@@ -12,7 +12,7 @@ import CodeIcon from '@mui/icons-material/Code'
 import PsychologyIcon from '@mui/icons-material/Psychology'
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents'
 
-const HeroSection = styled(Box)(({ theme }) => ({
+const HeaderSection = styled(Box)(({ theme }) => ({
   background: theme.palette.mode === 'dark' 
     ? 'linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)'
     : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
@@ -84,7 +84,7 @@ export default function APropos() {
     }}>
       <AppBarComponent />
       
-      <HeroSection>
+      <HeaderSection>
         <Container maxWidth="lg">
           <Typography 
             variant="h1" 
@@ -112,7 +112,7 @@ export default function APropos() {
             Découvrez mon parcours et mes compétences
           </Typography>
         </Container>
-      </HeroSection>
+      </HeaderSection>
 
       <Container maxWidth="lg" sx={{ py: 8 }}>
         <Box sx={{ 

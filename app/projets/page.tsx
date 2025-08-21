@@ -34,7 +34,7 @@ interface Project {
 }
 
 // Composants stylisés
-const HeroSection = styled(Box)(({ theme }) => ({
+const HeaderSection = styled(Box)(({ theme }) => ({
   background: theme.palette.mode === 'dark' 
     ? 'linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)'
     : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
@@ -334,7 +334,7 @@ export default function Projets() {
       <AppBarComponent />
       
       {/* Hero Section */}
-      <HeroSection>
+      <HeaderSection>
         <Container maxWidth="lg">
           <AnimatedBox>
                          <Typography 
@@ -400,7 +400,7 @@ export default function Projets() {
             </Typography>
           </AnimatedBox>
         </Container>
-      </HeroSection>
+      </HeaderSection>
 
       <Container maxWidth="lg" sx={{ py: 6 }}>
         {error && (

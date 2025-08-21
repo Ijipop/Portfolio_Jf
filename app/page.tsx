@@ -11,7 +11,7 @@ import PersonIcon from '@mui/icons-material/Person'
 import ContactSupportIcon from '@mui/icons-material/ContactSupport'
 import { useRouter } from 'next/navigation'
 
-const HeroSection = styled(Box)(({ theme }) => ({
+const HeaderSection = styled(Box)(({ theme }) => ({
   background: theme.palette.mode === 'dark' 
     ? 'linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)'
     : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
@@ -74,7 +74,7 @@ export default function Home() {
     }}>
       <AppBarComponent />
       
-      <HeroSection>
+      <HeaderSection>
         <Container maxWidth="lg">
           <Typography 
             variant="h1" 
@@ -102,7 +102,7 @@ export default function Home() {
             Développeur Full Stack passionné par les technologies modernes
           </Typography>
         </Container>
-      </HeroSection>
+      </HeaderSection>
 
       <Container maxWidth="lg" sx={{ py: 8 }}>
         <Box sx={{ 

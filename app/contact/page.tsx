@@ -12,7 +12,7 @@ import LinkedInIcon from '@mui/icons-material/LinkedIn'
 import GitHubIcon from '@mui/icons-material/GitHub'
 import TwitterIcon from '@mui/icons-material/Twitter'
 
-const HeroSection = styled(Box)(({ theme }) => ({
+const HeaderSection = styled(Box)(({ theme }) => ({
   background: theme.palette.mode === 'dark' 
     ? 'linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)'
     : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
@@ -89,7 +89,7 @@ export default function Contact() {
     }}>
       <AppBarComponent />
       
-      <HeroSection>
+      <HeaderSection>
         <Container maxWidth="lg">
           <Typography 
             variant="h1" 
@@ -117,7 +117,7 @@ export default function Contact() {
             Prenons contact et discutons!
           </Typography>
         </Container>
-      </HeroSection>
+      </HeaderSection>
 
       <Container maxWidth="lg" sx={{ py: 8 }}>
         <Box sx={{ 
