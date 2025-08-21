@@ -100,7 +100,7 @@ export async function PUT(request: NextRequest,{ params }: { params: { id: strin
 		}
 
 		const body = await request.json()
-		const { name, description, technologies, status, url } = body
+		const { name, description, technologies, status, url, imageUrl } = body
 
 		// Validation des données
 		if (!name || typeof name !== 'string' || name.trim().length === 0)
@@ -161,7 +161,8 @@ export async function PUT(request: NextRequest,{ params }: { params: { id: strin
 				description: description.trim(),
 				technologies: technologies.trim(),
 				status: status.trim(),
-				url: url || ''
+				url: url || '',
+				imageUrl: imageUrl || ''
 			}
 		})
 
