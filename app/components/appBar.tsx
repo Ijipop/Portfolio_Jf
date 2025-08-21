@@ -12,12 +12,14 @@ import Typography from "@mui/material/Typography";
 import { useState } from "react";
 import { useRouter } from 'next/navigation';
 import { useTheme } from '../contexts/ThemeContext';
+import LoginModal from './LoginModal';
 
 import './components.css';
 
 export default function AppBarComponent() {
 	const { isDarkMode, toggleTheme } = useTheme();
 	const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+	const [loginModalOpen, setLoginModalOpen] = useState(false);
 	const open = Boolean(anchorEl);
 	const router = useRouter();
 
@@ -43,47 +45,63 @@ export default function AppBarComponent() {
 		case 'Contact':
 			router.push('/contact');
 			break;
+		case 'Admin':
+			router.push('/admin');
+			break;
 		}
 		handleMenuClose();
 	};
+	
+	const handleAdminClick = () =>
+	{
+		handleMenuClose();
+		setLoginModalOpen(true);
+	};
 
 	return (
-		<AppBar position="static">
-			<Toolbar>
-				<Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-					Portfolio
-				</Typography>
-				<IconButton 
-					edge="start" 
-					color="inherit" 
-					aria-label="menu"
-					onClick={handleMenuClick}
-					aria-controls={open ? 'basic-menu' : undefined}
-					aria-haspopup="true"
-					aria-expanded={open ? 'true' : undefined}
-				>
-					<MenuIcon />
-				</IconButton>
-				<Menu
-					id="basic-menu"
-					anchorEl={anchorEl}
-					open={open}
-					onClose={handleMenuClose}
-				>
-					<MenuItem onClick={() => handleMenuItemClick('Accueil')}>Accueil</MenuItem>
-					<MenuItem onClick={() => handleMenuItemClick('Projets')}>Projets</MenuItem>
-					<MenuItem onClick={() => handleMenuItemClick('À propos')}>À propos</MenuItem>
-					<MenuItem onClick={() => handleMenuItemClick('Contact')}>Contact</MenuItem>
-				</Menu>
-				<IconButton 
-					edge="end" 
-					color="inherit" 
-					aria-label="dark mode toggle" 
-					onClick={toggleTheme}
-				> 
-					{isDarkMode ? <LightModeIcon /> : <DarkModeIcon />}
-				</IconButton>
-			</Toolbar>
-		</AppBar>
+		<>
+			<AppBar position="static">
+				<Toolbar>
+					<Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+						Portfolio
+					</Typography>
+					<IconButton 
+						edge="start" 
+						color="inherit" 
+						aria-label="menu"
+						onClick={handleMenuClick}
+						aria-controls={open ? 'basic-menu' : undefined}
+						aria-haspopup="true"
+						aria-expanded={open ? 'true' : undefined}
+					>
+						<MenuIcon />
+					</IconButton>
+					<Menu
+						id="basic-menu"
+						anchorEl={anchorEl}
+						open={open}
+						onClose={handleMenuClose}
+					>
+						<MenuItem onClick={() => handleMenuItemClick('Accueil')}>Accueil</MenuItem>
+						<MenuItem onClick={() => handleMenuItemClick('Projets')}>Projets</MenuItem>
+						<MenuItem onClick={() => handleMenuItemClick('À propos')}>À propos</MenuItem>
+						<MenuItem onClick={() => handleMenuItemClick('Contact')}>Contact</MenuItem>
+						<MenuItem onClick={handleAdminClick}>Admin</MenuItem>
+					</Menu>
+					<IconButton 
+						edge="end" 
+						color="inherit" 
+						aria-label="dark mode toggle" 
+						onClick={toggleTheme}
+					> 
+						{isDarkMode ? <LightModeIcon /> : <DarkModeIcon />}
+					</IconButton>
+				</Toolbar>
+			</AppBar>
+			<LoginModal 
+				open={loginModalOpen} 
+				onClose={() => setLoginModalOpen(false)} 
+			/>
+		</>
 	)
 }

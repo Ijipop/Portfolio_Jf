@@ -1,26 +1,26 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import AppBarComponent from '../components/appBar'
-import Box from '@mui/material/Box'
-import Card from '@mui/material/Card'
-import CardContent from '@mui/material/CardContent'
-import CardActions from '@mui/material/CardActions'
-import Typography from '@mui/material/Typography'
-import Container from '@mui/material/Container'
-import Button from '@mui/material/Button'
-import Chip from '@mui/material/Chip'
-import CircularProgress from '@mui/material/CircularProgress'
-import Alert from '@mui/material/Alert'
-import Paper from '@mui/material/Paper'
-import { styled } from '@mui/material/styles'
+import CheckCircleIcon from '@mui/icons-material/CheckCircle'
+import CodeIcon from '@mui/icons-material/Code'
+import ErrorIcon from '@mui/icons-material/Error'
 import GitHubIcon from '@mui/icons-material/GitHub'
 import LaunchIcon from '@mui/icons-material/Launch'
-import CodeIcon from '@mui/icons-material/Code'
-import TrendingUpIcon from '@mui/icons-material/TrendingUp'
-import CheckCircleIcon from '@mui/icons-material/CheckCircle'
 import ScheduleIcon from '@mui/icons-material/Schedule'
-import ErrorIcon from '@mui/icons-material/Error'
+import TrendingUpIcon from '@mui/icons-material/TrendingUp'
+import Alert from '@mui/material/Alert'
+import Box from '@mui/material/Box'
+import Button from '@mui/material/Button'
+import Card from '@mui/material/Card'
+import CardActions from '@mui/material/CardActions'
+import CardContent from '@mui/material/CardContent'
+import Chip from '@mui/material/Chip'
+import CircularProgress from '@mui/material/CircularProgress'
+import Container from '@mui/material/Container'
+import Paper from '@mui/material/Paper'
+import { styled } from '@mui/material/styles'
+import Typography from '@mui/material/Typography'
+import { useEffect, useState } from 'react'
+import AppBarComponent from '../components/appBar'
 
 interface Project {
   id: number
@@ -29,6 +29,7 @@ interface Project {
   technologies: string
   status: string
   url: string
+  imageUrl?: string
   createdAt: string
   updatedAt: string
 }
@@ -286,6 +287,28 @@ export default function Projets() {
     }
   }
 
+  // Fonction pour corriger les chemins d'images
+  const getImageUrl = (imageUrl: string) => {
+    if (!imageUrl) return '';
+    
+    // Si c'est une URL complète (http/https), la retourner telle quelle
+    if (imageUrl.startsWith('http://') || imageUrl.startsWith('https://')) {
+      return imageUrl;
+    }
+    
+    // Si c'est un chemin relatif commençant par "public/", le corriger
+    if (imageUrl.startsWith('public/')) {
+      return imageUrl.replace('public/', '/');
+    }
+    
+    // Si c'est un chemin relatif sans "public/", ajouter "/"
+    if (!imageUrl.startsWith('/')) {
+      return `/${imageUrl}`;
+    }
+    
+    return imageUrl;
+  };
+
   const getCompletedProjects = () => projects.filter(p => 
     ['terminee', 'fini', 'terminé'].includes(p.status.toLowerCase())
   ).length
@@ -467,6 +490,22 @@ export default function Projets() {
                  >
                   {project.name}
                 </Typography>
+                
+                {project.imageUrl && (
+                  <Box sx={{ mb: 3, textAlign: 'center' }}>
+                    <img 
+                      src={getImageUrl(project.imageUrl)} 
+                      alt={project.name}
+                      style={{ 
+                        width: '400px',
+                        height: '300px',
+                        objectFit: 'cover',
+                        borderRadius: '12px',
+                        boxShadow: '0 4px 12px rgba(0,0,0,0.15)'
+                      }}
+                    />
+                  </Box>
+                )}
                 
                 <Typography 
                   variant="body1" 
