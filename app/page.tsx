@@ -105,6 +105,15 @@ export default function Home() {
       </HeaderSection>
 
       <Container maxWidth="lg" sx={{ py: 8 }}>
+        <Box sx={{ textAlign: 'center', mb: 6 }}>
+          <Typography variant="h4" gutterBottom sx={{ mb: 2 }}>
+            Bienvenue sur mon portfolio
+          </Typography>
+          <Typography variant="body1" color="text.secondary" sx={{ maxWidth: 600, mx: 'auto' }}>
+            Explorez mes projets, découvrez mon parcours et n'hésitez pas à me contacter pour collaborer sur vos idées.
+          </Typography>
+        </Box>
+
         <Box sx={{ 
           display: 'grid', 
           gridTemplateColumns: { xs: '1fr', md: 'repeat(3, 1fr)' },
@@ -140,15 +149,6 @@ export default function Home() {
               Prenons contact et discutons de vos projets
             </Typography>
           </FeatureCard>
-        </Box>
-
-        <Box sx={{ textAlign: 'center', mt: 8 }}>
-          <Typography variant="h4" gutterBottom sx={{ mb: 2 }}>
-            Bienvenue sur mon portfolio
-          </Typography>
-          <Typography variant="body1" color="text.secondary" sx={{ maxWidth: 600, mx: 'auto' }}>
-            Explorez mes projets, découvrez mon parcours et n'hésitez pas à me contacter pour collaborer sur vos idées.
-          </Typography>
         </Box>
       </Container>
     </Box>

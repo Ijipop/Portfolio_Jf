@@ -100,7 +100,7 @@ export async function POST(request: NextRequest)
 				technologies: technologies.trim(),
 				status: status.trim(),
 				url: url || '',
-				imageUrl: imageUrl || ''
+				//imageUrl: imageUrl || ''
 			}
 		})
 

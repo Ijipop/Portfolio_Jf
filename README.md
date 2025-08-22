@@ -16,8 +16,8 @@ Portfolio web moderne développé avec Next.js 14, Material-UI, TypeScript et Pr
 git clone <votre-repo-github>
 cd Portfolio-2
 
-# 2. Installer toutes les dépendances (automatique)
-npm run install
+# 2. Installer toutes les dépendances
+npm install
 
 # 3. Lancer l'application
 npm run dev
@@ -25,9 +25,9 @@ npm run dev
 
 L'application sera disponible sur `http://localhost:3000`
 
-## Dépendances installées automatiquement
+## Dépendances du projet
 
-Le script `npm run install` installe automatiquement :
+Le projet utilise les technologies suivantes :
 
 ### Dependencies
 - **Next.js 14** - Framework React
@@ -45,7 +45,7 @@ Le script `npm run install` installe automatiquement :
 - **ESLint** - Linting du code
 - **@types/node, @types/react** - Types TypeScript
 
-## 🗄️ Configuration de la base de données
+## Configuration de la base de données
 
 1. **Créez un compte sur [Neon.tech](https://neon.tech)**
 2. **Créez un projet PostgreSQL**
@@ -69,7 +69,6 @@ npm run dev          # Démarre le serveur de développement
 npm run build        # Compile pour la production
 npm run start        # Lance l'application en production
 npm run lint         # Vérifie le code avec ESLint
-npm run install      # Installe toutes les dépendances du fichier install.txt
 npm run db:seed      # Peuple la base de données avec des données de test
 ```
 
@@ -99,11 +98,12 @@ Portfolio-2/
 - **TypeScript** pour la sécurité du typage
 - **Animations fluides** avec Framer Motion
 
-## 🔧 Développement
+## Développement
 
 ### Ajouter une nouvelle dépendance
-1. Ajoutez-la dans `install.txt`
-2. Exécutez `npm run install`
+```bash
+npm install nom-du-package
+```
 
 ### Modifier le schéma de base de données
 1. Modifiez `prisma/schema.prisma`
@@ -137,8 +137,10 @@ Remove-Item -Recurse -Force .next
 npm run dev
 ```
 
-## 📄 Licence
+## Licence
 
 Ce projet est sous licence MIT. Voir le fichier `LICENSE` pour plus de détails.
 
 ---
+
+**Développé avec ❤️ en utilisant Next.js, Material-UI et TypeScript**

@@ -3,6 +3,7 @@
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 import LightModeIcon from '@mui/icons-material/LightMode';
 import MenuIcon from '@mui/icons-material/Menu';
+import HomeIcon from '@mui/icons-material/Home';
 import AppBar from "@mui/material/AppBar";
 import IconButton from "@mui/material/IconButton";
 import Menu from "@mui/material/Menu";
@@ -58,10 +59,23 @@ export default function AppBarComponent() {
 		setLoginModalOpen(true);
 	};
 
+	const handleHomeClick = () => {
+		router.push('/');
+	};
+
 	return (
 		<>
 			<AppBar position="static">
 				<Toolbar>
+					<IconButton 
+						edge="start" 
+						color="inherit" 
+						aria-label="accueil"
+						onClick={handleHomeClick}
+						sx={{ mr: 1 }}
+					>
+						<HomeIcon />
+					</IconButton>
 					<Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
 						Portfolio
 					</Typography>
