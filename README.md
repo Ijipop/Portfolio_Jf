@@ -101,7 +101,7 @@ Darkmode included!
 Et grâce au Navbar, on peut naviguer d'une page à l'autre avec ces sélections :
 ![picture](https://github.com/Ijipop/portfolio/blob/Ji/public/imgs/readme/navigation.png)
 
-### Prokets
+### Projets
 
 ![picture](https://github.com/Ijipop/portfolio/blob/Ji/public/imgs/readme/projets.png)
 
