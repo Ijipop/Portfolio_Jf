@@ -27,7 +27,7 @@ ancienne version:
 - **Git** ([Télécharger](https://git-scm.com/))
 - **Compte Neon.tech** pour la base de données PostgreSQL
 
-Une fois vous avez clone le projet, veuillez creez une base de donnees dans votre compte Neon.tech et copier la string de connection.
+Une fois que vous avez clonez le projet, veuillez creez une base de données dans votre compte Neon.tech et copier la string de connection.
 Une string similaire a ceci:
 `postgresql://neondb_owner:***************@ep-rapid-sky-ad5triop-pooler.c-2.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require`
 
@@ -53,6 +53,9 @@ npm run dev
 L'application sera disponible sur `http://localhost:3000`
 
 Pour pouvez faire des tests avec l'aide du fichier `api.http` dans `./tests/`
+
+
+**Liens utile : npx prisma studio**
 
 ## Architecture technique
 
