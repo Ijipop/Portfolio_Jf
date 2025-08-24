@@ -56,6 +56,8 @@ Pour pouvez faire des tests avec l'aide du fichier `api.http` dans `./tests/`
 
 
 **Liens utile : npx prisma studio**
+admin@portfolio.com
+admin123
 
 ## Architecture technique
 
