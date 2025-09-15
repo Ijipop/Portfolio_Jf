@@ -17,6 +17,15 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Vérification de la présence du JWT_SECRET
+    if (!process.env.JWT_SECRET) {
+      console.error('JWT_SECRET non configuré');
+      return NextResponse.json(
+        { message: 'Configuration serveur manquante' },
+        { status: 500 }
+      );
+    }
+
     // Recherche de l'utilisateur
     const user = await prisma.user.findUnique({
       where: { email: email.toLowerCase() }
@@ -46,7 +55,7 @@ export async function POST(request: NextRequest) {
         email: user.email, 
         role: user.role 
       },
-      process.env.JWT_SECRET || 'your-secret-key',
+      process.env.JWT_SECRET,
       { expiresIn: '24h' }
     );
 

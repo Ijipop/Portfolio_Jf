@@ -36,6 +36,13 @@ Dans la root du projet, veuillez creer une fichier `.env` et le remplir comme ce
 ```
 # ===== BASE DE DONNÉES NEON/POSTGRESQL =====
 DATABASE_URL = "[votre string ici]"
+
+# ===== JWT SECRET =====
+JWT_SECRET = "[votre clé secrète JWT]"
+
+# ===== ADMIN CREDENTIALS =====
+ADMIN_EMAIL = "[votre email admin]"
+ADMIN_PASSWORD = "[votre mot de passe admin]"
 ```
 
 Une fois faite, vous pouvez le lancer:
@@ -46,6 +53,9 @@ npm install
 npx prisma generate
 npx prisma db push
 
+# Créer un utilisateur admin
+node scripts/createAdmin.js
+
 # Lancer l'application
 npm run dev
 ```
@@ -54,10 +64,7 @@ L'application sera disponible sur `http://localhost:3000`
 
 Pour pouvez faire des tests avec l'aide du fichier `api.http` dans `./tests/`
 
-
 **Liens utile : npx prisma studio**
-admin@portfolio.com
-admin123
 
 ## Architecture technique
 
