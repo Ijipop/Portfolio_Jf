@@ -14,9 +14,9 @@ async function createAdminUser() {
       return;
     }
 
-    // Identifiants Vercel
+    // Valeurs directes (même que sur Vercel)
     const adminEmail = 'ijipop82@gmail.com';
-    const adminPassword = 'DKQ2xnt5mxb7bwc_yje';
+    const adminPassword = 'DKQ2xnt5mxb7bwc_yje'; // Votre mot de passe
 
     const hashedPassword = await bcrypt.hash(adminPassword, 10);
 
