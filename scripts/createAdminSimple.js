@@ -14,7 +14,7 @@ async function createAdminUser() {
       return;
     }
 
-    // Valeurs directes (même que sur Vercel)
+    // Identifiants Vercel
     const adminEmail = 'ijipop82@gmail.com';
     const adminPassword = 'DKQ2xnt5mxb7bwc_yje';
 
@@ -33,7 +33,7 @@ async function createAdminUser() {
 
     console.log('✅ Utilisateur admin créé avec succès:');
     console.log('Email:', adminUser.email);
-    console.log('Mot de passe: admin123');
+    console.log('Mot de passe: DKQ2xnt5mxb7bwc_yje');
     console.log('ID:', adminUser.id);
   } catch (error) {
     console.error('❌ Erreur:', error);
