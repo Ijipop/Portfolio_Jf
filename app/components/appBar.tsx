@@ -65,7 +65,20 @@ export default function AppBarComponent() {
 
 	return (
 		<>
-			<AppBar position="static">
+			<AppBar 
+				position="static" 
+				sx={{
+					background: (theme) => theme.palette.mode === 'dark'
+						? 'linear-gradient(135deg, #1e293b 0%, #334155 100%)'
+						: 'linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%)',
+					boxShadow: (theme) => theme.palette.mode === 'dark'
+						? '0 4px 20px rgba(0,0,0,0.3)'
+						: '0 4px 20px rgba(30, 58, 138, 0.1)',
+					borderBottom: (theme) => theme.palette.mode === 'dark'
+						? '1px solid rgba(59, 130, 246, 0.2)'
+						: '1px solid rgba(30, 58, 138, 0.1)',
+				}}
+			>
 				<Toolbar>
 					<IconButton 
 						edge="start" 
@@ -95,6 +108,21 @@ export default function AppBarComponent() {
 						anchorEl={anchorEl}
 						open={open}
 						onClose={handleMenuClose}
+						sx={{
+							'& .MuiPaper-root': {
+								background: (theme) => theme.palette.mode === 'dark'
+									? 'linear-gradient(145deg, #1e293b 0%, #334155 100%)'
+									: 'linear-gradient(145deg, #ffffff 0%, #f8fafc 100%)',
+								border: (theme) => theme.palette.mode === 'dark'
+									? '1px solid rgba(59, 130, 246, 0.2)'
+									: '1px solid rgba(30, 58, 138, 0.1)',
+								borderRadius: 3,
+								boxShadow: (theme) => theme.palette.mode === 'dark'
+									? '0 10px 40px rgba(0,0,0,0.4)'
+									: '0 10px 40px rgba(30, 58, 138, 0.1)',
+								mt: 1,
+							}
+						}}
 					>
 						<MenuItem onClick={() => handleMenuItemClick('Accueil')}>Accueil</MenuItem>
 						<MenuItem onClick={() => handleMenuItemClick('Projets')}>Projets</MenuItem>

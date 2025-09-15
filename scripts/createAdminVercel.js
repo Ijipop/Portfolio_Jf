@@ -22,8 +22,8 @@ async function createAdminUser() {
     }
 
     // Créer l'admin
-    const adminEmail = 'ijipop82@gmail.com';
-    const adminPassword = 'admin123';
+    const adminEmail = process.env.ADMIN_EMAIL || 'admin@example.com';
+    const adminPassword = process.env.ADMIN_PASSWORD || 'admin123';
     const hashedPassword = await bcrypt.hash(adminPassword, 10);
 
     const adminUser = await prisma.user.create({
@@ -39,7 +39,7 @@ async function createAdminUser() {
 
     console.log('✅ Utilisateur admin créé avec succès:');
     console.log('Email:', adminUser.email);
-    console.log('Mot de passe: admin123');
+    console.log('Mot de passe: [configuré via ADMIN_PASSWORD]');
     console.log('ID:', adminUser.id);
   } catch (error) {
     console.error('❌ Erreur:', error);
