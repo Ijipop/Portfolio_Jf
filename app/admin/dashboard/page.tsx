@@ -79,15 +79,13 @@ export default function AdminDashboard() {
   };
 
   useEffect(() => {
-    // Vérifier si l'utilisateur est connecté
-    const token = localStorage.getItem('adminToken');
-    if (!token) {
+    if (!isAuthenticated) {
       router.push('/');
       return;
     }
 
     fetchProjects();
-  }, [router]);
+  }, [router, isAuthenticated, fetchProjects]);
 
   const fetchProjects = async () => {
     try {

@@ -110,7 +110,7 @@ export default function Home() {
             Bienvenue sur mon portfolio
           </Typography>
           <Typography variant="body1" color="text.secondary" sx={{ maxWidth: 600, mx: 'auto' }}>
-            Explorez mes projets, découvrez mon parcours et n'hésitez pas à me contacter pour collaborer sur vos idées.
+            Explorez mes projets, découvrez mon parcours et n&apos;hésitez pas à me contacter pour collaborer sur vos idées.
           </Typography>
         </Box>
 
