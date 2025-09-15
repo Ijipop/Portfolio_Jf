@@ -14,10 +14,7 @@ On a décidé de faire un portfolio de projets. Ceci étant dit, ce n'est pas un
 
 **Repositories:**
 [Ijipop/portfolio](https://github.com/Ijipop/portfolio.git)
-<!--
-ancienne version:
-~~[dracken24/Portfolio-2](https://github.com/dracken24/Portfolio-2)~~
--->
+
 
 ## Instructions d'installation et de configuration
 
