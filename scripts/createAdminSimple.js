@@ -14,9 +14,9 @@ async function createAdminUser() {
       return;
     }
 
-    // Valeurs directes (même que dans .env.local)
-    const adminEmail = 'admin@portfolio.com';
-    const adminPassword = 'admin123';
+    // Valeurs directes (même que sur Vercel)
+    const adminEmail = 'ijipop82@gmail.com';
+    const adminPassword = 'DKQ2xnt5mxb7bwc_yje';
 
     const hashedPassword = await bcrypt.hash(adminPassword, 10);
 
