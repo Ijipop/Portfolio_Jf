@@ -309,10 +309,17 @@ export default function AdminDashboard() {
                   </TableCell>
                   <TableCell>
                     {project.imageUrl && (
-                      <img
+                      <Box
+                        component="img"
                         src={getImageUrl(project.imageUrl)}
                         alt={project.name}
-                        style={{ width: 50, height: 50, objectFit: 'cover', borderRadius: 4 }}
+                        sx={{ 
+                          width: 50, 
+                          height: 50, 
+                          objectFit: 'cover', 
+                          borderRadius: 1,
+                          display: 'block'
+                        }}
                         onError={(e) => {
                           (e.target as HTMLImageElement).style.display = 'none';
                         }}
@@ -348,7 +355,7 @@ export default function AdminDashboard() {
                 Aucun projet trouvé
               </Typography>
               <Typography variant="body2" color="text.secondary">
-                Cliquez sur "Ajouter un Projet" pour commencer
+                Cliquez sur &quot;Ajouter un Projet&quot; pour commencer
               </Typography>
             </CardContent>
           </Card>
