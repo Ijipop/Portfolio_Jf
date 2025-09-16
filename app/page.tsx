@@ -182,6 +182,7 @@ export default function Home() {
         <Box sx={{ textAlign: 'center', mb: 6 }}>
           <Typography variant="h4" gutterBottom sx={{ mb: 2 }}>
             Bienvenue sur mon portfolio
+            JEAN-FRANÇOIS LEFEBVRE
           </Typography>
           <Typography variant="body1" color="text.secondary" sx={{ maxWidth: 600, mx: 'auto' }}>
             Explorez mes projets, découvrez mon parcours et n&apos;hésitez pas à me contacter pour collaborer sur vos idées.
