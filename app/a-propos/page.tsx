@@ -13,24 +13,61 @@ import { useRouter } from 'next/navigation'
 
 const AboutCard = styled(Box)(({ theme }) => ({
   background: theme.palette.mode === 'dark'
-    ? 'linear-gradient(145deg, #1e1e1e 0%, #2d2d2d 100%)'
+    ? 'linear-gradient(145deg, #1a1a1a 0%, #2a2a2a 50%, #1a1a1a 100%)'
     : 'linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%)',
   border: theme.palette.mode === 'dark' 
-    ? '1px solid rgba(255,255,255,0.1)' 
+    ? '2px solid rgba(255, 107, 53, 0.3)' 
     : '1px solid rgba(0,0,0,0.08)',
-  borderRadius: 20,
+  borderRadius: 24,
   padding: theme.spacing(4),
   textAlign: 'center',
   boxShadow: theme.palette.mode === 'dark'
-    ? '0 8px 32px rgba(0,0,0,0.3)'
+    ? '0 15px 50px rgba(0, 0, 0, 0.6), 0 0 20px rgba(255, 107, 53, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.1)'
     : '0 8px 32px rgba(0,0,0,0.1)',
-  transition: 'all 0.3s ease',
+  transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
   height: '100%',
+  cursor: 'pointer',
+  position: 'relative',
+  overflow: 'hidden',
+  '&::before': {
+    content: '""',
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    background: theme.palette.mode === 'dark'
+      ? 'linear-gradient(135deg, rgba(255, 107, 53, 0.1) 0%, rgba(255, 23, 68, 0.1) 50%, rgba(255, 107, 53, 0.05) 100%)'
+      : 'transparent',
+    opacity: 0,
+    transition: 'opacity 0.3s ease',
+  },
+  '&::after': {
+    content: '""',
+    position: 'absolute',
+    top: '-2px',
+    left: '-2px',
+    right: '-2px',
+    bottom: '-2px',
+    background: theme.palette.mode === 'dark'
+      ? 'linear-gradient(45deg, #ff6b35, #ff1744, #ff6b35, #ff1744)'
+      : 'transparent',
+    borderRadius: 26,
+    zIndex: -1,
+    opacity: 0,
+    transition: 'opacity 0.3s ease',
+  },
   '&:hover': {
-    transform: 'translateY(-5px)',
+    transform: 'translateY(-12px) scale(1.03)',
     boxShadow: theme.palette.mode === 'dark'
-      ? '0 20px 40px rgba(0,0,0,0.4)'
+      ? '0 30px 60px rgba(0, 0, 0, 0.7), 0 0 30px rgba(255, 107, 53, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2)'
       : '0 20px 40px rgba(0,0,0,0.15)',
+    '&::before': {
+      opacity: 1,
+    },
+    '&::after': {
+      opacity: 1,
+    }
   }
 }))
 
@@ -57,8 +94,22 @@ export default function About() {
     <Box sx={{ 
       minHeight: '100vh', 
       background: (theme) => theme.palette.mode === 'dark'
-        ? 'linear-gradient(135deg, #0f0f23 0%, #1a1a2e 100%)'
-        : 'linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)'
+        ? 'linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 25%, #2a2a2a 50%, #1a1a1a 75%, #0a0a0a 100%)'
+        : 'linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)',
+      position: 'relative',
+      '&::before': {
+        content: '""',
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        background: (theme) => theme.palette.mode === 'dark'
+          ? 'radial-gradient(circle at 25% 25%, rgba(255, 107, 53, 0.05) 0%, transparent 50%), radial-gradient(circle at 75% 75%, rgba(255, 23, 68, 0.05) 0%, transparent 50%)'
+          : 'none',
+        pointerEvents: 'none',
+        zIndex: 0,
+      }
     }}>
       <AppBarComponent />
       
@@ -71,9 +122,17 @@ export default function About() {
             sx={{ 
               fontWeight: 900,
               fontSize: { xs: '2.5rem', md: '3.5rem' },
-              textShadow: '0 4px 8px rgba(0,0,0,0.3)',
+              textShadow: (theme) => theme.palette.mode === 'dark'
+                ? '0 0 20px rgba(255, 107, 53, 0.5), 0 4px 8px rgba(0,0,0,0.8)'
+                : '0 4px 8px rgba(0,0,0,0.3)',
               letterSpacing: '0.1em',
-              textTransform: 'uppercase'
+              textTransform: 'uppercase',
+              background: (theme) => theme.palette.mode === 'dark'
+                ? 'linear-gradient(45deg, #ff6b35, #ffffff, #ff1744)'
+                : 'inherit',
+              backgroundClip: (theme) => theme.palette.mode === 'dark' ? 'text' : 'initial',
+              WebkitBackgroundClip: (theme) => theme.palette.mode === 'dark' ? 'text' : 'initial',
+              WebkitTextFillColor: (theme) => theme.palette.mode === 'dark' ? 'transparent' : 'inherit',
             }}
           >
             À Propos
@@ -135,7 +194,7 @@ export default function About() {
               Expérience
             </Typography>
             <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
-              Quelques années d&apos;expérience dans le développement d&apos;applications.
+              En toute honnêteté, je n'ai pas d'expérience dans le développement d'applications. Je termine actuellement ma formation en développement web et je suis à la recherche d'un stage pour appliquer mes connaissances.
             </Typography>
             <Box>
               <SkillTag>Full Stack</SkillTag>
@@ -148,18 +207,32 @@ export default function About() {
 
         <Box sx={{ 
           background: (theme) => theme.palette.mode === 'dark'
-            ? 'linear-gradient(145deg, #1e1e1e 0%, #2d2d2d 100%)'
+            ? 'linear-gradient(145deg, #1a1a1a 0%, #2a2a2a 50%, #1a1a1a 100%)'
             : 'linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%)',
           border: (theme) => theme.palette.mode === 'dark' 
-            ? '1px solid rgba(255,255,255,0.1)' 
+            ? '2px solid rgba(255, 107, 53, 0.3)' 
             : '1px solid rgba(0,0,0,0.08)',
-          borderRadius: 20,
+          borderRadius: 24,
           padding: 4,
           textAlign: 'center',
           boxShadow: (theme) => theme.palette.mode === 'dark'
-            ? '0 8px 32px rgba(0,0,0,0.3)'
+            ? '0 15px 50px rgba(0, 0, 0, 0.6), 0 0 20px rgba(255, 107, 53, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.1)'
             : '0 8px 32px rgba(0,0,0,0.1)',
-          mb: 8
+          mb: 8,
+          position: 'relative',
+          overflow: 'hidden',
+          '&::before': {
+            content: '""',
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: (theme) => theme.palette.mode === 'dark'
+              ? 'linear-gradient(135deg, rgba(255, 107, 53, 0.1) 0%, rgba(255, 23, 68, 0.1) 50%, rgba(255, 107, 53, 0.05) 100%)'
+              : 'transparent',
+            opacity: 0.3,
+          }
         }}>
           <Typography variant="h4" gutterBottom sx={{ mb: 3 }}>
             Mes Compétences Techniques
@@ -170,24 +243,17 @@ export default function About() {
             justifyContent: 'center',
             gap: 1
           }}>
-            <SkillTag>React</SkillTag>
-            <SkillTag>Next.js</SkillTag>
-            <SkillTag>TypeScript</SkillTag>
-            <SkillTag>JavaScript</SkillTag>
-            <SkillTag>Node.js</SkillTag>
-            <SkillTag>Express</SkillTag>
-            <SkillTag>MongoDB</SkillTag>
-            <SkillTag>PostgreSQL</SkillTag>
-            <SkillTag>Prisma</SkillTag>
-            <SkillTag>Material-UI</SkillTag>
-            <SkillTag>CSS3</SkillTag>
-            <SkillTag>HTML5</SkillTag>
-            <SkillTag>Git</SkillTag>
-            <SkillTag>REST API</SkillTag>
-            <SkillTag>GraphQL</SkillTag>
-            <SkillTag>Docker</SkillTag>
-            <SkillTag>Vercel</SkillTag>
-            <SkillTag>Netlify</SkillTag>
+          <SkillTag>Python</SkillTag>
+          <SkillTag>Java</SkillTag>
+          <SkillTag>React</SkillTag>
+          <SkillTag>Next.js</SkillTag>
+          <SkillTag>TypeScript</SkillTag>
+          <SkillTag>JavaScript</SkillTag>
+          <SkillTag>SQL</SkillTag>
+          <SkillTag>CSS3</SkillTag>
+          <SkillTag>HTML5</SkillTag>
+          <SkillTag>Git</SkillTag>
+
           </Box>
         </Box>
 
