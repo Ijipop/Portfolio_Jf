@@ -105,7 +105,7 @@ const ProjectCard = styled(Card)(({ theme }) => ({
     opacity: 0,
     transition: 'opacity 0.3s ease',
   },
-  // Nouveau pseudo-élément pour la chenille lumineuse
+  // Chenille lumineuse sur le bord extérieur
   '&::before': {
     content: '""',
     position: 'absolute',
@@ -114,8 +114,8 @@ const ProjectCard = styled(Card)(({ theme }) => ({
     right: '-4px',
     bottom: '-4px',
     background: theme.palette.mode === 'dark'
-      ? 'conic-gradient(from 0deg, transparent 0deg, transparent 320deg, #ff6b35 340deg, #ff1744 360deg, transparent 20deg)'
-      : 'conic-gradient(from 0deg, transparent 0deg, transparent 320deg, #3b82f6 340deg, #60a5fa 360deg, transparent 20deg)',
+      ? 'conic-gradient(from 0deg, transparent 0deg, transparent 250deg, #ff6b35 270deg, #ff1744 290deg, #ff6b35 310deg, transparent 330deg)'
+      : 'conic-gradient(from 0deg, transparent 0deg, transparent 250deg, #dc2626 270deg, #ea580c 290deg, #dc2626 310deg, transparent 330deg)',
     borderRadius: 28,
     zIndex: -2,
     opacity: 0,
@@ -132,7 +132,7 @@ const ProjectCard = styled(Card)(({ theme }) => ({
       animation: 'rotate 2s linear infinite',
     },
     '&::after': {
-      opacity: 1,
+      opacity: 0, // Désactiver l'effet rectangle
     }
   },
   // Animation de rotation pour le serpent lumineux
