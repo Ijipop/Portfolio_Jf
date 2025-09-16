@@ -10,7 +10,10 @@ import PhoneIcon from '@mui/icons-material/Phone'
 import LocationOnIcon from '@mui/icons-material/LocationOn'
 import LinkedInIcon from '@mui/icons-material/LinkedIn'
 import GitHubIcon from '@mui/icons-material/GitHub'
-import TwitterIcon from '@mui/icons-material/Twitter'
+import ContentCopyIcon from '@mui/icons-material/ContentCopy'
+import SendIcon from '@mui/icons-material/Send'
+import { useState } from 'react'
+import { Snackbar, Alert, Button, Box as MuiBox } from '@mui/material'
 
 const HeaderSection = styled(Box)(({ theme }) => ({
   background: theme.palette.mode === 'dark' 
@@ -132,7 +135,67 @@ const SocialIcon = styled(Box)(({ theme }) => ({
   }
 }))
 
+const EmailButton = styled(Button)(({ theme }) => ({
+  background: theme.palette.mode === 'dark'
+    ? 'linear-gradient(135deg, #ff6b35 0%, #ff1744 100%)'
+    : 'linear-gradient(135deg, #1e3a8a 0%, #059669 100%)',
+  color: 'white',
+  borderRadius: 12,
+  padding: theme.spacing(1, 2),
+  margin: theme.spacing(0.5),
+  fontSize: '0.875rem',
+  fontWeight: 600,
+  textTransform: 'none',
+  boxShadow: theme.palette.mode === 'dark'
+    ? '0 4px 15px rgba(255, 107, 53, 0.4)'
+    : '0 4px 15px rgba(30, 58, 138, 0.4)',
+  transition: 'all 0.3s ease',
+  '&:hover': {
+    background: theme.palette.mode === 'dark'
+      ? 'linear-gradient(135deg, #e55a2b 0%, #e91e63 100%)'
+      : 'linear-gradient(135deg, #1e40af 0%, #047857 100%)',
+    transform: 'translateY(-2px)',
+    boxShadow: theme.palette.mode === 'dark'
+      ? '0 8px 25px rgba(255, 107, 53, 0.6)'
+      : '0 8px 25px rgba(30, 58, 138, 0.6)',
+  }
+}))
+
 export default function Contact() {
+  const [snackbarOpen, setSnackbarOpen] = useState(false)
+  const [snackbarMessage, setSnackbarMessage] = useState('')
+
+  const emailAddress = 'ijipop82@gmail.com'
+
+  const handleOpenEmail = () => {
+    const subject = encodeURIComponent('Contact depuis votre portfolio')
+    const body = encodeURIComponent('Bonjour Jean-François,\n\n')
+    const mailtoLink = `mailto:${emailAddress}?subject=${subject}&body=${body}`
+    window.open(mailtoLink)
+  }
+
+  const handleCopyEmail = async () => {
+    try {
+      await navigator.clipboard.writeText(emailAddress)
+      setSnackbarMessage('Adresse email copiée !')
+      setSnackbarOpen(true)
+    } catch (err) {
+      // Fallback pour les navigateurs plus anciens
+      const textArea = document.createElement('textarea')
+      textArea.value = emailAddress
+      document.body.appendChild(textArea)
+      textArea.select()
+      document.execCommand('copy')
+      document.body.removeChild(textArea)
+      setSnackbarMessage('Adresse email copiée !')
+      setSnackbarOpen(true)
+    }
+  }
+
+  const handleCloseSnackbar = () => {
+    setSnackbarOpen(false)
+  }
+
   return (
     <Box sx={{ 
       minHeight: '100vh', 
@@ -206,9 +269,41 @@ export default function Contact() {
             <Typography variant="h6" gutterBottom>
               Email
             </Typography>
-            <Typography variant="body2" color="text.secondary">
-              ijipop82@gmail.com
+            <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+              {emailAddress}
             </Typography>
+            <MuiBox sx={{ display: 'flex', flexDirection: 'column', gap: 1, mt: 2 }}>
+              <EmailButton
+                startIcon={<SendIcon />}
+                onClick={handleOpenEmail}
+                fullWidth
+              >
+                Ouvrir Email
+              </EmailButton>
+              <EmailButton
+                startIcon={<ContentCopyIcon />}
+                onClick={handleCopyEmail}
+                fullWidth
+                variant="outlined"
+                sx={{
+                  background: 'transparent',
+                  border: (theme) => theme.palette.mode === 'dark' 
+                    ? '2px solid rgba(255, 107, 53, 0.5)' 
+                    : '2px solid rgba(30, 58, 138, 0.5)',
+                  color: (theme) => theme.palette.mode === 'dark' ? '#ff6b35' : '#1e3a8a',
+                  '&:hover': {
+                    background: (theme) => theme.palette.mode === 'dark' 
+                      ? 'rgba(255, 107, 53, 0.1)' 
+                      : 'rgba(30, 58, 138, 0.1)',
+                    border: (theme) => theme.palette.mode === 'dark' 
+                      ? '2px solid #ff6b35' 
+                      : '2px solid #1e3a8a',
+                  }
+                }}
+              >
+                Copier
+              </EmailButton>
+            </MuiBox>
           </ContactCard>
 
           <ContactCard>
@@ -243,12 +338,34 @@ export default function Contact() {
             <SocialIcon>
               <GitHubIcon />
             </SocialIcon>
-            <SocialIcon>
-              <TwitterIcon />
-            </SocialIcon>
           </Box>
         </Box>
       </Container>
+
+      {/* Snackbar pour confirmer la copie */}
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={3000}
+        onClose={handleCloseSnackbar}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+      >
+        <Alert 
+          onClose={handleCloseSnackbar} 
+          severity="success" 
+          sx={{ 
+            width: '100%',
+            background: (theme) => theme.palette.mode === 'dark'
+              ? 'linear-gradient(135deg, #ff6b35 0%, #ff1744 100%)'
+              : 'linear-gradient(135deg, #1e3a8a 0%, #059669 100%)',
+            color: 'white',
+            '& .MuiAlert-icon': {
+              color: 'white'
+            }
+          }}
+        >
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
     </Box>
   )
 }

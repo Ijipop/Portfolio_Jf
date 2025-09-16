@@ -66,6 +66,3 @@ npm run dev      # Développement
 npm run build    # Build de production
 npx prisma studio # Interface BDD
 ```
-
----
-*Développé avec ❤️ en Next.js*
