@@ -16,13 +16,13 @@ const AboutCard = styled(Box)(({ theme }) => ({
     ? 'linear-gradient(145deg, #1a1a1a 0%, #2a2a2a 50%, #1a1a1a 100%)'
     : 'linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%)',
   border: theme.palette.mode === 'dark' 
-    ? '2px solid rgba(255, 107, 53, 0.3)' 
+    ? '2px solid rgba(74, 85, 104, 0.2)' 
     : '1px solid rgba(0,0,0,0.08)',
   borderRadius: 24,
   padding: theme.spacing(4),
   textAlign: 'center',
   boxShadow: theme.palette.mode === 'dark'
-    ? '0 15px 50px rgba(0, 0, 0, 0.6), 0 0 20px rgba(255, 107, 53, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.1)'
+    ? '0 15px 50px rgba(0, 0, 0, 0.6), 0 0 20px rgba(74, 85, 104, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.1)'
     : '0 8px 32px rgba(0,0,0,0.1)',
   transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
   height: '100%',
@@ -37,7 +37,7 @@ const AboutCard = styled(Box)(({ theme }) => ({
     right: 0,
     bottom: 0,
     background: theme.palette.mode === 'dark'
-      ? 'linear-gradient(135deg, rgba(255, 107, 53, 0.1) 0%, rgba(255, 23, 68, 0.1) 50%, rgba(255, 107, 53, 0.05) 100%)'
+      ? 'linear-gradient(135deg, rgba(74, 85, 104, 0.1) 0%, rgba(45, 55, 72, 0.1) 50%, rgba(74, 85, 104, 0.05) 100%)'
       : 'transparent',
     opacity: 0,
     transition: 'opacity 0.3s ease',
@@ -50,7 +50,7 @@ const AboutCard = styled(Box)(({ theme }) => ({
     right: '-2px',
     bottom: '-2px',
     background: theme.palette.mode === 'dark'
-      ? 'linear-gradient(45deg, #ff6b35, #ff1744, #ff6b35, #ff1744)'
+      ? 'linear-gradient(45deg, #4a5568, #2d3748, #4a5568, #2d3748)'
       : 'transparent',
     borderRadius: 26,
     zIndex: -1,
@@ -60,7 +60,7 @@ const AboutCard = styled(Box)(({ theme }) => ({
   '&:hover': {
     transform: 'translateY(-12px) scale(1.03)',
     boxShadow: theme.palette.mode === 'dark'
-      ? '0 30px 60px rgba(0, 0, 0, 0.7), 0 0 30px rgba(255, 107, 53, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2)'
+      ? '0 30px 60px rgba(0, 0, 0, 0.7), 0 0 30px rgba(74, 85, 104, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2)'
       : '0 20px 40px rgba(0,0,0,0.15)',
     '&::before': {
       opacity: 1,

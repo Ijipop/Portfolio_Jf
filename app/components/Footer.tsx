@@ -91,7 +91,7 @@ export default function Footer() {
 
           <Box sx={{ textAlign: 'center' }}>
             <Typography variant="body2" sx={{ opacity: 0.8, mb: 1 }}>
-              Suivez-moi
+              Suivez-moi!
             </Typography>
             <Box>
               <SocialIcon onClick={handleGitHubClick}>
