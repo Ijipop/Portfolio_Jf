@@ -10,8 +10,37 @@ import WorkIcon from '@mui/icons-material/Work'
 import SchoolIcon from '@mui/icons-material/School'
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents'
 import { useRouter } from 'next/navigation'
+import { useState } from 'react'
 
-const AboutCard = styled(Box)(({ theme }) => ({
+const FlipCard = styled(Box)(({ theme }) => ({
+  backgroundColor: 'transparent',
+  width: '100%',
+  height: '300px',
+  perspective: '1000px',
+  cursor: 'pointer',
+  WebkitPerspective: '1000px',
+  MozPerspective: '1000px',
+}))
+
+const FlipCardInner = styled(Box)<{ flipped: boolean }>(({ theme, flipped }) => ({
+  position: 'relative',
+  width: '100%',
+  height: '100%',
+  textAlign: 'center',
+  transition: 'transform 0.6s',
+  transformStyle: 'preserve-3d',
+  WebkitTransformStyle: 'preserve-3d',
+  transform: flipped ? 'rotateY(180deg)' : 'rotateY(0deg)',
+  WebkitTransform: flipped ? 'rotateY(180deg)' : 'rotateY(0deg)',
+}))
+
+const FlipCardFront = styled(Box)(({ theme }) => ({
+  position: 'absolute',
+  width: '100%',
+  height: '100%',
+  backfaceVisibility: 'hidden',
+  WebkitBackfaceVisibility: 'hidden',
+  MozBackfaceVisibility: 'hidden',
   background: theme.palette.mode === 'dark'
     ? 'linear-gradient(145deg, #1a1a1a 0%, #2a2a2a 50%, #1a1a1a 100%)'
     : 'linear-gradient(145deg, #ffffff 0%, #fafbfc 30%, #f1f5f9 70%, #e2e8f0 100%)',
@@ -25,9 +54,10 @@ const AboutCard = styled(Box)(({ theme }) => ({
     ? '0 15px 50px rgba(0, 0, 0, 0.6), 0 0 20px rgba(74, 85, 104, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.1)'
     : '0 4px 20px rgba(148, 163, 184, 0.08), 0 0 0 1px rgba(148, 163, 184, 0.05)',
   transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
-  height: '100%',
-  cursor: 'pointer',
-  position: 'relative',
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'center',
+  alignItems: 'center',
   overflow: 'hidden',
   '&::before': {
     content: '""',
@@ -58,10 +88,6 @@ const AboutCard = styled(Box)(({ theme }) => ({
     transition: 'opacity 0.3s ease',
   },
   '&:hover': {
-    transform: 'translateY(-12px) scale(1.03)',
-    boxShadow: theme.palette.mode === 'dark'
-      ? '0 30px 60px rgba(0, 0, 0, 0.7), 0 0 30px rgba(74, 85, 104, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2)'
-      : '0 20px 40px rgba(59, 130, 246, 0.15), 0 0 20px rgba(147, 197, 253, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.8)',
     '&::before': {
       opacity: 1,
     },
@@ -69,6 +95,34 @@ const AboutCard = styled(Box)(({ theme }) => ({
       opacity: 1,
     }
   }
+}))
+
+const FlipCardBack = styled(Box)(({ theme }) => ({
+  position: 'absolute',
+  width: '100%',
+  height: '100%',
+  backfaceVisibility: 'hidden',
+  WebkitBackfaceVisibility: 'hidden',
+  MozBackfaceVisibility: 'hidden',
+  background: theme.palette.mode === 'dark'
+    ? 'linear-gradient(145deg, #2a2a2a 0%, #3a3a3a 50%, #2a2a2a 100%)'
+    : 'linear-gradient(145deg, #f1f5f9 0%, #e2e8f0 30%, #cbd5e1 70%, #94a3b8 100%)',
+  border: theme.palette.mode === 'dark' 
+    ? '2px solid rgba(74, 85, 104, 0.3)' 
+    : '1px solid rgba(148, 163, 184, 0.2)',
+  borderRadius: 24,
+  padding: theme.spacing(4),
+  textAlign: 'center',
+  boxShadow: theme.palette.mode === 'dark'
+    ? '0 15px 50px rgba(0, 0, 0, 0.7), 0 0 20px rgba(74, 85, 104, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1)'
+    : '0 4px 20px rgba(148, 163, 184, 0.12), 0 0 0 1px rgba(148, 163, 184, 0.08)',
+  transform: 'rotateY(180deg)',
+  WebkitTransform: 'rotateY(180deg)',
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'center',
+  alignItems: 'center',
+  overflow: 'hidden',
 }))
 
 const SkillTag = styled(Box)(({ theme }) => ({
@@ -89,6 +143,18 @@ const SkillTag = styled(Box)(({ theme }) => ({
 
 export default function About() {
   const router = useRouter()
+  const [flippedCards, setFlippedCards] = useState<{ [key: string]: boolean }>({
+    who: false,
+    formation: false,
+    experience: false
+  })
+
+  const handleCardFlip = (cardKey: string) => {
+    setFlippedCards(prev => ({
+      ...prev,
+      [cardKey]: !prev[cardKey]
+    }))
+  }
 
   return (
     <Box sx={{ 
@@ -156,51 +222,154 @@ export default function About() {
           gap: 4,
           mb: 8
         }}>
-          <AboutCard>
-            <PersonIcon sx={{ fontSize: 48, color: 'primary.main', mb: 2 }} />
-            <Typography variant="h5" gutterBottom>
-              Qui suis-je ?
-            </Typography>
-            <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
-              Développeur passionné par la création d&apos;applications web modernes et innovantes.
-            </Typography>
-            <Box>
-              <SkillTag>Material-UI</SkillTag>
-              <SkillTag>Prisma</SkillTag>
-              <SkillTag>PostgreSQL</SkillTag>
-              <SkillTag>Vercel</SkillTag>
-            </Box>
-          </AboutCard>
+          {/* Carte Qui suis-je */}
+          <FlipCard onClick={() => handleCardFlip('who')}>
+            <FlipCardInner 
+              flipped={flippedCards.who}
+              sx={{
+                transform: flippedCards.who ? 'rotateY(180deg)' : 'rotateY(0deg)',
+                WebkitTransform: flippedCards.who ? 'rotateY(180deg)' : 'rotateY(0deg)',
+              }}
+            >
+              <FlipCardFront
+                sx={{
+                  backfaceVisibility: 'hidden',
+                  WebkitBackfaceVisibility: 'hidden',
+                  MozBackfaceVisibility: 'hidden',
+                }}
+              >
+                <PersonIcon sx={{ fontSize: 48, color: 'primary.main', mb: 2 }} />
+                <Typography variant="h5" gutterBottom>
+                  Qui suis-je ?
+                </Typography>
+                <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
+                  Développeur passionné par la création d&apos;applications web modernes et innovantes.
+                </Typography>
+                <Box>
+                  <SkillTag>Material-UI</SkillTag>
+                  <SkillTag>Prisma</SkillTag>
+                  <SkillTag>PostgreSQL</SkillTag>
+                  <SkillTag>Vercel</SkillTag>
+                </Box>
+              </FlipCardFront>
+              <FlipCardBack
+                sx={{
+                  backfaceVisibility: 'hidden',
+                  WebkitBackfaceVisibility: 'hidden',
+                  MozBackfaceVisibility: 'hidden',
+                  transform: 'rotateY(180deg)',
+                  WebkitTransform: 'rotateY(180deg)',
+                }}
+              >
+                <Typography variant="h4" sx={{ color: 'primary.main', mb: 2 }}>
+                  Jean-François Lefebvre, passionné par l'informatique et les jeux vidéo. <br />Je suis un grand consommateurs d'app mobile et web.
+                  À 38 ans à cause de problèmes de santé, je me suis réorienté vers le développement d'applications.  <br />Je suis vraiment motivé et je suis content de pouvoir 
+                  enfin pouvoir jumeler passion et travail.
+                </Typography>
+                <Typography variant="body1" color="text.secondary">
+                  Cliquez pour retourner la carte
+                </Typography>
+              </FlipCardBack>
+            </FlipCardInner>
+          </FlipCard>
 
-          <AboutCard>
-            <SchoolIcon sx={{ fontSize: 48, color: 'primary.main', mb: 2 }} />
-            <Typography variant="h5" gutterBottom>
-              Formation
-            </Typography>
-            <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
-              Formation en développement d'applications avec focus sur les technologies modernes.
-            </Typography>
-            <Box>
-              <SkillTag>Responsive Design</SkillTag>
-              <SkillTag>GitHub</SkillTag>
-              <SkillTag>JSON</SkillTag>
-            </Box>
-          </AboutCard>
+          {/* Carte Formation */}
+          <FlipCard onClick={() => handleCardFlip('formation')}>
+            <FlipCardInner 
+              flipped={flippedCards.formation}
+              sx={{
+                transform: flippedCards.formation ? 'rotateY(180deg)' : 'rotateY(0deg)',
+                WebkitTransform: flippedCards.formation ? 'rotateY(180deg)' : 'rotateY(0deg)',
+              }}
+            >
+              <FlipCardFront
+                sx={{
+                  backfaceVisibility: 'hidden',
+                  WebkitBackfaceVisibility: 'hidden',
+                  MozBackfaceVisibility: 'hidden',
+                }}
+              >
+                <SchoolIcon sx={{ fontSize: 48, color: 'primary.main', mb: 2 }} />
+                <Typography variant="h5" gutterBottom>
+                  Formation
+                </Typography>
+                <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
+                  Formation en développement d'applications avec focus sur les technologies modernes.
+                </Typography>
+                <Box>
+                  <SkillTag>Responsive Design</SkillTag>
+                  <SkillTag>GitHub</SkillTag>
+                  <SkillTag>JSON</SkillTag>
+                </Box>
+              </FlipCardFront>
+              <FlipCardBack
+                sx={{
+                  backfaceVisibility: 'hidden',
+                  WebkitBackfaceVisibility: 'hidden',
+                  MozBackfaceVisibility: 'hidden',
+                  transform: 'rotateY(180deg)',
+                  WebkitTransform: 'rotateY(180deg)',
+                }}
+              >
+                <Typography variant="h4" sx={{ color: 'primary.main', mb: 2 }}>
+                  DEP en soutien informatique à l'ÉMICA (2023-2024)<br />
+                  AEC Développement de logiciels <br />
+                  Sécurité d'applications de bureau, mobiles et Web (2024-2026)
+                </Typography>
+                <Typography variant="body1" color="text.secondary">
+                  Cliquez pour retourner la carte
+                </Typography>
+              </FlipCardBack>
+            </FlipCardInner>
+          </FlipCard>
 
-          <AboutCard>
-            <WorkIcon sx={{ fontSize: 48, color: 'primary.main', mb: 2 }} />
-            <Typography variant="h5" gutterBottom>
-              Expérience
-            </Typography>
-            <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
-              En toute honnêteté, je n'ai pas d'expérience dans le développement d'applications. Je termine actuellement ma formation en développement d'applications et je suis à la recherche d'un stage pour appliquer mes connaissances.
-            </Typography>
-            <Box>
-              <SkillTag>MVC</SkillTag>
-              <SkillTag>CRUD</SkillTag>
-              <SkillTag>REST API</SkillTag>
-            </Box>
-          </AboutCard>
+          {/* Carte Expérience */}
+          <FlipCard onClick={() => handleCardFlip('experience')}>
+            <FlipCardInner 
+              flipped={flippedCards.experience}
+              sx={{
+                transform: flippedCards.experience ? 'rotateY(180deg)' : 'rotateY(0deg)',
+                WebkitTransform: flippedCards.experience ? 'rotateY(180deg)' : 'rotateY(0deg)',
+              }}
+            >
+              <FlipCardFront
+                sx={{
+                  backfaceVisibility: 'hidden',
+                  WebkitBackfaceVisibility: 'hidden',
+                  MozBackfaceVisibility: 'hidden',
+                }}
+              >
+                <WorkIcon sx={{ fontSize: 48, color: 'primary.main', mb: 2 }} />
+                <Typography variant="h5" gutterBottom>
+                  Expérience
+                </Typography>
+                <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
+                  En toute honnêteté, je n'ai pas d'expérience dans le développement d'applications. Je termine actuellement ma formation en développement d'applications et je suis à la recherche d'un stage pour appliquer mes connaissances.
+                </Typography>
+                <Box>
+                  <SkillTag>MVC</SkillTag>
+                  <SkillTag>CRUD</SkillTag>
+                  <SkillTag>REST API</SkillTag>
+                </Box>
+              </FlipCardFront>
+              <FlipCardBack
+                sx={{
+                  backfaceVisibility: 'hidden',
+                  WebkitBackfaceVisibility: 'hidden',
+                  MozBackfaceVisibility: 'hidden',
+                  transform: 'rotateY(180deg)',
+                  WebkitTransform: 'rotateY(180deg)',
+                }}
+              >
+                <Typography variant="h4" sx={{ color: 'primary.main', mb: 2 }}>
+                  Merci de me donner une chance de travailler avec vous.
+                </Typography>
+                <Typography variant="body1" color="text.secondary">
+                  Cliquez pour retourner la carte
+                </Typography>
+              </FlipCardBack>
+            </FlipCardInner>
+          </FlipCard>
         </Box>
 
         <Box sx={{ 

@@ -3,8 +3,8 @@ import ThemeWrapper from './components/ThemeWrapper'
 import Footer from './components/Footer'
 
 export const metadata: Metadata = {
-  title: 'Laboratoire 2 - Services Web',
-  description: 'Application de gestion de projects avec services REST',
+  title: 'PortFolio',
+  description: 'PortFolio de Jean-François Lefebvre',
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
