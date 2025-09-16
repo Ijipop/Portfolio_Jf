@@ -167,6 +167,14 @@ export default function Contact() {
 
   const emailAddress = 'ijipop82@gmail.com'
 
+  const handleGitHubClick = () => {
+    window.open('https://github.com/Ijipop', '_blank')
+  }
+
+  const handleLinkedInClick = () => {
+    window.open('https://www.linkedin.com/in/jean-fran%C3%A7ois-lefebvre-92380329a/', '_blank')
+  }
+
   const handleOpenEmail = () => {
     const subject = encodeURIComponent('Contact depuis votre portfolio')
     const body = encodeURIComponent('Bonjour Jean-François,\n\n')
@@ -332,10 +340,10 @@ export default function Contact() {
             Suivez-moi
           </Typography>
           <Box>
-            <SocialIcon>
+            <SocialIcon onClick={handleLinkedInClick}>
               <LinkedInIcon />
             </SocialIcon>
-            <SocialIcon>
+            <SocialIcon onClick={handleGitHubClick}>
               <GitHubIcon />
             </SocialIcon>
           </Box>
