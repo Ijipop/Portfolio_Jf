@@ -90,21 +90,6 @@ const ProjectCard = styled(Card)(({ theme }) => ({
   overflow: 'hidden',
   animation: 'fadeInUp 0.6s ease-out',
   cursor: 'pointer',
-  '&::after': {
-    content: '""',
-    position: 'absolute',
-    top: '-3px',
-    left: '-3px',
-    right: '-3px',
-    bottom: '-3px',
-    background: theme.palette.mode === 'dark'
-      ? 'linear-gradient(45deg, #4a5568, #2d3748, #4a5568, #2d3748)'
-      : 'linear-gradient(45deg, #3b82f6, #60a5fa, #93c5fd, #60a5fa)',
-    borderRadius: 27,
-    zIndex: -1,
-    opacity: 0,
-    transition: 'opacity 0.3s ease',
-  },
   // Chenille lumineuse sur le bord extérieur
   '&::before': {
     content: '""',
@@ -131,9 +116,6 @@ const ProjectCard = styled(Card)(({ theme }) => ({
       // Chenille lumineuse qui marche sur le bord extérieur
       animation: 'rotate 2s linear infinite',
     },
-    '&::after': {
-      opacity: 0, // Désactiver l'effet rectangle
-    }
   },
   // Animation de rotation pour le serpent lumineux
   '@keyframes rotate': {
