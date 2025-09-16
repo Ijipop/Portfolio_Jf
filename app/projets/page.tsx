@@ -128,7 +128,17 @@ const ProjectCard = styled(Card)(({ theme }) => ({
     },
     '&::after': {
       opacity: 1,
+      // Effet serpent lumineux pour les deux modes
+      background: theme.palette.mode === 'dark' 
+        ? 'conic-gradient(from 0deg, #ff6b35, #ff1744, #e91e63, #9c27b0, #673ab7, #3f51b5, #2196f3, #00bcd4, #009688, #4caf50, #8bc34a, #cddc39, #ffeb3b, #ffc107, #ff9800, #ff6b35)'
+        : 'conic-gradient(from 0deg, #3b82f6, #1d4ed8, #7c3aed, #c026d3, #db2777, #dc2626, #ea580c, #d97706, #ca8a04, #65a30d, #16a34a, #059669, #0891b2, #0284c7, #2563eb, #3b82f6)',
+      animation: 'rotate 2s linear infinite',
     }
+  },
+  // Animation de rotation pour le serpent lumineux
+  '@keyframes rotate': {
+    '0%': { transform: 'rotate(0deg)' },
+    '100%': { transform: 'rotate(360deg)' }
   },
   '@keyframes fadeInUp': {
     from: {
