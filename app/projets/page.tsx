@@ -44,6 +44,7 @@ const HeaderSection = styled(Box)(({ theme }) => ({
   textAlign: 'center',
   position: 'relative',
   overflow: 'hidden',
+  zIndex: 10, // S'assurer que le header reste au-dessus
   '&::before': {
     content: '""',
     position: 'absolute',
@@ -67,6 +68,7 @@ const HeaderSection = styled(Box)(({ theme }) => ({
       ? 'linear-gradient(45deg, transparent 30%, rgba(255, 107, 53, 0.03) 50%, transparent 70%)'
       : 'none',
     animation: 'shimmer 3s ease-in-out infinite',
+    zIndex: 1, // S'assurer qu'il reste dans le header
   },
   '@keyframes shimmer': {
     '0%': { transform: 'translateX(-100%)' },
