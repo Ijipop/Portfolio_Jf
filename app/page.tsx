@@ -47,6 +47,15 @@ const HeaderSection = styled(Box)(({ theme }) => ({
   '@keyframes shimmer': {
     '0%': { transform: 'translateX(-100%)' },
     '100%': { transform: 'translateX(100%)' },
+  },
+  '@keyframes gradientShift': {
+    '0%': { backgroundPosition: '0% 50%' },
+    '50%': { backgroundPosition: '100% 50%' },
+    '100%': { backgroundPosition: '0% 50%' },
+  },
+  '@keyframes pulse': {
+    '0%': { opacity: 0.3, transform: 'scale(0.95)' },
+    '100%': { opacity: 0.6, transform: 'scale(1.05)' },
   }
 }))
 
@@ -180,9 +189,48 @@ export default function Home() {
 
       <Container maxWidth="lg" sx={{ py: 8 }}>
         <Box sx={{ textAlign: 'center', mb: 6 }}>
-          <Typography variant="h4" gutterBottom sx={{ mb: 2 }}>
-            Bienvenue sur mon portfolio
+          <Typography 
+            variant="h3" 
+            gutterBottom 
+            sx={{ 
+              mb: 3,
+              fontWeight: 900,
+              fontSize: { xs: '2rem', md: '3rem' },
+              textShadow: (theme) => theme.palette.mode === 'dark'
+                ? '0 0 20px rgba(255, 107, 53, 0.6), 0 0 40px rgba(255, 23, 68, 0.4), 0 4px 8px rgba(0,0,0,0.8)'
+                : '0 0 20px rgba(30, 58, 138, 0.4), 0 0 40px rgba(59, 130, 246, 0.3), 0 4px 8px rgba(0,0,0,0.3)',
+              letterSpacing: '0.15em',
+              textTransform: 'uppercase',
+              background: (theme) => theme.palette.mode === 'dark'
+                ? 'linear-gradient(45deg, #ff6b35, #ffffff, #ff1744, #ff6b35)'
+                : 'linear-gradient(45deg, #1e3a8a, #3b82f6, #059669, #1e3a8a)',
+              backgroundClip: 'text',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundSize: '200% 200%',
+              animation: 'gradientShift 3s ease-in-out infinite',
+              position: 'relative',
+              '&::before': {
+                content: '""',
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                background: (theme) => theme.palette.mode === 'dark'
+                  ? 'linear-gradient(45deg, rgba(255, 107, 53, 0.1), rgba(255, 23, 68, 0.1))'
+                  : 'linear-gradient(45deg, rgba(30, 58, 138, 0.1), rgba(59, 130, 246, 0.1))',
+                borderRadius: '20px',
+                filter: 'blur(20px)',
+                zIndex: -1,
+                animation: 'pulse 2s ease-in-out infinite alternate',
+              }
+            }}
+          >
             JEAN-FRANÇOIS LEFEBVRE
+          </Typography>
+          <Typography variant="h4" gutterBottom sx={{ mb: 2, fontWeight: 300, opacity: 0.8 }}>
+            Bienvenue sur mon portfolio
           </Typography>
           <Typography variant="body1" color="text.secondary" sx={{ maxWidth: 600, mx: 'auto' }}>
             Explorez mes projets, découvrez mon parcours et n&apos;hésitez pas à me contacter pour collaborer sur vos idées.
