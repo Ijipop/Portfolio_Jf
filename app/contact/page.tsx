@@ -59,13 +59,13 @@ const ContactCard = styled(Box)(({ theme }) => ({
     ? 'linear-gradient(145deg, #1a1a1a 0%, #2a2a2a 50%, #1a1a1a 100%)'
     : 'linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%)',
   border: theme.palette.mode === 'dark' 
-    ? '2px solid rgba(255, 107, 53, 0.3)' 
+    ? '2px solid rgba(74, 85, 104, 0.2)' 
     : '1px solid rgba(0,0,0,0.08)',
   borderRadius: 24,
   padding: theme.spacing(4),
   textAlign: 'center',
   boxShadow: theme.palette.mode === 'dark'
-    ? '0 15px 50px rgba(0, 0, 0, 0.6), 0 0 20px rgba(255, 107, 53, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.1)'
+    ? '0 15px 50px rgba(0, 0, 0, 0.6), 0 0 20px rgba(74, 85, 104, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.1)'
     : '0 8px 32px rgba(0,0,0,0.1)',
   transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
   cursor: 'pointer',
@@ -79,7 +79,7 @@ const ContactCard = styled(Box)(({ theme }) => ({
     right: 0,
     bottom: 0,
     background: theme.palette.mode === 'dark'
-      ? 'linear-gradient(135deg, rgba(255, 107, 53, 0.1) 0%, rgba(255, 23, 68, 0.1) 50%, rgba(255, 107, 53, 0.05) 100%)'
+      ? 'linear-gradient(135deg, rgba(74, 85, 104, 0.1) 0%, rgba(45, 55, 72, 0.1) 50%, rgba(74, 85, 104, 0.05) 100%)'
       : 'transparent',
     opacity: 0,
     transition: 'opacity 0.3s ease',
@@ -92,7 +92,7 @@ const ContactCard = styled(Box)(({ theme }) => ({
     right: '-2px',
     bottom: '-2px',
     background: theme.palette.mode === 'dark'
-      ? 'linear-gradient(45deg, #ff6b35, #ff1744, #ff6b35, #ff1744)'
+      ? 'linear-gradient(45deg, #4a5568, #2d3748, #4a5568, #2d3748)'
       : 'transparent',
     borderRadius: 26,
     zIndex: -1,
@@ -102,7 +102,7 @@ const ContactCard = styled(Box)(({ theme }) => ({
   '&:hover': {
     transform: 'translateY(-12px) scale(1.03)',
     boxShadow: theme.palette.mode === 'dark'
-      ? '0 30px 60px rgba(0, 0, 0, 0.7), 0 0 30px rgba(255, 107, 53, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2)'
+      ? '0 30px 60px rgba(0, 0, 0, 0.7), 0 0 30px rgba(74, 85, 104, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2)'
       : '0 20px 40px rgba(0,0,0,0.15)',
     '&::before': {
       opacity: 1,
@@ -137,8 +137,8 @@ const SocialIcon = styled(Box)(({ theme }) => ({
 
 const EmailButton = styled(Button)(({ theme }) => ({
   background: theme.palette.mode === 'dark'
-    ? 'linear-gradient(135deg, #ff6b35 0%, #ff1744 100%)'
-    : 'linear-gradient(135deg, #1e3a8a 0%, #059669 100%)',
+    ? 'linear-gradient(135deg, #4a5568 0%, #2d3748 100%)'
+    : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
   color: 'white',
   borderRadius: 12,
   padding: theme.spacing(1, 2),
@@ -147,17 +147,17 @@ const EmailButton = styled(Button)(({ theme }) => ({
   fontWeight: 600,
   textTransform: 'none',
   boxShadow: theme.palette.mode === 'dark'
-    ? '0 4px 15px rgba(255, 107, 53, 0.4)'
-    : '0 4px 15px rgba(30, 58, 138, 0.4)',
+    ? '0 4px 15px rgba(74, 85, 104, 0.3)'
+    : '0 4px 15px rgba(102, 126, 234, 0.3)',
   transition: 'all 0.3s ease',
   '&:hover': {
     background: theme.palette.mode === 'dark'
-      ? 'linear-gradient(135deg, #e55a2b 0%, #e91e63 100%)'
-      : 'linear-gradient(135deg, #1e40af 0%, #047857 100%)',
+      ? 'linear-gradient(135deg, #5a6578 0%, #3d4858 100%)'
+      : 'linear-gradient(135deg, #5a67d8 0%, #6b46c1 100%)',
     transform: 'translateY(-2px)',
     boxShadow: theme.palette.mode === 'dark'
-      ? '0 8px 25px rgba(255, 107, 53, 0.6)'
-      : '0 8px 25px rgba(30, 58, 138, 0.6)',
+      ? '0 8px 25px rgba(74, 85, 104, 0.4)'
+      : '0 8px 25px rgba(102, 126, 234, 0.4)',
   }
 }))
 
