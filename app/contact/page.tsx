@@ -60,13 +60,13 @@ const ContactCard = styled(Box)(({ theme }) => ({
     : 'linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%)',
   border: theme.palette.mode === 'dark' 
     ? '2px solid rgba(74, 85, 104, 0.2)' 
-    : '1px solid rgba(0,0,0,0.08)',
+    : '1px solid rgba(74, 85, 104, 0.15)',
   borderRadius: 24,
   padding: theme.spacing(4),
   textAlign: 'center',
   boxShadow: theme.palette.mode === 'dark'
     ? '0 15px 50px rgba(0, 0, 0, 0.6), 0 0 20px rgba(74, 85, 104, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.1)'
-    : '0 8px 32px rgba(0,0,0,0.1)',
+    : '0 8px 32px rgba(74, 85, 104, 0.1)',
   transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
   cursor: 'pointer',
   position: 'relative',
@@ -103,7 +103,7 @@ const ContactCard = styled(Box)(({ theme }) => ({
     transform: 'translateY(-12px) scale(1.03)',
     boxShadow: theme.palette.mode === 'dark'
       ? '0 30px 60px rgba(0, 0, 0, 0.7), 0 0 30px rgba(74, 85, 104, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2)'
-      : '0 20px 40px rgba(0,0,0,0.15)',
+      : '0 20px 40px rgba(74, 85, 104, 0.15)',
     '&::before': {
       opacity: 1,
     },
