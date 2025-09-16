@@ -109,14 +109,14 @@ const ProjectCard = styled(Card)(({ theme }) => ({
   '&::before': {
     content: '""',
     position: 'absolute',
-    top: '-4px',
-    left: '-4px',
-    right: '-4px',
-    bottom: '-4px',
+    top: '-8px',
+    left: '-8px',
+    right: '-8px',
+    bottom: '-8px',
     background: theme.palette.mode === 'dark'
       ? 'conic-gradient(from 0deg, transparent 0deg, transparent 250deg, #ff6b35 270deg, #ff1744 290deg, #ff6b35 310deg, transparent 330deg)'
       : 'conic-gradient(from 0deg, transparent 0deg, transparent 250deg, #dc2626 270deg, #ea580c 290deg, #dc2626 310deg, transparent 330deg)',
-    borderRadius: 28,
+    borderRadius: 32,
     zIndex: -2,
     opacity: 0,
     transition: 'opacity 0.3s ease',
