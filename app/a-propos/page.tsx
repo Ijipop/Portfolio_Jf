@@ -9,7 +9,7 @@ import PersonIcon from '@mui/icons-material/Person'
 import WorkIcon from '@mui/icons-material/Work'
 import SchoolIcon from '@mui/icons-material/School'
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents'
-import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos'
+import RotateRightIcon from '@mui/icons-material/RotateRight'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 
@@ -21,9 +21,14 @@ const FlipCard = styled(Box)(({ theme }) => ({
   cursor: 'pointer',
   WebkitPerspective: '1000px',
   MozPerspective: '1000px',
-  transition: 'transform 0.3s ease',
+  transition: 'transform 0.2s ease',
   '&:hover': {
-    transform: 'rotateY(5deg) rotateX(5deg)',
+    animation: 'shake 0.5s ease-in-out',
+  },
+  '@keyframes shake': {
+    '0%, 100%': { transform: 'translateX(0)' },
+    '25%': { transform: 'translateX(-2px)' },
+    '75%': { transform: 'translateX(2px)' },
   }
 }))
 
@@ -263,7 +268,14 @@ export default function About() {
                   opacity: 0.6,
                   transition: 'opacity 0.3s ease'
                 }}>
-                  <ArrowForwardIosIcon sx={{ fontSize: 16, color: 'primary.main' }} />
+                  <RotateRightIcon sx={{ 
+                    fontSize: 18, 
+                    color: (theme) => theme.palette.mode === 'dark' ? '#ffffff' : '#1a1a1a',
+                    transition: 'transform 0.3s ease',
+                    '&:hover': {
+                      transform: 'rotate(180deg)'
+                    }
+                  }} />
                 </Box>
               </FlipCardFront>
               <FlipCardBack
@@ -329,7 +341,14 @@ export default function About() {
                   opacity: 0.6,
                   transition: 'opacity 0.3s ease'
                 }}>
-                  <ArrowForwardIosIcon sx={{ fontSize: 16, color: 'primary.main' }} />
+                  <RotateRightIcon sx={{ 
+                    fontSize: 18, 
+                    color: (theme) => theme.palette.mode === 'dark' ? '#ffffff' : '#1a1a1a',
+                    transition: 'transform 0.3s ease',
+                    '&:hover': {
+                      transform: 'rotate(180deg)'
+                    }
+                  }} />
                 </Box>
               </FlipCardFront>
               <FlipCardBack
@@ -395,7 +414,14 @@ export default function About() {
                   opacity: 0.6,
                   transition: 'opacity 0.3s ease'
                 }}>
-                  <ArrowForwardIosIcon sx={{ fontSize: 16, color: 'primary.main' }} />
+                  <RotateRightIcon sx={{ 
+                    fontSize: 18, 
+                    color: (theme) => theme.palette.mode === 'dark' ? '#ffffff' : '#1a1a1a',
+                    transition: 'transform 0.3s ease',
+                    '&:hover': {
+                      transform: 'rotate(180deg)'
+                    }
+                  }} />
                 </Box>
               </FlipCardFront>
               <FlipCardBack
