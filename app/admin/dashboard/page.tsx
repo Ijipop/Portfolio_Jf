@@ -99,14 +99,33 @@ export default function AdminDashboard() {
   }, [router]);
 
   useEffect(() => {
-    // Vérifier si l'utilisateur est connecté
-    const user = localStorage.getItem('adminUser');
-    if (!user) {
-      router.push('/');
-      return;
-    }
+    // Vérifier l'authentification côté serveur
+    const checkAuth = async () => {
+      try {
+        const response = await fetch('/api/auth/verify', {
+          credentials: 'include'
+        });
+        
+        if (!response.ok) {
+          router.push('/');
+          return;
+        }
+        
+        const data = await response.json();
+        if (data.success) {
+          // Stocker les infos utilisateur pour l'affichage
+          localStorage.setItem('adminUser', JSON.stringify(data.user));
+          fetchProjects();
+        } else {
+          router.push('/');
+        }
+      } catch (error) {
+        console.error('Erreur de vérification auth:', error);
+        router.push('/');
+      }
+    };
 
-    fetchProjects();
+    checkAuth();
   }, [router, fetchProjects]);
 
   const handleLogout = async () => {
@@ -169,21 +188,15 @@ export default function AdminDashboard() {
     }
 
     try {
-      const token = localStorage.getItem('adminToken');
-      if (!token) {
-        router.push('/');
-        return;
-      }
-
       const url = editingProject ? `/api/projects/${editingProject.id}` : '/api/projects';
       const method = editingProject ? 'PUT' : 'POST';
 
       const response = await fetch(url, {
         method,
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
+          'Content-Type': 'application/json'
         },
+        credentials: 'include', // Inclure les cookies
         body: JSON.stringify(formData)
       });
 
@@ -208,17 +221,9 @@ export default function AdminDashboard() {
     }
 
     try {
-      const token = localStorage.getItem('adminToken');
-      if (!token) {
-        router.push('/');
-        return;
-      }
-
       const response = await fetch(`/api/projects/${id}`, {
         method: 'DELETE',
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
+        credentials: 'include' // Inclure les cookies
       });
 
       const data = await response.json();

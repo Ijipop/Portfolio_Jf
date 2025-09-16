@@ -62,16 +62,16 @@ const HeaderSection = styled(Box)(({ theme }) => ({
 const FeatureCard = styled(Box)(({ theme }) => ({
   background: theme.palette.mode === 'dark'
     ? 'linear-gradient(145deg, #1a1a1a 0%, #2a2a2a 50%, #1a1a1a 100%)'
-    : 'linear-gradient(145deg, #ffffff 0%, #f8fafc 25%, #f1f5f9 75%, #e2e8f0 100%)',
+    : 'linear-gradient(145deg, #ffffff 0%, #fafbfc 30%, #f1f5f9 70%, #e2e8f0 100%)',
   border: theme.palette.mode === 'dark' 
     ? '2px solid rgba(74, 85, 104, 0.2)' 
-    : '1px solid rgba(74, 85, 104, 0.15)',
+    : '1px solid rgba(148, 163, 184, 0.1)',
   borderRadius: 24,
   padding: theme.spacing(4),
   textAlign: 'center',
   boxShadow: theme.palette.mode === 'dark'
     ? '0 15px 50px rgba(0, 0, 0, 0.6), 0 0 20px rgba(74, 85, 104, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.1)'
-    : '0 10px 40px rgba(74, 85, 104, 0.1), 0 0 0 1px rgba(74, 85, 104, 0.05)',
+    : '0 4px 20px rgba(148, 163, 184, 0.08), 0 0 0 1px rgba(148, 163, 184, 0.05)',
   transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
   height: '100%',
   cursor: 'pointer',
@@ -86,7 +86,7 @@ const FeatureCard = styled(Box)(({ theme }) => ({
     bottom: 0,
     background: theme.palette.mode === 'dark'
       ? 'linear-gradient(135deg, rgba(74, 85, 104, 0.1) 0%, rgba(45, 55, 72, 0.1) 50%, rgba(74, 85, 104, 0.05) 100%)'
-      : 'linear-gradient(135deg, rgba(74, 85, 104, 0.08) 0%, rgba(45, 55, 72, 0.08) 50%, rgba(74, 85, 104, 0.05) 100%)',
+      : 'linear-gradient(135deg, rgba(59, 130, 246, 0.05) 0%, rgba(147, 197, 253, 0.05) 50%, rgba(59, 130, 246, 0.02) 100%)',
     opacity: 0,
     transition: 'opacity 0.3s ease',
   },
@@ -99,7 +99,7 @@ const FeatureCard = styled(Box)(({ theme }) => ({
     bottom: '-2px',
     background: theme.palette.mode === 'dark'
       ? 'linear-gradient(45deg, #4a5568, #2d3748, #4a5568, #2d3748)'
-      : 'linear-gradient(45deg, #667eea, #764ba2, #667eea, #764ba2)',
+      : 'linear-gradient(45deg, #3b82f6, #60a5fa, #93c5fd, #60a5fa)',
     borderRadius: 26,
     zIndex: -1,
     opacity: 0,
@@ -109,7 +109,7 @@ const FeatureCard = styled(Box)(({ theme }) => ({
     transform: 'translateY(-12px) scale(1.03)',
     boxShadow: theme.palette.mode === 'dark'
       ? '0 30px 60px rgba(0, 0, 0, 0.7), 0 0 30px rgba(74, 85, 104, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2)'
-      : '0 25px 50px rgba(74, 85, 104, 0.15), 0 0 0 1px rgba(74, 85, 104, 0.1)',
+      : '0 20px 40px rgba(59, 130, 246, 0.15), 0 0 20px rgba(147, 197, 253, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.8)',
     '&::before': {
       opacity: 1,
     },
