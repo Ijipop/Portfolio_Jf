@@ -90,31 +90,34 @@ const ProjectCard = styled(Card)(({ theme }) => ({
   overflow: 'hidden',
   animation: 'fadeInUp 0.6s ease-out',
   cursor: 'pointer',
-  '&::before': {
-    content: '""',
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    background: theme.palette.mode === 'dark'
-      ? 'linear-gradient(135deg, rgba(74, 85, 104, 0.1) 0%, rgba(45, 55, 72, 0.1) 50%, rgba(74, 85, 104, 0.05) 100%)'
-      : 'linear-gradient(135deg, rgba(59, 130, 246, 0.05) 0%, rgba(147, 197, 253, 0.05) 50%, rgba(59, 130, 246, 0.02) 100%)',
-    opacity: 0,
-    transition: 'opacity 0.3s ease',
-  },
   '&::after': {
     content: '""',
     position: 'absolute',
-    top: '-2px',
-    left: '-2px',
-    right: '-2px',
-    bottom: '-2px',
+    top: '-3px',
+    left: '-3px',
+    right: '-3px',
+    bottom: '-3px',
     background: theme.palette.mode === 'dark'
       ? 'linear-gradient(45deg, #4a5568, #2d3748, #4a5568, #2d3748)'
       : 'linear-gradient(45deg, #3b82f6, #60a5fa, #93c5fd, #60a5fa)',
-    borderRadius: 26,
+    borderRadius: 27,
     zIndex: -1,
+    opacity: 0,
+    transition: 'opacity 0.3s ease',
+  },
+  // Nouveau pseudo-élément pour la chenille lumineuse
+  '&::before': {
+    content: '""',
+    position: 'absolute',
+    top: '-4px',
+    left: '-4px',
+    right: '-4px',
+    bottom: '-4px',
+    background: theme.palette.mode === 'dark'
+      ? 'conic-gradient(from 0deg, transparent 0deg, transparent 320deg, #ff6b35 340deg, #ff1744 360deg, transparent 20deg)'
+      : 'conic-gradient(from 0deg, transparent 0deg, transparent 320deg, #3b82f6 340deg, #60a5fa 360deg, transparent 20deg)',
+    borderRadius: 28,
+    zIndex: -2,
     opacity: 0,
     transition: 'opacity 0.3s ease',
   },
@@ -125,14 +128,11 @@ const ProjectCard = styled(Card)(({ theme }) => ({
       : '0 20px 40px rgba(59, 130, 246, 0.15), 0 0 20px rgba(147, 197, 253, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.8)',
     '&::before': {
       opacity: 1,
+      // Chenille lumineuse qui marche sur le bord extérieur
+      animation: 'rotate 2s linear infinite',
     },
     '&::after': {
       opacity: 1,
-      // Petite traînée lumineuse qui tourne
-      background: theme.palette.mode === 'dark' 
-        ? 'conic-gradient(from 0deg, transparent 0deg, transparent 300deg, #3b82f6 320deg, #60a5fa 340deg, #93c5fd 360deg)'
-        : 'conic-gradient(from 0deg, transparent 0deg, transparent 300deg, #1d4ed8 320deg, #3b82f6 340deg, #60a5fa 360deg)',
-      animation: 'rotate 3s linear infinite',
     }
   },
   // Animation de rotation pour le serpent lumineux
