@@ -1,5 +1,6 @@
 import { prisma } from '@/lib/prisma'
 import { NextRequest, NextResponse } from 'next/server'
+import { requireAuth, AuthUser } from '@/lib/auth'
 
 // GET /api/projects - Obtenir tous les projects
 export async function GET()
@@ -34,8 +35,8 @@ export async function GET()
 	}
 }
 
-// POST /api/projects - Ajouter un nouveau project
-export async function POST(request: NextRequest)
+// POST /api/projects - Ajouter un nouveau project (PROTÉGÉ)
+export const POST = requireAuth(async (request: NextRequest, user: AuthUser) =>
 {
 	try
 	{
@@ -128,4 +129,4 @@ export async function POST(request: NextRequest)
 			}
 		)
 	}
-}
+});
