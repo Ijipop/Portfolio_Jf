@@ -15,7 +15,7 @@ import { useState } from 'react'
 const FlipCard = styled(Box)(({ theme }) => ({
   backgroundColor: 'transparent',
   width: '100%',
-  height: '300px',
+  height: '400px',
   perspective: '1000px',
   cursor: 'pointer',
   WebkitPerspective: '1000px',
@@ -261,10 +261,17 @@ export default function About() {
                   WebkitTransform: 'rotateY(180deg)',
                 }}
               >
-                <Typography variant="h4" sx={{ color: 'primary.main', mb: 2 }}>
-                  Jean-François Lefebvre, passionné par l'informatique et les jeux vidéo. <br />Je suis un grand consommateurs d'app mobile et web.
-                  À 38 ans à cause de problèmes de santé, je me suis réorienté vers le développement d'applications.  <br />Je suis vraiment motivé et je suis content de pouvoir 
-                  enfin pouvoir jumeler passion et travail.
+                <Typography variant="h5" sx={{ color: 'primary.main', mb: 2, fontWeight: 'bold' }}>
+                  Jean-François Lefebvre
+                </Typography>
+                <Typography variant="body1" sx={{ mb: 2, textAlign: 'left', lineHeight: 1.6 }}>
+                  Passionné par l'informatique et les jeux vidéo. Grand consommateur d'applications mobiles et web.
+                </Typography>
+                <Typography variant="body1" sx={{ mb: 2, textAlign: 'left', lineHeight: 1.6 }}>
+                  À 38 ans, suite à des problèmes de santé, je me suis réorienté vers le développement d'applications.
+                </Typography>
+                <Typography variant="body1" sx={{ textAlign: 'left', lineHeight: 1.6, fontWeight: 'bold', color: 'primary.main' }}>
+                  Motivé et heureux de pouvoir enfin jumeler passion et travail !
                 </Typography>
                 <Typography variant="body1" color="text.secondary">
                   Cliquez pour retourner la carte
@@ -311,10 +318,17 @@ export default function About() {
                   WebkitTransform: 'rotateY(180deg)',
                 }}
               >
-                <Typography variant="h4" sx={{ color: 'primary.main', mb: 2 }}>
-                  DEP en soutien informatique à l'ÉMICA (2023-2024)<br />
-                  AEC Développement de logiciels <br />
-                  Sécurité d'applications de bureau, mobiles et Web (2024-2026)
+                <Typography variant="h5" sx={{ color: 'primary.main', mb: 2, fontWeight: 'bold' }}>
+                  Formation
+                </Typography>
+                <Typography variant="body1" sx={{ mb: 1, textAlign: 'left', lineHeight: 1.6 }}>
+                  • DEP en soutien informatique à l'ÉMICA (2023-2024)
+                </Typography>
+                <Typography variant="body1" sx={{ mb: 1, textAlign: 'left', lineHeight: 1.6 }}>
+                  • AEC Développement de logiciels
+                </Typography>
+                <Typography variant="body1" sx={{ mb: 2, textAlign: 'left', lineHeight: 1.6 }}>
+                  • Sécurité d'applications de bureau, mobiles et Web (2024-2026)
                 </Typography>
                 <Typography variant="body1" color="text.secondary">
                   Cliquez pour retourner la carte
@@ -361,8 +375,17 @@ export default function About() {
                   WebkitTransform: 'rotateY(180deg)',
                 }}
               >
-                <Typography variant="h4" sx={{ color: 'primary.main', mb: 2 }}>
-                  Merci de me donner une chance de travailler avec vous.
+                <Typography variant="h5" sx={{ color: 'primary.main', mb: 2, fontWeight: 'bold' }}>
+                  Expérience
+                </Typography>
+                <Typography variant="body1" sx={{ mb: 2, textAlign: 'left', lineHeight: 1.6 }}>
+                  En toute honnêteté, je n'ai pas encore d'expérience professionnelle dans le développement d'applications.
+                </Typography>
+                <Typography variant="body1" sx={{ mb: 2, textAlign: 'left', lineHeight: 1.6 }}>
+                  Je termine actuellement ma formation et je suis à la recherche d'un stage pour appliquer mes connaissances.
+                </Typography>
+                <Typography variant="body1" sx={{ textAlign: 'center', lineHeight: 1.6, fontWeight: 'bold', color: 'primary.main' }}>
+                  Merci de me donner une chance de travailler avec vous !
                 </Typography>
                 <Typography variant="body1" color="text.secondary">
                   Cliquez pour retourner la carte
