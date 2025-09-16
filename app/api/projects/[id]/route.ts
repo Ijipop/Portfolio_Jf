@@ -61,7 +61,7 @@ export const DELETE = requireAuth(async (request: NextRequest, user: AuthUser, {
 			}
 		)
 	}
-}
+});
 
 // PUT /api/projects/[id] - Modifier un project par ID (PROTÉGÉ)
 export const PUT = requireAuth(async (request: NextRequest, user: AuthUser, { params }: { params: { id: string } }) =>
@@ -187,7 +187,7 @@ export const PUT = requireAuth(async (request: NextRequest, user: AuthUser, { pa
 			}
 		)
 	}
-}
+});
 
 // GET /api/projects/[id] - Obtenir un project par ID (bonus)
 export async function GET(request: NextRequest,{ params }: { params: { id: string } })
