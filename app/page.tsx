@@ -28,7 +28,7 @@ const HeaderSection = styled(Box)(({ theme }) => ({
     right: 0,
     bottom: 0,
     background: theme.palette.mode === 'dark'
-      ? 'radial-gradient(circle at 20% 50%, rgba(0, 212, 255, 0.1) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(255, 107, 53, 0.1) 0%, transparent 50%), radial-gradient(circle at 40% 80%, rgba(0, 212, 255, 0.05) 0%, transparent 50%)'
+      ? 'radial-gradient(circle at 20% 50%, rgba(139, 92, 246, 0.1) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(236, 72, 153, 0.1) 0%, transparent 50%), radial-gradient(circle at 40% 80%, rgba(139, 92, 246, 0.05) 0%, transparent 50%)'
       : 'url("data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%23ffffff" fill-opacity="0.08"%3E%3Ccircle cx="30" cy="30" r="1.5"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")',
     opacity: 1,
   },
@@ -40,7 +40,7 @@ const HeaderSection = styled(Box)(({ theme }) => ({
     right: 0,
     bottom: 0,
     background: theme.palette.mode === 'dark'
-      ? 'linear-gradient(45deg, transparent 30%, rgba(0, 212, 255, 0.03) 50%, transparent 70%)'
+      ? 'linear-gradient(45deg, transparent 30%, rgba(139, 92, 246, 0.03) 50%, transparent 70%)'
       : 'none',
     animation: 'shimmer 3s ease-in-out infinite',
   },
@@ -55,13 +55,13 @@ const FeatureCard = styled(Box)(({ theme }) => ({
     ? 'linear-gradient(145deg, #1a1a1a 0%, #2a2a2a 50%, #1a1a1a 100%)'
     : 'linear-gradient(145deg, #ffffff 0%, #f8fafc 100%)',
   border: theme.palette.mode === 'dark' 
-    ? '2px solid rgba(0, 212, 255, 0.3)' 
+    ? '2px solid rgba(139, 92, 246, 0.3)' 
     : '1px solid rgba(30, 58, 138, 0.1)',
   borderRadius: 24,
   padding: theme.spacing(4),
   textAlign: 'center',
   boxShadow: theme.palette.mode === 'dark'
-    ? '0 15px 50px rgba(0, 0, 0, 0.6), 0 0 20px rgba(0, 212, 255, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.1)'
+    ? '0 15px 50px rgba(0, 0, 0, 0.6), 0 0 20px rgba(139, 92, 246, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.1)'
     : '0 10px 40px rgba(30, 58, 138, 0.1), 0 0 0 1px rgba(30, 58, 138, 0.05)',
   transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
   height: '100%',
@@ -76,7 +76,7 @@ const FeatureCard = styled(Box)(({ theme }) => ({
     right: 0,
     bottom: 0,
     background: theme.palette.mode === 'dark'
-      ? 'linear-gradient(135deg, rgba(0, 212, 255, 0.1) 0%, rgba(255, 107, 53, 0.1) 50%, rgba(0, 212, 255, 0.05) 100%)'
+      ? 'linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(236, 72, 153, 0.1) 50%, rgba(139, 92, 246, 0.05) 100%)'
       : 'linear-gradient(135deg, rgba(30, 58, 138, 0.03) 0%, rgba(5, 150, 105, 0.03) 100%)',
     opacity: 0,
     transition: 'opacity 0.3s ease',
@@ -89,7 +89,7 @@ const FeatureCard = styled(Box)(({ theme }) => ({
     right: '-2px',
     bottom: '-2px',
     background: theme.palette.mode === 'dark'
-      ? 'linear-gradient(45deg, #00d4ff, #ff6b35, #00d4ff, #ff6b35)'
+      ? 'linear-gradient(45deg, #8b5cf6, #ec4899, #8b5cf6, #ec4899)'
       : 'transparent',
     borderRadius: 26,
     zIndex: -1,
@@ -99,7 +99,7 @@ const FeatureCard = styled(Box)(({ theme }) => ({
   '&:hover': {
     transform: 'translateY(-12px) scale(1.03)',
     boxShadow: theme.palette.mode === 'dark'
-      ? '0 30px 60px rgba(0, 0, 0, 0.7), 0 0 30px rgba(0, 212, 255, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2)'
+      ? '0 30px 60px rgba(0, 0, 0, 0.7), 0 0 30px rgba(139, 92, 246, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2)'
       : '0 25px 50px rgba(30, 58, 138, 0.15), 0 0 0 1px rgba(30, 58, 138, 0.1)',
     '&::before': {
       opacity: 1,
@@ -132,7 +132,7 @@ export default function Home() {
         right: 0,
         bottom: 0,
         background: (theme) => theme.palette.mode === 'dark'
-          ? 'radial-gradient(circle at 25% 25%, rgba(0, 212, 255, 0.05) 0%, transparent 50%), radial-gradient(circle at 75% 75%, rgba(255, 107, 53, 0.05) 0%, transparent 50%)'
+          ? 'radial-gradient(circle at 25% 25%, rgba(139, 92, 246, 0.05) 0%, transparent 50%), radial-gradient(circle at 75% 75%, rgba(236, 72, 153, 0.05) 0%, transparent 50%)'
           : 'none',
         pointerEvents: 'none',
         zIndex: 0,
@@ -150,12 +150,12 @@ export default function Home() {
               fontWeight: 900,
               fontSize: { xs: '3rem', md: '4.5rem' },
               textShadow: (theme) => theme.palette.mode === 'dark'
-                ? '0 0 20px rgba(0, 212, 255, 0.5), 0 4px 8px rgba(0,0,0,0.8)'
+                ? '0 0 20px rgba(139, 92, 246, 0.5), 0 4px 8px rgba(0,0,0,0.8)'
                 : '0 4px 8px rgba(0,0,0,0.3)',
               letterSpacing: '0.1em',
               textTransform: 'uppercase',
               background: (theme) => theme.palette.mode === 'dark'
-                ? 'linear-gradient(45deg, #00d4ff, #ffffff, #ff6b35)'
+                ? 'linear-gradient(45deg, #8b5cf6, #ffffff, #ec4899)'
                 : 'inherit',
               backgroundClip: (theme) => theme.palette.mode === 'dark' ? 'text' : 'initial',
               WebkitBackgroundClip: (theme) => theme.palette.mode === 'dark' ? 'text' : 'initial',
