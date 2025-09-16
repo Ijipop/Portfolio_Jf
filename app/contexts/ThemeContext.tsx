@@ -46,24 +46,24 @@ const darkTheme = createTheme({
   palette: {
     mode: 'dark',
     primary: {
-      main: '#3b82f6', // Bleu vif pour le mode sombre
-      light: '#60a5fa',
-      dark: '#2563eb',
-      contrastText: '#ffffff',
+      main: '#00d4ff', // Cyan électrique vibrant
+      light: '#33ddff',
+      dark: '#00a8cc',
+      contrastText: '#000000',
     },
     secondary: {
-      main: '#10b981', // Vert émeraude lumineux
-      light: '#34d399',
-      dark: '#059669',
+      main: '#ff6b35', // Orange vif et énergique
+      light: '#ff8a5b',
+      dark: '#e55a2b',
       contrastText: '#ffffff',
     },
     background: {
-      default: '#0f172a', // Bleu très sombre élégant
-      paper: '#1e293b',
+      default: '#0a0a0a', // Noir profond pour plus de contraste
+      paper: '#1a1a1a',
     },
     text: {
-      primary: '#f1f5f9',
-      secondary: '#cbd5e1',
+      primary: '#ffffff',
+      secondary: '#b0b0b0',
     },
     grey: {
       50: '#f8fafc',
@@ -76,6 +76,16 @@ const darkTheme = createTheme({
       700: '#334155',
       800: '#1e293b',
       900: '#0f172a',
+    },
+  },
+  components: {
+    MuiCssBaseline: {
+      styleOverrides: {
+        body: {
+          background: 'linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 50%, #0a0a0a 100%)',
+          backgroundAttachment: 'fixed',
+        },
+      },
     },
   },
 })
