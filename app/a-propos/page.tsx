@@ -178,7 +178,7 @@ export default function About() {
               Formation
             </Typography>
             <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
-              Formation en développement web avec focus sur les technologies modernes.
+              Formation en développement d'applications avec focus sur les technologies modernes.
             </Typography>
             <Box>
               <SkillTag>Responsive Design</SkillTag>
