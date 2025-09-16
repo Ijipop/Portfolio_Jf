@@ -62,8 +62,6 @@ export async function POST(request: NextRequest)
 
 	try
 	{
-	try
-	{
 		const body = await request.json()
 		const { name, description, technologies, status, url, imageUrl } = body
 

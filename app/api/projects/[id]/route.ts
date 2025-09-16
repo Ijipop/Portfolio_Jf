@@ -29,8 +29,6 @@ export async function DELETE(request: NextRequest, { params }: { params: { id: s
 
 	try
 	{
-	try
-	{
 		const id = parseInt(params.id)
 
 		// Validation de l'ID
@@ -48,7 +46,9 @@ export async function DELETE(request: NextRequest, { params }: { params: { id: s
 		}
 
 		// Vérifier si le project existe
-		const existingProject = await prisma.project.findUnique({where: { id }})
+		const existingProject = await prisma.project.findUnique({
+			where: { id }
+		})
 
 		if (!existingProject)
 		{
@@ -64,12 +64,13 @@ export async function DELETE(request: NextRequest, { params }: { params: { id: s
 		}
 
 		// Supprimer le project
-		await prisma.project.delete({ where: { id } })
+		await prisma.project.delete({
+			where: { id }
+		})
 
-		return NextResponse.json(
-		{
+		return NextResponse.json({
 			success: true,
-			message: `Project "${existingProject.name}" supprimé avec succès`
+			message: 'Project supprimé avec succès'
 		})
 	}
 	catch (error)
@@ -114,8 +115,6 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
 
 	try
 	{
-	try
-	{
 		const id = parseInt(params.id)
 
 		// Validation de l'ID
@@ -132,28 +131,11 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
 			)
 		}
 
-		// Vérifier si le project existe
-		const existingProject = await prisma.project.findUnique({ where: { id } })
-
-		if (!existingProject)
-		{
-			return NextResponse.json(
-				{
-					success: false,
-					error: 'Project non trouvé'
-				},
-				{
-					status: 404
-				}
-			)
-		}
-
 		const body = await request.json()
 		const { name, description, technologies, status, url, imageUrl } = body
 
 		// Validation des données
-		if (!name || typeof name !== 'string' || name.trim().length === 0)
-		{
+		if (!name || typeof name !== 'string' || name.trim().length === 0) {
 			return NextResponse.json(
 				{
 					success: false,
@@ -201,6 +183,24 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
 			)
 		}
 
+		// Vérifier si le project existe
+		const existingProject = await prisma.project.findUnique({
+			where: { id }
+		})
+
+		if (!existingProject)
+		{
+			return NextResponse.json(
+				{
+					success: false,
+					error: 'Project non trouvé'
+				},
+				{
+					status: 404
+				}
+			)
+		}
+
 		// Mettre à jour le project
 		const updatedProject = await prisma.project.update({
 			where: { id },
@@ -224,7 +224,6 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
 	catch (error)
 	{
 		console.error('Erreur lors de la modification du project:', error)
-		
 		return NextResponse.json(
 			{
 				success: false,
@@ -238,7 +237,7 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
 }
 
 // GET /api/projects/[id] - Obtenir un project par ID (bonus)
-export async function GET(request: NextRequest,{ params }: { params: { id: string } })
+export async function GET(request: NextRequest, { params }: { params: { id: string } })
 {
 	try
 	{
@@ -259,7 +258,9 @@ export async function GET(request: NextRequest,{ params }: { params: { id: strin
 		}
 
 		// Récupérer le project
-		const project = await prisma.project.findUnique({ where: { id } })
+		const project = await prisma.project.findUnique({
+			where: { id }
+		})
 
 		if (!project)
 		{
