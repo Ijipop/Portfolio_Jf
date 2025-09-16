@@ -13,6 +13,54 @@ import RotateRightIcon from '@mui/icons-material/RotateRight'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 
+const HeaderSection = styled(Box)(({ theme }) => ({
+  background: theme.palette.mode === 'dark' 
+    ? 'linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 25%, #2a2a2a 50%, #1a1a1a 75%, #0a0a0a 100%)'
+    : 'linear-gradient(135deg, #1e3a8a 0%, #3b82f6 50%, #059669 100%)',
+  color: 'white',
+  padding: theme.spacing(12, 0, 8),
+  textAlign: 'center',
+  position: 'relative',
+  overflow: 'hidden',
+  '&::before': {
+    content: '""',
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    background: theme.palette.mode === 'dark'
+      ? 'radial-gradient(circle at 20% 50%, rgba(255, 107, 53, 0.1) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(255, 23, 68, 0.1) 0%, transparent 50%), radial-gradient(circle at 40% 80%, rgba(255, 107, 53, 0.05) 0%, transparent 50%)'
+      : 'url("data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%23ffffff" fill-opacity="0.08"%3E%3Ccircle cx="30" cy="30" r="1.5"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")',
+    opacity: 1,
+  },
+  '&::after': {
+    content: '""',
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    background: theme.palette.mode === 'dark'
+      ? 'linear-gradient(45deg, transparent 30%, rgba(255, 107, 53, 0.03) 50%, transparent 70%)'
+      : 'linear-gradient(45deg, transparent 30%, rgba(30, 58, 138, 0.05) 50%, transparent 70%)',
+    animation: 'shimmer 3s ease-in-out infinite',
+  },
+  '@keyframes shimmer': {
+    '0%': { transform: 'translateX(-100%)' },
+    '100%': { transform: 'translateX(100%)' },
+  },
+  '@keyframes gradientShift': {
+    '0%': { backgroundPosition: '0% 50%' },
+    '50%': { backgroundPosition: '100% 50%' },
+    '100%': { backgroundPosition: '0% 50%' },
+  },
+  '@keyframes pulse': {
+    '0%': { opacity: 0.3, transform: 'scale(0.95)' },
+    '100%': { opacity: 0.6, transform: 'scale(1.05)' },
+  }
+}))
+
 const FlipCard = styled(Box)(({ theme }) => ({
   backgroundColor: 'transparent',
   width: '100%',
@@ -137,7 +185,9 @@ const FlipCardBack = styled(Box)(({ theme }) => ({
 
 const SkillTag = styled(Box)(({ theme }) => ({
   display: 'inline-block',
-  background: theme.palette.primary.main,
+  background: theme.palette.mode === 'dark'
+    ? 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
+    : 'linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%)',
   color: 'white',
   padding: theme.spacing(0.5, 1.5),
   borderRadius: 20,
@@ -145,9 +195,14 @@ const SkillTag = styled(Box)(({ theme }) => ({
   fontWeight: 500,
   margin: theme.spacing(0.5),
   transition: 'all 0.3s ease',
+  boxShadow: theme.palette.mode === 'dark'
+    ? '0 2px 8px rgba(102, 126, 234, 0.3)'
+    : '0 2px 8px rgba(79, 70, 229, 0.3)',
   '&:hover': {
     transform: 'scale(1.05)',
-    boxShadow: '0 4px 12px rgba(0,0,0,0.2)',
+    boxShadow: theme.palette.mode === 'dark'
+      ? '0 4px 16px rgba(102, 126, 234, 0.4)'
+      : '0 4px 16px rgba(79, 70, 229, 0.4)',
   }
 }))
 
@@ -189,15 +244,16 @@ export default function About() {
     }}>
       <AppBarComponent />
       
-      <Container maxWidth="lg" sx={{ py: 8 }}>
-        <Box sx={{ textAlign: 'center', mb: 8 }}>
+      {/* Hero Section */}
+      <HeaderSection>
+        <Container maxWidth="lg">
           <Typography 
             variant="h2" 
             component="h1" 
             gutterBottom 
             sx={{ 
               fontWeight: 900,
-              fontSize: { xs: '2.5rem', md: '3.5rem' },
+              fontSize: { xs: '3rem', md: '4.5rem' },
               textShadow: (theme) => theme.palette.mode === 'dark'
                 ? '0 0 20px rgba(255, 107, 53, 0.5), 0 4px 8px rgba(0,0,0,0.8)'
                 : '0 4px 8px rgba(0,0,0,0.3)',
@@ -214,9 +270,9 @@ export default function About() {
             À Propos
           </Typography>
           <Typography 
-            variant="h6" 
+            variant="h5" 
             sx={{ 
-              opacity: 0.8,
+              opacity: 0.9,
               fontWeight: 300,
               maxWidth: 600,
               mx: 'auto'
@@ -224,7 +280,10 @@ export default function About() {
           >
             Découvrez mon parcours et mes compétences
           </Typography>
-        </Box>
+        </Container>
+      </HeaderSection>
+
+      <Container maxWidth="lg" sx={{ py: 6 }}>
 
         <Box sx={{ 
           display: 'grid', 
