@@ -57,7 +57,7 @@ const HeaderSection = styled(Box)(({ theme }) => ({
 const ContactCard = styled(Box)(({ theme }) => ({
   background: theme.palette.mode === 'dark'
     ? 'linear-gradient(145deg, #1a1a1a 0%, #2a2a2a 50%, #1a1a1a 100%)'
-    : 'linear-gradient(145deg, #ffffff 0%, #f1f5f9 50%, #e2e8f0 100%)',
+    : 'linear-gradient(145deg, #ffffff 0%, #f8fafc 25%, #f1f5f9 75%, #e2e8f0 100%)',
   border: theme.palette.mode === 'dark' 
     ? '2px solid rgba(74, 85, 104, 0.2)' 
     : '1px solid rgba(74, 85, 104, 0.15)',
