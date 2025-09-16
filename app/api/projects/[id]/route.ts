@@ -1,10 +1,32 @@
 import { prisma } from '@/lib/prisma'
 import { NextRequest, NextResponse } from 'next/server'
-import { requireAuth, AuthUser } from '@/lib/auth'
+import jwt from 'jsonwebtoken'
 
 // DELETE /api/projects/[id] - Supprimer un project par ID (PROTÉGÉ)
-export const DELETE = requireAuth(async (request: NextRequest, user: AuthUser, { params }: { params: { id: string } }) =>
+export async function DELETE(request: NextRequest, { params }: { params: { id: string } })
 {
+	// Vérifier l'authentification
+	const authHeader = request.headers.get('authorization')
+	if (!authHeader || !authHeader.startsWith('Bearer ')) {
+		return NextResponse.json(
+			{ success: false, error: 'Token d\'authentification requis' },
+			{ status: 401 }
+		)
+	}
+
+	const token = authHeader.substring(7)
+	try {
+		if (!process.env.JWT_SECRET) {
+			throw new Error('JWT_SECRET non configuré')
+		}
+		jwt.verify(token, process.env.JWT_SECRET)
+	} catch (error) {
+		return NextResponse.json(
+			{ success: false, error: 'Token invalide ou expiré' },
+			{ status: 401 }
+		)
+	}
+
 	try
 	{
 		const id = parseInt(params.id)
@@ -24,7 +46,9 @@ export const DELETE = requireAuth(async (request: NextRequest, user: AuthUser, {
 		}
 
 		// Vérifier si le project existe
-		const existingProject = await prisma.project.findUnique({where: { id }})
+		const existingProject = await prisma.project.findUnique({
+			where: { id }
+		})
 
 		if (!existingProject)
 		{
@@ -40,12 +64,13 @@ export const DELETE = requireAuth(async (request: NextRequest, user: AuthUser, {
 		}
 
 		// Supprimer le project
-		await prisma.project.delete({ where: { id } })
+		await prisma.project.delete({
+			where: { id }
+		})
 
-		return NextResponse.json(
-		{
+		return NextResponse.json({
 			success: true,
-			message: `Project "${existingProject.name}" supprimé avec succès`
+			message: 'Project supprimé avec succès'
 		})
 	}
 	catch (error)
@@ -61,11 +86,33 @@ export const DELETE = requireAuth(async (request: NextRequest, user: AuthUser, {
 			}
 		)
 	}
-});
+}
 
 // PUT /api/projects/[id] - Modifier un project par ID (PROTÉGÉ)
-export const PUT = requireAuth(async (request: NextRequest, user: AuthUser, { params }: { params: { id: string } }) =>
+export async function PUT(request: NextRequest, { params }: { params: { id: string } })
 {
+	// Vérifier l'authentification
+	const authHeader = request.headers.get('authorization')
+	if (!authHeader || !authHeader.startsWith('Bearer ')) {
+		return NextResponse.json(
+			{ success: false, error: 'Token d\'authentification requis' },
+			{ status: 401 }
+		)
+	}
+
+	const token = authHeader.substring(7)
+	try {
+		if (!process.env.JWT_SECRET) {
+			throw new Error('JWT_SECRET non configuré')
+		}
+		jwt.verify(token, process.env.JWT_SECRET)
+	} catch (error) {
+		return NextResponse.json(
+			{ success: false, error: 'Token invalide ou expiré' },
+			{ status: 401 }
+		)
+	}
+
 	try
 	{
 		const id = parseInt(params.id)
@@ -84,28 +131,11 @@ export const PUT = requireAuth(async (request: NextRequest, user: AuthUser, { pa
 			)
 		}
 
-		// Vérifier si le project existe
-		const existingProject = await prisma.project.findUnique({ where: { id } })
-
-		if (!existingProject)
-		{
-			return NextResponse.json(
-				{
-					success: false,
-					error: 'Project non trouvé'
-				},
-				{
-					status: 404
-				}
-			)
-		}
-
 		const body = await request.json()
 		const { name, description, technologies, status, url, imageUrl } = body
 
 		// Validation des données
-		if (!name || typeof name !== 'string' || name.trim().length === 0)
-		{
+		if (!name || typeof name !== 'string' || name.trim().length === 0) {
 			return NextResponse.json(
 				{
 					success: false,
@@ -153,6 +183,24 @@ export const PUT = requireAuth(async (request: NextRequest, user: AuthUser, { pa
 			)
 		}
 
+		// Vérifier si le project existe
+		const existingProject = await prisma.project.findUnique({
+			where: { id }
+		})
+
+		if (!existingProject)
+		{
+			return NextResponse.json(
+				{
+					success: false,
+					error: 'Project non trouvé'
+				},
+				{
+					status: 404
+				}
+			)
+		}
+
 		// Mettre à jour le project
 		const updatedProject = await prisma.project.update({
 			where: { id },
@@ -176,7 +224,6 @@ export const PUT = requireAuth(async (request: NextRequest, user: AuthUser, { pa
 	catch (error)
 	{
 		console.error('Erreur lors de la modification du project:', error)
-		
 		return NextResponse.json(
 			{
 				success: false,
@@ -187,10 +234,10 @@ export const PUT = requireAuth(async (request: NextRequest, user: AuthUser, { pa
 			}
 		)
 	}
-});
+}
 
 // GET /api/projects/[id] - Obtenir un project par ID (bonus)
-export async function GET(request: NextRequest,{ params }: { params: { id: string } })
+export async function GET(request: NextRequest, { params }: { params: { id: string } })
 {
 	try
 	{
@@ -211,7 +258,9 @@ export async function GET(request: NextRequest,{ params }: { params: { id: strin
 		}
 
 		// Récupérer le project
-		const project = await prisma.project.findUnique({ where: { id } })
+		const project = await prisma.project.findUnique({
+			where: { id }
+		})
 
 		if (!project)
 		{
