@@ -41,7 +41,7 @@ const HeaderSection = styled(Box)(({ theme }) => ({
     bottom: 0,
     background: theme.palette.mode === 'dark'
       ? 'linear-gradient(45deg, transparent 30%, rgba(255, 107, 53, 0.03) 50%, transparent 70%)'
-      : 'none',
+      : 'linear-gradient(45deg, transparent 30%, rgba(30, 58, 138, 0.05) 50%, transparent 70%)',
     animation: 'shimmer 3s ease-in-out infinite',
   },
   '@keyframes shimmer': {
