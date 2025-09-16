@@ -181,7 +181,6 @@ export default function About() {
               Formation en développement web avec focus sur les technologies modernes.
             </Typography>
             <Box>
-              <SkillTag>ES6+</SkillTag>
               <SkillTag>Responsive Design</SkillTag>
               <SkillTag>GitHub</SkillTag>
               <SkillTag>JSON</SkillTag>
@@ -194,12 +193,11 @@ export default function About() {
               Expérience
             </Typography>
             <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
-              En toute honnêteté, je n'ai pas d'expérience dans le développement d'applications. Je termine actuellement ma formation en développement web et je suis à la recherche d'un stage pour appliquer mes connaissances.
+              En toute honnêteté, je n'ai pas d'expérience dans le développement d'applications. Je termine actuellement ma formation en développement d'applications et je suis à la recherche d'un stage pour appliquer mes connaissances.
             </Typography>
             <Box>
               <SkillTag>MVC</SkillTag>
               <SkillTag>CRUD</SkillTag>
-              <SkillTag>JWT</SkillTag>
               <SkillTag>REST API</SkillTag>
             </Box>
           </AboutCard>

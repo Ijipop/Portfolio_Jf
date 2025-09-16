@@ -8,6 +8,7 @@ import GitHubIcon from '@mui/icons-material/GitHub'
 import LinkedInIcon from '@mui/icons-material/LinkedIn'
 import TwitterIcon from '@mui/icons-material/Twitter'
 import EmailIcon from '@mui/icons-material/Email'
+import { useRouter } from 'next/navigation'
 
 const FooterContainer = styled(Box)(({ theme }) => ({
   background: theme.palette.mode === 'dark'
@@ -51,6 +52,19 @@ const SocialIcon = styled(Box)(({ theme }) => ({
 
 export default function Footer() {
   const currentYear = new Date().getFullYear()
+  const router = useRouter()
+
+  const handleEmailClick = () => {
+    router.push('/contact')
+  }
+
+  const handleGitHubClick = () => {
+    window.open('https://github.com/Ijipop', '_blank')
+  }
+
+  const handleLinkedInClick = () => {
+    window.open('https://www.linkedin.com/in/jean-fran%C3%A7ois-lefebvre-92380329a/', '_blank')
+  }
 
   return (
     <FooterContainer>
@@ -67,7 +81,7 @@ export default function Footer() {
               Portfolio Web
             </Typography>
             <Typography variant="body2" sx={{ opacity: 0.8 }}>
-              Développeur Full Stack
+              Jean-François Lefebvre, Développeur Full Stack
             </Typography>
           </Box>
 
@@ -76,16 +90,13 @@ export default function Footer() {
               Suivez-moi
             </Typography>
             <Box>
-              <SocialIcon>
+              <SocialIcon onClick={handleGitHubClick}>
                 <GitHubIcon fontSize="small" />
               </SocialIcon>
-              <SocialIcon>
+              <SocialIcon onClick={handleLinkedInClick}>
                 <LinkedInIcon fontSize="small" />
               </SocialIcon>
-              <SocialIcon>
-                <TwitterIcon fontSize="small" />
-              </SocialIcon>
-              <SocialIcon>
+              <SocialIcon onClick={handleEmailClick}>
                 <EmailIcon fontSize="small" />
               </SocialIcon>
             </Box>
