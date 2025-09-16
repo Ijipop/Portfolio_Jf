@@ -80,9 +80,7 @@ export default function AdminDashboard() {
 
   const fetchProjects = useCallback(async () => {
     try {
-      const response = await fetch('/api/projects', {
-        credentials: 'include' // Inclure les cookies
-      });
+      const response = await fetch('/api/projects');
       const data = await response.json();
       
       if (data.success) {
@@ -99,46 +97,23 @@ export default function AdminDashboard() {
   }, [router]);
 
   useEffect(() => {
-    // Vérifier l'authentification côté serveur
-    const checkAuth = async () => {
-      try {
-        const response = await fetch('/api/auth/verify', {
-          credentials: 'include'
-        });
-        
-        if (!response.ok) {
-          router.push('/');
-          return;
-        }
-        
-        const data = await response.json();
-        if (data.success) {
-          // Stocker les infos utilisateur pour l'affichage
-          localStorage.setItem('adminUser', JSON.stringify(data.user));
-          fetchProjects();
-        } else {
-          router.push('/');
-        }
-      } catch (error) {
-        console.error('Erreur de vérification auth:', error);
-        router.push('/');
-      }
-    };
+    // Vérifier si l'utilisateur est connecté
+    const token = localStorage.getItem('adminToken');
+    const user = localStorage.getItem('adminUser');
+    
+    if (!token || !user) {
+      router.push('/');
+      return;
+    }
 
-    checkAuth();
+    fetchProjects();
   }, [router, fetchProjects]);
 
-  const handleLogout = async () => {
-    try {
-      // Appeler l'API de logout pour supprimer le cookie
-      await fetch('/api/auth/logout', { method: 'POST' });
-    } catch (error) {
-      console.error('Erreur lors de la déconnexion:', error);
-    } finally {
-      // Nettoyer le localStorage
-      localStorage.removeItem('adminUser');
-      router.push('/');
-    }
+  const handleLogout = () => {
+    // Nettoyer le localStorage
+    localStorage.removeItem('adminToken');
+    localStorage.removeItem('adminUser');
+    router.push('/');
   };
 
   const handleOpenDialog = (project?: Project) => {
@@ -188,15 +163,21 @@ export default function AdminDashboard() {
     }
 
     try {
+      const token = localStorage.getItem('adminToken');
+      if (!token) {
+        router.push('/');
+        return;
+      }
+
       const url = editingProject ? `/api/projects/${editingProject.id}` : '/api/projects';
       const method = editingProject ? 'PUT' : 'POST';
 
       const response = await fetch(url, {
         method,
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
         },
-        credentials: 'include', // Inclure les cookies
         body: JSON.stringify(formData)
       });
 
@@ -221,9 +202,17 @@ export default function AdminDashboard() {
     }
 
     try {
+      const token = localStorage.getItem('adminToken');
+      if (!token) {
+        router.push('/');
+        return;
+      }
+
       const response = await fetch(`/api/projects/${id}`, {
         method: 'DELETE',
-        credentials: 'include' // Inclure les cookies
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
       });
 
       const data = await response.json();

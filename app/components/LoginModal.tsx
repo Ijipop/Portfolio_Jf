@@ -43,8 +43,8 @@ export default function LoginModal({ open, onClose }: LoginModalProps)
 			if (response.ok)
 			{
 				const data = await response.json();
-				// Le token est maintenant dans un cookie sécurisé
-				// Stocker seulement les infos utilisateur
+				// Stocker le token et les infos utilisateur
+				localStorage.setItem('adminToken', data.token);
 				localStorage.setItem('adminUser', JSON.stringify(data.user));
 				
 				onClose();
@@ -67,7 +67,14 @@ export default function LoginModal({ open, onClose }: LoginModalProps)
 	};
 
 	return (
-		<Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
+		<Dialog 
+			open={open} 
+			onClose={onClose} 
+			maxWidth="sm" 
+			fullWidth
+			disableEnforceFocus
+			disableAutoFocus
+		>
 			<DialogTitle>
 				<Typography variant="h5" component="div">
 					Connexion Admin

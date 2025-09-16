@@ -1,6 +1,6 @@
 import { prisma } from '@/lib/prisma'
 import { NextRequest, NextResponse } from 'next/server'
-import { requireAuth, AuthUser } from '@/lib/auth'
+import jwt from 'jsonwebtoken'
 
 // GET /api/projects - Obtenir tous les projects
 export async function GET()
@@ -36,8 +36,32 @@ export async function GET()
 }
 
 // POST /api/projects - Ajouter un nouveau project (PROTÉGÉ)
-export const POST = requireAuth(async (request: NextRequest, user: AuthUser) =>
+export async function POST(request: NextRequest)
 {
+	// Vérifier l'authentification
+	const authHeader = request.headers.get('authorization')
+	if (!authHeader || !authHeader.startsWith('Bearer ')) {
+		return NextResponse.json(
+			{ success: false, error: 'Token d\'authentification requis' },
+			{ status: 401 }
+		)
+	}
+
+	const token = authHeader.substring(7)
+	try {
+		if (!process.env.JWT_SECRET) {
+			throw new Error('JWT_SECRET non configuré')
+		}
+		jwt.verify(token, process.env.JWT_SECRET)
+	} catch (error) {
+		return NextResponse.json(
+			{ success: false, error: 'Token invalide ou expiré' },
+			{ status: 401 }
+		)
+	}
+
+	try
+	{
 	try
 	{
 		const body = await request.json()
@@ -129,4 +153,4 @@ export const POST = requireAuth(async (request: NextRequest, user: AuthUser) =>
 			}
 		)
 	}
-});
+}

@@ -108,6 +108,8 @@ export default function AppBarComponent() {
 						anchorEl={anchorEl}
 						open={open}
 						onClose={handleMenuClose}
+						disableEnforceFocus
+						disableAutoFocus
 						sx={{
 							'& .MuiPaper-root': {
 								background: (theme) => theme.palette.mode === 'dark'
