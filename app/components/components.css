@@ -14,30 +14,30 @@
 
 .dark-mode .my-app-bar {
   background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%) !important;
-  border-bottom: 1px solid rgba(139, 92, 246, 0.2) !important;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5), 0 0 10px rgba(139, 92, 246, 0.1) !important;
+  border-bottom: 1px solid rgba(255, 107, 53, 0.2) !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5), 0 0 10px rgba(255, 107, 53, 0.1) !important;
 }
 
 .dark-mode .my-typography {
   color: #ffffff !important;
-  text-shadow: 0 0 10px rgba(139, 92, 246, 0.3) !important;
+  text-shadow: 0 0 10px rgba(255, 107, 53, 0.3) !important;
 }
 
 /* Styles spécifiques pour les icônes en mode sombre */
 .dark-mode .MuiIconButton-root {
-  color: #8b5cf6 !important;
+  color: #ff6b35 !important;
   transition: all 0.3s ease !important;
 }
 
 .dark-mode .MuiIconButton-root:hover {
-  color: #ec4899 !important;
+  color: #ff1744 !important;
   transform: scale(1.1) !important;
-  text-shadow: 0 0 15px rgba(139, 92, 246, 0.5) !important;
+  text-shadow: 0 0 15px rgba(255, 107, 53, 0.5) !important;
 }
 
 .dark-mode .MuiSvgIcon-root {
-  color: #8b5cf6 !important;
-  filter: drop-shadow(0 0 5px rgba(139, 92, 246, 0.3)) !important;
+  color: #ff6b35 !important;
+  filter: drop-shadow(0 0 5px rgba(255, 107, 53, 0.3)) !important;
 }
 
 /* Styles pour le body en mode sombre */
@@ -50,10 +50,10 @@ body.dark-mode {
 /* Effets de brillance pour le mode sombre */
 @keyframes glow {
   0%, 100% { 
-    box-shadow: 0 0 5px rgba(139, 92, 246, 0.3), 0 0 10px rgba(139, 92, 246, 0.2), 0 0 15px rgba(139, 92, 246, 0.1);
+    box-shadow: 0 0 5px rgba(255, 107, 53, 0.3), 0 0 10px rgba(255, 107, 53, 0.2), 0 0 15px rgba(255, 107, 53, 0.1);
   }
   50% { 
-    box-shadow: 0 0 10px rgba(139, 92, 246, 0.5), 0 0 20px rgba(139, 92, 246, 0.3), 0 0 30px rgba(139, 92, 246, 0.2);
+    box-shadow: 0 0 10px rgba(255, 107, 53, 0.5), 0 0 20px rgba(255, 107, 53, 0.3), 0 0 30px rgba(255, 107, 53, 0.2);
   }
 }
 
@@ -69,8 +69,8 @@ body.dark-mode {
   left: 0;
   width: 100%;
   height: 100%;
-  background: radial-gradient(circle at 20% 20%, rgba(139, 92, 246, 0.03) 0%, transparent 50%),
-              radial-gradient(circle at 80% 80%, rgba(236, 72, 153, 0.03) 0%, transparent 50%);
+  background: radial-gradient(circle at 20% 20%, rgba(255, 107, 53, 0.03) 0%, transparent 50%),
+              radial-gradient(circle at 80% 80%, rgba(255, 23, 68, 0.03) 0%, transparent 50%);
   pointer-events: none;
   z-index: -1;
 }
