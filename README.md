@@ -209,5 +209,5 @@ POST /api/projects
 Ce projet est sous licence MIT. Voir le fichier `LICENSE` pour plus de détails.
 
 ---
-
-**Créé par Jean-François Lefebvre**
+Initialement créé dans le cadre d'un cours de programmation
+**Créé par Jean-François Lefebvre, Natacha Meyer & Nadia Desjardins**
