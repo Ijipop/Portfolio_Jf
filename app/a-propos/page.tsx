@@ -18,6 +18,8 @@ const FlipCard = styled(Box)(({ theme }) => ({
   height: '300px',
   perspective: '1000px',
   cursor: 'pointer',
+  WebkitPerspective: '1000px',
+  MozPerspective: '1000px',
 }))
 
 const FlipCardInner = styled(Box)<{ flipped: boolean }>(({ theme, flipped }) => ({
@@ -27,7 +29,9 @@ const FlipCardInner = styled(Box)<{ flipped: boolean }>(({ theme, flipped }) => 
   textAlign: 'center',
   transition: 'transform 0.6s',
   transformStyle: 'preserve-3d',
+  WebkitTransformStyle: 'preserve-3d',
   transform: flipped ? 'rotateY(180deg)' : 'rotateY(0deg)',
+  WebkitTransform: flipped ? 'rotateY(180deg)' : 'rotateY(0deg)',
 }))
 
 const FlipCardFront = styled(Box)(({ theme }) => ({
@@ -35,6 +39,8 @@ const FlipCardFront = styled(Box)(({ theme }) => ({
   width: '100%',
   height: '100%',
   backfaceVisibility: 'hidden',
+  WebkitBackfaceVisibility: 'hidden',
+  MozBackfaceVisibility: 'hidden',
   background: theme.palette.mode === 'dark'
     ? 'linear-gradient(145deg, #1a1a1a 0%, #2a2a2a 50%, #1a1a1a 100%)'
     : 'linear-gradient(145deg, #ffffff 0%, #fafbfc 30%, #f1f5f9 70%, #e2e8f0 100%)',
@@ -96,6 +102,8 @@ const FlipCardBack = styled(Box)(({ theme }) => ({
   width: '100%',
   height: '100%',
   backfaceVisibility: 'hidden',
+  WebkitBackfaceVisibility: 'hidden',
+  MozBackfaceVisibility: 'hidden',
   background: theme.palette.mode === 'dark'
     ? 'linear-gradient(145deg, #2a2a2a 0%, #3a3a3a 50%, #2a2a2a 100%)'
     : 'linear-gradient(145deg, #f1f5f9 0%, #e2e8f0 30%, #cbd5e1 70%, #94a3b8 100%)',
@@ -109,6 +117,7 @@ const FlipCardBack = styled(Box)(({ theme }) => ({
     ? '0 15px 50px rgba(0, 0, 0, 0.7), 0 0 20px rgba(74, 85, 104, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1)'
     : '0 4px 20px rgba(148, 163, 184, 0.12), 0 0 0 1px rgba(148, 163, 184, 0.08)',
   transform: 'rotateY(180deg)',
+  WebkitTransform: 'rotateY(180deg)',
   display: 'flex',
   flexDirection: 'column',
   justifyContent: 'center',
