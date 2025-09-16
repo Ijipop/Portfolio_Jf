@@ -224,8 +224,20 @@ export default function About() {
         }}>
           {/* Carte Qui suis-je */}
           <FlipCard onClick={() => handleCardFlip('who')}>
-            <FlipCardInner flipped={flippedCards.who}>
-              <FlipCardFront>
+            <FlipCardInner 
+              flipped={flippedCards.who}
+              sx={{
+                transform: flippedCards.who ? 'rotateY(180deg)' : 'rotateY(0deg)',
+                WebkitTransform: flippedCards.who ? 'rotateY(180deg)' : 'rotateY(0deg)',
+              }}
+            >
+              <FlipCardFront
+                sx={{
+                  backfaceVisibility: 'hidden',
+                  WebkitBackfaceVisibility: 'hidden',
+                  MozBackfaceVisibility: 'hidden',
+                }}
+              >
                 <PersonIcon sx={{ fontSize: 48, color: 'primary.main', mb: 2 }} />
                 <Typography variant="h5" gutterBottom>
                   Qui suis-je ?
@@ -240,7 +252,15 @@ export default function About() {
                   <SkillTag>Vercel</SkillTag>
                 </Box>
               </FlipCardFront>
-              <FlipCardBack>
+              <FlipCardBack
+                sx={{
+                  backfaceVisibility: 'hidden',
+                  WebkitBackfaceVisibility: 'hidden',
+                  MozBackfaceVisibility: 'hidden',
+                  transform: 'rotateY(180deg)',
+                  WebkitTransform: 'rotateY(180deg)',
+                }}
+              >
                 <Typography variant="h4" sx={{ color: 'primary.main', mb: 2 }}>
                   Jean-François Lefebvre, passionné par l'informatique et les jeux vidéo. <br />Je suis un grand consommateurs d'app mobile et web.
                   À 38 ans à cause de problèmes de santé, je me suis réorienté vers le développement d'applications.  <br />Je suis vraiment motivé et je suis content de pouvoir 
@@ -255,8 +275,20 @@ export default function About() {
 
           {/* Carte Formation */}
           <FlipCard onClick={() => handleCardFlip('formation')}>
-            <FlipCardInner flipped={flippedCards.formation}>
-              <FlipCardFront>
+            <FlipCardInner 
+              flipped={flippedCards.formation}
+              sx={{
+                transform: flippedCards.formation ? 'rotateY(180deg)' : 'rotateY(0deg)',
+                WebkitTransform: flippedCards.formation ? 'rotateY(180deg)' : 'rotateY(0deg)',
+              }}
+            >
+              <FlipCardFront
+                sx={{
+                  backfaceVisibility: 'hidden',
+                  WebkitBackfaceVisibility: 'hidden',
+                  MozBackfaceVisibility: 'hidden',
+                }}
+              >
                 <SchoolIcon sx={{ fontSize: 48, color: 'primary.main', mb: 2 }} />
                 <Typography variant="h5" gutterBottom>
                   Formation
@@ -270,7 +302,15 @@ export default function About() {
                   <SkillTag>JSON</SkillTag>
                 </Box>
               </FlipCardFront>
-              <FlipCardBack>
+              <FlipCardBack
+                sx={{
+                  backfaceVisibility: 'hidden',
+                  WebkitBackfaceVisibility: 'hidden',
+                  MozBackfaceVisibility: 'hidden',
+                  transform: 'rotateY(180deg)',
+                  WebkitTransform: 'rotateY(180deg)',
+                }}
+              >
                 <Typography variant="h4" sx={{ color: 'primary.main', mb: 2 }}>
                   DEP en soutien informatique à l'ÉMICA (2023-2024)<br />
                   AEC Développement de logiciels <br />
@@ -285,8 +325,20 @@ export default function About() {
 
           {/* Carte Expérience */}
           <FlipCard onClick={() => handleCardFlip('experience')}>
-            <FlipCardInner flipped={flippedCards.experience}>
-              <FlipCardFront>
+            <FlipCardInner 
+              flipped={flippedCards.experience}
+              sx={{
+                transform: flippedCards.experience ? 'rotateY(180deg)' : 'rotateY(0deg)',
+                WebkitTransform: flippedCards.experience ? 'rotateY(180deg)' : 'rotateY(0deg)',
+              }}
+            >
+              <FlipCardFront
+                sx={{
+                  backfaceVisibility: 'hidden',
+                  WebkitBackfaceVisibility: 'hidden',
+                  MozBackfaceVisibility: 'hidden',
+                }}
+              >
                 <WorkIcon sx={{ fontSize: 48, color: 'primary.main', mb: 2 }} />
                 <Typography variant="h5" gutterBottom>
                   Expérience
@@ -300,7 +352,15 @@ export default function About() {
                   <SkillTag>REST API</SkillTag>
                 </Box>
               </FlipCardFront>
-              <FlipCardBack>
+              <FlipCardBack
+                sx={{
+                  backfaceVisibility: 'hidden',
+                  WebkitBackfaceVisibility: 'hidden',
+                  MozBackfaceVisibility: 'hidden',
+                  transform: 'rotateY(180deg)',
+                  WebkitTransform: 'rotateY(180deg)',
+                }}
+              >
                 <Typography variant="h4" sx={{ color: 'primary.main', mb: 2 }}>
                   Merci de me donner une chance de travailler avec vous.
                 </Typography>
