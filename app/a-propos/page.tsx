@@ -9,6 +9,7 @@ import PersonIcon from '@mui/icons-material/Person'
 import WorkIcon from '@mui/icons-material/Work'
 import SchoolIcon from '@mui/icons-material/School'
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents'
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 
@@ -20,6 +21,10 @@ const FlipCard = styled(Box)(({ theme }) => ({
   cursor: 'pointer',
   WebkitPerspective: '1000px',
   MozPerspective: '1000px',
+  transition: 'transform 0.3s ease',
+  '&:hover': {
+    transform: 'rotateY(5deg) rotateX(5deg)',
+  }
 }))
 
 const FlipCardInner = styled(Box)<{ flipped: boolean }>(({ theme, flipped }) => ({
@@ -251,6 +256,15 @@ export default function About() {
                   <SkillTag>PostgreSQL</SkillTag>
                   <SkillTag>Vercel</SkillTag>
                 </Box>
+                <Box sx={{ 
+                  position: 'absolute', 
+                  bottom: 16, 
+                  right: 16,
+                  opacity: 0.6,
+                  transition: 'opacity 0.3s ease'
+                }}>
+                  <ArrowForwardIosIcon sx={{ fontSize: 16, color: 'primary.main' }} />
+                </Box>
               </FlipCardFront>
               <FlipCardBack
                 sx={{
@@ -308,6 +322,15 @@ export default function About() {
                   <SkillTag>GitHub</SkillTag>
                   <SkillTag>JSON</SkillTag>
                 </Box>
+                <Box sx={{ 
+                  position: 'absolute', 
+                  bottom: 16, 
+                  right: 16,
+                  opacity: 0.6,
+                  transition: 'opacity 0.3s ease'
+                }}>
+                  <ArrowForwardIosIcon sx={{ fontSize: 16, color: 'primary.main' }} />
+                </Box>
               </FlipCardFront>
               <FlipCardBack
                 sx={{
@@ -328,7 +351,7 @@ export default function About() {
                   • AEC Développement de logiciels,
                 </Typography>
                 <Typography variant="body1" sx={{ mb: 2, textAlign: 'left', lineHeight: 1.6 }}>
-                  sécurité d'applications de bureau, mobiles et Web (2024-2026)
+                  • sécurité d'applications de bureau, mobiles et Web (2024-2026)
                 </Typography>
                 <Typography variant="body1" color="text.secondary">
                   Cliquez pour retourner la carte
@@ -364,6 +387,15 @@ export default function About() {
                   <SkillTag>MVC</SkillTag>
                   <SkillTag>CRUD</SkillTag>
                   <SkillTag>REST API</SkillTag>
+                </Box>
+                <Box sx={{ 
+                  position: 'absolute', 
+                  bottom: 16, 
+                  right: 16,
+                  opacity: 0.6,
+                  transition: 'opacity 0.3s ease'
+                }}>
+                  <ArrowForwardIosIcon sx={{ fontSize: 16, color: 'primary.main' }} />
                 </Box>
               </FlipCardFront>
               <FlipCardBack
