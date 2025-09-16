@@ -43,8 +43,8 @@ export default function LoginModal({ open, onClose }: LoginModalProps)
 			if (response.ok)
 			{
 				const data = await response.json();
-				// Stocker le token dans localStorage
-				localStorage.setItem('adminToken', data.token);
+				// Le token est maintenant dans un cookie sécurisé
+				// Stocker seulement les infos utilisateur
 				localStorage.setItem('adminUser', JSON.stringify(data.user));
 				
 				onClose();

@@ -80,7 +80,7 @@ const ContactCard = styled(Box)(({ theme }) => ({
     bottom: 0,
     background: theme.palette.mode === 'dark'
       ? 'linear-gradient(135deg, rgba(74, 85, 104, 0.1) 0%, rgba(45, 55, 72, 0.1) 50%, rgba(74, 85, 104, 0.05) 100%)'
-      : 'transparent',
+      : 'linear-gradient(135deg, rgba(74, 85, 104, 0.08) 0%, rgba(45, 55, 72, 0.08) 50%, rgba(74, 85, 104, 0.05) 100%)',
     opacity: 0,
     transition: 'opacity 0.3s ease',
   },
@@ -93,7 +93,7 @@ const ContactCard = styled(Box)(({ theme }) => ({
     bottom: '-2px',
     background: theme.palette.mode === 'dark'
       ? 'linear-gradient(45deg, #4a5568, #2d3748, #4a5568, #2d3748)'
-      : 'transparent',
+      : 'linear-gradient(45deg, #667eea, #764ba2, #667eea, #764ba2)',
     borderRadius: 26,
     zIndex: -1,
     opacity: 0,

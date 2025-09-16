@@ -80,13 +80,9 @@ export default function AdminDashboard() {
 
   const fetchProjects = useCallback(async () => {
     try {
-      const token = localStorage.getItem('adminToken');
-      if (!token) {
-        router.push('/');
-        return;
-      }
-
-      const response = await fetch('/api/projects');
+      const response = await fetch('/api/projects', {
+        credentials: 'include' // Inclure les cookies
+      });
       const data = await response.json();
       
       if (data.success) {
@@ -103,8 +99,9 @@ export default function AdminDashboard() {
   }, [router]);
 
   useEffect(() => {
-    const token = localStorage.getItem('adminToken');
-    if (!token) {
+    // Vérifier si l'utilisateur est connecté
+    const user = localStorage.getItem('adminUser');
+    if (!user) {
       router.push('/');
       return;
     }
@@ -112,9 +109,17 @@ export default function AdminDashboard() {
     fetchProjects();
   }, [router, fetchProjects]);
 
-  const handleLogout = () => {
-    localStorage.removeItem('adminToken');
-    router.push('/');
+  const handleLogout = async () => {
+    try {
+      // Appeler l'API de logout pour supprimer le cookie
+      await fetch('/api/auth/logout', { method: 'POST' });
+    } catch (error) {
+      console.error('Erreur lors de la déconnexion:', error);
+    } finally {
+      // Nettoyer le localStorage
+      localStorage.removeItem('adminUser');
+      router.push('/');
+    }
   };
 
   const handleOpenDialog = (project?: Project) => {
