@@ -90,6 +90,7 @@ const ProjectCard = styled(Card)(({ theme }) => ({
   overflow: 'hidden',
   animation: 'fadeInUp 0.6s ease-out',
   cursor: 'pointer',
+  zIndex: 1,
   // Chenille lumineuse sur le bord extérieur
   '&::before': {
     content: '""',
@@ -102,7 +103,7 @@ const ProjectCard = styled(Card)(({ theme }) => ({
       ? 'conic-gradient(from 0deg, transparent 0deg, transparent 250deg, #ff6b35 270deg, #ff1744 290deg, #ff6b35 310deg, transparent 330deg)'
       : 'conic-gradient(from 0deg, transparent 0deg, transparent 250deg, #dc2626 270deg, #ea580c 290deg, #dc2626 310deg, transparent 330deg)',
     borderRadius: 32,
-    zIndex: -2,
+    zIndex: -10,
     opacity: 0,
     transition: 'opacity 0.3s ease',
   },
