@@ -37,7 +37,7 @@ interface Project {
 // Composants stylisés
 const HeaderSection = styled(Box)(({ theme }) => ({
   background: theme.palette.mode === 'dark' 
-    ? 'linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 25%, #2a2a2a 50%, #1a1a1a 75%, #0a0a0a 100%)'
+    ? 'linear-gradient(135deg, #2a2a2a 0%, #3a3a3a 25%, #4a4a4a 50%, #3a3a3a 75%, #2a2a2a 100%)'
     : 'linear-gradient(135deg, #1e3a8a 0%, #3b82f6 50%, #059669 100%)',
   color: theme.palette.mode === 'dark' ? '#ffffff' : '#ffffff',
   padding: theme.spacing(8, 0, 6),
@@ -77,7 +77,7 @@ const HeaderSection = styled(Box)(({ theme }) => ({
 const ProjectCard = styled(Card)(({ theme }) => ({
   background: theme.palette.mode === 'dark'
     ? 'linear-gradient(145deg, #1a1a1a 0%, #2a2a2a 50%, #1a1a1a 100%)'
-    : 'linear-gradient(145deg, #ffffff 0%, #f8fafc 100%)',
+    : 'linear-gradient(145deg, #ffffff 0%, #f1f5f9 50%, #e2e8f0 100%)',
   border: theme.palette.mode === 'dark' 
     ? '2px solid rgba(74, 85, 104, 0.2)' 
     : '1px solid rgba(74, 85, 104, 0.15)',
@@ -204,7 +204,7 @@ const TechTag = styled(Box)(({ theme }) => ({
 const StatsCard = styled(Paper)(({ theme }) => ({
   background: theme.palette.mode === 'dark'
     ? 'linear-gradient(135deg, #1e293b 0%, #334155 100%)'
-    : 'linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%)',
+    : 'linear-gradient(135deg, #3b82f6 0%, #60a5fa 50%, #93c5fd 100%)',
   color: 'white',
   padding: theme.spacing(3),
   borderRadius: 16,

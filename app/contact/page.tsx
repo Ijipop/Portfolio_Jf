@@ -57,7 +57,7 @@ const HeaderSection = styled(Box)(({ theme }) => ({
 const ContactCard = styled(Box)(({ theme }) => ({
   background: theme.palette.mode === 'dark'
     ? 'linear-gradient(145deg, #1a1a1a 0%, #2a2a2a 50%, #1a1a1a 100%)'
-    : 'linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%)',
+    : 'linear-gradient(145deg, #ffffff 0%, #f1f5f9 50%, #e2e8f0 100%)',
   border: theme.palette.mode === 'dark' 
     ? '2px solid rgba(74, 85, 104, 0.2)' 
     : '1px solid rgba(74, 85, 104, 0.15)',
@@ -138,7 +138,7 @@ const SocialIcon = styled(Box)(({ theme }) => ({
 const EmailButton = styled(Button)(({ theme }) => ({
   background: theme.palette.mode === 'dark'
     ? 'linear-gradient(135deg, #4a5568 0%, #2d3748 100%)'
-    : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+    : 'linear-gradient(135deg, #3b82f6 0%, #60a5fa 50%, #93c5fd 100%)',
   color: 'white',
   borderRadius: 12,
   padding: theme.spacing(1, 2),
@@ -150,10 +150,10 @@ const EmailButton = styled(Button)(({ theme }) => ({
     ? '0 4px 15px rgba(74, 85, 104, 0.3)'
     : '0 4px 15px rgba(102, 126, 234, 0.3)',
   transition: 'all 0.3s ease',
-  '&:hover': {
-    background: theme.palette.mode === 'dark'
-      ? 'linear-gradient(135deg, #5a6578 0%, #3d4858 100%)'
-      : 'linear-gradient(135deg, #5a67d8 0%, #6b46c1 100%)',
+    '&:hover': {
+      background: theme.palette.mode === 'dark'
+        ? 'linear-gradient(135deg, #5a6578 0%, #3d4858 100%)'
+        : 'linear-gradient(135deg, #2563eb 0%, #3b82f6 50%, #60a5fa 100%)',
     transform: 'translateY(-2px)',
     boxShadow: theme.palette.mode === 'dark'
       ? '0 8px 25px rgba(74, 85, 104, 0.4)'
