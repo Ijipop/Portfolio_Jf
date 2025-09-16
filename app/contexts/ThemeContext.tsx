@@ -46,15 +46,15 @@ const darkTheme = createTheme({
   palette: {
     mode: 'dark',
     primary: {
-      main: '#8b5cf6', // Violet néon vibrant
-      light: '#a78bfa',
-      dark: '#7c3aed',
+      main: '#ff6b35', // Orange coucher de soleil
+      light: '#ff8a5b',
+      dark: '#e55a2b',
       contrastText: '#ffffff',
     },
     secondary: {
-      main: '#ec4899', // Rose électrique
-      light: '#f472b6',
-      dark: '#db2777',
+      main: '#ff1744', // Rose sunset vibrant
+      light: '#ff4569',
+      dark: '#e91e63',
       contrastText: '#ffffff',
     },
     background: {
