@@ -165,10 +165,10 @@ export default function About() {
               Développeur passionné par la création d&apos;applications web modernes et innovantes.
             </Typography>
             <Box>
-              <SkillTag>React</SkillTag>
-              <SkillTag>Next.js</SkillTag>
-              <SkillTag>TypeScript</SkillTag>
-              <SkillTag>Node.js</SkillTag>
+              <SkillTag>Material-UI</SkillTag>
+              <SkillTag>Prisma</SkillTag>
+              <SkillTag>PostgreSQL</SkillTag>
+              <SkillTag>Vercel</SkillTag>
             </Box>
           </AboutCard>
 
@@ -181,10 +181,10 @@ export default function About() {
               Formation en développement web avec focus sur les technologies modernes.
             </Typography>
             <Box>
-              <SkillTag>JavaScript</SkillTag>
-              <SkillTag>HTML/CSS</SkillTag>
-              <SkillTag>Git</SkillTag>
-              <SkillTag>API REST</SkillTag>
+              <SkillTag>ES6+</SkillTag>
+              <SkillTag>Responsive Design</SkillTag>
+              <SkillTag>GitHub</SkillTag>
+              <SkillTag>JSON</SkillTag>
             </Box>
           </AboutCard>
 
@@ -197,10 +197,10 @@ export default function About() {
               En toute honnêteté, je n'ai pas d'expérience dans le développement d'applications. Je termine actuellement ma formation en développement web et je suis à la recherche d'un stage pour appliquer mes connaissances.
             </Typography>
             <Box>
-              <SkillTag>Full Stack</SkillTag>
-              <SkillTag>Frontend</SkillTag>
-              <SkillTag>Backend</SkillTag>
-              <SkillTag>Database</SkillTag>
+              <SkillTag>MVC</SkillTag>
+              <SkillTag>CRUD</SkillTag>
+              <SkillTag>JWT</SkillTag>
+              <SkillTag>REST API</SkillTag>
             </Box>
           </AboutCard>
         </Box>
