@@ -325,10 +325,10 @@ export default function About() {
                   • DEP en soutien informatique à l'ÉMICA (2023-2024)
                 </Typography>
                 <Typography variant="body1" sx={{ mb: 1, textAlign: 'left', lineHeight: 1.6 }}>
-                  • AEC Développement de logiciels
+                  • AEC Développement de logiciels,
                 </Typography>
                 <Typography variant="body1" sx={{ mb: 2, textAlign: 'left', lineHeight: 1.6 }}>
-                  • Sécurité d'applications de bureau, mobiles et Web (2024-2026)
+                  sécurité d'applications de bureau, mobiles et Web (2024-2026)
                 </Typography>
                 <Typography variant="body1" color="text.secondary">
                   Cliquez pour retourner la carte
@@ -377,12 +377,6 @@ export default function About() {
               >
                 <Typography variant="h5" sx={{ color: 'primary.main', mb: 2, fontWeight: 'bold' }}>
                   Expérience
-                </Typography>
-                <Typography variant="body1" sx={{ mb: 2, textAlign: 'left', lineHeight: 1.6 }}>
-                  En toute honnêteté, je n'ai pas encore d'expérience professionnelle dans le développement d'applications.
-                </Typography>
-                <Typography variant="body1" sx={{ mb: 2, textAlign: 'left', lineHeight: 1.6 }}>
-                  Je termine actuellement ma formation et je suis à la recherche d'un stage pour appliquer mes connaissances.
                 </Typography>
                 <Typography variant="body1" sx={{ textAlign: 'center', lineHeight: 1.6, fontWeight: 'bold', color: 'primary.main' }}>
                   Merci de me donner une chance de travailler avec vous !
