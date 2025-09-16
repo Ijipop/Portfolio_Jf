@@ -367,10 +367,7 @@ export default function About() {
                   • DEP en soutien informatique à l'ÉMICA (2023-2024)
                 </Typography>
                 <Typography variant="body1" sx={{ mb: 1, textAlign: 'left', lineHeight: 1.6 }}>
-                  • AEC Développement de logiciels,
-                </Typography>
-                <Typography variant="body1" sx={{ mb: 2, textAlign: 'left', lineHeight: 1.6 }}>
-                  • sécurité d'applications de bureau, mobiles et Web (2024-2026)
+                  • AEC Développement de logiciels, sécurité d'applications de bureau, mobiles et Web (2024-2026)
                 </Typography>
                 <Typography variant="body1" color="text.secondary">
                   Cliquez pour retourner la carte
