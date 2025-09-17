@@ -363,7 +363,7 @@ export default function Projets() {
       minHeight: '100vh', 
       background: (theme) => theme.palette.mode === 'dark'
         ? 'linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 25%, #2a2a2a 50%, #1a1a1a 75%, #0a0a0a 100%)'
-        : 'linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%)',
+        : 'linear-gradient(135deg, #f0f4ff 0%, #e6f2ff 25%, #dbeafe 50%, #e6f2ff 75%, #f0f4ff 100%)',
       position: 'relative',
       '&::before': {
         content: '""',
@@ -374,7 +374,7 @@ export default function Projets() {
         bottom: 0,
         background: (theme) => theme.palette.mode === 'dark'
           ? 'radial-gradient(circle at 25% 25%, rgba(255, 107, 53, 0.05) 0%, transparent 50%), radial-gradient(circle at 75% 75%, rgba(255, 23, 68, 0.05) 0%, transparent 50%)'
-          : 'none',
+          : 'radial-gradient(circle at 20% 30%, rgba(59, 130, 246, 0.08) 0%, transparent 50%), radial-gradient(circle at 80% 70%, rgba(5, 150, 105, 0.06) 0%, transparent 50%)',
         pointerEvents: 'none',
         zIndex: 0,
       }
@@ -481,8 +481,23 @@ export default function Projets() {
                    gutterBottom
                    sx={{ 
                      fontWeight: 700,
-                     color: (theme) => theme.palette.mode === 'dark' ? '#ffffff' : '#2c3e50',
-                     mb: 2
+                     mb: 2,
+                     background: (theme) => theme.palette.mode === 'dark'
+                       ? 'linear-gradient(45deg, #ff6b35, #ffffff, #ff1744, #ff6b35)'
+                       : 'linear-gradient(45deg, #1e3a8a, #3b82f6, #059669, #1e3a8a)',
+                     backgroundClip: 'text',
+                     WebkitBackgroundClip: 'text',
+                     WebkitTextFillColor: 'transparent',
+                     backgroundSize: '200% 200%',
+                     animation: 'gradientShift 3s ease-in-out infinite',
+                     textShadow: (theme) => theme.palette.mode === 'dark'
+                       ? '0 0 20px rgba(255, 107, 53, 0.5)'
+                       : '0 0 20px rgba(30, 58, 138, 0.4)',
+                     '@keyframes gradientShift': {
+                       '0%': { backgroundPosition: '0% 50%' },
+                       '50%': { backgroundPosition: '100% 50%' },
+                       '100%': { backgroundPosition: '0% 50%' }
+                     }
                    }}
                  >
                   {project.name}
