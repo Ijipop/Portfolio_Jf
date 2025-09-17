@@ -100,34 +100,11 @@ const ProjectCard = styled(Card)(({ theme }) => ({
   animation: 'fadeInUp 0.6s ease-out',
   cursor: 'pointer',
   zIndex: 1,
-  // Effet shimmer comme dans le header
-  '&::before': {
-    content: '""',
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    background: theme.palette.mode === 'dark'
-      ? 'linear-gradient(45deg, transparent 30%, rgba(255, 107, 53, 0.03) 50%, transparent 70%)'
-      : 'linear-gradient(45deg, transparent 30%, rgba(59, 130, 246, 0.08) 50%, transparent 70%)',
-    opacity: 0,
-    transition: 'opacity 0.3s ease',
-    zIndex: 1,
-  },
   '&:hover': {
     transform: 'translateY(-12px) scale(1.03)',
     boxShadow: theme.palette.mode === 'dark'
-      ? '0 30px 60px rgba(0, 0, 0, 0.7), 0 0 30px rgba(74, 85, 104, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2)'
-      : '0 20px 40px rgba(59, 130, 246, 0.15), 0 0 20px rgba(147, 197, 253, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.8)',
-    '&::before': {
-      opacity: 1,
-      animation: 'shimmer 3s ease-in-out infinite',
-    },
-  },
-  '@keyframes shimmer': {
-    '0%': { transform: 'translateX(-100%)' },
-    '100%': { transform: 'translateX(100%)' },
+      ? '0 30px 60px rgba(0, 0, 0, 0.7), 0 0 0 2px rgba(255, 107, 53, 0.6), 0 0 40px rgba(255, 107, 53, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2)'
+      : '0 20px 40px rgba(59, 130, 246, 0.15), 0 0 0 2px rgba(59, 130, 246, 0.6), 0 0 30px rgba(59, 130, 246, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.8)',
   },
   '@keyframes fadeInUp': {
     from: {
