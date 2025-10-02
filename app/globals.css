@@ -12,10 +12,56 @@
   --theme-bg: #0a0a0a;
 }
 
+/* FORCER les palettes avec !important */
+[data-mui-color-scheme="dark"] body {
+  background: var(--theme-bg) !important;
+}
+
+[data-mui-color-scheme="dark"] .MuiCssBaseline-root {
+  background: var(--theme-bg) !important;
+}
+
+/* FORCER les couleurs sur tous les éléments */
+body * {
+  transition: all 0.3s ease !important;
+}
+
+/* Titres avec thème - seulement en dark mode */
+[data-mui-color-scheme="dark"] h1, 
+[data-mui-color-scheme="dark"] .MuiTypography-h1 {
+  color: var(--primary-color) !important;
+  text-shadow: 0 0 20px var(--primary-color)80 !important;
+}
+
+/* Liens avec thème - seulement en dark mode */
+[data-mui-color-scheme="dark"] a {
+  color: var(--primary-color) !important;
+}
+
+/* Icônes avec thème - seulement en dark mode */
+[data-mui-color-scheme="dark"] .MuiSvgIcon-root, 
+[data-mui-color-scheme="dark"] svg {
+  color: var(--primary-color) !important;
+}
+
+/* Boutons avec thème - seulement en dark mode */
+[data-mui-color-scheme="dark"] .MuiButton-root, 
+[data-mui-color-scheme="dark"] button {
+  color: var(--primary-color) !important;
+  border-color: var(--primary-color) !important;
+}
+
+/* Cards avec thème - seulement en dark mode */
+[data-mui-color-scheme="dark"] .MuiCard-root, 
+[data-mui-color-scheme="dark"] .MuiPaper-root {
+  border-color: var(--primary-color)40 !important;
+  box-shadow: 0 4px 20px var(--primary-color)20 !important;
+}
+
 /* Application des thèmes sur les éléments */
 body {
-  background-color: var(--theme-bg) !important;
-  transition: background-color 0.3s ease;
+  background: var(--theme-bg) !important;
+  transition: background 0.3s ease;
 }
 
 /* Titre principal avec thème */
