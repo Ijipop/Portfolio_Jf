@@ -1,19 +1,20 @@
 'use client'
 
-import AppBarComponent from '../components/appBar'
+import ContentCopyIcon from '@mui/icons-material/ContentCopy'
+import EmailIcon from '@mui/icons-material/Email'
+import GitHubIcon from '@mui/icons-material/GitHub'
+import LinkedInIcon from '@mui/icons-material/LinkedIn'
+import LocationOnIcon from '@mui/icons-material/LocationOn'
+import PhoneIcon from '@mui/icons-material/Phone'
+import SendIcon from '@mui/icons-material/Send'
+import { Alert, Button, Box as MuiBox, Snackbar } from '@mui/material'
 import Box from '@mui/material/Box'
 import Container from '@mui/material/Container'
 import Typography from '@mui/material/Typography'
 import { styled } from '@mui/material/styles'
-import EmailIcon from '@mui/icons-material/Email'
-import PhoneIcon from '@mui/icons-material/Phone'
-import LocationOnIcon from '@mui/icons-material/LocationOn'
-import LinkedInIcon from '@mui/icons-material/LinkedIn'
-import GitHubIcon from '@mui/icons-material/GitHub'
-import ContentCopyIcon from '@mui/icons-material/ContentCopy'
-import SendIcon from '@mui/icons-material/Send'
 import { useState } from 'react'
-import { Snackbar, Alert, Button, Box as MuiBox } from '@mui/material'
+import ParticleSystem from '../components/ParticleSystem'
+import AppBarComponent from '../components/appBar'
 
 const HeaderSection = styled(Box)(({ theme }) => ({
   background: theme.palette.mode === 'dark' 
@@ -220,6 +221,7 @@ export default function Contact() {
         ? 'linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 25%, #2a2a2a 50%, #1a1a1a 75%, #0a0a0a 100%)'
         : 'linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)',
       position: 'relative',
+      overflow: 'hidden',
       '&::before': {
         content: '""',
         position: 'fixed',
@@ -234,6 +236,14 @@ export default function Contact() {
         zIndex: 0,
       }
     }}>
+      {/* Particle System */}
+      <ParticleSystem 
+        particleCount={100}
+        speed={0.5}
+        colors={['#ff6b35', '#ff1744', '#3b82f6', '#059669']}
+        mouseInteraction={true}
+      />
+      
       <AppBarComponent />
       
       <HeaderSection>
@@ -274,7 +284,7 @@ export default function Contact() {
         </Container>
       </HeaderSection>
 
-      <Container maxWidth="lg" sx={{ py: 8 }}>
+      <Container maxWidth="lg" sx={{ py: 8, position: 'relative', zIndex: 2 }}>
         <Box sx={{ 
           display: 'grid', 
           gridTemplateColumns: { xs: '1fr', md: 'repeat(3, 1fr)' },

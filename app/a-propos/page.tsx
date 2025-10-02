@@ -1,17 +1,18 @@
 'use client'
 
-import AppBarComponent from '../components/appBar'
+import EmojiEventsIcon from '@mui/icons-material/EmojiEvents'
+import PersonIcon from '@mui/icons-material/Person'
+import RotateRightIcon from '@mui/icons-material/RotateRight'
+import SchoolIcon from '@mui/icons-material/School'
+import WorkIcon from '@mui/icons-material/Work'
 import Box from '@mui/material/Box'
 import Container from '@mui/material/Container'
 import Typography from '@mui/material/Typography'
 import { styled } from '@mui/material/styles'
-import PersonIcon from '@mui/icons-material/Person'
-import WorkIcon from '@mui/icons-material/Work'
-import SchoolIcon from '@mui/icons-material/School'
-import EmojiEventsIcon from '@mui/icons-material/EmojiEvents'
-import RotateRightIcon from '@mui/icons-material/RotateRight'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
+import ParticleSystem from '../components/ParticleSystem'
+import AppBarComponent from '../components/appBar'
 
 const HeaderSection = styled(Box)(({ theme }) => ({
   background: theme.palette.mode === 'dark' 
@@ -228,6 +229,7 @@ export default function About() {
         ? 'linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 25%, #2a2a2a 50%, #1a1a1a 75%, #0a0a0a 100%)'
         : 'linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)',
       position: 'relative',
+      overflow: 'hidden',
       '&::before': {
         content: '""',
         position: 'fixed',
@@ -242,6 +244,14 @@ export default function About() {
         zIndex: 0,
       }
     }}>
+      {/* Particle System */}
+      <ParticleSystem 
+        particleCount={120}
+        speed={0.4}
+        colors={['#ff6b35', '#ff1744', '#3b82f6', '#059669']}
+        mouseInteraction={true}
+      />
+      
       <AppBarComponent />
       
       {/* Hero Section */}
@@ -283,7 +293,7 @@ export default function About() {
         </Container>
       </HeaderSection>
 
-      <Container maxWidth="lg" sx={{ py: 6 }}>
+      <Container maxWidth="lg" sx={{ py: 6, position: 'relative', zIndex: 2 }}>
 
         <Box sx={{ 
           display: 'grid', 
@@ -353,7 +363,7 @@ export default function About() {
                   Passionné par l'informatique et les jeux vidéo. Grand consommateur d'applications mobiles et web.
                 </Typography>
                 <Typography variant="body1" sx={{ mb: 2, textAlign: 'left', lineHeight: 1.6 }}>
-                  À 38 ans, suite à des problèmes de santé, je me suis réorienté vers le développement d'applications.
+                  À 38 ans, je me suis réorienté vers le développement d'applications.  Pour ainsi réalisé mon rêve de travailler dans cette industrie.
                 </Typography>
                 <Typography variant="body1" sx={{ textAlign: 'left', lineHeight: 1.6, fontWeight: 'bold', color: 'primary.main' }}>
                   Motivé et heureux de pouvoir enfin jumeler passion et travail !

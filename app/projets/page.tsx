@@ -11,7 +11,6 @@ import Alert from '@mui/material/Alert'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Card from '@mui/material/Card'
-import CardActions from '@mui/material/CardActions'
 import CardContent from '@mui/material/CardContent'
 import Chip from '@mui/material/Chip'
 import CircularProgress from '@mui/material/CircularProgress'
@@ -21,6 +20,8 @@ import { styled } from '@mui/material/styles'
 import Typography from '@mui/material/Typography'
 import { useEffect, useState } from 'react'
 import AppBarComponent from '../components/appBar'
+import ParticleSystem from '../components/ParticleSystem'
+import ThreeDCardComponent from '../components/ThreeDCard'
 
 interface Project {
   id: number
@@ -365,6 +366,7 @@ export default function Projets() {
         ? 'linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 25%, #2a2a2a 50%, #1a1a1a 75%, #0a0a0a 100%)'
         : 'linear-gradient(135deg, #f0f4ff 0%, #e6f2ff 25%, #dbeafe 50%, #e6f2ff 75%, #f0f4ff 100%)',
       position: 'relative',
+      overflow: 'hidden',
       '&::before': {
         content: '""',
         position: 'fixed',
@@ -379,6 +381,14 @@ export default function Projets() {
         zIndex: 0,
       }
     }}>
+      {/* Particle System */}
+      <ParticleSystem 
+        particleCount={200}
+        speed={0.2}
+        colors={['#ff6b35', '#ff1744', '#3b82f6', '#059669']}
+        mouseInteraction={true}
+      />
+      
       <AppBarComponent />
       
       {/* Hero Section */}
@@ -422,7 +432,7 @@ export default function Projets() {
         </Container>
       </HeaderSection>
 
-      <Container maxWidth="lg" sx={{ py: 6 }}>
+      <Container maxWidth="lg" sx={{ py: 6, position: 'relative', zIndex: 2 }}>
         {error && (
           <AnimatedBox>
             <Alert severity="error" sx={{ mb: 4, borderRadius: 2 }}>
@@ -464,8 +474,111 @@ export default function Projets() {
         {/* Projects Grid */}
         <ProjectsGrid>
           {projects.map((project, index) => (
-            <ProjectCard key={project.id} sx={{ animationDelay: `${index * 0.1}s` }}>
-              <CardContent sx={{ p: 4 }}>
+            <ThreeDCardComponent 
+              key={project.id} 
+              floatingElements={Math.floor(Math.random() * 3) + 1}
+              onClick={() => handleProjectClick(project.url)}
+              sx={{
+                cursor: project.url && project.url.trim() !== '' ? 'pointer' : 'default',
+                position: 'relative',
+                '&::before': project.url && project.url.trim() !== '' ? {
+                  content: '""',
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  borderRadius: '24px',
+                  background: (theme) => theme.palette.mode === 'dark'
+                    ? 'linear-gradient(45deg, rgba(255, 107, 53, 0.1), rgba(255, 23, 68, 0.1))'
+                    : 'linear-gradient(45deg, rgba(59, 130, 246, 0.1), rgba(5, 150, 105, 0.1))',
+                  opacity: 0,
+                  animation: 'pulse 2s ease-in-out infinite',
+                  zIndex: 1,
+                  '@keyframes pulse': {
+                    '0%, 100%': { opacity: 0 },
+                    '50%': { opacity: 0.3 }
+                  }
+                } : {}
+              }}
+            >
+              <CardContent sx={{ p: 4, position: 'relative' }}>
+                {/* Logo GitHub dans le coin supérieur droit */}
+                {project.url && project.url.includes('github') && (
+                  <Box
+                    sx={{
+                      position: 'absolute',
+                      top: 16,
+                      right: 16,
+                      background: (theme) => theme.palette.mode === 'dark'
+                        ? 'rgba(0, 0, 0, 0.6)'
+                        : 'rgba(255, 255, 255, 0.9)',
+                      borderRadius: '50%',
+                      padding: 1,
+                      boxShadow: (theme) => theme.palette.mode === 'dark'
+                        ? '0 4px 12px rgba(0, 0, 0, 0.3)'
+                        : '0 4px 12px rgba(0, 0, 0, 0.1)',
+                      border: (theme) => theme.palette.mode === 'dark'
+                        ? '1px solid rgba(255, 255, 255, 0.1)'
+                        : '1px solid rgba(0, 0, 0, 0.1)',
+                      zIndex: 3,
+                      transition: 'all 0.3s ease',
+                      '&:hover': {
+                        transform: 'scale(1.1)',
+                        boxShadow: (theme) => theme.palette.mode === 'dark'
+                          ? '0 6px 20px rgba(0, 0, 0, 0.4)'
+                          : '0 6px 20px rgba(0, 0, 0, 0.15)',
+                      }
+                    }}
+                  >
+                    <GitHubIcon 
+                      sx={{ 
+                        fontSize: 20, 
+                        color: (theme) => theme.palette.mode === 'dark' ? '#ffffff' : '#000000',
+                        filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.1))'
+                      }} 
+                    />
+                  </Box>
+                )}
+
+                {/* Icône générique pour autres liens */}
+                {project.url && !project.url.includes('github') && (
+                  <Box
+                    sx={{
+                      position: 'absolute',
+                      top: 16,
+                      right: 16,
+                      background: (theme) => theme.palette.mode === 'dark'
+                        ? 'rgba(0, 0, 0, 0.6)'
+                        : 'rgba(255, 255, 255, 0.9)',
+                      borderRadius: '50%',
+                      padding: 1,
+                      boxShadow: (theme) => theme.palette.mode === 'dark'
+                        ? '0 4px 12px rgba(0, 0, 0, 0.3)'
+                        : '0 4px 12px rgba(0, 0, 0, 0.1)',
+                      border: (theme) => theme.palette.mode === 'dark'
+                        ? '1px solid rgba(255, 255, 255, 0.1)'
+                        : '1px solid rgba(0, 0, 0, 0.1)',
+                      zIndex: 3,
+                      transition: 'all 0.3s ease',
+                      '&:hover': {
+                        transform: 'scale(1.1)',
+                        boxShadow: (theme) => theme.palette.mode === 'dark'
+                          ? '0 6px 20px rgba(0, 0, 0, 0.4)'
+                          : '0 6px 20px rgba(0, 0, 0, 0.15)',
+                      }
+                    }}
+                  >
+                    <LaunchIcon 
+                      sx={{ 
+                        fontSize: 20, 
+                        color: (theme) => theme.palette.mode === 'dark' ? '#ffffff' : '#000000',
+                        filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.1))'
+                      }} 
+                    />
+                  </Box>
+                )}
+
                 <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
                   <StatusChip
                     icon={getStatusIcon(project.status)}
@@ -540,23 +653,7 @@ export default function Projets() {
                   ))}
                 </TechStack>
               </CardContent>
-              
-              <CardActions sx={{ p: 4, pt: 0 }}>
-                <ActionButton
-                  variant="contained"
-                  size="large"
-                  fullWidth
-                  onClick={() => handleProjectClick(project.url)}
-                  disabled={!project.url || project.url.trim() === ''}
-                  startIcon={project.url?.includes('github') ? <GitHubIcon /> : <LaunchIcon />}
-                >
-                  {project.url && project.url.trim() !== '' 
-                    ? 'Voir le projet' 
-                    : 'Lien non disponible'
-                  }
-                </ActionButton>
-              </CardActions>
-            </ProjectCard>
+            </ThreeDCardComponent>
           ))}
         </ProjectsGrid>
         
