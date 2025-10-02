@@ -41,7 +41,7 @@ const HeaderSection = styled(Box)(({ theme }) => ({
     ? 'linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 25%, #2a2a2a 50%, #1a1a1a 75%, #0a0a0a 100%)'
     : 'linear-gradient(135deg, #1e3a8a 0%, #3b82f6 50%, #059669 100%)',
   color: 'white',
-  padding: theme.spacing(12, 0, 8),
+  padding: theme.spacing(6.75, 0, 4.5),
   textAlign: 'center',
   position: 'relative',
   overflow: 'hidden',
@@ -105,6 +105,7 @@ const ProjectCard = styled(Card)(({ theme }) => ({
   animation: 'fadeInUp 0.6s ease-out',
   cursor: 'pointer',
   zIndex: 1,
+  height: '400px', // Hauteur fixe réduite
   '&:hover': {
     transform: 'translateY(-12px) scale(1.03)',
     boxShadow: theme.palette.mode === 'dark'
@@ -513,7 +514,7 @@ export default function Projets() {
                 } : {}
               }}
             >
-              <CardContent sx={{ p: 4, position: 'relative' }}>
+              <CardContent sx={{ p: 1, position: 'relative' }}>
                 {/* Logo GitHub dans le coin supérieur droit */}
                 {project.url && project.url.includes('github') && (
                   <Box
@@ -590,22 +591,22 @@ export default function Projets() {
                   </Box>
                 )}
 
-                <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', mb: 1.5 }}>
                   <StatusChip
                     icon={getStatusIcon(project.status)}
                     label={project.status}
                     color={getStatusColor(project.status)}
-                    size="medium"
+                    size="small"
                   />
                 </Box>
                 
                                  <Typography 
-                   variant="h5" 
+                   variant="h6" 
                    component="h2" 
                    gutterBottom
                    sx={{ 
                      fontWeight: 700,
-                     mb: 2,
+                     mb: 1.5,
                      background: (theme) => theme.palette.mode === 'dark'
                        ? 'linear-gradient(45deg, #ff6b35, #ffffff, #ff1744, #ff6b35)'
                        : 'linear-gradient(45deg, #1e3a8a, #3b82f6, #059669, #1e3a8a)',
@@ -628,29 +629,30 @@ export default function Projets() {
                 </Typography>
                 
                 {project.imageUrl && (
-                  <Box sx={{ mb: 3, textAlign: 'center' }}>
+                  <Box sx={{ mb: 2, textAlign: 'center' }}>
                     <img 
                       src={getImageUrl(project.imageUrl)} 
                       alt={project.name}
                       style={{ 
-                        width: '400px',
-                        height: '300px',
+                        width: '100%',
+                        height: '180px',
                         objectFit: 'cover',
-                        borderRadius: '12px',
-                        boxShadow: '0 4px 12px rgba(0,0,0,0.15)'
+                        borderRadius: '8px',
+                        boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
                       }}
                     />
                   </Box>
                 )}
                 
                 <Typography 
-                  variant="body1" 
+                  variant="body2" 
                   color="text.secondary" 
                   paragraph
                   sx={{ 
-                    lineHeight: 1.6,
-                    mb: 3,
-                    minHeight: '4.5rem'
+                    lineHeight: 1.4,
+                    mb: 2,
+                    minHeight: '3rem',
+                    fontSize: '0.9rem'
                   }}
                 >
                   {project.description}

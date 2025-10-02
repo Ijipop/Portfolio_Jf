@@ -20,6 +20,7 @@ const ThreeDCard = styled(Card)(({ theme }) => ({
   cursor: 'pointer',
   transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
   transformStyle: 'preserve-3d',
+  minHeight: '240px', // Hauteur ultra compacte
   '&::before': {
     content: '""',
     position: 'absolute',

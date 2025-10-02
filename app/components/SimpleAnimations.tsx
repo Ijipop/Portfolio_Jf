@@ -186,9 +186,14 @@ export function HoverScale({
 }) {
   return (
     <motion.div
-      className={className}
+      className={`hover-scale-wrapper ${className || ''}`}
       whileHover={{ scale }}
       transition={{ duration: 0.3 }}
+      style={{ 
+        // Empêcher les conflits CSS
+        transform: 'none !important',
+        boxShadow: 'none !important'
+      }}
     >
       {children}
     </motion.div>

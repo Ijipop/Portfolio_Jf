@@ -66,21 +66,94 @@ export function ThemeSelector() {
         root.style.removeProperty('--theme-bg')
         root.style.removeProperty('--theme-bg2')
         
-        // Reset body background
+        // Reset body ET html background
         document.body.style.removeProperty('background')
+        document.documentElement.style.removeProperty('background')
         
-        // Reset tous les styles inline
+        // SUPPRIMÉ - Plus de reset des conteneurs
+        
+        // SUPPRIMÉ - Plus de reset des conteneurs
+        
+        // SUPPRIMÉ - Plus de reset des conteneurs
+        
+        // Reset SÉLECTIF des styles inline
         setTimeout(() => {
-          const allElements = document.querySelectorAll('*')
-          allElements.forEach((element) => {
-            if (element instanceof HTMLElement) {
-              element.style.removeProperty('color')
-              element.style.removeProperty('text-shadow')
-              element.style.removeProperty('border-color')
-              element.style.removeProperty('box-shadow')
-              element.style.removeProperty('background')
+          // Reset des titres
+          const titles = document.querySelectorAll('h1, .MuiTypography-h1')
+          titles.forEach((title) => {
+            if (title instanceof HTMLElement) {
+              title.style.removeProperty('color')
+              title.style.removeProperty('text-shadow')
             }
           })
+          
+          // Reset des liens
+          const links = document.querySelectorAll('a')
+          links.forEach((link) => {
+            if (link instanceof HTMLElement) {
+              link.style.removeProperty('color')
+            }
+          })
+          
+          // Reset des icônes
+          const icons = document.querySelectorAll('.MuiSvgIcon-root, svg')
+          icons.forEach((icon) => {
+            if (icon instanceof HTMLElement) {
+              icon.style.removeProperty('color')
+            }
+          })
+          
+          // Reset des boutons
+          const buttons = document.querySelectorAll('.MuiButton-root, button')
+          buttons.forEach((button) => {
+            if (button instanceof HTMLElement) {
+              button.style.removeProperty('color')
+              button.style.removeProperty('border-color')
+            }
+          })
+          
+          // Reset des cartes - APPROCHE SIMPLE !
+          console.log('🔄 Resetting cards...')
+          
+          const mainCards = document.querySelectorAll('.MuiCard-root, .MuiPaper-root')
+          const processedCards = new Set()
+          
+          mainCards.forEach((card) => {
+            if (card instanceof HTMLElement && !processedCards.has(card)) {
+              processedCards.add(card)
+              console.log('🔄 Resetting MUI card:', card.className)
+              
+              card.style.removeProperty('background')
+              card.style.removeProperty('border')
+              card.style.removeProperty('backdrop-filter')
+              card.style.removeProperty('box-shadow')
+              card.style.removeProperty('color')
+            }
+          })
+          
+          // SUPPRIMÉ - Plus de reset des headers/footers
+          
+          // Reset des headers
+          const headers = document.querySelectorAll('[class*="HeaderSection"]')
+          headers.forEach((header) => {
+            if (header instanceof HTMLElement) {
+              header.style.removeProperty('background')
+            }
+          })
+          
+          // Reset des Box de titre
+          const titleBoxes = document.querySelectorAll('.MuiBox-root')
+          titleBoxes.forEach((box) => {
+            if (box instanceof HTMLElement) {
+              const hasTitle = box.querySelector('h1, .MuiTypography-h1, [class*="title"], [class*="Title"]')
+              if (hasTitle) {
+                box.style.removeProperty('background')
+              }
+            }
+          })
+          
+          // SUPPRIMÉ - Plus d'effets hover à reset
+          
           console.log('✅ Default theme restored!')
         }, 100)
       } else {
@@ -116,8 +189,17 @@ export function ThemeSelector() {
     root.style.setProperty('--theme-bg', theme.bg)
     root.style.setProperty('--theme-bg2', theme.bg2)
     
-    // 2. Background du body avec !important
+    // 2. Background du body ET du html pour couvrir toute la page
     document.body.style.setProperty('background', `linear-gradient(135deg, ${theme.bg} 0%, ${theme.bg2} 25%, ${theme.bg} 50%, ${theme.bg2} 75%, ${theme.bg} 100%)`, 'important')
+    document.documentElement.style.setProperty('background', `linear-gradient(135deg, ${theme.bg} 0%, ${theme.bg2} 25%, ${theme.bg} 50%, ${theme.bg2} 75%, ${theme.bg} 100%)`, 'important')
+    
+    // SUPPRIMÉ - On ne touche plus aux conteneurs pour éviter qu'ils soient visibles
+    
+    // SUPPRIMÉ - On ne touche plus aux conteneurs
+    
+    // SUPPRIMÉ - On ne touche plus aux conteneurs
+    
+    // SUPPRIMÉ - On ne touche plus aux conteneurs pour éviter de tout voir
     
     // 3. Forcer sur tous les éléments avec un délai
     setTimeout(() => {
@@ -157,20 +239,46 @@ export function ThemeSelector() {
         }
       })
       
-      // Cards
-      const cards = document.querySelectorAll('.MuiCard-root, .MuiPaper-root, [class*="Card"]')
-      cards.forEach((card) => {
-        if (card instanceof HTMLElement) {
-          card.style.setProperty('border-color', theme.primary + '40', 'important')
-          card.style.setProperty('box-shadow', `0 4px 20px ${theme.primary}20`, 'important')
+      // Cards - APPROCHE SIMPLE ET PROPRE !
+      console.log('🎨 Applying theme to cards...')
+      
+      // Cibler SEULEMENT les cartes MUI principales
+      const mainCards = document.querySelectorAll('.MuiCard-root, .MuiPaper-root')
+      const processedCards = new Set()
+      
+      mainCards.forEach((card) => {
+        if (card instanceof HTMLElement && !processedCards.has(card)) {
+          processedCards.add(card)
+          console.log('🎨 Applying theme to MUI card:', card.className)
+          
+          // Styles propres et précis
+          card.style.setProperty('background', `linear-gradient(145deg, ${theme.bg} 0%, ${theme.bg2} 50%, ${theme.bg} 100%)`, 'important')
+          card.style.setProperty('border', `2px solid ${theme.primary}60`, 'important')
+          card.style.setProperty('backdrop-filter', 'blur(10px)', 'important')
+          card.style.setProperty('box-shadow', `0 20px 60px ${theme.primary}40, 0 0 0 1px ${theme.primary}30`, 'important')
+          card.style.setProperty('color', theme.primary, 'important')
         }
       })
       
-      // Sections header
-      const sections = document.querySelectorAll('[class*="HeaderSection"], .MuiBox-root')
+      // SUPPRIMÉ - On évite les conflits avec headers/footers
+      
+      // Sections header - REMETTRE LES BANNIÈRES DE TITRE !
+      const sections = document.querySelectorAll('[class*="HeaderSection"]')
       sections.forEach((section) => {
         if (section instanceof HTMLElement) {
           section.style.setProperty('background', `linear-gradient(135deg, ${theme.bg} 0%, ${theme.bg2} 25%, ${theme.bg} 50%, ${theme.bg2} 75%, ${theme.bg} 100%)`, 'important')
+        }
+      })
+      
+      // AUSSI cibler les Box qui contiennent les titres principaux
+      const titleBoxes = document.querySelectorAll('.MuiBox-root')
+      titleBoxes.forEach((box) => {
+        if (box instanceof HTMLElement) {
+          // Vérifier si c'est une section de titre (contient h1 ou titre principal)
+          const hasTitle = box.querySelector('h1, .MuiTypography-h1, [class*="title"], [class*="Title"]')
+          if (hasTitle) {
+            box.style.setProperty('background', `linear-gradient(135deg, ${theme.bg} 0%, ${theme.bg2} 25%, ${theme.bg} 50%, ${theme.bg2} 75%, ${theme.bg} 100%)`, 'important')
+          }
         }
       })
       

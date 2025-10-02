@@ -21,7 +21,7 @@ const HeaderSection = styled(Box)(({ theme }) => ({
     ? 'linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 25%, #2a2a2a 50%, #1a1a1a 75%, #0a0a0a 100%)'
     : 'linear-gradient(135deg, #1e3a8a 0%, #3b82f6 50%, #059669 100%)',
   color: 'white',
-  padding: theme.spacing(12, 0, 8),
+  padding: theme.spacing(6.75, 0, 4.5),
   textAlign: 'center',
   position: 'relative',
   overflow: 'hidden',
