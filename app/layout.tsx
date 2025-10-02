@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
-import ThemeWrapper from './components/ThemeWrapper'
 import Footer from './components/Footer'
+import ThemeWrapper from './components/ThemeWrapper'
 
 export const metadata: Metadata = {
   title: 'PortFolio',

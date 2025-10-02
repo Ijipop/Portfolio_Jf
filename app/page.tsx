@@ -9,7 +9,9 @@ import Typography from '@mui/material/Typography'
 import { styled } from '@mui/material/styles'
 import { useRouter } from 'next/navigation'
 import { GlassContainer } from './components/GlassCard'
+import { LetterAnimations } from './components/LetterAnimations'
 import ParticleSystem from './components/ParticleSystem'
+import { FadeIn, HoverScale, TypingEffect } from './components/SimpleAnimations'
 import ThreeDCardComponent from './components/ThreeDCard'
 import AppBarComponent from './components/appBar'
 
@@ -162,39 +164,53 @@ export default function Home() {
       
       <HeaderSection>
         <Container maxWidth="lg">
-          <Typography 
-            variant="h1" 
-            component="h1" 
-            gutterBottom 
-            sx={{ 
-              fontWeight: 900,
-              fontSize: { xs: '3rem', md: '4.5rem' },
-              textShadow: (theme) => theme.palette.mode === 'dark'
-                ? '0 0 20px rgba(255, 107, 53, 0.5), 0 4px 8px rgba(0,0,0,0.8)'
-                : '0 4px 8px rgba(0,0,0,0.3)',
-              letterSpacing: '0.1em',
-              textTransform: 'uppercase',
-              background: (theme) => theme.palette.mode === 'dark'
-                ? 'linear-gradient(45deg, #ff6b35, #ffffff, #ff1744)'
-                : 'inherit',
-              backgroundClip: (theme) => theme.palette.mode === 'dark' ? 'text' : 'initial',
-              WebkitBackgroundClip: (theme) => theme.palette.mode === 'dark' ? 'text' : 'initial',
-              WebkitTextFillColor: (theme) => theme.palette.mode === 'dark' ? 'transparent' : 'inherit',
-            }}
-          >
-            Portfolio Web
-          </Typography>
-          <Typography 
-            variant="h5" 
-            sx={{ 
-              opacity: 0.9,
-              fontWeight: 300,
-              maxWidth: 600,
-              mx: 'auto'
-            }}
-          >
-            Développeur Full Stack passionné par les technologies modernes
-          </Typography>
+          <FadeIn delay={0.2}>
+            <Typography 
+              variant="h1" 
+              component="h1" 
+              gutterBottom 
+              sx={{ 
+                fontWeight: 900,
+                fontSize: { xs: '3rem', md: '4.5rem' },
+                textShadow: (theme) => theme.palette.mode === 'dark'
+                  ? '0 0 20px rgba(255, 107, 53, 0.5), 0 4px 8px rgba(0,0,0,0.8)'
+                  : '0 4px 8px rgba(0,0,0,0.3)',
+                letterSpacing: '0.1em',
+                textTransform: 'uppercase',
+                // Orange simple sans gradient pour éviter le flou
+                color: (theme) => theme.palette.mode === 'dark' ? '#ff6b35' : 'inherit',
+                // Supprime complètement le gradient qui cause le flou
+                filter: 'none',
+                textRendering: 'optimizeLegibility',
+                WebkitFontSmoothing: 'antialiased',
+                MozOsxFontSmoothing: 'grayscale',
+                // Force la netteté
+                imageRendering: 'crisp-edges',
+                backfaceVisibility: 'hidden',
+                transform: 'translateZ(0)' // Force l'accélération GPU
+              }}
+            >
+              <LetterAnimations>
+                Portfolio Web
+              </LetterAnimations>
+            </Typography>
+          </FadeIn>
+          <FadeIn delay={0.5}>
+            <Typography 
+              variant="h5" 
+              sx={{ 
+                opacity: 0.9,
+                fontWeight: 300,
+                maxWidth: 600,
+                mx: 'auto'
+              }}
+            >
+              <TypingEffect 
+                text="Développeur Full Stack passionné par les technologies modernes"
+                speed={50}
+              />
+            </Typography>
+          </FadeIn>
         </Container>
       </HeaderSection>
 
@@ -256,7 +272,9 @@ export default function Home() {
           gap: 4,
           mb: 8
         }}>
-          <ThreeDCardComponent onClick={() => handleCardClick('/projets')} floatingElements={2}>
+          <FadeIn delay={0.8}>
+            <HoverScale>
+              <ThreeDCardComponent onClick={() => handleCardClick('/projets')} floatingElements={2}>
             <CodeIcon sx={{ fontSize: 48, color: 'primary.main', mb: 2 }} />
             <Typography variant="h5" gutterBottom>
               Mes Projets
@@ -265,26 +283,36 @@ export default function Home() {
               Découvrez mes réalisations et explorations technologiques
             </Typography>
           </ThreeDCardComponent>
+            </HoverScale>
+          </FadeIn>
 
-          <ThreeDCardComponent onClick={() => handleCardClick('/a-propos')} floatingElements={3}>
-            <PersonIcon sx={{ fontSize: 48, color: 'primary.main', mb: 2 }} />
-            <Typography variant="h5" gutterBottom>
-              À Propos
-            </Typography>
-            <Typography variant="body1" color="text.secondary">
-              En savoir plus sur mon parcours et mes compétences
-            </Typography>
-          </ThreeDCardComponent>
+          <FadeIn delay={1.0}>
+            <HoverScale>
+              <ThreeDCardComponent onClick={() => handleCardClick('/a-propos')} floatingElements={3}>
+                <PersonIcon sx={{ fontSize: 48, color: 'primary.main', mb: 2 }} />
+                <Typography variant="h5" gutterBottom>
+                  À Propos
+                </Typography>
+                <Typography variant="body1" color="text.secondary">
+                  En savoir plus sur mon parcours et mes compétences
+                </Typography>
+              </ThreeDCardComponent>
+            </HoverScale>
+          </FadeIn>
 
-          <ThreeDCardComponent onClick={() => handleCardClick('/contact')} floatingElements={2}>
-            <ContactSupportIcon sx={{ fontSize: 48, color: 'primary.main', mb: 2 }} />
-            <Typography variant="h5" gutterBottom>
-              Contact
-            </Typography>
-            <Typography variant="body1" color="text.secondary">
-              Prenons contact et discutons de vos projets
-            </Typography>
-          </ThreeDCardComponent>
+          <FadeIn delay={1.2}>
+            <HoverScale>
+              <ThreeDCardComponent onClick={() => handleCardClick('/contact')} floatingElements={2}>
+                <ContactSupportIcon sx={{ fontSize: 48, color: 'primary.main', mb: 2 }} />
+                <Typography variant="h5" gutterBottom>
+                  Contact
+                </Typography>
+                <Typography variant="body1" color="text.secondary">
+                  Prenons contact et discutons de vos projets
+                </Typography>
+              </ThreeDCardComponent>
+            </HoverScale>
+          </FadeIn>
         </Box>
       </Container>
     </Box>
