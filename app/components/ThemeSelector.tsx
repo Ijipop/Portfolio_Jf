@@ -2,14 +2,14 @@
 
 import { ArrowDropDown, Palette } from '@mui/icons-material'
 import {
-    Box,
-    Chip,
-    IconButton,
-    ListItemIcon,
-    ListItemText,
-    Menu,
-    MenuItem,
-    Tooltip
+	Box,
+	Chip,
+	IconButton,
+	ListItemIcon,
+	ListItemText,
+	Menu,
+	MenuItem,
+	Tooltip
 } from '@mui/material'
 import { useEffect, useState } from 'react'
 
@@ -83,6 +83,16 @@ export function ThemeSelector() {
         root.style.removeProperty('--theme-bg')
         root.style.removeProperty('--theme-bg2')
         
+        // Supprimer TOUTES les variables CSS de cartes
+        root.style.removeProperty('--card-primary')
+        root.style.removeProperty('--card-secondary')
+        root.style.removeProperty('--card-background')
+        root.style.removeProperty('--card-text-primary')
+        root.style.removeProperty('--card-text-secondary')
+        root.style.removeProperty('--card-hover-primary')
+        root.style.removeProperty('--card-hover-secondary')
+        root.style.removeProperty('--card-hover-glow')
+        
         // Reset body ET html background
         document.body.style.removeProperty('background')
         document.documentElement.style.removeProperty('background')
@@ -129,22 +139,30 @@ export function ThemeSelector() {
             }
           })
           
-          // Reset des cartes - APPROCHE SIMPLE !
+          // Reset des cartes - NETTOYAGE AGRESSIF !
           console.log('🔄 Resetting cards...')
           
-          const mainCards = document.querySelectorAll('.MuiCard-root, .MuiPaper-root')
-          const processedCards = new Set()
-          
-          mainCards.forEach((card) => {
-            if (card instanceof HTMLElement && !processedCards.has(card)) {
-              processedCards.add(card)
-              console.log('🔄 Resetting MUI card:', card.className)
+          // Nettoyer TOUTES les cartes possibles
+          const allCards = document.querySelectorAll('.MuiCard-root, .MuiPaper-root, [class*="Card"], [class*="card"], .MuiBox-root, .MuiContainer-root')
+          allCards.forEach((card) => {
+            if (card instanceof HTMLElement) {
+              console.log('🔄 Resetting card:', card.className)
               
+              // Supprimer TOUS les styles de thème
               card.style.removeProperty('background')
+              card.style.removeProperty('background-color')
+              card.style.removeProperty('background-image')
               card.style.removeProperty('border')
+              card.style.removeProperty('border-color')
               card.style.removeProperty('backdrop-filter')
               card.style.removeProperty('box-shadow')
               card.style.removeProperty('color')
+              card.style.removeProperty('text-shadow')
+              
+              // Forcer le style par défaut
+              card.style.setProperty('background', '', 'important')
+              card.style.setProperty('border', '', 'important')
+              card.style.setProperty('box-shadow', '', 'important')
             }
           })
           
@@ -194,6 +212,71 @@ export function ThemeSelector() {
           })
           console.log('✅ Dark mode default colors applied!')
         }, 100)
+        
+        // Nettoyage ULTRA-AGRESSIF après 1 seconde
+        setTimeout(() => {
+          console.log('🔄 ULTRA-AGGRESSIVE card cleanup...')
+          
+          // Supprimer TOUTES les variables CSS de thème
+          const root = document.documentElement
+          root.style.removeProperty('--card-primary')
+          root.style.removeProperty('--card-secondary')
+          root.style.removeProperty('--card-background')
+          root.style.removeProperty('--card-text-primary')
+          root.style.removeProperty('--card-text-secondary')
+          root.style.removeProperty('--card-hover-primary')
+          root.style.removeProperty('--card-hover-secondary')
+          root.style.removeProperty('--card-hover-glow')
+          
+          // Nettoyer TOUTES les cartes avec approche ultra-agressive
+          const allCards = document.querySelectorAll('*')
+          allCards.forEach((element) => {
+            if (element instanceof HTMLElement) {
+              const className = element.className || ''
+              const tagName = element.tagName.toLowerCase()
+              
+              // Cibler tous les éléments qui pourraient être des cartes
+              if (className.includes('Card') || className.includes('card') || 
+                  className.includes('MuiCard') || className.includes('MuiPaper') ||
+                  className.includes('MuiBox') || className.includes('MuiContainer') ||
+                  tagName === 'div' || tagName === 'section' || tagName === 'article') {
+                
+                console.log('🔄 ULTRA-cleaning element:', tagName, className)
+                
+                // Supprimer TOUS les styles possibles
+                element.style.removeProperty('background')
+                element.style.removeProperty('background-color')
+                element.style.removeProperty('background-image')
+                element.style.removeProperty('background-size')
+                element.style.removeProperty('background-position')
+                element.style.removeProperty('background-repeat')
+                element.style.removeProperty('border')
+                element.style.removeProperty('border-color')
+                element.style.removeProperty('border-width')
+                element.style.removeProperty('border-style')
+                element.style.removeProperty('border-radius')
+                element.style.removeProperty('box-shadow')
+                element.style.removeProperty('color')
+                element.style.removeProperty('text-shadow')
+                element.style.removeProperty('backdrop-filter')
+                element.style.removeProperty('filter')
+                element.style.removeProperty('transform')
+                element.style.removeProperty('transition')
+                
+                // Forcer le style par défaut avec !important
+                element.style.setProperty('background', 'transparent', 'important')
+                element.style.setProperty('background-color', 'transparent', 'important')
+                element.style.setProperty('background-image', 'none', 'important')
+                element.style.setProperty('border', 'none', 'important')
+                element.style.setProperty('box-shadow', 'none', 'important')
+                element.style.setProperty('color', 'inherit', 'important')
+                element.style.setProperty('text-shadow', 'none', 'important')
+              }
+            }
+          })
+          
+          console.log('✅ ULTRA-AGGRESSIVE cleanup complete')
+        }, 1000)
       }
       
       return
