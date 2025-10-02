@@ -8,16 +8,16 @@ import { motion } from 'framer-motion'
 const GlassCard = styled(Card)(({ theme }) => ({
   background: theme.palette.mode === 'dark'
     ? 'rgba(26, 26, 26, 0.25)'
-    : 'rgba(255, 255, 255, 0.25)',
+    : 'var(--card-background, rgba(255, 255, 255, 0.25))',
   backdropFilter: 'blur(20px)',
   WebkitBackdropFilter: 'blur(20px)',
   border: theme.palette.mode === 'dark'
     ? '1px solid rgba(255, 255, 255, 0.18)'
-    : '1px solid rgba(255, 255, 255, 0.3)',
+    : '1px solid var(--card-primary, rgba(255, 255, 255, 0.3))',
   borderRadius: 24,
   boxShadow: theme.palette.mode === 'dark'
     ? '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)'
-    : '0 8px 32px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.8)',
+    : '0 8px 32px rgba(0, 0, 0, 0.1), 0 0 0 1px var(--card-primary, transparent), inset 0 1px 0 rgba(255, 255, 255, 0.8)',
   position: 'relative',
   overflow: 'hidden',
   transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
@@ -30,7 +30,7 @@ const GlassCard = styled(Card)(({ theme }) => ({
     bottom: 0,
     background: theme.palette.mode === 'dark'
       ? 'linear-gradient(135deg, rgba(255, 107, 53, 0.1) 0%, rgba(255, 23, 68, 0.1) 100%)'
-      : 'linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(5, 150, 105, 0.1) 100%)',
+      : 'linear-gradient(135deg, var(--card-primary, rgba(59, 130, 246, 0.1)) 0%, var(--card-secondary, rgba(5, 150, 105, 0.1)) 100%)',
     opacity: 0,
     transition: 'opacity 0.3s ease',
     zIndex: 1,
@@ -39,7 +39,7 @@ const GlassCard = styled(Card)(({ theme }) => ({
     transform: 'translateY(-8px) scale(1.02)',
     boxShadow: theme.palette.mode === 'dark'
       ? '0 20px 40px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 107, 53, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2)'
-      : '0 20px 40px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(59, 130, 246, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.9)',
+      : '0 20px 40px rgba(0, 0, 0, 0.15), 0 0 0 1px var(--card-hover-primary, rgba(59, 130, 246, 0.3)), inset 0 1px 0 rgba(255, 255, 255, 0.9)',
     '&::before': {
       opacity: 1,
     }
@@ -81,17 +81,17 @@ const NeumorphicButton = styled(Box)(({ theme }) => ({
 const GlassContainer = styled(Box)(({ theme }) => ({
   background: theme.palette.mode === 'dark'
     ? 'rgba(10, 10, 10, 0.8)'
-    : 'rgba(248, 250, 252, 0.8)',
+    : 'var(--card-background, rgba(248, 250, 252, 0.8))',
   backdropFilter: 'blur(30px)',
   WebkitBackdropFilter: 'blur(30px)',
   border: theme.palette.mode === 'dark'
     ? '1px solid rgba(255, 255, 255, 0.1)'
-    : '1px solid rgba(255, 255, 255, 0.2)',
+    : '1px solid var(--card-primary, rgba(255, 255, 255, 0.2))',
   borderRadius: 32,
   padding: theme.spacing(4),
   boxShadow: theme.palette.mode === 'dark'
     ? '0 20px 60px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1)'
-    : '0 20px 60px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.8)',
+    : '0 20px 60px rgba(0, 0, 0, 0.1), 0 0 0 1px var(--card-primary, transparent), inset 0 1px 0 rgba(255, 255, 255, 0.8)',
   position: 'relative',
   overflow: 'hidden',
   '&::before': {
@@ -103,7 +103,7 @@ const GlassContainer = styled(Box)(({ theme }) => ({
     height: '200%',
     background: theme.palette.mode === 'dark'
       ? 'conic-gradient(from 0deg, transparent, rgba(255, 107, 53, 0.1), transparent, rgba(255, 23, 68, 0.1), transparent)'
-      : 'conic-gradient(from 0deg, transparent, rgba(59, 130, 246, 0.1), transparent, rgba(5, 150, 105, 0.1), transparent)',
+      : 'conic-gradient(from 0deg, transparent, var(--card-primary, rgba(59, 130, 246, 0.1)), transparent, var(--card-secondary, rgba(5, 150, 105, 0.1)), transparent)',
     animation: 'rotate 10s linear infinite',
     zIndex: 0,
   },

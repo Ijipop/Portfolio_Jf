@@ -226,12 +226,12 @@ export default function Home() {
                 fontSize: { xs: '2rem', md: '3rem' },
                 textShadow: (theme) => theme.palette.mode === 'dark'
                   ? '0 0 20px rgba(255, 107, 53, 0.6), 0 0 40px rgba(255, 23, 68, 0.4), 0 4px 8px rgba(0,0,0,0.8)'
-                  : '0 0 20px rgba(30, 58, 138, 0.4), 0 0 40px rgba(59, 130, 246, 0.3), 0 4px 8px rgba(0,0,0,0.3)',
+                  : '0 0 20px var(--primary-color, rgba(30, 58, 138, 0.4)), 0 0 40px var(--secondary-color, rgba(59, 130, 246, 0.3)), 0 4px 8px rgba(0,0,0,0.3)',
                 letterSpacing: '0.15em',
                 textTransform: 'uppercase',
                 background: (theme) => theme.palette.mode === 'dark'
                   ? 'linear-gradient(45deg, #ff6b35, #ffffff, #ff1744, #ff6b35)'
-                  : 'linear-gradient(45deg, #1e3a8a, #3b82f6, #059669, #1e3a8a)',
+                  : 'linear-gradient(45deg, var(--primary-color, #1e3a8a), var(--secondary-color, #3b82f6), var(--primary-color, #059669), var(--primary-color, #1e3a8a))',
                 backgroundClip: 'text',
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
@@ -247,7 +247,7 @@ export default function Home() {
                   bottom: 0,
                   background: (theme) => theme.palette.mode === 'dark'
                     ? 'linear-gradient(45deg, rgba(255, 107, 53, 0.1), rgba(255, 23, 68, 0.1))'
-                    : 'linear-gradient(45deg, rgba(30, 58, 138, 0.1), rgba(59, 130, 246, 0.1))',
+                    : 'linear-gradient(45deg, var(--primary-color, rgba(30, 58, 138, 0.1)), var(--secondary-color, rgba(59, 130, 246, 0.1))',
                   borderRadius: '20px',
                   filter: 'blur(20px)',
                   zIndex: -1,
