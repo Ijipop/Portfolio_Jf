@@ -44,7 +44,7 @@ const UnifiedCard = styled(Card)(({ theme }) => ({
   padding: theme.spacing(4),
   boxShadow: theme.palette.mode === 'dark'
     ? '0 20px 60px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 107, 53, 0.2)'
-    : '0 20px 60px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(59, 130, 246, 0.2)',
+    : '0 20px 60px rgba(0, 0, 0, 0.1), 0 0 0 1px var(--card-primary, transparent)',
   position: 'relative',
   overflow: 'hidden',
   cursor: 'pointer',
@@ -69,7 +69,7 @@ const UnifiedCard = styled(Card)(({ theme }) => ({
     transform: 'perspective(1000px) rotateX(5deg) rotateY(5deg) translateZ(20px)',
     boxShadow: theme.palette.mode === 'dark'
       ? '0 30px 80px rgba(0, 0, 0, 0.6), 0 0 0 2px rgba(102, 126, 234, 0.4), 0 0 40px rgba(245, 87, 108, 0.3)'
-      : '0 30px 80px rgba(0, 0, 0, 0.2), 0 0 0 2px rgba(102, 126, 234, 0.4), 0 0 40px rgba(245, 87, 108, 0.3)',
+      : '0 30px 80px rgba(0, 0, 0, 0.2), 0 0 0 2px var(--card-hover-primary), 0 0 40px var(--card-hover-secondary), 0 0 60px var(--card-hover-glow)',
     '&::before': {
       opacity: 1,
     }

@@ -12,7 +12,7 @@ const ThreeDCard = styled(Card)(({ theme }) => ({
   padding: theme.spacing(4),
   boxShadow: theme.palette.mode === 'dark'
     ? '0 20px 60px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 107, 53, 0.2)'
-    : '0 20px 60px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(59, 130, 246, 0.2)',
+    : '0 20px 60px rgba(0, 0, 0, 0.1), 0 0 0 1px var(--card-primary, transparent)',
   position: 'relative',
   overflow: 'hidden',
   cursor: 'pointer',
@@ -28,14 +28,14 @@ const ThreeDCard = styled(Card)(({ theme }) => ({
     bottom: 0,
     background: theme.palette.mode === 'dark'
       ? 'linear-gradient(135deg, rgba(255, 107, 53, 0.1) 0%, rgba(255, 23, 68, 0.1) 100%)'
-      : 'linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(5, 150, 105, 0.1) 100%)',
+      : 'linear-gradient(135deg, var(--card-primary, transparent) 0%, var(--card-secondary, transparent) 100%)',
     opacity: 0,
     transition: 'opacity 0.3s ease',
     zIndex: 1,
   },
   '&:hover': {
     transform: 'perspective(1000px) rotateX(5deg) rotateY(5deg) translateZ(20px)',
-    boxShadow: `0 30px 80px rgba(0, 0, 0, 0.6), 0 0 0 2px var(--card-primary, rgba(59, 130, 246, 0.4)), 0 0 40px var(--card-secondary, rgba(5, 150, 105, 0.3))`,
+    boxShadow: `0 30px 80px rgba(0, 0, 0, 0.6), 0 0 0 2px var(--card-hover-primary), 0 0 40px var(--card-hover-secondary), 0 0 60px var(--card-hover-glow)`,
     '&::before': {
       opacity: 1,
     }
@@ -45,7 +45,7 @@ const ThreeDCard = styled(Card)(({ theme }) => ({
 // Floating 3D Element - Plus subtil
 const FloatingElement = styled(Box)(({ theme }) => ({
   position: 'absolute',
-  background: 'var(--card-primary, rgba(59, 130, 246, 0.3))',
+  background: 'var(--card-primary)',
   borderRadius: '50%',
   filter: 'blur(0.5px)',
   animation: 'float 8s ease-in-out infinite',
