@@ -25,6 +25,10 @@ const HeaderSection = styled(Box)(({ theme }) => ({
   textAlign: 'center',
   position: 'relative',
   overflow: 'hidden',
+  // Orange seulement pour h1 en dark mode
+  '& h1': {
+    color: theme.palette.mode === 'dark' ? '#ff6b35' : 'inherit'
+  },
   '&::before': {
     content: '""',
     position: 'absolute',
@@ -256,16 +260,23 @@ export default function Contact() {
               fontWeight: 900,
               fontSize: { xs: '3rem', md: '4.5rem' },
               textShadow: (theme) => theme.palette.mode === 'dark'
-                ? '0 0 20px rgba(255, 107, 53, 0.5), 0 4px 8px rgba(0,0,0,0.8)'
+                ? '0 0 20px rgba(255, 107, 53, 0.8), 0 0 40px rgba(255, 107, 53, 0.4), 0 4px 8px rgba(0,0,0,0.8)'
                 : '0 4px 8px rgba(0,0,0,0.3)',
               letterSpacing: '0.1em',
               textTransform: 'uppercase',
-              background: (theme) => theme.palette.mode === 'dark'
-                ? 'linear-gradient(45deg, #ff6b35, #ffffff, #ff1744)'
-                : 'inherit',
-              backgroundClip: (theme) => theme.palette.mode === 'dark' ? 'text' : 'initial',
-              WebkitBackgroundClip: (theme) => theme.palette.mode === 'dark' ? 'text' : 'initial',
-              WebkitTextFillColor: (theme) => theme.palette.mode === 'dark' ? 'transparent' : 'inherit',
+              color: (theme) => theme.palette.mode === 'dark' ? '#ff6b35' : 'inherit',
+              // Effet de glow animé
+              animation: (theme) => theme.palette.mode === 'dark' ? 'glow-pulse 2s ease-in-out infinite alternate' : 'none',
+              '@keyframes glow-pulse': {
+                '0%': {
+                  textShadow: '0 0 20px rgba(255, 107, 53, 0.8), 0 0 40px rgba(255, 107, 53, 0.4)',
+                  filter: 'brightness(1)'
+                },
+                '100%': {
+                  textShadow: '0 0 30px rgba(255, 107, 53, 1), 0 0 60px rgba(255, 107, 53, 0.6)',
+                  filter: 'brightness(1.2)'
+                }
+              }
             }}
           >
             Contact

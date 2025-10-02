@@ -177,7 +177,7 @@ export default function Home() {
                   : '0 4px 8px rgba(0,0,0,0.3)',
                 letterSpacing: '0.1em',
                 textTransform: 'uppercase',
-                // Orange simple sans gradient pour éviter le flou
+                // Force l'orange en dark mode
                 color: (theme) => theme.palette.mode === 'dark' ? '#ff6b35' : 'inherit',
                 // Supprime complètement le gradient qui cause le flou
                 filter: 'none',
