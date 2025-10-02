@@ -37,6 +37,23 @@ export function ThemeSelector() {
     { name: 'Cyber', primary: '#9c27b0', secondary: '#e91e63', bg: '#1a0a1a', bg2: '#0f0a1a' }
   ]
 
+  // Fonction pour obtenir les couleurs de cartes selon le thème
+  const getCardColorsForTheme = (theme: any) => {
+    if (theme.isDefault) {
+      return {
+        primary: '#1e3a8a',
+        secondary: '#059669',
+        background: 'linear-gradient(145deg, #ffffff 0%, #f8fafc 50%, #ffffff 100%)'
+      }
+    }
+    
+    return {
+      primary: theme.primary,
+      secondary: theme.secondary,
+      background: `linear-gradient(145deg, ${theme.primary}20 0%, ${theme.secondary}20 50%, ${theme.primary}20 100%)`
+    }
+  }
+
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget)
   }
@@ -188,6 +205,12 @@ export function ThemeSelector() {
     root.style.setProperty('--secondary-color', theme.secondary)
     root.style.setProperty('--theme-bg', theme.bg)
     root.style.setProperty('--theme-bg2', theme.bg2)
+    
+    // Appliquer les couleurs de cartes selon le thème
+    const cardColors = getCardColorsForTheme(theme)
+    root.style.setProperty('--card-primary', cardColors.primary)
+    root.style.setProperty('--card-secondary', cardColors.secondary)
+    root.style.setProperty('--card-background', cardColors.background)
     
     // 2. Background du body ET du html pour couvrir toute la page
     document.body.style.setProperty('background', `linear-gradient(135deg, ${theme.bg} 0%, ${theme.bg2} 25%, ${theme.bg} 50%, ${theme.bg2} 75%, ${theme.bg} 100%)`, 'important')

@@ -69,9 +69,7 @@ const HeaderSection = styled(Box)(({ theme }) => ({
 }))
 
 const ContactCard = styled(Box)(({ theme }) => ({
-  background: theme.palette.mode === 'dark'
-    ? 'linear-gradient(145deg, #1a1a1a 0%, #2a2a2a 50%, #1a1a1a 100%)'
-    : 'linear-gradient(145deg, #ffffff 0%, #fafbfc 30%, #f1f5f9 70%, #e2e8f0 100%)',
+  background: 'var(--card-background, linear-gradient(145deg, #ffffff 0%, #fafbfc 30%, #f1f5f9 70%, #e2e8f0 100%))',
   border: theme.palette.mode === 'dark' 
     ? '2px solid rgba(74, 85, 104, 0.2)' 
     : '1px solid rgba(148, 163, 184, 0.1)',
@@ -115,9 +113,7 @@ const ContactCard = styled(Box)(({ theme }) => ({
   },
   '&:hover': {
     transform: 'translateY(-12px) scale(1.03)',
-    boxShadow: theme.palette.mode === 'dark'
-      ? '0 30px 60px rgba(0, 0, 0, 0.7), 0 0 30px rgba(74, 85, 104, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2)'
-      : '0 20px 40px rgba(59, 130, 246, 0.15), 0 0 20px rgba(147, 197, 253, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.8)',
+    boxShadow: `0 30px 60px rgba(0, 0, 0, 0.7), 0 0 30px var(--card-primary, rgba(59, 130, 246, 0.3)), inset 0 1px 0 rgba(255, 255, 255, 0.2)`,
     '&::before': {
       opacity: 1,
     },

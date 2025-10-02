@@ -104,9 +104,7 @@ const FlipCardFront = styled(Box)(({ theme }) => ({
   backfaceVisibility: 'hidden',
   WebkitBackfaceVisibility: 'hidden',
   MozBackfaceVisibility: 'hidden',
-  background: theme.palette.mode === 'dark'
-    ? 'linear-gradient(145deg, #1a1a1a 0%, #2a2a2a 50%, #1a1a1a 100%)'
-    : 'linear-gradient(145deg, #ffffff 0%, #fafbfc 30%, #f1f5f9 70%, #e2e8f0 100%)',
+  background: 'var(--card-background, linear-gradient(145deg, #ffffff 0%, #fafbfc 30%, #f1f5f9 70%, #e2e8f0 100%))',
   border: theme.palette.mode === 'dark' 
     ? '2px solid rgba(74, 85, 104, 0.2)' 
     : '1px solid rgba(148, 163, 184, 0.1)',
@@ -167,9 +165,7 @@ const FlipCardBack = styled(Box)(({ theme }) => ({
   backfaceVisibility: 'hidden',
   WebkitBackfaceVisibility: 'hidden',
   MozBackfaceVisibility: 'hidden',
-  background: theme.palette.mode === 'dark'
-    ? 'linear-gradient(145deg, #2a2a2a 0%, #3a3a3a 50%, #2a2a2a 100%)'
-    : 'linear-gradient(145deg, #f1f5f9 0%, #e2e8f0 30%, #cbd5e1 70%, #94a3b8 100%)',
+  background: `linear-gradient(145deg, var(--card-secondary, #059669)20 0%, var(--card-primary, #1e3a8a)20 50%, var(--card-secondary, #059669)20 100%)`,
   border: theme.palette.mode === 'dark' 
     ? '2px solid rgba(74, 85, 104, 0.3)' 
     : '1px solid rgba(148, 163, 184, 0.2)',
@@ -190,9 +186,7 @@ const FlipCardBack = styled(Box)(({ theme }) => ({
 
 const SkillTag = styled(Box)(({ theme }) => ({
   display: 'inline-block',
-  background: theme.palette.mode === 'dark'
-    ? 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
-    : 'linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%)',
+  background: `linear-gradient(135deg, var(--card-primary, #4f46e5) 0%, var(--card-secondary, #7c3aed) 100%)`,
   color: 'white',
   padding: theme.spacing(0.5, 1.5),
   borderRadius: 20,
@@ -200,14 +194,10 @@ const SkillTag = styled(Box)(({ theme }) => ({
   fontWeight: 500,
   margin: theme.spacing(0.5),
   transition: 'all 0.3s ease',
-  boxShadow: theme.palette.mode === 'dark'
-    ? '0 2px 8px rgba(102, 126, 234, 0.3)'
-    : '0 2px 8px rgba(79, 70, 229, 0.3)',
+  boxShadow: '0 2px 8px var(--card-primary, rgba(79, 70, 229, 0.3))',
   '&:hover': {
     transform: 'scale(1.05)',
-    boxShadow: theme.palette.mode === 'dark'
-      ? '0 4px 16px rgba(102, 126, 234, 0.4)'
-      : '0 4px 16px rgba(79, 70, 229, 0.4)',
+    boxShadow: '0 4px 16px var(--card-primary, rgba(79, 70, 229, 0.4))',
   }
 }))
 
@@ -525,18 +515,12 @@ export default function About() {
         </Box>
 
         <Box sx={{ 
-          background: (theme) => theme.palette.mode === 'dark'
-            ? 'linear-gradient(145deg, #1a1a1a 0%, #2a2a2a 50%, #1a1a1a 100%)'
-            : 'linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%)',
-          border: (theme) => theme.palette.mode === 'dark' 
-            ? '2px solid rgba(255, 107, 53, 0.3)' 
-            : '1px solid rgba(0,0,0,0.08)',
+          background: 'var(--card-background, linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%))',
+          border: '1px solid var(--card-primary, rgba(0,0,0,0.08))',
           borderRadius: 24,
           padding: 4,
           textAlign: 'center',
-          boxShadow: (theme) => theme.palette.mode === 'dark'
-            ? '0 15px 50px rgba(0, 0, 0, 0.6), 0 0 20px rgba(255, 107, 53, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.1)'
-            : '0 8px 32px rgba(0,0,0,0.1)',
+          boxShadow: '0 8px 32px var(--card-primary, rgba(0,0,0,0.1))',
           mb: 8,
           position: 'relative',
           overflow: 'hidden',
@@ -547,9 +531,7 @@ export default function About() {
             left: 0,
             right: 0,
             bottom: 0,
-            background: (theme) => theme.palette.mode === 'dark'
-              ? 'linear-gradient(135deg, rgba(255, 107, 53, 0.1) 0%, rgba(255, 23, 68, 0.1) 50%, rgba(255, 107, 53, 0.05) 100%)'
-              : 'transparent',
+            background: `linear-gradient(135deg, var(--card-primary, rgba(30, 58, 138, 0.1)) 0%, var(--card-secondary, rgba(5, 150, 105, 0.1)) 50%, var(--card-primary, rgba(30, 58, 138, 0.05)) 100%)`,
             opacity: 0.3,
           }
         }}>
