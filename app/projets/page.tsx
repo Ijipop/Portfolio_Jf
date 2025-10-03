@@ -478,11 +478,29 @@ export default function Projets() {
 
         {/* Projects Grid */}
         <ProjectsGrid>
-          {projects.map((project, index) => (
-            <SimpleCardComponent 
-              key={project.id} 
-              onClick={() => handleProjectClick(project.url)}
-            >
+          {projects.map((project, index) => {
+            // Palette de couleurs pour les reflets
+            const reflectionColors = [
+              '#ff6b35', // Orange
+              '#3b82f6', // Bleu
+              '#059669', // Vert
+              '#8b5cf6', // Violet
+              '#ec4899', // Rose
+              '#f59e0b', // Jaune
+              '#ef4444', // Rouge
+              '#06b6d4', // Cyan
+              '#84cc16', // Lime
+              '#f97316', // Orange vif
+            ]
+            
+            const reflectionColor = reflectionColors[index % reflectionColors.length]
+            
+            return (
+              <SimpleCardComponent 
+                key={project.id} 
+                onClick={() => handleProjectClick(project.url)}
+                reflectionColor={reflectionColor}
+              >
               {/* Logo GitHub dans le coin supérieur droit */}
                 {project.url && project.url.includes('github') && (
                   <Box
@@ -633,13 +651,14 @@ export default function Projets() {
                   position: 'relative'
                 }}>
                   {project.technologies.split(',').map((tech, techIndex) => (
-                    <SimpleTechTag key={techIndex}>
+                    <SimpleTechTag key={techIndex} reflectionColor={reflectionColor}>
                       {tech.trim()}
                     </SimpleTechTag>
                   ))}
-              </TechStack>
-            </SimpleCardComponent>
-          ))}
+                </TechStack>
+              </SimpleCardComponent>
+            )
+          })}
         </ProjectsGrid>
         
         {projects.length === 0 && !error && (
