@@ -148,14 +148,7 @@ const FlipCardFront = styled(Box)(({ theme }) => ({
     opacity: 0,
     transition: 'opacity 0.3s ease',
   },
-  '&:hover': {
-    '&::before': {
-      opacity: 1,
-    },
-    '&::after': {
-      opacity: 1,
-    }
-  }
+  // Suppression des effets de couleur au hover
 }))
 
 const FlipCardBack = styled(Box)(({ theme }) => ({
@@ -197,7 +190,7 @@ const SkillTag = styled(Box)(({ theme }) => ({
   boxShadow: '0 2px 8px var(--card-primary, rgba(79, 70, 229, 0.3))',
   '&:hover': {
     transform: 'scale(1.05)',
-    boxShadow: '0 4px 16px var(--card-primary, rgba(79, 70, 229, 0.4))',
+    // Suppression de l'effet de couleur au hover
   }
 }))
 
