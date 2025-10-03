@@ -251,7 +251,51 @@ export function ThemeSelector() {
             }
           })
           
-          // SUPPRIMÉ - Plus d'effets hover à reset
+          // Reset des conteneurs Footer pour le thème Default - MÊME MÉTHODE QUE LES CARTES
+          console.log('🔄 Resetting footer containers (same method as cards)...')
+          
+          // Nettoyer TOUS les éléments du Footer avec la même approche que les cartes
+          const allElements = document.querySelectorAll('*')
+          allElements.forEach((element) => {
+            if (element instanceof HTMLElement) {
+              const className = element.className || ''
+              const tagName = element.tagName.toLowerCase()
+              
+              // Vérifier si c'est dans un footer
+              const isInFooter = element.closest('footer') || 
+                                element.closest('[class*="Footer"]') ||
+                                element.textContent?.includes('©') ||
+                                element.textContent?.includes('Tous droits réservés') ||
+                                element.textContent?.includes('Portfolio Web')
+              
+              // Cibler les conteneurs dans le footer (même logique que les cartes)
+              if (isInFooter && (className.includes('MuiContainer') || className.includes('MuiBox') || 
+                  tagName === 'div' || tagName === 'section' || tagName === 'article')) {
+                
+                console.log('🔄 ULTRA-resetting footer element:', tagName, className)
+                
+                // Supprimer TOUS les styles possibles (même méthode que les cartes)
+                element.style.removeProperty('background')
+                element.style.removeProperty('background-color')
+                element.style.removeProperty('background-image')
+                element.style.removeProperty('background-size')
+                element.style.removeProperty('background-position')
+                element.style.removeProperty('background-repeat')
+                element.style.removeProperty('border')
+                element.style.removeProperty('border-color')
+                element.style.removeProperty('border-width')
+                element.style.removeProperty('border-style')
+                element.style.removeProperty('border-radius')
+                element.style.removeProperty('box-shadow')
+                element.style.removeProperty('color')
+                element.style.removeProperty('text-shadow')
+                element.style.removeProperty('backdrop-filter')
+                element.style.removeProperty('filter')
+                element.style.removeProperty('transform')
+                element.style.removeProperty('transition')
+              }
+            }
+          })
           
           console.log('✅ Default theme restored!')
         }, 100)
@@ -493,6 +537,80 @@ export function ThemeSelector() {
             console.log('🎨 Applying theme to footer element:', footer.className)
             footer.style.setProperty('background', `linear-gradient(135deg, ${theme.bg} 0%, ${theme.bg2} 25%, ${theme.bg} 50%, ${theme.bg2} 75%, ${theme.bg} 100%)`, 'important')
             footer.style.setProperty('color', theme.primary, 'important')
+            
+            // MASQUER LES CONTENEURS DANS LE FOOTER
+            const containers = footer.querySelectorAll('.MuiContainer-root, .MuiBox-root, div')
+            containers.forEach((container) => {
+              if (container instanceof HTMLElement) {
+                console.log('🎨 Making footer container transparent:', container.className)
+                
+                // Forcer la transparence absolue
+                container.style.cssText = `
+                  background: transparent !important;
+                  background-color: transparent !important;
+                  background-image: none !important;
+                  border: none !important;
+                  box-shadow: none !important;
+                  backdrop-filter: none !important;
+                  filter: none !important;
+                `
+              }
+            })
+          }
+        }
+      })
+      
+      // APPROCHE ULTRA-AGRESSIVE - MÊME MÉTHODE QUE LES CARTES
+      console.log('🎨 Applying ULTRA-AGGRESSIVE footer cleanup (same method as cards)...')
+      
+      // Nettoyer TOUS les éléments du Footer avec la même approche que les cartes
+      const allElements = document.querySelectorAll('*')
+      allElements.forEach((element) => {
+        if (element instanceof HTMLElement) {
+          const className = element.className || ''
+          const tagName = element.tagName.toLowerCase()
+          
+          // Vérifier si c'est dans un footer
+          const isInFooter = element.closest('footer') || 
+                            element.closest('[class*="Footer"]') ||
+                            element.textContent?.includes('©') ||
+                            element.textContent?.includes('Tous droits réservés') ||
+                            element.textContent?.includes('Portfolio Web')
+          
+          // Cibler les conteneurs dans le footer (même logique que les cartes)
+          if (isInFooter && (className.includes('MuiContainer') || className.includes('MuiBox') || 
+              tagName === 'div' || tagName === 'section' || tagName === 'article')) {
+            
+            console.log('🔄 ULTRA-cleaning footer element:', tagName, className)
+            
+            // Supprimer TOUS les styles possibles (même méthode que les cartes)
+            element.style.removeProperty('background')
+            element.style.removeProperty('background-color')
+            element.style.removeProperty('background-image')
+            element.style.removeProperty('background-size')
+            element.style.removeProperty('background-position')
+            element.style.removeProperty('background-repeat')
+            element.style.removeProperty('border')
+            element.style.removeProperty('border-color')
+            element.style.removeProperty('border-width')
+            element.style.removeProperty('border-style')
+            element.style.removeProperty('border-radius')
+            element.style.removeProperty('box-shadow')
+            element.style.removeProperty('color')
+            element.style.removeProperty('text-shadow')
+            element.style.removeProperty('backdrop-filter')
+            element.style.removeProperty('filter')
+            element.style.removeProperty('transform')
+            element.style.removeProperty('transition')
+            
+            // Forcer le style par défaut avec !important (même méthode que les cartes)
+            element.style.setProperty('background', 'transparent', 'important')
+            element.style.setProperty('background-color', 'transparent', 'important')
+            element.style.setProperty('background-image', 'none', 'important')
+            element.style.setProperty('border', 'none', 'important')
+            element.style.setProperty('box-shadow', 'none', 'important')
+            element.style.setProperty('color', 'inherit', 'important')
+            element.style.setProperty('text-shadow', 'none', 'important')
           }
         }
       })
