@@ -331,18 +331,42 @@ export function ThemeSelector() {
     
     // SUPPRIMÉ - On ne touche plus aux conteneurs pour éviter de tout voir
     
-    // 3. Forcer sur tous les éléments avec un délai
-    setTimeout(() => {
-      console.log('🔧 Applying styles to elements...')
-      
-      // Titres principaux (h1, h4, h5 et leurs variantes MUI)
-      const titles = document.querySelectorAll('h1, .MuiTypography-h1, h4, .MuiTypography-h4, h5, .MuiTypography-h5')
-      titles.forEach((title) => {
-        if (title instanceof HTMLElement) {
-          title.style.setProperty('color', theme.primary, 'important')
-          title.style.setProperty('text-shadow', `0 0 20px ${theme.primary}80, 0 0 40px ${theme.primary}40`, 'important')
-        }
-      })
+     // 3. Forcer sur tous les éléments avec un délai
+     setTimeout(() => {
+       console.log('🔧 Applying styles to elements...')
+       
+       // Titres principaux (h1, h4, h5 et leurs variantes MUI)
+       const titles = document.querySelectorAll('h1, .MuiTypography-h1, h4, .MuiTypography-h4, h5, .MuiTypography-h5')
+       titles.forEach((title) => {
+         if (title instanceof HTMLElement) {
+           title.style.setProperty('color', theme.primary, 'important')
+           title.style.setProperty('text-shadow', `0 0 20px ${theme.primary}80, 0 0 40px ${theme.primary}40`, 'important')
+         }
+       })
+       
+       // Texte descriptif en blanc pour toutes les palettes (sauf Default)
+       const descriptiveTexts = document.querySelectorAll('p, .MuiTypography-body1, .MuiTypography-body2, .MuiTypography-root')
+       descriptiveTexts.forEach((text) => {
+         if (text instanceof HTMLElement) {
+           // Vérifier si c'est dans la navbar
+           const isInNavbar = text.closest('nav') || text.closest('.MuiAppBar-root') || 
+                             text.closest('[class*="AppBar"]') || text.closest('[class*="navbar"]') ||
+                             text.closest('[class*="Nav"]') || text.closest('header')
+           
+           // Vérifier si c'est un texte descriptif (pas un titre)
+           const isTitle = text.tagName === 'H1' || text.tagName === 'H2' || text.tagName === 'H3' || 
+                          text.tagName === 'H4' || text.tagName === 'H5' || text.tagName === 'H6' ||
+                          text.classList.contains('MuiTypography-h1') || text.classList.contains('MuiTypography-h2') ||
+                          text.classList.contains('MuiTypography-h3') || text.classList.contains('MuiTypography-h4') ||
+                          text.classList.contains('MuiTypography-h5') || text.classList.contains('MuiTypography-h6')
+           
+           if (!isTitle && !isInNavbar) {
+             // Mettre en blanc pour le texte descriptif sur toutes les palettes
+             text.style.setProperty('color', '#ffffff', 'important')
+             text.style.setProperty('text-shadow', '0 1px 2px rgba(0,0,0,0.8)', 'important')
+           }
+         }
+       })
       
       // Liens
       const links = document.querySelectorAll('a')
