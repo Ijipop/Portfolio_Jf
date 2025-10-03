@@ -11,7 +11,6 @@ import Alert from '@mui/material/Alert'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Card from '@mui/material/Card'
-import CardContent from '@mui/material/CardContent'
 import Chip from '@mui/material/Chip'
 import CircularProgress from '@mui/material/CircularProgress'
 import Container from '@mui/material/Container'
@@ -21,8 +20,8 @@ import Typography from '@mui/material/Typography'
 import { useEffect, useState } from 'react'
 import AppBarComponent from '../components/appBar'
 import ParticleSystem from '../components/ParticleSystem'
+import SimpleCardComponent from '../components/SimpleCard'
 import SimpleTechTag from '../components/SimpleTechTag'
-import ThreeDCardComponent from '../components/ThreeDCard'
 import { useAdvancedTheme } from '../contexts/AdvancedThemeContext'
 
 interface Project {
@@ -480,38 +479,11 @@ export default function Projets() {
         {/* Projects Grid */}
         <ProjectsGrid>
           {projects.map((project, index) => (
-            <Box
-              sx={{
-                cursor: project.url && project.url.trim() !== '' ? 'pointer' : 'default',
-                position: 'relative',
-                '&::before': project.url && project.url.trim() !== '' ? {
-                  content: '""',
-                  position: 'absolute',
-                  top: 0,
-                  left: 0,
-                  right: 0,
-                  bottom: 0,
-                  borderRadius: '24px',
-                  background: (theme: any) => theme.palette.mode === 'dark'
-                    ? 'linear-gradient(45deg, rgba(255, 107, 53, 0.1), rgba(255, 23, 68, 0.1))'
-                    : 'linear-gradient(45deg, rgba(59, 130, 246, 0.1), rgba(5, 150, 105, 0.1))',
-                  opacity: 0,
-                  animation: 'pulse 2s ease-in-out infinite',
-                  zIndex: 1,
-                  '@keyframes pulse': {
-                    '0%, 100%': { opacity: 0 },
-                    '50%': { opacity: 0.3 }
-                  }
-                } : {}
-              }}
+            <SimpleCardComponent 
+              key={project.id} 
+              onClick={() => handleProjectClick(project.url)}
             >
-              <ThreeDCardComponent 
-                key={project.id} 
-                floatingElements={Math.floor(Math.random() * 3) + 1}
-                onClick={() => handleProjectClick(project.url)}
-              >
-              <CardContent sx={{ p: 1, position: 'relative' }}>
-                {/* Logo GitHub dans le coin supérieur droit */}
+              {/* Logo GitHub dans le coin supérieur droit */}
                 {project.url && project.url.includes('github') && (
                   <Box
                     sx={{
@@ -665,10 +637,8 @@ export default function Projets() {
                       {tech.trim()}
                     </SimpleTechTag>
                   ))}
-                </TechStack>
-              </CardContent>
-              </ThreeDCardComponent>
-            </Box>
+              </TechStack>
+            </SimpleCardComponent>
           ))}
         </ProjectsGrid>
         
