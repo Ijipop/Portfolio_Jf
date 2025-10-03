@@ -2,14 +2,14 @@
 
 import { ArrowDropDown, Palette } from '@mui/icons-material'
 import {
-    Box,
-    Chip,
-    IconButton,
-    ListItemIcon,
-    ListItemText,
-    Menu,
-    MenuItem,
-    Tooltip
+	Box,
+	Chip,
+	IconButton,
+	ListItemIcon,
+	ListItemText,
+	Menu,
+	MenuItem,
+	Tooltip
 } from '@mui/material'
 import { useEffect, useState } from 'react'
 
@@ -105,14 +105,38 @@ export function ThemeSelector() {
         
         // Reset SÉLECTIF des styles inline
         setTimeout(() => {
-          // Reset des titres
-          const titles = document.querySelectorAll('h1, .MuiTypography-h1')
-          titles.forEach((title) => {
-            if (title instanceof HTMLElement) {
-              title.style.removeProperty('color')
-              title.style.removeProperty('text-shadow')
-            }
-          })
+           // Reset des titres
+           const titles = document.querySelectorAll('h1, .MuiTypography-h1')
+           titles.forEach((title) => {
+             if (title instanceof HTMLElement) {
+               title.style.removeProperty('color')
+               title.style.removeProperty('text-shadow')
+             }
+           })
+           
+           // Mettre le texte descriptif en noir UNIQUEMENT sur Default (sauf navbar)
+           const descriptiveTexts = document.querySelectorAll('p, .MuiTypography-body1, .MuiTypography-body2, .MuiTypography-root')
+           descriptiveTexts.forEach((text) => {
+             if (text instanceof HTMLElement) {
+               // Vérifier si c'est dans la navbar
+               const isInNavbar = text.closest('nav') || text.closest('.MuiAppBar-root') || 
+                                 text.closest('[class*="AppBar"]') || text.closest('[class*="navbar"]') ||
+                                 text.closest('[class*="Nav"]') || text.closest('header')
+               
+               // Vérifier si c'est un texte descriptif (pas un titre)
+               const isTitle = text.tagName === 'H1' || text.tagName === 'H2' || text.tagName === 'H3' || 
+                              text.tagName === 'H4' || text.tagName === 'H5' || text.tagName === 'H6' ||
+                              text.classList.contains('MuiTypography-h1') || text.classList.contains('MuiTypography-h2') ||
+                              text.classList.contains('MuiTypography-h3') || text.classList.contains('MuiTypography-h4') ||
+                              text.classList.contains('MuiTypography-h5') || text.classList.contains('MuiTypography-h6')
+               
+               if (!isTitle && !isInNavbar) {
+                 // Mettre en noir pour le texte descriptif (sauf navbar)
+                 text.style.setProperty('color', '#000000', 'important')
+                 text.style.setProperty('text-shadow', 'none', 'important')
+               }
+             }
+           })
           
           // Reset des liens
           const links = document.querySelectorAll('a')
