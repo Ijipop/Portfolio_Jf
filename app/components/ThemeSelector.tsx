@@ -105,12 +105,29 @@ export function ThemeSelector() {
         
         // Reset SÉLECTIF des styles inline
         setTimeout(() => {
-           // Reset des titres
-           const titles = document.querySelectorAll('h1, .MuiTypography-h1')
-           titles.forEach((title) => {
+           // Reset COMPLET des titres et sous-titres
+           const allTitles = document.querySelectorAll(`
+             h1, h2, h3, h4, h5, h6,
+             .MuiTypography-h1, .MuiTypography-h2, .MuiTypography-h3, 
+             .MuiTypography-h4, .MuiTypography-h5, .MuiTypography-h6,
+             [class*="title"], [class*="Title"], [class*="heading"], [class*="Heading"]
+           `)
+           
+           allTitles.forEach((title) => {
              if (title instanceof HTMLElement) {
+               // Supprimer TOUS les styles inline avec force
                title.style.removeProperty('color')
                title.style.removeProperty('text-shadow')
+               title.style.removeProperty('background')
+               title.style.removeProperty('background-color')
+               title.style.removeProperty('background-image')
+               
+               // Forcer la réinitialisation avec !important pour override les styles persistants
+               title.style.setProperty('color', '', 'important')
+               title.style.setProperty('text-shadow', '', 'important')
+               title.style.setProperty('background', '', 'important')
+               title.style.setProperty('background-color', '', 'important')
+               title.style.setProperty('background-image', '', 'important')
              }
            })
            

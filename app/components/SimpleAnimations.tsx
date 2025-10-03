@@ -35,7 +35,7 @@ export function TypingEffect({
         <motion.span
           animate={{ opacity: [1, 0, 1] }}
           transition={{ duration: 0.8, repeat: Infinity }}
-          sx={{ color: 'primary.main' }}
+          style={{ color: 'var(--primary-color, #1e3a8a)' }}
         >
           |
         </motion.span>
