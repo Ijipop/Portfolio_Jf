@@ -312,10 +312,20 @@ export default function About() {
                 }}
               >
                 <PersonIcon sx={{ fontSize: 48, color: 'primary.main', mb: 2 }} />
-                <Typography variant="h5" gutterBottom>
+                <Typography variant="h5" gutterBottom sx={{ 
+                  fontWeight: 'bold',
+                  color: (theme) => theme.palette.mode === 'dark' ? theme.palette.primary.main : theme.palette.primary.dark,
+                  textShadow: (theme) => theme.palette.mode === 'dark' 
+                    ? `0 2px 4px ${theme.palette.primary.main}40` 
+                    : `0 2px 4px ${theme.palette.primary.main}20`
+                }}>
                   Qui suis-je ?
                 </Typography>
-                <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
+                <Typography variant="body1" sx={{ 
+                  mb: 3,
+                  color: '#ffffff',
+                  textShadow: '0 1px 2px rgba(0,0,0,0.8)'
+                }}>
                   Développeur passionné par la création d&apos;applications web modernes et innovantes.
                 </Typography>
                 <Box>
@@ -350,16 +360,43 @@ export default function About() {
                   WebkitTransform: 'rotateY(180deg)',
                 }}
               >
-                <Typography variant="h5" sx={{ color: 'primary.main', mb: 2, fontWeight: 'bold' }}>
+                <Typography variant="h5" sx={{ 
+                  color: (theme) => theme.palette.mode === 'dark' ? theme.palette.primary.main : theme.palette.primary.dark,
+                  mb: 2, 
+                  fontWeight: 'bold',
+                  textShadow: (theme) => theme.palette.mode === 'dark' 
+                    ? `0 2px 4px ${theme.palette.primary.main}40` 
+                    : `0 2px 4px ${theme.palette.primary.main}20`
+                }}>
                   Jean-François Lefebvre
                 </Typography>
-                <Typography variant="body1" sx={{ mb: 2, textAlign: 'left', lineHeight: 1.6 }}>
+                <Typography variant="body1" sx={{ 
+                  mb: 2, 
+                  textAlign: 'left', 
+                  lineHeight: 1.6,
+                  color: '#ffffff',
+                  textShadow: '0 1px 2px rgba(0,0,0,0.8)'
+                }}>
                   Passionné par l'informatique et les jeux vidéo. Grand consommateur d'applications mobiles et web.
                 </Typography>
-                <Typography variant="body1" sx={{ mb: 2, textAlign: 'left', lineHeight: 1.6 }}>
-                  À 38 ans, je me suis réorienté vers le développement d'applications.  Pour ainsi réalisé mon rêve de travailler dans cette industrie.
+                <Typography variant="body1" sx={{ 
+                  mb: 2, 
+                  textAlign: 'left', 
+                  lineHeight: 1.6,
+                  color: '#ffffff',
+                  textShadow: '0 1px 2px rgba(0,0,0,0.8)'
+                }}>
+                  À 41 ans, je me suis réorienté vers le développement d'applications.  Pour ainsi réalisé mon rêve de travailler dans cette industrie.
                 </Typography>
-                <Typography variant="body1" sx={{ textAlign: 'left', lineHeight: 1.6, fontWeight: 'bold', color: 'primary.main' }}>
+                <Typography variant="body1" sx={{ 
+                  textAlign: 'left', 
+                  lineHeight: 1.6, 
+                  fontWeight: 'bold', 
+                  color: (theme) => theme.palette.mode === 'dark' ? theme.palette.primary.main : theme.palette.primary.dark,
+                  textShadow: (theme) => theme.palette.mode === 'dark' 
+                    ? `0 1px 2px ${theme.palette.primary.main}40` 
+                    : `0 1px 2px ${theme.palette.primary.main}20`
+                }}>
                   Motivé et heureux de pouvoir enfin jumeler passion et travail !
                 </Typography>
                 <Typography variant="body1" color="text.secondary">
@@ -386,10 +423,20 @@ export default function About() {
                 }}
               >
                 <SchoolIcon sx={{ fontSize: 48, color: 'primary.main', mb: 2 }} />
-                <Typography variant="h5" gutterBottom>
+                <Typography variant="h5" gutterBottom sx={{ 
+                  fontWeight: 'bold',
+                  color: (theme) => theme.palette.mode === 'dark' ? theme.palette.primary.main : theme.palette.primary.dark,
+                  textShadow: (theme) => theme.palette.mode === 'dark' 
+                    ? `0 2px 4px ${theme.palette.primary.main}40` 
+                    : `0 2px 4px ${theme.palette.primary.main}20`
+                }}>
                   Formation
                 </Typography>
-                <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
+                <Typography variant="body1" sx={{ 
+                  mb: 3,
+                  color: '#ffffff',
+                  textShadow: '0 1px 2px rgba(0,0,0,0.8)'
+                }}>
                   Formation en développement d'applications avec focus sur les technologies modernes.
                 </Typography>
                 <Box>
@@ -423,13 +470,32 @@ export default function About() {
                   WebkitTransform: 'rotateY(180deg)',
                 }}
               >
-                <Typography variant="h5" sx={{ color: 'primary.main', mb: 2, fontWeight: 'bold' }}>
+                <Typography variant="h5" sx={{ 
+                  color: (theme) => theme.palette.mode === 'dark' ? theme.palette.primary.main : theme.palette.primary.dark,
+                  mb: 2, 
+                  fontWeight: 'bold',
+                  textShadow: (theme) => theme.palette.mode === 'dark' 
+                    ? `0 2px 4px ${theme.palette.primary.main}40` 
+                    : `0 2px 4px ${theme.palette.primary.main}20`
+                }}>
                   Formation
                 </Typography>
-                <Typography variant="body1" sx={{ mb: 1, textAlign: 'left', lineHeight: 1.6 }}>
+                <Typography variant="body1" sx={{ 
+                  mb: 1, 
+                  textAlign: 'left', 
+                  lineHeight: 1.6,
+                  color: '#ffffff',
+                  textShadow: '0 1px 2px rgba(0,0,0,0.8)'
+                }}>
                   • DEP en soutien informatique à l'ÉMICA (2023-2024)
                 </Typography>
-                <Typography variant="body1" sx={{ mb: 1, textAlign: 'left', lineHeight: 1.6 }}>
+                <Typography variant="body1" sx={{ 
+                  mb: 1, 
+                  textAlign: 'left', 
+                  lineHeight: 1.6,
+                  color: '#ffffff',
+                  textShadow: '0 1px 2px rgba(0,0,0,0.8)'
+                }}>
                   • AEC Développement de logiciels, sécurité d'applications de bureau, mobiles et Web (2024-2026)
                 </Typography>
                 <Typography variant="body1" color="text.secondary">
@@ -456,10 +522,20 @@ export default function About() {
                 }}
               >
                 <WorkIcon sx={{ fontSize: 48, color: 'primary.main', mb: 2 }} />
-                <Typography variant="h5" gutterBottom>
+                <Typography variant="h5" gutterBottom sx={{ 
+                  fontWeight: 'bold',
+                  color: (theme) => theme.palette.mode === 'dark' ? theme.palette.primary.main : theme.palette.primary.dark,
+                  textShadow: (theme) => theme.palette.mode === 'dark' 
+                    ? `0 2px 4px ${theme.palette.primary.main}40` 
+                    : `0 2px 4px ${theme.palette.primary.main}20`
+                }}>
                   Expérience
                 </Typography>
-                <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
+                <Typography variant="body1" sx={{ 
+                  mb: 3,
+                  color: '#ffffff',
+                  textShadow: '0 1px 2px rgba(0,0,0,0.8)'
+                }}>
                   En toute honnêteté, je n'ai pas d'expérience dans le développement d'applications. Je termine actuellement ma formation en développement d'applications et je suis à la recherche d'un stage pour appliquer mes connaissances.
                 </Typography>
                 <Box>
@@ -493,10 +569,25 @@ export default function About() {
                   WebkitTransform: 'rotateY(180deg)',
                 }}
               >
-                <Typography variant="h5" sx={{ color: 'primary.main', mb: 2, fontWeight: 'bold' }}>
+                <Typography variant="h5" sx={{ 
+                  color: (theme) => theme.palette.mode === 'dark' ? theme.palette.primary.main : theme.palette.primary.dark,
+                  mb: 2, 
+                  fontWeight: 'bold',
+                  textShadow: (theme) => theme.palette.mode === 'dark' 
+                    ? `0 2px 4px ${theme.palette.primary.main}40` 
+                    : `0 2px 4px ${theme.palette.primary.main}20`
+                }}>
                   Expérience
                 </Typography>
-                <Typography variant="body1" sx={{ textAlign: 'center', lineHeight: 1.6, fontWeight: 'bold', color: 'primary.main' }}>
+                <Typography variant="body1" sx={{ 
+                  textAlign: 'center', 
+                  lineHeight: 1.6, 
+                  fontWeight: 'bold', 
+                  color: (theme) => theme.palette.mode === 'dark' ? theme.palette.primary.main : theme.palette.primary.dark,
+                  textShadow: (theme) => theme.palette.mode === 'dark' 
+                    ? `0 1px 2px ${theme.palette.primary.main}40` 
+                    : `0 1px 2px ${theme.palette.primary.main}20`
+                }}>
                   Merci de me donner une chance de travailler avec vous !
                 </Typography>
                 <Typography variant="body1" color="text.secondary">
@@ -528,7 +619,14 @@ export default function About() {
             opacity: 0.3,
           }
         }}>
-          <Typography variant="h4" gutterBottom sx={{ mb: 3 }}>
+          <Typography variant="h4" gutterBottom sx={{ 
+            mb: 3,
+            fontWeight: 'bold',
+            color: (theme) => theme.palette.mode === 'dark' ? theme.palette.primary.main : theme.palette.primary.dark,
+            textShadow: (theme) => theme.palette.mode === 'dark' 
+              ? `0 2px 4px ${theme.palette.primary.main}40` 
+              : `0 2px 4px ${theme.palette.primary.main}20`
+          }}>
             Mes Compétences Techniques
           </Typography>
           <Box sx={{ 
