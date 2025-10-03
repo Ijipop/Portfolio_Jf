@@ -2,14 +2,14 @@
 
 import { ArrowDropDown, Palette } from '@mui/icons-material'
 import {
-	Box,
-	Chip,
-	IconButton,
-	ListItemIcon,
-	ListItemText,
-	Menu,
-	MenuItem,
-	Tooltip
+    Box,
+    Chip,
+    IconButton,
+    ListItemIcon,
+    ListItemText,
+    Menu,
+    MenuItem,
+    Tooltip
 } from '@mui/material'
 import { useEffect, useState } from 'react'
 
@@ -311,8 +311,8 @@ export function ThemeSelector() {
     setTimeout(() => {
       console.log('🔧 Applying styles to elements...')
       
-      // Titres principaux
-      const titles = document.querySelectorAll('h1, .MuiTypography-h1')
+      // Titres principaux (h1, h4, h5 et leurs variantes MUI)
+      const titles = document.querySelectorAll('h1, .MuiTypography-h1, h4, .MuiTypography-h4, h5, .MuiTypography-h5')
       titles.forEach((title) => {
         if (title instanceof HTMLElement) {
           title.style.setProperty('color', theme.primary, 'important')

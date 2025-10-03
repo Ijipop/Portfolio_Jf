@@ -16,14 +16,14 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import { usePathname, useRouter } from 'next/navigation';
 import { useState } from "react";
-import { useTheme } from '../contexts/ThemeContext';
+import { useAdvancedTheme } from '../contexts/AdvancedThemeContext';
 import LoginModal from './LoginModal';
 import { ThemeSelector } from './ThemeSelector';
 
 import './components.css';
 
 export default function AppBarComponent() {
-	const { isDarkMode, toggleTheme } = useTheme();
+	const { mode, toggleMode } = useAdvancedTheme();
 	const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 	const [loginModalOpen, setLoginModalOpen] = useState(false);
 	const open = Boolean(anchorEl);
@@ -196,9 +196,9 @@ export default function AppBarComponent() {
 						<IconButton 
 							color="inherit" 
 							aria-label="dark mode toggle" 
-							onClick={toggleTheme}
+							onClick={toggleMode}
 						> 
-							{isDarkMode ? <LightModeIcon /> : <DarkModeIcon />}
+							{mode === 'dark' ? <LightModeIcon /> : <DarkModeIcon />}
 						</IconButton>
 					</Box>
 					

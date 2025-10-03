@@ -13,6 +13,7 @@ import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import ParticleSystem from '../components/ParticleSystem'
 import AppBarComponent from '../components/appBar'
+import { useAdvancedTheme } from '../contexts/AdvancedThemeContext'
 
 const HeaderSection = styled(Box)(({ theme }) => ({
   background: theme.palette.mode === 'dark' 
@@ -196,11 +197,26 @@ const SkillTag = styled(Box)(({ theme }) => ({
 
 export default function About() {
   const router = useRouter()
+  const { customTheme } = useAdvancedTheme()
   const [flippedCards, setFlippedCards] = useState<{ [key: string]: boolean }>({
     who: false,
     formation: false,
     experience: false
   })
+
+  // Utiliser directement la couleur primaire du thème personnalisé
+  const getPaletteColor = () => {
+    console.log('customTheme:', customTheme)
+    console.log('customTheme.primary:', customTheme.primary)
+    return customTheme.primary
+  }
+
+
+  // Créer des styles dynamiques basés sur le thème
+  const dynamicStyles = {
+    titleColor: getPaletteColor(),
+    titleShadow: `0 2px 4px ${getPaletteColor()}40`
+  }
 
   const handleCardFlip = (cardKey: string) => {
     setFlippedCards(prev => ({
@@ -312,13 +328,15 @@ export default function About() {
                 }}
               >
                 <PersonIcon sx={{ fontSize: 48, color: 'primary.main', mb: 2 }} />
-                <Typography variant="h5" gutterBottom sx={{ 
-                  fontWeight: 'bold',
-                  color: (theme) => theme.palette.mode === 'dark' ? theme.palette.primary.main : theme.palette.primary.dark,
-                  textShadow: (theme) => theme.palette.mode === 'dark' 
-                    ? `0 2px 4px ${theme.palette.primary.main}40` 
-                    : `0 2px 4px ${theme.palette.primary.main}20`
-                }}>
+                <Typography 
+                  variant="h5" 
+                  gutterBottom 
+                  style={{ 
+                    fontWeight: 'bold',
+                    color: dynamicStyles.titleColor,
+                    textShadow: dynamicStyles.titleShadow
+                  }}
+                >
                   Qui suis-je ?
                 </Typography>
                 <Typography variant="body1" sx={{ 
@@ -360,14 +378,15 @@ export default function About() {
                   WebkitTransform: 'rotateY(180deg)',
                 }}
               >
-                <Typography variant="h5" sx={{ 
-                  color: (theme) => theme.palette.mode === 'dark' ? theme.palette.primary.main : theme.palette.primary.dark,
-                  mb: 2, 
-                  fontWeight: 'bold',
-                  textShadow: (theme) => theme.palette.mode === 'dark' 
-                    ? `0 2px 4px ${theme.palette.primary.main}40` 
-                    : `0 2px 4px ${theme.palette.primary.main}20`
-                }}>
+                <Typography 
+                  variant="h5" 
+                  style={{ 
+                    color: dynamicStyles.titleColor,
+                    marginBottom: '16px', 
+                    fontWeight: 'bold',
+                    textShadow: dynamicStyles.titleShadow
+                  }}
+                >
                   Jean-François Lefebvre
                 </Typography>
                 <Typography variant="body1" sx={{ 
@@ -388,15 +407,16 @@ export default function About() {
                 }}>
                   À 41 ans, je me suis réorienté vers le développement d'applications.  Pour ainsi réalisé mon rêve de travailler dans cette industrie.
                 </Typography>
-                <Typography variant="body1" sx={{ 
-                  textAlign: 'left', 
-                  lineHeight: 1.6, 
-                  fontWeight: 'bold', 
-                  color: (theme) => theme.palette.mode === 'dark' ? theme.palette.primary.main : theme.palette.primary.dark,
-                  textShadow: (theme) => theme.palette.mode === 'dark' 
-                    ? `0 1px 2px ${theme.palette.primary.main}40` 
-                    : `0 1px 2px ${theme.palette.primary.main}20`
-                }}>
+                <Typography 
+                  variant="body1" 
+                  style={{ 
+                    textAlign: 'left', 
+                    lineHeight: 1.6, 
+                    fontWeight: 'bold', 
+                    color: dynamicStyles.titleColor,
+                    textShadow: `0 1px 2px ${dynamicStyles.titleColor}40`
+                  }}
+                >
                   Motivé et heureux de pouvoir enfin jumeler passion et travail !
                 </Typography>
                 <Typography variant="body1" color="text.secondary">
@@ -423,13 +443,15 @@ export default function About() {
                 }}
               >
                 <SchoolIcon sx={{ fontSize: 48, color: 'primary.main', mb: 2 }} />
-                <Typography variant="h5" gutterBottom sx={{ 
-                  fontWeight: 'bold',
-                  color: (theme) => theme.palette.mode === 'dark' ? theme.palette.primary.main : theme.palette.primary.dark,
-                  textShadow: (theme) => theme.palette.mode === 'dark' 
-                    ? `0 2px 4px ${theme.palette.primary.main}40` 
-                    : `0 2px 4px ${theme.palette.primary.main}20`
-                }}>
+                <Typography 
+                  variant="h5" 
+                  gutterBottom 
+                  style={{ 
+                    fontWeight: 'bold',
+                    color: dynamicStyles.titleColor,
+                    textShadow: dynamicStyles.titleShadow
+                  }}
+                >
                   Formation
                 </Typography>
                 <Typography variant="body1" sx={{ 
@@ -470,14 +492,15 @@ export default function About() {
                   WebkitTransform: 'rotateY(180deg)',
                 }}
               >
-                <Typography variant="h5" sx={{ 
-                  color: (theme) => theme.palette.mode === 'dark' ? theme.palette.primary.main : theme.palette.primary.dark,
-                  mb: 2, 
-                  fontWeight: 'bold',
-                  textShadow: (theme) => theme.palette.mode === 'dark' 
-                    ? `0 2px 4px ${theme.palette.primary.main}40` 
-                    : `0 2px 4px ${theme.palette.primary.main}20`
-                }}>
+                <Typography 
+                  variant="h5" 
+                  style={{ 
+                    color: dynamicStyles.titleColor,
+                    marginBottom: '16px', 
+                    fontWeight: 'bold',
+                    textShadow: dynamicStyles.titleShadow
+                  }}
+                >
                   Formation
                 </Typography>
                 <Typography variant="body1" sx={{ 
@@ -522,13 +545,15 @@ export default function About() {
                 }}
               >
                 <WorkIcon sx={{ fontSize: 48, color: 'primary.main', mb: 2 }} />
-                <Typography variant="h5" gutterBottom sx={{ 
-                  fontWeight: 'bold',
-                  color: (theme) => theme.palette.mode === 'dark' ? theme.palette.primary.main : theme.palette.primary.dark,
-                  textShadow: (theme) => theme.palette.mode === 'dark' 
-                    ? `0 2px 4px ${theme.palette.primary.main}40` 
-                    : `0 2px 4px ${theme.palette.primary.main}20`
-                }}>
+                <Typography 
+                  variant="h5" 
+                  gutterBottom 
+                  style={{ 
+                    fontWeight: 'bold',
+                    color: dynamicStyles.titleColor,
+                    textShadow: dynamicStyles.titleShadow
+                  }}
+                >
                   Expérience
                 </Typography>
                 <Typography variant="body1" sx={{ 
@@ -569,25 +594,27 @@ export default function About() {
                   WebkitTransform: 'rotateY(180deg)',
                 }}
               >
-                <Typography variant="h5" sx={{ 
-                  color: (theme) => theme.palette.mode === 'dark' ? theme.palette.primary.main : theme.palette.primary.dark,
-                  mb: 2, 
-                  fontWeight: 'bold',
-                  textShadow: (theme) => theme.palette.mode === 'dark' 
-                    ? `0 2px 4px ${theme.palette.primary.main}40` 
-                    : `0 2px 4px ${theme.palette.primary.main}20`
-                }}>
+                <Typography 
+                  variant="h5" 
+                  style={{ 
+                    color: dynamicStyles.titleColor,
+                    marginBottom: '16px', 
+                    fontWeight: 'bold',
+                    textShadow: dynamicStyles.titleShadow
+                  }}
+                >
                   Expérience
                 </Typography>
-                <Typography variant="body1" sx={{ 
-                  textAlign: 'center', 
-                  lineHeight: 1.6, 
-                  fontWeight: 'bold', 
-                  color: (theme) => theme.palette.mode === 'dark' ? theme.palette.primary.main : theme.palette.primary.dark,
-                  textShadow: (theme) => theme.palette.mode === 'dark' 
-                    ? `0 1px 2px ${theme.palette.primary.main}40` 
-                    : `0 1px 2px ${theme.palette.primary.main}20`
-                }}>
+                <Typography 
+                  variant="body1" 
+                  style={{ 
+                    textAlign: 'center', 
+                    lineHeight: 1.6, 
+                    fontWeight: 'bold', 
+                    color: dynamicStyles.titleColor,
+                    textShadow: `0 1px 2px ${dynamicStyles.titleColor}40`
+                  }}
+                >
                   Merci de me donner une chance de travailler avec vous !
                 </Typography>
                 <Typography variant="body1" color="text.secondary">
@@ -619,14 +646,16 @@ export default function About() {
             opacity: 0.3,
           }
         }}>
-          <Typography variant="h4" gutterBottom sx={{ 
-            mb: 3,
-            fontWeight: 'bold',
-            color: (theme) => theme.palette.mode === 'dark' ? theme.palette.primary.main : theme.palette.primary.dark,
-            textShadow: (theme) => theme.palette.mode === 'dark' 
-              ? `0 2px 4px ${theme.palette.primary.main}40` 
-              : `0 2px 4px ${theme.palette.primary.main}20`
-          }}>
+          <Typography 
+            variant="h4" 
+            gutterBottom 
+            style={{ 
+              marginBottom: '24px',
+              fontWeight: 'bold',
+              color: dynamicStyles.titleColor,
+              textShadow: dynamicStyles.titleShadow
+            }}
+          >
             Mes Compétences Techniques
           </Typography>
           <Box sx={{ 
@@ -654,7 +683,15 @@ export default function About() {
           <Typography variant="h4" gutterBottom>
             Prêt à collaborer sur votre prochain projet ?
           </Typography>
-          <Typography variant="body1" color="text.secondary" sx={{ maxWidth: 600, mx: 'auto' }}>
+          <Typography 
+            variant="body1" 
+            sx={{ 
+              maxWidth: 600, 
+              mx: 'auto',
+              color: customTheme.name === 'Default' ? 'text.secondary' : '#ffffff',
+              textShadow: customTheme.name === 'Default' ? 'none' : '0 1px 2px rgba(0,0,0,0.8)'
+            }}
+          >
             N&apos;hésitez pas à me contacter pour discuter de vos idées et voir comment nous pouvons travailler ensemble.
           </Typography>
         </Box>
