@@ -228,6 +228,29 @@ export function ThemeSelector() {
             }
           })
           
+          // Reset du Footer pour le thème Default
+          console.log('🔄 Resetting footer...')
+          const footers = document.querySelectorAll('footer, [class*="Footer"], .MuiBox-root')
+          footers.forEach((footer) => {
+            if (footer instanceof HTMLElement) {
+              // Vérifier si c'est un footer
+              const isFooter = footer.querySelector('footer') || 
+                              footer.closest('footer') ||
+                              footer.textContent?.includes('©') ||
+                              footer.textContent?.includes('Tous droits réservés') ||
+                              footer.textContent?.includes('Portfolio Web') ||
+                              footer.className.includes('Footer')
+              
+              if (isFooter) {
+                console.log('🔄 Resetting footer element:', footer.className)
+                footer.style.removeProperty('background')
+                footer.style.removeProperty('color')
+                footer.style.removeProperty('background-color')
+                footer.style.removeProperty('background-image')
+              }
+            }
+          })
+          
           // SUPPRIMÉ - Plus d'effets hover à reset
           
           console.log('✅ Default theme restored!')
@@ -449,6 +472,27 @@ export function ThemeSelector() {
           const hasTitle = box.querySelector('h1, .MuiTypography-h1, [class*="title"], [class*="Title"]')
           if (hasTitle) {
             box.style.setProperty('background', `linear-gradient(135deg, ${theme.bg} 0%, ${theme.bg2} 25%, ${theme.bg} 50%, ${theme.bg2} 75%, ${theme.bg} 100%)`, 'important')
+          }
+        }
+      })
+      
+      // FOOTER - Appliquer le thème au footer
+      console.log('🎨 Applying theme to footer...')
+      const footers = document.querySelectorAll('footer, [class*="Footer"], .MuiBox-root')
+      footers.forEach((footer) => {
+        if (footer instanceof HTMLElement) {
+          // Vérifier si c'est un footer (contient des éléments typiques de footer)
+          const isFooter = footer.querySelector('footer') || 
+                          footer.closest('footer') ||
+                          footer.textContent?.includes('©') ||
+                          footer.textContent?.includes('Tous droits réservés') ||
+                          footer.textContent?.includes('Portfolio Web') ||
+                          footer.className.includes('Footer')
+          
+          if (isFooter) {
+            console.log('🎨 Applying theme to footer element:', footer.className)
+            footer.style.setProperty('background', `linear-gradient(135deg, ${theme.bg} 0%, ${theme.bg2} 25%, ${theme.bg} 50%, ${theme.bg2} 75%, ${theme.bg} 100%)`, 'important')
+            footer.style.setProperty('color', theme.primary, 'important')
           }
         }
       })
