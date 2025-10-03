@@ -178,18 +178,51 @@ const TechStack = styled(Box)(({ theme }) => ({
 const StatsCard = styled(Paper)(({ theme }) => ({
   background: theme.palette.mode === 'dark'
     ? 'linear-gradient(135deg, #1e293b 0%, #334155 100%)'
-    : 'linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%)',
+    : 'linear-gradient(135deg, #3b82f6 0%, #059669 25%, #10b981 50%, #3b82f6 75%, #059669 100%)',
+  backgroundSize: '200% 200%',
+  animation: 'gradientShift 6s ease-in-out infinite',
   color: 'white',
-  padding: theme.spacing(3),
+  padding: theme.spacing(2),
   borderRadius: 16,
   textAlign: 'center',
+  position: 'relative',
+  overflow: 'hidden',
+  cursor: 'pointer',
+  transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
   boxShadow: theme.palette.mode === 'dark'
-    ? '0 8px 32px rgba(0,0,0,0.4), 0 0 0 1px rgba(59, 130, 246, 0.2)'
-    : '0 8px 32px rgba(30, 58, 138, 0.2), 0 0 0 1px rgba(30, 58, 138, 0.1)',
-  animation: 'fadeIn 0.6s ease-out',
+    ? '0 6px 24px rgba(0,0,0,0.4), 0 0 0 1px rgba(59, 130, 246, 0.2)'
+    : '0 8px 32px rgba(59, 130, 246, 0.2), 0 0 0 1px rgba(59, 130, 246, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.2)',
+  '&::before': {
+    content: '""',
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    background: theme.palette.mode === 'dark'
+      ? 'linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(16, 185, 129, 0.1) 100%)'
+      : 'linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(16, 185, 129, 0.1) 100%)',
+    opacity: 0,
+    transition: 'opacity 0.3s ease',
+    zIndex: 1,
+  },
+  '&:hover': {
+    transform: 'translateY(-4px) scale(1.02)',
+    boxShadow: theme.palette.mode === 'dark'
+      ? '0 12px 40px rgba(0,0,0,0.6), 0 0 0 2px rgba(59, 130, 246, 0.4), 0 0 20px rgba(59, 130, 246, 0.3)'
+      : '0 12px 40px rgba(59, 130, 246, 0.3), 0 0 0 2px rgba(59, 130, 246, 0.3), 0 0 20px rgba(16, 185, 129, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.3)',
+    '&::before': {
+      opacity: 1,
+    }
+  },
   '@keyframes fadeIn': {
     from: { opacity: 0, transform: 'translateY(20px)' },
     to: { opacity: 1, transform: 'translateY(0)' }
+  },
+  '@keyframes gradientShift': {
+    '0%': { backgroundPosition: '0% 50%' },
+    '50%': { backgroundPosition: '100% 50%' },
+    '100%': { backgroundPosition: '0% 50%' }
   }
 }))
 
@@ -450,28 +483,172 @@ export default function Projets() {
         <AnimatedBox>
           <StatsGrid>
             <StatsCard>
-              <Typography variant="h3" sx={{ fontWeight: 700, mb: 1 }}>
-                {projects.length}
-              </Typography>
-              <Typography variant="body1" sx={{ opacity: 0.9 }}>
-                Projets Totaux
-              </Typography>
+              <Box sx={{ position: 'relative', zIndex: 2 }}>
+                <Typography variant="h3" sx={{ 
+                  fontWeight: 800, 
+                  mb: 0.5, 
+                  background: 'linear-gradient(45deg, #ffffff 0%, #e0f2fe 25%, #b3e5fc 50%, #81d4fa 75%, #ffffff 100%)',
+                  backgroundClip: 'text',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  backgroundSize: '200% 200%',
+                  animation: 'textShimmer 3s ease-in-out infinite',
+                  textShadow: '0 0 20px rgba(255, 255, 255, 0.6), 0 0 40px rgba(59, 130, 246, 0.3)',
+                  fontSize: { xs: '1.8rem', md: '2.2rem' },
+                  position: 'relative',
+                  '&::before': {
+                    content: '""',
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    background: 'linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.3) 50%, transparent 70%)',
+                    animation: 'textGlow 2s ease-in-out infinite',
+                    zIndex: -1,
+                  }
+                }}>
+                  {projects.length}
+                </Typography>
+                <Typography variant="body1" sx={{ 
+                  opacity: 0.95, 
+                  fontWeight: 600,
+                  textShadow: '0 2px 8px rgba(0, 0, 0, 0.3), 0 0 10px rgba(59, 130, 246, 0.2)',
+                  fontSize: '0.9rem',
+                  background: 'linear-gradient(45deg, #ffffff, #f8fafc)',
+                  backgroundClip: 'text',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  letterSpacing: '0.5px',
+                  textTransform: 'uppercase',
+                  position: 'relative',
+                  '&::after': {
+                    content: '""',
+                    position: 'absolute',
+                    bottom: '-2px',
+                    left: '50%',
+                    transform: 'translateX(-50%)',
+                    width: '60%',
+                    height: '2px',
+                    background: 'linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent)',
+                    animation: 'underlineGlow 2s ease-in-out infinite',
+                  }
+                }}>
+                  Projets Totaux
+                </Typography>
+              </Box>
             </StatsCard>
             <StatsCard>
-              <Typography variant="h3" sx={{ fontWeight: 700, mb: 1 }}>
-                {getCompletedProjects()}
-              </Typography>
-              <Typography variant="body1" sx={{ opacity: 0.9 }}>
-                Projets Terminés
-              </Typography>
+              <Box sx={{ position: 'relative', zIndex: 2 }}>
+                <Typography variant="h3" sx={{ 
+                  fontWeight: 800, 
+                  mb: 0.5, 
+                  background: 'linear-gradient(45deg, #ffffff 0%, #e0f2fe 25%, #b3e5fc 50%, #81d4fa 75%, #ffffff 100%)',
+                  backgroundClip: 'text',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  backgroundSize: '200% 200%',
+                  animation: 'textShimmer 3s ease-in-out infinite',
+                  textShadow: '0 0 20px rgba(255, 255, 255, 0.6), 0 0 40px rgba(16, 185, 129, 0.3)',
+                  fontSize: { xs: '1.8rem', md: '2.2rem' },
+                  position: 'relative',
+                  '&::before': {
+                    content: '""',
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    background: 'linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.3) 50%, transparent 70%)',
+                    animation: 'textGlow 2s ease-in-out infinite',
+                    zIndex: -1,
+                  }
+                }}>
+                  {getCompletedProjects()}
+                </Typography>
+                <Typography variant="body1" sx={{ 
+                  opacity: 0.95, 
+                  fontWeight: 600,
+                  textShadow: '0 2px 8px rgba(0, 0, 0, 0.3), 0 0 10px rgba(16, 185, 129, 0.2)',
+                  fontSize: '0.9rem',
+                  background: 'linear-gradient(45deg, #ffffff, #f8fafc)',
+                  backgroundClip: 'text',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  letterSpacing: '0.5px',
+                  textTransform: 'uppercase',
+                  position: 'relative',
+                  '&::after': {
+                    content: '""',
+                    position: 'absolute',
+                    bottom: '-2px',
+                    left: '50%',
+                    transform: 'translateX(-50%)',
+                    width: '60%',
+                    height: '2px',
+                    background: 'linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent)',
+                    animation: 'underlineGlow 2s ease-in-out infinite',
+                  }
+                }}>
+                  Projets Terminés
+                </Typography>
+              </Box>
             </StatsCard>
             <StatsCard>
-              <Typography variant="h3" sx={{ fontWeight: 700, mb: 1 }}>
-                {getInProgressProjects()}
-              </Typography>
-              <Typography variant="body1" sx={{ opacity: 0.9 }}>
-                En Cours
-              </Typography>
+              <Box sx={{ position: 'relative', zIndex: 2 }}>
+                <Typography variant="h3" sx={{ 
+                  fontWeight: 800, 
+                  mb: 0.5, 
+                  background: 'linear-gradient(45deg, #ffffff 0%, #e0f2fe 25%, #b3e5fc 50%, #81d4fa 75%, #ffffff 100%)',
+                  backgroundClip: 'text',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  backgroundSize: '200% 200%',
+                  animation: 'textShimmer 3s ease-in-out infinite',
+                  textShadow: '0 0 20px rgba(255, 255, 255, 0.6), 0 0 40px rgba(59, 130, 246, 0.3)',
+                  fontSize: { xs: '1.8rem', md: '2.2rem' },
+                  position: 'relative',
+                  '&::before': {
+                    content: '""',
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    background: 'linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.3) 50%, transparent 70%)',
+                    animation: 'textGlow 2s ease-in-out infinite',
+                    zIndex: -1,
+                  }
+                }}>
+                  {getInProgressProjects()}
+                </Typography>
+                <Typography variant="body1" sx={{ 
+                  opacity: 0.95, 
+                  fontWeight: 600,
+                  textShadow: '0 2px 8px rgba(0, 0, 0, 0.3), 0 0 10px rgba(59, 130, 246, 0.2)',
+                  fontSize: '0.9rem',
+                  background: 'linear-gradient(45deg, #ffffff, #f8fafc)',
+                  backgroundClip: 'text',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  letterSpacing: '0.5px',
+                  textTransform: 'uppercase',
+                  position: 'relative',
+                  '&::after': {
+                    content: '""',
+                    position: 'absolute',
+                    bottom: '-2px',
+                    left: '50%',
+                    transform: 'translateX(-50%)',
+                    width: '60%',
+                    height: '2px',
+                    background: 'linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent)',
+                    animation: 'underlineGlow 2s ease-in-out infinite',
+                  }
+                }}>
+                  En Cours
+                </Typography>
+              </Box>
             </StatsCard>
           </StatsGrid>
         </AnimatedBox>
