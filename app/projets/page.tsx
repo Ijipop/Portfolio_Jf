@@ -21,7 +21,9 @@ import Typography from '@mui/material/Typography'
 import { useEffect, useState } from 'react'
 import AppBarComponent from '../components/appBar'
 import ParticleSystem from '../components/ParticleSystem'
+import SimpleTechTag from '../components/SimpleTechTag'
 import ThreeDCardComponent from '../components/ThreeDCard'
+import { useAdvancedTheme } from '../contexts/AdvancedThemeContext'
 
 interface Project {
   id: number
@@ -173,15 +175,6 @@ const TechStack = styled(Box)(({ theme }) => ({
   marginTop: theme.spacing(2),
 }))
 
-const TechTag = styled(Box)(({ theme }) => ({
-  background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
-  color: 'white',
-  padding: theme.spacing(0.5, 1.5),
-  borderRadius: 20,
-  fontSize: '0.75rem',
-  fontWeight: 500,
-  boxShadow: '0 2px 8px rgba(240, 147, 251, 0.3)',
-}))
 
 const StatsCard = styled(Paper)(({ theme }) => ({
   background: theme.palette.mode === 'dark'
@@ -232,6 +225,7 @@ export default function Projets() {
   const [projects, setProjects] = useState<Project[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const { customTheme } = useAdvancedTheme()
 
   useEffect(() => {
     fetchProjects()
@@ -486,10 +480,7 @@ export default function Projets() {
         {/* Projects Grid */}
         <ProjectsGrid>
           {projects.map((project, index) => (
-            <ThreeDCardComponent 
-              key={project.id} 
-              floatingElements={Math.floor(Math.random() * 3) + 1}
-              onClick={() => handleProjectClick(project.url)}
+            <Box
               sx={{
                 cursor: project.url && project.url.trim() !== '' ? 'pointer' : 'default',
                 position: 'relative',
@@ -501,7 +492,7 @@ export default function Projets() {
                   right: 0,
                   bottom: 0,
                   borderRadius: '24px',
-                  background: (theme) => theme.palette.mode === 'dark'
+                  background: (theme: any) => theme.palette.mode === 'dark'
                     ? 'linear-gradient(45deg, rgba(255, 107, 53, 0.1), rgba(255, 23, 68, 0.1))'
                     : 'linear-gradient(45deg, rgba(59, 130, 246, 0.1), rgba(5, 150, 105, 0.1))',
                   opacity: 0,
@@ -514,6 +505,11 @@ export default function Projets() {
                 } : {}
               }}
             >
+              <ThreeDCardComponent 
+                key={project.id} 
+                floatingElements={Math.floor(Math.random() * 3) + 1}
+                onClick={() => handleProjectClick(project.url)}
+              >
               <CardContent sx={{ p: 1, position: 'relative' }}>
                 {/* Logo GitHub dans le coin supérieur droit */}
                 {project.url && project.url.includes('github') && (
@@ -658,15 +654,21 @@ export default function Projets() {
                   {project.description}
                 </Typography>
                 
-                <TechStack>
+                <TechStack sx={{
+                  visibility: 'visible !important',
+                  opacity: '1 !important',
+                  zIndex: 1000,
+                  position: 'relative'
+                }}>
                   {project.technologies.split(',').map((tech, techIndex) => (
-                    <TechTag key={techIndex}>
+                    <SimpleTechTag key={techIndex}>
                       {tech.trim()}
-                    </TechTag>
+                    </SimpleTechTag>
                   ))}
                 </TechStack>
               </CardContent>
-            </ThreeDCardComponent>
+              </ThreeDCardComponent>
+            </Box>
           ))}
         </ProjectsGrid>
         

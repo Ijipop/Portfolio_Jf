@@ -12,8 +12,11 @@ import { GlassContainer } from './components/GlassCard'
 import { LetterAnimations } from './components/LetterAnimations'
 import ParticleSystem from './components/ParticleSystem'
 import { FadeIn, HoverScale, TypingEffect } from './components/SimpleAnimations'
+import SimpleSkillTag from './components/SimpleSkillTag'
 import ThreeDCardComponent from './components/ThreeDCard'
 import AppBarComponent from './components/appBar'
+import { useAdvancedTheme } from './contexts/AdvancedThemeContext'
+
 
 const HeaderSection = styled(Box)(({ theme }) => ({
   background: theme.palette.mode === 'dark' 
@@ -125,6 +128,8 @@ const FeatureCard = styled(Box)(({ theme }) => ({
 
 export default function Home() {
   const router = useRouter()
+  const { customTheme } = useAdvancedTheme()
+
 
   const handleCardClick = (path: string) => {
     router.push(path)
@@ -265,6 +270,61 @@ export default function Home() {
             </Typography>
           </Box>
         </GlassContainer>
+
+        {/* Section Compétences */}
+        <Container maxWidth="lg" sx={{ py: 6, position: 'relative', zIndex: 2 }}>
+          <Box sx={{ 
+            background: (theme) => theme.palette.mode === 'dark'
+              ? 'linear-gradient(145deg, rgba(26, 26, 26, 0.8) 0%, rgba(45, 45, 45, 0.8) 100%)'
+              : 'linear-gradient(145deg, rgba(255, 255, 255, 0.8) 0%, rgba(248, 250, 252, 0.8) 100%)',
+            border: (theme) => theme.palette.mode === 'dark' 
+              ? '1px solid rgba(74, 85, 104, 0.3)' 
+              : '1px solid rgba(148, 163, 184, 0.2)',
+            borderRadius: 24,
+            padding: 4,
+            textAlign: 'center',
+            boxShadow: (theme) => theme.palette.mode === 'dark'
+              ? '0 8px 32px rgba(0, 0, 0, 0.3)'
+              : '0 8px 32px rgba(0, 0, 0, 0.1)',
+            mb: 8,
+            position: 'relative',
+            overflow: 'hidden',
+            backdropFilter: 'blur(10px)',
+          }}>
+            <Typography 
+              variant="h4" 
+              gutterBottom 
+              sx={{ 
+                marginBottom: '24px',
+                fontWeight: 'bold',
+                color: 'primary.main',
+              }}
+            >
+              Technologies & Compétences
+            </Typography>
+            <Box sx={{ 
+              display: 'flex', 
+              flexWrap: 'wrap', 
+              justifyContent: 'center',
+              gap: 1,
+              visibility: 'visible !important',
+              opacity: '1 !important',
+              zIndex: 1000,
+              position: 'relative'
+            }}>
+              <SimpleSkillTag>Python</SimpleSkillTag>
+              <SimpleSkillTag>Java</SimpleSkillTag>
+              <SimpleSkillTag>React</SimpleSkillTag>
+              <SimpleSkillTag>Next.js</SimpleSkillTag>
+              <SimpleSkillTag>TypeScript</SimpleSkillTag>
+              <SimpleSkillTag>JavaScript</SimpleSkillTag>
+              <SimpleSkillTag>SQL</SimpleSkillTag>
+              <SimpleSkillTag>CSS3</SimpleSkillTag>
+              <SimpleSkillTag>HTML5</SimpleSkillTag>
+              <SimpleSkillTag>Git</SimpleSkillTag>
+            </Box>
+          </Box>
+        </Container>
 
         <Box sx={{ 
           display: 'grid', 

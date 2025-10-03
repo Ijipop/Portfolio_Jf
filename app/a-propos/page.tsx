@@ -12,6 +12,7 @@ import { styled } from '@mui/material/styles'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import ParticleSystem from '../components/ParticleSystem'
+import SimpleSkillTag from '../components/SimpleSkillTag'
 import AppBarComponent from '../components/appBar'
 import { useAdvancedTheme } from '../contexts/AdvancedThemeContext'
 
@@ -178,22 +179,6 @@ const FlipCardBack = styled(Box)(({ theme }) => ({
   overflow: 'hidden',
 }))
 
-const SkillTag = styled(Box)(({ theme }) => ({
-  display: 'inline-block',
-  background: `linear-gradient(135deg, var(--card-primary, #4f46e5) 0%, var(--card-secondary, #7c3aed) 100%)`,
-  color: 'white',
-  padding: theme.spacing(0.5, 1.5),
-  borderRadius: 20,
-  fontSize: '0.875rem',
-  fontWeight: 500,
-  margin: theme.spacing(0.5),
-  transition: 'all 0.3s ease',
-  boxShadow: '0 2px 8px var(--card-primary, rgba(79, 70, 229, 0.3))',
-  '&:hover': {
-    transform: 'scale(1.05)',
-    // Suppression de l'effet de couleur au hover
-  }
-}))
 
 export default function About() {
   const router = useRouter()
@@ -346,11 +331,16 @@ export default function About() {
                 }}>
                   Développeur passionné par la création d&apos;applications web modernes et innovantes.
                 </Typography>
-                <Box>
-                  <SkillTag>Material-UI</SkillTag>
-                  <SkillTag>Prisma</SkillTag>
-                  <SkillTag>PostgreSQL</SkillTag>
-                  <SkillTag>Vercel</SkillTag>
+                <Box sx={{ 
+                  visibility: 'visible !important',
+                  opacity: '1 !important',
+                  zIndex: 1000,
+                  position: 'relative'
+                }}>
+                  <SimpleSkillTag>Material-UI</SimpleSkillTag>
+                  <SimpleSkillTag>Prisma</SimpleSkillTag>
+                  <SimpleSkillTag>PostgreSQL</SimpleSkillTag>
+                  <SimpleSkillTag>Vercel</SimpleSkillTag>
                 </Box>
                 <Box sx={{ 
                   position: 'absolute', 
@@ -461,10 +451,15 @@ export default function About() {
                 }}>
                   Formation en développement d'applications avec focus sur les technologies modernes.
                 </Typography>
-                <Box>
-                  <SkillTag>Responsive Design</SkillTag>
-                  <SkillTag>GitHub</SkillTag>
-                  <SkillTag>JSON</SkillTag>
+                <Box sx={{ 
+                  visibility: 'visible !important',
+                  opacity: '1 !important',
+                  zIndex: 1000,
+                  position: 'relative'
+                }}>
+                  <SimpleSkillTag>Responsive Design</SimpleSkillTag>
+                  <SimpleSkillTag>GitHub</SimpleSkillTag>
+                  <SimpleSkillTag>JSON</SimpleSkillTag>
                 </Box>
                 <Box sx={{ 
                   position: 'absolute', 
@@ -563,10 +558,15 @@ export default function About() {
                 }}>
                   En toute honnêteté, je n'ai pas d'expérience dans le développement d'applications. Je termine actuellement ma formation en développement d'applications et je suis à la recherche d'un stage pour appliquer mes connaissances.
                 </Typography>
-                <Box>
-                  <SkillTag>MVC</SkillTag>
-                  <SkillTag>CRUD</SkillTag>
-                  <SkillTag>REST API</SkillTag>
+                <Box sx={{ 
+                  visibility: 'visible !important',
+                  opacity: '1 !important',
+                  zIndex: 1000,
+                  position: 'relative'
+                }}>
+                  <SimpleSkillTag>MVC</SimpleSkillTag>
+                  <SimpleSkillTag>CRUD</SimpleSkillTag>
+                  <SimpleSkillTag>REST API</SimpleSkillTag>
                 </Box>
                 <Box sx={{ 
                   position: 'absolute', 
@@ -662,18 +662,22 @@ export default function About() {
             display: 'flex', 
             flexWrap: 'wrap', 
             justifyContent: 'center',
-            gap: 1
+            gap: 1,
+            visibility: 'visible !important',
+            opacity: '1 !important',
+            zIndex: 1000,
+            position: 'relative'
           }}>
-          <SkillTag>Python</SkillTag>
-          <SkillTag>Java</SkillTag>
-          <SkillTag>React</SkillTag>
-          <SkillTag>Next.js</SkillTag>
-          <SkillTag>TypeScript</SkillTag>
-          <SkillTag>JavaScript</SkillTag>
-          <SkillTag>SQL</SkillTag>
-          <SkillTag>CSS3</SkillTag>
-          <SkillTag>HTML5</SkillTag>
-          <SkillTag>Git</SkillTag>
+          <SimpleSkillTag>Python</SimpleSkillTag>
+          <SimpleSkillTag>Java</SimpleSkillTag>
+          <SimpleSkillTag>React</SimpleSkillTag>
+          <SimpleSkillTag>Next.js</SimpleSkillTag>
+          <SimpleSkillTag>TypeScript</SimpleSkillTag>
+          <SimpleSkillTag>JavaScript</SimpleSkillTag>
+          <SimpleSkillTag>SQL</SimpleSkillTag>
+          <SimpleSkillTag>CSS3</SimpleSkillTag>
+          <SimpleSkillTag>HTML5</SimpleSkillTag>
+          <SimpleSkillTag>Git</SimpleSkillTag>
 
           </Box>
         </Box>

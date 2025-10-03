@@ -85,8 +85,6 @@ export function GlitchEffect({
       }}
       style={{
         // Effet pixel art
-        imageRendering: 'pixelated',
-        imageRendering: '-moz-crisp-edges',
         imageRendering: 'crisp-edges',
         // Filtre pixel
         filter: isGlitching ? 'contrast(1.5) brightness(1.2) saturate(1.3)' : 'none',
