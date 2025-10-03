@@ -20,24 +20,24 @@
 
 .dark-mode .my-typography {
   color: #ffffff !important;
-  text-shadow: 0 0 10px rgba(255, 107, 53, 0.3) !important;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.3) !important;
 }
 
 /* Styles spécifiques pour les icônes en mode sombre */
 .dark-mode .MuiIconButton-root {
-  color: #ff6b35 !important;
+  color: #ffffff !important;
   transition: all 0.3s ease !important;
 }
 
 .dark-mode .MuiIconButton-root:hover {
-  color: #ff1744 !important;
+  color: #ffffff !important;
   transform: scale(1.1) !important;
-  text-shadow: 0 0 15px rgba(255, 107, 53, 0.5) !important;
+  text-shadow: 0 0 15px rgba(255, 255, 255, 0.5) !important;
 }
 
 .dark-mode .MuiSvgIcon-root {
-  color: #ff6b35 !important;
-  filter: drop-shadow(0 0 5px rgba(255, 107, 53, 0.3)) !important;
+  color: #ffffff !important;
+  filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.3)) !important;
 }
 
 /* Styles pour le body en mode sombre */
@@ -94,19 +94,33 @@ body.dark-mode {
 
 /* Styles spécifiques pour les icônes en mode clair */
 .light-mode .MuiIconButton-root {
-  color: #667eea !important;
+  color: #ffffff !important;
   transition: all 0.3s ease !important;
 }
 
 .light-mode .MuiIconButton-root:hover {
-  color: #764ba2 !important;
+  color: #ffffff !important;
   transform: scale(1.1) !important;
-  text-shadow: 0 0 15px rgba(102, 126, 234, 0.5) !important;
+  text-shadow: 0 0 15px rgba(255, 255, 255, 0.5) !important;
 }
 
 .light-mode .MuiSvgIcon-root {
-  color: #667eea !important;
-  filter: drop-shadow(0 0 5px rgba(102, 126, 234, 0.3)) !important;
+  color: #ffffff !important;
+  filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.3)) !important;
+}
+
+/* Styles spécifiques pour le header - s'assurer que tout est blanc */
+.MuiAppBar-root .MuiIconButton-root,
+.MuiAppBar-root .MuiSvgIcon-root,
+.MuiAppBar-root .MuiTypography-root,
+.MuiAppBar-root .MuiButton-root {
+  color: #ffffff !important;
+}
+
+.MuiAppBar-root .MuiIconButton-root:hover,
+.MuiAppBar-root .MuiButton-root:hover {
+  color: #ffffff !important;
+  background-color: rgba(255, 255, 255, 0.1) !important;
 }
 
 /* Styles pour le body en mode clair */

@@ -11,8 +11,6 @@ import Alert from '@mui/material/Alert'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Card from '@mui/material/Card'
-import CardActions from '@mui/material/CardActions'
-import CardContent from '@mui/material/CardContent'
 import Chip from '@mui/material/Chip'
 import CircularProgress from '@mui/material/CircularProgress'
 import Container from '@mui/material/Container'
@@ -21,6 +19,10 @@ import { styled } from '@mui/material/styles'
 import Typography from '@mui/material/Typography'
 import { useEffect, useState } from 'react'
 import AppBarComponent from '../components/appBar'
+import ParticleSystem from '../components/ParticleSystem'
+import SimpleCardComponent from '../components/SimpleCard'
+import SimpleTechTag from '../components/SimpleTechTag'
+import { useAdvancedTheme } from '../contexts/AdvancedThemeContext'
 
 interface Project {
   id: number
@@ -40,10 +42,14 @@ const HeaderSection = styled(Box)(({ theme }) => ({
     ? 'linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 25%, #2a2a2a 50%, #1a1a1a 75%, #0a0a0a 100%)'
     : 'linear-gradient(135deg, #1e3a8a 0%, #3b82f6 50%, #059669 100%)',
   color: 'white',
-  padding: theme.spacing(12, 0, 8),
+  padding: theme.spacing(6.75, 0, 4.5),
   textAlign: 'center',
   position: 'relative',
   overflow: 'hidden',
+  // Orange seulement pour h1 en dark mode
+  '& h1': {
+    color: theme.palette.mode === 'dark' ? '#ff6b35' : 'inherit'
+  },
   '&::before': {
     content: '""',
     position: 'absolute',
@@ -100,6 +106,7 @@ const ProjectCard = styled(Card)(({ theme }) => ({
   animation: 'fadeInUp 0.6s ease-out',
   cursor: 'pointer',
   zIndex: 1,
+  height: '400px', // Hauteur fixe réduite
   '&:hover': {
     transform: 'translateY(-12px) scale(1.03)',
     boxShadow: theme.palette.mode === 'dark'
@@ -167,31 +174,55 @@ const TechStack = styled(Box)(({ theme }) => ({
   marginTop: theme.spacing(2),
 }))
 
-const TechTag = styled(Box)(({ theme }) => ({
-  background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
-  color: 'white',
-  padding: theme.spacing(0.5, 1.5),
-  borderRadius: 20,
-  fontSize: '0.75rem',
-  fontWeight: 500,
-  boxShadow: '0 2px 8px rgba(240, 147, 251, 0.3)',
-}))
 
 const StatsCard = styled(Paper)(({ theme }) => ({
   background: theme.palette.mode === 'dark'
     ? 'linear-gradient(135deg, #1e293b 0%, #334155 100%)'
-    : 'linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%)',
+    : 'linear-gradient(135deg, #3b82f6 0%, #059669 25%, #10b981 50%, #3b82f6 75%, #059669 100%)',
+  backgroundSize: '200% 200%',
+  animation: 'gradientShift 6s ease-in-out infinite',
   color: 'white',
-  padding: theme.spacing(3),
+  padding: theme.spacing(2),
   borderRadius: 16,
   textAlign: 'center',
+  position: 'relative',
+  overflow: 'hidden',
+  cursor: 'pointer',
+  transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
   boxShadow: theme.palette.mode === 'dark'
-    ? '0 8px 32px rgba(0,0,0,0.4), 0 0 0 1px rgba(59, 130, 246, 0.2)'
-    : '0 8px 32px rgba(30, 58, 138, 0.2), 0 0 0 1px rgba(30, 58, 138, 0.1)',
-  animation: 'fadeIn 0.6s ease-out',
+    ? '0 6px 24px rgba(0,0,0,0.4), 0 0 0 1px rgba(59, 130, 246, 0.2)'
+    : '0 8px 32px rgba(59, 130, 246, 0.2), 0 0 0 1px rgba(59, 130, 246, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.2)',
+  '&::before': {
+    content: '""',
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    background: theme.palette.mode === 'dark'
+      ? 'linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(16, 185, 129, 0.1) 100%)'
+      : 'linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(16, 185, 129, 0.1) 100%)',
+    opacity: 0,
+    transition: 'opacity 0.3s ease',
+    zIndex: 1,
+  },
+  '&:hover': {
+    transform: 'translateY(-4px) scale(1.02)',
+    boxShadow: theme.palette.mode === 'dark'
+      ? '0 12px 40px rgba(0,0,0,0.6), 0 0 0 2px rgba(59, 130, 246, 0.4), 0 0 20px rgba(59, 130, 246, 0.3)'
+      : '0 12px 40px rgba(59, 130, 246, 0.3), 0 0 0 2px rgba(59, 130, 246, 0.3), 0 0 20px rgba(16, 185, 129, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.3)',
+    '&::before': {
+      opacity: 1,
+    }
+  },
   '@keyframes fadeIn': {
     from: { opacity: 0, transform: 'translateY(20px)' },
     to: { opacity: 1, transform: 'translateY(0)' }
+  },
+  '@keyframes gradientShift': {
+    '0%': { backgroundPosition: '0% 50%' },
+    '50%': { backgroundPosition: '100% 50%' },
+    '100%': { backgroundPosition: '0% 50%' }
   }
 }))
 
@@ -226,6 +257,7 @@ export default function Projets() {
   const [projects, setProjects] = useState<Project[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const { customTheme } = useAdvancedTheme()
 
   useEffect(() => {
     fetchProjects()
@@ -365,6 +397,7 @@ export default function Projets() {
         ? 'linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 25%, #2a2a2a 50%, #1a1a1a 75%, #0a0a0a 100%)'
         : 'linear-gradient(135deg, #f0f4ff 0%, #e6f2ff 25%, #dbeafe 50%, #e6f2ff 75%, #f0f4ff 100%)',
       position: 'relative',
+      overflow: 'hidden',
       '&::before': {
         content: '""',
         position: 'fixed',
@@ -379,6 +412,14 @@ export default function Projets() {
         zIndex: 0,
       }
     }}>
+      {/* Particle System */}
+      <ParticleSystem 
+        particleCount={200}
+        speed={0.2}
+        colors={['#ff6b35', '#ff1744', '#3b82f6', '#059669']}
+        mouseInteraction={true}
+      />
+      
       <AppBarComponent />
       
       {/* Hero Section */}
@@ -393,16 +434,23 @@ export default function Projets() {
                 fontWeight: 900,
                 fontSize: { xs: '3rem', md: '4.5rem' },
                 textShadow: (theme) => theme.palette.mode === 'dark'
-                  ? '0 0 20px rgba(255, 107, 53, 0.5), 0 4px 8px rgba(0,0,0,0.8)'
+                  ? '0 0 20px rgba(255, 107, 53, 0.8), 0 0 40px rgba(255, 107, 53, 0.4), 0 4px 8px rgba(0,0,0,0.8)'
                   : '0 4px 8px rgba(0,0,0,0.3)',
                 letterSpacing: '0.1em',
                 textTransform: 'uppercase',
-                background: (theme) => theme.palette.mode === 'dark'
-                  ? 'linear-gradient(45deg, #ff6b35, #ffffff, #ff1744)'
-                  : 'inherit',
-                backgroundClip: (theme) => theme.palette.mode === 'dark' ? 'text' : 'initial',
-                WebkitBackgroundClip: (theme) => theme.palette.mode === 'dark' ? 'text' : 'initial',
-                WebkitTextFillColor: (theme) => theme.palette.mode === 'dark' ? 'transparent' : 'inherit',
+                color: (theme) => theme.palette.mode === 'dark' ? '#ff6b35' : 'inherit',
+                // Effet de glow animé
+                animation: (theme) => theme.palette.mode === 'dark' ? 'glow-pulse 2s ease-in-out infinite alternate' : 'none',
+                '@keyframes glow-pulse': {
+                  '0%': {
+                    textShadow: '0 0 20px rgba(255, 107, 53, 0.8), 0 0 40px rgba(255, 107, 53, 0.4)',
+                    filter: 'brightness(1)'
+                  },
+                  '100%': {
+                    textShadow: '0 0 30px rgba(255, 107, 53, 1), 0 0 60px rgba(255, 107, 53, 0.6)',
+                    filter: 'brightness(1.2)'
+                  }
+                }
               }}
             >
               Mes Projets
@@ -422,7 +470,7 @@ export default function Projets() {
         </Container>
       </HeaderSection>
 
-      <Container maxWidth="lg" sx={{ py: 6 }}>
+      <Container maxWidth="lg" sx={{ py: 6, position: 'relative', zIndex: 2 }}>
         {error && (
           <AnimatedBox>
             <Alert severity="error" sx={{ mb: 4, borderRadius: 2 }}>
@@ -435,53 +483,293 @@ export default function Projets() {
         <AnimatedBox>
           <StatsGrid>
             <StatsCard>
-              <Typography variant="h3" sx={{ fontWeight: 700, mb: 1 }}>
-                {projects.length}
-              </Typography>
-              <Typography variant="body1" sx={{ opacity: 0.9 }}>
-                Projets Totaux
-              </Typography>
+              <Box sx={{ position: 'relative', zIndex: 2 }}>
+                <Typography variant="h3" sx={{ 
+                  fontWeight: 800, 
+                  mb: 0.5, 
+                  background: 'linear-gradient(45deg, #ffffff 0%, #e0f2fe 25%, #b3e5fc 50%, #81d4fa 75%, #ffffff 100%)',
+                  backgroundClip: 'text',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  backgroundSize: '200% 200%',
+                  animation: 'textShimmer 3s ease-in-out infinite',
+                  textShadow: '0 0 20px rgba(255, 255, 255, 0.6), 0 0 40px rgba(59, 130, 246, 0.3)',
+                  fontSize: { xs: '1.8rem', md: '2.2rem' },
+                  position: 'relative',
+                  '&::before': {
+                    content: '""',
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    background: 'linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.3) 50%, transparent 70%)',
+                    animation: 'textGlow 2s ease-in-out infinite',
+                    zIndex: -1,
+                  }
+                }}>
+                  {projects.length}
+                </Typography>
+                <Typography variant="body1" sx={{ 
+                  opacity: 0.95, 
+                  fontWeight: 600,
+                  textShadow: '0 2px 8px rgba(0, 0, 0, 0.3), 0 0 10px rgba(59, 130, 246, 0.2)',
+                  fontSize: '0.9rem',
+                  background: 'linear-gradient(45deg, #ffffff, #f8fafc)',
+                  backgroundClip: 'text',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  letterSpacing: '0.5px',
+                  textTransform: 'uppercase',
+                  position: 'relative',
+                  '&::after': {
+                    content: '""',
+                    position: 'absolute',
+                    bottom: '-2px',
+                    left: '50%',
+                    transform: 'translateX(-50%)',
+                    width: '60%',
+                    height: '2px',
+                    background: 'linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent)',
+                    animation: 'underlineGlow 2s ease-in-out infinite',
+                  }
+                }}>
+                  Projets Totaux
+                </Typography>
+              </Box>
             </StatsCard>
             <StatsCard>
-              <Typography variant="h3" sx={{ fontWeight: 700, mb: 1 }}>
-                {getCompletedProjects()}
-              </Typography>
-              <Typography variant="body1" sx={{ opacity: 0.9 }}>
-                Projets Terminés
-              </Typography>
+              <Box sx={{ position: 'relative', zIndex: 2 }}>
+                <Typography variant="h3" sx={{ 
+                  fontWeight: 800, 
+                  mb: 0.5, 
+                  background: 'linear-gradient(45deg, #ffffff 0%, #e0f2fe 25%, #b3e5fc 50%, #81d4fa 75%, #ffffff 100%)',
+                  backgroundClip: 'text',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  backgroundSize: '200% 200%',
+                  animation: 'textShimmer 3s ease-in-out infinite',
+                  textShadow: '0 0 20px rgba(255, 255, 255, 0.6), 0 0 40px rgba(16, 185, 129, 0.3)',
+                  fontSize: { xs: '1.8rem', md: '2.2rem' },
+                  position: 'relative',
+                  '&::before': {
+                    content: '""',
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    background: 'linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.3) 50%, transparent 70%)',
+                    animation: 'textGlow 2s ease-in-out infinite',
+                    zIndex: -1,
+                  }
+                }}>
+                  {getCompletedProjects()}
+                </Typography>
+                <Typography variant="body1" sx={{ 
+                  opacity: 0.95, 
+                  fontWeight: 600,
+                  textShadow: '0 2px 8px rgba(0, 0, 0, 0.3), 0 0 10px rgba(16, 185, 129, 0.2)',
+                  fontSize: '0.9rem',
+                  background: 'linear-gradient(45deg, #ffffff, #f8fafc)',
+                  backgroundClip: 'text',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  letterSpacing: '0.5px',
+                  textTransform: 'uppercase',
+                  position: 'relative',
+                  '&::after': {
+                    content: '""',
+                    position: 'absolute',
+                    bottom: '-2px',
+                    left: '50%',
+                    transform: 'translateX(-50%)',
+                    width: '60%',
+                    height: '2px',
+                    background: 'linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent)',
+                    animation: 'underlineGlow 2s ease-in-out infinite',
+                  }
+                }}>
+                  Projets Terminés
+                </Typography>
+              </Box>
             </StatsCard>
             <StatsCard>
-              <Typography variant="h3" sx={{ fontWeight: 700, mb: 1 }}>
-                {getInProgressProjects()}
-              </Typography>
-              <Typography variant="body1" sx={{ opacity: 0.9 }}>
-                En Cours
-              </Typography>
+              <Box sx={{ position: 'relative', zIndex: 2 }}>
+                <Typography variant="h3" sx={{ 
+                  fontWeight: 800, 
+                  mb: 0.5, 
+                  background: 'linear-gradient(45deg, #ffffff 0%, #e0f2fe 25%, #b3e5fc 50%, #81d4fa 75%, #ffffff 100%)',
+                  backgroundClip: 'text',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  backgroundSize: '200% 200%',
+                  animation: 'textShimmer 3s ease-in-out infinite',
+                  textShadow: '0 0 20px rgba(255, 255, 255, 0.6), 0 0 40px rgba(59, 130, 246, 0.3)',
+                  fontSize: { xs: '1.8rem', md: '2.2rem' },
+                  position: 'relative',
+                  '&::before': {
+                    content: '""',
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    background: 'linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.3) 50%, transparent 70%)',
+                    animation: 'textGlow 2s ease-in-out infinite',
+                    zIndex: -1,
+                  }
+                }}>
+                  {getInProgressProjects()}
+                </Typography>
+                <Typography variant="body1" sx={{ 
+                  opacity: 0.95, 
+                  fontWeight: 600,
+                  textShadow: '0 2px 8px rgba(0, 0, 0, 0.3), 0 0 10px rgba(59, 130, 246, 0.2)',
+                  fontSize: '0.9rem',
+                  background: 'linear-gradient(45deg, #ffffff, #f8fafc)',
+                  backgroundClip: 'text',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  letterSpacing: '0.5px',
+                  textTransform: 'uppercase',
+                  position: 'relative',
+                  '&::after': {
+                    content: '""',
+                    position: 'absolute',
+                    bottom: '-2px',
+                    left: '50%',
+                    transform: 'translateX(-50%)',
+                    width: '60%',
+                    height: '2px',
+                    background: 'linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent)',
+                    animation: 'underlineGlow 2s ease-in-out infinite',
+                  }
+                }}>
+                  En Cours
+                </Typography>
+              </Box>
             </StatsCard>
           </StatsGrid>
         </AnimatedBox>
 
         {/* Projects Grid */}
         <ProjectsGrid>
-          {projects.map((project, index) => (
-            <ProjectCard key={project.id} sx={{ animationDelay: `${index * 0.1}s` }}>
-              <CardContent sx={{ p: 4 }}>
-                <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+          {projects.map((project, index) => {
+            // Palette de couleurs pour les reflets
+            const reflectionColors = [
+              '#ff6b35', // Orange
+              '#3b82f6', // Bleu
+              '#059669', // Vert
+              '#8b5cf6', // Violet
+              '#ec4899', // Rose
+              '#f59e0b', // Jaune
+              '#ef4444', // Rouge
+              '#06b6d4', // Cyan
+              '#84cc16', // Lime
+              '#f97316', // Orange vif
+            ]
+            
+            const reflectionColor = reflectionColors[index % reflectionColors.length]
+            
+            return (
+              <SimpleCardComponent 
+                key={project.id} 
+                onClick={() => handleProjectClick(project.url)}
+                reflectionColor={reflectionColor}
+              >
+              {/* Logo GitHub dans le coin supérieur droit */}
+                {project.url && project.url.includes('github') && (
+                  <Box
+                    sx={{
+                      position: 'absolute',
+                      top: 16,
+                      right: 16,
+                      background: (theme) => theme.palette.mode === 'dark'
+                        ? 'rgba(0, 0, 0, 0.6)'
+                        : 'rgba(255, 255, 255, 0.9)',
+                      borderRadius: '50%',
+                      padding: 1,
+                      boxShadow: (theme) => theme.palette.mode === 'dark'
+                        ? '0 4px 12px rgba(0, 0, 0, 0.3)'
+                        : '0 4px 12px rgba(0, 0, 0, 0.1)',
+                      border: (theme) => theme.palette.mode === 'dark'
+                        ? '1px solid rgba(255, 255, 255, 0.1)'
+                        : '1px solid rgba(0, 0, 0, 0.1)',
+                      zIndex: 3,
+                      transition: 'all 0.3s ease',
+                      '&:hover': {
+                        transform: 'scale(1.1)',
+                        boxShadow: (theme) => theme.palette.mode === 'dark'
+                          ? '0 6px 20px rgba(0, 0, 0, 0.4)'
+                          : '0 6px 20px rgba(0, 0, 0, 0.15)',
+                      }
+                    }}
+                  >
+                    <GitHubIcon 
+                      sx={{ 
+                        fontSize: 20, 
+                        color: (theme) => theme.palette.mode === 'dark' ? '#ffffff' : '#000000',
+                        filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.1))'
+                      }} 
+                    />
+                  </Box>
+                )}
+
+                {/* Icône générique pour autres liens */}
+                {project.url && !project.url.includes('github') && (
+                  <Box
+                    sx={{
+                      position: 'absolute',
+                      top: 16,
+                      right: 16,
+                      background: (theme) => theme.palette.mode === 'dark'
+                        ? 'rgba(0, 0, 0, 0.6)'
+                        : 'rgba(255, 255, 255, 0.9)',
+                      borderRadius: '50%',
+                      padding: 1,
+                      boxShadow: (theme) => theme.palette.mode === 'dark'
+                        ? '0 4px 12px rgba(0, 0, 0, 0.3)'
+                        : '0 4px 12px rgba(0, 0, 0, 0.1)',
+                      border: (theme) => theme.palette.mode === 'dark'
+                        ? '1px solid rgba(255, 255, 255, 0.1)'
+                        : '1px solid rgba(0, 0, 0, 0.1)',
+                      zIndex: 3,
+                      transition: 'all 0.3s ease',
+                      '&:hover': {
+                        transform: 'scale(1.1)',
+                        boxShadow: (theme) => theme.palette.mode === 'dark'
+                          ? '0 6px 20px rgba(0, 0, 0, 0.4)'
+                          : '0 6px 20px rgba(0, 0, 0, 0.15)',
+                      }
+                    }}
+                  >
+                    <LaunchIcon 
+                      sx={{ 
+                        fontSize: 20, 
+                        color: (theme) => theme.palette.mode === 'dark' ? '#ffffff' : '#000000',
+                        filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.1))'
+                      }} 
+                    />
+                  </Box>
+                )}
+
+                <Box sx={{ display: 'flex', alignItems: 'center', mb: 1.5 }}>
                   <StatusChip
                     icon={getStatusIcon(project.status)}
                     label={project.status}
                     color={getStatusColor(project.status)}
-                    size="medium"
+                    size="small"
                   />
                 </Box>
                 
                                  <Typography 
-                   variant="h5" 
+                   variant="h6" 
                    component="h2" 
                    gutterBottom
                    sx={{ 
                      fontWeight: 700,
-                     mb: 2,
+                     mb: 1.5,
                      background: (theme) => theme.palette.mode === 'dark'
                        ? 'linear-gradient(45deg, #ff6b35, #ffffff, #ff1744, #ff6b35)'
                        : 'linear-gradient(45deg, #1e3a8a, #3b82f6, #059669, #1e3a8a)',
@@ -504,60 +792,50 @@ export default function Projets() {
                 </Typography>
                 
                 {project.imageUrl && (
-                  <Box sx={{ mb: 3, textAlign: 'center' }}>
+                  <Box sx={{ mb: 2, textAlign: 'center' }}>
                     <img 
                       src={getImageUrl(project.imageUrl)} 
                       alt={project.name}
                       style={{ 
-                        width: '400px',
-                        height: '300px',
+                        width: '100%',
+                        height: '180px',
                         objectFit: 'cover',
-                        borderRadius: '12px',
-                        boxShadow: '0 4px 12px rgba(0,0,0,0.15)'
+                        borderRadius: '8px',
+                        boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
                       }}
                     />
                   </Box>
                 )}
                 
                 <Typography 
-                  variant="body1" 
+                  variant="body2" 
                   color="text.secondary" 
                   paragraph
                   sx={{ 
-                    lineHeight: 1.6,
-                    mb: 3,
-                    minHeight: '4.5rem'
+                    lineHeight: 1.4,
+                    mb: 2,
+                    minHeight: '3rem',
+                    fontSize: '0.9rem'
                   }}
                 >
                   {project.description}
                 </Typography>
                 
-                <TechStack>
+                <TechStack sx={{
+                  visibility: 'visible !important',
+                  opacity: '1 !important',
+                  zIndex: 1000,
+                  position: 'relative'
+                }}>
                   {project.technologies.split(',').map((tech, techIndex) => (
-                    <TechTag key={techIndex}>
+                    <SimpleTechTag key={techIndex} reflectionColor={reflectionColor}>
                       {tech.trim()}
-                    </TechTag>
+                    </SimpleTechTag>
                   ))}
                 </TechStack>
-              </CardContent>
-              
-              <CardActions sx={{ p: 4, pt: 0 }}>
-                <ActionButton
-                  variant="contained"
-                  size="large"
-                  fullWidth
-                  onClick={() => handleProjectClick(project.url)}
-                  disabled={!project.url || project.url.trim() === ''}
-                  startIcon={project.url?.includes('github') ? <GitHubIcon /> : <LaunchIcon />}
-                >
-                  {project.url && project.url.trim() !== '' 
-                    ? 'Voir le projet' 
-                    : 'Lien non disponible'
-                  }
-                </ActionButton>
-              </CardActions>
-            </ProjectCard>
-          ))}
+              </SimpleCardComponent>
+            )
+          })}
         </ProjectsGrid>
         
         {projects.length === 0 && !error && (

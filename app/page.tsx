@@ -1,22 +1,29 @@
 'use client'
 
-import AppBarComponent from './components/appBar'
+import CodeIcon from '@mui/icons-material/Code'
+import ContactSupportIcon from '@mui/icons-material/ContactSupport'
+import PersonIcon from '@mui/icons-material/Person'
 import Box from '@mui/material/Box'
 import Container from '@mui/material/Container'
 import Typography from '@mui/material/Typography'
 import { styled } from '@mui/material/styles'
-import HomeIcon from '@mui/icons-material/Home'
-import CodeIcon from '@mui/icons-material/Code'
-import PersonIcon from '@mui/icons-material/Person'
-import ContactSupportIcon from '@mui/icons-material/ContactSupport'
 import { useRouter } from 'next/navigation'
+import { GlassContainer } from './components/GlassCard'
+import { LetterAnimations } from './components/LetterAnimations'
+import ParticleSystem from './components/ParticleSystem'
+import { FadeIn, HoverScale, TypingEffect } from './components/SimpleAnimations'
+import SimpleSkillTag from './components/SimpleSkillTag'
+import ThreeDCardComponent from './components/ThreeDCard'
+import AppBarComponent from './components/appBar'
+import { useAdvancedTheme } from './contexts/AdvancedThemeContext'
+
 
 const HeaderSection = styled(Box)(({ theme }) => ({
   background: theme.palette.mode === 'dark' 
     ? 'linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 25%, #2a2a2a 50%, #1a1a1a 75%, #0a0a0a 100%)'
     : 'linear-gradient(135deg, #1e3a8a 0%, #3b82f6 50%, #059669 100%)',
   color: 'white',
-  padding: theme.spacing(12, 0, 8),
+  padding: theme.spacing(6.75, 0, 4.5),
   textAlign: 'center',
   position: 'relative',
   overflow: 'hidden',
@@ -121,6 +128,8 @@ const FeatureCard = styled(Box)(({ theme }) => ({
 
 export default function Home() {
   const router = useRouter()
+  const { customTheme } = useAdvancedTheme()
+
 
   const handleCardClick = (path: string) => {
     router.push(path)
@@ -133,6 +142,7 @@ export default function Home() {
         ? 'linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 25%, #2a2a2a 50%, #1a1a1a 75%, #0a0a0a 100%)'
         : 'linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%)',
       position: 'relative',
+      overflow: 'hidden',
       '&::before': {
         content: '""',
         position: 'fixed',
@@ -147,95 +157,174 @@ export default function Home() {
         zIndex: 0,
       }
     }}>
+      {/* Particle System */}
+      <ParticleSystem 
+        particleCount={150}
+        speed={0.3}
+        colors={['#ff6b35', '#ff1744', '#3b82f6', '#059669', '#ffffff']}
+        mouseInteraction={true}
+      />
+      
       <AppBarComponent />
       
       <HeaderSection>
         <Container maxWidth="lg">
-          <Typography 
-            variant="h1" 
-            component="h1" 
-            gutterBottom 
-            sx={{ 
-              fontWeight: 900,
-              fontSize: { xs: '3rem', md: '4.5rem' },
-              textShadow: (theme) => theme.palette.mode === 'dark'
-                ? '0 0 20px rgba(255, 107, 53, 0.5), 0 4px 8px rgba(0,0,0,0.8)'
-                : '0 4px 8px rgba(0,0,0,0.3)',
-              letterSpacing: '0.1em',
-              textTransform: 'uppercase',
-              background: (theme) => theme.palette.mode === 'dark'
-                ? 'linear-gradient(45deg, #ff6b35, #ffffff, #ff1744)'
-                : 'inherit',
-              backgroundClip: (theme) => theme.palette.mode === 'dark' ? 'text' : 'initial',
-              WebkitBackgroundClip: (theme) => theme.palette.mode === 'dark' ? 'text' : 'initial',
-              WebkitTextFillColor: (theme) => theme.palette.mode === 'dark' ? 'transparent' : 'inherit',
-            }}
-          >
-            Portfolio Web
-          </Typography>
-          <Typography 
-            variant="h5" 
-            sx={{ 
-              opacity: 0.9,
-              fontWeight: 300,
-              maxWidth: 600,
-              mx: 'auto'
-            }}
-          >
-            Développeur Full Stack passionné par les technologies modernes
-          </Typography>
+          <FadeIn delay={0.2}>
+            <Typography 
+              variant="h1" 
+              component="h1" 
+              gutterBottom 
+              sx={{ 
+                fontWeight: 900,
+                fontSize: { xs: '3rem', md: '4.5rem' },
+                textShadow: (theme) => theme.palette.mode === 'dark'
+                  ? '0 0 20px rgba(255, 107, 53, 0.5), 0 4px 8px rgba(0,0,0,0.8)'
+                  : '0 4px 8px rgba(0,0,0,0.3)',
+                letterSpacing: '0.1em',
+                textTransform: 'uppercase',
+                // Force l'orange en dark mode
+                color: (theme) => theme.palette.mode === 'dark' ? '#ff6b35' : 'inherit',
+                // Supprime complètement le gradient qui cause le flou
+                filter: 'none',
+                textRendering: 'optimizeLegibility',
+                WebkitFontSmoothing: 'antialiased',
+                MozOsxFontSmoothing: 'grayscale',
+                // Force la netteté
+                imageRendering: 'crisp-edges',
+                backfaceVisibility: 'hidden',
+                transform: 'translateZ(0)' // Force l'accélération GPU
+              }}
+            >
+              <LetterAnimations>
+                Portfolio Web
+              </LetterAnimations>
+            </Typography>
+          </FadeIn>
+          <FadeIn delay={0.5}>
+            <Typography 
+              variant="h5" 
+              sx={{ 
+                opacity: 0.9,
+                fontWeight: 300,
+                maxWidth: 600,
+                mx: 'auto'
+              }}
+            >
+              <TypingEffect 
+                text="Développeur Full Stack passionné par les technologies modernes"
+                speed={50}
+              />
+            </Typography>
+          </FadeIn>
         </Container>
       </HeaderSection>
 
-      <Container maxWidth="lg" sx={{ py: 8 }}>
-        <Box sx={{ textAlign: 'center', mb: 6 }}>
-          <Typography 
-            variant="h3" 
-            gutterBottom 
-            sx={{ 
-              mb: 3,
-              fontWeight: 900,
-              fontSize: { xs: '2rem', md: '3rem' },
-              textShadow: (theme) => theme.palette.mode === 'dark'
-                ? '0 0 20px rgba(255, 107, 53, 0.6), 0 0 40px rgba(255, 23, 68, 0.4), 0 4px 8px rgba(0,0,0,0.8)'
-                : '0 0 20px rgba(30, 58, 138, 0.4), 0 0 40px rgba(59, 130, 246, 0.3), 0 4px 8px rgba(0,0,0,0.3)',
-              letterSpacing: '0.15em',
-              textTransform: 'uppercase',
-              background: (theme) => theme.palette.mode === 'dark'
-                ? 'linear-gradient(45deg, #ff6b35, #ffffff, #ff1744, #ff6b35)'
-                : 'linear-gradient(45deg, #1e3a8a, #3b82f6, #059669, #1e3a8a)',
-              backgroundClip: 'text',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              backgroundSize: '200% 200%',
-              animation: 'gradientShift 3s ease-in-out infinite',
-              position: 'relative',
-              '&::before': {
-                content: '""',
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0,
+      <Container maxWidth="lg" sx={{ py: 8, position: 'relative', zIndex: 2 }}>
+        <GlassContainer sx={{ mb: 6 }}>
+          <Box sx={{ textAlign: 'center' }}>
+            <Typography 
+              variant="h3" 
+              gutterBottom 
+              sx={{ 
+                mb: 3,
+                fontWeight: 900,
+                fontSize: { xs: '2rem', md: '3rem' },
+                textShadow: (theme) => theme.palette.mode === 'dark'
+                  ? '0 0 20px rgba(255, 107, 53, 0.6), 0 0 40px rgba(255, 23, 68, 0.4), 0 4px 8px rgba(0,0,0,0.8)'
+                  : '0 0 20px var(--primary-color, rgba(30, 58, 138, 0.4)), 0 0 40px var(--secondary-color, rgba(59, 130, 246, 0.3)), 0 4px 8px rgba(0,0,0,0.3)',
+                letterSpacing: '0.15em',
+                textTransform: 'uppercase',
                 background: (theme) => theme.palette.mode === 'dark'
-                  ? 'linear-gradient(45deg, rgba(255, 107, 53, 0.1), rgba(255, 23, 68, 0.1))'
-                  : 'linear-gradient(45deg, rgba(30, 58, 138, 0.1), rgba(59, 130, 246, 0.1))',
-                borderRadius: '20px',
-                filter: 'blur(20px)',
-                zIndex: -1,
-                animation: 'pulse 2s ease-in-out infinite alternate',
-              }
-            }}
-          >
-            JEAN-FRANÇOIS LEFEBVRE
-          </Typography>
-          <Typography variant="h4" gutterBottom sx={{ mb: 2, fontWeight: 300, opacity: 0.8 }}>
-            Bienvenue sur mon portfolio
-          </Typography>
-          <Typography variant="body1" color="text.secondary" sx={{ maxWidth: 600, mx: 'auto' }}>
-            Explorez mes projets, découvrez mon parcours et n&apos;hésitez pas à me contacter pour collaborer sur vos idées.
-          </Typography>
-        </Box>
+                  ? 'linear-gradient(45deg, #ff6b35, #ffffff, #ff1744, #ff6b35)'
+                  : 'linear-gradient(45deg, var(--primary-color, #1e3a8a), var(--secondary-color, #3b82f6), var(--primary-color, #059669), var(--primary-color, #1e3a8a))',
+                backgroundClip: 'text',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                backgroundSize: '200% 200%',
+                animation: 'gradientShift 3s ease-in-out infinite',
+                position: 'relative',
+                '&::before': {
+                  content: '""',
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  background: (theme) => theme.palette.mode === 'dark'
+                    ? 'linear-gradient(45deg, rgba(255, 107, 53, 0.1), rgba(255, 23, 68, 0.1))'
+                    : 'linear-gradient(45deg, var(--primary-color, rgba(30, 58, 138, 0.1)), var(--secondary-color, rgba(59, 130, 246, 0.1))',
+                  borderRadius: '20px',
+                  filter: 'blur(20px)',
+                  zIndex: -1,
+                  animation: 'pulse 2s ease-in-out infinite alternate',
+                }
+              }}
+            >
+              JEAN-FRANÇOIS LEFEBVRE
+            </Typography>
+            <Typography variant="h4" gutterBottom sx={{ mb: 2, fontWeight: 300, opacity: 0.8 }}>
+              Bienvenue sur mon portfolio
+            </Typography>
+            <Typography variant="body1" color="text.secondary" sx={{ maxWidth: 600, mx: 'auto' }}>
+              Explorez mes projets, découvrez mon parcours et n&apos;hésitez pas à me contacter pour collaborer sur vos idées.
+            </Typography>
+          </Box>
+        </GlassContainer>
+
+        {/* Section Compétences */}
+        <Container maxWidth="lg" sx={{ py: 6, position: 'relative', zIndex: 2 }}>
+          <Box sx={{ 
+            background: (theme) => theme.palette.mode === 'dark'
+              ? 'linear-gradient(145deg, rgba(26, 26, 26, 0.8) 0%, rgba(45, 45, 45, 0.8) 100%)'
+              : 'linear-gradient(145deg, rgba(255, 255, 255, 0.8) 0%, rgba(248, 250, 252, 0.8) 100%)',
+            border: (theme) => theme.palette.mode === 'dark' 
+              ? '1px solid rgba(74, 85, 104, 0.3)' 
+              : '1px solid rgba(148, 163, 184, 0.2)',
+            borderRadius: 24,
+            padding: 4,
+            textAlign: 'center',
+            boxShadow: (theme) => theme.palette.mode === 'dark'
+              ? '0 8px 32px rgba(0, 0, 0, 0.3)'
+              : '0 8px 32px rgba(0, 0, 0, 0.1)',
+            mb: 8,
+            position: 'relative',
+            overflow: 'hidden',
+            backdropFilter: 'blur(10px)',
+          }}>
+            <Typography 
+              variant="h4" 
+              gutterBottom 
+              sx={{ 
+                marginBottom: '24px',
+                fontWeight: 'bold',
+                color: 'primary.main',
+              }}
+            >
+              Technologies & Compétences
+            </Typography>
+            <Box sx={{ 
+              display: 'flex', 
+              flexWrap: 'wrap', 
+              justifyContent: 'center',
+              gap: 1,
+              visibility: 'visible !important',
+              opacity: '1 !important',
+              zIndex: 1000,
+              position: 'relative'
+            }}>
+              <SimpleSkillTag>Python</SimpleSkillTag>
+              <SimpleSkillTag>Java</SimpleSkillTag>
+              <SimpleSkillTag>React</SimpleSkillTag>
+              <SimpleSkillTag>Next.js</SimpleSkillTag>
+              <SimpleSkillTag>TypeScript</SimpleSkillTag>
+              <SimpleSkillTag>JavaScript</SimpleSkillTag>
+              <SimpleSkillTag>SQL</SimpleSkillTag>
+              <SimpleSkillTag>CSS3</SimpleSkillTag>
+              <SimpleSkillTag>HTML5</SimpleSkillTag>
+              <SimpleSkillTag>Git</SimpleSkillTag>
+            </Box>
+          </Box>
+        </Container>
 
         <Box sx={{ 
           display: 'grid', 
@@ -243,7 +332,9 @@ export default function Home() {
           gap: 4,
           mb: 8
         }}>
-          <FeatureCard onClick={() => handleCardClick('/projets')}>
+          <FadeIn delay={0.8}>
+            <HoverScale>
+              <ThreeDCardComponent onClick={() => handleCardClick('/projets')} floatingElements={2}>
             <CodeIcon sx={{ fontSize: 48, color: 'primary.main', mb: 2 }} />
             <Typography variant="h5" gutterBottom>
               Mes Projets
@@ -251,27 +342,37 @@ export default function Home() {
             <Typography variant="body1" color="text.secondary">
               Découvrez mes réalisations et explorations technologiques
             </Typography>
-          </FeatureCard>
+          </ThreeDCardComponent>
+            </HoverScale>
+          </FadeIn>
 
-          <FeatureCard onClick={() => handleCardClick('/a-propos')}>
-            <PersonIcon sx={{ fontSize: 48, color: 'primary.main', mb: 2 }} />
-            <Typography variant="h5" gutterBottom>
-              À Propos
-            </Typography>
-            <Typography variant="body1" color="text.secondary">
-              En savoir plus sur mon parcours et mes compétences
-            </Typography>
-          </FeatureCard>
+          <FadeIn delay={1.0}>
+            <HoverScale>
+              <ThreeDCardComponent onClick={() => handleCardClick('/a-propos')} floatingElements={3}>
+                <PersonIcon sx={{ fontSize: 48, color: 'primary.main', mb: 2 }} />
+                <Typography variant="h5" gutterBottom>
+                  À Propos
+                </Typography>
+                <Typography variant="body1" color="text.secondary">
+                  En savoir plus sur mon parcours et mes compétences
+                </Typography>
+              </ThreeDCardComponent>
+            </HoverScale>
+          </FadeIn>
 
-          <FeatureCard onClick={() => handleCardClick('/contact')}>
-            <ContactSupportIcon sx={{ fontSize: 48, color: 'primary.main', mb: 2 }} />
-            <Typography variant="h5" gutterBottom>
-              Contact
-            </Typography>
-            <Typography variant="body1" color="text.secondary">
-              Prenons contact et discutons de vos projets
-            </Typography>
-          </FeatureCard>
+          <FadeIn delay={1.2}>
+            <HoverScale>
+              <ThreeDCardComponent onClick={() => handleCardClick('/contact')} floatingElements={2}>
+                <ContactSupportIcon sx={{ fontSize: 48, color: 'primary.main', mb: 2 }} />
+                <Typography variant="h5" gutterBottom>
+                  Contact
+                </Typography>
+                <Typography variant="body1" color="text.secondary">
+                  Prenons contact et discutons de vos projets
+                </Typography>
+              </ThreeDCardComponent>
+            </HoverScale>
+          </FadeIn>
         </Box>
       </Container>
     </Box>

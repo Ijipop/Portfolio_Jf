@@ -1,0 +1,181 @@
+:root {
+  /* Thèmes par défaut */
+  --primary-color: #3b82f6;
+  --secondary-color: #059669;
+  --theme-bg: #1e293b;
+}
+
+/* Dark mode avec orange par défaut */
+[data-mui-color-scheme="dark"] {
+  --primary-color: #ff6b35;
+  --secondary-color: #ff1744;
+  --theme-bg: #0a0a0a;
+}
+
+/* FORCER les palettes avec !important */
+[data-mui-color-scheme="dark"] body {
+  background: var(--theme-bg) !important;
+}
+
+[data-mui-color-scheme="dark"] .MuiCssBaseline-root {
+  background: var(--theme-bg) !important;
+}
+
+/* FORCER les couleurs sur tous les éléments */
+body * {
+  transition: all 0.3s ease !important;
+}
+
+/* Titres avec thème - seulement en dark mode */
+[data-mui-color-scheme="dark"] h1, 
+[data-mui-color-scheme="dark"] .MuiTypography-h1 {
+  color: var(--primary-color) !important;
+  text-shadow: 0 0 20px var(--primary-color)80 !important;
+}
+
+/* Liens avec thème - seulement en dark mode */
+[data-mui-color-scheme="dark"] a {
+  color: var(--primary-color) !important;
+}
+
+/* Icônes avec thème - seulement en dark mode */
+[data-mui-color-scheme="dark"] .MuiSvgIcon-root, 
+[data-mui-color-scheme="dark"] svg {
+  color: var(--primary-color) !important;
+}
+
+/* Boutons avec thème - seulement en dark mode */
+[data-mui-color-scheme="dark"] .MuiButton-root, 
+[data-mui-color-scheme="dark"] button {
+  color: var(--primary-color) !important;
+  border-color: var(--primary-color) !important;
+}
+
+/* Cards avec thème - seulement en dark mode */
+[data-mui-color-scheme="dark"] .MuiCard-root, 
+[data-mui-color-scheme="dark"] .MuiPaper-root {
+  border-color: var(--primary-color)40 !important;
+  box-shadow: 0 4px 20px var(--primary-color)20 !important;
+}
+
+/* SUPPRIMÉ - On garde les styles originaux */
+
+/* SUPPRIMÉ - On garde les effets originaux */
+
+/* Exclure complètement hover-scale-wrapper */
+.hover-scale-wrapper {
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+/* SUPPRIMÉ - On garde les effets originaux */
+
+/* SUPPRIMÉ - On évite tous les conflits CSS */
+
+/* Application des thèmes sur les éléments */
+body {
+  background: var(--theme-bg) !important;
+  transition: background 0.3s ease;
+}
+
+/* Titre principal avec thème */
+.theme-title {
+  background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Dark mode - Seulement les titres principaux en orange */
+[data-mui-color-scheme="dark"] h1 {
+  color: #ff6b35 !important;
+}
+
+/* Les autres titres restent blancs */
+[data-mui-color-scheme="dark"] h2,
+[data-mui-color-scheme="dark"] h3,
+[data-mui-color-scheme="dark"] h4,
+[data-mui-color-scheme="dark"] h5,
+[data-mui-color-scheme="dark"] h6 {
+  color: white !important;
+}
+
+/* Dark mode - Liens orange */
+[data-mui-color-scheme="dark"] a {
+  color: var(--primary-color) !important;
+}
+
+[data-mui-color-scheme="dark"] a:hover {
+  color: var(--secondary-color) !important;
+}
+
+/* Dark mode - Boutons orange */
+[data-mui-color-scheme="dark"] .MuiButton-root {
+  color: var(--primary-color) !important;
+  border-color: var(--primary-color) !important;
+}
+
+[data-mui-color-scheme="dark"] .MuiButton-root:hover {
+  background-color: var(--primary-color) !important;
+  color: white !important;
+}
+
+/* Dark mode - Icônes orange */
+[data-mui-color-scheme="dark"] .MuiSvgIcon-root {
+  color: var(--primary-color) !important;
+}
+
+/* Dark mode - Text orange seulement pour les titres principaux */
+[data-mui-color-scheme="dark"] .MuiTypography-h1 {
+  color: #ff6b35 !important;
+}
+
+/* Les autres textes restent blancs */
+[data-mui-color-scheme="dark"] .MuiTypography-h2,
+[data-mui-color-scheme="dark"] .MuiTypography-h3,
+[data-mui-color-scheme="dark"] .MuiTypography-h4,
+[data-mui-color-scheme="dark"] .MuiTypography-h5,
+[data-mui-color-scheme="dark"] .MuiTypography-h6,
+[data-mui-color-scheme="dark"] .MuiTypography-body1,
+[data-mui-color-scheme="dark"] .MuiTypography-body2 {
+  color: white !important;
+}
+
+/* Boutons avec thème */
+.theme-button {
+  background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+  border: none;
+  color: white;
+  transition: all 0.3s ease;
+}
+
+.theme-button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 20px var(--primary-color);
+}
+
+/* Cards avec thème */
+.theme-card {
+  border: 1px solid var(--primary-color);
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+}
+
+/* Particules avec thème */
+.theme-particles {
+  --particle-color: var(--primary-color);
+}
+
+/* Animations avec thème */
+@keyframes theme-glow {
+  0%, 100% {
+    box-shadow: 0 0 5px var(--primary-color);
+  }
+  50% {
+    box-shadow: 0 0 20px var(--primary-color), 0 0 30px var(--secondary-color);
+  }
+}
+
+.theme-glow {
+  animation: theme-glow 2s ease-in-out infinite;
+}

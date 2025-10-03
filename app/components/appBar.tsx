@@ -1,28 +1,29 @@
 "use client";
 
+import ContactMailIcon from '@mui/icons-material/ContactMail';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
+import HomeIcon from '@mui/icons-material/Home';
 import LightModeIcon from '@mui/icons-material/LightMode';
 import MenuIcon from '@mui/icons-material/Menu';
-import HomeIcon from '@mui/icons-material/Home';
-import WorkIcon from '@mui/icons-material/Work';
 import PersonIcon from '@mui/icons-material/Person';
-import ContactMailIcon from '@mui/icons-material/ContactMail';
+import WorkIcon from '@mui/icons-material/Work';
 import AppBar from "@mui/material/AppBar";
+import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
-import Box from "@mui/material/Box";
+import { usePathname, useRouter } from 'next/navigation';
 import { useState } from "react";
-import { useRouter, usePathname } from 'next/navigation';
-import { useTheme } from '../contexts/ThemeContext';
+import { useAdvancedTheme } from '../contexts/AdvancedThemeContext';
 import LoginModal from './LoginModal';
+import { ThemeSelector } from './ThemeSelector';
 
 import './components.css';
 
 export default function AppBarComponent() {
-	const { isDarkMode, toggleTheme } = useTheme();
+	const { mode, toggleMode } = useAdvancedTheme();
 	const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 	const [loginModalOpen, setLoginModalOpen] = useState(false);
 	const open = Boolean(anchorEl);
@@ -181,8 +182,8 @@ export default function AppBarComponent() {
 					
 					{/* Boutons de contrôle */}
 					<Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-						<IconButton 
-							color="inherit" 
+						<IconButton
+							color="inherit"
 							aria-label="menu"
 							onClick={handleMenuClick}
 							aria-controls={open ? 'basic-menu' : undefined}
@@ -191,12 +192,13 @@ export default function AppBarComponent() {
 						>
 							<MenuIcon />
 						</IconButton>
+						<ThemeSelector />
 						<IconButton 
 							color="inherit" 
 							aria-label="dark mode toggle" 
-							onClick={toggleTheme}
+							onClick={toggleMode}
 						> 
-							{isDarkMode ? <LightModeIcon /> : <DarkModeIcon />}
+							{mode === 'dark' ? <LightModeIcon /> : <DarkModeIcon />}
 						</IconButton>
 					</Box>
 					
