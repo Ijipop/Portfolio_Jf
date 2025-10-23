@@ -103,8 +103,8 @@ export function AdvancedThemeProvider({ children }: { children: React.ReactNode 
         dark: customTheme.secondary + 'CC'
       },
       background: {
-        default: mode === 'dark' ? '#0a0a0a' : '#f5f7fa',
-        paper: mode === 'dark' ? '#1a1a1a' : '#ffffff'
+        default: '#f5f7fa',
+        paper: '#ffffff'
       }
     },
     typography: {
@@ -146,10 +146,8 @@ export function AdvancedThemeProvider({ children }: { children: React.ReactNode 
           root: {
             borderRadius: '20px',
             backdropFilter: 'blur(10px)',
-            background: mode === 'dark' 
-              ? 'rgba(255, 255, 255, 0.05)' 
-              : 'rgba(255, 255, 255, 0.8)',
-            border: `1px solid ${mode === 'dark' ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'}`,
+            background: 'rgba(255, 255, 255, 0.8)',
+            border: '1px solid rgba(0, 0, 0, 0.1)',
             transition: 'all 0.3s ease',
             '&:hover': {
               transform: 'translateY(-5px)',
