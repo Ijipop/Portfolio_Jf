@@ -97,19 +97,19 @@ const GlassContainer = styled(Box)(({ theme }) => ({
   '&::before': {
     content: '""',
     position: 'absolute',
-    top: '-50%',
-    left: '-50%',
+    top: 0,
+    left: '-100%',
     width: '200%',
-    height: '200%',
+    height: '100%',
     background: theme.palette.mode === 'dark'
-      ? 'conic-gradient(from 0deg, transparent, rgba(255, 107, 53, 0.1), transparent, rgba(255, 23, 68, 0.1), transparent)'
-      : 'conic-gradient(from 0deg, transparent, var(--card-primary, rgba(59, 130, 246, 0.1)), transparent, var(--card-secondary, rgba(5, 150, 105, 0.1)), transparent)',
-    animation: 'rotate 10s linear infinite',
+      ? 'linear-gradient(110deg, transparent 20%, transparent 40%, rgba(255, 107, 53, 0.15) 50%, rgba(255, 23, 68, 0.15) 55%, transparent 60%, transparent 80%)'
+      : 'linear-gradient(110deg, transparent 20%, transparent 40%, var(--card-primary, rgba(59, 130, 246, 0.12)) 50%, var(--card-secondary, rgba(5, 150, 105, 0.12)) 55%, transparent 60%, transparent 80%)',
+    animation: 'shimmer 3s ease-in-out infinite',
     zIndex: 0,
   },
-  '@keyframes rotate': {
-    '0%': { transform: 'rotate(0deg)' },
-    '100%': { transform: 'rotate(360deg)' }
+  '@keyframes shimmer': {
+    '0%': { transform: 'translateX(0)' },
+    '100%': { transform: 'translateX(100%)' }
   }
 }))
 
