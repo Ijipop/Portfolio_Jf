@@ -83,6 +83,11 @@ const ContactCard = styled(Box)(({ theme }) => ({
   cursor: 'pointer',
   position: 'relative',
   overflow: 'hidden',
+  // S'assurer que le contenu est au-dessus des pseudo-éléments
+  '& > *': {
+    position: 'relative',
+    zIndex: 1,
+  },
   '&::before': {
     content: '""',
     position: 'absolute',
@@ -95,6 +100,7 @@ const ContactCard = styled(Box)(({ theme }) => ({
       : 'linear-gradient(135deg, var(--card-primary, transparent) 0%, var(--card-secondary, transparent) 50%, var(--card-primary, transparent) 100%)',
     opacity: 0,
     transition: 'opacity 0.3s ease',
+    zIndex: 0,
   },
   '&::after': {
     content: '""',
