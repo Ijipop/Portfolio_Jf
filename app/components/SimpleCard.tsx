@@ -6,14 +6,7 @@ import { motion } from 'framer-motion'
 import { useRef, useState } from 'react'
 import { useAdvancedTheme } from '../contexts/AdvancedThemeContext'
 
-// Type pour les props custom du styled component
-type SimpleCardStyleProps = {
-  customTheme?: any
-}
-
-const SimpleCard = styled(Card, {
-  shouldForwardProp: (prop) => prop !== 'customTheme',
-})<SimpleCardStyleProps>(({ theme, customTheme }) => ({
+const SimpleCard = styled(Card)(({ theme }) => ({
   background: 'linear-gradient(145deg, #f0f4ff 0%, #e6f2ff 50%, #dbeafe 100%)',
   border: '1px solid rgba(74, 85, 104, 0.15)',
   borderRadius: 24,
@@ -26,29 +19,6 @@ const SimpleCard = styled(Card, {
   height: '400px',
   transformStyle: 'preserve-3d',
   perspective: '1000px',
-  '&::before': {
-    content: '""',
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    background: `linear-gradient(135deg, ${customTheme?.primary || '#3b82f6'}20 0%, ${customTheme?.secondary || '#059669'}20 25%, ${customTheme?.accent || '#8b5cf6'}20 50%, ${customTheme?.primary || '#3b82f6'}20 75%, ${customTheme?.primary || '#3b82f6'}20 100%)`,
-    backgroundSize: '200% 200%',
-    opacity: 0,
-    transition: 'all 0.4s ease',
-    zIndex: 1,
-    animation: 'gradientShift 3s ease-in-out infinite',
-  },
-  '&:hover': {
-    transform: 'translateY(-16px) scale(1.02) rotateX(5deg) rotateY(5deg) rotateZ(2deg)',
-    background: `linear-gradient(145deg, #f0f4ff 0%, #e6f2ff 50%, #dbeafe 100%), linear-gradient(135deg, ${customTheme?.primary || '#3b82f6'}30 0%, ${customTheme?.secondary || '#059669'}30 25%, ${customTheme?.accent || '#8b5cf6'}30 50%, ${customTheme?.primary || '#3b82f6'}30 75%, ${customTheme?.primary || '#3b82f6'}30 100%)`,
-    boxShadow: `0 25px 50px ${customTheme?.primary || '#3b82f6'}20, 0 0 0 2px ${customTheme?.primary || '#3b82f6'}60, 0 0 30px ${customTheme?.primary || '#3b82f6'}40, 0 0 60px ${customTheme?.secondary || '#059669'}20, inset 0 1px 0 rgba(255, 255, 255, 0.8)`,
-    '&::before': {
-      opacity: 1,
-      background: `linear-gradient(135deg, ${customTheme?.primary || '#3b82f6'}40 0%, ${customTheme?.secondary || '#059669'}40 25%, ${customTheme?.accent || '#8b5cf6'}40 50%, ${customTheme?.primary || '#3b82f6'}40 75%, ${customTheme?.primary || '#3b82f6'}40 100%)`,
-    }
-  },
   '@keyframes gradientShift': {
     '0%': { backgroundPosition: '0% 50%' },
     '50%': { backgroundPosition: '100% 50%' },
@@ -88,6 +58,10 @@ export default function SimpleCardComponent({ children, onClick, className, refl
     setRotation({ x: 0, y: 0 })
   }
   
+  const primary = customTheme?.primary || '#3b82f6'
+  const secondary = customTheme?.secondary || '#059669'
+  const accent = customTheme?.accent || '#8b5cf6'
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -99,12 +73,37 @@ export default function SimpleCardComponent({ children, onClick, className, refl
       <SimpleCard 
         ref={cardRef}
         onClick={onClick} 
-        className={className} 
-        customTheme={customTheme}
+        className={className}
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
         sx={{
           transform: `rotateX(${rotation.x}deg) rotateY(${rotation.y}deg)`,
+          '&::before': {
+            content: '""',
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: `linear-gradient(135deg, ${primary}20 0%, ${secondary}20 25%, ${accent}20 50%, ${primary}20 75%, ${primary}20 100%)`,
+            backgroundSize: '200% 200%',
+            opacity: 0,
+            transition: 'all 0.4s ease',
+            zIndex: 1,
+            animation: 'gradientShift 3s ease-in-out infinite',
+          },
+          '&:hover': {
+            transform: 'translateY(-16px) scale(1.02) rotateX(5deg) rotateY(5deg) rotateZ(2deg)',
+            background: `linear-gradient(145deg, #f0f4ff 0%, #e6f2ff 50%, #dbeafe 100%), linear-gradient(135deg, ${primary}30 0%, ${secondary}30 25%, ${accent}30 50%, ${primary}30 75%, ${primary}30 100%)`,
+            boxShadow: `0 25px 50px ${primary}20, 0 0 0 2px ${primary}60, 0 0 30px ${primary}40, 0 0 60px ${secondary}20, inset 0 1px 0 rgba(255, 255, 255, 0.8)`,
+            '&::before': {
+              opacity: 1,
+              background: `linear-gradient(135deg, ${primary}40 0%, ${secondary}40 25%, ${accent}40 50%, ${primary}40 75%, ${primary}40 100%)`,
+            },
+            '&::after': reflectionColor ? {
+              opacity: 1,
+            } : {}
+          },
           '&::after': reflectionColor ? {
             content: '""',
             position: 'absolute',
@@ -119,11 +118,6 @@ export default function SimpleCardComponent({ children, onClick, className, refl
             zIndex: 1,
             pointerEvents: 'none',
           } : {},
-          '&:hover': {
-            '&::after': reflectionColor ? {
-              opacity: 1,
-            } : {}
-          }
         }}
       >
         <CardContent sx={{ position: 'relative', zIndex: 2, height: '100%' }}>
