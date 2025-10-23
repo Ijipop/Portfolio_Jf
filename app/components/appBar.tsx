@@ -1,9 +1,7 @@
 "use client";
 
 import ContactMailIcon from '@mui/icons-material/ContactMail';
-import DarkModeIcon from '@mui/icons-material/DarkMode';
 import HomeIcon from '@mui/icons-material/Home';
-import LightModeIcon from '@mui/icons-material/LightMode';
 import MenuIcon from '@mui/icons-material/Menu';
 import PersonIcon from '@mui/icons-material/Person';
 import WorkIcon from '@mui/icons-material/Work';
@@ -16,14 +14,12 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import { usePathname, useRouter } from 'next/navigation';
 import { useState } from "react";
-import { useAdvancedTheme } from '../contexts/AdvancedThemeContext';
 import LoginModal from './LoginModal';
 import { ThemeSelector } from './ThemeSelector';
 
 import './components.css';
 
 export default function AppBarComponent() {
-	const { mode, toggleMode } = useAdvancedTheme();
 	const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 	const [loginModalOpen, setLoginModalOpen] = useState(false);
 	const open = Boolean(anchorEl);
@@ -193,13 +189,6 @@ export default function AppBarComponent() {
 							<MenuIcon />
 						</IconButton>
 						<ThemeSelector />
-						<IconButton 
-							color="inherit" 
-							aria-label="dark mode toggle" 
-							onClick={toggleMode}
-						> 
-							{mode === 'dark' ? <LightModeIcon /> : <DarkModeIcon />}
-						</IconButton>
 					</Box>
 					
 					{/* Menu déroulant pour admin */}

@@ -57,10 +57,8 @@ const themes = {
 }
 
 interface AdvancedThemeContextType {
-  mode: PaletteMode
   themeName: string
   customTheme: any
-  toggleMode: () => void
   setTheme: (themeName: string) => void
   availableThemes: string[]
 }
@@ -68,27 +66,19 @@ interface AdvancedThemeContextType {
 const AdvancedThemeContext = createContext<AdvancedThemeContextType | undefined>(undefined)
 
 export function AdvancedThemeProvider({ children }: { children: React.ReactNode }) {
-  const [mode, setMode] = useState<PaletteMode>('light')
+  const mode: PaletteMode = 'light' // Mode fixe à light
   const [themeName, setThemeName] = useState('default')
   const [customTheme, setCustomTheme] = useState(themes.default)
 
   // Charger les préférences depuis localStorage
   useEffect(() => {
-    const savedMode = localStorage.getItem('themeMode') as PaletteMode
     const savedTheme = localStorage.getItem('themeName')
     
-    if (savedMode) setMode(savedMode)
     if (savedTheme && themes[savedTheme as keyof typeof themes]) {
       setThemeName(savedTheme)
       setCustomTheme(themes[savedTheme as keyof typeof themes])
     }
   }, [])
-
-  const toggleMode = () => {
-    const newMode = mode === 'light' ? 'dark' : 'light'
-    setMode(newMode)
-    localStorage.setItem('themeMode', newMode)
-  }
 
   const setTheme = (newThemeName: string) => {
     if (themes[newThemeName as keyof typeof themes]) {
@@ -174,10 +164,8 @@ export function AdvancedThemeProvider({ children }: { children: React.ReactNode 
   return (
     <AdvancedThemeContext.Provider
       value={{
-        mode,
         themeName,
         customTheme,
-        toggleMode,
         setTheme,
         availableThemes: Object.keys(themes)
       }}
@@ -186,7 +174,7 @@ export function AdvancedThemeProvider({ children }: { children: React.ReactNode 
         <CssBaseline />
         <Box
           sx={{
-            background: mode === 'dark' ? customTheme.darkBackground : customTheme.background,
+            background: customTheme.background,
             minHeight: '100vh',
             transition: 'background 0.5s ease'
           }}

@@ -30,6 +30,7 @@ export function ThemeSelector() {
   
   const themes = [
     { name: 'Default', primary: '#1e3a8a', secondary: '#059669', bg: '#f8fafc', bg2: '#ffffff', isDefault: true },
+    { name: 'Dark Mode', primary: '#ff6b35', secondary: '#ff1744', bg: '#0a0a0a', bg2: '#1a1a1a' },
     { name: 'Neon', primary: '#00ff88', secondary: '#ff0080', bg: '#0a0a0a', bg2: '#000000' },
     { name: 'Sunset', primary: '#ff6b35', secondary: '#ff1744', bg: '#2d1b1b', bg2: '#1a0f0f' },
     { name: 'Ocean', primary: '#00bcd4', secondary: '#2196f3', bg: '#0f172a', bg2: '#0a0f1a' },
