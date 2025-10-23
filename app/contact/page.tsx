@@ -1,29 +1,34 @@
 'use client'
 
-import AppBarComponent from '../components/appBar'
+import ContentCopyIcon from '@mui/icons-material/ContentCopy'
+import EmailIcon from '@mui/icons-material/Email'
+import GitHubIcon from '@mui/icons-material/GitHub'
+import LinkedInIcon from '@mui/icons-material/LinkedIn'
+import LocationOnIcon from '@mui/icons-material/LocationOn'
+import PhoneIcon from '@mui/icons-material/Phone'
+import SendIcon from '@mui/icons-material/Send'
+import { Alert, Button, Box as MuiBox, Snackbar } from '@mui/material'
 import Box from '@mui/material/Box'
 import Container from '@mui/material/Container'
 import Typography from '@mui/material/Typography'
 import { styled } from '@mui/material/styles'
-import EmailIcon from '@mui/icons-material/Email'
-import PhoneIcon from '@mui/icons-material/Phone'
-import LocationOnIcon from '@mui/icons-material/LocationOn'
-import LinkedInIcon from '@mui/icons-material/LinkedIn'
-import GitHubIcon from '@mui/icons-material/GitHub'
-import ContentCopyIcon from '@mui/icons-material/ContentCopy'
-import SendIcon from '@mui/icons-material/Send'
 import { useState } from 'react'
-import { Snackbar, Alert, Button, Box as MuiBox } from '@mui/material'
+import ParticleSystem from '../components/ParticleSystem'
+import AppBarComponent from '../components/appBar'
 
 const HeaderSection = styled(Box)(({ theme }) => ({
   background: theme.palette.mode === 'dark' 
     ? 'linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 25%, #2a2a2a 50%, #1a1a1a 75%, #0a0a0a 100%)'
     : 'linear-gradient(135deg, #1e3a8a 0%, #3b82f6 50%, #059669 100%)',
   color: 'white',
-  padding: theme.spacing(12, 0, 8),
+  padding: theme.spacing(6.75, 0, 4.5),
   textAlign: 'center',
   position: 'relative',
   overflow: 'hidden',
+  // Orange seulement pour h1 en dark mode
+  '& h1': {
+    color: theme.palette.mode === 'dark' ? '#ff6b35' : 'inherit'
+  },
   '&::before': {
     content: '""',
     position: 'absolute',
@@ -64,9 +69,7 @@ const HeaderSection = styled(Box)(({ theme }) => ({
 }))
 
 const ContactCard = styled(Box)(({ theme }) => ({
-  background: theme.palette.mode === 'dark'
-    ? 'linear-gradient(145deg, #1a1a1a 0%, #2a2a2a 50%, #1a1a1a 100%)'
-    : 'linear-gradient(145deg, #ffffff 0%, #fafbfc 30%, #f1f5f9 70%, #e2e8f0 100%)',
+  background: 'var(--card-background, linear-gradient(145deg, #ffffff 0%, #fafbfc 30%, #f1f5f9 70%, #e2e8f0 100%))',
   border: theme.palette.mode === 'dark' 
     ? '2px solid rgba(74, 85, 104, 0.2)' 
     : '1px solid rgba(148, 163, 184, 0.1)',
@@ -80,6 +83,11 @@ const ContactCard = styled(Box)(({ theme }) => ({
   cursor: 'pointer',
   position: 'relative',
   overflow: 'hidden',
+  // S'assurer que le contenu est au-dessus des pseudo-éléments
+  '& > *': {
+    position: 'relative',
+    zIndex: 1,
+  },
   '&::before': {
     content: '""',
     position: 'absolute',
@@ -89,9 +97,10 @@ const ContactCard = styled(Box)(({ theme }) => ({
     bottom: 0,
     background: theme.palette.mode === 'dark'
       ? 'linear-gradient(135deg, rgba(74, 85, 104, 0.1) 0%, rgba(45, 55, 72, 0.1) 50%, rgba(74, 85, 104, 0.05) 100%)'
-      : 'linear-gradient(135deg, rgba(59, 130, 246, 0.05) 0%, rgba(147, 197, 253, 0.05) 50%, rgba(59, 130, 246, 0.02) 100%)',
+      : 'linear-gradient(135deg, var(--card-primary, transparent) 0%, var(--card-secondary, transparent) 50%, var(--card-primary, transparent) 100%)',
     opacity: 0,
     transition: 'opacity 0.3s ease',
+    zIndex: 0,
   },
   '&::after': {
     content: '""',
@@ -110,9 +119,7 @@ const ContactCard = styled(Box)(({ theme }) => ({
   },
   '&:hover': {
     transform: 'translateY(-12px) scale(1.03)',
-    boxShadow: theme.palette.mode === 'dark'
-      ? '0 30px 60px rgba(0, 0, 0, 0.7), 0 0 30px rgba(74, 85, 104, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2)'
-      : '0 20px 40px rgba(59, 130, 246, 0.15), 0 0 20px rgba(147, 197, 253, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.8)',
+    boxShadow: `0 30px 60px rgba(0, 0, 0, 0.7), 0 0 30px var(--card-hover-primary), 0 0 60px var(--card-hover-glow), inset 0 1px 0 rgba(255, 255, 255, 0.2)`,
     '&::before': {
       opacity: 1,
     },
@@ -220,6 +227,7 @@ export default function Contact() {
         ? 'linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 25%, #2a2a2a 50%, #1a1a1a 75%, #0a0a0a 100%)'
         : 'linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)',
       position: 'relative',
+      overflow: 'hidden',
       '&::before': {
         content: '""',
         position: 'fixed',
@@ -234,6 +242,14 @@ export default function Contact() {
         zIndex: 0,
       }
     }}>
+      {/* Particle System */}
+      <ParticleSystem 
+        particleCount={100}
+        speed={0.5}
+        colors={['#ff6b35', '#ff1744', '#3b82f6', '#059669']}
+        mouseInteraction={true}
+      />
+      
       <AppBarComponent />
       
       <HeaderSection>
@@ -246,16 +262,23 @@ export default function Contact() {
               fontWeight: 900,
               fontSize: { xs: '3rem', md: '4.5rem' },
               textShadow: (theme) => theme.palette.mode === 'dark'
-                ? '0 0 20px rgba(255, 107, 53, 0.5), 0 4px 8px rgba(0,0,0,0.8)'
+                ? '0 0 20px rgba(255, 107, 53, 0.8), 0 0 40px rgba(255, 107, 53, 0.4), 0 4px 8px rgba(0,0,0,0.8)'
                 : '0 4px 8px rgba(0,0,0,0.3)',
               letterSpacing: '0.1em',
               textTransform: 'uppercase',
-              background: (theme) => theme.palette.mode === 'dark'
-                ? 'linear-gradient(45deg, #ff6b35, #ffffff, #ff1744)'
-                : 'inherit',
-              backgroundClip: (theme) => theme.palette.mode === 'dark' ? 'text' : 'initial',
-              WebkitBackgroundClip: (theme) => theme.palette.mode === 'dark' ? 'text' : 'initial',
-              WebkitTextFillColor: (theme) => theme.palette.mode === 'dark' ? 'transparent' : 'inherit',
+              color: (theme) => theme.palette.mode === 'dark' ? '#ff6b35' : 'inherit',
+              // Effet de glow animé
+              animation: (theme) => theme.palette.mode === 'dark' ? 'glow-pulse 2s ease-in-out infinite alternate' : 'none',
+              '@keyframes glow-pulse': {
+                '0%': {
+                  textShadow: '0 0 20px rgba(255, 107, 53, 0.8), 0 0 40px rgba(255, 107, 53, 0.4)',
+                  filter: 'brightness(1)'
+                },
+                '100%': {
+                  textShadow: '0 0 30px rgba(255, 107, 53, 1), 0 0 60px rgba(255, 107, 53, 0.6)',
+                  filter: 'brightness(1.2)'
+                }
+              }
             }}
           >
             Contact
@@ -274,7 +297,7 @@ export default function Contact() {
         </Container>
       </HeaderSection>
 
-      <Container maxWidth="lg" sx={{ py: 8 }}>
+      <Container maxWidth="lg" sx={{ py: 8, position: 'relative', zIndex: 2 }}>
         <Box sx={{ 
           display: 'grid', 
           gridTemplateColumns: { xs: '1fr', md: 'repeat(3, 1fr)' },

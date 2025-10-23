@@ -1,27 +1,34 @@
 'use client'
 
-import AppBarComponent from '../components/appBar'
+import EmojiEventsIcon from '@mui/icons-material/EmojiEvents'
+import PersonIcon from '@mui/icons-material/Person'
+import RotateRightIcon from '@mui/icons-material/RotateRight'
+import SchoolIcon from '@mui/icons-material/School'
+import WorkIcon from '@mui/icons-material/Work'
 import Box from '@mui/material/Box'
 import Container from '@mui/material/Container'
 import Typography from '@mui/material/Typography'
 import { styled } from '@mui/material/styles'
-import PersonIcon from '@mui/icons-material/Person'
-import WorkIcon from '@mui/icons-material/Work'
-import SchoolIcon from '@mui/icons-material/School'
-import EmojiEventsIcon from '@mui/icons-material/EmojiEvents'
-import RotateRightIcon from '@mui/icons-material/RotateRight'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
+import ParticleSystem from '../components/ParticleSystem'
+import SimpleSkillTag from '../components/SimpleSkillTag'
+import AppBarComponent from '../components/appBar'
+import { useAdvancedTheme } from '../contexts/AdvancedThemeContext'
 
 const HeaderSection = styled(Box)(({ theme }) => ({
   background: theme.palette.mode === 'dark' 
     ? 'linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 25%, #2a2a2a 50%, #1a1a1a 75%, #0a0a0a 100%)'
     : 'linear-gradient(135deg, #1e3a8a 0%, #3b82f6 50%, #059669 100%)',
   color: 'white',
-  padding: theme.spacing(12, 0, 8),
+  padding: theme.spacing(6.75, 0, 4.5),
   textAlign: 'center',
   position: 'relative',
   overflow: 'hidden',
+  // Orange seulement pour h1 en dark mode
+  '& h1': {
+    color: theme.palette.mode === 'dark' ? '#ff6b35' : 'inherit'
+  },
   '&::before': {
     content: '""',
     position: 'absolute',
@@ -99,9 +106,7 @@ const FlipCardFront = styled(Box)(({ theme }) => ({
   backfaceVisibility: 'hidden',
   WebkitBackfaceVisibility: 'hidden',
   MozBackfaceVisibility: 'hidden',
-  background: theme.palette.mode === 'dark'
-    ? 'linear-gradient(145deg, #1a1a1a 0%, #2a2a2a 50%, #1a1a1a 100%)'
-    : 'linear-gradient(145deg, #ffffff 0%, #fafbfc 30%, #f1f5f9 70%, #e2e8f0 100%)',
+  background: 'var(--card-background, linear-gradient(145deg, #ffffff 0%, #fafbfc 30%, #f1f5f9 70%, #e2e8f0 100%))',
   border: theme.palette.mode === 'dark' 
     ? '2px solid rgba(74, 85, 104, 0.2)' 
     : '1px solid rgba(148, 163, 184, 0.1)',
@@ -126,7 +131,7 @@ const FlipCardFront = styled(Box)(({ theme }) => ({
     bottom: 0,
     background: theme.palette.mode === 'dark'
       ? 'linear-gradient(135deg, rgba(74, 85, 104, 0.1) 0%, rgba(45, 55, 72, 0.1) 50%, rgba(74, 85, 104, 0.05) 100%)'
-      : 'linear-gradient(135deg, rgba(59, 130, 246, 0.05) 0%, rgba(147, 197, 253, 0.05) 50%, rgba(59, 130, 246, 0.02) 100%)',
+      : 'linear-gradient(135deg, var(--card-primary, transparent) 0%, var(--card-secondary, transparent) 50%, var(--card-primary, transparent) 100%)',
     opacity: 0,
     transition: 'opacity 0.3s ease',
   },
@@ -145,14 +150,7 @@ const FlipCardFront = styled(Box)(({ theme }) => ({
     opacity: 0,
     transition: 'opacity 0.3s ease',
   },
-  '&:hover': {
-    '&::before': {
-      opacity: 1,
-    },
-    '&::after': {
-      opacity: 1,
-    }
-  }
+  // Suppression des effets de couleur au hover
 }))
 
 const FlipCardBack = styled(Box)(({ theme }) => ({
@@ -162,9 +160,7 @@ const FlipCardBack = styled(Box)(({ theme }) => ({
   backfaceVisibility: 'hidden',
   WebkitBackfaceVisibility: 'hidden',
   MozBackfaceVisibility: 'hidden',
-  background: theme.palette.mode === 'dark'
-    ? 'linear-gradient(145deg, #2a2a2a 0%, #3a3a3a 50%, #2a2a2a 100%)'
-    : 'linear-gradient(145deg, #f1f5f9 0%, #e2e8f0 30%, #cbd5e1 70%, #94a3b8 100%)',
+  background: `linear-gradient(145deg, var(--card-secondary, #059669)20 0%, var(--card-primary, #1e3a8a)20 50%, var(--card-secondary, #059669)20 100%)`,
   border: theme.palette.mode === 'dark' 
     ? '2px solid rgba(74, 85, 104, 0.3)' 
     : '1px solid rgba(148, 163, 184, 0.2)',
@@ -183,36 +179,29 @@ const FlipCardBack = styled(Box)(({ theme }) => ({
   overflow: 'hidden',
 }))
 
-const SkillTag = styled(Box)(({ theme }) => ({
-  display: 'inline-block',
-  background: theme.palette.mode === 'dark'
-    ? 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
-    : 'linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%)',
-  color: 'white',
-  padding: theme.spacing(0.5, 1.5),
-  borderRadius: 20,
-  fontSize: '0.875rem',
-  fontWeight: 500,
-  margin: theme.spacing(0.5),
-  transition: 'all 0.3s ease',
-  boxShadow: theme.palette.mode === 'dark'
-    ? '0 2px 8px rgba(102, 126, 234, 0.3)'
-    : '0 2px 8px rgba(79, 70, 229, 0.3)',
-  '&:hover': {
-    transform: 'scale(1.05)',
-    boxShadow: theme.palette.mode === 'dark'
-      ? '0 4px 16px rgba(102, 126, 234, 0.4)'
-      : '0 4px 16px rgba(79, 70, 229, 0.4)',
-  }
-}))
 
 export default function About() {
   const router = useRouter()
+  const { customTheme } = useAdvancedTheme()
   const [flippedCards, setFlippedCards] = useState<{ [key: string]: boolean }>({
     who: false,
     formation: false,
     experience: false
   })
+
+  // Utiliser directement la couleur primaire du thème personnalisé
+  const getPaletteColor = () => {
+    console.log('customTheme:', customTheme)
+    console.log('customTheme.primary:', customTheme.primary)
+    return customTheme.primary
+  }
+
+
+  // Créer des styles dynamiques basés sur le thème
+  const dynamicStyles = {
+    titleColor: getPaletteColor(),
+    titleShadow: `0 2px 4px ${getPaletteColor()}40`
+  }
 
   const handleCardFlip = (cardKey: string) => {
     setFlippedCards(prev => ({
@@ -228,6 +217,7 @@ export default function About() {
         ? 'linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 25%, #2a2a2a 50%, #1a1a1a 75%, #0a0a0a 100%)'
         : 'linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)',
       position: 'relative',
+      overflow: 'hidden',
       '&::before': {
         content: '""',
         position: 'fixed',
@@ -242,6 +232,14 @@ export default function About() {
         zIndex: 0,
       }
     }}>
+      {/* Particle System */}
+      <ParticleSystem 
+        particleCount={120}
+        speed={0.4}
+        colors={['#ff6b35', '#ff1744', '#3b82f6', '#059669']}
+        mouseInteraction={true}
+      />
+      
       <AppBarComponent />
       
       {/* Hero Section */}
@@ -255,16 +253,23 @@ export default function About() {
               fontWeight: 900,
               fontSize: { xs: '3rem', md: '4.5rem' },
               textShadow: (theme) => theme.palette.mode === 'dark'
-                ? '0 0 20px rgba(255, 107, 53, 0.5), 0 4px 8px rgba(0,0,0,0.8)'
+                ? '0 0 20px rgba(255, 107, 53, 0.8), 0 0 40px rgba(255, 107, 53, 0.4), 0 4px 8px rgba(0,0,0,0.8)'
                 : '0 4px 8px rgba(0,0,0,0.3)',
               letterSpacing: '0.1em',
               textTransform: 'uppercase',
-              background: (theme) => theme.palette.mode === 'dark'
-                ? 'linear-gradient(45deg, #ff6b35, #ffffff, #ff1744)'
-                : 'inherit',
-              backgroundClip: (theme) => theme.palette.mode === 'dark' ? 'text' : 'initial',
-              WebkitBackgroundClip: (theme) => theme.palette.mode === 'dark' ? 'text' : 'initial',
-              WebkitTextFillColor: (theme) => theme.palette.mode === 'dark' ? 'transparent' : 'inherit',
+              color: (theme) => theme.palette.mode === 'dark' ? '#ff6b35' : 'inherit',
+              // Effet de glow animé
+              animation: (theme) => theme.palette.mode === 'dark' ? 'glow-pulse 2s ease-in-out infinite alternate' : 'none',
+              '@keyframes glow-pulse': {
+                '0%': {
+                  textShadow: '0 0 20px rgba(255, 107, 53, 0.8), 0 0 40px rgba(255, 107, 53, 0.4)',
+                  filter: 'brightness(1)'
+                },
+                '100%': {
+                  textShadow: '0 0 30px rgba(255, 107, 53, 1), 0 0 60px rgba(255, 107, 53, 0.6)',
+                  filter: 'brightness(1.2)'
+                }
+              }
             }}
           >
             À Propos
@@ -283,7 +288,7 @@ export default function About() {
         </Container>
       </HeaderSection>
 
-      <Container maxWidth="lg" sx={{ py: 6 }}>
+      <Container maxWidth="lg" sx={{ py: 6, position: 'relative', zIndex: 2 }}>
 
         <Box sx={{ 
           display: 'grid', 
@@ -308,17 +313,34 @@ export default function About() {
                 }}
               >
                 <PersonIcon sx={{ fontSize: 48, color: 'primary.main', mb: 2 }} />
-                <Typography variant="h5" gutterBottom>
+                <Typography 
+                  variant="h5" 
+                  gutterBottom 
+                  style={{ 
+                    fontWeight: 'bold',
+                    color: dynamicStyles.titleColor,
+                    textShadow: dynamicStyles.titleShadow
+                  }}
+                >
                   Qui suis-je ?
                 </Typography>
-                <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
+                <Typography variant="body1" sx={{ 
+                  mb: 3,
+                  color: '#ffffff',
+                  textShadow: '0 1px 2px rgba(0,0,0,0.8)'
+                }}>
                   Développeur passionné par la création d&apos;applications web modernes et innovantes.
                 </Typography>
-                <Box>
-                  <SkillTag>Material-UI</SkillTag>
-                  <SkillTag>Prisma</SkillTag>
-                  <SkillTag>PostgreSQL</SkillTag>
-                  <SkillTag>Vercel</SkillTag>
+                <Box sx={{ 
+                  visibility: 'visible !important',
+                  opacity: '1 !important',
+                  zIndex: 1000,
+                  position: 'relative'
+                }}>
+                  <SimpleSkillTag>Material-UI</SimpleSkillTag>
+                  <SimpleSkillTag>Prisma</SimpleSkillTag>
+                  <SimpleSkillTag>PostgreSQL</SimpleSkillTag>
+                  <SimpleSkillTag>Vercel</SimpleSkillTag>
                 </Box>
                 <Box sx={{ 
                   position: 'absolute', 
@@ -346,16 +368,45 @@ export default function About() {
                   WebkitTransform: 'rotateY(180deg)',
                 }}
               >
-                <Typography variant="h5" sx={{ color: 'primary.main', mb: 2, fontWeight: 'bold' }}>
+                <Typography 
+                  variant="h5" 
+                  style={{ 
+                    color: dynamicStyles.titleColor,
+                    marginBottom: '16px', 
+                    fontWeight: 'bold',
+                    textShadow: dynamicStyles.titleShadow
+                  }}
+                >
                   Jean-François Lefebvre
                 </Typography>
-                <Typography variant="body1" sx={{ mb: 2, textAlign: 'left', lineHeight: 1.6 }}>
+                <Typography variant="body1" sx={{ 
+                  mb: 2, 
+                  textAlign: 'left', 
+                  lineHeight: 1.6,
+                  color: '#ffffff',
+                  textShadow: '0 1px 2px rgba(0,0,0,0.8)'
+                }}>
                   Passionné par l'informatique et les jeux vidéo. Grand consommateur d'applications mobiles et web.
                 </Typography>
-                <Typography variant="body1" sx={{ mb: 2, textAlign: 'left', lineHeight: 1.6 }}>
-                  À 38 ans, suite à des problèmes de santé, je me suis réorienté vers le développement d'applications.
+                <Typography variant="body1" sx={{ 
+                  mb: 2, 
+                  textAlign: 'left', 
+                  lineHeight: 1.6,
+                  color: '#ffffff',
+                  textShadow: '0 1px 2px rgba(0,0,0,0.8)'
+                }}>
+                  À 41 ans, je me suis réorienté vers le développement d'applications.  Pour ainsi réalisé mon rêve de travailler dans cette industrie.
                 </Typography>
-                <Typography variant="body1" sx={{ textAlign: 'left', lineHeight: 1.6, fontWeight: 'bold', color: 'primary.main' }}>
+                <Typography 
+                  variant="body1" 
+                  style={{ 
+                    textAlign: 'left', 
+                    lineHeight: 1.6, 
+                    fontWeight: 'bold', 
+                    color: dynamicStyles.titleColor,
+                    textShadow: `0 1px 2px ${dynamicStyles.titleColor}40`
+                  }}
+                >
                   Motivé et heureux de pouvoir enfin jumeler passion et travail !
                 </Typography>
                 <Typography variant="body1" color="text.secondary">
@@ -382,16 +433,33 @@ export default function About() {
                 }}
               >
                 <SchoolIcon sx={{ fontSize: 48, color: 'primary.main', mb: 2 }} />
-                <Typography variant="h5" gutterBottom>
+                <Typography 
+                  variant="h5" 
+                  gutterBottom 
+                  style={{ 
+                    fontWeight: 'bold',
+                    color: dynamicStyles.titleColor,
+                    textShadow: dynamicStyles.titleShadow
+                  }}
+                >
                   Formation
                 </Typography>
-                <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
+                <Typography variant="body1" sx={{ 
+                  mb: 3,
+                  color: '#ffffff',
+                  textShadow: '0 1px 2px rgba(0,0,0,0.8)'
+                }}>
                   Formation en développement d'applications avec focus sur les technologies modernes.
                 </Typography>
-                <Box>
-                  <SkillTag>Responsive Design</SkillTag>
-                  <SkillTag>GitHub</SkillTag>
-                  <SkillTag>JSON</SkillTag>
+                <Box sx={{ 
+                  visibility: 'visible !important',
+                  opacity: '1 !important',
+                  zIndex: 1000,
+                  position: 'relative'
+                }}>
+                  <SimpleSkillTag>Responsive Design</SimpleSkillTag>
+                  <SimpleSkillTag>GitHub</SimpleSkillTag>
+                  <SimpleSkillTag>JSON</SimpleSkillTag>
                 </Box>
                 <Box sx={{ 
                   position: 'absolute', 
@@ -419,13 +487,33 @@ export default function About() {
                   WebkitTransform: 'rotateY(180deg)',
                 }}
               >
-                <Typography variant="h5" sx={{ color: 'primary.main', mb: 2, fontWeight: 'bold' }}>
+                <Typography 
+                  variant="h5" 
+                  style={{ 
+                    color: dynamicStyles.titleColor,
+                    marginBottom: '16px', 
+                    fontWeight: 'bold',
+                    textShadow: dynamicStyles.titleShadow
+                  }}
+                >
                   Formation
                 </Typography>
-                <Typography variant="body1" sx={{ mb: 1, textAlign: 'left', lineHeight: 1.6 }}>
+                <Typography variant="body1" sx={{ 
+                  mb: 1, 
+                  textAlign: 'left', 
+                  lineHeight: 1.6,
+                  color: '#ffffff',
+                  textShadow: '0 1px 2px rgba(0,0,0,0.8)'
+                }}>
                   • DEP en soutien informatique à l'ÉMICA (2023-2024)
                 </Typography>
-                <Typography variant="body1" sx={{ mb: 1, textAlign: 'left', lineHeight: 1.6 }}>
+                <Typography variant="body1" sx={{ 
+                  mb: 1, 
+                  textAlign: 'left', 
+                  lineHeight: 1.6,
+                  color: '#ffffff',
+                  textShadow: '0 1px 2px rgba(0,0,0,0.8)'
+                }}>
                   • AEC Développement de logiciels, sécurité d'applications de bureau, mobiles et Web (2024-2026)
                 </Typography>
                 <Typography variant="body1" color="text.secondary">
@@ -452,16 +540,33 @@ export default function About() {
                 }}
               >
                 <WorkIcon sx={{ fontSize: 48, color: 'primary.main', mb: 2 }} />
-                <Typography variant="h5" gutterBottom>
+                <Typography 
+                  variant="h5" 
+                  gutterBottom 
+                  style={{ 
+                    fontWeight: 'bold',
+                    color: dynamicStyles.titleColor,
+                    textShadow: dynamicStyles.titleShadow
+                  }}
+                >
                   Expérience
                 </Typography>
-                <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
+                <Typography variant="body1" sx={{ 
+                  mb: 3,
+                  color: '#ffffff',
+                  textShadow: '0 1px 2px rgba(0,0,0,0.8)'
+                }}>
                   En toute honnêteté, je n'ai pas d'expérience dans le développement d'applications. Je termine actuellement ma formation en développement d'applications et je suis à la recherche d'un stage pour appliquer mes connaissances.
                 </Typography>
-                <Box>
-                  <SkillTag>MVC</SkillTag>
-                  <SkillTag>CRUD</SkillTag>
-                  <SkillTag>REST API</SkillTag>
+                <Box sx={{ 
+                  visibility: 'visible !important',
+                  opacity: '1 !important',
+                  zIndex: 1000,
+                  position: 'relative'
+                }}>
+                  <SimpleSkillTag>MVC</SimpleSkillTag>
+                  <SimpleSkillTag>CRUD</SimpleSkillTag>
+                  <SimpleSkillTag>REST API</SimpleSkillTag>
                 </Box>
                 <Box sx={{ 
                   position: 'absolute', 
@@ -489,10 +594,27 @@ export default function About() {
                   WebkitTransform: 'rotateY(180deg)',
                 }}
               >
-                <Typography variant="h5" sx={{ color: 'primary.main', mb: 2, fontWeight: 'bold' }}>
+                <Typography 
+                  variant="h5" 
+                  style={{ 
+                    color: dynamicStyles.titleColor,
+                    marginBottom: '16px', 
+                    fontWeight: 'bold',
+                    textShadow: dynamicStyles.titleShadow
+                  }}
+                >
                   Expérience
                 </Typography>
-                <Typography variant="body1" sx={{ textAlign: 'center', lineHeight: 1.6, fontWeight: 'bold', color: 'primary.main' }}>
+                <Typography 
+                  variant="body1" 
+                  style={{ 
+                    textAlign: 'center', 
+                    lineHeight: 1.6, 
+                    fontWeight: 'bold', 
+                    color: dynamicStyles.titleColor,
+                    textShadow: `0 1px 2px ${dynamicStyles.titleColor}40`
+                  }}
+                >
                   Merci de me donner une chance de travailler avec vous !
                 </Typography>
                 <Typography variant="body1" color="text.secondary">
@@ -504,18 +626,12 @@ export default function About() {
         </Box>
 
         <Box sx={{ 
-          background: (theme) => theme.palette.mode === 'dark'
-            ? 'linear-gradient(145deg, #1a1a1a 0%, #2a2a2a 50%, #1a1a1a 100%)'
-            : 'linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%)',
-          border: (theme) => theme.palette.mode === 'dark' 
-            ? '2px solid rgba(255, 107, 53, 0.3)' 
-            : '1px solid rgba(0,0,0,0.08)',
+          background: 'var(--card-background, linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%))',
+          border: '1px solid var(--card-primary, rgba(0,0,0,0.08))',
           borderRadius: 24,
           padding: 4,
           textAlign: 'center',
-          boxShadow: (theme) => theme.palette.mode === 'dark'
-            ? '0 15px 50px rgba(0, 0, 0, 0.6), 0 0 20px rgba(255, 107, 53, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.1)'
-            : '0 8px 32px rgba(0,0,0,0.1)',
+          boxShadow: '0 8px 32px var(--card-primary, rgba(0,0,0,0.1))',
           mb: 8,
           position: 'relative',
           overflow: 'hidden',
@@ -526,31 +642,42 @@ export default function About() {
             left: 0,
             right: 0,
             bottom: 0,
-            background: (theme) => theme.palette.mode === 'dark'
-              ? 'linear-gradient(135deg, rgba(255, 107, 53, 0.1) 0%, rgba(255, 23, 68, 0.1) 50%, rgba(255, 107, 53, 0.05) 100%)'
-              : 'transparent',
+            background: `linear-gradient(135deg, var(--card-primary, rgba(30, 58, 138, 0.1)) 0%, var(--card-secondary, rgba(5, 150, 105, 0.1)) 50%, var(--card-primary, rgba(30, 58, 138, 0.05)) 100%)`,
             opacity: 0.3,
           }
         }}>
-          <Typography variant="h4" gutterBottom sx={{ mb: 3 }}>
+          <Typography 
+            variant="h4" 
+            gutterBottom 
+            style={{ 
+              marginBottom: '24px',
+              fontWeight: 'bold',
+              color: dynamicStyles.titleColor,
+              textShadow: dynamicStyles.titleShadow
+            }}
+          >
             Mes Compétences Techniques
           </Typography>
           <Box sx={{ 
             display: 'flex', 
             flexWrap: 'wrap', 
             justifyContent: 'center',
-            gap: 1
+            gap: 1,
+            visibility: 'visible !important',
+            opacity: '1 !important',
+            zIndex: 1000,
+            position: 'relative'
           }}>
-          <SkillTag>Python</SkillTag>
-          <SkillTag>Java</SkillTag>
-          <SkillTag>React</SkillTag>
-          <SkillTag>Next.js</SkillTag>
-          <SkillTag>TypeScript</SkillTag>
-          <SkillTag>JavaScript</SkillTag>
-          <SkillTag>SQL</SkillTag>
-          <SkillTag>CSS3</SkillTag>
-          <SkillTag>HTML5</SkillTag>
-          <SkillTag>Git</SkillTag>
+          <SimpleSkillTag>Python</SimpleSkillTag>
+          <SimpleSkillTag>Java</SimpleSkillTag>
+          <SimpleSkillTag>React</SimpleSkillTag>
+          <SimpleSkillTag>Next.js</SimpleSkillTag>
+          <SimpleSkillTag>TypeScript</SimpleSkillTag>
+          <SimpleSkillTag>JavaScript</SimpleSkillTag>
+          <SimpleSkillTag>SQL</SimpleSkillTag>
+          <SimpleSkillTag>CSS3</SimpleSkillTag>
+          <SimpleSkillTag>HTML5</SimpleSkillTag>
+          <SimpleSkillTag>Git</SimpleSkillTag>
 
           </Box>
         </Box>
@@ -560,7 +687,15 @@ export default function About() {
           <Typography variant="h4" gutterBottom>
             Prêt à collaborer sur votre prochain projet ?
           </Typography>
-          <Typography variant="body1" color="text.secondary" sx={{ maxWidth: 600, mx: 'auto' }}>
+          <Typography 
+            variant="body1" 
+            sx={{ 
+              maxWidth: 600, 
+              mx: 'auto',
+              color: customTheme.name === 'Default' ? 'text.secondary' : '#ffffff',
+              textShadow: customTheme.name === 'Default' ? 'none' : '0 1px 2px rgba(0,0,0,0.8)'
+            }}
+          >
             N&apos;hésitez pas à me contacter pour discuter de vos idées et voir comment nous pouvons travailler ensemble.
           </Typography>
         </Box>
