@@ -86,8 +86,9 @@ export default function AppBarComponent() {
 				<Toolbar sx={{ 
 					display: 'flex', 
 					alignItems: 'center',
-					padding: { xs: 1, md: 2 },
-					gap: { xs: 1, md: 2 }
+					padding: { xs: '8px 4px', sm: 1, md: 2 },
+					gap: { xs: 0.5, sm: 1, md: 2 },
+					minHeight: { xs: '56px', sm: '64px' }
 				}}>
 					{/* Bouton Accueil */}
 					<IconButton 
@@ -101,14 +102,22 @@ export default function AppBarComponent() {
 					</IconButton>
 					
 					{/* Titre Portfolio */}
-					<Typography variant="h6" component="div" sx={{ mr: 2 }}>
+					<Typography 
+						variant="h6" 
+						component="div" 
+						sx={{ 
+							mr: { xs: 1, sm: 2 },
+							fontSize: { xs: '1rem', sm: '1.25rem' },
+							display: { xs: 'none', sm: 'block' }
+						}}
+					>
 						Portfolio
 					</Typography>
 					
 					{/* Onglets de navigation */}
 					<Box sx={{ 
-						display: 'flex', 
-						gap: 1,
+						display: { xs: 'none', sm: 'flex' }, 
+						gap: { xs: 0.5, sm: 1 },
 						flexGrow: 1,
 						justifyContent: 'center'
 					}}>
@@ -119,7 +128,7 @@ export default function AppBarComponent() {
 								color: pathname === '/projets' ? 'white' : 'rgba(255, 255, 255, 0.7)',
 								backgroundColor: pathname === '/projets' ? 'rgba(255, 255, 255, 0.1)' : 'transparent',
 								borderRadius: 2,
-								px: 2,
+								px: { xs: 1, sm: 2 },
 								py: 1,
 								'&:hover': {
 									color: 'white',
@@ -127,7 +136,7 @@ export default function AppBarComponent() {
 								},
 							}}
 						>
-							<WorkIcon sx={{ mr: 1 }} />
+							<WorkIcon sx={{ mr: { xs: 0, sm: 1 } }} />
 							<Typography variant="body2" sx={{ display: { xs: 'none', sm: 'block' } }}>
 								Projets
 							</Typography>
@@ -140,7 +149,7 @@ export default function AppBarComponent() {
 								color: pathname === '/a-propos' ? 'white' : 'rgba(255, 255, 255, 0.7)',
 								backgroundColor: pathname === '/a-propos' ? 'rgba(255, 255, 255, 0.1)' : 'transparent',
 								borderRadius: 2,
-								px: 2,
+								px: { xs: 1, sm: 2 },
 								py: 1,
 								'&:hover': {
 									color: 'white',
@@ -148,7 +157,7 @@ export default function AppBarComponent() {
 								},
 							}}
 						>
-							<PersonIcon sx={{ mr: 1 }} />
+							<PersonIcon sx={{ mr: { xs: 0, sm: 1 } }} />
 							<Typography variant="body2" sx={{ display: { xs: 'none', sm: 'block' } }}>
 								À propos
 							</Typography>
@@ -161,7 +170,7 @@ export default function AppBarComponent() {
 								color: pathname === '/contact' ? 'white' : 'rgba(255, 255, 255, 0.7)',
 								backgroundColor: pathname === '/contact' ? 'rgba(255, 255, 255, 0.1)' : 'transparent',
 								borderRadius: 2,
-								px: 2,
+								px: { xs: 1, sm: 2 },
 								py: 1,
 								'&:hover': {
 									color: 'white',
@@ -169,7 +178,7 @@ export default function AppBarComponent() {
 								},
 							}}
 						>
-							<ContactMailIcon sx={{ mr: 1 }} />
+							<ContactMailIcon sx={{ mr: { xs: 0, sm: 1 } }} />
 							<Typography variant="body2" sx={{ display: { xs: 'none', sm: 'block' } }}>
 								Contact
 							</Typography>

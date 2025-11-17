@@ -179,3 +179,68 @@ body {
 .theme-glow {
   animation: theme-glow 2s ease-in-out infinite;
 }
+
+/* Styles responsive pour mobile et iPhone */
+@media screen and (max-width: 600px) {
+  /* Assurer que le body prend toute la largeur */
+  html, body {
+    width: 100%;
+    overflow-x: hidden;
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* Prévenir le zoom automatique sur iOS */
+  input, textarea, select {
+    font-size: 16px !important;
+  }
+
+  /* Améliorer le rendu des textes sur mobile */
+  body {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* Assurer que les conteneurs ne débordent pas */
+  * {
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  /* Améliorer les espacements sur très petits écrans */
+  .MuiContainer-root {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+  }
+}
+
+/* Styles spécifiques pour iPhone (Safari) */
+@supports (-webkit-touch-callout: none) {
+  /* iPhone Safari specific styles */
+  body {
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Fix pour la barre d'adresse iOS */
+  @media screen and (max-width: 600px) {
+    body {
+      padding-bottom: env(safe-area-inset-bottom);
+    }
+  }
+}
+
+/* Améliorer les performances sur mobile */
+@media (prefers-reduced-motion: no-preference) {
+  * {
+    will-change: auto;
+  }
+}
+
+/* Optimisation pour les écrans haute densité (Retina) */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  body {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}

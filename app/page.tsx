@@ -27,6 +27,9 @@ const HeaderSection = styled(Box)(({ theme }) => ({
   textAlign: 'center',
   position: 'relative',
   overflow: 'hidden',
+  [theme.breakpoints.down('sm')]: {
+    padding: theme.spacing(4, 1, 3),
+  },
   '&::before': {
     content: '""',
     position: 'absolute',
@@ -76,6 +79,10 @@ const FeatureCard = styled(Box)(({ theme }) => ({
   borderRadius: 24,
   padding: theme.spacing(4),
   textAlign: 'center',
+  [theme.breakpoints.down('sm')]: {
+    padding: theme.spacing(2.5),
+    borderRadius: 16,
+  },
   boxShadow: theme.palette.mode === 'dark'
     ? '0 15px 50px rgba(0, 0, 0, 0.6), 0 0 20px rgba(74, 85, 104, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.1)'
     : '0 4px 20px rgba(148, 163, 184, 0.08), 0 0 0 1px rgba(148, 163, 184, 0.05)',
@@ -176,11 +183,11 @@ export default function Home() {
               gutterBottom 
               sx={{ 
                 fontWeight: 900,
-                fontSize: { xs: '3rem', md: '4.5rem' },
+                fontSize: { xs: '2rem', sm: '3rem', md: '4.5rem' },
                 textShadow: (theme) => theme.palette.mode === 'dark'
                   ? '0 0 20px rgba(255, 107, 53, 0.5), 0 4px 8px rgba(0,0,0,0.8)'
                   : '0 4px 8px rgba(0,0,0,0.3)',
-                letterSpacing: '0.1em',
+                letterSpacing: { xs: '0.05em', sm: '0.1em' },
                 textTransform: 'uppercase',
                 // Force l'orange en dark mode
                 color: (theme) => theme.palette.mode === 'dark' ? '#ff6b35' : 'inherit',
@@ -219,16 +226,16 @@ export default function Home() {
         </Container>
       </HeaderSection>
 
-      <Container maxWidth="lg" sx={{ py: 8, position: 'relative', zIndex: 2 }}>
-        <GlassContainer sx={{ mb: 6 }}>
+      <Container maxWidth="lg" sx={{ py: { xs: 4, md: 8 }, px: { xs: 2, sm: 3, md: 4 }, position: 'relative', zIndex: 2 }}>
+        <GlassContainer sx={{ mb: { xs: 4, md: 6 } }}>
           <Box sx={{ textAlign: 'center' }}>
             <Typography 
               variant="h3" 
               gutterBottom 
               sx={{ 
-                mb: 3,
+                mb: { xs: 2, md: 3 },
                 fontWeight: 900,
-                fontSize: { xs: '2rem', md: '3rem' },
+                fontSize: { xs: '1.5rem', sm: '2rem', md: '3rem' },
                 textShadow: (theme) => theme.palette.mode === 'dark'
                   ? '0 0 20px rgba(255, 107, 53, 0.6), 0 0 40px rgba(255, 23, 68, 0.4), 0 4px 8px rgba(0,0,0,0.8)'
                   : '0 0 20px var(--primary-color, rgba(30, 58, 138, 0.4)), 0 0 40px var(--secondary-color, rgba(59, 130, 246, 0.3)), 0 4px 8px rgba(0,0,0,0.3)',
@@ -272,7 +279,7 @@ export default function Home() {
         </GlassContainer>
 
         {/* Section Compétences */}
-        <Container maxWidth="lg" sx={{ py: 6, position: 'relative', zIndex: 2 }}>
+        <Container maxWidth="lg" sx={{ py: { xs: 4, md: 6 }, px: { xs: 2, sm: 3, md: 4 }, position: 'relative', zIndex: 2 }}>
           <Box sx={{ 
             background: (theme) => theme.palette.mode === 'dark'
               ? 'linear-gradient(145deg, rgba(26, 26, 26, 0.8) 0%, rgba(45, 45, 45, 0.8) 100%)'
@@ -280,8 +287,8 @@ export default function Home() {
             border: (theme) => theme.palette.mode === 'dark' 
               ? '1px solid rgba(74, 85, 104, 0.3)' 
               : '1px solid rgba(148, 163, 184, 0.2)',
-            borderRadius: 24,
-            padding: 4,
+            borderRadius: { xs: 16, md: 24 },
+            padding: { xs: 2, md: 4 },
             textAlign: 'center',
             boxShadow: (theme) => theme.palette.mode === 'dark'
               ? '0 8px 32px rgba(0, 0, 0, 0.3)'
@@ -329,8 +336,9 @@ export default function Home() {
         <Box sx={{ 
           display: 'grid', 
           gridTemplateColumns: { xs: '1fr', md: 'repeat(3, 1fr)' },
-          gap: 4,
-          mb: 8
+          gap: { xs: 2, md: 4 },
+          mb: { xs: 4, md: 8 },
+          px: { xs: 1, sm: 0 }
         }}>
           <FadeIn delay={0.8}>
             <HoverScale>
