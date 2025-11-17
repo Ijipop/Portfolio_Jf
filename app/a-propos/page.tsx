@@ -338,7 +338,12 @@ export default function About() {
                   visibility: 'visible !important',
                   opacity: '1 !important',
                   zIndex: 1000,
-                  position: 'relative'
+                  position: 'relative',
+                  // Cacher les tags sur mobile quand la carte est retournée
+                  display: { xs: flippedCards.who ? 'none' : 'flex', sm: 'flex' },
+                  flexWrap: 'wrap',
+                  justifyContent: 'center',
+                  gap: 1
                 }}>
                   <SimpleSkillTag>Material-UI</SimpleSkillTag>
                   <SimpleSkillTag>Prisma</SimpleSkillTag>
@@ -361,6 +366,20 @@ export default function About() {
                     }
                   }} />
                 </Box>
+                <Typography 
+                  variant="caption" 
+                  sx={{ 
+                    position: 'absolute',
+                    bottom: 8,
+                    left: '50%',
+                    transform: 'translateX(-50%)',
+                    fontSize: '0.65rem',
+                    opacity: 0.6,
+                    color: (theme) => theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.6)' : 'rgba(0, 0, 0, 0.6)'
+                  }}
+                >
+                  Cliquez pour retourner la carte
+                </Typography>
               </FlipCardFront>
               <FlipCardBack
                 sx={{
@@ -412,9 +431,6 @@ export default function About() {
                 >
                   Motivé et heureux de pouvoir enfin jumeler passion et travail !
                 </Typography>
-                <Typography variant="body1" color="text.secondary">
-                  Cliquez pour retourner la carte
-                </Typography>
               </FlipCardBack>
             </FlipCardInner>
           </FlipCard>
@@ -458,7 +474,12 @@ export default function About() {
                   visibility: 'visible !important',
                   opacity: '1 !important',
                   zIndex: 1000,
-                  position: 'relative'
+                  position: 'relative',
+                  // Cacher les tags sur mobile quand la carte est retournée
+                  display: { xs: flippedCards.formation ? 'none' : 'flex', sm: 'flex' },
+                  flexWrap: 'wrap',
+                  justifyContent: 'center',
+                  gap: 1
                 }}>
                   <SimpleSkillTag>Responsive Design</SimpleSkillTag>
                   <SimpleSkillTag>GitHub</SimpleSkillTag>
@@ -480,6 +501,20 @@ export default function About() {
                     }
                   }} />
                 </Box>
+                <Typography 
+                  variant="caption" 
+                  sx={{ 
+                    position: 'absolute',
+                    bottom: 8,
+                    left: '50%',
+                    transform: 'translateX(-50%)',
+                    fontSize: '0.65rem',
+                    opacity: 0.6,
+                    color: (theme) => theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.6)' : 'rgba(0, 0, 0, 0.6)'
+                  }}
+                >
+                  Cliquez pour retourner la carte
+                </Typography>
               </FlipCardFront>
               <FlipCardBack
                 sx={{
@@ -518,9 +553,6 @@ export default function About() {
                   textShadow: '0 1px 2px rgba(0,0,0,0.8)'
                 }}>
                   • AEC Développement de logiciels, sécurité d'applications de bureau, mobiles et Web (2024-2026)
-                </Typography>
-                <Typography variant="body1" color="text.secondary">
-                  Cliquez pour retourner la carte
                 </Typography>
               </FlipCardBack>
             </FlipCardInner>
@@ -565,7 +597,12 @@ export default function About() {
                   visibility: 'visible !important',
                   opacity: '1 !important',
                   zIndex: 1000,
-                  position: 'relative'
+                  position: 'relative',
+                  // Cacher les tags sur mobile quand la carte est retournée
+                  display: { xs: flippedCards.experience ? 'none' : 'flex', sm: 'flex' },
+                  flexWrap: 'wrap',
+                  justifyContent: 'center',
+                  gap: 1
                 }}>
                   <SimpleSkillTag>MVC</SimpleSkillTag>
                   <SimpleSkillTag>CRUD</SimpleSkillTag>
@@ -587,6 +624,20 @@ export default function About() {
                     }
                   }} />
                 </Box>
+                <Typography 
+                  variant="caption" 
+                  sx={{ 
+                    position: 'absolute',
+                    bottom: 8,
+                    left: '50%',
+                    transform: 'translateX(-50%)',
+                    fontSize: '0.65rem',
+                    opacity: 0.6,
+                    color: (theme) => theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.6)' : 'rgba(0, 0, 0, 0.6)'
+                  }}
+                >
+                  Cliquez pour retourner la carte
+                </Typography>
               </FlipCardFront>
               <FlipCardBack
                 sx={{
@@ -619,9 +670,6 @@ export default function About() {
                   }}
                 >
                   Merci de me donner une chance de travailler avec vous !
-                </Typography>
-                <Typography variant="body1" color="text.secondary">
-                  Cliquez pour retourner la carte
                 </Typography>
               </FlipCardBack>
             </FlipCardInner>
