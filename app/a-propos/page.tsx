@@ -25,6 +25,9 @@ const HeaderSection = styled(Box)(({ theme }) => ({
   textAlign: 'center',
   position: 'relative',
   overflow: 'hidden',
+  [theme.breakpoints.down('sm')]: {
+    padding: theme.spacing(4, 1, 3),
+  },
   // Orange seulement pour h1 en dark mode
   '& h1': {
     color: theme.palette.mode === 'dark' ? '#ff6b35' : 'inherit'

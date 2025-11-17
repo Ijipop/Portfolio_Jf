@@ -46,6 +46,9 @@ const HeaderSection = styled(Box)(({ theme }) => ({
   textAlign: 'center',
   position: 'relative',
   overflow: 'hidden',
+  [theme.breakpoints.down('sm')]: {
+    padding: theme.spacing(4, 1, 3),
+  },
   // Orange seulement pour h1 en dark mode
   '& h1': {
     color: theme.palette.mode === 'dark' ? '#ff6b35' : 'inherit'
@@ -107,6 +110,11 @@ const ProjectCard = styled(Card)(({ theme }) => ({
   cursor: 'pointer',
   zIndex: 1,
   height: '400px', // Hauteur fixe réduite
+  [theme.breakpoints.down('sm')]: {
+    borderRadius: 16,
+    height: 'auto',
+    minHeight: '300px',
+  },
   '&:hover': {
     transform: 'translateY(-12px) scale(1.03)',
     boxShadow: theme.palette.mode === 'dark'
@@ -238,8 +246,13 @@ const ProjectsGrid = styled(Box)(({ theme }) => ({
   display: 'grid',
   gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))',
   gap: theme.spacing(4),
+  [theme.breakpoints.down('sm')]: {
+    gridTemplateColumns: '1fr',
+    gap: theme.spacing(2),
+  },
   [theme.breakpoints.down('md')]: {
     gridTemplateColumns: '1fr',
+    gap: theme.spacing(3),
   },
   [theme.breakpoints.up('lg')]: {
     gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))',
@@ -251,6 +264,11 @@ const StatsGrid = styled(Box)(({ theme }) => ({
   gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
   gap: theme.spacing(3),
   marginBottom: theme.spacing(6),
+  [theme.breakpoints.down('sm')]: {
+    gridTemplateColumns: '1fr',
+    gap: theme.spacing(2),
+    marginBottom: theme.spacing(4),
+  },
 }))
 
 export default function Projets() {

@@ -25,6 +25,9 @@ const HeaderSection = styled(Box)(({ theme }) => ({
   textAlign: 'center',
   position: 'relative',
   overflow: 'hidden',
+  [theme.breakpoints.down('sm')]: {
+    padding: theme.spacing(4, 1, 3),
+  },
   // Orange seulement pour h1 en dark mode
   '& h1': {
     color: theme.palette.mode === 'dark' ? '#ff6b35' : 'inherit'
@@ -76,6 +79,10 @@ const ContactCard = styled(Box)(({ theme }) => ({
   borderRadius: 24,
   padding: theme.spacing(4),
   textAlign: 'center',
+  [theme.breakpoints.down('sm')]: {
+    padding: theme.spacing(2.5),
+    borderRadius: 16,
+  },
   boxShadow: theme.palette.mode === 'dark'
     ? '0 15px 50px rgba(0, 0, 0, 0.6), 0 0 20px rgba(74, 85, 104, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.1)'
     : '0 4px 20px rgba(148, 163, 184, 0.08), 0 0 0 1px rgba(148, 163, 184, 0.05)',
