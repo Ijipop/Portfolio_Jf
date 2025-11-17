@@ -12,6 +12,7 @@ export const viewport = {
   width: 'device-width',
   initialScale: 1,
   maximumScale: 5,
+  viewportFit: 'cover',
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -20,10 +21,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         <ThemeWrapper>
           <div style={{ 
-            minHeight: '100vh', 
+            minHeight: '100dvh', // Dynamic viewport height pour mobile (fallback: 100vh)
+            height: '100dvh', // Dynamic viewport height pour mobile (fallback: 100vh)
             display: 'flex', 
-            flexDirection: 'column' 
-          }}>
+            flexDirection: 'column',
+            width: '100%',
+            overflowX: 'hidden'
+          } as React.CSSProperties & { minHeight: string; height: string }}>
             {children}
             <Footer />
           </div>
