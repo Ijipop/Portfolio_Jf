@@ -114,7 +114,7 @@ export default function AppBarComponent() {
 						Portfolio
 					</Typography>
 					
-					{/* Onglets de navigation */}
+					{/* Onglets de navigation - Desktop */}
 					<Box sx={{ 
 						display: { xs: 'none', sm: 'flex' }, 
 						gap: { xs: 0.5, sm: 1 },
@@ -182,6 +182,66 @@ export default function AppBarComponent() {
 							<Typography variant="body2" sx={{ display: { xs: 'none', sm: 'block' } }}>
 								Contact
 							</Typography>
+						</IconButton>
+					</Box>
+
+					{/* Icônes de navigation - Mobile uniquement */}
+					<Box sx={{ 
+						display: { xs: 'flex', sm: 'none' }, 
+						gap: 0.5,
+						flexGrow: 1,
+						justifyContent: 'center',
+						alignItems: 'center'
+					}}>
+						<IconButton
+							color="inherit"
+							onClick={() => router.push('/projets')}
+							aria-label="projets"
+							sx={{
+								color: pathname === '/projets' ? 'white' : 'rgba(255, 255, 255, 0.7)',
+								backgroundColor: pathname === '/projets' ? 'rgba(255, 255, 255, 0.15)' : 'transparent',
+								padding: '8px',
+								'&:hover': {
+									color: 'white',
+									backgroundColor: 'rgba(255, 255, 255, 0.15)',
+								},
+							}}
+						>
+							<WorkIcon />
+						</IconButton>
+						
+						<IconButton
+							color="inherit"
+							onClick={() => router.push('/a-propos')}
+							aria-label="à propos"
+							sx={{
+								color: pathname === '/a-propos' ? 'white' : 'rgba(255, 255, 255, 0.7)',
+								backgroundColor: pathname === '/a-propos' ? 'rgba(255, 255, 255, 0.15)' : 'transparent',
+								padding: '8px',
+								'&:hover': {
+									color: 'white',
+									backgroundColor: 'rgba(255, 255, 255, 0.15)',
+								},
+							}}
+						>
+							<PersonIcon />
+						</IconButton>
+						
+						<IconButton
+							color="inherit"
+							onClick={() => router.push('/contact')}
+							aria-label="contact"
+							sx={{
+								color: pathname === '/contact' ? 'white' : 'rgba(255, 255, 255, 0.7)',
+								backgroundColor: pathname === '/contact' ? 'rgba(255, 255, 255, 0.15)' : 'transparent',
+								padding: '8px',
+								'&:hover': {
+									color: 'white',
+									backgroundColor: 'rgba(255, 255, 255, 0.15)',
+								},
+							}}
+						>
+							<ContactMailIcon />
 						</IconButton>
 					</Box>
 					
