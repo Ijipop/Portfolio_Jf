@@ -191,26 +191,33 @@ html, body {
   -webkit-tap-highlight-color: transparent;
 }
 
-/* Utiliser dynamic viewport height pour mobile */
+/* Utiliser dynamic viewport height pour mobile uniquement */
 html {
-  height: 100vh; /* Fallback pour navigateurs qui ne supportent pas dvh */
+  /* Pas de height fixe sur desktop pour permettre le scroll */
+  min-height: 100vh;
 }
 
+/* Sur mobile uniquement, utiliser height fixe */
 @supports (height: 100dvh) {
-  html {
-    height: 100dvh; /* Dynamic viewport height - s'adapte aux barres du navigateur */
+  @media screen and (max-width: 600px) {
+    html {
+      height: 100dvh; /* Dynamic viewport height - seulement sur mobile */
+    }
   }
 }
 
 body {
-  min-height: 100vh; /* Fallback */
-  height: 100vh; /* Fallback */
+  min-height: 100vh; /* Fallback - permet le scroll sur desktop */
+  /* Pas de height fixe sur desktop pour permettre le scroll */
 }
 
+/* Sur mobile uniquement, utiliser height fixe */
 @supports (height: 100dvh) {
-  body {
-    min-height: 100dvh; /* Dynamic viewport height */
-    height: 100dvh; /* Dynamic viewport height */
+  @media screen and (max-width: 600px) {
+    body {
+      min-height: 100dvh; /* Dynamic viewport height */
+      height: 100dvh; /* Dynamic viewport height - seulement sur mobile */
+    }
   }
 }
 
