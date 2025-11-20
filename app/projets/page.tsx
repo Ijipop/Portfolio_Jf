@@ -415,7 +415,8 @@ export default function Projets() {
         ? 'linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 25%, #2a2a2a 50%, #1a1a1a 75%, #0a0a0a 100%)'
         : 'linear-gradient(135deg, #f0f4ff 0%, #e6f2ff 25%, #dbeafe 50%, #e6f2ff 75%, #f0f4ff 100%)',
       position: 'relative',
-      overflow: 'hidden',
+      overflowX: 'hidden', // Empêcher le scroll horizontal seulement
+      overflowY: 'auto', // Permettre le scroll vertical
       '&::before': {
         content: '""',
         position: 'fixed',

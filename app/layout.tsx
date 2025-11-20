@@ -21,13 +21,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         <ThemeWrapper>
           <div style={{ 
-            minHeight: '100dvh', // Dynamic viewport height pour mobile (fallback: 100vh)
-            height: '100dvh', // Dynamic viewport height pour mobile (fallback: 100vh)
+            minHeight: '100vh', // Minimum height pour desktop
             display: 'flex', 
             flexDirection: 'column',
             width: '100%',
             overflowX: 'hidden'
-          } as React.CSSProperties & { minHeight: string; height: string }}>
+          } as React.CSSProperties}>
             {children}
             <Footer />
           </div>
