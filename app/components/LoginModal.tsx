@@ -52,8 +52,23 @@ export default function LoginModal({ open, onClose }: LoginModalProps)
 			}
 			else
 			{
-				const errorData = await response.json();
-				setError(errorData.message || 'Erreur de connexion');
+				let errorMessage = 'Erreur de connexion';
+				try {
+					const errorData = await response.json();
+					errorMessage = errorData.message || 'Email ou mot de passe incorrect';
+					
+					// Messages d'erreur plus clairs
+					if (response.status === 401) {
+						errorMessage = '❌ Email ou mot de passe incorrect. Vérifiez vos identifiants.';
+					} else if (response.status === 500) {
+						errorMessage = '⚠️ Erreur serveur. Vérifiez que JWT_SECRET est configuré dans votre .env';
+					}
+				} catch (e) {
+					if (response.status === 401) {
+						errorMessage = '❌ Email ou mot de passe incorrect';
+					}
+				}
+				setError(errorMessage);
 			}
 		}
 		catch (err)
@@ -74,8 +89,11 @@ export default function LoginModal({ open, onClose }: LoginModalProps)
 			fullWidth
 			disableEnforceFocus
 			disableAutoFocus
+			disableRestoreFocus
+			aria-labelledby="login-dialog-title"
+			aria-describedby="login-dialog-description"
 		>
-			<DialogTitle>
+			<DialogTitle id="login-dialog-title">
 				<Typography variant="h5" component="div">
 					Connexion Admin
 				</Typography>
