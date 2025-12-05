@@ -1,6 +1,6 @@
 "use client";
 
-import { Add as AddIcon, Delete as DeleteIcon, Edit as EditIcon, Logout as LogoutIcon } from '@mui/icons-material';
+import { Add as AddIcon, Delete as DeleteIcon, Edit as EditIcon, Logout as LogoutIcon, CloudUpload as CloudUploadIcon } from '@mui/icons-material';
 import {
 	Alert,
 	AppBar,
@@ -23,10 +23,11 @@ import {
 	TableRow,
 	TextField,
 	Toolbar,
-	Typography
+	Typography,
+	CircularProgress
 } from '@mui/material';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 
 interface Project {
   id: number;
@@ -54,6 +55,9 @@ export default function AdminDashboard() {
     url: '',
     imageUrl: ''
   });
+  const [uploading, setUploading] = useState(false);
+  const [previewImage, setPreviewImage] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
 
   // Fonction pour corriger les chemins d'images
@@ -96,18 +100,25 @@ export default function AdminDashboard() {
     }
   }, [router]);
 
+  // Fonction pour nettoyer le localStorage et rediriger
+  const clearStorageAndRedirect = useCallback(() => {
+    localStorage.removeItem('adminToken');
+    localStorage.removeItem('adminUser');
+    router.push('/');
+  }, [router]);
+
   useEffect(() => {
     // Vérifier si l'utilisateur est connecté
     const token = localStorage.getItem('adminToken');
     const user = localStorage.getItem('adminUser');
     
     if (!token || !user) {
-      router.push('/');
+      clearStorageAndRedirect();
       return;
     }
 
     fetchProjects();
-  }, [router, fetchProjects]);
+  }, [router, fetchProjects, clearStorageAndRedirect]);
 
   const handleLogout = () => {
     // Nettoyer le localStorage
@@ -127,6 +138,7 @@ export default function AdminDashboard() {
         url: project.url || '',
         imageUrl: project.imageUrl || ''
       });
+      setPreviewImage(project.imageUrl ? getImageUrl(project.imageUrl) : null);
     } else {
       setEditingProject(null);
       setFormData({
@@ -137,6 +149,7 @@ export default function AdminDashboard() {
         url: '',
         imageUrl: ''
       });
+      setPreviewImage(null);
     }
     setOpenDialog(true);
   };
@@ -152,6 +165,98 @@ export default function AdminDashboard() {
       url: '',
       imageUrl: ''
     });
+    setPreviewImage(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  };
+
+  const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // Vérifier le type de fichier
+    const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/gif'];
+    if (!allowedTypes.includes(file.type)) {
+      setError('Type de fichier non autorisé. Utilisez JPEG, PNG, WEBP ou GIF');
+      return;
+    }
+
+    // Vérifier la taille (max 5MB)
+    const maxSize = 5 * 1024 * 1024; // 5MB
+    if (file.size > maxSize) {
+      setError('Le fichier est trop volumineux. Taille maximale: 5MB');
+      return;
+    }
+
+    // Afficher la preview
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setPreviewImage(reader.result as string);
+    };
+    reader.readAsDataURL(file);
+
+    // Uploader le fichier
+    setUploading(true);
+    setError('');
+
+    try {
+      // Vérifier que l'utilisateur est connecté
+      const token = localStorage.getItem('adminToken');
+      const user = localStorage.getItem('adminUser');
+      
+      if (!token || !user) {
+        setError('Session expirée. Veuillez vous reconnecter.');
+        setUploading(false);
+        setPreviewImage(null);
+        setTimeout(() => {
+          router.push('/');
+        }, 2000);
+        return;
+      }
+
+      const uploadFormData = new FormData();
+      uploadFormData.append('file', file);
+
+      const response = await fetch('/api/upload', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`
+          // Ne pas définir Content-Type - le navigateur le fait automatiquement pour FormData
+        },
+        body: uploadFormData
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({ error: 'Erreur inconnue' }));
+        console.error('Erreur upload:', errorData);
+        
+        if (response.status === 401) {
+          setError('❌ Session expirée. Redirection vers la page d\'accueil...');
+          clearStorageAndRedirect();
+        } else {
+          setError(errorData.error || `Erreur ${response.status}: ${errorData.message || 'Erreur lors de l\'upload'}`);
+        }
+        setPreviewImage(null);
+        return;
+      }
+
+      const data = await response.json();
+
+      if (data.success) {
+        setFormData({ ...formData, imageUrl: data.data.url });
+        setError('');
+      } else {
+        setError(data.error || 'Erreur lors de l\'upload de l\'image');
+        setPreviewImage(null);
+      }
+    } catch (error) {
+      console.error('Erreur:', error);
+      setError('Erreur de connexion lors de l\'upload. Vérifiez votre connexion internet.');
+      setPreviewImage(null);
+    } finally {
+      setUploading(false);
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -414,14 +519,63 @@ export default function AdminDashboard() {
               value={formData.url}
               onChange={(e) => setFormData({ ...formData, url: e.target.value })}
             />
-            <TextField
-              margin="dense"
-              label="URL de l'image"
-              fullWidth
-              variant="outlined"
-              value={formData.imageUrl}
-              onChange={(e) => setFormData({ ...formData, imageUrl: e.target.value })}
-            />
+            <Box sx={{ mt: 2, mb: 1 }}>
+              <Typography variant="subtitle2" sx={{ mb: 1 }}>
+                Image du projet
+              </Typography>
+              <input
+                ref={fileInputRef}
+                accept="image/*"
+                style={{ display: 'none' }}
+                id="image-upload"
+                type="file"
+                onChange={handleFileSelect}
+              />
+              <label htmlFor="image-upload">
+                <Button
+                  variant="outlined"
+                  component="span"
+                  startIcon={uploading ? <CircularProgress size={20} /> : <CloudUploadIcon />}
+                  disabled={uploading}
+                  fullWidth
+                  sx={{ mb: 2 }}
+                >
+                  {uploading ? 'Upload en cours...' : 'Choisir une image'}
+                </Button>
+              </label>
+              {previewImage && (
+                <Box sx={{ mt: 2, mb: 2 }}>
+                  <Box
+                    component="img"
+                    src={previewImage}
+                    alt="Preview"
+                    sx={{
+                      width: '100%',
+                      maxHeight: 300,
+                      objectFit: 'contain',
+                      borderRadius: 2,
+                      border: '1px solid #e0e0e0'
+                    }}
+                  />
+                </Box>
+              )}
+              <TextField
+                margin="dense"
+                label="URL de l'image (ou laissez vide si vous avez uploadé une image)"
+                fullWidth
+                variant="outlined"
+                value={formData.imageUrl}
+                onChange={(e) => {
+                  setFormData({ ...formData, imageUrl: e.target.value });
+                  if (e.target.value) {
+                    setPreviewImage(e.target.value);
+                  } else if (!fileInputRef.current?.files?.[0]) {
+                    setPreviewImage(null);
+                  }
+                }}
+                helperText="Vous pouvez uploader une image ou entrer une URL directement"
+              />
+            </Box>
           </DialogContent>
           <DialogActions>
             <Button onClick={handleCloseDialog}>Annuler</Button>

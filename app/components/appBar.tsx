@@ -268,6 +268,7 @@ export default function AppBarComponent() {
 						onClose={handleMenuClose}
 						disableEnforceFocus
 						disableAutoFocus
+						disableRestoreFocus
 						sx={{
 							'& .MuiPaper-root': {
 								background: (theme) => theme.palette.mode === 'dark'

@@ -28,10 +28,11 @@ export async function POST(request: NextRequest) {
 
     // Recherche de l'utilisateur
     const user = await prisma.user.findUnique({
-      where: { email: email.toLowerCase() }
+      where: { email: email.toLowerCase().trim() }
     });
 
     if (!user) {
+      console.log(`Tentative de connexion avec email non trouvé: ${email.toLowerCase().trim()}`);
       return NextResponse.json(
         { message: 'Email ou mot de passe incorrect' },
         { status: 401 }
@@ -42,6 +43,7 @@ export async function POST(request: NextRequest) {
     const isValidPassword = await bcrypt.compare(password, user.password);
     
     if (!isValidPassword) {
+      console.log(`Mot de passe incorrect pour l'utilisateur: ${user.email}`);
       return NextResponse.json(
         { message: 'Email ou mot de passe incorrect' },
         { status: 401 }

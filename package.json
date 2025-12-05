@@ -8,7 +8,10 @@
     "start": "next start",
     "lint": "next lint",
     "postinstall": "npx prisma generate",
-    "db:seed": "npx ts-node prisma/seed.ts"
+    "db:seed": "npx ts-node prisma/seed.ts",
+    "admin:password": "node scripts/changeAdminPassword.js",
+    "admin:create": "node scripts/createAdminWithEmail.js",
+    "admin:show": "node scripts/showAdmin.js"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
