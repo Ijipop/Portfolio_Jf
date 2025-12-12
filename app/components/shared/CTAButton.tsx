@@ -31,17 +31,17 @@ const hexToRgba = (hex: string, alpha: number) => {
 const StyledCTAButton = styled(Button, {
   shouldForwardProp: (prop) => prop !== 'ctaVariant' && prop !== 'primaryColor' && prop !== 'secondaryColor',
 })<{ ctaVariant: string; primaryColor?: string; secondaryColor?: string }>(({ theme, ctaVariant, primaryColor = '#1e3a8a', secondaryColor = '#059669' }) => {
-  const baseStyles = {
+  const baseStyles: any = {
     borderRadius: DESIGN_TOKENS.borderRadius.medium,
     fontWeight: 600,
     textTransform: 'none',
     transition: DESIGN_TOKENS.transitions.normal,
-    position: 'relative',
+    position: 'relative' as const,
     overflow: 'hidden',
     cursor: 'pointer',
     '&::before': {
       content: '""',
-      position: 'absolute',
+      position: 'absolute' as const,
       top: 0,
       left: '-100%',
       width: '100%',
@@ -51,7 +51,7 @@ const StyledCTAButton = styled(Button, {
     },
     '&::after': {
       content: '""',
-      position: 'absolute',
+      position: 'absolute' as const,
       top: '50%',
       left: '50%',
       width: 0,
