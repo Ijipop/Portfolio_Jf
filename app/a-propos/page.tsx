@@ -11,66 +11,14 @@ import Typography from '@mui/material/Typography'
 import { styled } from '@mui/material/styles'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
-import ParticleSystem from '../components/ParticleSystem'
-import SimpleSkillTag from '../components/SimpleSkillTag'
+import SkillTag from '../components/shared/SkillTag'
+import HeaderSection from '../components/shared/HeaderSection'
 import AppBarComponent from '../components/appBar'
+import PageWrapper from '../components/shared/PageWrapper'
 import { useAdvancedTheme } from '../contexts/AdvancedThemeContext'
+import { GRADIENTS, DESIGN_TOKENS } from '../design-system/constants'
 
-const HeaderSection = styled(Box)(({ theme }) => ({
-  background: theme.palette.mode === 'dark' 
-    ? 'linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 25%, #2a2a2a 50%, #1a1a1a 75%, #0a0a0a 100%)'
-    : 'linear-gradient(135deg, #1e3a8a 0%, #3b82f6 50%, #059669 100%)',
-  color: 'white',
-  padding: theme.spacing(6.75, 0, 4.5),
-  textAlign: 'center',
-  position: 'relative',
-  overflow: 'hidden',
-  [theme.breakpoints.down('sm')]: {
-    padding: theme.spacing(4, 1, 3),
-  },
-  // Orange seulement pour h1 en dark mode
-  '& h1': {
-    color: theme.palette.mode === 'dark' ? '#ff6b35' : 'inherit'
-  },
-  '&::before': {
-    content: '""',
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    background: theme.palette.mode === 'dark'
-      ? 'radial-gradient(circle at 20% 50%, rgba(255, 107, 53, 0.1) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(255, 23, 68, 0.1) 0%, transparent 50%), radial-gradient(circle at 40% 80%, rgba(255, 107, 53, 0.05) 0%, transparent 50%)'
-      : 'url("data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%23ffffff" fill-opacity="0.08"%3E%3Ccircle cx="30" cy="30" r="1.5"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")',
-    opacity: 1,
-  },
-  '&::after': {
-    content: '""',
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    background: theme.palette.mode === 'dark'
-      ? 'linear-gradient(45deg, transparent 30%, rgba(255, 107, 53, 0.03) 50%, transparent 70%)'
-      : 'linear-gradient(45deg, transparent 30%, rgba(30, 58, 138, 0.05) 50%, transparent 70%)',
-    animation: 'shimmer 3s ease-in-out infinite',
-  },
-  '@keyframes shimmer': {
-    '0%': { transform: 'translateX(-100%)' },
-    '100%': { transform: 'translateX(100%)' },
-  },
-  '@keyframes gradientShift': {
-    '0%': { backgroundPosition: '0% 50%' },
-    '50%': { backgroundPosition: '100% 50%' },
-    '100%': { backgroundPosition: '0% 50%' },
-  },
-  '@keyframes pulse': {
-    '0%': { opacity: 0.3, transform: 'scale(0.95)' },
-    '100%': { opacity: 0.6, transform: 'scale(1.05)' },
-  }
-}))
-
+// FlipCard components spécifiques à cette page (logique complexe)
 const FlipCard = styled(Box)(({ theme }) => ({
   backgroundColor: 'transparent',
   width: '100%',
@@ -109,51 +57,24 @@ const FlipCardFront = styled(Box)(({ theme }) => ({
   backfaceVisibility: 'hidden',
   WebkitBackfaceVisibility: 'hidden',
   MozBackfaceVisibility: 'hidden',
-  background: 'var(--card-background, linear-gradient(145deg, #ffffff 0%, #fafbfc 30%, #f1f5f9 70%, #e2e8f0 100%))',
+  background: theme.palette.mode === 'dark'
+    ? GRADIENTS.cards.dark
+    : GRADIENTS.cards.light,
   border: theme.palette.mode === 'dark' 
     ? '2px solid rgba(74, 85, 104, 0.2)' 
     : '1px solid rgba(148, 163, 184, 0.1)',
-  borderRadius: 24,
+  borderRadius: DESIGN_TOKENS.borderRadius.large,
   padding: theme.spacing(4),
   textAlign: 'center',
   boxShadow: theme.palette.mode === 'dark'
-    ? '0 15px 50px rgba(0, 0, 0, 0.6), 0 0 20px rgba(74, 85, 104, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.1)'
-    : '0 4px 20px rgba(148, 163, 184, 0.08), 0 0 0 1px rgba(148, 163, 184, 0.05)',
-  transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
+    ? DESIGN_TOKENS.shadows.card.dark
+    : DESIGN_TOKENS.shadows.card.light,
+  transition: DESIGN_TOKENS.transitions.slow,
   display: 'flex',
   flexDirection: 'column',
   justifyContent: 'center',
   alignItems: 'center',
   overflow: 'hidden',
-  '&::before': {
-    content: '""',
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    background: theme.palette.mode === 'dark'
-      ? 'linear-gradient(135deg, rgba(74, 85, 104, 0.1) 0%, rgba(45, 55, 72, 0.1) 50%, rgba(74, 85, 104, 0.05) 100%)'
-      : 'linear-gradient(135deg, var(--card-primary, transparent) 0%, var(--card-secondary, transparent) 50%, var(--card-primary, transparent) 100%)',
-    opacity: 0,
-    transition: 'opacity 0.3s ease',
-  },
-  '&::after': {
-    content: '""',
-    position: 'absolute',
-    top: '-2px',
-    left: '-2px',
-    right: '-2px',
-    bottom: '-2px',
-    background: theme.palette.mode === 'dark'
-      ? 'linear-gradient(45deg, #4a5568, #2d3748, #4a5568, #2d3748)'
-      : 'linear-gradient(45deg, #3b82f6, #60a5fa, #93c5fd, #60a5fa)',
-    borderRadius: 26,
-    zIndex: -1,
-    opacity: 0,
-    transition: 'opacity 0.3s ease',
-  },
-  // Suppression des effets de couleur au hover
 }))
 
 const FlipCardBack = styled(Box)(({ theme }) => ({
@@ -163,11 +84,11 @@ const FlipCardBack = styled(Box)(({ theme }) => ({
   backfaceVisibility: 'hidden',
   WebkitBackfaceVisibility: 'hidden',
   MozBackfaceVisibility: 'hidden',
-  background: `linear-gradient(145deg, var(--card-secondary, #059669)20 0%, var(--card-primary, #1e3a8a)20 50%, var(--card-secondary, #059669)20 100%)`,
+  background: `linear-gradient(145deg, var(--card-secondary, #059669) 20%, var(--card-primary, #1e3a8a) 20%, var(--card-secondary, #059669) 20%)`,
   border: theme.palette.mode === 'dark' 
     ? '2px solid rgba(74, 85, 104, 0.3)' 
     : '1px solid rgba(148, 163, 184, 0.2)',
-  borderRadius: 24,
+  borderRadius: DESIGN_TOKENS.borderRadius.large,
   padding: theme.spacing(4),
   textAlign: 'center',
   boxShadow: theme.palette.mode === 'dark'
@@ -181,6 +102,7 @@ const FlipCardBack = styled(Box)(({ theme }) => ({
   alignItems: 'center',
   overflow: 'hidden',
 }))
+
 
 
 export default function About() {
@@ -214,82 +136,19 @@ export default function About() {
   }
 
   return (
-    <Box sx={{ 
-      minHeight: '100vh', 
-      background: (theme) => theme.palette.mode === 'dark'
-        ? 'linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 25%, #2a2a2a 50%, #1a1a1a 75%, #0a0a0a 100%)'
-        : 'linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)',
-      position: 'relative',
-      overflow: 'hidden',
-      '&::before': {
-        content: '""',
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        background: (theme) => theme.palette.mode === 'dark'
-          ? 'radial-gradient(circle at 25% 25%, rgba(255, 107, 53, 0.05) 0%, transparent 50%), radial-gradient(circle at 75% 75%, rgba(255, 23, 68, 0.05) 0%, transparent 50%)'
-          : 'none',
-        pointerEvents: 'none',
-        zIndex: 0,
-      }
-    }}>
-      {/* Particle System */}
-      <ParticleSystem 
-        particleCount={120}
-        speed={0.4}
-        colors={['#ff6b35', '#ff1744', '#3b82f6', '#059669']}
-        mouseInteraction={true}
-      />
-      
+    <PageWrapper
+      backgroundVariant="alternate"
+      particleCount={120}
+      particleSpeed={0.4}
+      particleColors={['#ff6b35', '#ff1744', '#3b82f6', '#059669']}
+    >
       <AppBarComponent />
       
       {/* Hero Section */}
-      <HeaderSection>
-        <Container maxWidth="lg">
-          <Typography 
-            variant="h2" 
-            component="h1" 
-            gutterBottom 
-            sx={{ 
-              fontWeight: 900,
-              fontSize: { xs: '3rem', md: '4.5rem' },
-              textShadow: (theme) => theme.palette.mode === 'dark'
-                ? '0 0 20px rgba(255, 107, 53, 0.8), 0 0 40px rgba(255, 107, 53, 0.4), 0 4px 8px rgba(0,0,0,0.8)'
-                : '0 4px 8px rgba(0,0,0,0.3)',
-              letterSpacing: '0.1em',
-              textTransform: 'uppercase',
-              color: (theme) => theme.palette.mode === 'dark' ? '#ff6b35' : 'inherit',
-              // Effet de glow animé
-              animation: (theme) => theme.palette.mode === 'dark' ? 'glow-pulse 2s ease-in-out infinite alternate' : 'none',
-              '@keyframes glow-pulse': {
-                '0%': {
-                  textShadow: '0 0 20px rgba(255, 107, 53, 0.8), 0 0 40px rgba(255, 107, 53, 0.4)',
-                  filter: 'brightness(1)'
-                },
-                '100%': {
-                  textShadow: '0 0 30px rgba(255, 107, 53, 1), 0 0 60px rgba(255, 107, 53, 0.6)',
-                  filter: 'brightness(1.2)'
-                }
-              }
-            }}
-          >
-            À Propos
-          </Typography>
-          <Typography 
-            variant="h5" 
-            sx={{ 
-              opacity: 0.9,
-              fontWeight: 300,
-              maxWidth: 600,
-              mx: 'auto'
-            }}
-          >
-            Découvrez mon parcours et mes compétences
-          </Typography>
-        </Container>
-      </HeaderSection>
+      <HeaderSection 
+        title="À Propos"
+        subtitle="Découvrez mon parcours et mes compétences"
+      />
 
       <Container maxWidth="lg" sx={{ py: 6, position: 'relative', zIndex: 2 }}>
 
@@ -345,10 +204,10 @@ export default function About() {
                   justifyContent: 'center',
                   gap: 1
                 }}>
-                  <SimpleSkillTag>Material-UI</SimpleSkillTag>
-                  <SimpleSkillTag>Prisma</SimpleSkillTag>
-                  <SimpleSkillTag>PostgreSQL</SimpleSkillTag>
-                  <SimpleSkillTag>Vercel</SimpleSkillTag>
+                  <SkillTag>Material-UI</SkillTag>
+                  <SkillTag>Prisma</SkillTag>
+                  <SkillTag>PostgreSQL</SkillTag>
+                  <SkillTag>Vercel</SkillTag>
                 </Box>
                 <Box sx={{ 
                   position: 'absolute', 
@@ -481,9 +340,9 @@ export default function About() {
                   justifyContent: 'center',
                   gap: 1
                 }}>
-                  <SimpleSkillTag>Responsive Design</SimpleSkillTag>
-                  <SimpleSkillTag>GitHub</SimpleSkillTag>
-                  <SimpleSkillTag>JSON</SimpleSkillTag>
+                  <SkillTag>Responsive Design</SkillTag>
+                  <SkillTag>GitHub</SkillTag>
+                  <SkillTag>JSON</SkillTag>
                 </Box>
                 <Box sx={{ 
                   position: 'absolute', 
@@ -604,9 +463,9 @@ export default function About() {
                   justifyContent: 'center',
                   gap: 1
                 }}>
-                  <SimpleSkillTag>MVC</SimpleSkillTag>
-                  <SimpleSkillTag>CRUD</SimpleSkillTag>
-                  <SimpleSkillTag>REST API</SimpleSkillTag>
+                  <SkillTag>MVC</SkillTag>
+                  <SkillTag>CRUD</SkillTag>
+                  <SkillTag>REST API</SkillTag>
                 </Box>
                 <Box sx={{ 
                   position: 'absolute', 
@@ -679,7 +538,7 @@ export default function About() {
         <Box sx={{ 
           background: 'var(--card-background, linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%))',
           border: '1px solid var(--card-primary, rgba(0,0,0,0.08))',
-          borderRadius: 24,
+          borderRadius: DESIGN_TOKENS.borderRadius.large,
           padding: 4,
           textAlign: 'center',
           boxShadow: '0 8px 32px var(--card-primary, rgba(0,0,0,0.1))',
@@ -719,16 +578,16 @@ export default function About() {
             zIndex: 1000,
             position: 'relative'
           }}>
-          <SimpleSkillTag>Python</SimpleSkillTag>
-          <SimpleSkillTag>Java</SimpleSkillTag>
-          <SimpleSkillTag>React</SimpleSkillTag>
-          <SimpleSkillTag>Next.js</SimpleSkillTag>
-          <SimpleSkillTag>TypeScript</SimpleSkillTag>
-          <SimpleSkillTag>JavaScript</SimpleSkillTag>
-          <SimpleSkillTag>SQL</SimpleSkillTag>
-          <SimpleSkillTag>CSS3</SimpleSkillTag>
-          <SimpleSkillTag>HTML5</SimpleSkillTag>
-          <SimpleSkillTag>Git</SimpleSkillTag>
+          <SkillTag>Python</SkillTag>
+          <SkillTag>Java</SkillTag>
+          <SkillTag>React</SkillTag>
+          <SkillTag>Next.js</SkillTag>
+          <SkillTag>TypeScript</SkillTag>
+          <SkillTag>JavaScript</SkillTag>
+          <SkillTag>SQL</SkillTag>
+          <SkillTag>CSS3</SkillTag>
+          <SkillTag>HTML5</SkillTag>
+          <SkillTag>Git</SkillTag>
 
           </Box>
         </Box>
@@ -751,6 +610,6 @@ export default function About() {
           </Typography>
         </Box>
       </Container>
-    </Box>
+    </PageWrapper>
   )
 }

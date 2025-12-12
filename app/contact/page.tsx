@@ -13,128 +13,12 @@ import Container from '@mui/material/Container'
 import Typography from '@mui/material/Typography'
 import { styled } from '@mui/material/styles'
 import { useState } from 'react'
-import ParticleSystem from '../components/ParticleSystem'
+import ContactCard from '../components/shared/ContactCard'
+import HeaderSection from '../components/shared/HeaderSection'
 import AppBarComponent from '../components/appBar'
+import PageWrapper from '../components/shared/PageWrapper'
+import { DESIGN_TOKENS } from '../design-system/constants'
 
-const HeaderSection = styled(Box)(({ theme }) => ({
-  background: theme.palette.mode === 'dark' 
-    ? 'linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 25%, #2a2a2a 50%, #1a1a1a 75%, #0a0a0a 100%)'
-    : 'linear-gradient(135deg, #1e3a8a 0%, #3b82f6 50%, #059669 100%)',
-  color: 'white',
-  padding: theme.spacing(6.75, 0, 4.5),
-  textAlign: 'center',
-  position: 'relative',
-  overflow: 'hidden',
-  [theme.breakpoints.down('sm')]: {
-    padding: theme.spacing(4, 1, 3),
-  },
-  // Orange seulement pour h1 en dark mode
-  '& h1': {
-    color: theme.palette.mode === 'dark' ? '#ff6b35' : 'inherit'
-  },
-  '&::before': {
-    content: '""',
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    background: theme.palette.mode === 'dark'
-      ? 'radial-gradient(circle at 20% 50%, rgba(255, 107, 53, 0.1) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(255, 23, 68, 0.1) 0%, transparent 50%), radial-gradient(circle at 40% 80%, rgba(255, 107, 53, 0.05) 0%, transparent 50%)'
-      : 'url("data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%23ffffff" fill-opacity="0.08"%3E%3Ccircle cx="30" cy="30" r="1.5"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")',
-    opacity: 1,
-  },
-  '&::after': {
-    content: '""',
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    background: theme.palette.mode === 'dark'
-      ? 'linear-gradient(45deg, transparent 30%, rgba(255, 107, 53, 0.03) 50%, transparent 70%)'
-      : 'linear-gradient(45deg, transparent 30%, rgba(30, 58, 138, 0.05) 50%, transparent 70%)',
-    animation: 'shimmer 3s ease-in-out infinite',
-  },
-  '@keyframes shimmer': {
-    '0%': { transform: 'translateX(-100%)' },
-    '100%': { transform: 'translateX(100%)' },
-  },
-  '@keyframes gradientShift': {
-    '0%': { backgroundPosition: '0% 50%' },
-    '50%': { backgroundPosition: '100% 50%' },
-    '100%': { backgroundPosition: '0% 50%' },
-  },
-  '@keyframes pulse': {
-    '0%': { opacity: 0.3, transform: 'scale(0.95)' },
-    '100%': { opacity: 0.6, transform: 'scale(1.05)' },
-  }
-}))
-
-const ContactCard = styled(Box)(({ theme }) => ({
-  background: 'var(--card-background, linear-gradient(145deg, #ffffff 0%, #fafbfc 30%, #f1f5f9 70%, #e2e8f0 100%))',
-  border: theme.palette.mode === 'dark' 
-    ? '2px solid rgba(74, 85, 104, 0.2)' 
-    : '1px solid rgba(148, 163, 184, 0.1)',
-  borderRadius: 24,
-  padding: theme.spacing(4),
-  textAlign: 'center',
-  [theme.breakpoints.down('sm')]: {
-    padding: theme.spacing(2.5),
-    borderRadius: 16,
-  },
-  boxShadow: theme.palette.mode === 'dark'
-    ? '0 15px 50px rgba(0, 0, 0, 0.6), 0 0 20px rgba(74, 85, 104, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.1)'
-    : '0 4px 20px rgba(148, 163, 184, 0.08), 0 0 0 1px rgba(148, 163, 184, 0.05)',
-  transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
-  cursor: 'pointer',
-  position: 'relative',
-  overflow: 'hidden',
-  // S'assurer que le contenu est au-dessus des pseudo-éléments
-  '& > *': {
-    position: 'relative',
-    zIndex: 1,
-  },
-  '&::before': {
-    content: '""',
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    background: theme.palette.mode === 'dark'
-      ? 'linear-gradient(135deg, rgba(74, 85, 104, 0.1) 0%, rgba(45, 55, 72, 0.1) 50%, rgba(74, 85, 104, 0.05) 100%)'
-      : 'linear-gradient(135deg, var(--card-primary, transparent) 0%, var(--card-secondary, transparent) 50%, var(--card-primary, transparent) 100%)',
-    opacity: 0,
-    transition: 'opacity 0.3s ease',
-    zIndex: 0,
-  },
-  '&::after': {
-    content: '""',
-    position: 'absolute',
-    top: '-2px',
-    left: '-2px',
-    right: '-2px',
-    bottom: '-2px',
-    background: theme.palette.mode === 'dark'
-      ? 'linear-gradient(45deg, #4a5568, #2d3748, #4a5568, #2d3748)'
-      : 'linear-gradient(45deg, #3b82f6, #60a5fa, #93c5fd, #60a5fa)',
-    borderRadius: 26,
-    zIndex: -1,
-    opacity: 0,
-    transition: 'opacity 0.3s ease',
-  },
-  '&:hover': {
-    transform: 'translateY(-12px) scale(1.03)',
-    boxShadow: `0 30px 60px rgba(0, 0, 0, 0.7), 0 0 30px var(--card-hover-primary), 0 0 60px var(--card-hover-glow), inset 0 1px 0 rgba(255, 255, 255, 0.2)`,
-    '&::before': {
-      opacity: 1,
-    },
-    '&::after': {
-      opacity: 1,
-    }
-  }
-}))
 
 const SocialIcon = styled(Box)(({ theme }) => ({
   display: 'inline-flex',
@@ -149,7 +33,7 @@ const SocialIcon = styled(Box)(({ theme }) => ({
   color: 'white',
   margin: theme.spacing(1),
   cursor: 'pointer',
-  transition: 'all 0.3s ease',
+  transition: DESIGN_TOKENS.transitions.normal,
   '&:hover': {
     transform: 'scale(1.1)',
     boxShadow: theme.palette.mode === 'dark'
@@ -163,7 +47,7 @@ const EmailButton = styled(Button)(({ theme }) => ({
     ? 'linear-gradient(135deg, #4a5568 0%, #2d3748 100%)'
     : 'linear-gradient(135deg, #3b82f6 0%, #60a5fa 50%, #93c5fd 100%)',
   color: 'white',
-  borderRadius: 12,
+  borderRadius: DESIGN_TOKENS.borderRadius.small,
   padding: theme.spacing(1, 2),
   margin: theme.spacing(0.5),
   fontSize: '0.875rem',
@@ -172,7 +56,7 @@ const EmailButton = styled(Button)(({ theme }) => ({
   boxShadow: theme.palette.mode === 'dark'
     ? '0 4px 15px rgba(74, 85, 104, 0.3)'
     : '0 4px 15px rgba(102, 126, 234, 0.3)',
-  transition: 'all 0.3s ease',
+  transition: DESIGN_TOKENS.transitions.normal,
     '&:hover': {
       background: theme.palette.mode === 'dark'
         ? 'linear-gradient(135deg, #5a6578 0%, #3d4858 100%)'
@@ -228,81 +112,18 @@ export default function Contact() {
   }
 
   return (
-    <Box sx={{ 
-      minHeight: '100vh', 
-      background: (theme) => theme.palette.mode === 'dark'
-        ? 'linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 25%, #2a2a2a 50%, #1a1a1a 75%, #0a0a0a 100%)'
-        : 'linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)',
-      position: 'relative',
-      overflow: 'hidden',
-      '&::before': {
-        content: '""',
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        background: (theme) => theme.palette.mode === 'dark'
-          ? 'radial-gradient(circle at 25% 25%, rgba(255, 107, 53, 0.05) 0%, transparent 50%), radial-gradient(circle at 75% 75%, rgba(255, 23, 68, 0.05) 0%, transparent 50%)'
-          : 'none',
-        pointerEvents: 'none',
-        zIndex: 0,
-      }
-    }}>
-      {/* Particle System */}
-      <ParticleSystem 
-        particleCount={100}
-        speed={0.5}
-        colors={['#ff6b35', '#ff1744', '#3b82f6', '#059669']}
-        mouseInteraction={true}
-      />
-      
+    <PageWrapper
+      backgroundVariant="alternate"
+      particleCount={100}
+      particleSpeed={0.5}
+      particleColors={['#ff6b35', '#ff1744', '#3b82f6', '#059669']}
+    >
       <AppBarComponent />
       
-      <HeaderSection>
-        <Container maxWidth="lg">
-          <Typography 
-            variant="h1" 
-            component="h1" 
-            gutterBottom 
-            sx={{ 
-              fontWeight: 900,
-              fontSize: { xs: '3rem', md: '4.5rem' },
-              textShadow: (theme) => theme.palette.mode === 'dark'
-                ? '0 0 20px rgba(255, 107, 53, 0.8), 0 0 40px rgba(255, 107, 53, 0.4), 0 4px 8px rgba(0,0,0,0.8)'
-                : '0 4px 8px rgba(0,0,0,0.3)',
-              letterSpacing: '0.1em',
-              textTransform: 'uppercase',
-              color: (theme) => theme.palette.mode === 'dark' ? '#ff6b35' : 'inherit',
-              // Effet de glow animé
-              animation: (theme) => theme.palette.mode === 'dark' ? 'glow-pulse 2s ease-in-out infinite alternate' : 'none',
-              '@keyframes glow-pulse': {
-                '0%': {
-                  textShadow: '0 0 20px rgba(255, 107, 53, 0.8), 0 0 40px rgba(255, 107, 53, 0.4)',
-                  filter: 'brightness(1)'
-                },
-                '100%': {
-                  textShadow: '0 0 30px rgba(255, 107, 53, 1), 0 0 60px rgba(255, 107, 53, 0.6)',
-                  filter: 'brightness(1.2)'
-                }
-              }
-            }}
-          >
-            Contact
-          </Typography>
-          <Typography 
-            variant="h5" 
-            sx={{ 
-              opacity: 0.9,
-              fontWeight: 300,
-              maxWidth: 600,
-              mx: 'auto'
-            }}
-          >
-            Prenons contact et discutons!
-          </Typography>
-        </Container>
-      </HeaderSection>
+      <HeaderSection 
+        title="Contact"
+        subtitle="Prenons contact et discutons!"
+      />
 
       <Container maxWidth="lg" sx={{ py: 8, position: 'relative', zIndex: 2 }}>
         <Box sx={{ 
@@ -413,6 +234,6 @@ export default function Contact() {
           {snackbarMessage}
         </Alert>
       </Snackbar>
-    </Box>
+    </PageWrapper>
   )
 }
