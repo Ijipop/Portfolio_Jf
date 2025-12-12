@@ -39,8 +39,8 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Vérification du mot de passe
-    const isValidPassword = await bcrypt.compare(password, user.password);
+    // Vérification du mot de passe (trim pour éviter les espaces invisibles de l'auto-fill)
+    const isValidPassword = await bcrypt.compare(password.trim(), user.password);
     
     if (!isValidPassword) {
       console.log(`Mot de passe incorrect pour l'utilisateur: ${user.email}`);

@@ -37,7 +37,7 @@ export default function LoginModal({ open, onClose }: LoginModalProps)
 				{
 					'Content-Type': 'application/json',
 				},
-				body: JSON.stringify({ email, password }),
+				body: JSON.stringify({ email: email.trim(), password: password.trim() }),
 			});
 
 			if (response.ok)
