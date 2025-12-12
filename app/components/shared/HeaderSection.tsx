@@ -6,6 +6,7 @@ import Typography from '@mui/material/Typography'
 import { ReactNode, useEffect, useState } from 'react'
 import { DESIGN_TOKENS, GRADIENTS } from '../../design-system/constants'
 import { useThemeColors } from '../../hooks/useThemeColors'
+import { useTextColor } from '../../hooks/useTextColor'
 import { useTheme } from '@mui/material/styles'
 
 // Fonction utilitaire pour convertir hex en rgba
@@ -24,6 +25,7 @@ interface HeaderSectionProps {
 
 export default function HeaderSection({ title, subtitle, children }: HeaderSectionProps) {
   const { primary, secondary } = useThemeColors()
+  const textColor = useTextColor()
   const theme = useTheme()
   const [headerBackground, setHeaderBackground] = useState<string>(GRADIENTS.backgrounds.headerLight)
   
@@ -65,7 +67,7 @@ export default function HeaderSection({ title, subtitle, children }: HeaderSecti
     <Box
       sx={{
         background: headerBackground,
-        color: 'white',
+        color: textColor,
         padding: theme.spacing(6.75, 0, 4.5),
         textAlign: 'center',
         position: 'relative',
@@ -131,7 +133,8 @@ export default function HeaderSection({ title, subtitle, children }: HeaderSecti
               opacity: 0.9,
               fontWeight: 300,
               maxWidth: 600,
-              mx: 'auto'
+              mx: 'auto',
+              color: textColor
             }}
           >
             {subtitle}

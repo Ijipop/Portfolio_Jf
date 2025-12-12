@@ -20,11 +20,13 @@ import StickyCTA from './components/shared/StickyCTA'
 import Footer from './components/Footer'
 import { DESIGN_TOKENS, GRADIENTS } from './design-system/constants'
 import { useThemeColors } from './hooks/useThemeColors'
+import { useTextColor } from './hooks/useTextColor'
 import { useEffect, useState } from 'react'
 
 export default function Home() {
   const router = useRouter()
   const { primary, secondary } = useThemeColors()
+  const textColor = useTextColor()
   const [skillsBackground, setSkillsBackground] = useState<string>(GRADIENTS.cards.light)
 
   // Mettre à jour le background de la section compétences quand le thème change
@@ -146,20 +148,21 @@ export default function Home() {
                 ...DESIGN_TOKENS.typography.h4,
                 fontWeight: 400,
                 opacity: 0.9,
-                color: 'text.secondary'
+                color: textColor
               }}
             >
               Développeur Full Stack
             </Typography>
             <Typography 
               variant="body1" 
-              color="text.secondary" 
               sx={{ 
                 maxWidth: 700, 
                 mx: 'auto',
                 mb: DESIGN_TOKENS.spacing.xl,
                 ...DESIGN_TOKENS.typography.body1,
-                fontSize: { xs: '0.95rem', md: '1.125rem' }
+                fontSize: { xs: '0.95rem', md: '1.125rem' },
+                color: textColor,
+                opacity: 0.9
               }}
             >
               Passionné par la création d&apos;applications web modernes et performantes. 
@@ -185,7 +188,7 @@ export default function Home() {
                 }}>
                   0
                 </Typography>
-                <Typography variant="body2" color="text.secondary">
+                <Typography variant="body2" sx={{ color: textColor, opacity: 0.8 }}>
                   Années d&apos;expérience
                 </Typography>
               </Box>
@@ -193,12 +196,12 @@ export default function Home() {
                 <Typography variant="h3" sx={{ 
                   ...DESIGN_TOKENS.typography.h3,
                   fontWeight: 700,
-                  color: 'primary.main',
+                  color: primary,
                   mb: 0.5
                 }}>
                   10+
                 </Typography>
-                <Typography variant="body2" color="text.secondary">
+                <Typography variant="body2" sx={{ color: textColor, opacity: 0.8 }}>
                   Technologies maîtrisées
                 </Typography>
               </Box>
@@ -206,12 +209,12 @@ export default function Home() {
                 <Typography variant="h3" sx={{ 
                   ...DESIGN_TOKENS.typography.h3,
                   fontWeight: 700,
-                  color: 'primary.main',
+                  color: primary,
                   mb: 0.5
                 }}>
                   Disponible
                 </Typography>
-                <Typography variant="body2" color="text.secondary">
+                <Typography variant="body2" sx={{ color: textColor, opacity: 0.8 }}>
                   Pour nouveaux projets
                 </Typography>
               </Box>
@@ -295,11 +298,11 @@ export default function Home() {
           <FadeIn delay={0.8}>
             <HoverScale>
               <ThreeDCardComponent onClick={() => handleCardClick('/projets')} floatingElements={2}>
-            <CodeIcon sx={{ fontSize: 48, color: 'primary.main', mb: 2 }} />
-            <Typography variant="h5" gutterBottom>
+            <CodeIcon sx={{ fontSize: 48, color: primary, mb: 2 }} />
+            <Typography variant="h5" gutterBottom sx={{ color: textColor }}>
               Mes Projets
             </Typography>
-            <Typography variant="body1" color="text.secondary">
+            <Typography variant="body1" sx={{ color: textColor, opacity: 0.8 }}>
               Découvrez mes réalisations et explorations technologiques
             </Typography>
           </ThreeDCardComponent>
@@ -309,11 +312,11 @@ export default function Home() {
           <FadeIn delay={1.0}>
             <HoverScale>
               <ThreeDCardComponent onClick={() => handleCardClick('/a-propos')} floatingElements={3}>
-                <PersonIcon sx={{ fontSize: 48, color: 'primary.main', mb: 2 }} />
-                <Typography variant="h5" gutterBottom>
+                <PersonIcon sx={{ fontSize: 48, color: primary, mb: 2 }} />
+                <Typography variant="h5" gutterBottom sx={{ color: textColor }}>
                   À Propos
                 </Typography>
-                <Typography variant="body1" color="text.secondary">
+                <Typography variant="body1" sx={{ color: textColor, opacity: 0.8 }}>
                   En savoir plus sur mon parcours et mes compétences
                 </Typography>
               </ThreeDCardComponent>
@@ -323,11 +326,11 @@ export default function Home() {
           <FadeIn delay={1.2}>
             <HoverScale>
               <ThreeDCardComponent onClick={() => handleCardClick('/contact')} floatingElements={2}>
-                <ContactSupportIcon sx={{ fontSize: 48, color: 'primary.main', mb: 2 }} />
-                <Typography variant="h5" gutterBottom>
+                <ContactSupportIcon sx={{ fontSize: 48, color: primary, mb: 2 }} />
+                <Typography variant="h5" gutterBottom sx={{ color: textColor }}>
                   Contact
                 </Typography>
-                <Typography variant="body1" color="text.secondary">
+                <Typography variant="body1" sx={{ color: textColor, opacity: 0.8 }}>
                   Prenons contact et discutons de vos projets
                 </Typography>
               </ThreeDCardComponent>

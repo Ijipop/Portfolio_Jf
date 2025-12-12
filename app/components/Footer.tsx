@@ -13,6 +13,7 @@ import { useEffect, useState } from 'react'
 import CTAButton from './shared/CTAButton'
 import { DESIGN_TOKENS } from '../design-system/constants'
 import { useThemeColors } from '../hooks/useThemeColors'
+import { getTextColorForBackground } from '../utils/colorUtils'
 
 export default function Footer() {
   const currentYear = new Date().getFullYear()
@@ -20,6 +21,7 @@ export default function Footer() {
   const theme = useTheme()
   const { primary, secondary } = useThemeColors()
   const [footerBackground, setFooterBackground] = useState<string>(`linear-gradient(135deg, ${primary} 0%, ${secondary} 100%)`)
+  const [textColor, setTextColor] = useState<string>('#ffffff')
 
   // Mettre à jour le background du footer quand le thème change
   useEffect(() => {
@@ -30,13 +32,18 @@ export default function Footer() {
       const bg = getComputedStyle(document.documentElement).getPropertyValue('--theme-bg')?.trim()
       const bg2 = getComputedStyle(document.documentElement).getPropertyValue('--theme-bg2')?.trim()
       
+      let newBackground: string
       if (bg && bg2) {
         // Créer un gradient avec les couleurs du thème
-        setFooterBackground(`linear-gradient(135deg, ${bg} 0%, ${bg2} 50%, ${bg} 100%)`)
+        newBackground = `linear-gradient(135deg, ${bg} 0%, ${bg2} 50%, ${bg} 100%)`
       } else {
         // Fallback : utiliser primary et secondary
-        setFooterBackground(`linear-gradient(135deg, ${primary} 0%, ${secondary} 100%)`)
+        newBackground = `linear-gradient(135deg, ${primary} 0%, ${secondary} 100%)`
       }
+      
+      setFooterBackground(newBackground)
+      // Déterminer la couleur de texte optimale pour ce background
+      setTextColor(getTextColorForBackground(newBackground))
     }
     
     updateFooterBackground()
@@ -72,7 +79,7 @@ export default function Footer() {
     <Box
       sx={{
         background: `${footerBackground} !important`,
-        color: 'white',
+        color: `${textColor} !important`,
         padding: theme.spacing(4, 0, 2),
         marginTop: 'auto',
         position: 'relative',
@@ -100,15 +107,15 @@ export default function Footer() {
           {/* Section Info */}
           <Box>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: DESIGN_TOKENS.spacing.sm }}>
-              <CodeIcon sx={{ fontSize: 32, color: 'white' }} />
-              <Typography variant="h5" sx={{ fontWeight: 700, color: 'white' }}>
+              <CodeIcon sx={{ fontSize: 32, color: textColor }} />
+              <Typography variant="h5" sx={{ fontWeight: 700, color: textColor }}>
                 Portfolio Web
               </Typography>
             </Box>
-            <Typography variant="body1" sx={{ opacity: 0.9, mb: DESIGN_TOKENS.spacing.md, color: 'white' }}>
+            <Typography variant="body1" sx={{ opacity: 0.9, mb: DESIGN_TOKENS.spacing.md, color: textColor }}>
               Jean-François Lefebvre
             </Typography>
-            <Typography variant="body2" sx={{ opacity: 0.8, mb: DESIGN_TOKENS.spacing.md, color: 'white' }}>
+            <Typography variant="body2" sx={{ opacity: 0.8, mb: DESIGN_TOKENS.spacing.md, color: textColor }}>
               Développeur Full Stack passionné par la création d&apos;applications web modernes et performantes.
             </Typography>
             <CTAButton
@@ -122,7 +129,7 @@ export default function Footer() {
 
           {/* Section Liens rapides */}
           <Box>
-            <Typography variant="h6" sx={{ fontWeight: 600, mb: DESIGN_TOKENS.spacing.md, color: 'white' }}>
+            <Typography variant="h6" sx={{ fontWeight: 600, mb: DESIGN_TOKENS.spacing.md, color: textColor }}>
               Navigation
             </Typography>
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
@@ -132,6 +139,7 @@ export default function Footer() {
                   opacity: 0.8, 
                   cursor: 'pointer',
                   transition: DESIGN_TOKENS.transitions.normal,
+                  color: textColor,
                   '&:hover': { opacity: 1, transform: 'translateX(4px)' }
                 }}
                 onClick={() => router.push('/projets')}
@@ -144,6 +152,7 @@ export default function Footer() {
                   opacity: 0.8, 
                   cursor: 'pointer',
                   transition: DESIGN_TOKENS.transitions.normal,
+                  color: textColor,
                   '&:hover': { opacity: 1, transform: 'translateX(4px)' }
                 }}
                 onClick={() => router.push('/a-propos')}
@@ -156,6 +165,7 @@ export default function Footer() {
                   opacity: 0.8, 
                   cursor: 'pointer',
                   transition: DESIGN_TOKENS.transitions.normal,
+                  color: textColor,
                   '&:hover': { opacity: 1, transform: 'translateX(4px)' }
                 }}
                 onClick={() => router.push('/contact')}
@@ -167,7 +177,7 @@ export default function Footer() {
 
           {/* Section Social */}
           <Box>
-            <Typography variant="h6" sx={{ fontWeight: 600, mb: DESIGN_TOKENS.spacing.md, color: 'white' }}>
+            <Typography variant="h6" sx={{ fontWeight: 600, mb: DESIGN_TOKENS.spacing.md, color: textColor }}>
               Suivez-moi
             </Typography>
             <Box sx={{ display: 'flex', gap: 1, mb: DESIGN_TOKENS.spacing.lg }}>
@@ -181,15 +191,15 @@ export default function Footer() {
                   width: 48,
                   height: 48,
                   borderRadius: '50%',
-                  background: 'rgba(255,255,255,0.1)',
-                  color: 'white',
+                  background: textColor === '#ffffff' ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)',
+                  color: textColor,
                   margin: theme.spacing(0, 1),
                   cursor: 'pointer',
                   transition: DESIGN_TOKENS.transitions.normal,
                   position: 'relative',
                   zIndex: 1,
                   '&:hover': {
-                    background: 'rgba(255,255,255,0.25)',
+                    background: textColor === '#ffffff' ? 'rgba(255,255,255,0.25)' : 'rgba(0,0,0,0.15)',
                     transform: 'scale(1.15) translateY(-2px)',
                     boxShadow: `0 4px 12px ${primary}40`,
                   }
@@ -207,15 +217,15 @@ export default function Footer() {
                   width: 48,
                   height: 48,
                   borderRadius: '50%',
-                  background: 'rgba(255,255,255,0.1)',
-                  color: 'white',
+                  background: textColor === '#ffffff' ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)',
+                  color: textColor,
                   margin: theme.spacing(0, 1),
                   cursor: 'pointer',
                   transition: DESIGN_TOKENS.transitions.normal,
                   position: 'relative',
                   zIndex: 1,
                   '&:hover': {
-                    background: 'rgba(255,255,255,0.25)',
+                    background: textColor === '#ffffff' ? 'rgba(255,255,255,0.25)' : 'rgba(0,0,0,0.15)',
                     transform: 'scale(1.15) translateY(-2px)',
                     boxShadow: `0 4px 12px ${primary}40`,
                   }
@@ -233,15 +243,15 @@ export default function Footer() {
                   width: 48,
                   height: 48,
                   borderRadius: '50%',
-                  background: 'rgba(255,255,255,0.1)',
-                  color: 'white',
+                  background: textColor === '#ffffff' ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)',
+                  color: textColor,
                   margin: theme.spacing(0, 1),
                   cursor: 'pointer',
                   transition: DESIGN_TOKENS.transitions.normal,
                   position: 'relative',
                   zIndex: 1,
                   '&:hover': {
-                    background: 'rgba(255,255,255,0.25)',
+                    background: textColor === '#ffffff' ? 'rgba(255,255,255,0.25)' : 'rgba(0,0,0,0.15)',
                     transform: 'scale(1.15) translateY(-2px)',
                     boxShadow: `0 4px 12px ${primary}40`,
                   }
@@ -250,11 +260,11 @@ export default function Footer() {
                 <EmailIcon />
               </Box>
             </Box>
-            <Box sx={{ borderTop: '1px solid rgba(255,255,255,0.1)', pt: DESIGN_TOKENS.spacing.md }}>
-              <Typography variant="body2" sx={{ opacity: 0.7, fontSize: '0.75rem', color: 'white' }}>
+            <Box sx={{ borderTop: `1px solid ${textColor === '#ffffff' ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)'}`, pt: DESIGN_TOKENS.spacing.md }}>
+              <Typography variant="body2" sx={{ opacity: 0.7, fontSize: '0.75rem', color: textColor }}>
                 © {currentYear} Tous droits réservés
               </Typography>
-              <Typography variant="body2" sx={{ opacity: 0.6, fontSize: '0.7rem', mt: 0.5, color: 'white' }}>
+              <Typography variant="body2" sx={{ opacity: 0.6, fontSize: '0.7rem', mt: 0.5, color: textColor }}>
                 Construit avec Next.js & Material-UI
               </Typography>
             </Box>

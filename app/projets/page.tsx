@@ -36,6 +36,7 @@ import FilterListIcon from '@mui/icons-material/FilterList'
 import ClearIcon from '@mui/icons-material/Clear'
 import { useAdvancedTheme } from '../contexts/AdvancedThemeContext'
 import { useThemeColors } from '../hooks/useThemeColors'
+import { useTextColor } from '../hooks/useTextColor'
 
 interface Project {
   id: number
@@ -287,7 +288,8 @@ const ProjectCardWrapper = ({
                 display: 'flex', 
                 alignItems: 'center', 
                 gap: 0.5,
-                color: 'text.secondary',
+                color: textColor,
+                opacity: 0.8,
                 fontSize: '0.75rem'
               }}>
                 <AccessTimeIcon sx={{ fontSize: 14 }} />
@@ -368,6 +370,7 @@ const FilterChipComponent = ({
 }) => {
   const theme = useTheme()
   const { primary, secondary } = useThemeColors()
+  const textColor = useTextColor()
   
   return (
     <Chip

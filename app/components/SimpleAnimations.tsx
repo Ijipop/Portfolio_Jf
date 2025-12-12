@@ -3,6 +3,8 @@
 import { Box, Typography } from '@mui/material'
 import { motion } from 'framer-motion'
 import { useEffect, useState } from 'react'
+import { useTextColor } from '../hooks/useTextColor'
+import { useThemeColors } from '../hooks/useThemeColors'
 
 // Effet de typing simple
 export function TypingEffect({ 
@@ -16,6 +18,8 @@ export function TypingEffect({
 }) {
   const [displayText, setDisplayText] = useState("")
   const [currentIndex, setCurrentIndex] = useState(0)
+  const textColor = useTextColor()
+  const { primary } = useThemeColors()
 
   useEffect(() => {
     if (currentIndex < text.length) {
@@ -30,12 +34,12 @@ export function TypingEffect({
 
   return (
     <Box className={className}>
-      <Typography component="span">
+      <Typography component="span" sx={{ color: textColor }}>
         {displayText}
         <motion.span
           animate={{ opacity: [1, 0, 1] }}
           transition={{ duration: 0.8, repeat: Infinity }}
-          style={{ color: 'var(--primary-color, #1e3a8a)' }}
+          style={{ color: primary }}
         >
           |
         </motion.span>
