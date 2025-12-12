@@ -51,8 +51,9 @@ export function ThemeSelector() {
   
   // Synchroniser avec AdvancedThemeContext
   useEffect(() => {
-    if (themeName && themeDisplayOrder.includes(themeName as ThemeName)) {
-      const index = themeDisplayOrder.indexOf(themeName as ThemeName)
+    const validThemeName = themeName as ThemeName
+    if (validThemeName && themeDisplayOrder.includes(validThemeName)) {
+      const index = themeDisplayOrder.indexOf(validThemeName)
       if (index !== -1) {
         setCurrentThemeIndex(index)
       }
