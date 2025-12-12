@@ -3,63 +3,12 @@
 import { Box, CssBaseline } from '@mui/material'
 import { createTheme, PaletteMode, ThemeProvider } from '@mui/material/styles'
 import React, { createContext, useContext, useEffect, useState } from 'react'
-
-// Thèmes personnalisés
-const themes = {
-  default: {
-    name: 'Default',
-    primary: '#3b82f6',
-    secondary: '#059669',
-    accent: '#ff6b35',
-    background: 'linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)',
-    darkBackground: 'linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 25%, #2a2a2a 50%, #1a1a1a 75%, #0a0a0a 100%)'
-  },
-  neon: {
-    name: 'Neon',
-    primary: '#00ff88',
-    secondary: '#ff0080',
-    accent: '#00ffff',
-    background: 'linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 50%, #0a0a0a 100%)',
-    darkBackground: 'linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 25%, #2a2a2a 50%, #1a1a1a 75%, #0a0a0a 100%)'
-  },
-  sunset: {
-    name: 'Sunset',
-    primary: '#ff6b35',
-    secondary: '#ff1744',
-    accent: '#ffd700',
-    background: 'linear-gradient(135deg, #ff6b35 0%, #ff1744 50%, #ffd700 100%)',
-    darkBackground: 'linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 25%, #2a2a2a 50%, #1a1a1a 75%, #0a0a0a 100%)'
-  },
-  ocean: {
-    name: 'Ocean',
-    primary: '#00bcd4',
-    secondary: '#2196f3',
-    accent: '#4fc3f7',
-    background: 'linear-gradient(135deg, #e3f2fd 0%, #bbdefb 50%, #90caf9 100%)',
-    darkBackground: 'linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 25%, #2a2a2a 50%, #1a1a1a 75%, #0a0a0a 100%)'
-  },
-  forest: {
-    name: 'Forest',
-    primary: '#4caf50',
-    secondary: '#8bc34a',
-    accent: '#cddc39',
-    background: 'linear-gradient(135deg, #e8f5e8 0%, #c8e6c9 50%, #a5d6a7 100%)',
-    darkBackground: 'linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 25%, #2a2a2a 50%, #1a1a1a 75%, #0a0a0a 100%)'
-  },
-  cyber: {
-    name: 'Cyber',
-    primary: '#9c27b0',
-    secondary: '#e91e63',
-    accent: '#ff9800',
-    background: 'linear-gradient(135deg, #f3e5f5 0%, #e1bee7 50%, #ce93d8 100%)',
-    darkBackground: 'linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 25%, #2a2a2a 50%, #1a1a1a 75%, #0a0a0a 100%)'
-  }
-}
+import { THEMES, ThemeName, getDefaultTheme, getAvailableThemes } from '../design-system/themes'
 
 interface AdvancedThemeContextType {
-  themeName: string
+  themeName: ThemeName
   customTheme: any
-  setTheme: (themeName: string) => void
+  setTheme: (themeName: ThemeName) => void
   availableThemes: string[]
 }
 
@@ -67,29 +16,28 @@ const AdvancedThemeContext = createContext<AdvancedThemeContextType | undefined>
 
 export function AdvancedThemeProvider({ children }: { children: React.ReactNode }) {
   const mode: PaletteMode = 'light' // Mode fixe à light
-  const [themeName, setThemeName] = useState('default')
-  const [customTheme, setCustomTheme] = useState(themes.default)
+  const [themeName, setThemeName] = useState<ThemeName>('default')
+  const customTheme = THEMES[themeName] // Source unique de vérité
 
   // Charger les préférences depuis localStorage
   useEffect(() => {
-    const savedTheme = localStorage.getItem('themeName')
+    const savedTheme = localStorage.getItem('themeName') as ThemeName
     
-    if (savedTheme && themes[savedTheme as keyof typeof themes]) {
+    if (savedTheme && THEMES[savedTheme]) {
       setThemeName(savedTheme)
-      setCustomTheme(themes[savedTheme as keyof typeof themes])
     }
   }, [])
 
-  const setTheme = (newThemeName: string) => {
-    if (themes[newThemeName as keyof typeof themes]) {
+  const setTheme = (newThemeName: ThemeName) => {
+    if (THEMES[newThemeName]) {
       setThemeName(newThemeName)
-      setCustomTheme(themes[newThemeName as keyof typeof themes])
       localStorage.setItem('themeName', newThemeName)
     }
   }
 
   // Créer le thème MUI avec les couleurs personnalisées
-  const theme = createTheme({
+  // Utiliser useMemo pour recréer le thème quand customTheme change
+  const theme = React.useMemo(() => createTheme({
     palette: {
       mode,
       primary: {
@@ -157,7 +105,7 @@ export function AdvancedThemeProvider({ children }: { children: React.ReactNode 
         }
       }
     }
-  })
+  }), [customTheme, mode])
 
   return (
     <AdvancedThemeContext.Provider
@@ -165,14 +113,14 @@ export function AdvancedThemeProvider({ children }: { children: React.ReactNode 
         themeName,
         customTheme,
         setTheme,
-        availableThemes: Object.keys(themes)
+        availableThemes: getAvailableThemes()
       }}
     >
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <Box
           sx={{
-            background: customTheme.background,
+            background: `linear-gradient(135deg, ${customTheme.bg} 0%, ${customTheme.bg2} 25%, ${customTheme.bg} 50%, ${customTheme.bg2} 75%, ${customTheme.bg} 100%)`,
             minHeight: '100vh',
             transition: 'background 0.5s ease'
           }}

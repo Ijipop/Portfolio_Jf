@@ -3,60 +3,65 @@
 import Box from '@mui/material/Box'
 import Container from '@mui/material/Container'
 import Typography from '@mui/material/Typography'
-import { styled } from '@mui/material/styles'
+import { useTheme } from '@mui/material/styles'
 import GitHubIcon from '@mui/icons-material/GitHub'
 import LinkedInIcon from '@mui/icons-material/LinkedIn'
-import TwitterIcon from '@mui/icons-material/Twitter'
 import EmailIcon from '@mui/icons-material/Email'
+import CodeIcon from '@mui/icons-material/Code'
 import { useRouter } from 'next/navigation'
-
-const FooterContainer = styled(Box)(({ theme }) => ({
-  background: theme.palette.mode === 'dark'
-    ? 'linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)'
-    : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-  color: 'white',
-  padding: theme.spacing(4, 0, 2),
-  marginTop: 'auto',
-  position: 'relative',
-  '&::before': {
-    content: '""',
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    background: theme.palette.mode === 'dark'
-      ? 'url("data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%23ffffff" fill-opacity="0.05"%3E%3Ccircle cx="30" cy="30" r="2"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")'
-      : 'url("data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%23ffffff" fill-opacity="0.1"%3E%3Ccircle cx="30" cy="30" r="2"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")',
-    opacity: 0.3,
-    pointerEvents: 'none',
-    zIndex: 0,
-  }
-}))
-
-const SocialIcon = styled(Box)(({ theme }) => ({
-  display: 'inline-flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  width: 40,
-  height: 40,
-  borderRadius: '50%',
-  background: 'rgba(255,255,255,0.1)',
-  color: 'white',
-  margin: theme.spacing(0, 1),
-  cursor: 'pointer',
-  transition: 'all 0.3s ease',
-  position: 'relative',
-  zIndex: 1,
-  '&:hover': {
-    background: 'rgba(255,255,255,0.2)',
-    transform: 'scale(1.1)',
-  }
-}))
+import { useEffect, useState } from 'react'
+import CTAButton from './shared/CTAButton'
+import { DESIGN_TOKENS } from '../design-system/constants'
+import { useThemeColors } from '../hooks/useThemeColors'
+import { getTextColorForBackground } from '../utils/colorUtils'
 
 export default function Footer() {
   const currentYear = new Date().getFullYear()
   const router = useRouter()
+  const theme = useTheme()
+  const { primary, secondary } = useThemeColors()
+  const [footerBackground, setFooterBackground] = useState<string>(`linear-gradient(135deg, ${primary} 0%, ${secondary} 100%)`)
+  const [textColor, setTextColor] = useState<string>('#ffffff')
+
+  // Mettre à jour le background du footer quand le thème change
+  useEffect(() => {
+    const updateFooterBackground = () => {
+      if (typeof window === 'undefined') return
+      
+      // Lire les CSS variables définies par ThemeSelector
+      const bg = getComputedStyle(document.documentElement).getPropertyValue('--theme-bg')?.trim()
+      const bg2 = getComputedStyle(document.documentElement).getPropertyValue('--theme-bg2')?.trim()
+      
+      let newBackground: string
+      if (bg && bg2) {
+        // Créer un gradient avec les couleurs du thème
+        newBackground = `linear-gradient(135deg, ${bg} 0%, ${bg2} 50%, ${bg} 100%)`
+      } else {
+        // Fallback : utiliser primary et secondary
+        newBackground = `linear-gradient(135deg, ${primary} 0%, ${secondary} 100%)`
+      }
+      
+      setFooterBackground(newBackground)
+      // Déterminer la couleur de texte optimale pour ce background
+      setTextColor(getTextColorForBackground(newBackground))
+    }
+    
+    updateFooterBackground()
+    
+    // Observer les changements de CSS variables
+    const observer = new MutationObserver(updateFooterBackground)
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['style'],
+    })
+    
+    const interval = setInterval(updateFooterBackground, 200)
+    
+    return () => {
+      observer.disconnect()
+      clearInterval(interval)
+    }
+  }, [primary, secondary])
 
   const handleEmailClick = () => {
     router.push('/contact')
@@ -71,51 +76,201 @@ export default function Footer() {
   }
 
   return (
-    <FooterContainer>
+    <Box
+      sx={{
+        background: `${footerBackground} !important`,
+        color: `${textColor} !important`,
+        padding: theme.spacing(4, 0, 2),
+        marginTop: 'auto',
+        position: 'relative',
+        '&::before': {
+          content: '""',
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: 'url("data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%23ffffff" fill-opacity="0.1"%3E%3Ccircle cx="30" cy="30" r="2"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")',
+          opacity: 0.3,
+          pointerEvents: 'none',
+          zIndex: 0,
+        }
+      }}
+    >
       <Container maxWidth="lg">
         <Box sx={{ 
-          display: 'flex', 
-          flexDirection: { xs: 'column', md: 'row' },
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          gap: 2
+          display: 'grid',
+          gridTemplateColumns: { xs: '1fr', md: '2fr 1fr 1fr' },
+          gap: DESIGN_TOKENS.spacing.xl,
+          py: DESIGN_TOKENS.spacing.xl
         }}>
+          {/* Section Info */}
           <Box>
-            <Typography variant="h6" sx={{ fontWeight: 600, mb: 1 }}>
-              Portfolio Web
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: DESIGN_TOKENS.spacing.sm }}>
+              <CodeIcon sx={{ fontSize: 32, color: textColor }} />
+              <Typography variant="h5" sx={{ fontWeight: 700, color: textColor }}>
+                Portfolio Web
+              </Typography>
+            </Box>
+            <Typography variant="body1" sx={{ opacity: 0.9, mb: DESIGN_TOKENS.spacing.md, color: textColor }}>
+              Jean-François Lefebvre
             </Typography>
-            <Typography variant="body2" sx={{ opacity: 0.8 }}>
-              Jean-François Lefebvre, Développeur Full Stack
+            <Typography variant="body2" sx={{ opacity: 0.8, mb: DESIGN_TOKENS.spacing.md, color: textColor }}>
+              Développeur Full Stack passionné par la création d&apos;applications web modernes et performantes.
             </Typography>
+            <CTAButton
+              variant="outline"
+              size="small"
+              onClick={() => router.push('/contact')}
+            >
+              Me contacter
+            </CTAButton>
           </Box>
 
-          <Box sx={{ textAlign: 'center' }}>
-            <Typography variant="body2" sx={{ opacity: 0.8, mb: 1 }}>
-              Suivez-moi!
+          {/* Section Liens rapides */}
+          <Box>
+            <Typography variant="h6" sx={{ fontWeight: 600, mb: DESIGN_TOKENS.spacing.md, color: textColor }}>
+              Navigation
             </Typography>
-            <Box>
-              <SocialIcon onClick={handleGitHubClick}>
-                <GitHubIcon fontSize="small" />
-              </SocialIcon>
-              <SocialIcon onClick={handleLinkedInClick}>
-                <LinkedInIcon fontSize="small" />
-              </SocialIcon>
-              <SocialIcon onClick={handleEmailClick}>
-                <EmailIcon fontSize="small" />
-              </SocialIcon>
+            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+              <Typography 
+                variant="body2" 
+                sx={{ 
+                  opacity: 0.8, 
+                  cursor: 'pointer',
+                  transition: DESIGN_TOKENS.transitions.normal,
+                  color: textColor,
+                  '&:hover': { opacity: 1, transform: 'translateX(4px)' }
+                }}
+                onClick={() => router.push('/projets')}
+              >
+                Mes Projets
+              </Typography>
+              <Typography 
+                variant="body2" 
+                sx={{ 
+                  opacity: 0.8, 
+                  cursor: 'pointer',
+                  transition: DESIGN_TOKENS.transitions.normal,
+                  color: textColor,
+                  '&:hover': { opacity: 1, transform: 'translateX(4px)' }
+                }}
+                onClick={() => router.push('/a-propos')}
+              >
+                À Propos
+              </Typography>
+              <Typography 
+                variant="body2" 
+                sx={{ 
+                  opacity: 0.8, 
+                  cursor: 'pointer',
+                  transition: DESIGN_TOKENS.transitions.normal,
+                  color: textColor,
+                  '&:hover': { opacity: 1, transform: 'translateX(4px)' }
+                }}
+                onClick={() => router.push('/contact')}
+              >
+                Contact
+              </Typography>
             </Box>
           </Box>
 
-          <Box sx={{ textAlign: { xs: 'center', md: 'right' } }}>
-            <Typography variant="body2" sx={{ opacity: 0.8 }}>
-              © {currentYear} Tous droits réservés
+          {/* Section Social */}
+          <Box>
+            <Typography variant="h6" sx={{ fontWeight: 600, mb: DESIGN_TOKENS.spacing.md, color: textColor }}>
+              Suivez-moi
             </Typography>
-            <Typography variant="body2" sx={{ opacity: 0.6, fontSize: '0.75rem' }}>
-              Construit avec Next.js & Material-UI
-            </Typography>
+            <Box sx={{ display: 'flex', gap: 1, mb: DESIGN_TOKENS.spacing.lg }}>
+              <Box
+                onClick={handleGitHubClick}
+                aria-label="GitHub"
+                sx={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  width: 48,
+                  height: 48,
+                  borderRadius: '50%',
+                  background: textColor === '#ffffff' ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)',
+                  color: textColor,
+                  margin: theme.spacing(0, 1),
+                  cursor: 'pointer',
+                  transition: DESIGN_TOKENS.transitions.normal,
+                  position: 'relative',
+                  zIndex: 1,
+                  '&:hover': {
+                    background: textColor === '#ffffff' ? 'rgba(255,255,255,0.25)' : 'rgba(0,0,0,0.15)',
+                    transform: 'scale(1.15) translateY(-2px)',
+                    boxShadow: `0 4px 12px ${primary}40`,
+                  }
+                }}
+              >
+                <GitHubIcon />
+              </Box>
+              <Box
+                onClick={handleLinkedInClick}
+                aria-label="LinkedIn"
+                sx={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  width: 48,
+                  height: 48,
+                  borderRadius: '50%',
+                  background: textColor === '#ffffff' ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)',
+                  color: textColor,
+                  margin: theme.spacing(0, 1),
+                  cursor: 'pointer',
+                  transition: DESIGN_TOKENS.transitions.normal,
+                  position: 'relative',
+                  zIndex: 1,
+                  '&:hover': {
+                    background: textColor === '#ffffff' ? 'rgba(255,255,255,0.25)' : 'rgba(0,0,0,0.15)',
+                    transform: 'scale(1.15) translateY(-2px)',
+                    boxShadow: `0 4px 12px ${primary}40`,
+                  }
+                }}
+              >
+                <LinkedInIcon />
+              </Box>
+              <Box
+                onClick={handleEmailClick}
+                aria-label="Email"
+                sx={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  width: 48,
+                  height: 48,
+                  borderRadius: '50%',
+                  background: textColor === '#ffffff' ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)',
+                  color: textColor,
+                  margin: theme.spacing(0, 1),
+                  cursor: 'pointer',
+                  transition: DESIGN_TOKENS.transitions.normal,
+                  position: 'relative',
+                  zIndex: 1,
+                  '&:hover': {
+                    background: textColor === '#ffffff' ? 'rgba(255,255,255,0.25)' : 'rgba(0,0,0,0.15)',
+                    transform: 'scale(1.15) translateY(-2px)',
+                    boxShadow: `0 4px 12px ${primary}40`,
+                  }
+                }}
+              >
+                <EmailIcon />
+              </Box>
+            </Box>
+            <Box sx={{ borderTop: `1px solid ${textColor === '#ffffff' ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)'}`, pt: DESIGN_TOKENS.spacing.md }}>
+              <Typography variant="body2" sx={{ opacity: 0.7, fontSize: '0.75rem', color: textColor }}>
+                © {currentYear} Tous droits réservés
+              </Typography>
+              <Typography variant="body2" sx={{ opacity: 0.6, fontSize: '0.7rem', mt: 0.5, color: textColor }}>
+                Construit avec Next.js & Material-UI
+              </Typography>
+            </Box>
           </Box>
         </Box>
       </Container>
-    </FooterContainer>
+    </Box>
   )
 }

@@ -10,19 +10,33 @@ import TrendingUpIcon from '@mui/icons-material/TrendingUp'
 import Alert from '@mui/material/Alert'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
-import Card from '@mui/material/Card'
 import Chip from '@mui/material/Chip'
 import CircularProgress from '@mui/material/CircularProgress'
 import Container from '@mui/material/Container'
-import Paper from '@mui/material/Paper'
-import { styled } from '@mui/material/styles'
+import { styled, useTheme } from '@mui/material/styles'
 import Typography from '@mui/material/Typography'
 import { useEffect, useState } from 'react'
+import React from 'react'
 import AppBarComponent from '../components/appBar'
-import ParticleSystem from '../components/ParticleSystem'
-import SimpleCardComponent from '../components/SimpleCard'
-import SimpleTechTag from '../components/SimpleTechTag'
+import ProjectCard from '../components/shared/ProjectCard'
+import StatsCard from '../components/shared/StatsCard'
+import { StatsValueTypography, StatsLabelTypography } from '../components/shared/StatsTypography'
+import AnimatedCounter from '../components/shared/AnimatedCounter'
+import LoadingSpinner from '../components/shared/LoadingSpinner'
+import ScrollReveal from '../components/shared/ScrollReveal'
+import SkillTag from '../components/shared/SkillTag'
+import HeaderSection from '../components/shared/HeaderSection'
+import PageWrapper from '../components/shared/PageWrapper'
+import CTAButton from '../components/shared/CTAButton'
+import Footer from '../components/Footer'
+import StickyCTA from '../components/shared/StickyCTA'
+import { DESIGN_TOKENS, ANIMATIONS, GRADIENTS } from '../design-system/constants'
+import AccessTimeIcon from '@mui/icons-material/AccessTime'
+import FilterListIcon from '@mui/icons-material/FilterList'
+import ClearIcon from '@mui/icons-material/Clear'
 import { useAdvancedTheme } from '../contexts/AdvancedThemeContext'
+import { useThemeColors } from '../hooks/useThemeColors'
+import { useTextColor } from '../hooks/useTextColor'
 
 interface Project {
   id: number
@@ -37,104 +51,9 @@ interface Project {
 }
 
 // Composants stylisés
-const HeaderSection = styled(Box)(({ theme }) => ({
-  background: theme.palette.mode === 'dark' 
-    ? 'linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 25%, #2a2a2a 50%, #1a1a1a 75%, #0a0a0a 100%)'
-    : 'linear-gradient(135deg, #1e3a8a 0%, #3b82f6 50%, #059669 100%)',
-  color: 'white',
-  padding: theme.spacing(6.75, 0, 4.5),
-  textAlign: 'center',
-  position: 'relative',
-  overflow: 'hidden',
-  [theme.breakpoints.down('sm')]: {
-    padding: theme.spacing(4, 1, 3),
-  },
-  // Orange seulement pour h1 en dark mode
-  '& h1': {
-    color: theme.palette.mode === 'dark' ? '#ff6b35' : 'inherit'
-  },
-  '&::before': {
-    content: '""',
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    background: theme.palette.mode === 'dark'
-      ? 'radial-gradient(circle at 20% 50%, rgba(255, 107, 53, 0.1) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(255, 23, 68, 0.1) 0%, transparent 50%), radial-gradient(circle at 40% 80%, rgba(255, 107, 53, 0.05) 0%, transparent 50%)'
-      : 'url("data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%23ffffff" fill-opacity="0.08"%3E%3Ccircle cx="30" cy="30" r="1.5"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")',
-    opacity: 1,
-  },
-  '&::after': {
-    content: '""',
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    background: theme.palette.mode === 'dark'
-      ? 'linear-gradient(45deg, transparent 30%, rgba(255, 107, 53, 0.03) 50%, transparent 70%)'
-      : 'linear-gradient(45deg, transparent 30%, rgba(30, 58, 138, 0.05) 50%, transparent 70%)',
-    animation: 'shimmer 3s ease-in-out infinite',
-  },
-  '@keyframes shimmer': {
-    '0%': { transform: 'translateX(-100%)' },
-    '100%': { transform: 'translateX(100%)' },
-  },
-  '@keyframes gradientShift': {
-    '0%': { backgroundPosition: '0% 50%' },
-    '50%': { backgroundPosition: '100% 50%' },
-    '100%': { backgroundPosition: '0% 50%' },
-  },
-  '@keyframes pulse': {
-    '0%': { opacity: 0.3, transform: 'scale(0.95)' },
-    '100%': { opacity: 0.6, transform: 'scale(1.05)' },
-  }
-}))
-
-const ProjectCard = styled(Card)(({ theme }) => ({
-  background: theme.palette.mode === 'dark'
-    ? 'linear-gradient(145deg, #1a1a1a 0%, #2a2a2a 50%, #1a1a1a 100%)'
-    : 'linear-gradient(145deg, #f0f4ff 0%, #e6f2ff 50%, #dbeafe 100%)',
-  border: theme.palette.mode === 'dark' 
-    ? '2px solid rgba(74, 85, 104, 0.2)' 
-    : '1px solid rgba(74, 85, 104, 0.15)',
-  borderRadius: 24,
-  boxShadow: theme.palette.mode === 'dark'
-    ? '0 15px 50px rgba(0, 0, 0, 0.6), 0 0 20px rgba(74, 85, 104, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.1)'
-    : '0 8px 32px rgba(74, 85, 104, 0.1), 0 0 0 1px rgba(74, 85, 104, 0.05)',
-  transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
-  position: 'relative',
-  overflow: 'hidden',
-  animation: 'fadeInUp 0.6s ease-out',
-  cursor: 'pointer',
-  zIndex: 1,
-  height: '400px', // Hauteur fixe réduite
-  [theme.breakpoints.down('sm')]: {
-    borderRadius: 16,
-    height: 'auto',
-    minHeight: '300px',
-  },
-  '&:hover': {
-    transform: 'translateY(-12px) scale(1.03)',
-    boxShadow: theme.palette.mode === 'dark'
-      ? '0 30px 60px rgba(0, 0, 0, 0.7), 0 0 0 2px rgba(255, 107, 53, 0.6), 0 0 40px rgba(255, 107, 53, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2)'
-      : '0 20px 40px rgba(59, 130, 246, 0.15), 0 0 0 2px rgba(59, 130, 246, 0.6), 0 0 30px rgba(59, 130, 246, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.8)',
-  },
-  '@keyframes fadeInUp': {
-    from: {
-      opacity: 0,
-      transform: 'translateY(30px)'
-    },
-    to: {
-      opacity: 1,
-      transform: 'translateY(0)'
-    }
-  }
-}))
 
 const StatusChip = styled(Chip)(({ theme, color }: any) => ({
-  borderRadius: 20,
+  borderRadius: DESIGN_TOKENS.borderRadius.medium,
   fontWeight: 600,
   fontSize: '0.875rem',
   padding: theme.spacing(0.5, 1.5),
@@ -144,36 +63,7 @@ const StatusChip = styled(Chip)(({ theme, color }: any) => ({
   }
 }))
 
-const ActionButton = styled(Button)(({ theme }) => ({
-  background: theme.palette.mode === 'dark'
-    ? 'linear-gradient(135deg, #3b82f6 0%, #10b981 100%)'
-    : 'linear-gradient(135deg, #1e3a8a 0%, #059669 100%)',
-  borderRadius: 12,
-  padding: theme.spacing(1.5, 3),
-  fontWeight: 600,
-  fontSize: '1rem',
-  textTransform: 'none',
-  boxShadow: theme.palette.mode === 'dark'
-    ? '0 4px 15px rgba(59, 130, 246, 0.4)'
-    : '0 4px 15px rgba(30, 58, 138, 0.4)',
-  transition: 'all 0.3s ease',
-  '&:hover': {
-    background: theme.palette.mode === 'dark'
-      ? 'linear-gradient(135deg, #2563eb 0%, #059669 100%)'
-      : 'linear-gradient(135deg, #1e40af 0%, #047857 100%)',
-    transform: 'translateY(-2px)',
-    boxShadow: theme.palette.mode === 'dark'
-      ? '0 8px 25px rgba(59, 130, 246, 0.6)'
-      : '0 8px 25px rgba(30, 58, 138, 0.6)',
-  },
-  '&:disabled': {
-    background: theme.palette.mode === 'dark'
-      ? 'linear-gradient(135deg, #404040 0%, #303030 100%)'
-      : 'linear-gradient(135deg, #e0e0e0 0%, #bdbdbd 100%)',
-    color: theme.palette.mode === 'dark' ? '#888888' : '#757575',
-    boxShadow: 'none',
-  }
-}))
+// ActionButton supprimé - utiliser CTAButton à la place qui utilise useThemeColors()
 
 const TechStack = styled(Box)(({ theme }) => ({
   display: 'flex',
@@ -183,56 +73,6 @@ const TechStack = styled(Box)(({ theme }) => ({
 }))
 
 
-const StatsCard = styled(Paper)(({ theme }) => ({
-  background: theme.palette.mode === 'dark'
-    ? 'linear-gradient(135deg, #1e293b 0%, #334155 100%)'
-    : 'linear-gradient(135deg, #3b82f6 0%, #059669 25%, #10b981 50%, #3b82f6 75%, #059669 100%)',
-  backgroundSize: '200% 200%',
-  animation: 'gradientShift 6s ease-in-out infinite',
-  color: 'white',
-  padding: theme.spacing(2),
-  borderRadius: 16,
-  textAlign: 'center',
-  position: 'relative',
-  overflow: 'hidden',
-  cursor: 'pointer',
-  transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-  boxShadow: theme.palette.mode === 'dark'
-    ? '0 6px 24px rgba(0,0,0,0.4), 0 0 0 1px rgba(59, 130, 246, 0.2)'
-    : '0 8px 32px rgba(59, 130, 246, 0.2), 0 0 0 1px rgba(59, 130, 246, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.2)',
-  '&::before': {
-    content: '""',
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    background: theme.palette.mode === 'dark'
-      ? 'linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(16, 185, 129, 0.1) 100%)'
-      : 'linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(16, 185, 129, 0.1) 100%)',
-    opacity: 0,
-    transition: 'opacity 0.3s ease',
-    zIndex: 1,
-  },
-  '&:hover': {
-    transform: 'translateY(-4px) scale(1.02)',
-    boxShadow: theme.palette.mode === 'dark'
-      ? '0 12px 40px rgba(0,0,0,0.6), 0 0 0 2px rgba(59, 130, 246, 0.4), 0 0 20px rgba(59, 130, 246, 0.3)'
-      : '0 12px 40px rgba(59, 130, 246, 0.3), 0 0 0 2px rgba(59, 130, 246, 0.3), 0 0 20px rgba(16, 185, 129, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.3)',
-    '&::before': {
-      opacity: 1,
-    }
-  },
-  '@keyframes fadeIn': {
-    from: { opacity: 0, transform: 'translateY(20px)' },
-    to: { opacity: 1, transform: 'translateY(0)' }
-  },
-  '@keyframes gradientShift': {
-    '0%': { backgroundPosition: '0% 50%' },
-    '50%': { backgroundPosition: '100% 50%' },
-    '100%': { backgroundPosition: '0% 50%' }
-  }
-}))
 
 const AnimatedBox = styled(Box)({
   animation: 'fadeIn 0.6s ease-out',
@@ -244,7 +84,7 @@ const AnimatedBox = styled(Box)({
 
 const ProjectsGrid = styled(Box)(({ theme }) => ({
   display: 'grid',
-  gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))',
+  gridTemplateColumns: 'repeat(2, 1fr)',
   gap: theme.spacing(4),
   [theme.breakpoints.down('sm')]: {
     gridTemplateColumns: '1fr',
@@ -255,7 +95,8 @@ const ProjectsGrid = styled(Box)(({ theme }) => ({
     gap: theme.spacing(3),
   },
   [theme.breakpoints.up('lg')]: {
-    gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))',
+    gridTemplateColumns: 'repeat(2, 1fr)',
+    gap: theme.spacing(4),
   }
 }))
 
@@ -271,11 +112,423 @@ const StatsGrid = styled(Box)(({ theme }) => ({
   },
 }))
 
+// Composant pour le label du filtre
+const FilterContainerLabel = () => {
+  const theme = useTheme()
+  const { primary } = useThemeColors()
+  const textColor = useTextColor()
+  
+  return (
+    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mr: 2 }}>
+      <FilterListIcon sx={{ 
+        color: primary,
+        fontSize: 28,
+        filter: `drop-shadow(0 0 8px ${primary}50)`,
+        transition: DESIGN_TOKENS.transitions.normal,
+      }} />
+      <Typography 
+        variant="h6" 
+        sx={{ 
+          fontWeight: 700,
+          color: textColor,
+          fontSize: { xs: '1rem', sm: '1.125rem' },
+          letterSpacing: '0.5px',
+          textShadow: `0 0 10px ${primary}30`,
+          transition: DESIGN_TOKENS.transitions.normal,
+        }}
+      >
+        Filtrer par technologie:
+      </Typography>
+    </Box>
+  )
+}
+
+// Composant pour le titre du projet avec gradient adaptatif
+const ProjectTitleTypography = ({ projectName }: { projectName: string }) => {
+  const theme = useTheme()
+  const { primary, secondary, accent } = useThemeColors()
+  
+  return (
+    <Typography 
+      variant="h6" 
+      component="h2" 
+      gutterBottom
+      sx={{ 
+        fontWeight: 700,
+        mb: 1.5,
+        background: `linear-gradient(45deg, ${primary}, ${secondary}, ${accent}, ${primary})`,
+        backgroundClip: 'text',
+        WebkitBackgroundClip: 'text',
+        WebkitTextFillColor: 'transparent',
+        backgroundSize: '200% 200%',
+        animation: 'gradientShift 3s ease-in-out infinite',
+        textShadow: `0 0 20px ${primary}40`,
+        ...ANIMATIONS.gradientShift
+      }}
+    >
+      {projectName}
+    </Typography>
+  )
+}
+
+// Composant wrapper pour un projet avec les couleurs du thème
+const ProjectCardWrapper = ({ 
+  project, 
+  index, 
+  handleProjectClick,
+  getStatusIcon,
+  getStatusColor,
+  getImageUrl
+}: { 
+  project: Project
+  index: number
+  handleProjectClick: (url: string) => void
+  getStatusIcon: (status: string) => React.ReactElement
+  getStatusColor: (status: string) => "error" | "success" | "warning" | "info" | "default" | "primary" | "secondary"
+  getImageUrl: (imageUrl: string) => string
+}) => {
+  // Utiliser les hooks ici, pas dans le map
+  const { primary, secondary, accent } = useThemeColors()
+  const textColor = useTextColor()
+  
+  // Palette de couleurs pour les reflets basée sur le thème
+  const reflectionColors = [
+    primary,
+    secondary,
+    accent,
+    primary,
+    secondary,
+    accent,
+    primary,
+    secondary,
+    accent,
+    primary,
+  ]
+  
+  const reflectionColor = reflectionColors[index % reflectionColors.length]
+  
+  return (
+    <ScrollReveal key={project.id} direction="up" delay={0.1 * (index % 4)}>
+      <ProjectCard 
+        key={project.id} 
+        onClick={() => handleProjectClick(project.url)}
+        reflectionColor={reflectionColor}
+      >
+        {/* Logo GitHub dans le coin supérieur droit */}
+        {project.url && project.url.includes('github') && (
+          <Box
+            sx={{
+              position: 'absolute',
+              top: 12,
+              right: 12,
+              background: 'rgba(255, 255, 255, 0.95)',
+              borderRadius: '50%',
+              padding: 1.5,
+              boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
+              border: '2px solid rgba(0, 0, 0, 0.1)',
+              zIndex: DESIGN_TOKENS.zIndex.overlay,
+              transition: DESIGN_TOKENS.transitions.normal,
+              pointerEvents: 'auto',
+              '&:hover': {
+                transform: 'scale(1.15)',
+                boxShadow: '0 8px 24px rgba(0, 0, 0, 0.2)',
+              }
+            }}
+          >
+            <GitHubIcon 
+              sx={{ 
+                fontSize: 22, 
+                color: '#000000',
+                filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.1))'
+              }} 
+            />
+          </Box>
+        )}
+
+        {/* Icône générique pour autres liens */}
+        {project.url && !project.url.includes('github') && (
+          <Box
+            sx={{
+              position: 'absolute',
+              top: 12,
+              right: 12,
+              background: 'rgba(255, 255, 255, 0.95)',
+              borderRadius: '50%',
+              padding: 1.5,
+              boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
+              border: '2px solid rgba(0, 0, 0, 0.1)',
+              zIndex: DESIGN_TOKENS.zIndex.overlay,
+              transition: DESIGN_TOKENS.transitions.normal,
+              pointerEvents: 'auto',
+              '&:hover': {
+                transform: 'scale(1.15)',
+                boxShadow: '0 8px 24px rgba(0, 0, 0, 0.2)',
+              }
+            }}
+          >
+            <LaunchIcon 
+              sx={{ 
+                fontSize: 22, 
+                color: '#000000',
+                filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.1))'
+              }} 
+            />
+          </Box>
+        )}
+
+        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 1.5 }}>
+          <StatusChip
+            icon={getStatusIcon(project.status)}
+            label={project.status}
+            color={getStatusColor(project.status)}
+            size="small"
+          />
+          {/* Métriques du projet */}
+          <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
+            {project.createdAt && (
+              <Box sx={{ 
+                display: 'flex', 
+                alignItems: 'center', 
+                gap: 0.5,
+                color: textColor,
+                opacity: 0.8,
+                fontSize: '0.75rem'
+              }}>
+                <AccessTimeIcon sx={{ fontSize: 14 }} />
+                <Typography variant="caption" sx={{ fontSize: '0.7rem' }}>
+                  {new Date(project.createdAt).getFullYear()}
+                </Typography>
+              </Box>
+            )}
+          </Box>
+        </Box>
+        
+        <ProjectTitleTypography projectName={project.name} />
+        
+        {project.imageUrl && (
+          <ProjectImageContainer>
+            <img 
+              src={getImageUrl(project.imageUrl)} 
+              alt={project.name}
+            />
+          </ProjectImageContainer>
+        )}
+        
+        <Typography 
+          variant="body2" 
+          color="text.secondary" 
+          paragraph
+          sx={{ 
+            lineHeight: 1.4,
+            mb: 2,
+            minHeight: '3rem',
+            fontSize: '0.9rem'
+          }}
+        >
+          {project.description}
+        </Typography>
+        
+        <TechStack sx={{
+          visibility: 'visible !important',
+          opacity: '1 !important',
+          zIndex: 1000,
+          position: 'relative',
+          mb: 2
+        }}>
+          {project.technologies.split(',').map((tech, techIndex) => (
+            <SkillTag key={techIndex} size="small" reflectionColor={reflectionColor}>
+              {tech.trim()}
+            </SkillTag>
+          ))}
+        </TechStack>
+        
+        {/* CTA pour voir le projet */}
+        {project.url && (
+          <CTAButton
+            variant="primary"
+            size="medium"
+            fullWidth
+            onClick={() => handleProjectClick(project.url)}
+          >
+            Voir le projet
+          </CTAButton>
+        )}
+      </ProjectCard>
+    </ScrollReveal>
+  )
+}
+
+// FilterChip comme composant fonctionnel pour réagir aux changements de thème
+const FilterChipComponent = ({ 
+  label, 
+  onClick, 
+  selected, 
+  icon 
+}: { 
+  label: string
+  onClick: () => void
+  selected: boolean
+  icon?: React.ReactElement
+}) => {
+  const theme = useTheme()
+  const { primary, secondary } = useThemeColors()
+  const textColor = useTextColor()
+  
+  return (
+    <Chip
+      label={label}
+      onClick={onClick}
+      icon={icon}
+      sx={{
+        borderRadius: DESIGN_TOKENS.borderRadius.small,
+        fontWeight: 600,
+        fontSize: '0.875rem',
+        padding: theme.spacing(0.5, 1.5),
+        cursor: 'pointer',
+        transition: DESIGN_TOKENS.transitions.normal,
+        ...(selected ? {
+          background: `linear-gradient(135deg, ${primary} 0%, ${secondary} 100%) !important`,
+          color: 'white !important',
+          border: `2px solid ${primary} !important`,
+          boxShadow: `0 4px 12px ${primary}40 !important`,
+          '&:hover': {
+            transform: 'translateY(-2px)',
+            boxShadow: `0 6px 20px ${primary}60 !important`,
+            background: `linear-gradient(135deg, ${primary} 0%, ${secondary} 100%) !important`,
+          }
+        } : {
+          background: textColor === '#ffffff' ? `rgba(255, 255, 255, 0.1) !important` : `rgba(0, 0, 0, 0.05) !important`,
+          color: `${textColor} !important`,
+          border: `2px solid ${primary}30 !important`,
+          '&:hover': {
+            transform: 'translateY(-2px)',
+            background: textColor === '#ffffff' ? `rgba(255, 255, 255, 0.15) !important` : `rgba(0, 0, 0, 0.08) !important`,
+            border: `2px solid ${primary}50 !important`,
+            boxShadow: `0 4px 12px ${primary}30 !important`,
+          }
+        })
+      }}
+    />
+  )
+}
+
+// FilterContainer comme composant fonctionnel pour réagir aux changements de thème
+const FilterContainerComponent = ({ children }: { children: React.ReactNode }) => {
+  const theme = useTheme()
+  const { primary } = useThemeColors()
+  const textColor = useTextColor()
+  const [filterBackground, setFilterBackground] = useState<string>(GRADIENTS.cards.light)
+  
+  // Mettre à jour le background du filtre quand le thème change
+  useEffect(() => {
+    const updateFilterBackground = () => {
+      if (typeof window === 'undefined') return
+      
+      // Lire les CSS variables définies par ThemeSelector
+      const cardBg = getComputedStyle(document.documentElement).getPropertyValue('--card-background')?.trim()
+      
+      if (cardBg && cardBg !== 'none') {
+        setFilterBackground(cardBg)
+      } else {
+        // Fallback : créer un gradient avec les couleurs du thème
+        const bg = getComputedStyle(document.documentElement).getPropertyValue('--theme-bg')?.trim()
+        const bg2 = getComputedStyle(document.documentElement).getPropertyValue('--theme-bg2')?.trim()
+        
+        if (bg && bg2) {
+          setFilterBackground(`linear-gradient(145deg, ${bg} 0%, ${bg2} 50%, ${bg} 100%)`)
+        } else {
+          setFilterBackground(GRADIENTS.cards.light)
+        }
+      }
+    }
+    
+    updateFilterBackground()
+    
+    // Observer les changements de CSS variables
+    const observer = new MutationObserver(updateFilterBackground)
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['style'],
+    })
+    
+    const interval = setInterval(updateFilterBackground, 200)
+    
+    return () => {
+      observer.disconnect()
+      clearInterval(interval)
+    }
+  }, [])
+  
+  return (
+    <Box
+      sx={{
+        display: 'flex',
+        flexWrap: 'wrap',
+        gap: theme.spacing(1.5),
+        alignItems: 'center',
+        marginBottom: theme.spacing(4),
+        padding: theme.spacing(2),
+        background: `${filterBackground} !important`,
+        border: `2px solid ${primary}30 !important`,
+        borderRadius: DESIGN_TOKENS.borderRadius.medium,
+        boxShadow: `0 8px 32px ${primary}15, ${DESIGN_TOKENS.shadows.elevated.light} !important`,
+        backdropFilter: 'blur(10px)',
+        WebkitBackdropFilter: 'blur(10px)',
+        transition: DESIGN_TOKENS.transitions.normal,
+        color: `${textColor} !important`,
+        '& *': {
+          color: 'inherit !important',
+        },
+        '&:hover': {
+          border: `2px solid ${primary}50 !important`,
+          boxShadow: `0 12px 40px ${primary}25, ${DESIGN_TOKENS.shadows.elevated.light} !important`,
+        }
+      }}
+    >
+      {children}
+    </Box>
+  )
+}
+
+const ProjectImageContainer = styled(Box)(({ theme }) => ({
+  position: 'relative',
+  overflow: 'hidden',
+  borderRadius: DESIGN_TOKENS.borderRadius.small,
+  marginBottom: theme.spacing(2),
+  '& img': {
+    transition: DESIGN_TOKENS.transitions.slow,
+    width: '100%',
+    height: '280px',
+    objectFit: 'cover',
+    borderRadius: DESIGN_TOKENS.borderRadius.small,
+    boxShadow: '0 4px 20px rgba(0, 0, 0, 0.1)',
+  },
+  '&:hover img': {
+    transform: 'scale(1.1)',
+  },
+  '&::after': {
+    content: '""',
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    background: 'linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.3) 100%)',
+    opacity: 0,
+    transition: DESIGN_TOKENS.transitions.normal,
+    pointerEvents: 'none',
+  },
+  '&:hover::after': {
+    opacity: 1,
+  },
+}))
+
 export default function Projets() {
+  const { primary, secondary, accent } = useThemeColors()
   const [projects, setProjects] = useState<Project[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const { customTheme } = useAdvancedTheme()
+  const [selectedTech, setSelectedTech] = useState<string | null>(null)
 
   useEffect(() => {
     fetchProjects()
@@ -378,14 +631,31 @@ export default function Projets() {
     ['wip', 'en cours', 'en cours de développement'].includes(p.status.toLowerCase())
   ).length
 
+  // Extraire toutes les technologies uniques
+  const getAllTechnologies = () => {
+    const techSet = new Set<string>()
+    projects.forEach(project => {
+      project.technologies.split(',').forEach(tech => {
+        techSet.add(tech.trim())
+      })
+    })
+    return Array.from(techSet).sort()
+  }
+
+  // Filtrer les projets par technologie
+  const filteredProjects = selectedTech
+    ? projects.filter(project => 
+        project.technologies.split(',').some(tech => tech.trim().toLowerCase() === selectedTech.toLowerCase())
+      )
+    : projects
+
+  const handleTechFilter = (tech: string) => {
+    setSelectedTech(selectedTech === tech ? null : tech)
+  }
+
   if (loading) {
     return (
-      <Box sx={{ 
-        minHeight: '100vh', 
-        background: (theme) => theme.palette.mode === 'dark'
-          ? 'linear-gradient(135deg, #0f172a 0%, #1e293b 100%)'
-          : 'linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%)'
-      }}>
+      <PageWrapper backgroundVariant="default" showParticles={false}>
         <AppBarComponent />
         <Container sx={{ 
           mt: 4, 
@@ -394,476 +664,153 @@ export default function Projets() {
           alignItems: 'center',
           minHeight: '60vh'
         }}>
-          <Box sx={{ textAlign: 'center' }}>
-            <CircularProgress size={60} sx={{ 
-              color: (theme) => theme.palette.mode === 'dark' ? '#4a90e2' : '#667eea', 
-              mb: 2 
-            }} />
-            <Typography variant="h6" color="text.secondary">
-              Chargement des projets...
-            </Typography>
-          </Box>
+          <LoadingSpinner message="Chargement des projets..." />
         </Container>
-      </Box>
+      </PageWrapper>
     )
   }
 
   return (
-    <Box sx={{ 
-      minHeight: '100vh', 
-      background: (theme) => theme.palette.mode === 'dark'
-        ? 'linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 25%, #2a2a2a 50%, #1a1a1a 75%, #0a0a0a 100%)'
-        : 'linear-gradient(135deg, #f0f4ff 0%, #e6f2ff 25%, #dbeafe 50%, #e6f2ff 75%, #f0f4ff 100%)',
-      position: 'relative',
-      overflowX: 'hidden', // Empêcher le scroll horizontal seulement
-      overflowY: 'auto', // Permettre le scroll vertical
-      '&::before': {
-        content: '""',
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        background: (theme) => theme.palette.mode === 'dark'
-          ? 'radial-gradient(circle at 25% 25%, rgba(255, 107, 53, 0.05) 0%, transparent 50%), radial-gradient(circle at 75% 75%, rgba(255, 23, 68, 0.05) 0%, transparent 50%)'
-          : 'radial-gradient(circle at 20% 30%, rgba(59, 130, 246, 0.08) 0%, transparent 50%), radial-gradient(circle at 80% 70%, rgba(5, 150, 105, 0.06) 0%, transparent 50%)',
-        pointerEvents: 'none',
-        zIndex: 0,
-      }
-    }}>
-      {/* Particle System */}
-      <ParticleSystem 
-        particleCount={200}
-        speed={0.2}
-        colors={['#ff6b35', '#ff1744', '#3b82f6', '#059669']}
-        mouseInteraction={true}
-      />
-      
+    <PageWrapper
+      backgroundVariant="projects"
+      particleCount={70}
+      particleSpeed={0.25}
+      particleColors={[primary, secondary, accent]}
+      overlayVariant="light"
+      overflowX="hidden"
+      overflowY="auto"
+    >
       <AppBarComponent />
       
       {/* Hero Section */}
-      <HeaderSection>
-        <Container maxWidth="lg">
-          <AnimatedBox>
-            <Typography 
-              variant="h2" 
-              component="h1" 
-              gutterBottom 
-              sx={{ 
-                fontWeight: 900,
-                fontSize: { xs: '3rem', md: '4.5rem' },
-                textShadow: (theme) => theme.palette.mode === 'dark'
-                  ? '0 0 20px rgba(255, 107, 53, 0.8), 0 0 40px rgba(255, 107, 53, 0.4), 0 4px 8px rgba(0,0,0,0.8)'
-                  : '0 4px 8px rgba(0,0,0,0.3)',
-                letterSpacing: '0.1em',
-                textTransform: 'uppercase',
-                color: (theme) => theme.palette.mode === 'dark' ? '#ff6b35' : 'inherit',
-                // Effet de glow animé
-                animation: (theme) => theme.palette.mode === 'dark' ? 'glow-pulse 2s ease-in-out infinite alternate' : 'none',
-                '@keyframes glow-pulse': {
-                  '0%': {
-                    textShadow: '0 0 20px rgba(255, 107, 53, 0.8), 0 0 40px rgba(255, 107, 53, 0.4)',
-                    filter: 'brightness(1)'
-                  },
-                  '100%': {
-                    textShadow: '0 0 30px rgba(255, 107, 53, 1), 0 0 60px rgba(255, 107, 53, 0.6)',
-                    filter: 'brightness(1.2)'
-                  }
-                }
-              }}
-            >
-              Mes Projets
-            </Typography>
-            <Typography 
-              variant="h5" 
-              sx={{ 
-                opacity: 0.9,
-                fontWeight: 300,
-                maxWidth: 600,
-                mx: 'auto'
-              }}
-            >
-              Découvrez mes réalisations et explorations technologiques
-            </Typography>
-          </AnimatedBox>
-        </Container>
-      </HeaderSection>
+      <HeaderSection 
+        title="Mes Projets"
+        subtitle="Découvrez mes réalisations et explorations technologiques"
+      />
 
       <Container maxWidth="lg" sx={{ py: 6, position: 'relative', zIndex: 2 }}>
         {error && (
           <AnimatedBox>
-            <Alert severity="error" sx={{ mb: 4, borderRadius: 2 }}>
+            <Alert severity="error" sx={{ mb: 4, borderRadius: DESIGN_TOKENS.borderRadius.small }}>
               {error}
             </Alert>
           </AnimatedBox>
         )}
 
         {/* Stats Section */}
-        <AnimatedBox>
+        <ScrollReveal direction="up" delay={0.1}>
           <StatsGrid>
-            <StatsCard>
-              <Box sx={{ position: 'relative', zIndex: 2 }}>
-                <Typography variant="h3" sx={{ 
-                  fontWeight: 800, 
-                  mb: 0.5, 
-                  background: 'linear-gradient(45deg, #ffffff 0%, #e0f2fe 25%, #b3e5fc 50%, #81d4fa 75%, #ffffff 100%)',
-                  backgroundClip: 'text',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                  backgroundSize: '200% 200%',
-                  animation: 'textShimmer 3s ease-in-out infinite',
-                  textShadow: '0 0 20px rgba(255, 255, 255, 0.6), 0 0 40px rgba(59, 130, 246, 0.3)',
-                  fontSize: { xs: '1.8rem', md: '2.2rem' },
-                  position: 'relative',
-                  '&::before': {
-                    content: '""',
-                    position: 'absolute',
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    bottom: 0,
-                    background: 'linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.3) 50%, transparent 70%)',
-                    animation: 'textGlow 2s ease-in-out infinite',
-                    zIndex: -1,
-                  }
-                }}>
-                  {projects.length}
-                </Typography>
-                <Typography variant="body1" sx={{ 
-                  opacity: 0.95, 
-                  fontWeight: 600,
-                  textShadow: '0 2px 8px rgba(0, 0, 0, 0.3), 0 0 10px rgba(59, 130, 246, 0.2)',
-                  fontSize: '0.9rem',
-                  background: 'linear-gradient(45deg, #ffffff, #f8fafc)',
-                  backgroundClip: 'text',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                  letterSpacing: '0.5px',
-                  textTransform: 'uppercase',
-                  position: 'relative',
-                  '&::after': {
-                    content: '""',
-                    position: 'absolute',
-                    bottom: '-2px',
-                    left: '50%',
-                    transform: 'translateX(-50%)',
-                    width: '60%',
-                    height: '2px',
-                    background: 'linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent)',
-                    animation: 'underlineGlow 2s ease-in-out infinite',
-                  }
-                }}>
-                  Projets Totaux
-                </Typography>
-              </Box>
-            </StatsCard>
-            <StatsCard>
-              <Box sx={{ position: 'relative', zIndex: 2 }}>
-                <Typography variant="h3" sx={{ 
-                  fontWeight: 800, 
-                  mb: 0.5, 
-                  background: 'linear-gradient(45deg, #ffffff 0%, #e0f2fe 25%, #b3e5fc 50%, #81d4fa 75%, #ffffff 100%)',
-                  backgroundClip: 'text',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                  backgroundSize: '200% 200%',
-                  animation: 'textShimmer 3s ease-in-out infinite',
-                  textShadow: '0 0 20px rgba(255, 255, 255, 0.6), 0 0 40px rgba(16, 185, 129, 0.3)',
-                  fontSize: { xs: '1.8rem', md: '2.2rem' },
-                  position: 'relative',
-                  '&::before': {
-                    content: '""',
-                    position: 'absolute',
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    bottom: 0,
-                    background: 'linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.3) 50%, transparent 70%)',
-                    animation: 'textGlow 2s ease-in-out infinite',
-                    zIndex: -1,
-                  }
-                }}>
-                  {getCompletedProjects()}
-                </Typography>
-                <Typography variant="body1" sx={{ 
-                  opacity: 0.95, 
-                  fontWeight: 600,
-                  textShadow: '0 2px 8px rgba(0, 0, 0, 0.3), 0 0 10px rgba(16, 185, 129, 0.2)',
-                  fontSize: '0.9rem',
-                  background: 'linear-gradient(45deg, #ffffff, #f8fafc)',
-                  backgroundClip: 'text',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                  letterSpacing: '0.5px',
-                  textTransform: 'uppercase',
-                  position: 'relative',
-                  '&::after': {
-                    content: '""',
-                    position: 'absolute',
-                    bottom: '-2px',
-                    left: '50%',
-                    transform: 'translateX(-50%)',
-                    width: '60%',
-                    height: '2px',
-                    background: 'linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent)',
-                    animation: 'underlineGlow 2s ease-in-out infinite',
-                  }
-                }}>
-                  Projets Terminés
-                </Typography>
-              </Box>
-            </StatsCard>
-            <StatsCard>
-              <Box sx={{ position: 'relative', zIndex: 2 }}>
-                <Typography variant="h3" sx={{ 
-                  fontWeight: 800, 
-                  mb: 0.5, 
-                  background: 'linear-gradient(45deg, #ffffff 0%, #e0f2fe 25%, #b3e5fc 50%, #81d4fa 75%, #ffffff 100%)',
-                  backgroundClip: 'text',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                  backgroundSize: '200% 200%',
-                  animation: 'textShimmer 3s ease-in-out infinite',
-                  textShadow: '0 0 20px rgba(255, 255, 255, 0.6), 0 0 40px rgba(59, 130, 246, 0.3)',
-                  fontSize: { xs: '1.8rem', md: '2.2rem' },
-                  position: 'relative',
-                  '&::before': {
-                    content: '""',
-                    position: 'absolute',
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    bottom: 0,
-                    background: 'linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.3) 50%, transparent 70%)',
-                    animation: 'textGlow 2s ease-in-out infinite',
-                    zIndex: -1,
-                  }
-                }}>
-                  {getInProgressProjects()}
-                </Typography>
-                <Typography variant="body1" sx={{ 
-                  opacity: 0.95, 
-                  fontWeight: 600,
-                  textShadow: '0 2px 8px rgba(0, 0, 0, 0.3), 0 0 10px rgba(59, 130, 246, 0.2)',
-                  fontSize: '0.9rem',
-                  background: 'linear-gradient(45deg, #ffffff, #f8fafc)',
-                  backgroundClip: 'text',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                  letterSpacing: '0.5px',
-                  textTransform: 'uppercase',
-                  position: 'relative',
-                  '&::after': {
-                    content: '""',
-                    position: 'absolute',
-                    bottom: '-2px',
-                    left: '50%',
-                    transform: 'translateX(-50%)',
-                    width: '60%',
-                    height: '2px',
-                    background: 'linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent)',
-                    animation: 'underlineGlow 2s ease-in-out infinite',
-                  }
-                }}>
-                  En Cours
-                </Typography>
-              </Box>
-            </StatsCard>
+            <ScrollReveal direction="up" delay={0.2}>
+              <StatsCard>
+                <Box sx={{ position: 'relative', zIndex: 2 }}>
+                  <StatsValueTypography variant="h3">
+                    <AnimatedCounter value={projects.length} />
+                  </StatsValueTypography>
+                  <StatsLabelTypography variant="body1">
+                    Projets Totaux
+                  </StatsLabelTypography>
+                </Box>
+              </StatsCard>
+            </ScrollReveal>
+            <ScrollReveal direction="up" delay={0.3}>
+              <StatsCard>
+                <Box sx={{ position: 'relative', zIndex: 2 }}>
+                  <StatsValueTypography variant="h3">
+                    <AnimatedCounter value={getCompletedProjects()} />
+                  </StatsValueTypography>
+                  <StatsLabelTypography variant="body1">
+                    Projets Terminés
+                  </StatsLabelTypography>
+                </Box>
+              </StatsCard>
+            </ScrollReveal>
+            <ScrollReveal direction="up" delay={0.4}>
+              <StatsCard>
+                <Box sx={{ position: 'relative', zIndex: 2 }}>
+                  <StatsValueTypography variant="h3">
+                    <AnimatedCounter value={getInProgressProjects()} />
+                  </StatsValueTypography>
+                  <StatsLabelTypography variant="body1">
+                    En Cours
+                  </StatsLabelTypography>
+                </Box>
+              </StatsCard>
+            </ScrollReveal>
           </StatsGrid>
-        </AnimatedBox>
+        </ScrollReveal>
+
+        {/* Filtres par technologie */}
+        {projects.length > 0 && (
+          <ScrollReveal direction="up" delay={0.5}>
+            <FilterContainerComponent>
+              <FilterContainerLabel />
+              <FilterChipComponent
+                label="Tous"
+                onClick={() => setSelectedTech(null)}
+                selected={selectedTech === null}
+                icon={selectedTech === null ? undefined : <ClearIcon />}
+              />
+              {getAllTechnologies().map((tech) => (
+                <FilterChipComponent
+                  key={tech}
+                  label={tech}
+                  onClick={() => handleTechFilter(tech)}
+                  selected={selectedTech === tech}
+                />
+              ))}
+            </FilterContainerComponent>
+          </ScrollReveal>
+        )}
 
         {/* Projects Grid */}
         <ProjectsGrid>
-          {projects.map((project, index) => {
-            // Palette de couleurs pour les reflets
-            const reflectionColors = [
-              '#ff6b35', // Orange
-              '#3b82f6', // Bleu
-              '#059669', // Vert
-              '#8b5cf6', // Violet
-              '#ec4899', // Rose
-              '#f59e0b', // Jaune
-              '#ef4444', // Rouge
-              '#06b6d4', // Cyan
-              '#84cc16', // Lime
-              '#f97316', // Orange vif
-            ]
-            
-            const reflectionColor = reflectionColors[index % reflectionColors.length]
-            
-            return (
-              <SimpleCardComponent 
-                key={project.id} 
-                onClick={() => handleProjectClick(project.url)}
-                reflectionColor={reflectionColor}
-              >
-              {/* Logo GitHub dans le coin supérieur droit */}
-                {project.url && project.url.includes('github') && (
-                  <Box
-                    sx={{
-                      position: 'absolute',
-                      top: 16,
-                      right: 16,
-                      background: (theme) => theme.palette.mode === 'dark'
-                        ? 'rgba(0, 0, 0, 0.6)'
-                        : 'rgba(255, 255, 255, 0.9)',
-                      borderRadius: '50%',
-                      padding: 1,
-                      boxShadow: (theme) => theme.palette.mode === 'dark'
-                        ? '0 4px 12px rgba(0, 0, 0, 0.3)'
-                        : '0 4px 12px rgba(0, 0, 0, 0.1)',
-                      border: (theme) => theme.palette.mode === 'dark'
-                        ? '1px solid rgba(255, 255, 255, 0.1)'
-                        : '1px solid rgba(0, 0, 0, 0.1)',
-                      zIndex: 3,
-                      transition: 'all 0.3s ease',
-                      '&:hover': {
-                        transform: 'scale(1.1)',
-                        boxShadow: (theme) => theme.palette.mode === 'dark'
-                          ? '0 6px 20px rgba(0, 0, 0, 0.4)'
-                          : '0 6px 20px rgba(0, 0, 0, 0.15)',
-                      }
-                    }}
-                  >
-                    <GitHubIcon 
-                      sx={{ 
-                        fontSize: 20, 
-                        color: (theme) => theme.palette.mode === 'dark' ? '#ffffff' : '#000000',
-                        filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.1))'
-                      }} 
-                    />
-                  </Box>
-                )}
-
-                {/* Icône générique pour autres liens */}
-                {project.url && !project.url.includes('github') && (
-                  <Box
-                    sx={{
-                      position: 'absolute',
-                      top: 16,
-                      right: 16,
-                      background: (theme) => theme.palette.mode === 'dark'
-                        ? 'rgba(0, 0, 0, 0.6)'
-                        : 'rgba(255, 255, 255, 0.9)',
-                      borderRadius: '50%',
-                      padding: 1,
-                      boxShadow: (theme) => theme.palette.mode === 'dark'
-                        ? '0 4px 12px rgba(0, 0, 0, 0.3)'
-                        : '0 4px 12px rgba(0, 0, 0, 0.1)',
-                      border: (theme) => theme.palette.mode === 'dark'
-                        ? '1px solid rgba(255, 255, 255, 0.1)'
-                        : '1px solid rgba(0, 0, 0, 0.1)',
-                      zIndex: 3,
-                      transition: 'all 0.3s ease',
-                      '&:hover': {
-                        transform: 'scale(1.1)',
-                        boxShadow: (theme) => theme.palette.mode === 'dark'
-                          ? '0 6px 20px rgba(0, 0, 0, 0.4)'
-                          : '0 6px 20px rgba(0, 0, 0, 0.15)',
-                      }
-                    }}
-                  >
-                    <LaunchIcon 
-                      sx={{ 
-                        fontSize: 20, 
-                        color: (theme) => theme.palette.mode === 'dark' ? '#ffffff' : '#000000',
-                        filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.1))'
-                      }} 
-                    />
-                  </Box>
-                )}
-
-                <Box sx={{ display: 'flex', alignItems: 'center', mb: 1.5 }}>
-                  <StatusChip
-                    icon={getStatusIcon(project.status)}
-                    label={project.status}
-                    color={getStatusColor(project.status)}
-                    size="small"
-                  />
-                </Box>
-                
-                                 <Typography 
-                   variant="h6" 
-                   component="h2" 
-                   gutterBottom
-                   sx={{ 
-                     fontWeight: 700,
-                     mb: 1.5,
-                     background: (theme) => theme.palette.mode === 'dark'
-                       ? 'linear-gradient(45deg, #ff6b35, #ffffff, #ff1744, #ff6b35)'
-                       : 'linear-gradient(45deg, #1e3a8a, #3b82f6, #059669, #1e3a8a)',
-                     backgroundClip: 'text',
-                     WebkitBackgroundClip: 'text',
-                     WebkitTextFillColor: 'transparent',
-                     backgroundSize: '200% 200%',
-                     animation: 'gradientShift 3s ease-in-out infinite',
-                     textShadow: (theme) => theme.palette.mode === 'dark'
-                       ? '0 0 20px rgba(255, 107, 53, 0.5)'
-                       : '0 0 20px rgba(30, 58, 138, 0.4)',
-                     '@keyframes gradientShift': {
-                       '0%': { backgroundPosition: '0% 50%' },
-                       '50%': { backgroundPosition: '100% 50%' },
-                       '100%': { backgroundPosition: '0% 50%' }
-                     }
-                   }}
-                 >
-                  {project.name}
-                </Typography>
-                
-                {project.imageUrl && (
-                  <Box sx={{ mb: 2, textAlign: 'center' }}>
-                    <img 
-                      src={getImageUrl(project.imageUrl)} 
-                      alt={project.name}
-                      style={{ 
-                        width: '100%',
-                        height: '180px',
-                        objectFit: 'cover',
-                        borderRadius: '8px',
-                        boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
-                      }}
-                    />
-                  </Box>
-                )}
-                
-                <Typography 
-                  variant="body2" 
-                  color="text.secondary" 
-                  paragraph
-                  sx={{ 
-                    lineHeight: 1.4,
-                    mb: 2,
-                    minHeight: '3rem',
-                    fontSize: '0.9rem'
-                  }}
-                >
-                  {project.description}
-                </Typography>
-                
-                <TechStack sx={{
-                  visibility: 'visible !important',
-                  opacity: '1 !important',
-                  zIndex: 1000,
-                  position: 'relative'
-                }}>
-                  {project.technologies.split(',').map((tech, techIndex) => (
-                    <SimpleTechTag key={techIndex} reflectionColor={reflectionColor}>
-                      {tech.trim()}
-                    </SimpleTechTag>
-                  ))}
-                </TechStack>
-              </SimpleCardComponent>
-            )
-          })}
+          {filteredProjects.map((project, index) => (
+            <ProjectCardWrapper
+              key={project.id}
+              project={project}
+              index={index}
+              handleProjectClick={handleProjectClick}
+              getStatusIcon={getStatusIcon}
+              getStatusColor={getStatusColor}
+              getImageUrl={getImageUrl}
+            />
+          ))}
         </ProjectsGrid>
         
+        {filteredProjects.length === 0 && projects.length > 0 && (
+          <AnimatedBox>
+            <Box sx={{ 
+              textAlign: 'center', 
+              py: 8,
+              background: 'linear-gradient(145deg, rgba(255, 255, 255, 0.8) 0%, rgba(248, 250, 252, 0.8) 100%)',
+              borderRadius: DESIGN_TOKENS.borderRadius.large,
+              boxShadow: DESIGN_TOKENS.shadows.elevated.light,
+            }}>
+              <FilterListIcon sx={{ fontSize: 64, color: 'primary.main', mb: 2 }} />
+              <Typography variant="h5" color="text.secondary" gutterBottom>
+                Aucun projet trouvé avec cette technologie
+              </Typography>
+              <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
+                Essayez de sélectionner une autre technologie ou réinitialisez le filtre
+              </Typography>
+              <CTAButton
+                variant="secondary"
+                onClick={() => setSelectedTech(null)}
+                startIcon={<ClearIcon />}
+              >
+                Réinitialiser le filtre
+              </CTAButton>
+            </Box>
+          </AnimatedBox>
+        )}
+
         {projects.length === 0 && !error && (
           <AnimatedBox>
             <Box sx={{ 
               textAlign: 'center', 
               py: 8,
               background: 'white',
-              borderRadius: 4,
+              borderRadius: DESIGN_TOKENS.borderRadius.small,
               boxShadow: '0 4px 20px rgba(0,0,0,0.08)'
             }}>
               <CodeIcon sx={{ fontSize: 64, color: '#667eea', mb: 2 }} />
@@ -877,6 +824,9 @@ export default function Projets() {
           </AnimatedBox>
         )}
       </Container>
-    </Box>
+      
+      <Footer />
+      <StickyCTA text="Voir mes projets" onClick={() => {}} />
+    </PageWrapper>
   )
 }

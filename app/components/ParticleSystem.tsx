@@ -11,8 +11,6 @@ interface Particle {
   size: number
   opacity: number
   color: string
-  life: number
-  maxLife: number
 }
 
 interface ParticleSystemProps {
@@ -21,26 +19,43 @@ interface ParticleSystemProps {
   colors?: string[]
   size?: { min: number; max: number }
   opacity?: { min: number; max: number }
-  life?: { min: number; max: number }
   mouseInteraction?: boolean
   className?: string
 }
 
 export default function ParticleSystem({
   particleCount = 100,
-  speed = 0.5,
+  speed = 0.2,
   colors = ['#ff6b35', '#ff1744', '#3b82f6', '#059669'],
-  size = { min: 1, max: 3 },
-  opacity = { min: 0.1, max: 0.8 },
-  life = { min: 100, max: 300 },
+  size = { min: 1.5, max: 2.5 },
+  opacity = { min: 0.15, max: 0.35 },
   mouseInteraction = true,
   className
 }: ParticleSystemProps) {
+  const [isMobile, setIsMobile] = useState(false)
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const animationRef = useRef<number>()
   const particlesRef = useRef<Particle[]>([])
   const mouseRef = useRef({ x: 0, y: 0 })
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 })
+
+  // Détecter si on est sur mobile et désactiver l'animation
+  useEffect(() => {
+    const checkMobile = () => {
+      const isMobileDevice = window.innerWidth < 768 || 
+                            /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
+      setIsMobile(isMobileDevice)
+    }
+    
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
+    return () => window.removeEventListener('resize', checkMobile)
+  }, [])
+
+  // Désactiver sur mobile pour la performance
+  if (isMobile) {
+    return null
+  }
 
   // Initialiser les particules
   const initParticles = () => {
@@ -50,13 +65,11 @@ export default function ParticleSystem({
       particles.push({
         x: Math.random() * dimensions.width,
         y: Math.random() * dimensions.height,
-        vx: (Math.random() - 0.5) * speed * 2,
-        vy: (Math.random() - 0.5) * speed * 2,
+        vx: (Math.random() - 0.5) * speed,
+        vy: (Math.random() - 0.5) * speed,
         size: Math.random() * (size.max - size.min) + size.min,
         opacity: Math.random() * (opacity.max - opacity.min) + opacity.min,
-        color: colors[Math.floor(Math.random() * colors.length)],
-        life: Math.random() * (life.max - life.min) + life.min,
-        maxLife: Math.random() * (life.max - life.min) + life.min
+        color: colors[Math.floor(Math.random() * colors.length)]
       })
     }
     
@@ -74,71 +87,78 @@ export default function ParticleSystem({
     // Effacer le canvas
     ctx.clearRect(0, 0, canvas.width, canvas.height)
 
-    particlesRef.current.forEach((particle, index) => {
+    particlesRef.current.forEach((particle) => {
       // Mettre à jour la position
       particle.x += particle.vx
       particle.y += particle.vy
 
-      // Rebond sur les bords
-      if (particle.x < 0 || particle.x > canvas.width) particle.vx *= -1
-      if (particle.y < 0 || particle.y > canvas.height) particle.vy *= -1
+      // Wrapping fluide sur les bords (comme dans l'eau) - plus fluide que les rebonds
+      if (particle.x < 0) {
+        particle.x = canvas.width
+      } else if (particle.x > canvas.width) {
+        particle.x = 0
+      }
+      
+      if (particle.y < 0) {
+        particle.y = canvas.height
+      } else if (particle.y > canvas.height) {
+        particle.y = 0
+      }
 
-      // Garder dans les limites
-      particle.x = Math.max(0, Math.min(canvas.width, particle.x))
-      particle.y = Math.max(0, Math.min(canvas.height, particle.y))
-
-      // Interaction avec la souris
+      // Interaction très douce avec la souris (optionnelle et discrète)
       if (mouseInteraction) {
         const dx = mouseRef.current.x - particle.x
         const dy = mouseRef.current.y - particle.y
         const distance = Math.sqrt(dx * dx + dy * dy)
         
-        if (distance < 100) {
-          const force = (100 - distance) / 100
-          particle.vx += (dx / distance) * force * 0.1
-          particle.vy += (dy / distance) * force * 0.1
+        if (distance < 100 && distance > 0) {
+          // Force très douce pour éviter les perturbations
+          const force = (100 - distance) / 100 * 0.01
+          const angle = Math.atan2(dy, dx)
+          // Répulsion douce
+          particle.vx -= Math.cos(angle) * force
+          particle.vy -= Math.sin(angle) * force
         }
       }
-
-      // Réduire la vie
-      particle.life--
-      if (particle.life <= 0) {
-        // Recréer la particule
-        particle.x = Math.random() * canvas.width
-        particle.y = Math.random() * canvas.height
-        particle.vx = (Math.random() - 0.5) * speed * 2
-        particle.vy = (Math.random() - 0.5) * speed * 2
-        particle.life = particle.maxLife
-        particle.opacity = Math.random() * (opacity.max - opacity.min) + opacity.min
+      
+      // Limiter la vitesse pour éviter les mouvements erratiques
+      const maxSpeed = speed * 1.2
+      const currentSpeed = Math.sqrt(particle.vx * particle.vx + particle.vy * particle.vy)
+      if (currentSpeed > maxSpeed) {
+        particle.vx = (particle.vx / currentSpeed) * maxSpeed
+        particle.vy = (particle.vy / currentSpeed) * maxSpeed
       }
 
-      // Dessiner la particule
-      const alpha = (particle.life / particle.maxLife) * particle.opacity
+      // Dessiner la particule (opacité constante, toujours visible)
       ctx.save()
-      ctx.globalAlpha = alpha
+      // Lueur douce autour de la particule
+      ctx.shadowBlur = 8
+      ctx.shadowColor = particle.color
+      ctx.globalAlpha = particle.opacity * 0.5
+      ctx.fillStyle = particle.color
+      ctx.beginPath()
+      ctx.arc(particle.x, particle.y, particle.size * 1.2, 0, Math.PI * 2)
+      ctx.fill()
+      
+      // Particule principale
+      ctx.shadowBlur = 0
+      ctx.globalAlpha = particle.opacity
       ctx.fillStyle = particle.color
       ctx.beginPath()
       ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2)
       ctx.fill()
-      
-      // Effet de lueur
-      ctx.shadowBlur = 10
-      ctx.shadowColor = particle.color
-      ctx.beginPath()
-      ctx.arc(particle.x, particle.y, particle.size * 0.5, 0, Math.PI * 2)
-      ctx.fill()
       ctx.restore()
     })
 
-    // Dessiner les connexions entre particules
+    // Dessiner les connexions entre particules (discrètes)
     particlesRef.current.forEach((particle, i) => {
       particlesRef.current.slice(i + 1).forEach(otherParticle => {
         const dx = particle.x - otherParticle.x
         const dy = particle.y - otherParticle.y
         const distance = Math.sqrt(dx * dx + dy * dy)
         
-        if (distance < 100) {
-          const alpha = (100 - distance) / 100 * 0.2
+        if (distance < 80) {
+          const alpha = (80 - distance) / 80 * 0.1
           ctx.save()
           ctx.globalAlpha = alpha
           ctx.strokeStyle = particle.color
@@ -200,7 +220,7 @@ export default function ParticleSystem({
     if (dimensions.width > 0 && dimensions.height > 0) {
       initParticles()
     }
-  }, [dimensions, particleCount, speed, colors, size, opacity, life])
+  }, [dimensions, particleCount, speed, colors, size, opacity])
 
   // Démarrer l'animation
   useEffect(() => {
@@ -324,3 +344,4 @@ export function SpecialParticleSystem({ className }: { className?: string }) {
     />
   )
 }
+

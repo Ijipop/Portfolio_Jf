@@ -1,0 +1,148 @@
+'use client'
+
+import Box from '@mui/material/Box'
+import Container from '@mui/material/Container'
+import Typography from '@mui/material/Typography'
+import { ReactNode, useEffect, useState } from 'react'
+import { DESIGN_TOKENS, GRADIENTS } from '../../design-system/constants'
+import { useThemeColors } from '../../hooks/useThemeColors'
+import { useTextColor } from '../../hooks/useTextColor'
+import { useTheme } from '@mui/material/styles'
+
+// Fonction utilitaire pour convertir hex en rgba
+const hexToRgba = (hex: string, alpha: number) => {
+  const r = parseInt(hex.slice(1, 3), 16)
+  const g = parseInt(hex.slice(3, 5), 16)
+  const b = parseInt(hex.slice(5, 7), 16)
+  return `rgba(${r}, ${g}, ${b}, ${alpha})`
+}
+
+interface HeaderSectionProps {
+  title: string | ReactNode
+  subtitle?: string | ReactNode
+  children?: ReactNode
+}
+
+export default function HeaderSection({ title, subtitle, children }: HeaderSectionProps) {
+  const { primary, secondary } = useThemeColors()
+  const textColor = useTextColor()
+  const theme = useTheme()
+  const [headerBackground, setHeaderBackground] = useState<string>(GRADIENTS.backgrounds.headerLight)
+  
+  // Mettre à jour le background du header quand le thème change
+  useEffect(() => {
+    const updateHeaderBackground = () => {
+      if (typeof window === 'undefined') return
+      
+      // Lire les CSS variables définies par ThemeSelector
+      const bg = getComputedStyle(document.documentElement).getPropertyValue('--theme-bg')?.trim()
+      const bg2 = getComputedStyle(document.documentElement).getPropertyValue('--theme-bg2')?.trim()
+      
+      if (bg && bg2) {
+        // Créer un gradient avec les couleurs du thème
+        setHeaderBackground(`linear-gradient(135deg, ${bg} 0%, ${bg2} 25%, ${bg} 50%, ${bg2} 75%, ${bg} 100%)`)
+      } else {
+        setHeaderBackground(GRADIENTS.backgrounds.headerLight)
+      }
+    }
+    
+    updateHeaderBackground()
+    
+    // Observer les changements de CSS variables
+    const observer = new MutationObserver(updateHeaderBackground)
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['style'],
+    })
+    
+    const interval = setInterval(updateHeaderBackground, 200)
+    
+    return () => {
+      observer.disconnect()
+      clearInterval(interval)
+    }
+  }, [])
+  
+  return (
+    <Box
+      sx={{
+        background: headerBackground,
+        color: textColor,
+        padding: theme.spacing(6.75, 0, 4.5),
+        textAlign: 'center',
+        position: 'relative',
+        overflow: 'hidden',
+        [theme.breakpoints.down('sm')]: {
+          padding: theme.spacing(4, 1, 3),
+        },
+        '&::before': {
+          content: '""',
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: 'url("data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%23ffffff" fill-opacity="0.08"%3E%3Ccircle cx="30" cy="30" r="1.5"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")',
+          opacity: 1,
+        },
+        '&::after': {
+          content: '""',
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: `linear-gradient(45deg, transparent 30%, ${hexToRgba(primary, 0.05)} 50%, transparent 70%)`,
+          animation: 'shimmer 3s ease-in-out infinite',
+        },
+        '@keyframes shimmer': {
+          '0%': { transform: 'translateX(-100%)' },
+          '100%': { transform: 'translateX(100%)' },
+        },
+      }}
+    >
+      <Container maxWidth="lg">
+        <Typography 
+          variant="h1" 
+          component="h1" 
+          gutterBottom 
+          sx={{ 
+            fontWeight: 900,
+            fontSize: { xs: '2rem', sm: '3rem', md: '4.5rem' },
+            textShadow: `0 0 20px ${hexToRgba(primary, 0.8)}, 0 4px 8px rgba(0,0,0,0.3)`,
+            letterSpacing: { xs: '0.05em', sm: '0.1em' },
+            textTransform: 'uppercase',
+            color: primary,
+            filter: 'none',
+            textRendering: 'optimizeLegibility',
+            WebkitFontSmoothing: 'antialiased',
+            MozOsxFontSmoothing: 'grayscale',
+            imageRendering: 'crisp-edges',
+            backfaceVisibility: 'hidden',
+            transform: 'translateZ(0)',
+            position: 'relative',
+            zIndex: 1
+          }}
+        >
+          {title}
+        </Typography>
+        {subtitle && (
+          <Typography 
+            variant="h5" 
+            sx={{ 
+              opacity: 0.9,
+              fontWeight: 300,
+              maxWidth: 600,
+              mx: 'auto',
+              color: textColor
+            }}
+          >
+            {subtitle}
+          </Typography>
+        )}
+        {children}
+      </Container>
+    </Box>
+  )
+}
+
