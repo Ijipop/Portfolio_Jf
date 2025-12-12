@@ -19,6 +19,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import { useState } from "react";
 import LoginModal from './LoginModal';
 import { ThemeSelector } from './ThemeSelector';
+import { useThemeColors } from '../hooks/useThemeColors';
 
 import './components.css';
 
@@ -28,7 +29,7 @@ export default function AppBarComponent() {
 	const open = Boolean(anchorEl);
 	const router = useRouter();
 	const pathname = usePathname();
-	
+	const { primary, secondary } = useThemeColors();
 
 	const handleMenuClick = (event: React.MouseEvent<HTMLElement>) => {
 		setAnchorEl(event.currentTarget);
@@ -75,15 +76,9 @@ export default function AppBarComponent() {
 			<AppBar 
 				position="static" 
 				sx={{
-					background: (theme) => theme.palette.mode === 'dark'
-						? 'linear-gradient(135deg, #1e293b 0%, #334155 100%)'
-						: 'linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%)',
-					boxShadow: (theme) => theme.palette.mode === 'dark'
-						? '0 4px 20px rgba(0,0,0,0.3)'
-						: '0 4px 20px rgba(30, 58, 138, 0.1)',
-					borderBottom: (theme) => theme.palette.mode === 'dark'
-						? '1px solid rgba(59, 130, 246, 0.2)'
-						: '1px solid rgba(30, 58, 138, 0.1)',
+					background: `linear-gradient(135deg, ${primary} 0%, ${secondary} 100%) !important`,
+					boxShadow: `0 4px 20px ${primary}40 !important`,
+					borderBottom: `1px solid ${primary}30 !important`,
 				}}
 			>
 				<Toolbar sx={{ 
@@ -337,16 +332,10 @@ export default function AppBarComponent() {
 						disableRestoreFocus
 						sx={{
 							'& .MuiPaper-root': {
-								background: (theme) => theme.palette.mode === 'dark'
-									? 'linear-gradient(145deg, #1e293b 0%, #334155 100%)'
-									: 'linear-gradient(145deg, #ffffff 0%, #f8fafc 100%)',
-								border: (theme) => theme.palette.mode === 'dark'
-									? '1px solid rgba(59, 130, 246, 0.2)'
-									: '1px solid rgba(30, 58, 138, 0.1)',
+								background: `linear-gradient(145deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.95) 100%) !important`,
+								border: `1px solid ${primary}30 !important`,
 								borderRadius: DESIGN_TOKENS.borderRadius.small,
-								boxShadow: (theme) => theme.palette.mode === 'dark'
-									? DESIGN_TOKENS.shadows.elevated.dark
-									: DESIGN_TOKENS.shadows.elevated.light,
+								boxShadow: `0 8px 32px ${primary}20 !important`,
 								mt: 1,
 								minWidth: 180,
 							}

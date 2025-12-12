@@ -1,9 +1,12 @@
 'use client'
 
 import Box from '@mui/material/Box'
-import { ReactNode } from 'react'
+import { ReactNode, useEffect, useState } from 'react'
+import { useTheme } from '@mui/material/styles'
 import ParticleSystem from '../ParticleSystem'
 import { GRADIENTS } from '../../design-system/constants'
+import { useThemeColors } from '../../hooks/useThemeColors'
+import { useAdvancedTheme } from '../../contexts/AdvancedThemeContext'
 
 interface PageWrapperProps {
   children: ReactNode
@@ -59,11 +62,11 @@ export default function PageWrapper({
   overflowX,
   overflowY,
 }: PageWrapperProps) {
-  const getBackground = (theme: any) => {
-    if (theme.palette.mode === 'dark') {
-      return GRADIENTS.backgrounds.dark
-    }
-    
+  const theme = useTheme()
+  const { customTheme } = useAdvancedTheme()
+  
+  // Fonction pour obtenir le background initial (plus de dépendance au dark mode)
+  const getInitialBackground = () => {
     switch (backgroundVariant) {
       case 'alternate':
         return GRADIENTS.backgrounds.lightAlternate
@@ -73,14 +76,55 @@ export default function PageWrapper({
         return GRADIENTS.backgrounds.light
     }
   }
-
-  const getOverlay = (theme: any) => {
-    if (!showRadialOverlay) return 'none'
-    
-    if (theme.palette.mode === 'dark') {
-      return GRADIENTS.overlays.darkRadial
+  
+  const [background, setBackground] = useState<string>(getInitialBackground())
+  
+  // Mettre à jour le background quand le thème change
+  useEffect(() => {
+    const updateBackground = () => {
+      if (typeof window === 'undefined') return
+      
+      // Lire les CSS variables définies par ThemeSelector
+      const bg = getComputedStyle(document.documentElement).getPropertyValue('--theme-bg')?.trim()
+      const bg2 = getComputedStyle(document.documentElement).getPropertyValue('--theme-bg2')?.trim()
+      
+      if (bg && bg2) {
+        setBackground(`linear-gradient(135deg, ${bg} 0%, ${bg2} 25%, ${bg} 50%, ${bg2} 75%, ${bg} 100%)`)
+        return
+      }
+      
+      // Fallback sur customTheme
+      if (customTheme?.bg && customTheme?.bg2) {
+        setBackground(`linear-gradient(135deg, ${customTheme.bg} 0%, ${customTheme.bg2} 25%, ${customTheme.bg} 50%, ${customTheme.bg2} 75%, ${customTheme.bg} 100%)`)
+        return
+      }
+      
+      // Fallback sur les gradients statiques
+      setBackground(getInitialBackground())
     }
     
+    updateBackground()
+    
+    // Observer les changements de CSS variables
+    const observer = new MutationObserver(updateBackground)
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['style'],
+    })
+    
+    // Vérifier périodiquement
+    const interval = setInterval(updateBackground, 200)
+    
+    return () => {
+      observer.disconnect()
+      clearInterval(interval)
+    }
+  }, [customTheme, backgroundVariant])
+
+  const getOverlay = () => {
+    if (!showRadialOverlay) return 'none'
+    
+    // Utiliser overlayVariant pour déterminer l'overlay (plus de dépendance au dark mode)
     return overlayVariant === 'dark' 
       ? GRADIENTS.overlays.darkRadial 
       : GRADIENTS.overlays.lightRadial
@@ -90,11 +134,12 @@ export default function PageWrapper({
     <Box
       sx={{
         minHeight: '100vh',
-        background: (theme) => getBackground(theme),
+        background: background || GRADIENTS.backgrounds.light,
         position: 'relative',
         overflow: overflow || 'hidden',
         overflowX: overflowX,
         overflowY: overflowY,
+        transition: 'background 0.5s ease',
         '&::before': {
           content: '""',
           position: 'fixed',
@@ -102,7 +147,7 @@ export default function PageWrapper({
           left: 0,
           right: 0,
           bottom: 0,
-          background: (theme) => getOverlay(theme),
+          background: getOverlay(),
           pointerEvents: 'none',
           zIndex: 0,
         },

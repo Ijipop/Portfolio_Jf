@@ -13,14 +13,17 @@ import Button from '@mui/material/Button'
 import Chip from '@mui/material/Chip'
 import CircularProgress from '@mui/material/CircularProgress'
 import Container from '@mui/material/Container'
-import { styled } from '@mui/material/styles'
+import { styled, useTheme } from '@mui/material/styles'
 import Typography from '@mui/material/Typography'
 import { useEffect, useState } from 'react'
+import React from 'react'
 import AppBarComponent from '../components/appBar'
 import ProjectCard from '../components/shared/ProjectCard'
 import StatsCard from '../components/shared/StatsCard'
 import { StatsValueTypography, StatsLabelTypography } from '../components/shared/StatsTypography'
 import AnimatedCounter from '../components/shared/AnimatedCounter'
+import LoadingSpinner from '../components/shared/LoadingSpinner'
+import ScrollReveal from '../components/shared/ScrollReveal'
 import SkillTag from '../components/shared/SkillTag'
 import HeaderSection from '../components/shared/HeaderSection'
 import PageWrapper from '../components/shared/PageWrapper'
@@ -31,6 +34,8 @@ import { DESIGN_TOKENS, ANIMATIONS } from '../design-system/constants'
 import AccessTimeIcon from '@mui/icons-material/AccessTime'
 import FilterListIcon from '@mui/icons-material/FilterList'
 import ClearIcon from '@mui/icons-material/Clear'
+import { useAdvancedTheme } from '../contexts/AdvancedThemeContext'
+import { useThemeColors } from '../hooks/useThemeColors'
 
 interface Project {
   id: number
@@ -57,36 +62,7 @@ const StatusChip = styled(Chip)(({ theme, color }: any) => ({
   }
 }))
 
-const ActionButton = styled(Button)(({ theme }) => ({
-  background: theme.palette.mode === 'dark'
-    ? 'linear-gradient(135deg, #3b82f6 0%, #10b981 100%)'
-    : 'linear-gradient(135deg, #1e3a8a 0%, #059669 100%)',
-  borderRadius: DESIGN_TOKENS.borderRadius.small,
-  padding: theme.spacing(1.5, 3),
-  fontWeight: 600,
-  fontSize: '1rem',
-  textTransform: 'none',
-  boxShadow: theme.palette.mode === 'dark'
-    ? '0 4px 15px rgba(59, 130, 246, 0.4)'
-    : '0 4px 15px rgba(30, 58, 138, 0.4)',
-  transition: DESIGN_TOKENS.transitions.normal,
-  '&:hover': {
-    background: theme.palette.mode === 'dark'
-      ? 'linear-gradient(135deg, #2563eb 0%, #059669 100%)'
-      : 'linear-gradient(135deg, #1e40af 0%, #047857 100%)',
-    transform: 'translateY(-2px)',
-    boxShadow: theme.palette.mode === 'dark'
-      ? '0 8px 25px rgba(59, 130, 246, 0.6)'
-      : '0 8px 25px rgba(30, 58, 138, 0.6)',
-  },
-  '&:disabled': {
-    background: theme.palette.mode === 'dark'
-      ? 'linear-gradient(135deg, #404040 0%, #303030 100%)'
-      : 'linear-gradient(135deg, #e0e0e0 0%, #bdbdbd 100%)',
-    color: theme.palette.mode === 'dark' ? '#888888' : '#757575',
-    boxShadow: 'none',
-  }
-}))
+// ActionButton supprimé - utiliser CTAButton à la place qui utilise useThemeColors()
 
 const TechStack = styled(Box)(({ theme }) => ({
   display: 'flex',
@@ -135,39 +111,337 @@ const StatsGrid = styled(Box)(({ theme }) => ({
   },
 }))
 
-const FilterChip = styled(Chip)(({ theme }) => ({
-  borderRadius: DESIGN_TOKENS.borderRadius.small,
-  fontWeight: 600,
-  fontSize: '0.875rem',
-  padding: theme.spacing(0.5, 1.5),
-  cursor: 'pointer',
-  transition: DESIGN_TOKENS.transitions.normal,
-  '&:hover': {
-    transform: 'translateY(-2px)',
-    boxShadow: theme.palette.mode === 'dark'
-      ? '0 4px 12px rgba(59, 130, 246, 0.3)'
-      : '0 4px 12px rgba(30, 58, 138, 0.2)',
-  },
-}))
+// Composant pour le label du filtre
+const FilterContainerLabel = () => {
+  const theme = useTheme()
+  const { primary } = useThemeColors()
+  
+  return (
+    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mr: 2 }}>
+      <FilterListIcon sx={{ 
+        color: primary,
+        fontSize: 28,
+        filter: `drop-shadow(0 0 8px ${primary}50)`,
+        transition: DESIGN_TOKENS.transitions.normal,
+      }} />
+      <Typography 
+        variant="h6" 
+        sx={{ 
+          fontWeight: 700,
+          color: primary,
+          fontSize: { xs: '1rem', sm: '1.125rem' },
+          letterSpacing: '0.5px',
+          textShadow: `0 0 10px ${primary}30`,
+          transition: DESIGN_TOKENS.transitions.normal,
+        }}
+      >
+        Filtrer par technologie:
+      </Typography>
+    </Box>
+  )
+}
 
-const FilterContainer = styled(Box)(({ theme }) => ({
-  display: 'flex',
-  flexWrap: 'wrap',
-  gap: theme.spacing(1.5),
-  alignItems: 'center',
-  marginBottom: theme.spacing(4),
-  padding: theme.spacing(2),
-  background: theme.palette.mode === 'dark'
-    ? 'linear-gradient(145deg, rgba(26, 26, 26, 0.8) 0%, rgba(45, 45, 45, 0.8) 100%)'
-    : 'linear-gradient(145deg, rgba(255, 255, 255, 0.8) 0%, rgba(248, 250, 252, 0.8) 100%)',
-  border: theme.palette.mode === 'dark' 
-    ? '1px solid rgba(74, 85, 104, 0.3)' 
-    : '1px solid rgba(148, 163, 184, 0.2)',
-  borderRadius: DESIGN_TOKENS.borderRadius.large,
-  boxShadow: theme.palette.mode === 'dark'
-    ? DESIGN_TOKENS.shadows.elevated.dark
-    : DESIGN_TOKENS.shadows.elevated.light,
-}))
+// Composant pour le titre du projet avec gradient adaptatif
+const ProjectTitleTypography = ({ projectName }: { projectName: string }) => {
+  const theme = useTheme()
+  const { primary, secondary, accent } = useThemeColors()
+  
+  return (
+    <Typography 
+      variant="h6" 
+      component="h2" 
+      gutterBottom
+      sx={{ 
+        fontWeight: 700,
+        mb: 1.5,
+        background: `linear-gradient(45deg, ${primary}, ${secondary}, ${accent}, ${primary})`,
+        backgroundClip: 'text',
+        WebkitBackgroundClip: 'text',
+        WebkitTextFillColor: 'transparent',
+        backgroundSize: '200% 200%',
+        animation: 'gradientShift 3s ease-in-out infinite',
+        textShadow: `0 0 20px ${primary}40`,
+        ...ANIMATIONS.gradientShift
+      }}
+    >
+      {projectName}
+    </Typography>
+  )
+}
+
+// Composant wrapper pour un projet avec les couleurs du thème
+const ProjectCardWrapper = ({ 
+  project, 
+  index, 
+  handleProjectClick,
+  getStatusIcon,
+  getStatusColor,
+  getImageUrl
+}: { 
+  project: Project
+  index: number
+  handleProjectClick: (url: string) => void
+  getStatusIcon: (status: string) => React.ReactElement
+  getStatusColor: (status: string) => "error" | "success" | "warning" | "info" | "default" | "primary" | "secondary"
+  getImageUrl: (imageUrl: string) => string
+}) => {
+  // Utiliser les hooks ici, pas dans le map
+  const { primary, secondary, accent } = useThemeColors()
+  
+  // Palette de couleurs pour les reflets basée sur le thème
+  const reflectionColors = [
+    primary,
+    secondary,
+    accent,
+    primary,
+    secondary,
+    accent,
+    primary,
+    secondary,
+    accent,
+    primary,
+  ]
+  
+  const reflectionColor = reflectionColors[index % reflectionColors.length]
+  
+  return (
+    <ScrollReveal key={project.id} direction="up" delay={0.1 * (index % 4)}>
+      <ProjectCard 
+        key={project.id} 
+        onClick={() => handleProjectClick(project.url)}
+        reflectionColor={reflectionColor}
+      >
+        {/* Logo GitHub dans le coin supérieur droit */}
+        {project.url && project.url.includes('github') && (
+          <Box
+            sx={{
+              position: 'absolute',
+              top: 12,
+              right: 12,
+              background: 'rgba(255, 255, 255, 0.95)',
+              borderRadius: '50%',
+              padding: 1.5,
+              boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
+              border: '2px solid rgba(0, 0, 0, 0.1)',
+              zIndex: DESIGN_TOKENS.zIndex.overlay,
+              transition: DESIGN_TOKENS.transitions.normal,
+              pointerEvents: 'auto',
+              '&:hover': {
+                transform: 'scale(1.15)',
+                boxShadow: '0 8px 24px rgba(0, 0, 0, 0.2)',
+              }
+            }}
+          >
+            <GitHubIcon 
+              sx={{ 
+                fontSize: 22, 
+                color: '#000000',
+                filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.1))'
+              }} 
+            />
+          </Box>
+        )}
+
+        {/* Icône générique pour autres liens */}
+        {project.url && !project.url.includes('github') && (
+          <Box
+            sx={{
+              position: 'absolute',
+              top: 12,
+              right: 12,
+              background: 'rgba(255, 255, 255, 0.95)',
+              borderRadius: '50%',
+              padding: 1.5,
+              boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
+              border: '2px solid rgba(0, 0, 0, 0.1)',
+              zIndex: DESIGN_TOKENS.zIndex.overlay,
+              transition: DESIGN_TOKENS.transitions.normal,
+              pointerEvents: 'auto',
+              '&:hover': {
+                transform: 'scale(1.15)',
+                boxShadow: '0 8px 24px rgba(0, 0, 0, 0.2)',
+              }
+            }}
+          >
+            <LaunchIcon 
+              sx={{ 
+                fontSize: 22, 
+                color: '#000000',
+                filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.1))'
+              }} 
+            />
+          </Box>
+        )}
+
+        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 1.5 }}>
+          <StatusChip
+            icon={getStatusIcon(project.status)}
+            label={project.status}
+            color={getStatusColor(project.status)}
+            size="small"
+          />
+          {/* Métriques du projet */}
+          <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
+            {project.createdAt && (
+              <Box sx={{ 
+                display: 'flex', 
+                alignItems: 'center', 
+                gap: 0.5,
+                color: 'text.secondary',
+                fontSize: '0.75rem'
+              }}>
+                <AccessTimeIcon sx={{ fontSize: 14 }} />
+                <Typography variant="caption" sx={{ fontSize: '0.7rem' }}>
+                  {new Date(project.createdAt).getFullYear()}
+                </Typography>
+              </Box>
+            )}
+          </Box>
+        </Box>
+        
+        <ProjectTitleTypography projectName={project.name} />
+        
+        {project.imageUrl && (
+          <ProjectImageContainer>
+            <img 
+              src={getImageUrl(project.imageUrl)} 
+              alt={project.name}
+            />
+          </ProjectImageContainer>
+        )}
+        
+        <Typography 
+          variant="body2" 
+          color="text.secondary" 
+          paragraph
+          sx={{ 
+            lineHeight: 1.4,
+            mb: 2,
+            minHeight: '3rem',
+            fontSize: '0.9rem'
+          }}
+        >
+          {project.description}
+        </Typography>
+        
+        <TechStack sx={{
+          visibility: 'visible !important',
+          opacity: '1 !important',
+          zIndex: 1000,
+          position: 'relative',
+          mb: 2
+        }}>
+          {project.technologies.split(',').map((tech, techIndex) => (
+            <SkillTag key={techIndex} size="small" reflectionColor={reflectionColor}>
+              {tech.trim()}
+            </SkillTag>
+          ))}
+        </TechStack>
+        
+        {/* CTA pour voir le projet */}
+        {project.url && (
+          <CTAButton
+            variant="primary"
+            size="medium"
+            fullWidth
+            onClick={() => handleProjectClick(project.url)}
+          >
+            Voir le projet
+          </CTAButton>
+        )}
+      </ProjectCard>
+    </ScrollReveal>
+  )
+}
+
+// FilterChip comme composant fonctionnel pour réagir aux changements de thème
+const FilterChipComponent = ({ 
+  label, 
+  onClick, 
+  selected, 
+  icon 
+}: { 
+  label: string
+  onClick: () => void
+  selected: boolean
+  icon?: React.ReactElement
+}) => {
+  const theme = useTheme()
+  const { primary, secondary } = useThemeColors()
+  
+  return (
+    <Chip
+      label={label}
+      onClick={onClick}
+      icon={icon}
+      sx={{
+        borderRadius: DESIGN_TOKENS.borderRadius.small,
+        fontWeight: 600,
+        fontSize: '0.875rem',
+        padding: theme.spacing(0.5, 1.5),
+        cursor: 'pointer',
+        transition: DESIGN_TOKENS.transitions.normal,
+        ...(selected ? {
+          background: `linear-gradient(135deg, ${primary} 0%, ${secondary} 100%) !important`,
+          color: 'white !important',
+          border: `2px solid ${primary} !important`,
+          boxShadow: `0 4px 12px ${primary}40 !important`,
+          '&:hover': {
+            transform: 'translateY(-2px)',
+            boxShadow: `0 6px 20px ${primary}60 !important`,
+            background: `linear-gradient(135deg, ${primary} 0%, ${secondary} 100%) !important`,
+          }
+        } : {
+          background: `rgba(0, 0, 0, 0.05) !important`,
+          color: `${theme.palette.text.primary} !important`,
+          border: `2px solid ${primary}30 !important`,
+          '&:hover': {
+            transform: 'translateY(-2px)',
+            background: `rgba(0, 0, 0, 0.08) !important`,
+            border: `2px solid ${primary}50 !important`,
+            boxShadow: `0 4px 12px ${primary}30 !important`,
+          }
+        })
+      }}
+    />
+  )
+}
+
+// FilterContainer comme composant fonctionnel pour réagir aux changements de thème
+const FilterContainerComponent = ({ children }: { children: React.ReactNode }) => {
+  const theme = useTheme()
+  const { primary } = useThemeColors()
+  
+  return (
+    <Box
+      sx={{
+        display: 'flex',
+        flexWrap: 'wrap',
+        gap: theme.spacing(1.5),
+        alignItems: 'center',
+        marginBottom: theme.spacing(4),
+        padding: theme.spacing(2),
+        background: `linear-gradient(145deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.95) 100%) !important`,
+        border: `2px solid ${primary}30 !important`,
+        borderRadius: DESIGN_TOKENS.borderRadius.medium,
+        boxShadow: `0 8px 32px ${primary}15, ${DESIGN_TOKENS.shadows.elevated.light} !important`,
+        backdropFilter: 'blur(10px)',
+        WebkitBackdropFilter: 'blur(10px)',
+        transition: DESIGN_TOKENS.transitions.normal,
+        color: `${theme.palette.text.primary} !important`,
+        '& *': {
+          color: 'inherit !important',
+        },
+        '&:hover': {
+          border: `2px solid ${primary}50 !important`,
+          boxShadow: `0 12px 40px ${primary}25, ${DESIGN_TOKENS.shadows.elevated.light} !important`,
+        }
+      }}
+    >
+      {children}
+    </Box>
+  )
+}
 
 const ProjectImageContainer = styled(Box)(({ theme }) => ({
   position: 'relative',
@@ -180,9 +454,7 @@ const ProjectImageContainer = styled(Box)(({ theme }) => ({
     height: '280px',
     objectFit: 'cover',
     borderRadius: DESIGN_TOKENS.borderRadius.small,
-    boxShadow: theme.palette.mode === 'dark'
-      ? '0 4px 20px rgba(0, 0, 0, 0.4)'
-      : '0 4px 20px rgba(0, 0, 0, 0.1)',
+    boxShadow: '0 4px 20px rgba(0, 0, 0, 0.1)',
   },
   '&:hover img': {
     transform: 'scale(1.1)',
@@ -344,15 +616,7 @@ export default function Projets() {
           alignItems: 'center',
           minHeight: '60vh'
         }}>
-          <Box sx={{ textAlign: 'center' }}>
-            <CircularProgress size={60} sx={{ 
-              color: (theme) => theme.palette.mode === 'dark' ? '#4a90e2' : '#667eea', 
-              mb: 2 
-            }} />
-            <Typography variant="h6" color="text.secondary">
-              Chargement des projets...
-            </Typography>
-          </Box>
+          <LoadingSpinner message="Chargement des projets..." />
         </Container>
       </PageWrapper>
     )
@@ -386,273 +650,83 @@ export default function Projets() {
         )}
 
         {/* Stats Section */}
-        <AnimatedBox>
+        <ScrollReveal direction="up" delay={0.1}>
           <StatsGrid>
-            <StatsCard>
-              <Box sx={{ position: 'relative', zIndex: 2 }}>
-                <StatsValueTypography variant="h3">
-                  <AnimatedCounter value={projects.length} />
-                </StatsValueTypography>
-                <StatsLabelTypography variant="body1">
-                  Projets Totaux
-                </StatsLabelTypography>
-              </Box>
-            </StatsCard>
-            <StatsCard>
-              <Box sx={{ position: 'relative', zIndex: 2 }}>
-                <StatsValueTypography variant="h3">
-                  <AnimatedCounter value={getCompletedProjects()} />
-                </StatsValueTypography>
-                <StatsLabelTypography variant="body1">
-                  Projets Terminés
-                </StatsLabelTypography>
-              </Box>
-            </StatsCard>
-            <StatsCard>
-              <Box sx={{ position: 'relative', zIndex: 2 }}>
-                <StatsValueTypography variant="h3">
-                  <AnimatedCounter value={getInProgressProjects()} />
-                </StatsValueTypography>
-                <StatsLabelTypography variant="body1">
-                  En Cours
-                </StatsLabelTypography>
-              </Box>
-            </StatsCard>
+            <ScrollReveal direction="up" delay={0.2}>
+              <StatsCard>
+                <Box sx={{ position: 'relative', zIndex: 2 }}>
+                  <StatsValueTypography variant="h3">
+                    <AnimatedCounter value={projects.length} />
+                  </StatsValueTypography>
+                  <StatsLabelTypography variant="body1">
+                    Projets Totaux
+                  </StatsLabelTypography>
+                </Box>
+              </StatsCard>
+            </ScrollReveal>
+            <ScrollReveal direction="up" delay={0.3}>
+              <StatsCard>
+                <Box sx={{ position: 'relative', zIndex: 2 }}>
+                  <StatsValueTypography variant="h3">
+                    <AnimatedCounter value={getCompletedProjects()} />
+                  </StatsValueTypography>
+                  <StatsLabelTypography variant="body1">
+                    Projets Terminés
+                  </StatsLabelTypography>
+                </Box>
+              </StatsCard>
+            </ScrollReveal>
+            <ScrollReveal direction="up" delay={0.4}>
+              <StatsCard>
+                <Box sx={{ position: 'relative', zIndex: 2 }}>
+                  <StatsValueTypography variant="h3">
+                    <AnimatedCounter value={getInProgressProjects()} />
+                  </StatsValueTypography>
+                  <StatsLabelTypography variant="body1">
+                    En Cours
+                  </StatsLabelTypography>
+                </Box>
+              </StatsCard>
+            </ScrollReveal>
           </StatsGrid>
-        </AnimatedBox>
+        </ScrollReveal>
 
         {/* Filtres par technologie */}
         {projects.length > 0 && (
-          <AnimatedBox>
-            <FilterContainer>
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mr: 2 }}>
-                <FilterListIcon sx={{ color: 'primary.main' }} />
-                <Typography variant="h6" sx={{ fontWeight: 600 }}>
-                  Filtrer par technologie:
-                </Typography>
-              </Box>
-              <FilterChip
+          <ScrollReveal direction="up" delay={0.5}>
+            <FilterContainerComponent>
+              <FilterContainerLabel />
+              <FilterChipComponent
                 label="Tous"
                 onClick={() => setSelectedTech(null)}
-                color={selectedTech === null ? 'primary' : 'default'}
-                variant={selectedTech === null ? 'filled' : 'outlined'}
+                selected={selectedTech === null}
                 icon={selectedTech === null ? undefined : <ClearIcon />}
               />
               {getAllTechnologies().map((tech) => (
-                <FilterChip
+                <FilterChipComponent
                   key={tech}
                   label={tech}
                   onClick={() => handleTechFilter(tech)}
-                  color={selectedTech === tech ? 'primary' : 'default'}
-                  variant={selectedTech === tech ? 'filled' : 'outlined'}
+                  selected={selectedTech === tech}
                 />
               ))}
-            </FilterContainer>
-          </AnimatedBox>
+            </FilterContainerComponent>
+          </ScrollReveal>
         )}
 
         {/* Projects Grid */}
         <ProjectsGrid>
-          {filteredProjects.map((project, index) => {
-            // Palette de couleurs pour les reflets
-            const reflectionColors = [
-              '#ff6b35', // Orange
-              '#3b82f6', // Bleu
-              '#059669', // Vert
-              '#8b5cf6', // Violet
-              '#ec4899', // Rose
-              '#f59e0b', // Jaune
-              '#ef4444', // Rouge
-              '#06b6d4', // Cyan
-              '#84cc16', // Lime
-              '#f97316', // Orange vif
-            ]
-            
-            const reflectionColor = reflectionColors[index % reflectionColors.length]
-            
-            return (
-              <ProjectCard 
-                key={project.id} 
-                onClick={() => handleProjectClick(project.url)}
-                reflectionColor={reflectionColor}
-              >
-              {/* Logo GitHub dans le coin supérieur droit */}
-                {project.url && project.url.includes('github') && (
-                  <Box
-                    sx={{
-                      position: 'absolute',
-                      top: 16,
-                      right: 16,
-                      background: (theme) => theme.palette.mode === 'dark'
-                        ? 'rgba(0, 0, 0, 0.6)'
-                        : 'rgba(255, 255, 255, 0.9)',
-                      borderRadius: '50%',
-                      padding: 1,
-                      boxShadow: (theme) => theme.palette.mode === 'dark'
-                        ? '0 4px 12px rgba(0, 0, 0, 0.3)'
-                        : '0 4px 12px rgba(0, 0, 0, 0.1)',
-                      border: (theme) => theme.palette.mode === 'dark'
-                        ? '1px solid rgba(255, 255, 255, 0.1)'
-                        : '1px solid rgba(0, 0, 0, 0.1)',
-                      zIndex: 3,
-                      transition: DESIGN_TOKENS.transitions.normal,
-                      '&:hover': {
-                        transform: 'scale(1.1)',
-                        boxShadow: (theme) => theme.palette.mode === 'dark'
-                          ? '0 6px 20px rgba(0, 0, 0, 0.4)'
-                          : '0 6px 20px rgba(0, 0, 0, 0.15)',
-                      }
-                    }}
-                  >
-                    <GitHubIcon 
-                      sx={{ 
-                        fontSize: 20, 
-                        color: (theme) => theme.palette.mode === 'dark' ? '#ffffff' : '#000000',
-                        filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.1))'
-                      }} 
-                    />
-                  </Box>
-                )}
-
-                {/* Icône générique pour autres liens */}
-                {project.url && !project.url.includes('github') && (
-                  <Box
-                    sx={{
-                      position: 'absolute',
-                      top: 16,
-                      right: 16,
-                      background: (theme) => theme.palette.mode === 'dark'
-                        ? 'rgba(0, 0, 0, 0.6)'
-                        : 'rgba(255, 255, 255, 0.9)',
-                      borderRadius: '50%',
-                      padding: 1,
-                      boxShadow: (theme) => theme.palette.mode === 'dark'
-                        ? '0 4px 12px rgba(0, 0, 0, 0.3)'
-                        : '0 4px 12px rgba(0, 0, 0, 0.1)',
-                      border: (theme) => theme.palette.mode === 'dark'
-                        ? '1px solid rgba(255, 255, 255, 0.1)'
-                        : '1px solid rgba(0, 0, 0, 0.1)',
-                      zIndex: 3,
-                      transition: DESIGN_TOKENS.transitions.normal,
-                      '&:hover': {
-                        transform: 'scale(1.1)',
-                        boxShadow: (theme) => theme.palette.mode === 'dark'
-                          ? '0 6px 20px rgba(0, 0, 0, 0.4)'
-                          : '0 6px 20px rgba(0, 0, 0, 0.15)',
-                      }
-                    }}
-                  >
-                    <LaunchIcon 
-                      sx={{ 
-                        fontSize: 20, 
-                        color: (theme) => theme.palette.mode === 'dark' ? '#ffffff' : '#000000',
-                        filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.1))'
-                      }} 
-                    />
-                  </Box>
-                )}
-
-                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 1.5 }}>
-                  <StatusChip
-                    icon={getStatusIcon(project.status)}
-                    label={project.status}
-                    color={getStatusColor(project.status)}
-                    size="small"
-                  />
-                  {/* Métriques du projet */}
-                  <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
-                    {project.createdAt && (
-                      <Box sx={{ 
-                        display: 'flex', 
-                        alignItems: 'center', 
-                        gap: 0.5,
-                        color: 'text.secondary',
-                        fontSize: '0.75rem'
-                      }}>
-                        <AccessTimeIcon sx={{ fontSize: 14 }} />
-                        <Typography variant="caption" sx={{ fontSize: '0.7rem' }}>
-                          {new Date(project.createdAt).getFullYear()}
-                        </Typography>
-                      </Box>
-                    )}
-                  </Box>
-                </Box>
-                
-                <Typography 
-                   variant="h6" 
-                   component="h2" 
-                   gutterBottom
-                   sx={{ 
-                     fontWeight: 700,
-                     mb: 1.5,
-                     background: (theme) => theme.palette.mode === 'dark'
-                       ? 'linear-gradient(45deg, #ff6b35, #ffffff, #ff1744, #ff6b35)'
-                       : 'linear-gradient(45deg, #1e3a8a, #3b82f6, #059669, #1e3a8a)',
-                     backgroundClip: 'text',
-                     WebkitBackgroundClip: 'text',
-                     WebkitTextFillColor: 'transparent',
-                     backgroundSize: '200% 200%',
-                     animation: 'gradientShift 3s ease-in-out infinite',
-                     textShadow: (theme) => theme.palette.mode === 'dark'
-                       ? '0 0 20px rgba(255, 107, 53, 0.5)'
-                       : '0 0 20px rgba(30, 58, 138, 0.4)',
-                     ...ANIMATIONS.gradientShift
-                   }}
-                 >
-                  {project.name}
-                </Typography>
-                
-                {project.imageUrl && (
-                  <ProjectImageContainer>
-                    <img 
-                      src={getImageUrl(project.imageUrl)} 
-                      alt={project.name}
-                    />
-                  </ProjectImageContainer>
-                )}
-                
-                <Typography 
-                  variant="body2" 
-                  color="text.secondary" 
-                  paragraph
-                  sx={{ 
-                    lineHeight: 1.4,
-                    mb: 2,
-                    minHeight: '3rem',
-                    fontSize: '0.9rem'
-                  }}
-                >
-                  {project.description}
-                </Typography>
-                
-                <TechStack sx={{
-                  visibility: 'visible !important',
-                  opacity: '1 !important',
-                  zIndex: 1000,
-                  position: 'relative',
-                  mb: 2
-                }}>
-                  {project.technologies.split(',').map((tech, techIndex) => (
-                    <SkillTag key={techIndex} size="small" reflectionColor={reflectionColor}>
-                      {tech.trim()}
-                    </SkillTag>
-                  ))}
-                </TechStack>
-                
-                {/* CTA pour voir le projet */}
-                {project.url && (
-                  <CTAButton
-                    variant="primary"
-                    size="medium"
-                    fullWidth
-                    onClick={() => handleProjectClick(project.url)}
-                  >
-                    Voir le projet
-                  </CTAButton>
-                )}
-              </ProjectCard>
-            )
-          })}
+          {filteredProjects.map((project, index) => (
+            <ProjectCardWrapper
+              key={project.id}
+              project={project}
+              index={index}
+              handleProjectClick={handleProjectClick}
+              getStatusIcon={getStatusIcon}
+              getStatusColor={getStatusColor}
+              getImageUrl={getImageUrl}
+            />
+          ))}
         </ProjectsGrid>
         
         {filteredProjects.length === 0 && projects.length > 0 && (
@@ -660,13 +734,9 @@ export default function Projets() {
             <Box sx={{ 
               textAlign: 'center', 
               py: 8,
-              background: (theme) => theme.palette.mode === 'dark'
-                ? 'linear-gradient(145deg, rgba(26, 26, 26, 0.8) 0%, rgba(45, 45, 45, 0.8) 100%)'
-                : 'linear-gradient(145deg, rgba(255, 255, 255, 0.8) 0%, rgba(248, 250, 252, 0.8) 100%)',
+              background: 'linear-gradient(145deg, rgba(255, 255, 255, 0.8) 0%, rgba(248, 250, 252, 0.8) 100%)',
               borderRadius: DESIGN_TOKENS.borderRadius.large,
-              boxShadow: (theme) => theme.palette.mode === 'dark'
-                ? DESIGN_TOKENS.shadows.elevated.dark
-                : DESIGN_TOKENS.shadows.elevated.light,
+              boxShadow: DESIGN_TOKENS.shadows.elevated.light,
             }}>
               <FilterListIcon sx={{ fontSize: 64, color: 'primary.main', mb: 2 }} />
               <Typography variant="h5" color="text.secondary" gutterBottom>

@@ -19,9 +19,11 @@ import CTAButton from './components/shared/CTAButton'
 import StickyCTA from './components/shared/StickyCTA'
 import Footer from './components/Footer'
 import { DESIGN_TOKENS } from './design-system/constants'
+import { useThemeColors } from './hooks/useThemeColors'
 
 export default function Home() {
   const router = useRouter()
+  const { primary, secondary } = useThemeColors()
 
   const handleCardClick = (path: string) => {
     router.push(path)
@@ -83,12 +85,8 @@ export default function Home() {
               sx={{ 
                 mb: { xs: DESIGN_TOKENS.spacing.sm, md: DESIGN_TOKENS.spacing.md },
                 ...DESIGN_TOKENS.typography.h1,
-                textShadow: (theme) => theme.palette.mode === 'dark'
-                  ? '0 0 20px rgba(255, 107, 53, 0.4), 0 4px 8px rgba(0,0,0,0.6)'
-                  : '0 2px 4px rgba(0,0,0,0.1)',
-                background: (theme) => theme.palette.mode === 'dark'
-                  ? 'linear-gradient(135deg, #ff6b35, #ffffff, #ff1744)'
-                  : 'linear-gradient(135deg, #1e3a8a, #3b82f6, #059669)',
+                textShadow: `0 2px 4px rgba(0,0,0,0.1), 0 0 20px ${primary}40`,
+                background: `linear-gradient(135deg, ${primary}, ${secondary}, ${primary})`,
                 backgroundClip: 'text',
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
@@ -187,18 +185,12 @@ export default function Home() {
           zIndex: 2 
         }}>
           <Box sx={{ 
-            background: (theme) => theme.palette.mode === 'dark'
-              ? 'linear-gradient(145deg, rgba(26, 26, 26, 0.8) 0%, rgba(45, 45, 45, 0.8) 100%)'
-              : 'linear-gradient(145deg, rgba(255, 255, 255, 0.8) 0%, rgba(248, 250, 252, 0.8) 100%)',
-            border: (theme) => theme.palette.mode === 'dark' 
-              ? '1px solid rgba(74, 85, 104, 0.3)' 
-              : '1px solid rgba(148, 163, 184, 0.2)',
+            background: 'linear-gradient(145deg, rgba(255, 255, 255, 0.8) 0%, rgba(248, 250, 252, 0.8) 100%)',
+            border: `1px solid ${primary}30`,
             borderRadius: DESIGN_TOKENS.borderRadius.large,
             padding: { xs: DESIGN_TOKENS.spacing.md, md: DESIGN_TOKENS.spacing.xl },
             textAlign: 'center',
-            boxShadow: (theme) => theme.palette.mode === 'dark'
-              ? DESIGN_TOKENS.shadows.elevated.dark
-              : DESIGN_TOKENS.shadows.elevated.light,
+            boxShadow: `0 8px 32px ${primary}20`,
             mb: DESIGN_TOKENS.spacing.xxl,
             position: 'relative',
             overflow: 'hidden',
@@ -210,7 +202,7 @@ export default function Home() {
               sx={{ 
                 mb: DESIGN_TOKENS.spacing.md,
                 ...DESIGN_TOKENS.typography.h3,
-                color: 'primary.main',
+                color: primary,
               }}
             >
               Technologies & Compétences
