@@ -25,7 +25,7 @@ import { useEffect, useState } from 'react'
 
 export default function Home() {
   const router = useRouter()
-  const { primary, secondary } = useThemeColors()
+  const { primary, secondary, accent } = useThemeColors()
   const textColor = useTextColor()
   const [skillsBackground, setSkillsBackground] = useState<string>(GRADIENTS.cards.light)
 
@@ -76,9 +76,9 @@ export default function Home() {
   return (
     <PageWrapper
       backgroundVariant="default"
-      particleCount={150}
-      particleSpeed={0.3}
-      particleColors={['#ff6b35', '#ff1744', '#3b82f6', '#059669', '#ffffff']}
+      particleCount={60}
+      particleSpeed={0.2}
+      particleColors={[primary, secondary, accent]}
     >
       <AppBarComponent />
       

@@ -109,7 +109,7 @@ const StyledTextField = styled(TextField)(({ theme }) => ({
 
 export default function Contact() {
   const textColor = useTextColor()
-  const { primary } = useThemeColors()
+  const { primary, secondary, accent } = useThemeColors()
   const [snackbarOpen, setSnackbarOpen] = useState(false)
   const [snackbarMessage, setSnackbarMessage] = useState('')
   const [snackbarSeverity, setSnackbarSeverity] = useState<'success' | 'error'>('success')
@@ -273,9 +273,9 @@ export default function Contact() {
   return (
     <PageWrapper
       backgroundVariant="alternate"
-      particleCount={100}
-      particleSpeed={0.5}
-      particleColors={['#ff6b35', '#ff1744', '#3b82f6', '#059669']}
+      particleCount={50}
+      particleSpeed={0.2}
+      particleColors={[primary, secondary, accent]}
     >
       <AppBarComponent />
       

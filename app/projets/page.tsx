@@ -524,6 +524,7 @@ const ProjectImageContainer = styled(Box)(({ theme }) => ({
 }))
 
 export default function Projets() {
+  const { primary, secondary, accent } = useThemeColors()
   const [projects, setProjects] = useState<Project[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -672,9 +673,9 @@ export default function Projets() {
   return (
     <PageWrapper
       backgroundVariant="projects"
-      particleCount={200}
-      particleSpeed={0.2}
-      particleColors={['#ff6b35', '#ff1744', '#3b82f6', '#059669']}
+      particleCount={70}
+      particleSpeed={0.25}
+      particleColors={[primary, secondary, accent]}
       overlayVariant="light"
       overflowX="hidden"
       overflowY="auto"

@@ -10,7 +10,7 @@ import Container from '@mui/material/Container'
 import Typography from '@mui/material/Typography'
 import { styled } from '@mui/material/styles'
 import { useRouter } from 'next/navigation'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import SkillTag from '../components/shared/SkillTag'
 import HeaderSection from '../components/shared/HeaderSection'
 import AppBarComponent from '../components/appBar'
@@ -19,6 +19,10 @@ import CTAButton from '../components/shared/CTAButton'
 import Footer from '../components/Footer'
 import { useAdvancedTheme } from '../contexts/AdvancedThemeContext'
 import { GRADIENTS, DESIGN_TOKENS } from '../design-system/constants'
+import { useThemeColors } from '../hooks/useThemeColors'
+import { useTextColor } from '../hooks/useTextColor'
+import { useTheme } from '@mui/material/styles'
+import { getTextColorForBackground } from '../utils/colorUtils'
 import TimelineIcon from '@mui/icons-material/Timeline'
 import LightbulbIcon from '@mui/icons-material/Lightbulb'
 import GroupWorkIcon from '@mui/icons-material/GroupWork'
@@ -56,83 +60,128 @@ const FlipCardInner = styled(Box)<{ flipped: boolean }>(({ theme, flipped }) => 
   WebkitTransform: flipped ? 'rotateY(180deg)' : 'rotateY(0deg)',
 }))
 
-const FlipCardFront = styled(Box)(({ theme }) => ({
-  position: 'absolute',
-  width: '100%',
-  height: '100%',
-  backfaceVisibility: 'hidden',
-  WebkitBackfaceVisibility: 'hidden',
-  MozBackfaceVisibility: 'hidden',
-  background: theme.palette.mode === 'dark'
-    ? GRADIENTS.cards.dark
-    : GRADIENTS.cards.light,
-  border: theme.palette.mode === 'dark' 
-    ? '2px solid rgba(74, 85, 104, 0.2)' 
-    : '1px solid rgba(148, 163, 184, 0.1)',
-  borderRadius: DESIGN_TOKENS.borderRadius.large,
-  padding: theme.spacing(4),
-  textAlign: 'center',
-  boxShadow: theme.palette.mode === 'dark'
-    ? DESIGN_TOKENS.shadows.card.dark
-    : DESIGN_TOKENS.shadows.card.light,
-  transition: DESIGN_TOKENS.transitions.slow,
-  display: 'flex',
-  flexDirection: 'column',
-  justifyContent: 'center',
-  alignItems: 'center',
-  overflow: 'hidden',
-}))
+// Composant FlipCardFront fonctionnel pour utiliser les couleurs du thème
+const FlipCardFront = ({ children, sx }: { children: React.ReactNode; sx?: any }) => {
+  const theme = useTheme()
+  const { primary } = useThemeColors()
+  const [cardBackground, setCardBackground] = useState<string>(GRADIENTS.cards.light)
 
-const FlipCardBack = styled(Box)(({ theme }) => ({
-  position: 'absolute',
-  width: '100%',
-  height: '100%',
-  backfaceVisibility: 'hidden',
-  WebkitBackfaceVisibility: 'hidden',
-  MozBackfaceVisibility: 'hidden',
-  background: `linear-gradient(145deg, var(--card-secondary, #059669) 20%, var(--card-primary, #1e3a8a) 20%, var(--card-secondary, #059669) 20%)`,
-  border: theme.palette.mode === 'dark' 
-    ? '2px solid rgba(74, 85, 104, 0.3)' 
-    : '1px solid rgba(148, 163, 184, 0.2)',
-  borderRadius: DESIGN_TOKENS.borderRadius.large,
-  padding: theme.spacing(4),
-  textAlign: 'center',
-  boxShadow: theme.palette.mode === 'dark'
-    ? '0 15px 50px rgba(0, 0, 0, 0.7), 0 0 20px rgba(74, 85, 104, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1)'
-    : '0 4px 20px rgba(148, 163, 184, 0.12), 0 0 0 1px rgba(148, 163, 184, 0.08)',
-  transform: 'rotateY(180deg)',
-  WebkitTransform: 'rotateY(180deg)',
-  display: 'flex',
-  flexDirection: 'column',
-  justifyContent: 'center',
-  alignItems: 'center',
-  overflow: 'hidden',
-}))
+  useEffect(() => {
+    const updateCardBackground = () => {
+      if (typeof window === 'undefined') return
+      
+      const cardBg = getComputedStyle(document.documentElement).getPropertyValue('--card-background')?.trim()
+      
+      if (cardBg && cardBg !== 'none') {
+        setCardBackground(cardBg)
+      } else {
+        const bg = getComputedStyle(document.documentElement).getPropertyValue('--theme-bg')?.trim()
+        const bg2 = getComputedStyle(document.documentElement).getPropertyValue('--theme-bg2')?.trim()
+        
+        if (bg && bg2) {
+          setCardBackground(`linear-gradient(145deg, ${bg} 0%, ${bg2} 50%, ${bg} 100%)`)
+        } else {
+          setCardBackground(GRADIENTS.cards.light)
+        }
+      }
+    }
+    
+    updateCardBackground()
+    
+    const observer = new MutationObserver(updateCardBackground)
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['style'],
+    })
+    
+    const interval = setInterval(updateCardBackground, 200)
+    
+    return () => {
+      observer.disconnect()
+      clearInterval(interval)
+    }
+  }, [])
+
+  return (
+    <Box
+      sx={{
+        position: 'absolute',
+        width: '100%',
+        height: '100%',
+        backfaceVisibility: 'hidden',
+        WebkitBackfaceVisibility: 'hidden',
+        MozBackfaceVisibility: 'hidden',
+        background: `${cardBackground} !important`,
+        border: `1px solid ${primary}30 !important`,
+        borderRadius: DESIGN_TOKENS.borderRadius.large,
+        padding: theme.spacing(4),
+        textAlign: 'center',
+        boxShadow: `0 8px 32px ${primary}15, ${DESIGN_TOKENS.shadows.elevated.light} !important`,
+        transition: DESIGN_TOKENS.transitions.slow,
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        overflow: 'hidden',
+        ...sx
+      }}
+    >
+      {children}
+    </Box>
+  )
+}
+
+// Composant FlipCardBack fonctionnel pour utiliser les couleurs du thème
+const FlipCardBack = ({ children, sx }: { children: React.ReactNode; sx?: any }) => {
+  const theme = useTheme()
+  const { primary, secondary } = useThemeColors()
+  
+  // Le verso a un gradient coloré, donc le texte doit être blanc pour être lisible
+  const backTextColor = getTextColorForBackground(`linear-gradient(135deg, ${primary} 0%, ${secondary} 100%)`)
+
+  return (
+    <Box
+      sx={{
+        position: 'absolute',
+        width: '100%',
+        height: '100%',
+        backfaceVisibility: 'hidden',
+        WebkitBackfaceVisibility: 'hidden',
+        MozBackfaceVisibility: 'hidden',
+        background: `linear-gradient(135deg, ${primary} 0%, ${secondary} 50%, ${primary} 100%) !important`,
+        border: `1px solid ${primary}40 !important`,
+        borderRadius: DESIGN_TOKENS.borderRadius.large,
+        padding: theme.spacing(4),
+        textAlign: 'center',
+        boxShadow: `0 8px 32px ${primary}30, ${DESIGN_TOKENS.shadows.elevated.light} !important`,
+        transform: 'rotateY(180deg)',
+        WebkitTransform: 'rotateY(180deg)',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        overflow: 'hidden',
+        color: backTextColor,
+        ...sx
+      }}
+    >
+      {children}
+    </Box>
+  )
+}
 
 
 
 export default function About() {
   const router = useRouter()
   const { customTheme } = useAdvancedTheme()
+  const { primary, secondary, accent } = useThemeColors()
+  const textColor = useTextColor()
   const [flippedCards, setFlippedCards] = useState<{ [key: string]: boolean }>({
     who: false,
     formation: false,
     experience: false
   })
-
-  // Utiliser directement la couleur primaire du thème personnalisé
-  const getPaletteColor = () => {
-    console.log('customTheme:', customTheme)
-    console.log('customTheme.primary:', customTheme.primary)
-    return customTheme.primary
-  }
-
-
-  // Créer des styles dynamiques basés sur le thème
-  const dynamicStyles = {
-    titleColor: getPaletteColor(),
-    titleShadow: `0 2px 4px ${getPaletteColor()}40`
-  }
 
   const handleCardFlip = (cardKey: string) => {
     setFlippedCards(prev => ({
@@ -144,9 +193,9 @@ export default function About() {
   return (
     <PageWrapper
       backgroundVariant="alternate"
-      particleCount={120}
-      particleSpeed={0.4}
-      particleColors={['#ff6b35', '#ff1744', '#3b82f6', '#059669']}
+      particleCount={60}
+      particleSpeed={0.25}
+      particleColors={[primary, secondary, accent]}
     >
       <AppBarComponent />
       
@@ -180,22 +229,22 @@ export default function About() {
                   MozBackfaceVisibility: 'hidden',
                 }}
               >
-                <PersonIcon sx={{ fontSize: 48, color: 'primary.main', mb: 2 }} />
+                <PersonIcon sx={{ fontSize: 48, color: primary, mb: 2 }} />
                 <Typography 
                   variant="h5" 
                   gutterBottom 
-                  style={{ 
+                  sx={{ 
                     fontWeight: 'bold',
-                    color: dynamicStyles.titleColor,
-                    textShadow: dynamicStyles.titleShadow
+                    color: primary,
+                    textShadow: `0 2px 4px ${primary}40`
                   }}
                 >
                   Qui suis-je ?
                 </Typography>
                 <Typography variant="body1" sx={{ 
                   mb: 3,
-                  color: '#ffffff',
-                  textShadow: '0 1px 2px rgba(0,0,0,0.8)'
+                  color: textColor,
+                  opacity: 0.9
                 }}>
                   Développeur passionné par la création d&apos;applications web modernes et innovantes.
                 </Typography>
@@ -224,7 +273,7 @@ export default function About() {
                 }}>
                   <RotateRightIcon sx={{ 
                     fontSize: 18, 
-                    color: (theme) => theme.palette.mode === 'dark' ? '#ffffff' : '#1a1a1a',
+                    color: textColor,
                     transition: 'transform 0.3s ease',
                     '&:hover': {
                       transform: 'rotate(180deg)'
@@ -240,7 +289,7 @@ export default function About() {
                     transform: 'translateX(-50%)',
                     fontSize: '0.65rem',
                     opacity: 0.6,
-                    color: (theme) => theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.6)' : 'rgba(0, 0, 0, 0.6)'
+                    color: textColor
                   }}
                 >
                   Cliquez pour retourner la carte
@@ -257,11 +306,11 @@ export default function About() {
               >
                 <Typography 
                   variant="h5" 
-                  style={{ 
-                    color: dynamicStyles.titleColor,
+                  sx={{ 
+                    color: textColor,
                     marginBottom: '16px', 
                     fontWeight: 'bold',
-                    textShadow: dynamicStyles.titleShadow
+                    textShadow: `0 2px 4px ${primary}40`
                   }}
                 >
                   Jean-François Lefebvre
@@ -270,8 +319,8 @@ export default function About() {
                   mb: 2, 
                   textAlign: 'left', 
                   lineHeight: 1.6,
-                  color: '#ffffff',
-                  textShadow: '0 1px 2px rgba(0,0,0,0.8)'
+                  color: textColor,
+                  opacity: 0.9
                 }}>
                   Passionné par l'informatique et les jeux vidéo. Grand consommateur d'applications mobiles et web.
                 </Typography>
@@ -279,19 +328,19 @@ export default function About() {
                   mb: 2, 
                   textAlign: 'left', 
                   lineHeight: 1.6,
-                  color: '#ffffff',
-                  textShadow: '0 1px 2px rgba(0,0,0,0.8)'
+                  color: textColor,
+                  opacity: 0.9
                 }}>
                   À 41 ans, je me suis réorienté vers le développement d'applications.  Pour ainsi réalisé mon rêve de travailler dans cette industrie.
                 </Typography>
                 <Typography 
                   variant="body1" 
-                  style={{ 
+                  sx={{ 
                     textAlign: 'left', 
                     lineHeight: 1.6, 
                     fontWeight: 'bold', 
-                    color: dynamicStyles.titleColor,
-                    textShadow: `0 1px 2px ${dynamicStyles.titleColor}40`
+                    color: textColor,
+                    textShadow: `0 1px 2px ${primary}40`
                   }}
                 >
                   Motivé et heureux de pouvoir enfin jumeler passion et travail !
@@ -316,22 +365,22 @@ export default function About() {
                   MozBackfaceVisibility: 'hidden',
                 }}
               >
-                <SchoolIcon sx={{ fontSize: 48, color: 'primary.main', mb: 2 }} />
+                <SchoolIcon sx={{ fontSize: 48, color: primary, mb: 2 }} />
                 <Typography 
                   variant="h5" 
                   gutterBottom 
-                  style={{ 
+                  sx={{ 
                     fontWeight: 'bold',
-                    color: dynamicStyles.titleColor,
-                    textShadow: dynamicStyles.titleShadow
+                    color: primary,
+                    textShadow: `0 2px 4px ${primary}40`
                   }}
                 >
                   Formation
                 </Typography>
                 <Typography variant="body1" sx={{ 
                   mb: 3,
-                  color: '#ffffff',
-                  textShadow: '0 1px 2px rgba(0,0,0,0.8)'
+                  color: textColor,
+                  opacity: 0.9
                 }}>
                   Formation en développement d'applications avec focus sur les technologies modernes.
                 </Typography>
@@ -359,7 +408,7 @@ export default function About() {
                 }}>
                   <RotateRightIcon sx={{ 
                     fontSize: 18, 
-                    color: (theme) => theme.palette.mode === 'dark' ? '#ffffff' : '#1a1a1a',
+                    color: textColor,
                     transition: 'transform 0.3s ease',
                     '&:hover': {
                       transform: 'rotate(180deg)'
@@ -375,7 +424,7 @@ export default function About() {
                     transform: 'translateX(-50%)',
                     fontSize: '0.65rem',
                     opacity: 0.6,
-                    color: (theme) => theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.6)' : 'rgba(0, 0, 0, 0.6)'
+                    color: textColor
                   }}
                 >
                   Cliquez pour retourner la carte
@@ -392,11 +441,11 @@ export default function About() {
               >
                 <Typography 
                   variant="h5" 
-                  style={{ 
-                    color: dynamicStyles.titleColor,
+                  sx={{ 
+                    color: textColor,
                     marginBottom: '16px', 
                     fontWeight: 'bold',
-                    textShadow: dynamicStyles.titleShadow
+                    textShadow: `0 2px 4px ${primary}40`
                   }}
                 >
                   Formation
@@ -405,8 +454,8 @@ export default function About() {
                   mb: 1, 
                   textAlign: 'left', 
                   lineHeight: 1.6,
-                  color: '#ffffff',
-                  textShadow: '0 1px 2px rgba(0,0,0,0.8)'
+                  color: textColor,
+                  opacity: 0.9
                 }}>
                   • DEP en soutien informatique à l'ÉMICA (2023-2024)
                 </Typography>
@@ -414,8 +463,8 @@ export default function About() {
                   mb: 1, 
                   textAlign: 'left', 
                   lineHeight: 1.6,
-                  color: '#ffffff',
-                  textShadow: '0 1px 2px rgba(0,0,0,0.8)'
+                  color: textColor,
+                  opacity: 0.9
                 }}>
                   • AEC Développement de logiciels, sécurité d'applications de bureau, mobiles et Web (2024-2026)
                 </Typography>
@@ -439,22 +488,22 @@ export default function About() {
                   MozBackfaceVisibility: 'hidden',
                 }}
               >
-                <WorkIcon sx={{ fontSize: 48, color: 'primary.main', mb: 2 }} />
+                <WorkIcon sx={{ fontSize: 48, color: primary, mb: 2 }} />
                 <Typography 
                   variant="h5" 
                   gutterBottom 
-                  style={{ 
+                  sx={{ 
                     fontWeight: 'bold',
-                    color: dynamicStyles.titleColor,
-                    textShadow: dynamicStyles.titleShadow
+                    color: primary,
+                    textShadow: `0 2px 4px ${primary}40`
                   }}
                 >
                   Expérience
                 </Typography>
                 <Typography variant="body1" sx={{ 
                   mb: 3,
-                  color: '#ffffff',
-                  textShadow: '0 1px 2px rgba(0,0,0,0.8)'
+                  color: textColor,
+                  opacity: 0.9
                 }}>
                   En toute honnêteté, je n'ai pas d'expérience dans le développement d'applications. Je termine actuellement ma formation en développement d'applications et je suis à la recherche d'un stage pour appliquer mes connaissances.
                 </Typography>
@@ -482,7 +531,7 @@ export default function About() {
                 }}>
                   <RotateRightIcon sx={{ 
                     fontSize: 18, 
-                    color: (theme) => theme.palette.mode === 'dark' ? '#ffffff' : '#1a1a1a',
+                    color: textColor,
                     transition: 'transform 0.3s ease',
                     '&:hover': {
                       transform: 'rotate(180deg)'
@@ -498,7 +547,7 @@ export default function About() {
                     transform: 'translateX(-50%)',
                     fontSize: '0.65rem',
                     opacity: 0.6,
-                    color: (theme) => theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.6)' : 'rgba(0, 0, 0, 0.6)'
+                    color: textColor
                   }}
                 >
                   Cliquez pour retourner la carte
@@ -515,23 +564,23 @@ export default function About() {
               >
                 <Typography 
                   variant="h5" 
-                  style={{ 
-                    color: dynamicStyles.titleColor,
+                  sx={{ 
+                    color: textColor,
                     marginBottom: '16px', 
                     fontWeight: 'bold',
-                    textShadow: dynamicStyles.titleShadow
+                    textShadow: `0 2px 4px ${primary}40`
                   }}
                 >
                   Expérience
                 </Typography>
                 <Typography 
                   variant="body1" 
-                  style={{ 
+                  sx={{ 
                     textAlign: 'center', 
                     lineHeight: 1.6, 
                     fontWeight: 'bold', 
-                    color: dynamicStyles.titleColor,
-                    textShadow: `0 1px 2px ${dynamicStyles.titleColor}40`
+                    color: textColor,
+                    textShadow: `0 1px 2px ${primary}40`
                   }}
                 >
                   Merci de me donner une chance de travailler avec vous !
@@ -565,11 +614,11 @@ export default function About() {
           <Typography 
             variant="h4" 
             gutterBottom 
-            style={{ 
+            sx={{ 
               marginBottom: '24px',
               fontWeight: 'bold',
-              color: dynamicStyles.titleColor,
-              textShadow: dynamicStyles.titleShadow
+              color: primary,
+              textShadow: `0 2px 4px ${primary}40`
             }}
           >
             Mes Compétences Techniques
@@ -613,11 +662,11 @@ export default function About() {
           <Typography 
             variant="h3" 
             gutterBottom 
-            style={{ 
+            sx={{ 
               marginBottom: DESIGN_TOKENS.spacing.md,
               fontWeight: 'bold',
-              color: dynamicStyles.titleColor,
-              textShadow: dynamicStyles.titleShadow
+              color: primary,
+              textShadow: `0 2px 4px ${primary}40`
             }}
           >
             Soft Skills
@@ -629,38 +678,38 @@ export default function About() {
             mt: DESIGN_TOKENS.spacing.lg
           }}>
             <Box sx={{ textAlign: 'center' }}>
-              <LightbulbIcon sx={{ fontSize: 48, color: 'primary.main', mb: 1 }} />
-              <Typography variant="h6" sx={{ mb: 0.5, fontWeight: 600 }}>
+              <LightbulbIcon sx={{ fontSize: 48, color: primary, mb: 1 }} />
+              <Typography variant="h6" sx={{ mb: 0.5, fontWeight: 600, color: textColor }}>
                 Créativité
               </Typography>
-              <Typography variant="body2" color="text.secondary">
+              <Typography variant="body2" sx={{ color: textColor, opacity: 0.8 }}>
                 Résolution de problèmes innovante
               </Typography>
             </Box>
             <Box sx={{ textAlign: 'center' }}>
-              <GroupWorkIcon sx={{ fontSize: 48, color: 'primary.main', mb: 1 }} />
-              <Typography variant="h6" sx={{ mb: 0.5, fontWeight: 600 }}>
+              <GroupWorkIcon sx={{ fontSize: 48, color: primary, mb: 1 }} />
+              <Typography variant="h6" sx={{ mb: 0.5, fontWeight: 600, color: textColor }}>
                 Collaboration
               </Typography>
-              <Typography variant="body2" color="text.secondary">
+              <Typography variant="body2" sx={{ color: textColor, opacity: 0.8 }}>
                 Travail d&apos;équipe efficace
               </Typography>
             </Box>
             <Box sx={{ textAlign: 'center' }}>
-              <TimelineIcon sx={{ fontSize: 48, color: 'primary.main', mb: 1 }} />
-              <Typography variant="h6" sx={{ mb: 0.5, fontWeight: 600 }}>
+              <TimelineIcon sx={{ fontSize: 48, color: primary, mb: 1 }} />
+              <Typography variant="h6" sx={{ mb: 0.5, fontWeight: 600, color: textColor }}>
                 Adaptabilité
               </Typography>
-              <Typography variant="body2" color="text.secondary">
+              <Typography variant="body2" sx={{ color: textColor, opacity: 0.8 }}>
                 Apprentissage continu
               </Typography>
             </Box>
             <Box sx={{ textAlign: 'center' }}>
-              <AutoAwesomeIcon sx={{ fontSize: 48, color: 'primary.main', mb: 1 }} />
-              <Typography variant="h6" sx={{ mb: 0.5, fontWeight: 600 }}>
+              <AutoAwesomeIcon sx={{ fontSize: 48, color: primary, mb: 1 }} />
+              <Typography variant="h6" sx={{ mb: 0.5, fontWeight: 600, color: textColor }}>
                 Qualité
               </Typography>
-              <Typography variant="body2" color="text.secondary">
+              <Typography variant="body2" sx={{ color: textColor, opacity: 0.8 }}>
                 Code propre et maintenable
               </Typography>
             </Box>
@@ -673,13 +722,14 @@ export default function About() {
           mt: DESIGN_TOKENS.spacing.xxl,
           mb: DESIGN_TOKENS.spacing.xl
         }}>
-          <EmojiEventsIcon sx={{ fontSize: 64, color: 'primary.main', mb: DESIGN_TOKENS.spacing.md }} />
+          <EmojiEventsIcon sx={{ fontSize: 64, color: primary, mb: DESIGN_TOKENS.spacing.md }} />
           <Typography 
             variant="h3" 
             gutterBottom
             sx={{
               ...DESIGN_TOKENS.typography.h3,
-              mb: DESIGN_TOKENS.spacing.md
+              mb: DESIGN_TOKENS.spacing.md,
+              color: textColor
             }}
           >
             Prêt à collaborer sur votre prochain projet ?
@@ -692,8 +742,8 @@ export default function About() {
               mb: DESIGN_TOKENS.spacing.xl,
               ...DESIGN_TOKENS.typography.body1,
               fontSize: '1.125rem',
-              color: customTheme.name === 'Default' ? 'text.secondary' : '#ffffff',
-              textShadow: customTheme.name === 'Default' ? 'none' : '0 1px 2px rgba(0,0,0,0.8)'
+              color: textColor,
+              opacity: 0.9
             }}
           >
             N&apos;hésitez pas à me contacter pour discuter de vos idées et voir comment nous pouvons travailler ensemble.

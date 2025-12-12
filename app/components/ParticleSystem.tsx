@@ -30,18 +30,36 @@ export default function ParticleSystem({
   particleCount = 100,
   speed = 0.5,
   colors = ['#ff6b35', '#ff1744', '#3b82f6', '#059669'],
-  size = { min: 1, max: 3 },
-  opacity = { min: 0.1, max: 0.8 },
+  size = { min: 1, max: 2 },
+  opacity = { min: 0.05, max: 0.3 },
   life = { min: 100, max: 300 },
   mouseInteraction = true,
   className
 }: ParticleSystemProps) {
+  const [isMobile, setIsMobile] = useState(false)
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const animationRef = useRef<number>()
   const particlesRef = useRef<Particle[]>([])
   const mouseRef = useRef({ x: 0, y: 0 })
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 })
 
+  // Détecter si on est sur mobile et désactiver l'animation
+  useEffect(() => {
+    const checkMobile = () => {
+      const isMobileDevice = window.innerWidth < 768 || 
+                            /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
+      setIsMobile(isMobileDevice)
+    }
+    
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
+    return () => window.removeEventListener('resize', checkMobile)
+  }, [])
+
+  // Désactiver sur mobile pour la performance
+  if (isMobile) {
+    return null
+  }
   // Initialiser les particules
   const initParticles = () => {
     const particles: Particle[] = []
@@ -121,8 +139,8 @@ export default function ParticleSystem({
       ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2)
       ctx.fill()
       
-      // Effet de lueur
-      ctx.shadowBlur = 10
+      // Effet de lueur (plus discret)
+      ctx.shadowBlur = 5
       ctx.shadowColor = particle.color
       ctx.beginPath()
       ctx.arc(particle.x, particle.y, particle.size * 0.5, 0, Math.PI * 2)
@@ -137,12 +155,12 @@ export default function ParticleSystem({
         const dy = particle.y - otherParticle.y
         const distance = Math.sqrt(dx * dx + dy * dy)
         
-        if (distance < 100) {
-          const alpha = (100 - distance) / 100 * 0.2
+        if (distance < 80) {
+          const alpha = (80 - distance) / 80 * 0.1
           ctx.save()
           ctx.globalAlpha = alpha
           ctx.strokeStyle = particle.color
-          ctx.lineWidth = 0.5
+          ctx.lineWidth = 0.3
           ctx.beginPath()
           ctx.moveTo(particle.x, particle.y)
           ctx.lineTo(otherParticle.x, otherParticle.y)
