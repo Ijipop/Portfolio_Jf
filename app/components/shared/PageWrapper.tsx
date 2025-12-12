@@ -3,7 +3,7 @@
 import Box from '@mui/material/Box'
 import { ReactNode, useEffect, useState } from 'react'
 import { useTheme } from '@mui/material/styles'
-import ParticleSystem from '../ParticleSystem'
+import ProfessionalBackground from '../ProfessionalBackground'
 import { GRADIENTS } from '../../design-system/constants'
 import { useThemeColors } from '../../hooks/useThemeColors'
 import { useAdvancedTheme } from '../../contexts/AdvancedThemeContext'
@@ -154,12 +154,7 @@ export default function PageWrapper({
       }}
     >
       {showParticles && (
-        <ParticleSystem
-          particleCount={particleCount}
-          speed={particleSpeed}
-          colors={particleColors}
-          mouseInteraction={true}
-        />
+        <ProfessionalBackground />
       )}
       {children}
     </Box>
