@@ -5,7 +5,6 @@ import HomeIcon from '@mui/icons-material/Home';
 import MenuIcon from '@mui/icons-material/Menu';
 import PersonIcon from '@mui/icons-material/Person';
 import WorkIcon from '@mui/icons-material/Work';
-import DescriptionIcon from '@mui/icons-material/Description';
 import CTAButton from './shared/CTAButton';
 import { DESIGN_TOKENS } from '../design-system/constants';
 import AppBar from "@mui/material/AppBar";
@@ -294,20 +293,6 @@ export default function AppBarComponent() {
 					
 					{/* Boutons de contrôle */}
 					<Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-						{/* Bouton CV - Desktop seulement */}
-						<Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-							<CTAButton
-								variant="outline"
-								size="small"
-								onClick={() => {
-									// TODO: Ajouter le lien vers le CV
-									window.open('/cv.pdf', '_blank')
-								}}
-								startIcon={<DescriptionIcon />}
-							>
-								CV
-							</CTAButton>
-						</Box>
 						<IconButton
 							color="inherit"
 							aria-label="menu"
@@ -341,16 +326,6 @@ export default function AppBarComponent() {
 							}
 						}}
 					>
-						<MenuItem 
-							onClick={() => {
-								window.open('/cv.pdf', '_blank')
-								handleMenuClose()
-							}}
-							sx={{ gap: 1 }}
-						>
-							<DescriptionIcon fontSize="small" />
-							Télécharger CV
-						</MenuItem>
 						<MenuItem onClick={handleAdminClick}>Admin</MenuItem>
 					</Menu>
 				</Toolbar>
