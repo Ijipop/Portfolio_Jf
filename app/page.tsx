@@ -18,12 +18,54 @@ import PageWrapper from './components/shared/PageWrapper'
 import CTAButton from './components/shared/CTAButton'
 import StickyCTA from './components/shared/StickyCTA'
 import Footer from './components/Footer'
-import { DESIGN_TOKENS } from './design-system/constants'
+import { DESIGN_TOKENS, GRADIENTS } from './design-system/constants'
 import { useThemeColors } from './hooks/useThemeColors'
+import { useEffect, useState } from 'react'
 
 export default function Home() {
   const router = useRouter()
   const { primary, secondary } = useThemeColors()
+  const [skillsBackground, setSkillsBackground] = useState<string>(GRADIENTS.cards.light)
+
+  // Mettre à jour le background de la section compétences quand le thème change
+  useEffect(() => {
+    const updateSkillsBackground = () => {
+      if (typeof window === 'undefined') return
+      
+      // Lire les CSS variables définies par ThemeSelector
+      const cardBg = getComputedStyle(document.documentElement).getPropertyValue('--card-background')?.trim()
+      
+      if (cardBg && cardBg !== 'none') {
+        setSkillsBackground(cardBg)
+      } else {
+        // Fallback : créer un gradient avec les couleurs du thème
+        const bg = getComputedStyle(document.documentElement).getPropertyValue('--theme-bg')?.trim()
+        const bg2 = getComputedStyle(document.documentElement).getPropertyValue('--theme-bg2')?.trim()
+        
+        if (bg && bg2) {
+          setSkillsBackground(`linear-gradient(145deg, ${bg} 0%, ${bg2} 50%, ${bg} 100%)`)
+        } else {
+          setSkillsBackground(GRADIENTS.cards.light)
+        }
+      }
+    }
+    
+    updateSkillsBackground()
+    
+    // Observer les changements de CSS variables
+    const observer = new MutationObserver(updateSkillsBackground)
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['style'],
+    })
+    
+    const interval = setInterval(updateSkillsBackground, 200)
+    
+    return () => {
+      observer.disconnect()
+      clearInterval(interval)
+    }
+  }, [])
 
   const handleCardClick = (path: string) => {
     router.push(path)
@@ -185,12 +227,12 @@ export default function Home() {
           zIndex: 2 
         }}>
           <Box sx={{ 
-            background: 'linear-gradient(145deg, rgba(255, 255, 255, 0.8) 0%, rgba(248, 250, 252, 0.8) 100%)',
-            border: `1px solid ${primary}30`,
+            background: `${skillsBackground} !important`,
+            border: `1px solid ${primary}30 !important`,
             borderRadius: DESIGN_TOKENS.borderRadius.large,
             padding: { xs: DESIGN_TOKENS.spacing.md, md: DESIGN_TOKENS.spacing.xl },
             textAlign: 'center',
-            boxShadow: `0 8px 32px ${primary}20`,
+            boxShadow: `0 8px 32px ${primary}20 !important`,
             mb: DESIGN_TOKENS.spacing.xxl,
             position: 'relative',
             overflow: 'hidden',
@@ -202,7 +244,19 @@ export default function Home() {
               sx={{ 
                 mb: DESIGN_TOKENS.spacing.md,
                 ...DESIGN_TOKENS.typography.h3,
-                color: primary,
+                fontWeight: 700,
+                textShadow: `0 2px 4px rgba(0,0,0,0.1), 0 0 20px ${primary}40`,
+                background: `linear-gradient(135deg, ${primary}, ${secondary}, ${primary})`,
+                backgroundClip: 'text',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                backgroundSize: '200% 200%',
+                animation: 'gradientShift 4s ease-in-out infinite',
+                '@keyframes gradientShift': {
+                  '0%': { backgroundPosition: '0% 50%' },
+                  '50%': { backgroundPosition: '100% 50%' },
+                  '100%': { backgroundPosition: '0% 50%' },
+                },
               }}
             >
               Technologies & Compétences

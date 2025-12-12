@@ -3,63 +3,58 @@
 import Box from '@mui/material/Box'
 import Container from '@mui/material/Container'
 import Typography from '@mui/material/Typography'
-import { styled } from '@mui/material/styles'
+import { useTheme } from '@mui/material/styles'
 import GitHubIcon from '@mui/icons-material/GitHub'
 import LinkedInIcon from '@mui/icons-material/LinkedIn'
 import EmailIcon from '@mui/icons-material/Email'
 import CodeIcon from '@mui/icons-material/Code'
 import { useRouter } from 'next/navigation'
+import { useEffect, useState } from 'react'
 import CTAButton from './shared/CTAButton'
 import { DESIGN_TOKENS } from '../design-system/constants'
-
-const FooterContainer = styled(Box)(({ theme }) => ({
-  background: theme.palette.mode === 'dark'
-    ? 'linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)'
-    : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-  color: 'white',
-  padding: theme.spacing(4, 0, 2),
-  marginTop: 'auto',
-  position: 'relative',
-  '&::before': {
-    content: '""',
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    background: theme.palette.mode === 'dark'
-      ? 'url("data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%23ffffff" fill-opacity="0.05"%3E%3Ccircle cx="30" cy="30" r="2"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")'
-      : 'url("data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%23ffffff" fill-opacity="0.1"%3E%3Ccircle cx="30" cy="30" r="2"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")',
-    opacity: 0.3,
-    pointerEvents: 'none',
-    zIndex: 0,
-  }
-}))
-
-const SocialIcon = styled(Box)(({ theme }) => ({
-  display: 'inline-flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  width: 48,
-  height: 48,
-  borderRadius: '50%',
-  background: 'rgba(255,255,255,0.1)',
-  color: 'white',
-  margin: theme.spacing(0, 1),
-  cursor: 'pointer',
-  transition: DESIGN_TOKENS.transitions.normal,
-  position: 'relative',
-  zIndex: 1,
-  '&:hover': {
-    background: 'rgba(255,255,255,0.25)',
-    transform: 'scale(1.15) translateY(-2px)',
-    boxShadow: '0 4px 12px rgba(0,0,0,0.2)',
-  }
-}))
+import { useThemeColors } from '../hooks/useThemeColors'
 
 export default function Footer() {
   const currentYear = new Date().getFullYear()
   const router = useRouter()
+  const theme = useTheme()
+  const { primary, secondary } = useThemeColors()
+  const [footerBackground, setFooterBackground] = useState<string>(`linear-gradient(135deg, ${primary} 0%, ${secondary} 100%)`)
+
+  // Mettre à jour le background du footer quand le thème change
+  useEffect(() => {
+    const updateFooterBackground = () => {
+      if (typeof window === 'undefined') return
+      
+      // Lire les CSS variables définies par ThemeSelector
+      const bg = getComputedStyle(document.documentElement).getPropertyValue('--theme-bg')?.trim()
+      const bg2 = getComputedStyle(document.documentElement).getPropertyValue('--theme-bg2')?.trim()
+      
+      if (bg && bg2) {
+        // Créer un gradient avec les couleurs du thème
+        setFooterBackground(`linear-gradient(135deg, ${bg} 0%, ${bg2} 50%, ${bg} 100%)`)
+      } else {
+        // Fallback : utiliser primary et secondary
+        setFooterBackground(`linear-gradient(135deg, ${primary} 0%, ${secondary} 100%)`)
+      }
+    }
+    
+    updateFooterBackground()
+    
+    // Observer les changements de CSS variables
+    const observer = new MutationObserver(updateFooterBackground)
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['style'],
+    })
+    
+    const interval = setInterval(updateFooterBackground, 200)
+    
+    return () => {
+      observer.disconnect()
+      clearInterval(interval)
+    }
+  }, [primary, secondary])
 
   const handleEmailClick = () => {
     router.push('/contact')
@@ -74,7 +69,27 @@ export default function Footer() {
   }
 
   return (
-    <FooterContainer>
+    <Box
+      sx={{
+        background: `${footerBackground} !important`,
+        color: 'white',
+        padding: theme.spacing(4, 0, 2),
+        marginTop: 'auto',
+        position: 'relative',
+        '&::before': {
+          content: '""',
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: 'url("data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%23ffffff" fill-opacity="0.1"%3E%3Ccircle cx="30" cy="30" r="2"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")',
+          opacity: 0.3,
+          pointerEvents: 'none',
+          zIndex: 0,
+        }
+      }}
+    >
       <Container maxWidth="lg">
         <Box sx={{ 
           display: 'grid',
@@ -156,15 +171,84 @@ export default function Footer() {
               Suivez-moi
             </Typography>
             <Box sx={{ display: 'flex', gap: 1, mb: DESIGN_TOKENS.spacing.lg }}>
-              <SocialIcon onClick={handleGitHubClick} aria-label="GitHub">
+              <Box
+                onClick={handleGitHubClick}
+                aria-label="GitHub"
+                sx={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  width: 48,
+                  height: 48,
+                  borderRadius: '50%',
+                  background: 'rgba(255,255,255,0.1)',
+                  color: 'white',
+                  margin: theme.spacing(0, 1),
+                  cursor: 'pointer',
+                  transition: DESIGN_TOKENS.transitions.normal,
+                  position: 'relative',
+                  zIndex: 1,
+                  '&:hover': {
+                    background: 'rgba(255,255,255,0.25)',
+                    transform: 'scale(1.15) translateY(-2px)',
+                    boxShadow: `0 4px 12px ${primary}40`,
+                  }
+                }}
+              >
                 <GitHubIcon />
-              </SocialIcon>
-              <SocialIcon onClick={handleLinkedInClick} aria-label="LinkedIn">
+              </Box>
+              <Box
+                onClick={handleLinkedInClick}
+                aria-label="LinkedIn"
+                sx={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  width: 48,
+                  height: 48,
+                  borderRadius: '50%',
+                  background: 'rgba(255,255,255,0.1)',
+                  color: 'white',
+                  margin: theme.spacing(0, 1),
+                  cursor: 'pointer',
+                  transition: DESIGN_TOKENS.transitions.normal,
+                  position: 'relative',
+                  zIndex: 1,
+                  '&:hover': {
+                    background: 'rgba(255,255,255,0.25)',
+                    transform: 'scale(1.15) translateY(-2px)',
+                    boxShadow: `0 4px 12px ${primary}40`,
+                  }
+                }}
+              >
                 <LinkedInIcon />
-              </SocialIcon>
-              <SocialIcon onClick={handleEmailClick} aria-label="Email">
+              </Box>
+              <Box
+                onClick={handleEmailClick}
+                aria-label="Email"
+                sx={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  width: 48,
+                  height: 48,
+                  borderRadius: '50%',
+                  background: 'rgba(255,255,255,0.1)',
+                  color: 'white',
+                  margin: theme.spacing(0, 1),
+                  cursor: 'pointer',
+                  transition: DESIGN_TOKENS.transitions.normal,
+                  position: 'relative',
+                  zIndex: 1,
+                  '&:hover': {
+                    background: 'rgba(255,255,255,0.25)',
+                    transform: 'scale(1.15) translateY(-2px)',
+                    boxShadow: `0 4px 12px ${primary}40`,
+                  }
+                }}
+              >
                 <EmailIcon />
-              </SocialIcon>
+              </Box>
             </Box>
             <Box sx={{ borderTop: '1px solid rgba(255,255,255,0.1)', pt: DESIGN_TOKENS.spacing.md }}>
               <Typography variant="body2" sx={{ opacity: 0.7, fontSize: '0.75rem', color: 'white' }}>
@@ -177,6 +261,6 @@ export default function Footer() {
           </Box>
         </Box>
       </Container>
-    </FooterContainer>
+    </Box>
   )
 }
