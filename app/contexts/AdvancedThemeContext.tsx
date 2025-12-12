@@ -6,9 +6,9 @@ import React, { createContext, useContext, useEffect, useState } from 'react'
 import { THEMES, ThemeName, getDefaultTheme, getAvailableThemes } from '../design-system/themes'
 
 interface AdvancedThemeContextType {
-  themeName: string
+  themeName: ThemeName
   customTheme: any
-  setTheme: (themeName: string) => void
+  setTheme: (themeName: ThemeName) => void
   availableThemes: string[]
 }
 

@@ -94,7 +94,7 @@ export function ThemeSelector() {
       console.log('✅ AdvancedThemeContext updated to:', themeName)
     } catch (error) {
       console.warn('⚠️ Could not update AdvancedThemeContext:', error)
-    }
+              }
     
     // 2. Définir UNIQUEMENT les CSS variables (pas de manipulation DOM directe)
     const root = document.documentElement
@@ -119,7 +119,7 @@ export function ThemeSelector() {
       `linear-gradient(135deg, ${theme.bg} 0%, ${theme.bg2} 25%, ${theme.bg} 50%, ${theme.bg2} 75%, ${theme.bg} 100%)`,
       'important'
     )
-    
+      
     // 4. Sauvegarder l'index pour l'affichage
     const index = themeDisplayOrder.indexOf(themeName)
     if (index !== -1) {
