@@ -29,7 +29,6 @@ import HeaderSection from '../components/shared/HeaderSection'
 import PageWrapper from '../components/shared/PageWrapper'
 import CTAButton from '../components/shared/CTAButton'
 import Footer from '../components/Footer'
-import StickyCTA from '../components/shared/StickyCTA'
 import { DESIGN_TOKENS, ANIMATIONS, GRADIENTS } from '../design-system/constants'
 import AccessTimeIcon from '@mui/icons-material/AccessTime'
 import FilterListIcon from '@mui/icons-material/FilterList'
@@ -826,7 +825,6 @@ export default function Projets() {
       </Container>
       
       <Footer />
-      <StickyCTA text="Voir mes projets" onClick={() => {}} />
     </PageWrapper>
   )
 }
