@@ -20,10 +20,17 @@ import AppBarComponent from '../components/appBar'
 import ProjectCard from '../components/shared/ProjectCard'
 import StatsCard from '../components/shared/StatsCard'
 import { StatsValueTypography, StatsLabelTypography } from '../components/shared/StatsTypography'
+import AnimatedCounter from '../components/shared/AnimatedCounter'
 import SkillTag from '../components/shared/SkillTag'
 import HeaderSection from '../components/shared/HeaderSection'
 import PageWrapper from '../components/shared/PageWrapper'
+import CTAButton from '../components/shared/CTAButton'
+import Footer from '../components/Footer'
+import StickyCTA from '../components/shared/StickyCTA'
 import { DESIGN_TOKENS, ANIMATIONS } from '../design-system/constants'
+import AccessTimeIcon from '@mui/icons-material/AccessTime'
+import FilterListIcon from '@mui/icons-material/FilterList'
+import ClearIcon from '@mui/icons-material/Clear'
 
 interface Project {
   id: number
@@ -100,7 +107,7 @@ const AnimatedBox = styled(Box)({
 
 const ProjectsGrid = styled(Box)(({ theme }) => ({
   display: 'grid',
-  gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))',
+  gridTemplateColumns: 'repeat(2, 1fr)',
   gap: theme.spacing(4),
   [theme.breakpoints.down('sm')]: {
     gridTemplateColumns: '1fr',
@@ -111,7 +118,8 @@ const ProjectsGrid = styled(Box)(({ theme }) => ({
     gap: theme.spacing(3),
   },
   [theme.breakpoints.up('lg')]: {
-    gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))',
+    gridTemplateColumns: 'repeat(2, 1fr)',
+    gap: theme.spacing(4),
   }
 }))
 
@@ -127,10 +135,80 @@ const StatsGrid = styled(Box)(({ theme }) => ({
   },
 }))
 
+const FilterChip = styled(Chip)(({ theme }) => ({
+  borderRadius: DESIGN_TOKENS.borderRadius.small,
+  fontWeight: 600,
+  fontSize: '0.875rem',
+  padding: theme.spacing(0.5, 1.5),
+  cursor: 'pointer',
+  transition: DESIGN_TOKENS.transitions.normal,
+  '&:hover': {
+    transform: 'translateY(-2px)',
+    boxShadow: theme.palette.mode === 'dark'
+      ? '0 4px 12px rgba(59, 130, 246, 0.3)'
+      : '0 4px 12px rgba(30, 58, 138, 0.2)',
+  },
+}))
+
+const FilterContainer = styled(Box)(({ theme }) => ({
+  display: 'flex',
+  flexWrap: 'wrap',
+  gap: theme.spacing(1.5),
+  alignItems: 'center',
+  marginBottom: theme.spacing(4),
+  padding: theme.spacing(2),
+  background: theme.palette.mode === 'dark'
+    ? 'linear-gradient(145deg, rgba(26, 26, 26, 0.8) 0%, rgba(45, 45, 45, 0.8) 100%)'
+    : 'linear-gradient(145deg, rgba(255, 255, 255, 0.8) 0%, rgba(248, 250, 252, 0.8) 100%)',
+  border: theme.palette.mode === 'dark' 
+    ? '1px solid rgba(74, 85, 104, 0.3)' 
+    : '1px solid rgba(148, 163, 184, 0.2)',
+  borderRadius: DESIGN_TOKENS.borderRadius.large,
+  boxShadow: theme.palette.mode === 'dark'
+    ? DESIGN_TOKENS.shadows.elevated.dark
+    : DESIGN_TOKENS.shadows.elevated.light,
+}))
+
+const ProjectImageContainer = styled(Box)(({ theme }) => ({
+  position: 'relative',
+  overflow: 'hidden',
+  borderRadius: DESIGN_TOKENS.borderRadius.small,
+  marginBottom: theme.spacing(2),
+  '& img': {
+    transition: DESIGN_TOKENS.transitions.slow,
+    width: '100%',
+    height: '280px',
+    objectFit: 'cover',
+    borderRadius: DESIGN_TOKENS.borderRadius.small,
+    boxShadow: theme.palette.mode === 'dark'
+      ? '0 4px 20px rgba(0, 0, 0, 0.4)'
+      : '0 4px 20px rgba(0, 0, 0, 0.1)',
+  },
+  '&:hover img': {
+    transform: 'scale(1.1)',
+  },
+  '&::after': {
+    content: '""',
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    background: 'linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.3) 100%)',
+    opacity: 0,
+    transition: DESIGN_TOKENS.transitions.normal,
+    pointerEvents: 'none',
+  },
+  '&:hover::after': {
+    opacity: 1,
+  },
+}))
+
 export default function Projets() {
   const [projects, setProjects] = useState<Project[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [selectedTech, setSelectedTech] = useState<string | null>(null)
 
   useEffect(() => {
     fetchProjects()
@@ -233,6 +311,28 @@ export default function Projets() {
     ['wip', 'en cours', 'en cours de développement'].includes(p.status.toLowerCase())
   ).length
 
+  // Extraire toutes les technologies uniques
+  const getAllTechnologies = () => {
+    const techSet = new Set<string>()
+    projects.forEach(project => {
+      project.technologies.split(',').forEach(tech => {
+        techSet.add(tech.trim())
+      })
+    })
+    return Array.from(techSet).sort()
+  }
+
+  // Filtrer les projets par technologie
+  const filteredProjects = selectedTech
+    ? projects.filter(project => 
+        project.technologies.split(',').some(tech => tech.trim().toLowerCase() === selectedTech.toLowerCase())
+      )
+    : projects
+
+  const handleTechFilter = (tech: string) => {
+    setSelectedTech(selectedTech === tech ? null : tech)
+  }
+
   if (loading) {
     return (
       <PageWrapper backgroundVariant="default" showParticles={false}>
@@ -291,7 +391,7 @@ export default function Projets() {
             <StatsCard>
               <Box sx={{ position: 'relative', zIndex: 2 }}>
                 <StatsValueTypography variant="h3">
-                  {projects.length}
+                  <AnimatedCounter value={projects.length} />
                 </StatsValueTypography>
                 <StatsLabelTypography variant="body1">
                   Projets Totaux
@@ -301,7 +401,7 @@ export default function Projets() {
             <StatsCard>
               <Box sx={{ position: 'relative', zIndex: 2 }}>
                 <StatsValueTypography variant="h3">
-                  {getCompletedProjects()}
+                  <AnimatedCounter value={getCompletedProjects()} />
                 </StatsValueTypography>
                 <StatsLabelTypography variant="body1">
                   Projets Terminés
@@ -311,7 +411,7 @@ export default function Projets() {
             <StatsCard>
               <Box sx={{ position: 'relative', zIndex: 2 }}>
                 <StatsValueTypography variant="h3">
-                  {getInProgressProjects()}
+                  <AnimatedCounter value={getInProgressProjects()} />
                 </StatsValueTypography>
                 <StatsLabelTypography variant="body1">
                   En Cours
@@ -321,9 +421,39 @@ export default function Projets() {
           </StatsGrid>
         </AnimatedBox>
 
+        {/* Filtres par technologie */}
+        {projects.length > 0 && (
+          <AnimatedBox>
+            <FilterContainer>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mr: 2 }}>
+                <FilterListIcon sx={{ color: 'primary.main' }} />
+                <Typography variant="h6" sx={{ fontWeight: 600 }}>
+                  Filtrer par technologie:
+                </Typography>
+              </Box>
+              <FilterChip
+                label="Tous"
+                onClick={() => setSelectedTech(null)}
+                color={selectedTech === null ? 'primary' : 'default'}
+                variant={selectedTech === null ? 'filled' : 'outlined'}
+                icon={selectedTech === null ? undefined : <ClearIcon />}
+              />
+              {getAllTechnologies().map((tech) => (
+                <FilterChip
+                  key={tech}
+                  label={tech}
+                  onClick={() => handleTechFilter(tech)}
+                  color={selectedTech === tech ? 'primary' : 'default'}
+                  variant={selectedTech === tech ? 'filled' : 'outlined'}
+                />
+              ))}
+            </FilterContainer>
+          </AnimatedBox>
+        )}
+
         {/* Projects Grid */}
         <ProjectsGrid>
-          {projects.map((project, index) => {
+          {filteredProjects.map((project, index) => {
             // Palette de couleurs pour les reflets
             const reflectionColors = [
               '#ff6b35', // Orange
@@ -422,16 +552,33 @@ export default function Projets() {
                   </Box>
                 )}
 
-                <Box sx={{ display: 'flex', alignItems: 'center', mb: 1.5 }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 1.5 }}>
                   <StatusChip
                     icon={getStatusIcon(project.status)}
                     label={project.status}
                     color={getStatusColor(project.status)}
                     size="small"
                   />
+                  {/* Métriques du projet */}
+                  <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
+                    {project.createdAt && (
+                      <Box sx={{ 
+                        display: 'flex', 
+                        alignItems: 'center', 
+                        gap: 0.5,
+                        color: 'text.secondary',
+                        fontSize: '0.75rem'
+                      }}>
+                        <AccessTimeIcon sx={{ fontSize: 14 }} />
+                        <Typography variant="caption" sx={{ fontSize: '0.7rem' }}>
+                          {new Date(project.createdAt).getFullYear()}
+                        </Typography>
+                      </Box>
+                    )}
+                  </Box>
                 </Box>
                 
-                                 <Typography 
+                <Typography 
                    variant="h6" 
                    component="h2" 
                    gutterBottom
@@ -456,19 +603,12 @@ export default function Projets() {
                 </Typography>
                 
                 {project.imageUrl && (
-                  <Box sx={{ mb: 2, textAlign: 'center' }}>
+                  <ProjectImageContainer>
                     <img 
                       src={getImageUrl(project.imageUrl)} 
                       alt={project.name}
-                      style={{ 
-                        width: '100%',
-                        height: '180px',
-                        objectFit: 'cover',
-                        borderRadius: DESIGN_TOKENS.borderRadius.small,
-                        boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
-                      }}
                     />
-                  </Box>
+                  </ProjectImageContainer>
                 )}
                 
                 <Typography 
@@ -489,7 +629,8 @@ export default function Projets() {
                   visibility: 'visible !important',
                   opacity: '1 !important',
                   zIndex: 1000,
-                  position: 'relative'
+                  position: 'relative',
+                  mb: 2
                 }}>
                   {project.technologies.split(',').map((tech, techIndex) => (
                     <SkillTag key={techIndex} size="small" reflectionColor={reflectionColor}>
@@ -497,11 +638,54 @@ export default function Projets() {
                     </SkillTag>
                   ))}
                 </TechStack>
+                
+                {/* CTA pour voir le projet */}
+                {project.url && (
+                  <CTAButton
+                    variant="primary"
+                    size="medium"
+                    fullWidth
+                    onClick={() => handleProjectClick(project.url)}
+                  >
+                    Voir le projet
+                  </CTAButton>
+                )}
               </ProjectCard>
             )
           })}
         </ProjectsGrid>
         
+        {filteredProjects.length === 0 && projects.length > 0 && (
+          <AnimatedBox>
+            <Box sx={{ 
+              textAlign: 'center', 
+              py: 8,
+              background: (theme) => theme.palette.mode === 'dark'
+                ? 'linear-gradient(145deg, rgba(26, 26, 26, 0.8) 0%, rgba(45, 45, 45, 0.8) 100%)'
+                : 'linear-gradient(145deg, rgba(255, 255, 255, 0.8) 0%, rgba(248, 250, 252, 0.8) 100%)',
+              borderRadius: DESIGN_TOKENS.borderRadius.large,
+              boxShadow: (theme) => theme.palette.mode === 'dark'
+                ? DESIGN_TOKENS.shadows.elevated.dark
+                : DESIGN_TOKENS.shadows.elevated.light,
+            }}>
+              <FilterListIcon sx={{ fontSize: 64, color: 'primary.main', mb: 2 }} />
+              <Typography variant="h5" color="text.secondary" gutterBottom>
+                Aucun projet trouvé avec cette technologie
+              </Typography>
+              <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
+                Essayez de sélectionner une autre technologie ou réinitialisez le filtre
+              </Typography>
+              <CTAButton
+                variant="secondary"
+                onClick={() => setSelectedTech(null)}
+                startIcon={<ClearIcon />}
+              >
+                Réinitialiser le filtre
+              </CTAButton>
+            </Box>
+          </AnimatedBox>
+        )}
+
         {projects.length === 0 && !error && (
           <AnimatedBox>
             <Box sx={{ 
@@ -522,6 +706,9 @@ export default function Projets() {
           </AnimatedBox>
         )}
       </Container>
+      
+      <Footer />
+      <StickyCTA text="Voir mes projets" onClick={() => {}} />
     </PageWrapper>
   )
 }

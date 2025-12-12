@@ -5,6 +5,9 @@ import HomeIcon from '@mui/icons-material/Home';
 import MenuIcon from '@mui/icons-material/Menu';
 import PersonIcon from '@mui/icons-material/Person';
 import WorkIcon from '@mui/icons-material/Work';
+import DescriptionIcon from '@mui/icons-material/Description';
+import CTAButton from './shared/CTAButton';
+import { DESIGN_TOKENS } from '../design-system/constants';
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
@@ -119,25 +122,42 @@ export default function AppBarComponent() {
 						display: { xs: 'none', sm: 'flex' }, 
 						gap: { xs: 0.5, sm: 1 },
 						flexGrow: 1,
-						justifyContent: 'center'
+						justifyContent: 'center',
+						alignItems: 'center'
 					}}>
 						<IconButton
 							color="inherit"
 							onClick={() => router.push('/projets')}
 							sx={{
-								color: pathname === '/projets' ? 'white' : 'rgba(255, 255, 255, 0.7)',
-								backgroundColor: pathname === '/projets' ? 'rgba(255, 255, 255, 0.1)' : 'transparent',
-								borderRadius: 2,
+								color: pathname === '/projets' ? 'white' : 'rgba(255, 255, 255, 0.8)',
+								backgroundColor: pathname === '/projets' ? 'rgba(255, 255, 255, 0.15)' : 'transparent',
+								borderRadius: DESIGN_TOKENS.borderRadius.small,
 								px: { xs: 1, sm: 2 },
 								py: 1,
+								position: 'relative',
+								transition: DESIGN_TOKENS.transitions.normal,
+								...(pathname === '/projets' && {
+									'&::after': {
+										content: '""',
+										position: 'absolute',
+										bottom: 0,
+										left: '50%',
+										transform: 'translateX(-50%)',
+										width: '80%',
+										height: '3px',
+										background: 'white',
+										borderRadius: '2px 2px 0 0',
+									}
+								}),
 								'&:hover': {
 									color: 'white',
-									backgroundColor: 'rgba(255, 255, 255, 0.1)',
+									backgroundColor: 'rgba(255, 255, 255, 0.15)',
+									transform: 'translateY(-2px)',
 								},
 							}}
 						>
-							<WorkIcon sx={{ mr: { xs: 0, sm: 1 } }} />
-							<Typography variant="body2" sx={{ display: { xs: 'none', sm: 'block' } }}>
+							<WorkIcon sx={{ mr: { xs: 0, sm: 1 }, fontSize: { xs: 20, sm: 24 } }} />
+							<Typography variant="body2" sx={{ display: { xs: 'none', sm: 'block' }, fontWeight: pathname === '/projets' ? 600 : 400 }}>
 								Projets
 							</Typography>
 						</IconButton>
@@ -146,19 +166,35 @@ export default function AppBarComponent() {
 							color="inherit"
 							onClick={() => router.push('/a-propos')}
 							sx={{
-								color: pathname === '/a-propos' ? 'white' : 'rgba(255, 255, 255, 0.7)',
-								backgroundColor: pathname === '/a-propos' ? 'rgba(255, 255, 255, 0.1)' : 'transparent',
-								borderRadius: 2,
+								color: pathname === '/a-propos' ? 'white' : 'rgba(255, 255, 255, 0.8)',
+								backgroundColor: pathname === '/a-propos' ? 'rgba(255, 255, 255, 0.15)' : 'transparent',
+								borderRadius: DESIGN_TOKENS.borderRadius.small,
 								px: { xs: 1, sm: 2 },
 								py: 1,
+								position: 'relative',
+								transition: DESIGN_TOKENS.transitions.normal,
+								...(pathname === '/a-propos' && {
+									'&::after': {
+										content: '""',
+										position: 'absolute',
+										bottom: 0,
+										left: '50%',
+										transform: 'translateX(-50%)',
+										width: '80%',
+										height: '3px',
+										background: 'white',
+										borderRadius: '2px 2px 0 0',
+									}
+								}),
 								'&:hover': {
 									color: 'white',
-									backgroundColor: 'rgba(255, 255, 255, 0.1)',
+									backgroundColor: 'rgba(255, 255, 255, 0.15)',
+									transform: 'translateY(-2px)',
 								},
 							}}
 						>
-							<PersonIcon sx={{ mr: { xs: 0, sm: 1 } }} />
-							<Typography variant="body2" sx={{ display: { xs: 'none', sm: 'block' } }}>
+							<PersonIcon sx={{ mr: { xs: 0, sm: 1 }, fontSize: { xs: 20, sm: 24 } }} />
+							<Typography variant="body2" sx={{ display: { xs: 'none', sm: 'block' }, fontWeight: pathname === '/a-propos' ? 600 : 400 }}>
 								À propos
 							</Typography>
 						</IconButton>
@@ -167,19 +203,35 @@ export default function AppBarComponent() {
 							color="inherit"
 							onClick={() => router.push('/contact')}
 							sx={{
-								color: pathname === '/contact' ? 'white' : 'rgba(255, 255, 255, 0.7)',
-								backgroundColor: pathname === '/contact' ? 'rgba(255, 255, 255, 0.1)' : 'transparent',
-								borderRadius: 2,
+								color: pathname === '/contact' ? 'white' : 'rgba(255, 255, 255, 0.8)',
+								backgroundColor: pathname === '/contact' ? 'rgba(255, 255, 255, 0.15)' : 'transparent',
+								borderRadius: DESIGN_TOKENS.borderRadius.small,
 								px: { xs: 1, sm: 2 },
 								py: 1,
+								position: 'relative',
+								transition: DESIGN_TOKENS.transitions.normal,
+								...(pathname === '/contact' && {
+									'&::after': {
+										content: '""',
+										position: 'absolute',
+										bottom: 0,
+										left: '50%',
+										transform: 'translateX(-50%)',
+										width: '80%',
+										height: '3px',
+										background: 'white',
+										borderRadius: '2px 2px 0 0',
+									}
+								}),
 								'&:hover': {
 									color: 'white',
-									backgroundColor: 'rgba(255, 255, 255, 0.1)',
+									backgroundColor: 'rgba(255, 255, 255, 0.15)',
+									transform: 'translateY(-2px)',
 								},
 							}}
 						>
-							<ContactMailIcon sx={{ mr: { xs: 0, sm: 1 } }} />
-							<Typography variant="body2" sx={{ display: { xs: 'none', sm: 'block' } }}>
+							<ContactMailIcon sx={{ mr: { xs: 0, sm: 1 }, fontSize: { xs: 20, sm: 24 } }} />
+							<Typography variant="body2" sx={{ display: { xs: 'none', sm: 'block' }, fontWeight: pathname === '/contact' ? 600 : 400 }}>
 								Contact
 							</Typography>
 						</IconButton>
@@ -247,6 +299,20 @@ export default function AppBarComponent() {
 					
 					{/* Boutons de contrôle */}
 					<Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+						{/* Bouton CV - Desktop seulement */}
+						<Box sx={{ display: { xs: 'none', md: 'flex' } }}>
+							<CTAButton
+								variant="outline"
+								size="small"
+								onClick={() => {
+									// TODO: Ajouter le lien vers le CV
+									window.open('/cv.pdf', '_blank')
+								}}
+								startIcon={<DescriptionIcon />}
+							>
+								CV
+							</CTAButton>
+						</Box>
 						<IconButton
 							color="inherit"
 							aria-label="menu"
@@ -277,14 +343,25 @@ export default function AppBarComponent() {
 								border: (theme) => theme.palette.mode === 'dark'
 									? '1px solid rgba(59, 130, 246, 0.2)'
 									: '1px solid rgba(30, 58, 138, 0.1)',
-								borderRadius: 3,
+								borderRadius: DESIGN_TOKENS.borderRadius.small,
 								boxShadow: (theme) => theme.palette.mode === 'dark'
-									? '0 10px 40px rgba(0,0,0,0.4)'
-									: '0 10px 40px rgba(30, 58, 138, 0.1)',
+									? DESIGN_TOKENS.shadows.elevated.dark
+									: DESIGN_TOKENS.shadows.elevated.light,
 								mt: 1,
+								minWidth: 180,
 							}
 						}}
 					>
+						<MenuItem 
+							onClick={() => {
+								window.open('/cv.pdf', '_blank')
+								handleMenuClose()
+							}}
+							sx={{ gap: 1 }}
+						>
+							<DescriptionIcon fontSize="small" />
+							Télécharger CV
+						</MenuItem>
 						<MenuItem onClick={handleAdminClick}>Admin</MenuItem>
 					</Menu>
 				</Toolbar>

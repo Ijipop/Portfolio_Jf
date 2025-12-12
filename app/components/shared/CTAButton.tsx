@@ -14,6 +14,8 @@ interface CTAButtonProps {
   fullWidth?: boolean
   startIcon?: React.ReactNode
   endIcon?: React.ReactNode
+  type?: 'button' | 'submit' | 'reset'
+  disabled?: boolean
 }
 
 const StyledCTAButton = styled(Button)<{ ctaVariant: string }>(({ theme, ctaVariant }) => {
@@ -118,6 +120,8 @@ export default function CTAButton({
   fullWidth = false,
   startIcon,
   endIcon,
+  type,
+  disabled,
 }: CTAButtonProps) {
   const buttonProps: any = {
     variant: 'contained',
@@ -125,6 +129,8 @@ export default function CTAButton({
     href,
     fullWidth,
     size,
+    type,
+    disabled,
     startIcon: startIcon || (variant === 'primary' ? null : null),
     endIcon: endIcon || (variant === 'primary' ? <ArrowForwardIcon /> : null),
   }

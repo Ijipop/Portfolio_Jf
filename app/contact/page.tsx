@@ -7,7 +7,8 @@ import LinkedInIcon from '@mui/icons-material/LinkedIn'
 import LocationOnIcon from '@mui/icons-material/LocationOn'
 import PhoneIcon from '@mui/icons-material/Phone'
 import SendIcon from '@mui/icons-material/Send'
-import { Alert, Button, Box as MuiBox, Snackbar } from '@mui/material'
+import CheckCircleIcon from '@mui/icons-material/CheckCircle'
+import { Alert, Button, Box as MuiBox, Snackbar, TextField, CircularProgress } from '@mui/material'
 import Box from '@mui/material/Box'
 import Container from '@mui/material/Container'
 import Typography from '@mui/material/Typography'
@@ -17,28 +18,42 @@ import ContactCard from '../components/shared/ContactCard'
 import HeaderSection from '../components/shared/HeaderSection'
 import AppBarComponent from '../components/appBar'
 import PageWrapper from '../components/shared/PageWrapper'
+import Footer from '../components/Footer'
+import CTAButton from '../components/shared/CTAButton'
 import { DESIGN_TOKENS } from '../design-system/constants'
 
 
-const SocialIcon = styled(Box)(({ theme }) => ({
+const SocialCard = styled(ContactCard)(({ theme }) => ({
+  textAlign: 'center',
+  padding: theme.spacing(3),
+  transition: DESIGN_TOKENS.transitions.slow,
+  '&:hover': {
+    transform: 'translateY(-8px) scale(1.05)',
+  },
+}))
+
+const SocialIconWrapper = styled(Box)(({ theme }) => ({
   display: 'inline-flex',
   alignItems: 'center',
   justifyContent: 'center',
-  width: 60,
-  height: 60,
+  width: 80,
+  height: 80,
   borderRadius: '50%',
   background: theme.palette.mode === 'dark'
     ? 'linear-gradient(135deg, #4a90e2 0%, #357abd 100%)'
     : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
   color: 'white',
-  margin: theme.spacing(1),
+  marginBottom: theme.spacing(2),
   cursor: 'pointer',
   transition: DESIGN_TOKENS.transitions.normal,
+  boxShadow: theme.palette.mode === 'dark'
+    ? '0 4px 20px rgba(74, 144, 226, 0.3)'
+    : '0 4px 20px rgba(102, 126, 234, 0.3)',
   '&:hover': {
-    transform: 'scale(1.1)',
+    transform: 'scale(1.15) rotate(5deg)',
     boxShadow: theme.palette.mode === 'dark'
-      ? '0 8px 25px rgba(74, 144, 226, 0.4)'
-      : '0 8px 25px rgba(102, 126, 234, 0.4)',
+      ? '0 8px 30px rgba(74, 144, 226, 0.5)'
+      : '0 8px 30px rgba(102, 126, 234, 0.5)',
   }
 }))
 
@@ -68,9 +83,47 @@ const EmailButton = styled(Button)(({ theme }) => ({
   }
 }))
 
+
+const StyledTextField = styled(TextField)(({ theme }) => ({
+  '& .MuiOutlinedInput-root': {
+    borderRadius: DESIGN_TOKENS.borderRadius.small,
+    transition: DESIGN_TOKENS.transitions.normal,
+    '&:hover': {
+      '& .MuiOutlinedInput-notchedOutline': {
+        borderColor: theme.palette.mode === 'dark' ? '#60a5fa' : '#1e3a8a',
+      },
+    },
+    '&.Mui-focused': {
+      '& .MuiOutlinedInput-notchedOutline': {
+        borderWidth: '2px',
+        borderColor: theme.palette.mode === 'dark' ? '#60a5fa' : '#1e3a8a',
+      },
+    },
+  },
+  '& .MuiInputLabel-root.Mui-focused': {
+    color: theme.palette.mode === 'dark' ? '#60a5fa' : '#1e3a8a',
+  },
+}))
+
 export default function Contact() {
   const [snackbarOpen, setSnackbarOpen] = useState(false)
   const [snackbarMessage, setSnackbarMessage] = useState('')
+  const [snackbarSeverity, setSnackbarSeverity] = useState<'success' | 'error'>('success')
+  
+  // Formulaire de contact
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    subject: '',
+    message: '',
+  })
+  const [formErrors, setFormErrors] = useState({
+    name: '',
+    email: '',
+    subject: '',
+    message: '',
+  })
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   const emailAddress = 'ijipop82@gmail.com'
 
@@ -109,6 +162,108 @@ export default function Contact() {
 
   const handleCloseSnackbar = () => {
     setSnackbarOpen(false)
+  }
+
+  const validateField = (name: string, value: string) => {
+    let error = ''
+    
+    switch (name) {
+      case 'name':
+        if (!value.trim()) {
+          error = 'Le nom est requis'
+        } else if (value.trim().length < 2) {
+          error = 'Le nom doit contenir au moins 2 caractères'
+        }
+        break
+      case 'email':
+        if (!value.trim()) {
+          error = 'L\'email est requis'
+        } else {
+          const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+          if (!emailRegex.test(value)) {
+            error = 'Format d\'email invalide'
+          }
+        }
+        break
+      case 'subject':
+        if (!value.trim()) {
+          error = 'Le sujet est requis'
+        } else if (value.trim().length < 3) {
+          error = 'Le sujet doit contenir au moins 3 caractères'
+        }
+        break
+      case 'message':
+        if (!value.trim()) {
+          error = 'Le message est requis'
+        } else if (value.trim().length < 10) {
+          error = 'Le message doit contenir au moins 10 caractères'
+        }
+        break
+    }
+    
+    return error
+  }
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target
+    setFormData(prev => ({ ...prev, [name]: value }))
+    
+    // Validation en temps réel
+    const error = validateField(name, value)
+    setFormErrors(prev => ({ ...prev, [name]: error }))
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    
+    // Valider tous les champs
+    const errors = {
+      name: validateField('name', formData.name),
+      email: validateField('email', formData.email),
+      subject: validateField('subject', formData.subject),
+      message: validateField('message', formData.message),
+    }
+    
+    setFormErrors(errors)
+    
+    // Vérifier s'il y a des erreurs
+    if (Object.values(errors).some(error => error !== '')) {
+      setSnackbarMessage('Veuillez corriger les erreurs dans le formulaire')
+      setSnackbarSeverity('error')
+      setSnackbarOpen(true)
+      return
+    }
+    
+    setIsSubmitting(true)
+    
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      })
+      
+      const data = await response.json()
+      
+      if (data.success) {
+        setSnackbarMessage(data.message || 'Message envoyé avec succès !')
+        setSnackbarSeverity('success')
+        setFormData({ name: '', email: '', subject: '', message: '' })
+        setFormErrors({ name: '', email: '', subject: '', message: '' })
+      } else {
+        setSnackbarMessage(data.error || 'Erreur lors de l\'envoi du message')
+        setSnackbarSeverity('error')
+      }
+    } catch (error) {
+      console.error('Erreur:', error)
+      setSnackbarMessage('Erreur de connexion. Veuillez réessayer.')
+      setSnackbarSeverity('error')
+    } finally {
+      setIsSubmitting(false)
+      setSnackbarOpen(true)
+    }
   }
 
   return (
@@ -195,17 +350,127 @@ export default function Contact() {
           </ContactCard>
         </Box>
 
-        <Box sx={{ textAlign: 'center' }}>
-          <Typography variant="h4" gutterBottom sx={{ mb: 4 }}>
+        {/* Formulaire de contact */}
+        <Box sx={{ 
+          gridColumn: { xs: '1fr', md: 'span 3' },
+          maxWidth: '800px',
+          margin: '0 auto',
+        }}>
+          <ContactCard>
+          <Box sx={{ textAlign: 'center', mb: 4 }}>
+            <EmailIcon sx={{ fontSize: 56, color: 'primary.main', mb: 2 }} />
+            <Typography variant="h4" gutterBottom sx={{ fontWeight: 700 }}>
+              Envoyez-moi un message
+            </Typography>
+            <Typography variant="body1" color="text.secondary">
+              Remplissez le formulaire ci-dessous et je vous répondrai dans les plus brefs délais
+            </Typography>
+          </Box>
+          
+          <Box component="form" onSubmit={handleSubmit} sx={{ mt: 4 }}>
+            <Box sx={{ display: 'grid', gap: 3, mb: 3 }}>
+              <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)' }, gap: 3 }}>
+                <StyledTextField
+                  name="name"
+                  label="Nom complet"
+                  value={formData.name}
+                  onChange={handleInputChange}
+                  error={!!formErrors.name}
+                  helperText={formErrors.name}
+                  required
+                  fullWidth
+                />
+                <StyledTextField
+                  name="email"
+                  label="Email"
+                  type="email"
+                  value={formData.email}
+                  onChange={handleInputChange}
+                  error={!!formErrors.email}
+                  helperText={formErrors.email}
+                  required
+                  fullWidth
+                />
+              </Box>
+              
+              <StyledTextField
+                name="subject"
+                label="Sujet"
+                value={formData.subject}
+                onChange={handleInputChange}
+                error={!!formErrors.subject}
+                helperText={formErrors.subject}
+                required
+                fullWidth
+              />
+              
+              <StyledTextField
+                name="message"
+                label="Message"
+                value={formData.message}
+                onChange={handleInputChange}
+                error={!!formErrors.message}
+                helperText={formErrors.message}
+                required
+                fullWidth
+                multiline
+                rows={6}
+              />
+            </Box>
+            
+            <CTAButton
+              variant="primary"
+              type="submit"
+              fullWidth
+              disabled={isSubmitting}
+              startIcon={isSubmitting ? <CircularProgress size={20} color="inherit" /> : <SendIcon />}
+            >
+              {isSubmitting ? 'Envoi en cours...' : 'Envoyer le message'}
+            </CTAButton>
+          </Box>
+          </ContactCard>
+        </Box>
+
+        <Box sx={{ mt: 8 }}>
+          <Typography variant="h4" gutterBottom sx={{ mb: 4, textAlign: 'center', fontWeight: 700 }}>
             Suivez-moi
           </Typography>
-          <Box>
-            <SocialIcon onClick={handleLinkedInClick}>
-              <LinkedInIcon />
-            </SocialIcon>
-            <SocialIcon onClick={handleGitHubClick}>
-              <GitHubIcon />
-            </SocialIcon>
+          <Box sx={{ 
+            display: 'grid', 
+            gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)' },
+            gap: 4,
+            maxWidth: '600px',
+            mx: 'auto'
+          }}>
+            <SocialCard onClick={handleLinkedInClick}>
+              <SocialIconWrapper>
+                <LinkedInIcon sx={{ fontSize: 40 }} />
+              </SocialIconWrapper>
+              <Typography variant="h6" gutterBottom sx={{ fontWeight: 600 }}>
+                LinkedIn
+              </Typography>
+              <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+                Connectons-nous et échangeons sur nos expériences professionnelles
+              </Typography>
+              <CTAButton variant="outline" size="small" fullWidth>
+                Voir le profil
+              </CTAButton>
+            </SocialCard>
+
+            <SocialCard onClick={handleGitHubClick}>
+              <SocialIconWrapper>
+                <GitHubIcon sx={{ fontSize: 40 }} />
+              </SocialIconWrapper>
+              <Typography variant="h6" gutterBottom sx={{ fontWeight: 600 }}>
+                GitHub
+              </Typography>
+              <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+                Découvrez mes projets open source et contributions
+              </Typography>
+              <CTAButton variant="outline" size="small" fullWidth>
+                Voir les repos
+              </CTAButton>
+            </SocialCard>
           </Box>
         </Box>
       </Container>
@@ -219,12 +484,17 @@ export default function Contact() {
       >
         <Alert 
           onClose={handleCloseSnackbar} 
-          severity="success" 
+          severity={snackbarSeverity}
+          icon={snackbarSeverity === 'success' ? <CheckCircleIcon /> : undefined}
           sx={{ 
             width: '100%',
-            background: (theme) => theme.palette.mode === 'dark'
-              ? 'linear-gradient(135deg, #ff6b35 0%, #ff1744 100%)'
-              : 'linear-gradient(135deg, #1e3a8a 0%, #059669 100%)',
+            background: snackbarSeverity === 'success'
+              ? (theme) => theme.palette.mode === 'dark'
+                ? 'linear-gradient(135deg, #059669 0%, #047857 100%)'
+                : 'linear-gradient(135deg, #059669 0%, #047857 100%)'
+              : (theme) => theme.palette.mode === 'dark'
+                ? 'linear-gradient(135deg, #ff6b35 0%, #ff1744 100%)'
+                : 'linear-gradient(135deg, #dc2626 0%, #b91c1c 100%)',
             color: 'white',
             '& .MuiAlert-icon': {
               color: 'white'
@@ -234,6 +504,8 @@ export default function Contact() {
           {snackbarMessage}
         </Alert>
       </Snackbar>
+      
+      <Footer />
     </PageWrapper>
   )
 }

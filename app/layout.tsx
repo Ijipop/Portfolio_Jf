@@ -1,5 +1,4 @@
 import type { Metadata } from 'next'
-import Footer from './components/Footer'
 import ThemeWrapper from './components/ThemeWrapper'
 import './globals.css'
 
@@ -28,7 +27,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             overflowX: 'hidden'
           } as React.CSSProperties}>
             {children}
-            <Footer />
           </div>
         </ThemeWrapper>
       </body>

@@ -16,6 +16,8 @@ import AppBarComponent from './components/appBar'
 import HeaderSection from './components/shared/HeaderSection'
 import PageWrapper from './components/shared/PageWrapper'
 import CTAButton from './components/shared/CTAButton'
+import StickyCTA from './components/shared/StickyCTA'
+import Footer from './components/Footer'
 import { DESIGN_TOKENS } from './design-system/constants'
 
 export default function Home() {
@@ -73,59 +75,117 @@ export default function Home() {
       </HeaderSection>
 
       <Container maxWidth="lg" sx={{ py: { xs: 4, md: 8 }, px: { xs: 2, sm: 3, md: 4 }, position: 'relative', zIndex: 2 }}>
-        <GlassContainer sx={{ mb: { xs: 4, md: 6 } }}>
+        <GlassContainer sx={{ mb: { xs: DESIGN_TOKENS.spacing.xl, md: DESIGN_TOKENS.spacing.xxl } }}>
           <Box sx={{ textAlign: 'center' }}>
             <Typography 
-              variant="h3" 
+              variant="h1" 
               gutterBottom 
               sx={{ 
-                mb: { xs: 2, md: 3 },
-                fontWeight: 900,
-                fontSize: { xs: '1.5rem', sm: '2rem', md: '3rem' },
+                mb: { xs: DESIGN_TOKENS.spacing.sm, md: DESIGN_TOKENS.spacing.md },
+                ...DESIGN_TOKENS.typography.h1,
                 textShadow: (theme) => theme.palette.mode === 'dark'
-                  ? '0 0 20px rgba(255, 107, 53, 0.6), 0 0 40px rgba(255, 23, 68, 0.4), 0 4px 8px rgba(0,0,0,0.8)'
-                  : '0 0 20px var(--primary-color, rgba(30, 58, 138, 0.4)), 0 0 40px var(--secondary-color, rgba(59, 130, 246, 0.3)), 0 4px 8px rgba(0,0,0,0.3)',
-                letterSpacing: '0.15em',
-                textTransform: 'uppercase',
+                  ? '0 0 20px rgba(255, 107, 53, 0.4), 0 4px 8px rgba(0,0,0,0.6)'
+                  : '0 2px 4px rgba(0,0,0,0.1)',
                 background: (theme) => theme.palette.mode === 'dark'
-                  ? 'linear-gradient(45deg, #ff6b35, #ffffff, #ff1744, #ff6b35)'
-                  : 'linear-gradient(45deg, var(--primary-color, #1e3a8a), var(--secondary-color, #3b82f6), var(--primary-color, #059669), var(--primary-color, #1e3a8a))',
+                  ? 'linear-gradient(135deg, #ff6b35, #ffffff, #ff1744)'
+                  : 'linear-gradient(135deg, #1e3a8a, #3b82f6, #059669)',
                 backgroundClip: 'text',
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
                 backgroundSize: '200% 200%',
-                animation: 'gradientShift 3s ease-in-out infinite',
-                position: 'relative',
-                '&::before': {
-                  content: '""',
-                  position: 'absolute',
-                  top: 0,
-                  left: 0,
-                  right: 0,
-                  bottom: 0,
-                  background: (theme) => theme.palette.mode === 'dark'
-                    ? 'linear-gradient(45deg, rgba(255, 107, 53, 0.1), rgba(255, 23, 68, 0.1))'
-                    : 'linear-gradient(45deg, var(--primary-color, rgba(30, 58, 138, 0.1)), var(--secondary-color, rgba(59, 130, 246, 0.1))',
-                  borderRadius: '20px',
-                  filter: 'blur(20px)',
-                  zIndex: -1,
-                  animation: 'pulse 2s ease-in-out infinite alternate',
-                }
+                animation: 'gradientShift 4s ease-in-out infinite',
               }}
             >
-              JEAN-FRANÇOIS LEFEBVRE
+              Jean-François Lefebvre
             </Typography>
-            <Typography variant="h4" gutterBottom sx={{ mb: 2, fontWeight: 300, opacity: 0.8 }}>
-              Bienvenue sur mon portfolio
+            <Typography 
+              variant="h4" 
+              gutterBottom 
+              sx={{ 
+                mb: DESIGN_TOKENS.spacing.md,
+                ...DESIGN_TOKENS.typography.h4,
+                fontWeight: 400,
+                opacity: 0.9,
+                color: 'text.secondary'
+              }}
+            >
+              Développeur Full Stack
             </Typography>
-            <Typography variant="body1" color="text.secondary" sx={{ maxWidth: 600, mx: 'auto' }}>
-              Explorez mes projets, découvrez mon parcours et n&apos;hésitez pas à me contacter pour collaborer sur vos idées.
+            <Typography 
+              variant="body1" 
+              color="text.secondary" 
+              sx={{ 
+                maxWidth: 700, 
+                mx: 'auto',
+                mb: DESIGN_TOKENS.spacing.xl,
+                ...DESIGN_TOKENS.typography.body1,
+                fontSize: { xs: '0.95rem', md: '1.125rem' }
+              }}
+            >
+              Passionné par la création d&apos;applications web modernes et performantes. 
+              Spécialisé en React, Next.js et TypeScript, je transforme vos idées en solutions digitales innovantes.
             </Typography>
+            
+            {/* Stats Section */}
+            <Box sx={{ 
+              display: 'grid',
+              gridTemplateColumns: { xs: 'repeat(2, 1fr)', sm: 'repeat(3, 1fr)' },
+              gap: DESIGN_TOKENS.spacing.md,
+              mt: DESIGN_TOKENS.spacing.xl,
+              mb: DESIGN_TOKENS.spacing.lg,
+              maxWidth: 600,
+              mx: 'auto'
+            }}>
+              <Box>
+                <Typography variant="h3" sx={{ 
+                  ...DESIGN_TOKENS.typography.h3,
+                  fontWeight: 700,
+                  color: 'primary.main',
+                  mb: 0.5
+                }}>
+                  0
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  Années d&apos;expérience
+                </Typography>
+              </Box>
+              <Box>
+                <Typography variant="h3" sx={{ 
+                  ...DESIGN_TOKENS.typography.h3,
+                  fontWeight: 700,
+                  color: 'primary.main',
+                  mb: 0.5
+                }}>
+                  10+
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  Technologies maîtrisées
+                </Typography>
+              </Box>
+              <Box sx={{ gridColumn: { xs: 'span 2', sm: 'span 1' } }}>
+                <Typography variant="h3" sx={{ 
+                  ...DESIGN_TOKENS.typography.h3,
+                  fontWeight: 700,
+                  color: 'primary.main',
+                  mb: 0.5
+                }}>
+                  Disponible
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  Pour nouveaux projets
+                </Typography>
+              </Box>
+            </Box>
           </Box>
         </GlassContainer>
 
         {/* Section Compétences */}
-        <Container maxWidth="lg" sx={{ py: { xs: 4, md: 6 }, px: { xs: 2, sm: 3, md: 4 }, position: 'relative', zIndex: 2 }}>
+        <Container maxWidth="lg" sx={{ 
+          py: { xs: DESIGN_TOKENS.spacing.xl, md: DESIGN_TOKENS.spacing.xxl }, 
+          px: { xs: 2, sm: 3, md: 4 }, 
+          position: 'relative', 
+          zIndex: 2 
+        }}>
           <Box sx={{ 
             background: (theme) => theme.palette.mode === 'dark'
               ? 'linear-gradient(145deg, rgba(26, 26, 26, 0.8) 0%, rgba(45, 45, 45, 0.8) 100%)'
@@ -133,23 +193,23 @@ export default function Home() {
             border: (theme) => theme.palette.mode === 'dark' 
               ? '1px solid rgba(74, 85, 104, 0.3)' 
               : '1px solid rgba(148, 163, 184, 0.2)',
-            borderRadius: { xs: 16, md: 24 },
-            padding: { xs: 2, md: 4 },
+            borderRadius: DESIGN_TOKENS.borderRadius.large,
+            padding: { xs: DESIGN_TOKENS.spacing.md, md: DESIGN_TOKENS.spacing.xl },
             textAlign: 'center',
             boxShadow: (theme) => theme.palette.mode === 'dark'
-              ? '0 8px 32px rgba(0, 0, 0, 0.3)'
-              : '0 8px 32px rgba(0, 0, 0, 0.1)',
-            mb: 8,
+              ? DESIGN_TOKENS.shadows.elevated.dark
+              : DESIGN_TOKENS.shadows.elevated.light,
+            mb: DESIGN_TOKENS.spacing.xxl,
             position: 'relative',
             overflow: 'hidden',
             backdropFilter: 'blur(10px)',
           }}>
             <Typography 
-              variant="h4" 
+              variant="h3" 
               gutterBottom 
               sx={{ 
-                marginBottom: '24px',
-                fontWeight: 'bold',
+                mb: DESIGN_TOKENS.spacing.md,
+                ...DESIGN_TOKENS.typography.h3,
                 color: 'primary.main',
               }}
             >
@@ -159,7 +219,7 @@ export default function Home() {
               display: 'flex', 
               flexWrap: 'wrap', 
               justifyContent: 'center',
-              gap: 1,
+              gap: 1.5, // 12px au lieu de 4px
               visibility: 'visible !important',
               opacity: '1 !important',
               zIndex: 1000,
@@ -182,8 +242,8 @@ export default function Home() {
         <Box sx={{ 
           display: 'grid', 
           gridTemplateColumns: { xs: '1fr', md: 'repeat(3, 1fr)' },
-          gap: { xs: 2, md: 4 },
-          mb: { xs: 4, md: 8 },
+          gap: { xs: DESIGN_TOKENS.spacing.md, md: DESIGN_TOKENS.spacing.xl },
+          mb: { xs: DESIGN_TOKENS.spacing.xl, md: DESIGN_TOKENS.spacing.xxl },
           px: { xs: 1, sm: 0 }
         }}>
           <FadeIn delay={0.8}>
@@ -229,6 +289,9 @@ export default function Home() {
           </FadeIn>
         </Box>
       </Container>
+      
+      <Footer />
+      <StickyCTA text="Travaillons ensemble" onClick={() => router.push('/contact')} />
     </PageWrapper>
   )
 }

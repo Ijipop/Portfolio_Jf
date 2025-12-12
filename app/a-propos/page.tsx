@@ -15,8 +15,14 @@ import SkillTag from '../components/shared/SkillTag'
 import HeaderSection from '../components/shared/HeaderSection'
 import AppBarComponent from '../components/appBar'
 import PageWrapper from '../components/shared/PageWrapper'
+import CTAButton from '../components/shared/CTAButton'
+import Footer from '../components/Footer'
 import { useAdvancedTheme } from '../contexts/AdvancedThemeContext'
 import { GRADIENTS, DESIGN_TOKENS } from '../design-system/constants'
+import TimelineIcon from '@mui/icons-material/Timeline'
+import LightbulbIcon from '@mui/icons-material/Lightbulb'
+import GroupWorkIcon from '@mui/icons-material/GroupWork'
+import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome'
 
 // FlipCard components spécifiques à cette page (logique complexe)
 const FlipCard = styled(Box)(({ theme }) => ({
@@ -592,24 +598,126 @@ export default function About() {
           </Box>
         </Box>
 
-        <Box sx={{ textAlign: 'center', mt: 8 }}>
-          <EmojiEventsIcon sx={{ fontSize: 64, color: 'primary.main', mb: 2 }} />
-          <Typography variant="h4" gutterBottom>
+        {/* Section Soft Skills */}
+        <Box sx={{ 
+          background: 'var(--card-background, linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%))',
+          border: '1px solid var(--card-primary, rgba(0,0,0,0.08))',
+          borderRadius: DESIGN_TOKENS.borderRadius.large,
+          padding: DESIGN_TOKENS.spacing.xl,
+          textAlign: 'center',
+          boxShadow: '0 8px 32px var(--card-primary, rgba(0,0,0,0.1))',
+          mb: DESIGN_TOKENS.spacing.xxl,
+          position: 'relative',
+          overflow: 'hidden',
+        }}>
+          <Typography 
+            variant="h3" 
+            gutterBottom 
+            style={{ 
+              marginBottom: DESIGN_TOKENS.spacing.md,
+              fontWeight: 'bold',
+              color: dynamicStyles.titleColor,
+              textShadow: dynamicStyles.titleShadow
+            }}
+          >
+            Soft Skills
+          </Typography>
+          <Box sx={{ 
+            display: 'grid',
+            gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)', md: 'repeat(4, 1fr)' },
+            gap: DESIGN_TOKENS.spacing.md,
+            mt: DESIGN_TOKENS.spacing.lg
+          }}>
+            <Box sx={{ textAlign: 'center' }}>
+              <LightbulbIcon sx={{ fontSize: 48, color: 'primary.main', mb: 1 }} />
+              <Typography variant="h6" sx={{ mb: 0.5, fontWeight: 600 }}>
+                Créativité
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                Résolution de problèmes innovante
+              </Typography>
+            </Box>
+            <Box sx={{ textAlign: 'center' }}>
+              <GroupWorkIcon sx={{ fontSize: 48, color: 'primary.main', mb: 1 }} />
+              <Typography variant="h6" sx={{ mb: 0.5, fontWeight: 600 }}>
+                Collaboration
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                Travail d&apos;équipe efficace
+              </Typography>
+            </Box>
+            <Box sx={{ textAlign: 'center' }}>
+              <TimelineIcon sx={{ fontSize: 48, color: 'primary.main', mb: 1 }} />
+              <Typography variant="h6" sx={{ mb: 0.5, fontWeight: 600 }}>
+                Adaptabilité
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                Apprentissage continu
+              </Typography>
+            </Box>
+            <Box sx={{ textAlign: 'center' }}>
+              <AutoAwesomeIcon sx={{ fontSize: 48, color: 'primary.main', mb: 1 }} />
+              <Typography variant="h6" sx={{ mb: 0.5, fontWeight: 600 }}>
+                Qualité
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                Code propre et maintenable
+              </Typography>
+            </Box>
+          </Box>
+        </Box>
+
+        {/* Section CTA */}
+        <Box sx={{ 
+          textAlign: 'center', 
+          mt: DESIGN_TOKENS.spacing.xxl,
+          mb: DESIGN_TOKENS.spacing.xl
+        }}>
+          <EmojiEventsIcon sx={{ fontSize: 64, color: 'primary.main', mb: DESIGN_TOKENS.spacing.md }} />
+          <Typography 
+            variant="h3" 
+            gutterBottom
+            sx={{
+              ...DESIGN_TOKENS.typography.h3,
+              mb: DESIGN_TOKENS.spacing.md
+            }}
+          >
             Prêt à collaborer sur votre prochain projet ?
           </Typography>
           <Typography 
             variant="body1" 
             sx={{ 
-              maxWidth: 600, 
+              maxWidth: 700, 
               mx: 'auto',
+              mb: DESIGN_TOKENS.spacing.xl,
+              ...DESIGN_TOKENS.typography.body1,
+              fontSize: '1.125rem',
               color: customTheme.name === 'Default' ? 'text.secondary' : '#ffffff',
               textShadow: customTheme.name === 'Default' ? 'none' : '0 1px 2px rgba(0,0,0,0.8)'
             }}
           >
             N&apos;hésitez pas à me contacter pour discuter de vos idées et voir comment nous pouvons travailler ensemble.
           </Typography>
+          <Box sx={{ display: 'flex', gap: 2, justifyContent: 'center', flexWrap: 'wrap' }}>
+            <CTAButton 
+              variant="primary"
+              onClick={() => router.push('/contact')}
+              size="large"
+            >
+              Me contacter
+            </CTAButton>
+            <CTAButton 
+              variant="outline"
+              onClick={() => router.push('/projets')}
+              size="large"
+            >
+              Voir mes projets
+            </CTAButton>
+          </Box>
         </Box>
       </Container>
+      
+      <Footer />
     </PageWrapper>
   )
 }
