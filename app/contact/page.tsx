@@ -23,6 +23,7 @@ import CTAButton from '../components/shared/CTAButton'
 import { DESIGN_TOKENS } from '../design-system/constants'
 import { useTextColor } from '../hooks/useTextColor'
 import { useThemeColors } from '../hooks/useThemeColors'
+import { useAdvancedTheme } from '../contexts/AdvancedThemeContext'
 
 
 const SocialCard = styled(ContactCard)(({ theme }) => ({
@@ -86,10 +87,16 @@ const EmailButton = styled(Button)(({ theme }) => ({
 }))
 
 
-const StyledTextField = styled(TextField)(({ theme }) => ({
+const StyledTextField = styled(TextField, {
+  shouldForwardProp: (prop) => prop !== 'textColor' && prop !== 'isDefaultTheme',
+})<{ textColor?: string; isDefaultTheme?: boolean }>(({ theme, textColor, isDefaultTheme }) => ({
   '& .MuiOutlinedInput-root': {
     borderRadius: DESIGN_TOKENS.borderRadius.small,
     transition: DESIGN_TOKENS.transitions.normal,
+    color: textColor || '#ffffff',
+    '& .MuiOutlinedInput-input': {
+      color: textColor || '#ffffff',
+    },
     '&:hover': {
       '& .MuiOutlinedInput-notchedOutline': {
         borderColor: theme.palette.mode === 'dark' ? '#60a5fa' : '#1e3a8a',
@@ -102,14 +109,21 @@ const StyledTextField = styled(TextField)(({ theme }) => ({
       },
     },
   },
-  '& .MuiInputLabel-root.Mui-focused': {
-    color: theme.palette.mode === 'dark' ? '#60a5fa' : '#1e3a8a',
+  '& .MuiInputLabel-root': {
+    color: textColor || '#ffffff',
+    '&.Mui-focused': {
+      color: theme.palette.mode === 'dark' ? '#60a5fa' : '#1e3a8a',
+    },
+  },
+  '& .MuiFormHelperText-root': {
+    color: isDefaultTheme ? 'rgba(0, 0, 0, 0.7)' : 'rgba(255, 255, 255, 0.7)',
   },
 }))
 
 export default function Contact() {
   const textColor = useTextColor()
   const { primary, secondary, accent } = useThemeColors()
+  const { themeName } = useAdvancedTheme()
   const [snackbarOpen, setSnackbarOpen] = useState(false)
   const [snackbarMessage, setSnackbarMessage] = useState('')
   const [snackbarSeverity, setSnackbarSeverity] = useState<'success' | 'error'>('success')
@@ -383,6 +397,8 @@ export default function Contact() {
                   helperText={formErrors.name}
                   required
                   fullWidth
+                  textColor={textColor}
+                  isDefaultTheme={themeName === 'default'}
                 />
                 <StyledTextField
                   name="email"
@@ -394,6 +410,8 @@ export default function Contact() {
                   helperText={formErrors.email}
                   required
                   fullWidth
+                  textColor={textColor}
+                  isDefaultTheme={themeName === 'default'}
                 />
               </Box>
               
@@ -406,6 +424,8 @@ export default function Contact() {
                 helperText={formErrors.subject}
                 required
                 fullWidth
+                textColor={textColor}
+                isDefaultTheme={themeName === 'default'}
               />
               
               <StyledTextField
@@ -419,6 +439,8 @@ export default function Contact() {
                 fullWidth
                 multiline
                 rows={6}
+                textColor={textColor}
+                isDefaultTheme={themeName === 'default'}
               />
             </Box>
             
