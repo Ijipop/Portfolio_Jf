@@ -21,6 +21,8 @@ import PageWrapper from '../components/shared/PageWrapper'
 import Footer from '../components/Footer'
 import CTAButton from '../components/shared/CTAButton'
 import { DESIGN_TOKENS } from '../design-system/constants'
+import { useTextColor } from '../hooks/useTextColor'
+import { useThemeColors } from '../hooks/useThemeColors'
 
 
 const SocialCard = styled(ContactCard)(({ theme }) => ({
@@ -106,6 +108,8 @@ const StyledTextField = styled(TextField)(({ theme }) => ({
 }))
 
 export default function Contact() {
+  const textColor = useTextColor()
+  const { primary } = useThemeColors()
   const [snackbarOpen, setSnackbarOpen] = useState(false)
   const [snackbarMessage, setSnackbarMessage] = useState('')
   const [snackbarSeverity, setSnackbarSeverity] = useState<'success' | 'error'>('success')
@@ -288,11 +292,11 @@ export default function Contact() {
           mb: 8
         }}>
           <ContactCard>
-            <EmailIcon sx={{ fontSize: 48, color: 'primary.main', mb: 2 }} />
-            <Typography variant="h6" gutterBottom>
+            <EmailIcon sx={{ fontSize: 48, color: primary, mb: 2 }} />
+            <Typography variant="h6" gutterBottom sx={{ color: textColor }}>
               Email
             </Typography>
-            <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+            <Typography variant="body2" sx={{ mb: 2, color: textColor, opacity: 0.8 }}>
               {emailAddress}
             </Typography>
             <MuiBox sx={{ display: 'flex', flexDirection: 'column', gap: 1, mt: 2 }}>
@@ -330,21 +334,21 @@ export default function Contact() {
           </ContactCard>
 
           <ContactCard>
-            <PhoneIcon sx={{ fontSize: 48, color: 'primary.main', mb: 2 }} />
-            <Typography variant="h6" gutterBottom>
+            <PhoneIcon sx={{ fontSize: 48, color: primary, mb: 2 }} />
+            <Typography variant="h6" gutterBottom sx={{ color: textColor }}>
               Téléphone
             </Typography>
-            <Typography variant="body2" color="text.secondary">
+            <Typography variant="body2" sx={{ color: textColor, opacity: 0.8 }}>
               Sur demande!
             </Typography>
           </ContactCard>
 
           <ContactCard>
-            <LocationOnIcon sx={{ fontSize: 48, color: 'primary.main', mb: 2 }} />
-            <Typography variant="h6" gutterBottom>
+            <LocationOnIcon sx={{ fontSize: 48, color: primary, mb: 2 }} />
+            <Typography variant="h6" gutterBottom sx={{ color: textColor }}>
               Localisation
             </Typography>
-            <Typography variant="body2" color="text.secondary">
+            <Typography variant="body2" sx={{ color: textColor, opacity: 0.8 }}>
               Montréal, Québec, Canada
             </Typography>
           </ContactCard>
@@ -358,11 +362,11 @@ export default function Contact() {
         }}>
           <ContactCard>
           <Box sx={{ textAlign: 'center', mb: 4 }}>
-            <EmailIcon sx={{ fontSize: 56, color: 'primary.main', mb: 2 }} />
-            <Typography variant="h4" gutterBottom sx={{ fontWeight: 700 }}>
+            <EmailIcon sx={{ fontSize: 56, color: primary, mb: 2 }} />
+            <Typography variant="h4" gutterBottom sx={{ fontWeight: 700, color: textColor }}>
               Envoyez-moi un message
             </Typography>
-            <Typography variant="body1" color="text.secondary">
+            <Typography variant="body1" sx={{ color: textColor, opacity: 0.9 }}>
               Remplissez le formulaire ci-dessous et je vous répondrai dans les plus brefs délais
             </Typography>
           </Box>
@@ -432,7 +436,7 @@ export default function Contact() {
         </Box>
 
         <Box sx={{ mt: 8 }}>
-          <Typography variant="h4" gutterBottom sx={{ mb: 4, textAlign: 'center', fontWeight: 700 }}>
+          <Typography variant="h4" gutterBottom sx={{ mb: 4, textAlign: 'center', fontWeight: 700, color: textColor }}>
             Suivez-moi
           </Typography>
           <Box sx={{ 
@@ -446,10 +450,10 @@ export default function Contact() {
               <SocialIconWrapper>
                 <LinkedInIcon sx={{ fontSize: 40 }} />
               </SocialIconWrapper>
-              <Typography variant="h6" gutterBottom sx={{ fontWeight: 600 }}>
+              <Typography variant="h6" gutterBottom sx={{ fontWeight: 600, color: textColor }}>
                 LinkedIn
               </Typography>
-              <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+              <Typography variant="body2" sx={{ mb: 2, color: textColor, opacity: 0.8 }}>
                 Connectons-nous et échangeons sur nos expériences professionnelles
               </Typography>
               <CTAButton variant="outline" size="small" fullWidth>
@@ -461,10 +465,10 @@ export default function Contact() {
               <SocialIconWrapper>
                 <GitHubIcon sx={{ fontSize: 40 }} />
               </SocialIconWrapper>
-              <Typography variant="h6" gutterBottom sx={{ fontWeight: 600 }}>
+              <Typography variant="h6" gutterBottom sx={{ fontWeight: 600, color: textColor }}>
                 GitHub
               </Typography>
-              <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+              <Typography variant="body2" sx={{ mb: 2, color: textColor, opacity: 0.8 }}>
                 Découvrez mes projets open source et contributions
               </Typography>
               <CTAButton variant="outline" size="small" fullWidth>

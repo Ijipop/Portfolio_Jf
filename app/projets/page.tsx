@@ -30,7 +30,7 @@ import PageWrapper from '../components/shared/PageWrapper'
 import CTAButton from '../components/shared/CTAButton'
 import Footer from '../components/Footer'
 import StickyCTA from '../components/shared/StickyCTA'
-import { DESIGN_TOKENS, ANIMATIONS } from '../design-system/constants'
+import { DESIGN_TOKENS, ANIMATIONS, GRADIENTS } from '../design-system/constants'
 import AccessTimeIcon from '@mui/icons-material/AccessTime'
 import FilterListIcon from '@mui/icons-material/FilterList'
 import ClearIcon from '@mui/icons-material/Clear'
@@ -116,6 +116,7 @@ const StatsGrid = styled(Box)(({ theme }) => ({
 const FilterContainerLabel = () => {
   const theme = useTheme()
   const { primary } = useThemeColors()
+  const textColor = useTextColor()
   
   return (
     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mr: 2 }}>
@@ -129,7 +130,7 @@ const FilterContainerLabel = () => {
         variant="h6" 
         sx={{ 
           fontWeight: 700,
-          color: primary,
+          color: textColor,
           fontSize: { xs: '1rem', sm: '1.125rem' },
           letterSpacing: '0.5px',
           textShadow: `0 0 10px ${primary}30`,
@@ -188,6 +189,7 @@ const ProjectCardWrapper = ({
 }) => {
   // Utiliser les hooks ici, pas dans le map
   const { primary, secondary, accent } = useThemeColors()
+  const textColor = useTextColor()
   
   // Palette de couleurs pour les reflets basée sur le thème
   const reflectionColors = [
@@ -395,12 +397,12 @@ const FilterChipComponent = ({
             background: `linear-gradient(135deg, ${primary} 0%, ${secondary} 100%) !important`,
           }
         } : {
-          background: `rgba(0, 0, 0, 0.05) !important`,
-          color: `${theme.palette.text.primary} !important`,
+          background: textColor === '#ffffff' ? `rgba(255, 255, 255, 0.1) !important` : `rgba(0, 0, 0, 0.05) !important`,
+          color: `${textColor} !important`,
           border: `2px solid ${primary}30 !important`,
           '&:hover': {
             transform: 'translateY(-2px)',
-            background: `rgba(0, 0, 0, 0.08) !important`,
+            background: textColor === '#ffffff' ? `rgba(255, 255, 255, 0.15) !important` : `rgba(0, 0, 0, 0.08) !important`,
             border: `2px solid ${primary}50 !important`,
             boxShadow: `0 4px 12px ${primary}30 !important`,
           }
@@ -414,6 +416,48 @@ const FilterChipComponent = ({
 const FilterContainerComponent = ({ children }: { children: React.ReactNode }) => {
   const theme = useTheme()
   const { primary } = useThemeColors()
+  const textColor = useTextColor()
+  const [filterBackground, setFilterBackground] = useState<string>(GRADIENTS.cards.light)
+  
+  // Mettre à jour le background du filtre quand le thème change
+  useEffect(() => {
+    const updateFilterBackground = () => {
+      if (typeof window === 'undefined') return
+      
+      // Lire les CSS variables définies par ThemeSelector
+      const cardBg = getComputedStyle(document.documentElement).getPropertyValue('--card-background')?.trim()
+      
+      if (cardBg && cardBg !== 'none') {
+        setFilterBackground(cardBg)
+      } else {
+        // Fallback : créer un gradient avec les couleurs du thème
+        const bg = getComputedStyle(document.documentElement).getPropertyValue('--theme-bg')?.trim()
+        const bg2 = getComputedStyle(document.documentElement).getPropertyValue('--theme-bg2')?.trim()
+        
+        if (bg && bg2) {
+          setFilterBackground(`linear-gradient(145deg, ${bg} 0%, ${bg2} 50%, ${bg} 100%)`)
+        } else {
+          setFilterBackground(GRADIENTS.cards.light)
+        }
+      }
+    }
+    
+    updateFilterBackground()
+    
+    // Observer les changements de CSS variables
+    const observer = new MutationObserver(updateFilterBackground)
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['style'],
+    })
+    
+    const interval = setInterval(updateFilterBackground, 200)
+    
+    return () => {
+      observer.disconnect()
+      clearInterval(interval)
+    }
+  }, [])
   
   return (
     <Box
@@ -424,14 +468,14 @@ const FilterContainerComponent = ({ children }: { children: React.ReactNode }) =
         alignItems: 'center',
         marginBottom: theme.spacing(4),
         padding: theme.spacing(2),
-        background: `linear-gradient(145deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.95) 100%) !important`,
+        background: `${filterBackground} !important`,
         border: `2px solid ${primary}30 !important`,
         borderRadius: DESIGN_TOKENS.borderRadius.medium,
         boxShadow: `0 8px 32px ${primary}15, ${DESIGN_TOKENS.shadows.elevated.light} !important`,
         backdropFilter: 'blur(10px)',
         WebkitBackdropFilter: 'blur(10px)',
         transition: DESIGN_TOKENS.transitions.normal,
-        color: `${theme.palette.text.primary} !important`,
+        color: `${textColor} !important`,
         '& *': {
           color: 'inherit !important',
         },
