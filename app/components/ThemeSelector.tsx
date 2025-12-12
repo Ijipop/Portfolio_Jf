@@ -61,8 +61,8 @@ export function ThemeSelector() {
   }, [themeName])
 
   // Fonction pour obtenir les couleurs de cartes selon le thème
-  const getCardColorsForTheme = (theme: typeof THEMES[ThemeName]) => {
-    if (theme.isDefault) {
+  const getCardColorsForTheme = (theme: typeof THEMES[ThemeName], themeName: ThemeName) => {
+    if (themeName === 'default') {
       return {
         primary: theme.primary,
         secondary: theme.secondary,
@@ -108,7 +108,7 @@ export function ThemeSelector() {
     root.style.setProperty('--theme-bg2', theme.bg2)
     
     // Appliquer les couleurs de cartes selon le thème
-    const cardColors = getCardColorsForTheme(theme)
+    const cardColors = getCardColorsForTheme(theme, themeName)
     root.style.setProperty('--card-primary', cardColors.primary)
     root.style.setProperty('--card-secondary', cardColors.secondary)
     root.style.setProperty('--card-background', cardColors.background)
