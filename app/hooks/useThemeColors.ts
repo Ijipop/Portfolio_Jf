@@ -65,14 +65,9 @@ export function useThemeColors(): ThemeColors {
     const handleStorageChange = () => updateColors()
     window.addEventListener('storage', handleStorageChange)
 
-    // Vérifier périodiquement (fallback si MutationObserver ne détecte pas certains changements)
-    // Intervalle réduit à 200ms pour une meilleure réactivité
-    const interval = setInterval(updateColors, 200)
-
     return () => {
       observer.disconnect()
       window.removeEventListener('storage', handleStorageChange)
-      clearInterval(interval)
     }
   }, [customTheme, muiTheme])
 

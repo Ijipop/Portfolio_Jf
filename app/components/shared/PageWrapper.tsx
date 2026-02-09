@@ -112,12 +112,8 @@ export default function PageWrapper({
       attributeFilter: ['style'],
     })
     
-    // Vérifier périodiquement
-    const interval = setInterval(updateBackground, 200)
-    
     return () => {
       observer.disconnect()
-      clearInterval(interval)
     }
   }, [customTheme, backgroundVariant])
 
