@@ -82,8 +82,8 @@ const GlassContainer = styled(Box)(({ theme }) => ({
   background: theme.palette.mode === 'dark'
     ? 'rgba(10, 10, 10, 0.8)'
     : 'var(--card-background, rgba(248, 250, 252, 0.8))',
-  backdropFilter: 'blur(30px)',
-  WebkitBackdropFilter: 'blur(30px)',
+  backdropFilter: 'blur(24px)',
+  WebkitBackdropFilter: 'blur(24px)',
   border: theme.palette.mode === 'dark'
     ? '1px solid rgba(255, 255, 255, 0.1)'
     : '1px solid var(--card-primary, rgba(255, 255, 255, 0.2))',
@@ -98,19 +98,14 @@ const GlassContainer = styled(Box)(({ theme }) => ({
     content: '""',
     position: 'absolute',
     top: 0,
-    left: '-100%',
-    width: '200%',
+    left: 0,
+    width: '100%',
     height: '100%',
     background: theme.palette.mode === 'dark'
-      ? 'linear-gradient(110deg, transparent 20%, transparent 40%, rgba(255, 107, 53, 0.15) 50%, rgba(255, 23, 68, 0.15) 55%, transparent 60%, transparent 80%)'
-      : 'linear-gradient(110deg, transparent 20%, transparent 40%, var(--card-primary, rgba(59, 130, 246, 0.12)) 50%, var(--card-secondary, rgba(5, 150, 105, 0.12)) 55%, transparent 60%, transparent 80%)',
-    animation: 'shimmer 3s ease-in-out infinite',
+      ? 'linear-gradient(180deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0.00) 40%, rgba(0, 0, 0, 0.05) 100%)'
+      : 'linear-gradient(180deg, rgba(255, 255, 255, 0.35) 0%, rgba(255, 255, 255, 0.15) 40%, rgba(255, 255, 255, 0.00) 100%)',
     zIndex: 0,
   },
-  '@keyframes shimmer': {
-    '0%': { transform: 'translateX(0)' },
-    '100%': { transform: 'translateX(100%)' }
-  }
 }))
 
 interface GlassCardProps {

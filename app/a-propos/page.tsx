@@ -134,10 +134,13 @@ const FlipCardFront = ({ children, sx }: { children: React.ReactNode; sx?: any }
 // Composant FlipCardBack fonctionnel pour utiliser les couleurs du thème
 const FlipCardBack = ({ children, sx }: { children: React.ReactNode; sx?: any }) => {
   const theme = useTheme()
+  const { themeName } = useAdvancedTheme()
   const { primary, secondary } = useThemeColors()
-  
-  // Le verso a un gradient coloré, donc le texte doit être blanc pour être lisible
-  const backTextColor = getTextColorForBackground(`linear-gradient(135deg, ${primary} 0%, ${secondary} 100%)`)
+  const isDefaultPalette = themeName === 'default'
+  const backGradient = isDefaultPalette
+    ? `linear-gradient(135deg, ${primary}50 0%, ${secondary}50 50%, ${primary}50 100%)`
+    : `linear-gradient(135deg, ${primary} 0%, ${secondary} 50%, ${primary} 100%)`
+  const backTextColor = getTextColorForBackground(backGradient)
 
   return (
     <Box
@@ -148,7 +151,7 @@ const FlipCardBack = ({ children, sx }: { children: React.ReactNode; sx?: any })
         backfaceVisibility: 'hidden',
         WebkitBackfaceVisibility: 'hidden',
         MozBackfaceVisibility: 'hidden',
-        background: `linear-gradient(135deg, ${primary} 0%, ${secondary} 50%, ${primary} 100%) !important`,
+        background: `${backGradient} !important`,
         border: `1px solid ${primary}40 !important`,
         borderRadius: '8px',
         padding: theme.spacing(4),
@@ -505,7 +508,7 @@ export default function About() {
                   color: textColor,
                   opacity: 0.9
                 }}>
-                  En toute honnêteté, je n'ai pas d'expérience dans le développement d'applications. Je termine actuellement ma formation en développement d'applications et je suis à la recherche d'un stage pour appliquer mes connaissances.
+                  Formation en développement d&apos;applications terminée. Stage en entreprise réalisé. Je suis prêt à rejoindre une équipe et à contribuer sur des projets concrets.
                 </Typography>
                 <Box sx={{ 
                   visibility: 'visible !important',
@@ -608,7 +611,7 @@ export default function About() {
             right: 0,
             bottom: 0,
             background: `linear-gradient(135deg, var(--card-primary, rgba(30, 58, 138, 0.1)) 0%, var(--card-secondary, rgba(5, 150, 105, 0.1)) 50%, var(--card-primary, rgba(30, 58, 138, 0.05)) 100%)`,
-            opacity: 0.3,
+            opacity: 'var(--card-overlay-opacity, 0.3)',
           }
         }}>
           <Typography 

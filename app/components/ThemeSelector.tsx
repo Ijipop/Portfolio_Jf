@@ -61,19 +61,22 @@ export function ThemeSelector() {
   }, [themeName])
 
   // Fonction pour obtenir les couleurs de cartes selon le thème
+  // Palette default : fond de carte plus clair (moins foncé) que les autres palettes
   const getCardColorsForTheme = (theme: typeof THEMES[ThemeName], themeName: ThemeName) => {
     if (themeName === 'default') {
       return {
         primary: theme.primary,
         secondary: theme.secondary,
-        background: `linear-gradient(145deg, ${theme.bg2} 0%, ${theme.bg} 50%, ${theme.bg2} 100%)`
+        background: `linear-gradient(145deg, ${theme.bg2} 0%, ${theme.bg} 50%, ${theme.bg2} 100%)`,
+        cardGradient: `linear-gradient(145deg, ${theme.primary}12 0%, ${theme.secondary}12 50%, ${theme.primary}12 100%)`
       }
     }
     
     return {
       primary: theme.primary,
       secondary: theme.secondary,
-      background: `linear-gradient(145deg, ${theme.primary}20 0%, ${theme.secondary}20 50%, ${theme.primary}20 100%)`
+      background: `linear-gradient(145deg, ${theme.primary}20 0%, ${theme.secondary}20 50%, ${theme.primary}20 100%)`,
+      cardGradient: `linear-gradient(145deg, ${theme.primary}20 0%, ${theme.secondary}20 50%, ${theme.primary}20 100%)`
     }
   }
 
@@ -112,6 +115,9 @@ export function ThemeSelector() {
     root.style.setProperty('--card-primary', cardColors.primary)
     root.style.setProperty('--card-secondary', cardColors.secondary)
     root.style.setProperty('--card-background', cardColors.background)
+    root.style.setProperty('--card-card-gradient', cardColors.cardGradient)
+    root.style.setProperty('--card-overlay-opacity', themeName === 'default' ? '0.12' : '0.3')
+    root.style.setProperty('--card-decor-opacity', themeName === 'default' ? '0.45' : '0.6')
     
     // 3. Background global avec !important pour override les styles React
     document.body.style.setProperty('background', 

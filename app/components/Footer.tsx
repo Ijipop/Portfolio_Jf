@@ -116,7 +116,7 @@ export default function Footer() {
               Jean-François Lefebvre
             </Typography>
             <Typography variant="body2" sx={{ opacity: 0.8, mb: DESIGN_TOKENS.spacing.md, color: textColor }}>
-              Développeur Full Stack passionné par la création d&apos;applications web modernes et performantes.
+              Développeur de logiciel, d&apos;applications mobiles et de sites web, passionné par la création d&apos;applications web modernes et performantes.
             </Typography>
             <CTAButton
               variant="outline"
