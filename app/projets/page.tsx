@@ -32,6 +32,7 @@ import AccessTimeIcon from '@mui/icons-material/AccessTime'
 import FilterListIcon from '@mui/icons-material/FilterList'
 import ClearIcon from '@mui/icons-material/Clear'
 import { useAdvancedTheme } from '../contexts/AdvancedThemeContext'
+import { useLanguage } from '../contexts/LanguageContext'
 import { useThemeColors } from '../hooks/useThemeColors'
 import { useTextColor } from '../hooks/useTextColor'
 
@@ -110,7 +111,7 @@ const StatsGrid = styled(Box)(({ theme }) => ({
 }))
 
 // Composant pour le label du filtre
-const FilterContainerLabel = () => {
+const FilterContainerLabel = ({ label }: { label: string }) => {
   const theme = useTheme()
   const { primary } = useThemeColors()
   const textColor = useTextColor()
@@ -134,7 +135,7 @@ const FilterContainerLabel = () => {
           transition: DESIGN_TOKENS.transitions.normal,
         }}
       >
-        Filtrer par technologie:
+        {label}
       </Typography>
     </Box>
   )
@@ -179,7 +180,8 @@ const ProjectCardWrapper = ({
   handleProjectClick,
   getStatusIcon,
   getStatusColor,
-  getImageUrl
+  getImageUrl,
+  viewProjectLabel = 'Voir le projet'
 }: { 
   project: Project
   index: number
@@ -187,6 +189,7 @@ const ProjectCardWrapper = ({
   getStatusIcon: (status: string) => React.ReactElement
   getStatusColor: (status: string) => "error" | "success" | "warning" | "info" | "default" | "primary" | "secondary"
   getImageUrl: (imageUrl: string) => string
+  viewProjectLabel?: string
 }) => {
   const { primary, secondary, accent } = useThemeColors()
   const textColor = useTextColor()
@@ -359,7 +362,7 @@ const ProjectCardWrapper = ({
             fullWidth
             onClick={() => handleProjectClick(project.url)}
           >
-            Voir le projet
+            {viewProjectLabel}
           </CTAButton>
         )}
       </ThreeDCardComponent>
@@ -526,6 +529,7 @@ const ProjectImageContainer = styled(Box)(({ theme }) => ({
 export default function Projets() {
   const { primary, secondary, accent } = useThemeColors()
   const textColor = useTextColor()
+  const { t } = useLanguage()
   const [projects, setProjects] = useState<Project[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -685,8 +689,8 @@ export default function Projets() {
       
       {/* Hero Section */}
       <HeaderSection 
-        title="Mes Projets"
-        subtitle="Découvrez mes réalisations et explorations technologiques"
+        title={t('projects.title')}
+        subtitle={t('projects.subtitle')}
       />
 
       <Container maxWidth="lg" sx={{ py: 6, position: 'relative', zIndex: 2 }}>
@@ -708,7 +712,7 @@ export default function Projets() {
                     <AnimatedCounter value={projects.length} />
                   </Typography>
                   <Typography variant="body2" sx={{ fontWeight: 600, color: textColor, opacity: 0.9, textTransform: 'uppercase', letterSpacing: '0.5px' }}>
-                    Projets Totaux
+                    {t('projects.totalProjects')}
                   </Typography>
                 </Box>
               </ThreeDCardComponent>
@@ -720,7 +724,7 @@ export default function Projets() {
                     <AnimatedCounter value={getCompletedProjects()} />
                   </Typography>
                   <Typography variant="body2" sx={{ fontWeight: 600, color: textColor, opacity: 0.9, textTransform: 'uppercase', letterSpacing: '0.5px' }}>
-                    Projets Terminés
+                    {t('projects.completed')}
                   </Typography>
                 </Box>
               </ThreeDCardComponent>
@@ -744,9 +748,9 @@ export default function Projets() {
         {projects.length > 0 && (
           <ScrollReveal direction="up" delay={0.5}>
             <FilterContainerComponent>
-              <FilterContainerLabel />
+              <FilterContainerLabel label={t('projects.filterLabel')} />
               <FilterChipComponent
-                label="Tous"
+                label={t('projects.filterAll')}
                 onClick={() => setSelectedTech(null)}
                 selected={selectedTech === null}
                 icon={selectedTech === null ? undefined : <ClearIcon />}
@@ -774,6 +778,7 @@ export default function Projets() {
               getStatusIcon={getStatusIcon}
               getStatusColor={getStatusColor}
               getImageUrl={getImageUrl}
+              viewProjectLabel={t('projects.viewProject')}
             />
           ))}
         </ProjectsGrid>
@@ -789,17 +794,17 @@ export default function Projets() {
             }}>
               <FilterListIcon sx={{ fontSize: 64, color: 'primary.main', mb: 2 }} />
               <Typography variant="h5" color="text.secondary" gutterBottom>
-                Aucun projet trouvé avec cette technologie
+                {t('projects.noProjects')}
               </Typography>
               <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
-                Essayez de sélectionner une autre technologie ou réinitialisez le filtre
+                {t('projects.noProjectsHint')}
               </Typography>
               <CTAButton
                 variant="secondary"
                 onClick={() => setSelectedTech(null)}
                 startIcon={<ClearIcon />}
               >
-                Réinitialiser le filtre
+                {t('projects.resetFilter')}
               </CTAButton>
             </Box>
           </AnimatedBox>
@@ -816,10 +821,10 @@ export default function Projets() {
             }}>
               <CodeIcon sx={{ fontSize: 64, color: '#667eea', mb: 2 }} />
               <Typography variant="h5" color="text.secondary" gutterBottom>
-                Aucun projet disponible
+                {t('projects.noProjectsAvailable')}
               </Typography>
               <Typography variant="body1" color="text.secondary">
-                Mes projets apparaîtront ici bientôt !
+                {t('projects.comingSoon')}
               </Typography>
             </Box>
           </AnimatedBox>

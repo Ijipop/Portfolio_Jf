@@ -21,12 +21,14 @@ import Footer from './components/Footer'
 import { DESIGN_TOKENS, GRADIENTS } from './design-system/constants'
 import { useThemeColors } from './hooks/useThemeColors'
 import { useTextColor } from './hooks/useTextColor'
+import { useLanguage } from './contexts/LanguageContext'
 import { useEffect, useState } from 'react'
 
 export default function Home() {
   const router = useRouter()
   const { primary, secondary, accent } = useThemeColors()
   const textColor = useTextColor()
+  const { t } = useLanguage()
   const [skillsBackground, setSkillsBackground] = useState<string>(GRADIENTS.cards.light)
 
   // Mettre à jour le background de la section compétences quand le thème change
@@ -85,12 +87,12 @@ export default function Home() {
       <HeaderSection 
         title={
           <LetterAnimations>
-            Portfolio Web
+            {t('home.heroTitle')}
           </LetterAnimations>
         }
         subtitle={
           <TypingEffect 
-            text="Développeur de logiciel, d'applications mobiles et de sites web | React • Next.js • TypeScript"
+            text={t('home.heroSubtitle')}
             speed={50}
           />
         }
@@ -108,14 +110,14 @@ export default function Home() {
             onClick={() => router.push('/projets')}
             size="large"
           >
-            Voir mes projets
+            {t('home.seeProjects')}
           </CTAButton>
           <CTAButton 
             variant="outline"
             onClick={() => router.push('/contact')}
             size="large"
           >
-            Me contacter
+            {t('home.contactMe')}
           </CTAButton>
         </Box>
       </HeaderSection>
@@ -151,7 +153,7 @@ export default function Home() {
                 color: textColor
               }}
             >
-              Développeur de logiciel, d&apos;applications mobiles et de sites web
+              {t('home.role')}
             </Typography>
             <Typography 
               variant="body1" 
@@ -165,8 +167,7 @@ export default function Home() {
                 opacity: 0.9
               }}
             >
-              Passionné par la création d&apos;applications web modernes et performantes. 
-              Spécialisé en React, Next.js et TypeScript, je transforme vos idées en solutions digitales innovantes.
+              {t('home.intro')}
             </Typography>
             
             {/* Stats Section */}
@@ -262,7 +263,7 @@ export default function Home() {
                 },
               }}
             >
-              Technologies & Compétences
+              {t('home.sectionSkills')}
             </Typography>
             <Box sx={{ 
               display: 'flex', 
@@ -300,10 +301,10 @@ export default function Home() {
               <ThreeDCardComponent onClick={() => handleCardClick('/projets')} floatingElements={2}>
             <CodeIcon sx={{ fontSize: 48, color: primary, mb: 2 }} />
             <Typography variant="h5" gutterBottom sx={{ color: textColor }}>
-              Mes Projets
+              {t('home.cardProjects')}
             </Typography>
             <Typography variant="body1" sx={{ color: textColor, opacity: 0.8 }}>
-              Découvrez mes réalisations et explorations technologiques
+              {t('home.cardProjectsDesc')}
             </Typography>
           </ThreeDCardComponent>
             </HoverScale>
@@ -314,10 +315,10 @@ export default function Home() {
               <ThreeDCardComponent onClick={() => handleCardClick('/a-propos')} floatingElements={3}>
                 <PersonIcon sx={{ fontSize: 48, color: primary, mb: 2 }} />
                 <Typography variant="h5" gutterBottom sx={{ color: textColor }}>
-                  À Propos
+                  {t('home.cardAbout')}
                 </Typography>
                 <Typography variant="body1" sx={{ color: textColor, opacity: 0.8 }}>
-                  En savoir plus sur mon parcours et mes compétences
+                  {t('home.cardAboutDesc')}
                 </Typography>
               </ThreeDCardComponent>
             </HoverScale>
@@ -328,10 +329,10 @@ export default function Home() {
               <ThreeDCardComponent onClick={() => handleCardClick('/contact')} floatingElements={2}>
                 <ContactSupportIcon sx={{ fontSize: 48, color: primary, mb: 2 }} />
                 <Typography variant="h5" gutterBottom sx={{ color: textColor }}>
-                  Contact
+                  {t('home.cardContact')}
                 </Typography>
                 <Typography variant="body1" sx={{ color: textColor, opacity: 0.8 }}>
-                  Prenons contact et discutons de vos projets
+                  {t('home.cardContactDesc')}
                 </Typography>
               </ThreeDCardComponent>
             </HoverScale>
@@ -340,7 +341,7 @@ export default function Home() {
       </Container>
       
       <Footer />
-      <StickyCTA text="Travaillons ensemble" onClick={() => router.push('/contact')} />
+      <StickyCTA text={t('home.stickyCTA')} onClick={() => router.push('/contact')} />
     </PageWrapper>
   )
 }
