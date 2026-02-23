@@ -21,6 +21,7 @@ import { useAdvancedTheme } from '../contexts/AdvancedThemeContext'
 import { GRADIENTS, DESIGN_TOKENS } from '../design-system/constants'
 import { useThemeColors } from '../hooks/useThemeColors'
 import { useTextColor } from '../hooks/useTextColor'
+import { useLanguage } from '../contexts/LanguageContext'
 import { useTheme } from '@mui/material/styles'
 import { getTextColorForBackground } from '../utils/colorUtils'
 import TimelineIcon from '@mui/icons-material/Timeline'
@@ -180,6 +181,7 @@ export default function About() {
   const { customTheme } = useAdvancedTheme()
   const { primary, secondary, accent } = useThemeColors()
   const textColor = useTextColor()
+  const { t } = useLanguage()
   const [flippedCards, setFlippedCards] = useState<{ [key: string]: boolean }>({
     who: false,
     formation: false,
@@ -204,8 +206,8 @@ export default function About() {
       
       {/* Hero Section */}
       <HeaderSection 
-        title="À Propos"
-        subtitle="Découvrez mon parcours et mes compétences"
+        title={t('about.title')}
+        subtitle={t('about.subtitle')}
       />
 
       <Container maxWidth="lg" sx={{ py: 6, position: 'relative', zIndex: 2 }}>
@@ -242,14 +244,14 @@ export default function About() {
                     textShadow: `0 2px 4px ${primary}40`
                   }}
                 >
-                  Qui suis-je ?
+                  {t('about.subtitle')}
                 </Typography>
                 <Typography variant="body1" sx={{ 
                   mb: 3,
                   color: textColor,
                   opacity: 0.9
                 }}>
-                  Développeur passionné par la création d&apos;applications web modernes et innovantes.
+                  {t('home.intro')}
                 </Typography>
                 <Box sx={{ 
                   visibility: 'visible !important',
@@ -295,7 +297,7 @@ export default function About() {
                     color: textColor
                   }}
                 >
-                  Cliquez pour retourner la carte
+                  {t('about.clickToFlip')}
                 </Typography>
               </FlipCardFront>
               <FlipCardBack
@@ -378,14 +380,14 @@ export default function About() {
                     textShadow: `0 2px 4px ${primary}40`
                   }}
                 >
-                  Formation
+                  {t('about.formation')}
                 </Typography>
                 <Typography variant="body1" sx={{ 
                   mb: 3,
                   color: textColor,
                   opacity: 0.9
                 }}>
-                  Formation en développement d'applications avec focus sur les technologies modernes.
+                  {t('about.formationDesc')}
                 </Typography>
                 <Box sx={{ 
                   visibility: 'visible !important',
@@ -430,7 +432,7 @@ export default function About() {
                     color: textColor
                   }}
                 >
-                  Cliquez pour retourner la carte
+                  {t('about.clickToFlip')}
                 </Typography>
               </FlipCardFront>
               <FlipCardBack
@@ -501,14 +503,14 @@ export default function About() {
                     textShadow: `0 2px 4px ${primary}40`
                   }}
                 >
-                  Expérience
+                  {t('about.experience')}
                 </Typography>
                 <Typography variant="body1" sx={{ 
                   mb: 3,
                   color: textColor,
                   opacity: 0.9
                 }}>
-                  Formation en développement d&apos;applications terminée. Stage en entreprise réalisé. Je suis prêt à rejoindre une équipe et à contribuer sur des projets concrets.
+                  {t('about.experienceText')}
                 </Typography>
                 <Box sx={{ 
                   visibility: 'visible !important',
@@ -553,7 +555,7 @@ export default function About() {
                     color: textColor
                   }}
                 >
-                  Cliquez pour retourner la carte
+                  {t('about.clickToFlip')}
                 </Typography>
               </FlipCardFront>
               <FlipCardBack
@@ -624,7 +626,7 @@ export default function About() {
               textShadow: `0 2px 4px ${primary}40`
             }}
           >
-            Mes Compétences Techniques
+            {t('about.skills')}
           </Typography>
           <Box sx={{ 
             display: 'flex', 
@@ -672,7 +674,7 @@ export default function About() {
               textShadow: `0 2px 4px ${primary}40`
             }}
           >
-            Soft Skills
+            {t('about.softSkills')}
           </Typography>
           <Box sx={{ 
             display: 'grid',
@@ -683,37 +685,37 @@ export default function About() {
             <Box sx={{ textAlign: 'center' }}>
               <LightbulbIcon sx={{ fontSize: 48, color: primary, mb: 1 }} />
               <Typography variant="h6" sx={{ mb: 0.5, fontWeight: 600, color: textColor }}>
-                Créativité
+                {t('about.creativity')}
               </Typography>
               <Typography variant="body2" sx={{ color: textColor, opacity: 0.8 }}>
-                Résolution de problèmes innovante
+                {t('about.creativityDesc')}
               </Typography>
             </Box>
             <Box sx={{ textAlign: 'center' }}>
               <GroupWorkIcon sx={{ fontSize: 48, color: primary, mb: 1 }} />
               <Typography variant="h6" sx={{ mb: 0.5, fontWeight: 600, color: textColor }}>
-                Collaboration
+                {t('about.collaboration')}
               </Typography>
               <Typography variant="body2" sx={{ color: textColor, opacity: 0.8 }}>
-                Travail d&apos;équipe efficace
+                {t('about.collaborationDesc')}
               </Typography>
             </Box>
             <Box sx={{ textAlign: 'center' }}>
               <TimelineIcon sx={{ fontSize: 48, color: primary, mb: 1 }} />
               <Typography variant="h6" sx={{ mb: 0.5, fontWeight: 600, color: textColor }}>
-                Adaptabilité
+                {t('about.adaptability')}
               </Typography>
               <Typography variant="body2" sx={{ color: textColor, opacity: 0.8 }}>
-                Apprentissage continu
+                {t('about.adaptabilityDesc')}
               </Typography>
             </Box>
             <Box sx={{ textAlign: 'center' }}>
               <AutoAwesomeIcon sx={{ fontSize: 48, color: primary, mb: 1 }} />
               <Typography variant="h6" sx={{ mb: 0.5, fontWeight: 600, color: textColor }}>
-                Qualité
+                {t('about.quality')}
               </Typography>
               <Typography variant="body2" sx={{ color: textColor, opacity: 0.8 }}>
-                Code propre et maintenable
+                {t('about.qualityDesc')}
               </Typography>
             </Box>
           </Box>
@@ -735,7 +737,7 @@ export default function About() {
               color: textColor
             }}
           >
-            Prêt à collaborer sur votre prochain projet ?
+            {t('about.ctaTitle')}
           </Typography>
           <Typography 
             variant="body1" 
@@ -749,7 +751,7 @@ export default function About() {
               opacity: 0.9
             }}
           >
-            N&apos;hésitez pas à me contacter pour discuter de vos idées et voir comment nous pouvons travailler ensemble.
+            {t('about.ctaText')}
           </Typography>
           <Box sx={{ display: 'flex', gap: 2, justifyContent: 'center', flexWrap: 'wrap' }}>
             <CTAButton 
@@ -757,14 +759,14 @@ export default function About() {
               onClick={() => router.push('/contact')}
               size="large"
             >
-              Me contacter
+              {t('about.contactCTA')}
             </CTAButton>
             <CTAButton 
               variant="outline"
               onClick={() => router.push('/projets')}
               size="large"
             >
-              Voir mes projets
+              {t('home.seeProjects')}
             </CTAButton>
           </Box>
         </Box>

@@ -14,12 +14,14 @@ import CTAButton from './shared/CTAButton'
 import { DESIGN_TOKENS } from '../design-system/constants'
 import { useThemeColors } from '../hooks/useThemeColors'
 import { getTextColorForBackground } from '../utils/colorUtils'
+import { useLanguage } from '../contexts/LanguageContext'
 
 export default function Footer() {
   const currentYear = new Date().getFullYear()
   const router = useRouter()
   const theme = useTheme()
   const { primary, secondary } = useThemeColors()
+  const { t } = useLanguage()
   const [footerBackground, setFooterBackground] = useState<string>(`linear-gradient(135deg, ${primary} 0%, ${secondary} 100%)`)
   const [textColor, setTextColor] = useState<string>('#ffffff')
 
@@ -109,21 +111,21 @@ export default function Footer() {
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: DESIGN_TOKENS.spacing.sm }}>
               <CodeIcon sx={{ fontSize: 32, color: textColor }} />
               <Typography variant="h5" sx={{ fontWeight: 700, color: textColor }}>
-                Portfolio Web
+                {t('home.heroTitle')}
               </Typography>
             </Box>
             <Typography variant="body1" sx={{ opacity: 0.9, mb: DESIGN_TOKENS.spacing.md, color: textColor }}>
               Jean-François Lefebvre
             </Typography>
             <Typography variant="body2" sx={{ opacity: 0.8, mb: DESIGN_TOKENS.spacing.md, color: textColor }}>
-              Développeur de logiciel, d&apos;applications mobiles et de sites web, passionné par la création d&apos;applications web modernes et performantes.
+              {t('footer.tagline')}
             </Typography>
             <CTAButton
               variant="outline"
               size="small"
               onClick={() => router.push('/contact')}
             >
-              Me contacter
+              {t('footer.contactButton')}
             </CTAButton>
           </Box>
 
@@ -178,7 +180,7 @@ export default function Footer() {
           {/* Section Social */}
           <Box>
             <Typography variant="h6" sx={{ fontWeight: 600, mb: DESIGN_TOKENS.spacing.md, color: textColor }}>
-              Suivez-moi
+              {t('contact.followMe')}
             </Typography>
             <Box sx={{ display: 'flex', gap: 1, mb: DESIGN_TOKENS.spacing.lg }}>
               <Box
@@ -262,7 +264,7 @@ export default function Footer() {
             </Box>
             <Box sx={{ borderTop: `1px solid ${textColor === '#ffffff' ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)'}`, pt: DESIGN_TOKENS.spacing.md }}>
               <Typography variant="body2" sx={{ opacity: 0.7, fontSize: '0.75rem', color: textColor }}>
-                © {currentYear} Tous droits réservés
+                © {currentYear} {t('footer.rights')}
               </Typography>
               <Typography variant="body2" sx={{ opacity: 0.6, fontSize: '0.7rem', mt: 0.5, color: textColor }}>
                 Construit avec Next.js & Material-UI

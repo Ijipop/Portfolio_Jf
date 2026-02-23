@@ -19,6 +19,8 @@ import { useState } from "react";
 import LoginModal from './LoginModal';
 import { ThemeSelector } from './ThemeSelector';
 import { useThemeColors } from '../hooks/useThemeColors';
+import { useLanguage } from '../contexts/LanguageContext';
+import Button from '@mui/material/Button';
 
 import './components.css';
 
@@ -29,6 +31,7 @@ export default function AppBarComponent() {
 	const router = useRouter();
 	const pathname = usePathname();
 	const { primary, secondary } = useThemeColors();
+	const { locale, setLocale, t } = useLanguage();
 
 	const handleMenuClick = (event: React.MouseEvent<HTMLElement>) => {
 		setAnchorEl(event.currentTarget);
@@ -38,23 +41,13 @@ export default function AppBarComponent() {
 		setAnchorEl(null);
 	};
 
-	const handleMenuItemClick = (action: string) => {
-		switch(action) {
-		case 'Accueil':
-			router.push('/');
-			break;
-		case 'Projets':
-			router.push('/projets');
-			break;
-		case 'À propos':
-			router.push('/a-propos');
-			break;
-		case 'Contact':
-			router.push('/contact');
-			break;
-		case 'Admin':
-			router.push('/admin');
-			break;
+	const handleMenuItemClick = (routeId: 'home' | 'projects' | 'about' | 'contact' | 'admin') => {
+		switch (routeId) {
+			case 'home': router.push('/'); break;
+			case 'projects': router.push('/projets'); break;
+			case 'about': router.push('/a-propos'); break;
+			case 'contact': router.push('/contact'); break;
+			case 'admin': router.push('/admin'); break;
 		}
 		handleMenuClose();
 	};
@@ -108,7 +101,7 @@ export default function AppBarComponent() {
 							display: { xs: 'none', sm: 'block' }
 						}}
 					>
-						Portfolio
+						{t('nav.portfolio')}
 					</Typography>
 					
 					{/* Onglets de navigation - Desktop */}
@@ -152,7 +145,7 @@ export default function AppBarComponent() {
 						>
 							<WorkIcon sx={{ mr: { xs: 0, sm: 1 }, fontSize: { xs: 20, sm: 24 } }} />
 							<Typography variant="body2" sx={{ display: { xs: 'none', sm: 'block' }, fontWeight: pathname === '/projets' ? 600 : 400 }}>
-								Projets
+								{t('nav.projects')}
 							</Typography>
 						</IconButton>
 						
@@ -189,7 +182,7 @@ export default function AppBarComponent() {
 						>
 							<PersonIcon sx={{ mr: { xs: 0, sm: 1 }, fontSize: { xs: 20, sm: 24 } }} />
 							<Typography variant="body2" sx={{ display: { xs: 'none', sm: 'block' }, fontWeight: pathname === '/a-propos' ? 600 : 400 }}>
-								À propos
+								{t('nav.about')}
 							</Typography>
 						</IconButton>
 						
@@ -226,7 +219,7 @@ export default function AppBarComponent() {
 						>
 							<ContactMailIcon sx={{ mr: { xs: 0, sm: 1 }, fontSize: { xs: 20, sm: 24 } }} />
 							<Typography variant="body2" sx={{ display: { xs: 'none', sm: 'block' }, fontWeight: pathname === '/contact' ? 600 : 400 }}>
-								Contact
+								{t('nav.contact')}
 							</Typography>
 						</IconButton>
 					</Box>
@@ -291,8 +284,34 @@ export default function AppBarComponent() {
 						</IconButton>
 					</Box>
 					
-					{/* Boutons de contrôle */}
-					<Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+					{/* Langue FR/ENG + Menu + Thème */}
+					<Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+						<Button
+							size="small"
+							onClick={() => setLocale('fr')}
+							sx={{
+								minWidth: 36,
+								color: locale === 'fr' ? 'white' : 'rgba(255,255,255,0.7)',
+								fontWeight: locale === 'fr' ? 700 : 500,
+								border: locale === 'fr' ? '1px solid rgba(255,255,255,0.8)' : '1px solid transparent',
+								'&:hover': { color: 'white', bgcolor: 'rgba(255,255,255,0.15)' },
+							}}
+						>
+							FR
+						</Button>
+						<Button
+							size="small"
+							onClick={() => setLocale('en')}
+							sx={{
+								minWidth: 36,
+								color: locale === 'en' ? 'white' : 'rgba(255,255,255,0.7)',
+								fontWeight: locale === 'en' ? 700 : 500,
+								border: locale === 'en' ? '1px solid rgba(255,255,255,0.8)' : '1px solid transparent',
+								'&:hover': { color: 'white', bgcolor: 'rgba(255,255,255,0.15)' },
+							}}
+						>
+							ENG
+						</Button>
 						<IconButton
 							color="inherit"
 							aria-label="menu"
@@ -326,7 +345,7 @@ export default function AppBarComponent() {
 							}
 						}}
 					>
-						<MenuItem onClick={handleAdminClick}>Admin</MenuItem>
+						<MenuItem onClick={handleAdminClick}>{t('nav.admin')}</MenuItem>
 					</Menu>
 				</Toolbar>
 			</AppBar>

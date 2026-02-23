@@ -24,7 +24,7 @@ import { DESIGN_TOKENS } from '../design-system/constants'
 import { useTextColor } from '../hooks/useTextColor'
 import { useThemeColors } from '../hooks/useThemeColors'
 import { useAdvancedTheme } from '../contexts/AdvancedThemeContext'
-
+import { useLanguage } from '../contexts/LanguageContext'
 
 const SocialCardContent = styled(Box)(({ theme }) => ({
   textAlign: 'center',
@@ -124,6 +124,7 @@ export default function Contact() {
   const textColor = useTextColor()
   const { primary, secondary, accent } = useThemeColors()
   const { themeName } = useAdvancedTheme()
+  const { t } = useLanguage()
   const [snackbarOpen, setSnackbarOpen] = useState(false)
   const [snackbarMessage, setSnackbarMessage] = useState('')
   const [snackbarSeverity, setSnackbarSeverity] = useState<'success' | 'error'>('success')
@@ -246,7 +247,7 @@ export default function Contact() {
     
     // Vérifier s'il y a des erreurs
     if (Object.values(errors).some(error => error !== '')) {
-      setSnackbarMessage('Veuillez corriger les erreurs dans le formulaire')
+      setSnackbarMessage(t('contact.formErrors'))
       setSnackbarSeverity('error')
       setSnackbarOpen(true)
       return
@@ -266,17 +267,17 @@ export default function Contact() {
       const data = await response.json()
       
       if (data.success) {
-        setSnackbarMessage(data.message || 'Message envoyé avec succès !')
+        setSnackbarMessage(data.message || t('contact.sendSuccess'))
         setSnackbarSeverity('success')
         setFormData({ name: '', email: '', subject: '', message: '' })
         setFormErrors({ name: '', email: '', subject: '', message: '' })
       } else {
-        setSnackbarMessage(data.error || 'Erreur lors de l\'envoi du message')
+        setSnackbarMessage(data.error || t('contact.sendError'))
         setSnackbarSeverity('error')
       }
     } catch (error) {
       console.error('Erreur:', error)
-      setSnackbarMessage('Erreur de connexion. Veuillez réessayer.')
+      setSnackbarMessage(t('contact.networkError'))
       setSnackbarSeverity('error')
     } finally {
       setIsSubmitting(false)
@@ -294,8 +295,8 @@ export default function Contact() {
       <AppBarComponent />
       
       <HeaderSection 
-        title="Contact"
-        subtitle="Prenons contact et discutons!"
+        title={t('contact.title')}
+        subtitle={t('contact.subtitle')}
       />
 
       <Container maxWidth="lg" sx={{ py: 8, position: 'relative', zIndex: 2 }}>
@@ -308,7 +309,7 @@ export default function Contact() {
           <ThreeDCardComponent floatingElements={2}>
             <EmailIcon sx={{ fontSize: 48, color: primary, mb: 2 }} />
             <Typography variant="h6" gutterBottom sx={{ color: textColor }}>
-              Email
+              {t('contact.email')}
             </Typography>
             <Typography variant="body2" sx={{ mb: 2, color: textColor, opacity: 0.8 }}>
               {emailAddress}
@@ -350,20 +351,20 @@ export default function Contact() {
           <ThreeDCardComponent floatingElements={2}>
             <PhoneIcon sx={{ fontSize: 48, color: primary, mb: 2 }} />
             <Typography variant="h6" gutterBottom sx={{ color: textColor }}>
-              Téléphone
+              {t('contact.phone')}
             </Typography>
             <Typography variant="body2" sx={{ color: textColor, opacity: 0.8 }}>
-              Sur demande!
+              {t('contact.phoneOnRequest')}
             </Typography>
           </ThreeDCardComponent>
 
           <ThreeDCardComponent floatingElements={2}>
             <LocationOnIcon sx={{ fontSize: 48, color: primary, mb: 2 }} />
             <Typography variant="h6" gutterBottom sx={{ color: textColor }}>
-              Localisation
+              {t('contact.location')}
             </Typography>
             <Typography variant="body2" sx={{ color: textColor, opacity: 0.8 }}>
-              Montréal, Québec, Canada
+              {t('contact.locationCity')}
             </Typography>
           </ThreeDCardComponent>
         </Box>
@@ -390,7 +391,7 @@ export default function Contact() {
                 <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)' }, gap: 3 }}>
                   <StyledTextField
                     name="name"
-                    label="Nom complet"
+                    label={t('contact.formName')}
                     value={formData.name}
                     onChange={handleInputChange}
                     error={!!formErrors.name}
@@ -402,7 +403,7 @@ export default function Contact() {
                   />
                   <StyledTextField
                     name="email"
-                    label="Email"
+                    label={t('contact.formEmail')}
                     type="email"
                     value={formData.email}
                     onChange={handleInputChange}
@@ -417,7 +418,7 @@ export default function Contact() {
                 
                 <StyledTextField
                   name="subject"
-                  label="Sujet"
+                  label={t('contact.formSubject')}
                   value={formData.subject}
                   onChange={handleInputChange}
                   error={!!formErrors.subject}
@@ -430,7 +431,7 @@ export default function Contact() {
                 
                 <StyledTextField
                   name="message"
-                  label="Message"
+                  label={t('contact.formMessage')}
                   value={formData.message}
                   onChange={handleInputChange}
                   error={!!formErrors.message}
@@ -451,7 +452,7 @@ export default function Contact() {
                 disabled={isSubmitting}
                 startIcon={isSubmitting ? <CircularProgress size={20} color="inherit" /> : <SendIcon />}
               >
-                {isSubmitting ? 'Envoi en cours...' : 'Envoyer le message'}
+                {isSubmitting ? t('contact.sending') : t('contact.sendButton')}
               </CTAButton>
             </Box>
           </ThreeDCardComponent>
@@ -459,7 +460,7 @@ export default function Contact() {
 
         <Box sx={{ mt: 8 }}>
           <Typography variant="h4" gutterBottom sx={{ mb: 4, textAlign: 'center', fontWeight: 700, color: textColor }}>
-            Suivez-moi
+            {t('contact.followMe')}
           </Typography>
           <Box sx={{ 
             display: 'grid', 
@@ -477,10 +478,10 @@ export default function Contact() {
                   LinkedIn
                 </Typography>
                 <Typography variant="body2" sx={{ mb: 2, color: textColor, opacity: 0.8 }}>
-                  Connectons-nous et échangeons sur nos expériences professionnelles
+                  {t('contact.linkedInDesc')}
                 </Typography>
                 <CTAButton variant="outline" size="small" fullWidth>
-                  Voir le profil
+                  {t('contact.viewProfile')}
                 </CTAButton>
               </SocialCardContent>
             </ThreeDCardComponent>
@@ -494,10 +495,10 @@ export default function Contact() {
                   GitHub
                 </Typography>
                 <Typography variant="body2" sx={{ mb: 2, color: textColor, opacity: 0.8 }}>
-                  Découvrez mes projets open source et contributions
+                  {t('contact.githubDesc')}
                 </Typography>
                 <CTAButton variant="outline" size="small" fullWidth>
-                  Voir les repos
+                  {t('contact.viewRepos')}
                 </CTAButton>
               </SocialCardContent>
             </ThreeDCardComponent>
