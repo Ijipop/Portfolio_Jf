@@ -5,6 +5,7 @@ import Container from '@mui/material/Container'
 import Typography from '@mui/material/Typography'
 import { ReactNode, useEffect, useState } from 'react'
 import { DESIGN_TOKENS, GRADIENTS } from '../../design-system/constants'
+import { THEMES } from '../../design-system/themes'
 import { useThemeColors } from '../../hooks/useThemeColors'
 import { useTextColor } from '../../hooks/useTextColor'
 import { useTheme } from '@mui/material/styles'
@@ -23,11 +24,13 @@ interface HeaderSectionProps {
   children?: ReactNode
 }
 
+const defaultHeaderBg = `linear-gradient(135deg, ${THEMES.default.bg} 0%, ${THEMES.default.bg2} 25%, ${THEMES.default.bg} 50%, ${THEMES.default.bg2} 75%, ${THEMES.default.bg} 100%)`
+
 export default function HeaderSection({ title, subtitle, children }: HeaderSectionProps) {
   const { primary, secondary } = useThemeColors()
   const textColor = useTextColor()
   const theme = useTheme()
-  const [headerBackground, setHeaderBackground] = useState<string>(GRADIENTS.backgrounds.headerLight)
+  const [headerBackground, setHeaderBackground] = useState<string>(defaultHeaderBg)
   
   // Mettre à jour le background du header quand le thème change
   useEffect(() => {

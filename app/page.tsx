@@ -23,7 +23,7 @@ import { useThemeColors } from './hooks/useThemeColors'
 import { useTextColor } from './hooks/useTextColor'
 import { useLanguage } from './contexts/LanguageContext'
 import SignatureIntro from './components/SignatureIntro'
-import { useEffect, useState } from 'react'
+import { useEffect, useLayoutEffect, useState } from 'react'
 
 const INTRO_SESSION_KEY = 'portfolio-intro-seen'
 
@@ -35,8 +35,7 @@ export default function Home() {
   const [skillsBackground, setSkillsBackground] = useState<string>(GRADIENTS.cards.light)
   const [showIntro, setShowIntro] = useState<boolean | null>(null)
 
-  useEffect(() => {
-    if (typeof window === 'undefined') return
+  useLayoutEffect(() => {
     setShowIntro(!sessionStorage.getItem(INTRO_SESSION_KEY))
   }, [])
 
@@ -91,9 +90,10 @@ export default function Home() {
 
   return (
     <>
-      {showIntro === true && (
+      {showIntro !== false && (
         <SignatureIntro onComplete={handleIntroComplete} />
       )}
+      {showIntro === false && (
       <PageWrapper
       backgroundVariant="default"
       particleCount={60}
@@ -361,6 +361,7 @@ export default function Home() {
       <Footer />
       <StickyCTA text={t('home.stickyCTA')} onClick={() => router.push('/contact')} />
     </PageWrapper>
+      )}
     </>
   )
 }

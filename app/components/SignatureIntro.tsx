@@ -9,7 +9,8 @@ import { useLanguage } from '../contexts/LanguageContext'
 import { useState, useEffect, useCallback } from 'react'
 
 const INTRO_DURATION_MS = 2800
-const SPLIT_DURATION_S = 0.85
+const SPLIT_DURATION_S = 1.15
+const SPLIT_EASE = [0.25, 0.46, 0.45, 0.94] as const
 
 interface SignatureIntroProps {
   onComplete: () => void
@@ -56,7 +57,7 @@ export default function SignatureIntro({ onComplete }: SignatureIntroProps) {
         animate={{ x: isOpening ? '-100%' : 0 }}
         transition={{
           duration: SPLIT_DURATION_S,
-          ease: [0.4, 0, 0.2, 1],
+          ease: SPLIT_EASE,
         }}
         onAnimationComplete={isOpening ? handleAnimationComplete : undefined}
         style={{
@@ -75,7 +76,7 @@ export default function SignatureIntro({ onComplete }: SignatureIntroProps) {
         animate={{ x: isOpening ? '100%' : 0 }}
         transition={{
           duration: SPLIT_DURATION_S,
-          ease: [0.4, 0, 0.2, 1],
+          ease: SPLIT_EASE,
         }}
         style={{
           position: 'absolute',
@@ -104,10 +105,10 @@ export default function SignatureIntro({ onComplete }: SignatureIntroProps) {
           <AnimatePresence mode="wait">
             {!isOpening && (
               <motion.div
-                initial={{ opacity: 0, scale: 0.92 }}
+                initial={{ opacity: 0, scale: 0.96 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.98 }}
-                transition={{ duration: 0.5, ease: [0.4, 0, 0.2, 1] }}
+                transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
               >
                 <Typography
                   variant="h2"
