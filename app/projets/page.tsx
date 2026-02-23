@@ -18,9 +18,7 @@ import Typography from '@mui/material/Typography'
 import { useEffect, useState } from 'react'
 import React from 'react'
 import AppBarComponent from '../components/appBar'
-import ProjectCard from '../components/shared/ProjectCard'
-import StatsCard from '../components/shared/StatsCard'
-import { StatsValueTypography, StatsLabelTypography } from '../components/shared/StatsTypography'
+import ThreeDCardComponent from '../components/ThreeDCard'
 import AnimatedCounter from '../components/shared/AnimatedCounter'
 import LoadingSpinner from '../components/shared/LoadingSpinner'
 import ScrollReveal from '../components/shared/ScrollReveal'
@@ -142,8 +140,8 @@ const FilterContainerLabel = () => {
   )
 }
 
-// Composant pour le titre du projet avec gradient adaptatif
-const ProjectTitleTypography = ({ projectName }: { projectName: string }) => {
+// Composant pour le titre du projet : gradient sur default, couleur palette sur les autres thèmes
+const ProjectTitleTypography = ({ projectName, isNonDefaultPalette = false }: { projectName: string; isNonDefaultPalette?: boolean }) => {
   const theme = useTheme()
   const { primary, secondary, accent } = useThemeColors()
   
@@ -152,18 +150,22 @@ const ProjectTitleTypography = ({ projectName }: { projectName: string }) => {
       variant="h6" 
       component="h2" 
       gutterBottom
-      sx={{ 
-        fontWeight: 700,
-        mb: 1.5,
-        background: `linear-gradient(45deg, ${primary}, ${secondary}, ${accent}, ${primary})`,
-        backgroundClip: 'text',
-        WebkitBackgroundClip: 'text',
-        WebkitTextFillColor: 'transparent',
-        backgroundSize: '200% 200%',
-        animation: 'gradientShift 3s ease-in-out infinite',
-        textShadow: `0 0 20px ${primary}40`,
-        ...ANIMATIONS.gradientShift
-      }}
+      sx={ 
+        isNonDefaultPalette
+          ? { fontWeight: 700, mb: 1.5, color: primary, textShadow: `0 0 12px ${primary}40` }
+          : { 
+              fontWeight: 700,
+              mb: 1.5,
+              background: `linear-gradient(45deg, ${primary}, ${secondary}, ${accent}, ${primary})`,
+              backgroundClip: 'text',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundSize: '200% 200%',
+              animation: 'gradientShift 3s ease-in-out infinite',
+              textShadow: `0 0 20px ${primary}40`,
+              ...ANIMATIONS.gradientShift
+            }
+      }
     >
       {projectName}
     </Typography>
@@ -186,9 +188,10 @@ const ProjectCardWrapper = ({
   getStatusColor: (status: string) => "error" | "success" | "warning" | "info" | "default" | "primary" | "secondary"
   getImageUrl: (imageUrl: string) => string
 }) => {
-  // Utiliser les hooks ici, pas dans le map
   const { primary, secondary, accent } = useThemeColors()
   const textColor = useTextColor()
+  const { themeName } = useAdvancedTheme()
+  const isNonDefaultPalette = themeName !== 'default'
   
   // Palette de couleurs pour les reflets basée sur le thème
   const reflectionColors = [
@@ -208,10 +211,10 @@ const ProjectCardWrapper = ({
   
   return (
     <ScrollReveal key={project.id} direction="up" delay={0.1 * (index % 4)}>
-      <ProjectCard 
+      <ThreeDCardComponent 
         key={project.id} 
         onClick={() => handleProjectClick(project.url)}
-        reflectionColor={reflectionColor}
+        floatingElements={2}
       >
         {/* Logo GitHub dans le coin supérieur droit */}
         {project.url && project.url.includes('github') && (
@@ -302,10 +305,17 @@ const ProjectCardWrapper = ({
           </Box>
         </Box>
         
-        <ProjectTitleTypography projectName={project.name} />
+        <ProjectTitleTypography projectName={project.name} isNonDefaultPalette={isNonDefaultPalette} />
         
         {project.imageUrl && (
-          <ProjectImageContainer>
+          <ProjectImageContainer
+            sx={isNonDefaultPalette ? {
+              border: `2px solid ${primary}60`,
+              borderRadius: DESIGN_TOKENS.borderRadius.small,
+              boxShadow: `0 4px 20px ${primary}25, 0 0 0 1px ${primary}20`,
+              '& img': { boxShadow: 'none' },
+            } : undefined}
+          >
             <img 
               src={getImageUrl(project.imageUrl)} 
               alt={project.name}
@@ -315,13 +325,13 @@ const ProjectCardWrapper = ({
         
         <Typography 
           variant="body2" 
-          color="text.secondary" 
           paragraph
           sx={{ 
             lineHeight: 1.4,
             mb: 2,
             minHeight: '3rem',
-            fontSize: '0.9rem'
+            fontSize: '0.9rem',
+            ...(isNonDefaultPalette ? { color: `${primary}ee` } : { color: 'text.secondary' }),
           }}
         >
           {project.description}
@@ -352,12 +362,12 @@ const ProjectCardWrapper = ({
             Voir le projet
           </CTAButton>
         )}
-      </ProjectCard>
+      </ThreeDCardComponent>
     </ScrollReveal>
   )
 }
 
-// FilterChip comme composant fonctionnel pour réagir aux changements de thème
+// Pills du filtre : style simple, un seul effet au survol
 const FilterChipComponent = ({ 
   label, 
   onClick, 
@@ -370,9 +380,13 @@ const FilterChipComponent = ({
   icon?: React.ReactElement
 }) => {
   const theme = useTheme()
-  const { primary, secondary } = useThemeColors()
+  const { primary } = useThemeColors()
   const textColor = useTextColor()
   
+  const borderColor = selected ? primary : `${primary}40`
+  const labelColor = selected ? primary : textColor
+  const bgTint = `${primary}0c`
+
   return (
     <Chip
       label={label}
@@ -384,28 +398,15 @@ const FilterChipComponent = ({
         fontSize: '0.875rem',
         padding: theme.spacing(0.5, 1.5),
         cursor: 'pointer',
-        transition: DESIGN_TOKENS.transitions.normal,
-        ...(selected ? {
-          background: `linear-gradient(135deg, ${primary} 0%, ${secondary} 100%) !important`,
-          color: 'white !important',
-          border: `2px solid ${primary} !important`,
-          boxShadow: `0 4px 12px ${primary}40 !important`,
-          '&:hover': {
-            transform: 'translateY(-2px)',
-            boxShadow: `0 6px 20px ${primary}60 !important`,
-            background: `linear-gradient(135deg, ${primary} 0%, ${secondary} 100%) !important`,
-          }
-        } : {
-          background: textColor === '#ffffff' ? `rgba(255, 255, 255, 0.1) !important` : `rgba(0, 0, 0, 0.05) !important`,
-          color: `${textColor} !important`,
-          border: `2px solid ${primary}30 !important`,
-          '&:hover': {
-            transform: 'translateY(-2px)',
-            background: textColor === '#ffffff' ? `rgba(255, 255, 255, 0.15) !important` : `rgba(0, 0, 0, 0.08) !important`,
-            border: `2px solid ${primary}50 !important`,
-            boxShadow: `0 4px 12px ${primary}30 !important`,
-          }
-        })
+        transition: 'transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease, background 0.2s ease',
+        background: `${bgTint} !important`,
+        color: `${labelColor} !important`,
+        border: `1px solid ${borderColor} !important`,
+        boxShadow: `0 2px 6px ${primary}15`,
+        '&:hover': {
+          transform: 'translateY(-2px)',
+          boxShadow: `0 4px 14px ${primary}40`,
+        },
       }}
     />
   )
@@ -524,6 +525,7 @@ const ProjectImageContainer = styled(Box)(({ theme }) => ({
 
 export default function Projets() {
   const { primary, secondary, accent } = useThemeColors()
+  const textColor = useTextColor()
   const [projects, setProjects] = useState<Project[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -700,40 +702,40 @@ export default function Projets() {
         <ScrollReveal direction="up" delay={0.1}>
           <StatsGrid>
             <ScrollReveal direction="up" delay={0.2}>
-              <StatsCard>
-                <Box sx={{ position: 'relative', zIndex: 2 }}>
-                  <StatsValueTypography variant="h3">
+              <ThreeDCardComponent floatingElements={2} compact>
+                <Box sx={{ position: 'relative', zIndex: 2, textAlign: 'center' }}>
+                  <Typography variant="h3" sx={{ fontWeight: 700, color: primary, mb: 0.5, fontSize: { xs: '1.75rem', md: '2rem' } }}>
                     <AnimatedCounter value={projects.length} />
-                  </StatsValueTypography>
-                  <StatsLabelTypography variant="body1">
+                  </Typography>
+                  <Typography variant="body2" sx={{ fontWeight: 600, color: textColor, opacity: 0.9, textTransform: 'uppercase', letterSpacing: '0.5px' }}>
                     Projets Totaux
-                  </StatsLabelTypography>
+                  </Typography>
                 </Box>
-              </StatsCard>
+              </ThreeDCardComponent>
             </ScrollReveal>
             <ScrollReveal direction="up" delay={0.3}>
-              <StatsCard>
-                <Box sx={{ position: 'relative', zIndex: 2 }}>
-                  <StatsValueTypography variant="h3">
+              <ThreeDCardComponent floatingElements={2} compact>
+                <Box sx={{ position: 'relative', zIndex: 2, textAlign: 'center' }}>
+                  <Typography variant="h3" sx={{ fontWeight: 700, color: primary, mb: 0.5, fontSize: { xs: '1.75rem', md: '2rem' } }}>
                     <AnimatedCounter value={getCompletedProjects()} />
-                  </StatsValueTypography>
-                  <StatsLabelTypography variant="body1">
+                  </Typography>
+                  <Typography variant="body2" sx={{ fontWeight: 600, color: textColor, opacity: 0.9, textTransform: 'uppercase', letterSpacing: '0.5px' }}>
                     Projets Terminés
-                  </StatsLabelTypography>
+                  </Typography>
                 </Box>
-              </StatsCard>
+              </ThreeDCardComponent>
             </ScrollReveal>
             <ScrollReveal direction="up" delay={0.4}>
-              <StatsCard>
-                <Box sx={{ position: 'relative', zIndex: 2 }}>
-                  <StatsValueTypography variant="h3">
+              <ThreeDCardComponent floatingElements={2} compact>
+                <Box sx={{ position: 'relative', zIndex: 2, textAlign: 'center' }}>
+                  <Typography variant="h3" sx={{ fontWeight: 700, color: primary, mb: 0.5, fontSize: { xs: '1.75rem', md: '2rem' } }}>
                     <AnimatedCounter value={getInProgressProjects()} />
-                  </StatsValueTypography>
-                  <StatsLabelTypography variant="body1">
+                  </Typography>
+                  <Typography variant="body2" sx={{ fontWeight: 600, color: textColor, opacity: 0.9, textTransform: 'uppercase', letterSpacing: '0.5px' }}>
                     En Cours
-                  </StatsLabelTypography>
+                  </Typography>
                 </Box>
-              </StatsCard>
+              </ThreeDCardComponent>
             </ScrollReveal>
           </StatsGrid>
         </ScrollReveal>

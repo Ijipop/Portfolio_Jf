@@ -32,7 +32,7 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const contactEmail = process.env.CONTACT_EMAIL || 'jfthebeanz@hotmail.com'
+    const contactEmail = process.env.CONTACT_EMAIL || 'ijipop82@gmail.com'
     if (!process.env.RESEND_API_KEY) {
       console.error('RESEND_API_KEY manquant')
       return NextResponse.json(
