@@ -21,6 +21,12 @@ export function TypingEffect({
   const textColor = useTextColor()
   const { primary } = useThemeColors()
 
+  // Réinitialiser l’animation quand le texte change (ex. changement de langue)
+  useEffect(() => {
+    setDisplayText("")
+    setCurrentIndex(0)
+  }, [text])
+
   useEffect(() => {
     if (currentIndex < text.length) {
       const timeout = setTimeout(() => {
