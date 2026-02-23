@@ -18,9 +18,7 @@ import Typography from '@mui/material/Typography'
 import { useEffect, useState } from 'react'
 import React from 'react'
 import AppBarComponent from '../components/appBar'
-import ProjectCard from '../components/shared/ProjectCard'
-import StatsCard from '../components/shared/StatsCard'
-import { StatsValueTypography, StatsLabelTypography } from '../components/shared/StatsTypography'
+import ThreeDCardComponent from '../components/ThreeDCard'
 import AnimatedCounter from '../components/shared/AnimatedCounter'
 import LoadingSpinner from '../components/shared/LoadingSpinner'
 import ScrollReveal from '../components/shared/ScrollReveal'
@@ -208,10 +206,10 @@ const ProjectCardWrapper = ({
   
   return (
     <ScrollReveal key={project.id} direction="up" delay={0.1 * (index % 4)}>
-      <ProjectCard 
+      <ThreeDCardComponent 
         key={project.id} 
         onClick={() => handleProjectClick(project.url)}
-        reflectionColor={reflectionColor}
+        floatingElements={2}
       >
         {/* Logo GitHub dans le coin supérieur droit */}
         {project.url && project.url.includes('github') && (
@@ -352,7 +350,7 @@ const ProjectCardWrapper = ({
             Voir le projet
           </CTAButton>
         )}
-      </ProjectCard>
+      </ThreeDCardComponent>
     </ScrollReveal>
   )
 }
@@ -524,6 +522,7 @@ const ProjectImageContainer = styled(Box)(({ theme }) => ({
 
 export default function Projets() {
   const { primary, secondary, accent } = useThemeColors()
+  const textColor = useTextColor()
   const [projects, setProjects] = useState<Project[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -700,40 +699,40 @@ export default function Projets() {
         <ScrollReveal direction="up" delay={0.1}>
           <StatsGrid>
             <ScrollReveal direction="up" delay={0.2}>
-              <StatsCard>
-                <Box sx={{ position: 'relative', zIndex: 2 }}>
-                  <StatsValueTypography variant="h3">
+              <ThreeDCardComponent floatingElements={2} compact>
+                <Box sx={{ position: 'relative', zIndex: 2, textAlign: 'center' }}>
+                  <Typography variant="h3" sx={{ fontWeight: 700, color: primary, mb: 0.5, fontSize: { xs: '1.75rem', md: '2rem' } }}>
                     <AnimatedCounter value={projects.length} />
-                  </StatsValueTypography>
-                  <StatsLabelTypography variant="body1">
+                  </Typography>
+                  <Typography variant="body2" sx={{ fontWeight: 600, color: textColor, opacity: 0.9, textTransform: 'uppercase', letterSpacing: '0.5px' }}>
                     Projets Totaux
-                  </StatsLabelTypography>
+                  </Typography>
                 </Box>
-              </StatsCard>
+              </ThreeDCardComponent>
             </ScrollReveal>
             <ScrollReveal direction="up" delay={0.3}>
-              <StatsCard>
-                <Box sx={{ position: 'relative', zIndex: 2 }}>
-                  <StatsValueTypography variant="h3">
+              <ThreeDCardComponent floatingElements={2} compact>
+                <Box sx={{ position: 'relative', zIndex: 2, textAlign: 'center' }}>
+                  <Typography variant="h3" sx={{ fontWeight: 700, color: primary, mb: 0.5, fontSize: { xs: '1.75rem', md: '2rem' } }}>
                     <AnimatedCounter value={getCompletedProjects()} />
-                  </StatsValueTypography>
-                  <StatsLabelTypography variant="body1">
+                  </Typography>
+                  <Typography variant="body2" sx={{ fontWeight: 600, color: textColor, opacity: 0.9, textTransform: 'uppercase', letterSpacing: '0.5px' }}>
                     Projets Terminés
-                  </StatsLabelTypography>
+                  </Typography>
                 </Box>
-              </StatsCard>
+              </ThreeDCardComponent>
             </ScrollReveal>
             <ScrollReveal direction="up" delay={0.4}>
-              <StatsCard>
-                <Box sx={{ position: 'relative', zIndex: 2 }}>
-                  <StatsValueTypography variant="h3">
+              <ThreeDCardComponent floatingElements={2} compact>
+                <Box sx={{ position: 'relative', zIndex: 2, textAlign: 'center' }}>
+                  <Typography variant="h3" sx={{ fontWeight: 700, color: primary, mb: 0.5, fontSize: { xs: '1.75rem', md: '2rem' } }}>
                     <AnimatedCounter value={getInProgressProjects()} />
-                  </StatsValueTypography>
-                  <StatsLabelTypography variant="body1">
+                  </Typography>
+                  <Typography variant="body2" sx={{ fontWeight: 600, color: textColor, opacity: 0.9, textTransform: 'uppercase', letterSpacing: '0.5px' }}>
                     En Cours
-                  </StatsLabelTypography>
+                  </Typography>
                 </Box>
-              </StatsCard>
+              </ThreeDCardComponent>
             </ScrollReveal>
           </StatsGrid>
         </ScrollReveal>

@@ -98,13 +98,16 @@ interface ThreeDCardProps {
   onClick?: () => void
   className?: string
   floatingElements?: number
+  /** Réduit hauteur et padding (pour cartes stats) */
+  compact?: boolean
 }
 
 export default function ThreeDCardComponent({ 
   children, 
   onClick, 
   className, 
-  floatingElements = 3 
+  floatingElements = 3,
+  compact = false
 }: ThreeDCardProps) {
   const cardRef = useRef<HTMLDivElement>(null)
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
@@ -138,6 +141,7 @@ export default function ThreeDCardComponent({
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
         sx={{
+          ...(compact && { minHeight: '120px', padding: 2 }),
           transform: isHovered 
             ? `perspective(1000px) rotateX(${(mousePosition.y - 150) / 20}deg) rotateY(${(mousePosition.x - 150) / 20}deg) translateZ(20px)`
             : 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateZ(0px)',
