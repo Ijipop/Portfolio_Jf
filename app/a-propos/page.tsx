@@ -469,7 +469,7 @@ export default function About() {
                   color: textColor,
                   opacity: 0.9
                 }}>
-                  • AEC Développement de logiciels, sécurité d'applications de bureau, mobiles et Web (2024-2026)
+                  • AEC Développement de logiciels, sécurité d'applications de bureau, mobiles et Web au Cégep De Maisonneuve (2024-2026)
                 </Typography>
               </FlipCardBack>
             </FlipCardInner>
