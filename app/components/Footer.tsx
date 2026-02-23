@@ -129,10 +129,10 @@ export default function Footer() {
             </CTAButton>
           </Box>
 
-          {/* Section Liens rapides */}
+          {/* Section Liens rapides / Navigation */}
           <Box>
             <Typography variant="h6" sx={{ fontWeight: 600, mb: DESIGN_TOKENS.spacing.md, color: textColor }}>
-              Navigation
+              {t('footer.navigation')}
             </Typography>
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
               <Typography 
@@ -146,7 +146,7 @@ export default function Footer() {
                 }}
                 onClick={() => router.push('/projets')}
               >
-                Mes Projets
+                {t('home.cardProjects')}
               </Typography>
               <Typography 
                 variant="body2" 
@@ -159,7 +159,7 @@ export default function Footer() {
                 }}
                 onClick={() => router.push('/a-propos')}
               >
-                À Propos
+                {t('home.cardAbout')}
               </Typography>
               <Typography 
                 variant="body2" 
@@ -172,7 +172,7 @@ export default function Footer() {
                 }}
                 onClick={() => router.push('/contact')}
               >
-                Contact
+                {t('home.cardContact')}
               </Typography>
             </Box>
           </Box>

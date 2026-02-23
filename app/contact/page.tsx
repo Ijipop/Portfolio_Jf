@@ -379,10 +379,10 @@ export default function Contact() {
             <Box sx={{ textAlign: 'center', mb: 4 }}>
               <EmailIcon sx={{ fontSize: 56, color: primary, mb: 2 }} />
               <Typography variant="h4" gutterBottom sx={{ fontWeight: 700, color: textColor }}>
-                Envoyez-moi un message
+                {t('contact.sendMessage')}
               </Typography>
               <Typography variant="body1" sx={{ color: textColor, opacity: 0.9 }}>
-                Remplissez le formulaire ci-dessous et je vous répondrai dans les plus brefs délais
+                {t('contact.sendMessageDesc')}
               </Typography>
             </Box>
             
