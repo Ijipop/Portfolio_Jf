@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { Resend } from 'resend'
 
-// POST /api/contact - Envoyer un message de contact
+const resend = new Resend(process.env.RESEND_API_KEY)
+
+// POST /api/contact - Envoyer un message de contact via Resend
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
@@ -29,18 +32,35 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Ici, vous pouvez ajouter l'envoi d'email via un service comme Resend, SendGrid, etc.
-    // Pour l'instant, on simule juste le succès
-    // TODO: Intégrer un service d'email (Resend, SendGrid, Nodemailer, etc.)
-    
-    console.log('📧 Nouveau message de contact:')
-    console.log('Nom:', name)
-    console.log('Email:', email)
-    console.log('Sujet:', subject)
-    console.log('Message:', message)
+    const contactEmail = process.env.CONTACT_EMAIL || 'jfthebeanz@hotmail.com'
+    if (!process.env.RESEND_API_KEY) {
+      console.error('RESEND_API_KEY manquant')
+      return NextResponse.json(
+        { success: false, error: 'Configuration email manquante' },
+        { status: 500 }
+      )
+    }
 
-    // Simuler un délai d'envoi
-    await new Promise(resolve => setTimeout(resolve, 500))
+    const { data, error } = await resend.emails.send({
+      from: 'Portfolio Contact <onboarding@resend.dev>',
+      to: contactEmail,
+      replyTo: email,
+      subject: `[Portfolio] ${subject}`,
+      html: `
+        <p><strong>De:</strong> ${name} &lt;${email}&gt;</p>
+        <p><strong>Sujet:</strong> ${subject}</p>
+        <hr />
+        <p>${message.replace(/\n/g, '<br />')}</p>
+      `
+    })
+
+    if (error) {
+      console.error('Erreur Resend:', error)
+      return NextResponse.json(
+        { success: false, error: 'Erreur lors de l\'envoi du message' },
+        { status: 500 }
+      )
+    }
 
     return NextResponse.json({
       success: true,
