@@ -14,7 +14,7 @@ import Container from '@mui/material/Container'
 import Typography from '@mui/material/Typography'
 import { styled } from '@mui/material/styles'
 import { useState } from 'react'
-import ContactCard from '../components/shared/ContactCard'
+import ThreeDCardComponent from '../components/ThreeDCard'
 import HeaderSection from '../components/shared/HeaderSection'
 import AppBarComponent from '../components/appBar'
 import PageWrapper from '../components/shared/PageWrapper'
@@ -26,13 +26,13 @@ import { useThemeColors } from '../hooks/useThemeColors'
 import { useAdvancedTheme } from '../contexts/AdvancedThemeContext'
 
 
-const SocialCard = styled(ContactCard)(({ theme }) => ({
+const SocialCardContent = styled(Box)(({ theme }) => ({
   textAlign: 'center',
-  padding: theme.spacing(3),
-  transition: DESIGN_TOKENS.transitions.slow,
-  '&:hover': {
-    transform: 'translateY(-8px) scale(1.05)',
-  },
+  padding: theme.spacing(2),
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  height: '100%',
 }))
 
 const SocialIconWrapper = styled(Box)(({ theme }) => ({
@@ -305,7 +305,7 @@ export default function Contact() {
           gap: 4,
           mb: 8
         }}>
-          <ContactCard>
+          <ThreeDCardComponent floatingElements={2}>
             <EmailIcon sx={{ fontSize: 48, color: primary, mb: 2 }} />
             <Typography variant="h6" gutterBottom sx={{ color: textColor }}>
               Email
@@ -345,9 +345,9 @@ export default function Contact() {
                 Copier
               </EmailButton>
             </MuiBox>
-          </ContactCard>
+          </ThreeDCardComponent>
 
-          <ContactCard>
+          <ThreeDCardComponent floatingElements={2}>
             <PhoneIcon sx={{ fontSize: 48, color: primary, mb: 2 }} />
             <Typography variant="h6" gutterBottom sx={{ color: textColor }}>
               Téléphone
@@ -355,9 +355,9 @@ export default function Contact() {
             <Typography variant="body2" sx={{ color: textColor, opacity: 0.8 }}>
               Sur demande!
             </Typography>
-          </ContactCard>
+          </ThreeDCardComponent>
 
-          <ContactCard>
+          <ThreeDCardComponent floatingElements={2}>
             <LocationOnIcon sx={{ fontSize: 48, color: primary, mb: 2 }} />
             <Typography variant="h6" gutterBottom sx={{ color: textColor }}>
               Localisation
@@ -365,7 +365,7 @@ export default function Contact() {
             <Typography variant="body2" sx={{ color: textColor, opacity: 0.8 }}>
               Montréal, Québec, Canada
             </Typography>
-          </ContactCard>
+          </ThreeDCardComponent>
         </Box>
 
         {/* Formulaire de contact */}
@@ -374,87 +374,87 @@ export default function Contact() {
           maxWidth: '800px',
           margin: '0 auto',
         }}>
-          <ContactCard>
-          <Box sx={{ textAlign: 'center', mb: 4 }}>
-            <EmailIcon sx={{ fontSize: 56, color: primary, mb: 2 }} />
-            <Typography variant="h4" gutterBottom sx={{ fontWeight: 700, color: textColor }}>
-              Envoyez-moi un message
-            </Typography>
-            <Typography variant="body1" sx={{ color: textColor, opacity: 0.9 }}>
-              Remplissez le formulaire ci-dessous et je vous répondrai dans les plus brefs délais
-            </Typography>
-          </Box>
-          
-          <Box component="form" onSubmit={handleSubmit} sx={{ mt: 4 }}>
-            <Box sx={{ display: 'grid', gap: 3, mb: 3 }}>
-              <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)' }, gap: 3 }}>
+          <ThreeDCardComponent floatingElements={2}>
+            <Box sx={{ textAlign: 'center', mb: 4 }}>
+              <EmailIcon sx={{ fontSize: 56, color: primary, mb: 2 }} />
+              <Typography variant="h4" gutterBottom sx={{ fontWeight: 700, color: textColor }}>
+                Envoyez-moi un message
+              </Typography>
+              <Typography variant="body1" sx={{ color: textColor, opacity: 0.9 }}>
+                Remplissez le formulaire ci-dessous et je vous répondrai dans les plus brefs délais
+              </Typography>
+            </Box>
+            
+            <Box component="form" onSubmit={handleSubmit} sx={{ mt: 4 }}>
+              <Box sx={{ display: 'grid', gap: 3, mb: 3 }}>
+                <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)' }, gap: 3 }}>
+                  <StyledTextField
+                    name="name"
+                    label="Nom complet"
+                    value={formData.name}
+                    onChange={handleInputChange}
+                    error={!!formErrors.name}
+                    helperText={formErrors.name}
+                    required
+                    fullWidth
+                    textColor={textColor}
+                    isDefaultTheme={themeName === 'default'}
+                  />
+                  <StyledTextField
+                    name="email"
+                    label="Email"
+                    type="email"
+                    value={formData.email}
+                    onChange={handleInputChange}
+                    error={!!formErrors.email}
+                    helperText={formErrors.email}
+                    required
+                    fullWidth
+                    textColor={textColor}
+                    isDefaultTheme={themeName === 'default'}
+                  />
+                </Box>
+                
                 <StyledTextField
-                  name="name"
-                  label="Nom complet"
-                  value={formData.name}
+                  name="subject"
+                  label="Sujet"
+                  value={formData.subject}
                   onChange={handleInputChange}
-                  error={!!formErrors.name}
-                  helperText={formErrors.name}
+                  error={!!formErrors.subject}
+                  helperText={formErrors.subject}
                   required
                   fullWidth
                   textColor={textColor}
                   isDefaultTheme={themeName === 'default'}
                 />
+                
                 <StyledTextField
-                  name="email"
-                  label="Email"
-                  type="email"
-                  value={formData.email}
+                  name="message"
+                  label="Message"
+                  value={formData.message}
                   onChange={handleInputChange}
-                  error={!!formErrors.email}
-                  helperText={formErrors.email}
+                  error={!!formErrors.message}
+                  helperText={formErrors.message}
                   required
                   fullWidth
+                  multiline
+                  rows={6}
                   textColor={textColor}
                   isDefaultTheme={themeName === 'default'}
                 />
               </Box>
               
-              <StyledTextField
-                name="subject"
-                label="Sujet"
-                value={formData.subject}
-                onChange={handleInputChange}
-                error={!!formErrors.subject}
-                helperText={formErrors.subject}
-                required
+              <CTAButton
+                variant="primary"
+                type="submit"
                 fullWidth
-                textColor={textColor}
-                isDefaultTheme={themeName === 'default'}
-              />
-              
-              <StyledTextField
-                name="message"
-                label="Message"
-                value={formData.message}
-                onChange={handleInputChange}
-                error={!!formErrors.message}
-                helperText={formErrors.message}
-                required
-                fullWidth
-                multiline
-                rows={6}
-                textColor={textColor}
-                isDefaultTheme={themeName === 'default'}
-              />
+                disabled={isSubmitting}
+                startIcon={isSubmitting ? <CircularProgress size={20} color="inherit" /> : <SendIcon />}
+              >
+                {isSubmitting ? 'Envoi en cours...' : 'Envoyer le message'}
+              </CTAButton>
             </Box>
-            
-            <CTAButton
-              variant="primary"
-              type="submit"
-              fullWidth
-              disabled={isSubmitting}
-              startIcon={isSubmitting ? <CircularProgress size={20} color="inherit" /> : <SendIcon />}
-            >
-              {isSubmitting ? 'Envoi en cours...' : 'Envoyer le message'}
-            </CTAButton>
-          </Box>
-          </ContactCard>
+          </ThreeDCardComponent>
         </Box>
 
         <Box sx={{ mt: 8 }}>
@@ -468,35 +468,39 @@ export default function Contact() {
             maxWidth: '600px',
             mx: 'auto'
           }}>
-            <SocialCard onClick={handleLinkedInClick}>
-              <SocialIconWrapper>
-                <LinkedInIcon sx={{ fontSize: 40 }} />
-              </SocialIconWrapper>
-              <Typography variant="h6" gutterBottom sx={{ fontWeight: 600, color: textColor }}>
-                LinkedIn
-              </Typography>
-              <Typography variant="body2" sx={{ mb: 2, color: textColor, opacity: 0.8 }}>
-                Connectons-nous et échangeons sur nos expériences professionnelles
-              </Typography>
-              <CTAButton variant="outline" size="small" fullWidth>
-                Voir le profil
-              </CTAButton>
-            </SocialCard>
+            <ThreeDCardComponent onClick={handleLinkedInClick} floatingElements={2}>
+              <SocialCardContent>
+                <SocialIconWrapper>
+                  <LinkedInIcon sx={{ fontSize: 40 }} />
+                </SocialIconWrapper>
+                <Typography variant="h6" gutterBottom sx={{ fontWeight: 600, color: textColor }}>
+                  LinkedIn
+                </Typography>
+                <Typography variant="body2" sx={{ mb: 2, color: textColor, opacity: 0.8 }}>
+                  Connectons-nous et échangeons sur nos expériences professionnelles
+                </Typography>
+                <CTAButton variant="outline" size="small" fullWidth>
+                  Voir le profil
+                </CTAButton>
+              </SocialCardContent>
+            </ThreeDCardComponent>
 
-            <SocialCard onClick={handleGitHubClick}>
-              <SocialIconWrapper>
-                <GitHubIcon sx={{ fontSize: 40 }} />
-              </SocialIconWrapper>
-              <Typography variant="h6" gutterBottom sx={{ fontWeight: 600, color: textColor }}>
-                GitHub
-              </Typography>
-              <Typography variant="body2" sx={{ mb: 2, color: textColor, opacity: 0.8 }}>
-                Découvrez mes projets open source et contributions
-              </Typography>
-              <CTAButton variant="outline" size="small" fullWidth>
-                Voir les repos
-              </CTAButton>
-            </SocialCard>
+            <ThreeDCardComponent onClick={handleGitHubClick} floatingElements={2}>
+              <SocialCardContent>
+                <SocialIconWrapper>
+                  <GitHubIcon sx={{ fontSize: 40 }} />
+                </SocialIconWrapper>
+                <Typography variant="h6" gutterBottom sx={{ fontWeight: 600, color: textColor }}>
+                  GitHub
+                </Typography>
+                <Typography variant="body2" sx={{ mb: 2, color: textColor, opacity: 0.8 }}>
+                  Découvrez mes projets open source et contributions
+                </Typography>
+                <CTAButton variant="outline" size="small" fullWidth>
+                  Voir les repos
+                </CTAButton>
+              </SocialCardContent>
+            </ThreeDCardComponent>
           </Box>
         </Box>
       </Container>
