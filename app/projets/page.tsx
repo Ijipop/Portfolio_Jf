@@ -140,8 +140,8 @@ const FilterContainerLabel = () => {
   )
 }
 
-// Composant pour le titre du projet avec gradient adaptatif
-const ProjectTitleTypography = ({ projectName }: { projectName: string }) => {
+// Composant pour le titre du projet : gradient sur default, couleur palette sur les autres thèmes
+const ProjectTitleTypography = ({ projectName, isNonDefaultPalette = false }: { projectName: string; isNonDefaultPalette?: boolean }) => {
   const theme = useTheme()
   const { primary, secondary, accent } = useThemeColors()
   
@@ -150,18 +150,22 @@ const ProjectTitleTypography = ({ projectName }: { projectName: string }) => {
       variant="h6" 
       component="h2" 
       gutterBottom
-      sx={{ 
-        fontWeight: 700,
-        mb: 1.5,
-        background: `linear-gradient(45deg, ${primary}, ${secondary}, ${accent}, ${primary})`,
-        backgroundClip: 'text',
-        WebkitBackgroundClip: 'text',
-        WebkitTextFillColor: 'transparent',
-        backgroundSize: '200% 200%',
-        animation: 'gradientShift 3s ease-in-out infinite',
-        textShadow: `0 0 20px ${primary}40`,
-        ...ANIMATIONS.gradientShift
-      }}
+      sx={ 
+        isNonDefaultPalette
+          ? { fontWeight: 700, mb: 1.5, color: primary, textShadow: `0 0 12px ${primary}40` }
+          : { 
+              fontWeight: 700,
+              mb: 1.5,
+              background: `linear-gradient(45deg, ${primary}, ${secondary}, ${accent}, ${primary})`,
+              backgroundClip: 'text',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundSize: '200% 200%',
+              animation: 'gradientShift 3s ease-in-out infinite',
+              textShadow: `0 0 20px ${primary}40`,
+              ...ANIMATIONS.gradientShift
+            }
+      }
     >
       {projectName}
     </Typography>
@@ -184,9 +188,10 @@ const ProjectCardWrapper = ({
   getStatusColor: (status: string) => "error" | "success" | "warning" | "info" | "default" | "primary" | "secondary"
   getImageUrl: (imageUrl: string) => string
 }) => {
-  // Utiliser les hooks ici, pas dans le map
   const { primary, secondary, accent } = useThemeColors()
   const textColor = useTextColor()
+  const { themeName } = useAdvancedTheme()
+  const isNonDefaultPalette = themeName !== 'default'
   
   // Palette de couleurs pour les reflets basée sur le thème
   const reflectionColors = [
@@ -300,10 +305,17 @@ const ProjectCardWrapper = ({
           </Box>
         </Box>
         
-        <ProjectTitleTypography projectName={project.name} />
+        <ProjectTitleTypography projectName={project.name} isNonDefaultPalette={isNonDefaultPalette} />
         
         {project.imageUrl && (
-          <ProjectImageContainer>
+          <ProjectImageContainer
+            sx={isNonDefaultPalette ? {
+              border: `2px solid ${primary}60`,
+              borderRadius: DESIGN_TOKENS.borderRadius.small,
+              boxShadow: `0 4px 20px ${primary}25, 0 0 0 1px ${primary}20`,
+              '& img': { boxShadow: 'none' },
+            } : undefined}
+          >
             <img 
               src={getImageUrl(project.imageUrl)} 
               alt={project.name}
@@ -313,13 +325,13 @@ const ProjectCardWrapper = ({
         
         <Typography 
           variant="body2" 
-          color="text.secondary" 
           paragraph
           sx={{ 
             lineHeight: 1.4,
             mb: 2,
             minHeight: '3rem',
-            fontSize: '0.9rem'
+            fontSize: '0.9rem',
+            ...(isNonDefaultPalette ? { color: `${primary}ee` } : { color: 'text.secondary' }),
           }}
         >
           {project.description}
