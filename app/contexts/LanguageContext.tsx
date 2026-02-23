@@ -40,14 +40,18 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
     if (typeof window !== 'undefined') localStorage.setItem(STORAGE_KEY, newLocale)
   }
 
+  // SSR + premier rendu client : toujours 'fr' pour éviter hydration mismatch et flash EN
+  const isServer = typeof window === 'undefined'
+  const resolvedLocale: Locale = (isServer || !mounted) ? 'fr' : locale
+
   const t = (key: TranslationKey): string => {
-    if (!mounted) return key
-    const value = getNested(translations[locale] as Record<string, unknown>, key)
+    const dict = translations[resolvedLocale] as Record<string, unknown>
+    const value = getNested(dict, key)
     return value ?? key
   }
 
   return (
-    <LanguageContext.Provider value={{ locale, setLocale, t }}>
+    <LanguageContext.Provider value={{ locale: resolvedLocale, setLocale, t }}>
       {children}
     </LanguageContext.Provider>
   )

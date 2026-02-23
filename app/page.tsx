@@ -22,7 +22,10 @@ import { DESIGN_TOKENS, GRADIENTS } from './design-system/constants'
 import { useThemeColors } from './hooks/useThemeColors'
 import { useTextColor } from './hooks/useTextColor'
 import { useLanguage } from './contexts/LanguageContext'
-import { useEffect, useState } from 'react'
+import SignatureIntro from './components/SignatureIntro'
+import { useEffect, useLayoutEffect, useState } from 'react'
+
+const INTRO_SESSION_KEY = 'portfolio-intro-seen'
 
 export default function Home() {
   const router = useRouter()
@@ -30,6 +33,11 @@ export default function Home() {
   const textColor = useTextColor()
   const { t } = useLanguage()
   const [skillsBackground, setSkillsBackground] = useState<string>(GRADIENTS.cards.light)
+  const [showIntro, setShowIntro] = useState<boolean | null>(null)
+
+  useLayoutEffect(() => {
+    setShowIntro(!sessionStorage.getItem(INTRO_SESSION_KEY))
+  }, [])
 
   // Mettre à jour le background de la section compétences quand le thème change
   useEffect(() => {
@@ -75,8 +83,18 @@ export default function Home() {
     router.push(path)
   }
 
+  const handleIntroComplete = () => {
+    if (typeof window !== 'undefined') sessionStorage.setItem(INTRO_SESSION_KEY, '1')
+    setShowIntro(false)
+  }
+
   return (
-    <PageWrapper
+    <>
+      {showIntro !== false && (
+        <SignatureIntro onComplete={handleIntroComplete} />
+      )}
+      {showIntro === false && (
+      <PageWrapper
       backgroundVariant="default"
       particleCount={60}
       particleSpeed={0.2}
@@ -343,5 +361,7 @@ export default function Home() {
       <Footer />
       <StickyCTA text={t('home.stickyCTA')} onClick={() => router.push('/contact')} />
     </PageWrapper>
+      )}
+    </>
   )
 }

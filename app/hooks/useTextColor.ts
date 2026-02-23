@@ -13,7 +13,9 @@ import { getTextColorForBackground } from '../utils/colorUtils'
  */
 export function useTextColor(): string {
   const { customTheme, themeName } = useAdvancedTheme()
-  const [textColor, setTextColor] = useState<string>('#ffffff')
+  const [textColor, setTextColor] = useState<string>(() =>
+    themeName === 'default' ? '#1e293b' : '#ffffff'
+  )
 
   useEffect(() => {
     const updateTextColor = () => {

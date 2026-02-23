@@ -12,6 +12,9 @@ export const translations = {
       contact: 'Contact',
       admin: 'Admin',
     },
+    intro: {
+      skip: 'Passer',
+    },
     home: {
       heroTitle: 'Portfolio Web',
       heroSubtitle: "Développeur de logiciel, d'applications mobiles et de sites web | React • Next.js • TypeScript",
@@ -115,6 +118,9 @@ export const translations = {
       about: 'About',
       contact: 'Contact',
       admin: 'Admin',
+    },
+    intro: {
+      skip: 'Skip',
     },
     home: {
       heroTitle: 'Web Portfolio',
