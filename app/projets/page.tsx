@@ -383,27 +383,17 @@ const FilterChipComponent = ({
         padding: theme.spacing(0.5, 1.5),
         cursor: 'pointer',
         transition: DESIGN_TOKENS.transitions.normal,
-        ...(selected ? {
-          background: `linear-gradient(135deg, ${primary} 0%, ${secondary} 100%) !important`,
-          color: 'white !important',
+        background: 'var(--card-background, rgba(255,255,255,0.9)) !important',
+        color: selected ? `${primary} !important` : `${textColor} !important`,
+        border: `1px solid ${selected ? `${primary}80` : 'var(--card-primary)'} !important`,
+        boxShadow: selected
+          ? `0 0 0 1px ${primary}40, 0 0 12px ${primary}25`
+          : '0 0 0 1px var(--card-primary), 0 2px 8px rgba(0,0,0,0.06)',
+        '&:hover': {
+          transform: 'translateY(-2px)',
           border: `2px solid ${primary} !important`,
-          boxShadow: `0 4px 12px ${primary}40 !important`,
-          '&:hover': {
-            transform: 'translateY(-2px)',
-            boxShadow: `0 6px 20px ${primary}60 !important`,
-            background: `linear-gradient(135deg, ${primary} 0%, ${secondary} 100%) !important`,
-          }
-        } : {
-          background: textColor === '#ffffff' ? `rgba(255, 255, 255, 0.1) !important` : `rgba(0, 0, 0, 0.05) !important`,
-          color: `${textColor} !important`,
-          border: `2px solid ${primary}30 !important`,
-          '&:hover': {
-            transform: 'translateY(-2px)',
-            background: textColor === '#ffffff' ? `rgba(255, 255, 255, 0.15) !important` : `rgba(0, 0, 0, 0.08) !important`,
-            border: `2px solid ${primary}50 !important`,
-            boxShadow: `0 4px 12px ${primary}30 !important`,
-          }
-        })
+          boxShadow: `0 0 0 1px ${primary}90, 0 0 12px ${primary}50, 0 0 20px ${primary}35, 0 4px 12px rgba(0,0,0,0.08)`,
+        },
       }}
     />
   )
