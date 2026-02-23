@@ -90,7 +90,7 @@ export default function Home() {
         }
         subtitle={
           <TypingEffect 
-            text="Développeur Full Stack | React • Next.js • TypeScript"
+            text="Développeur de logiciel, d'applications mobiles et de sites web | React • Next.js • TypeScript"
             speed={50}
           />
         }
@@ -151,7 +151,7 @@ export default function Home() {
                 color: textColor
               }}
             >
-              Développeur Full Stack
+              Développeur de logiciel, d&apos;applications mobiles et de sites web
             </Typography>
             <Typography 
               variant="body1" 
@@ -186,10 +186,10 @@ export default function Home() {
                   color: 'primary.main',
                   mb: 0.5
                 }}>
-                  0
+                  1
                 </Typography>
                 <Typography variant="body2" sx={{ color: textColor, opacity: 0.8 }}>
-                  Années d&apos;expérience
+                  Stage terminé
                 </Typography>
               </Box>
               <Box>

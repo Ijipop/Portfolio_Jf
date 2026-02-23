@@ -47,11 +47,8 @@ export function useTextColor(): string {
       attributeFilter: ['style'],
     })
 
-    const interval = setInterval(updateTextColor, 200)
-
     return () => {
       observer.disconnect()
-      clearInterval(interval)
     }
   }, [customTheme, themeName])
 

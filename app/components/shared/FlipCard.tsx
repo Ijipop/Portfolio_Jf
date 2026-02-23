@@ -70,7 +70,7 @@ const FlipCardFront = styled(FlipCardSide)({
 const FlipCardBack = styled(FlipCardSide)(({ theme }) => ({
   transform: 'rotateY(180deg)',
   WebkitTransform: 'rotateY(180deg)',
-  background: `linear-gradient(145deg, var(--card-secondary, #059669)20 0%, var(--card-primary, #1e3a8a)20 50%, var(--card-secondary, #059669)20 100%)`,
+  background: 'var(--card-card-gradient, linear-gradient(145deg, rgba(5,150,105,0.12) 0%, rgba(30,58,138,0.12) 50%, rgba(5,150,105,0.12) 100%))',
   border: theme.palette.mode === 'dark' 
     ? '2px solid rgba(74, 85, 104, 0.3)' 
     : '1px solid rgba(148, 163, 184, 0.2)',

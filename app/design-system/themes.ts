@@ -59,11 +59,43 @@ export type ThemeName = keyof typeof THEMES
 
 export type Theme = typeof THEMES[ThemeName]
 
+export interface PaletteTokens {
+  primary: string
+  secondary: string
+  accent: string
+  hover: {
+    background: string
+    shadow: string
+    glow: string
+  }
+}
+
 /**
  * Obtenir un thème par son nom
  */
 export function getTheme(themeName: ThemeName): Theme {
   return THEMES[themeName]
+}
+
+/**
+ * Obtenir les tokens de palette (couleurs + hover) d'un thème
+ */
+export function getPaletteTokens(themeName: ThemeName): PaletteTokens {
+  const theme = THEMES[themeName] || THEMES.default
+  const primary = theme.primary
+  const secondary = theme.secondary
+  const accent = theme.accent
+
+  return {
+    primary,
+    secondary,
+    accent,
+    hover: {
+      background: `linear-gradient(135deg, ${primary} 0%, ${secondary} 25%, ${accent} 50%, ${primary} 75%, ${primary} 100%)`,
+      shadow: primary,
+      glow: secondary,
+    },
+  }
 }
 
 /**

@@ -28,28 +28,28 @@ const ThreeDCard = styled(Card)(({ theme }) => ({
     bottom: 0,
     background: theme.palette.mode === 'dark'
       ? 'linear-gradient(135deg, rgba(255, 107, 53, 0.1) 0%, rgba(255, 23, 68, 0.1) 100%)'
-      : 'linear-gradient(135deg, var(--card-primary, transparent) 0%, var(--card-secondary, transparent) 100%)',
+      : 'var(--card-card-gradient, linear-gradient(135deg, var(--card-primary, transparent) 0%, var(--card-secondary, transparent) 100%))',
     opacity: 0,
     transition: 'opacity 0.3s ease',
     zIndex: 1,
   },
   '&:hover': {
     transform: 'perspective(1000px) rotateX(5deg) rotateY(5deg) translateZ(20px)',
-    boxShadow: `0 30px 80px rgba(0, 0, 0, 0.6), 0 0 0 2px var(--card-hover-primary), 0 0 40px var(--card-hover-secondary), 0 0 60px var(--card-hover-glow)`,
+    boxShadow: `0 30px 80px rgba(0, 0, 0, 0.6), 0 0 0 2px var(--card-hover-primary, var(--card-primary)), 0 0 40px var(--card-hover-secondary, var(--card-secondary)), 0 0 60px var(--card-hover-glow, transparent)`,
     '&::before': {
-      opacity: 1,
+      opacity: 0.5,
     }
   }
 }))
 
-// Floating 3D Element - Plus subtil
+// Floating 3D Element - Plus subtil (opacité plus faible en palette default)
 const FloatingElement = styled(Box)(({ theme }) => ({
   position: 'absolute',
   background: 'var(--card-primary)',
   borderRadius: '50%',
   filter: 'blur(0.5px)',
   animation: 'float 8s ease-in-out infinite',
-  opacity: 0.6,
+  opacity: 'var(--card-decor-opacity, 0.6)',
   '@keyframes float': {
     '0%, 100%': { 
       transform: 'translateY(0px) scale(1)',
