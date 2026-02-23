@@ -367,7 +367,7 @@ const ProjectCardWrapper = ({
   )
 }
 
-// FilterChip comme composant fonctionnel pour réagir aux changements de thème
+// Pills du filtre : style simple, un seul effet au survol
 const FilterChipComponent = ({ 
   label, 
   onClick, 
@@ -380,9 +380,13 @@ const FilterChipComponent = ({
   icon?: React.ReactElement
 }) => {
   const theme = useTheme()
-  const { primary, secondary } = useThemeColors()
+  const { primary } = useThemeColors()
   const textColor = useTextColor()
   
+  const borderColor = selected ? primary : `${primary}40`
+  const labelColor = selected ? primary : textColor
+  const bgTint = `${primary}0c`
+
   return (
     <Chip
       label={label}
@@ -394,17 +398,14 @@ const FilterChipComponent = ({
         fontSize: '0.875rem',
         padding: theme.spacing(0.5, 1.5),
         cursor: 'pointer',
-        transition: DESIGN_TOKENS.transitions.normal,
-        background: 'var(--card-background, rgba(255,255,255,0.9)) !important',
-        color: selected ? `${primary} !important` : `${textColor} !important`,
-        border: `1px solid ${selected ? `${primary}80` : 'var(--card-primary)'} !important`,
-        boxShadow: selected
-          ? `0 0 0 1px ${primary}40, 0 0 12px ${primary}25`
-          : '0 0 0 1px var(--card-primary), 0 2px 8px rgba(0,0,0,0.06)',
+        transition: 'transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease, background 0.2s ease',
+        background: `${bgTint} !important`,
+        color: `${labelColor} !important`,
+        border: `1px solid ${borderColor} !important`,
+        boxShadow: `0 2px 6px ${primary}15`,
         '&:hover': {
           transform: 'translateY(-2px)',
-          border: `2px solid ${primary} !important`,
-          boxShadow: `0 0 0 1px ${primary}90, 0 0 12px ${primary}50, 0 0 20px ${primary}35, 0 4px 12px rgba(0,0,0,0.08)`,
+          boxShadow: `0 4px 14px ${primary}40`,
         },
       }}
     />
