@@ -17,6 +17,7 @@ import { styled, useTheme } from '@mui/material/styles'
 import Typography from '@mui/material/Typography'
 import { useEffect, useState } from 'react'
 import React from 'react'
+import Image from 'next/image'
 import AppBarComponent from '../components/appBar'
 import ThreeDCardComponent from '../components/ThreeDCard'
 import AnimatedCounter from '../components/shared/AnimatedCounter'
@@ -83,17 +84,20 @@ const AnimatedBox = styled(Box)({
 const ProjectsGrid = styled(Box)(({ theme }) => ({
   display: 'grid',
   gridTemplateColumns: 'repeat(2, 1fr)',
-  gap: theme.spacing(4),
+  gap: theme.spacing(2),
   [theme.breakpoints.down('sm')]: {
     gridTemplateColumns: '1fr',
     gap: theme.spacing(2),
   },
   [theme.breakpoints.down('md')]: {
     gridTemplateColumns: '1fr',
-    gap: theme.spacing(3),
+    gap: theme.spacing(2),
   },
   [theme.breakpoints.up('lg')]: {
     gridTemplateColumns: 'repeat(2, 1fr)',
+    gap: theme.spacing(3),
+  },
+  [theme.breakpoints.up('xl')]: {
     gap: theme.spacing(4),
   }
 }))
@@ -101,12 +105,19 @@ const ProjectsGrid = styled(Box)(({ theme }) => ({
 const StatsGrid = styled(Box)(({ theme }) => ({
   display: 'grid',
   gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
-  gap: theme.spacing(3),
-  marginBottom: theme.spacing(6),
+  gap: theme.spacing(2),
+  marginBottom: theme.spacing(3),
   [theme.breakpoints.down('sm')]: {
     gridTemplateColumns: '1fr',
     gap: theme.spacing(2),
+    marginBottom: theme.spacing(3),
+  },
+  [theme.breakpoints.up('md')]: {
     marginBottom: theme.spacing(4),
+  },
+  [theme.breakpoints.up('xl')]: {
+    gap: theme.spacing(3),
+    marginBottom: theme.spacing(5),
   },
 }))
 
@@ -310,18 +321,26 @@ const ProjectCardWrapper = ({
         
         <ProjectTitleTypography projectName={project.name} isNonDefaultPalette={isNonDefaultPalette} />
         
-        {project.imageUrl && (
+        {project.imageUrl && getImageUrl(project.imageUrl) && (
           <ProjectImageContainer
-            sx={isNonDefaultPalette ? {
-              border: `2px solid ${primary}60`,
-              borderRadius: DESIGN_TOKENS.borderRadius.small,
-              boxShadow: `0 4px 20px ${primary}25, 0 0 0 1px ${primary}20`,
-              '& img': { boxShadow: 'none' },
-            } : undefined}
+            sx={{
+              height: { xs: '120px', sm: '150px', md: '170px', xl: '240px' },
+              ...(isNonDefaultPalette ? {
+                border: `2px solid ${primary}60`,
+                borderRadius: DESIGN_TOKENS.borderRadius.small,
+                boxShadow: `0 4px 20px ${primary}25, 0 0 0 1px ${primary}20`,
+              } : {}),
+              '& img': {
+                ...(isNonDefaultPalette ? { boxShadow: 'none' } : {}),
+              },
+            }}
           >
-            <img 
-              src={getImageUrl(project.imageUrl)} 
+            <Image
+              src={getImageUrl(project.imageUrl)}
               alt={project.name}
+              fill
+              sizes="(max-width: 600px) 100vw, (max-width: 900px) 50vw, 33vw"
+              style={{ objectFit: 'cover' }}
             />
           </ProjectImageContainer>
         )}
@@ -331,9 +350,9 @@ const ProjectCardWrapper = ({
           paragraph
           sx={{ 
             lineHeight: 1.4,
-            mb: 2,
-            minHeight: '3rem',
-            fontSize: '0.9rem',
+            mb: { xs: 1.5, md: 2 },
+            minHeight: { xs: '2rem', md: '3rem' },
+            fontSize: { xs: '0.85rem', md: '0.9rem' },
             ...(isNonDefaultPalette ? { color: `${primary}ee` } : { color: 'text.secondary' }),
           }}
         >
@@ -345,7 +364,7 @@ const ProjectCardWrapper = ({
           opacity: '1 !important',
           zIndex: 1000,
           position: 'relative',
-          mb: 2
+          mb: { xs: 1.5, md: 2 }
         }}>
           {project.technologies.split(',').map((tech, techIndex) => (
             <SkillTag key={techIndex} size="small" reflectionColor={reflectionColor}>
@@ -469,8 +488,15 @@ const FilterContainerComponent = ({ children }: { children: React.ReactNode }) =
         flexWrap: 'wrap',
         gap: theme.spacing(1.5),
         alignItems: 'center',
-        marginBottom: theme.spacing(4),
-        padding: theme.spacing(2),
+        marginBottom: theme.spacing(2),
+        padding: theme.spacing(1.5),
+        [theme.breakpoints.up('md')]: {
+          marginBottom: theme.spacing(3),
+          padding: theme.spacing(2),
+        },
+        [theme.breakpoints.up('xl')]: {
+          marginBottom: theme.spacing(4),
+        },
         background: `${filterBackground} !important`,
         border: `2px solid ${primary}30 !important`,
         borderRadius: DESIGN_TOKENS.borderRadius.medium,
@@ -497,11 +523,11 @@ const ProjectImageContainer = styled(Box)(({ theme }) => ({
   position: 'relative',
   overflow: 'hidden',
   borderRadius: DESIGN_TOKENS.borderRadius.small,
-  marginBottom: theme.spacing(2),
+  marginBottom: theme.spacing(1.5),
+  [theme.breakpoints.up('lg')]: { marginBottom: theme.spacing(2) },
   '& img': {
     transition: DESIGN_TOKENS.transitions.slow,
     width: '100%',
-    height: '280px',
     objectFit: 'cover',
     borderRadius: DESIGN_TOKENS.borderRadius.small,
     boxShadow: '0 4px 20px rgba(0, 0, 0, 0.1)',
@@ -693,7 +719,7 @@ export default function Projets() {
         subtitle={t('projects.subtitle')}
       />
 
-      <Container maxWidth="lg" sx={{ py: 6, position: 'relative', zIndex: 2 }}>
+      <Container maxWidth="lg" sx={{ py: { xs: 3, sm: 4, md: 4, xl: 5 }, position: 'relative', zIndex: 2 }}>
         {error && (
           <AnimatedBox>
             <Alert severity="error" sx={{ mb: 4, borderRadius: DESIGN_TOKENS.borderRadius.small }}>

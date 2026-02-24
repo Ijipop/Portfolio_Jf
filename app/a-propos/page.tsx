@@ -33,7 +33,10 @@ import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome'
 const FlipCard = styled(Box)(({ theme }) => ({
   backgroundColor: 'transparent',
   width: '100%',
-  height: '400px',
+  height: 400,
+  minHeight: 280,
+  [theme.breakpoints.down('md')]: { height: 320 },
+  [theme.breakpoints.down('sm')]: { height: 280 },
   perspective: '1000px',
   cursor: 'pointer',
   WebkitPerspective: '1000px',
@@ -49,7 +52,9 @@ const FlipCard = styled(Box)(({ theme }) => ({
   }
 }))
 
-const FlipCardInner = styled(Box)<{ flipped: boolean }>(({ theme, flipped }) => ({
+const FlipCardInner = styled(Box, {
+  shouldForwardProp: (prop) => prop !== 'flipped',
+})<{ flipped: boolean }>(({ theme, flipped }) => ({
   position: 'relative',
   width: '100%',
   height: '100%',
@@ -132,16 +137,66 @@ const FlipCardFront = ({ children, sx }: { children: React.ReactNode; sx?: any }
   )
 }
 
+// Animation d'entrée discrète pour l'endos des cartes (relax, professionnel)
+const BackContentAnimated = styled(Box)({
+  '@keyframes backEntrance': {
+    '0%': { opacity: 0, transform: 'translateY(6px)' },
+    '100%': { opacity: 1, transform: 'translateY(0)' },
+  },
+  animation: 'backEntrance 0.6s ease-out',
+  width: '100%',
+  height: '100%',
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'center',
+  alignItems: 'center',
+  position: 'relative',
+  zIndex: 1,
+})
+
+// Effet ripple « WOW » sur l'endos : double vague visible, texte reste lisible
+const RippleCircle = styled(Box)({
+  '@keyframes rippleExpand': {
+    '0%': { transform: 'translate(-50%, -50%) scale(0.2)', opacity: 0.6 },
+    '70%': { transform: 'translate(-50%, -50%) scale(1.1)', opacity: 0.25 },
+    '100%': { transform: 'translate(-50%, -50%) scale(1.35)', opacity: 0 },
+  },
+  position: 'absolute',
+  left: '50%',
+  top: '50%',
+  width: '160%',
+  height: '160%',
+  borderRadius: '50%',
+  animation: 'rippleExpand 2.8s ease-out infinite',
+})
+
+// Palettes où le fond est plus sombre/saturé → ripple renforcé pour rester visible
+const STRONG_RIPPLE_PALETTES = ['sunset', 'ocean', 'cyber', 'forest']
+
 // Composant FlipCardBack fonctionnel pour utiliser les couleurs du thème
 const FlipCardBack = ({ children, sx }: { children: React.ReactNode; sx?: any }) => {
   const theme = useTheme()
   const { themeName } = useAdvancedTheme()
   const { primary, secondary } = useThemeColors()
   const isDefaultPalette = themeName === 'default'
+  const strongRipple = STRONG_RIPPLE_PALETTES.includes(themeName)
+  // Default : pastel bleu ciel « mignon », doux et accueillant. Autres palettes : teintes adoucies.
   const backGradient = isDefaultPalette
-    ? `linear-gradient(135deg, ${primary}50 0%, ${secondary}50 50%, ${primary}50 100%)`
-    : `linear-gradient(135deg, ${primary} 0%, ${secondary} 50%, ${primary} 100%)`
+    ? 'linear-gradient(135deg, #dbeafe 0%, #eff6ff 50%, #e0f2fe 100%)'
+    : `linear-gradient(135deg, ${primary}CC 0%, ${secondary}B3 50%, ${primary}CC 100%)`
   const backTextColor = getTextColorForBackground(backGradient)
+
+  // Ripple : default = bleu ciel doux (mignon). Autres = selon palette, renforcé sur Sunset/Ocean/Cyber/Forest
+  const ripple1 = isDefaultPalette
+    ? 'radial-gradient(circle at center, rgba(147, 197, 253, 0.5) 0%, rgba(96, 165, 250, 0.25) 40%, transparent 70%)'
+    : strongRipple
+      ? `radial-gradient(circle at center, ${primary}CC 0%, ${secondary}99 30%, ${primary}80 55%, transparent 75%)`
+      : `radial-gradient(circle at center, ${primary}50 0%, ${secondary}35 35%, ${primary}20 55%, transparent 75%)`
+  const ripple2 = isDefaultPalette
+    ? 'radial-gradient(circle at center, rgba(191, 219, 254, 0.4) 0%, rgba(147, 197, 253, 0.2) 40%, transparent 70%)'
+    : strongRipple
+      ? `radial-gradient(circle at center, ${secondary}CC 0%, ${primary}99 30%, ${secondary}80 55%, transparent 75%)`
+      : `radial-gradient(circle at center, ${secondary}45 0%, ${primary}40 35%, ${secondary}25 55%, transparent 75%)`
 
   return (
     <Box
@@ -153,11 +208,13 @@ const FlipCardBack = ({ children, sx }: { children: React.ReactNode; sx?: any })
         WebkitBackfaceVisibility: 'hidden',
         MozBackfaceVisibility: 'hidden',
         background: `${backGradient} !important`,
-        border: `1px solid ${primary}40 !important`,
+        border: isDefaultPalette ? '1px solid rgba(147, 197, 253, 0.5) !important' : `1px solid ${primary}40 !important`,
         borderRadius: '8px',
         padding: theme.spacing(4),
         textAlign: 'center',
-        boxShadow: `0 8px 32px ${primary}30, ${DESIGN_TOKENS.shadows.elevated.light} !important`,
+        boxShadow: isDefaultPalette
+          ? '0 8px 32px rgba(147, 197, 253, 0.25), 0 0 0 1px rgba(255,255,255,0.5) inset !important'
+          : `0 8px 32px ${primary}30, ${DESIGN_TOKENS.shadows.elevated.light} !important`,
         transform: 'rotateY(180deg)',
         WebkitTransform: 'rotateY(180deg)',
         display: 'flex',
@@ -169,7 +226,22 @@ const FlipCardBack = ({ children, sx }: { children: React.ReactNode; sx?: any })
         ...sx
       }}
     >
-      {children}
+      {/* Double vague ripple (effet WOW) — renforcé sur Sunset, Ocean, Cyber, Forest */}
+      <Box
+        sx={{
+          position: 'absolute',
+          inset: 0,
+          borderRadius: '8px',
+          overflow: 'hidden',
+          pointerEvents: 'none',
+        }}
+      >
+        <RippleCircle sx={{ background: ripple1, animationDelay: '0s' }} />
+        <RippleCircle sx={{ background: ripple2, animationDelay: '1.4s' }} />
+      </Box>
+      <BackContentAnimated>
+        {children}
+      </BackContentAnimated>
     </Box>
   )
 }

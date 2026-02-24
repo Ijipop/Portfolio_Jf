@@ -130,7 +130,7 @@ interface BaseCardProps {
   onClick?: () => void
   className?: string
   variant?: 'default' | '3d' | 'glass' | 'feature'
-  height?: string | number
+  height?: string | number | Record<string, number | string>
   reflectionColor?: string
 }
 

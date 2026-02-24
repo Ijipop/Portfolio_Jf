@@ -100,6 +100,8 @@ interface ThreeDCardProps {
   floatingElements?: number
   /** Réduit hauteur et padding (pour cartes stats) */
   compact?: boolean
+  /** Carte en hauteur 100% pour aligner avec d'autres cartes dans une grille */
+  fullHeight?: boolean
 }
 
 export default function ThreeDCardComponent({ 
@@ -107,7 +109,8 @@ export default function ThreeDCardComponent({
   onClick, 
   className, 
   floatingElements = 3,
-  compact = false
+  compact = false,
+  fullHeight = false
 }: ThreeDCardProps) {
   const cardRef = useRef<HTMLDivElement>(null)
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
@@ -128,6 +131,7 @@ export default function ThreeDCardComponent({
 
   return (
     <motion.div
+      style={fullHeight ? { height: '100%' } : undefined}
       initial={{ opacity: 0, scale: 0.9 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.6, ease: "easeOut" }}
@@ -141,6 +145,7 @@ export default function ThreeDCardComponent({
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
         sx={{
+          ...(fullHeight && { height: '100%', minHeight: 0 }),
           ...(compact && { minHeight: '120px', padding: 2 }),
           transform: isHovered 
             ? `perspective(1000px) rotateX(${(mousePosition.y - 150) / 20}deg) rotateY(${(mousePosition.x - 150) / 20}deg) translateZ(20px)`

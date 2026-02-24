@@ -145,7 +145,8 @@ export default function UnifiedCardComponent({
         return {
           transformStyle: 'preserve-3d',
           transition: 'transform 0.6s',
-          height: '400px',
+          height: { xs: 280, sm: 320, md: 400 },
+          minHeight: 280,
           perspective: '1000px',
         }
       case 'feature':

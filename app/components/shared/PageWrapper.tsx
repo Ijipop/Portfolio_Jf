@@ -3,8 +3,10 @@
 import Box from '@mui/material/Box'
 import { ReactNode, useEffect, useState } from 'react'
 import { useTheme } from '@mui/material/styles'
-import ProfessionalBackground from '../ProfessionalBackground'
+import dynamic from 'next/dynamic'
 import { GRADIENTS } from '../../design-system/constants'
+
+const ProfessionalBackground = dynamic(() => import('../ProfessionalBackground'), { ssr: false })
 import { useThemeColors } from '../../hooks/useThemeColors'
 import { useAdvancedTheme } from '../../contexts/AdvancedThemeContext'
 

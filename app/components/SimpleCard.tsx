@@ -16,7 +16,10 @@ const SimpleCard = styled(Card)(({ theme }) => ({
   overflow: 'hidden',
   cursor: 'pointer',
   zIndex: 1,
-  height: '400px',
+  height: 400,
+  minHeight: 280,
+  [theme.breakpoints.down('md')]: { height: 320 },
+  [theme.breakpoints.down('sm')]: { height: 280 },
   transformStyle: 'preserve-3d',
   perspective: '1000px',
   '@keyframes gradientShift': {
