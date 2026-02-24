@@ -62,12 +62,16 @@ const FlipCardInner = styled(Box)<{ flipped: boolean }>(({ theme, flipped }) => 
 }))
 
 // Composant FlipCardFront fonctionnel pour utiliser les couleurs du thème
+// En thème default : même rendu que les cartes Contact (blanc, bordure légère, ombre)
 const FlipCardFront = ({ children, sx }: { children: React.ReactNode; sx?: any }) => {
   const theme = useTheme()
   const { primary } = useThemeColors()
+  const { themeName } = useAdvancedTheme()
   const [cardBackground, setCardBackground] = useState<string>(GRADIENTS.cards.light)
+  const isDefaultTheme = themeName === 'default'
 
   useEffect(() => {
+    if (isDefaultTheme) return
     const updateCardBackground = () => {
       if (typeof window === 'undefined') return
       
@@ -101,7 +105,7 @@ const FlipCardFront = ({ children, sx }: { children: React.ReactNode; sx?: any }
       observer.disconnect()
       clearInterval(interval)
     }
-  }, [])
+  }, [isDefaultTheme])
 
   return (
     <Box
@@ -112,12 +116,20 @@ const FlipCardFront = ({ children, sx }: { children: React.ReactNode; sx?: any }
         backfaceVisibility: 'hidden',
         WebkitBackfaceVisibility: 'hidden',
         MozBackfaceVisibility: 'hidden',
-        background: `${cardBackground} !important`,
-        border: `1px solid ${primary}30 !important`,
+        ...(isDefaultTheme
+          ? {
+              background: '#ffffff !important',
+              border: '1px solid rgba(0,0,0,0.08) !important',
+              boxShadow: '0 8px 32px rgba(0,0,0,0.08) !important',
+            }
+          : {
+              background: `${cardBackground} !important`,
+              border: `1px solid ${primary}30 !important`,
+              boxShadow: `0 8px 32px ${primary}15, ${DESIGN_TOKENS.shadows.elevated.light} !important`,
+            }),
         borderRadius: '8px',
         padding: theme.spacing(4),
         textAlign: 'center',
-        boxShadow: `0 8px 32px ${primary}15, ${DESIGN_TOKENS.shadows.elevated.light} !important`,
         transition: DESIGN_TOKENS.transitions.slow,
         display: 'flex',
         flexDirection: 'column',
@@ -132,16 +144,16 @@ const FlipCardFront = ({ children, sx }: { children: React.ReactNode; sx?: any }
   )
 }
 
-// Composant FlipCardBack fonctionnel pour utiliser les couleurs du thème
+// Composant FlipCardBack : en thème default même style que Contact (fond clair, bordure légère)
 const FlipCardBack = ({ children, sx }: { children: React.ReactNode; sx?: any }) => {
   const theme = useTheme()
   const { themeName } = useAdvancedTheme()
   const { primary, secondary } = useThemeColors()
-  const isDefaultPalette = themeName === 'default'
-  const backGradient = isDefaultPalette
-    ? `linear-gradient(135deg, ${primary}50 0%, ${secondary}50 50%, ${primary}50 100%)`
+  const isDefaultTheme = themeName === 'default'
+  const backGradient = isDefaultTheme
+    ? undefined
     : `linear-gradient(135deg, ${primary} 0%, ${secondary} 50%, ${primary} 100%)`
-  const backTextColor = getTextColorForBackground(backGradient)
+  const backTextColor = isDefaultTheme ? '#334155' : getTextColorForBackground(backGradient ?? '')
 
   return (
     <Box
@@ -152,12 +164,22 @@ const FlipCardBack = ({ children, sx }: { children: React.ReactNode; sx?: any })
         backfaceVisibility: 'hidden',
         WebkitBackfaceVisibility: 'hidden',
         MozBackfaceVisibility: 'hidden',
-        background: `${backGradient} !important`,
-        border: `1px solid ${primary}40 !important`,
+        ...(isDefaultTheme
+          ? {
+              background: '#f8fafc !important',
+              border: '1px solid rgba(0,0,0,0.08) !important',
+              boxShadow: '0 8px 32px rgba(0,0,0,0.08) !important',
+              color: backTextColor,
+            }
+          : {
+              background: `${backGradient} !important`,
+              border: `1px solid ${primary}40 !important`,
+              boxShadow: `0 8px 32px ${primary}30, ${DESIGN_TOKENS.shadows.elevated.light} !important`,
+              color: backTextColor,
+            }),
         borderRadius: '8px',
         padding: theme.spacing(4),
         textAlign: 'center',
-        boxShadow: `0 8px 32px ${primary}30, ${DESIGN_TOKENS.shadows.elevated.light} !important`,
         transform: 'rotateY(180deg)',
         WebkitTransform: 'rotateY(180deg)',
         display: 'flex',
@@ -165,7 +187,6 @@ const FlipCardBack = ({ children, sx }: { children: React.ReactNode; sx?: any })
         justifyContent: 'center',
         alignItems: 'center',
         overflow: 'hidden',
-        color: backTextColor,
         ...sx
       }}
     >

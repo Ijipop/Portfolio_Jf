@@ -22,6 +22,7 @@ import { DESIGN_TOKENS, GRADIENTS } from './design-system/constants'
 import { useThemeColors } from './hooks/useThemeColors'
 import { useTextColor } from './hooks/useTextColor'
 import { useLanguage } from './contexts/LanguageContext'
+import { useAdvancedTheme } from './contexts/AdvancedThemeContext'
 import SignatureIntro from './components/SignatureIntro'
 import { useEffect, useState } from 'react'
 
@@ -37,6 +38,7 @@ export default function HomeClient({ initialShowIntro }: { initialShowIntro: boo
   const { primary, secondary, accent } = useThemeColors()
   const textColor = useTextColor()
   const { t } = useLanguage()
+  const { themeName } = useAdvancedTheme()
   const [skillsBackground, setSkillsBackground] = useState<string>(GRADIENTS.cards.light)
   const [showIntro, setShowIntro] = useState<boolean>(initialShowIntro)
 
@@ -248,12 +250,12 @@ export default function HomeClient({ initialShowIntro }: { initialShowIntro: boo
           zIndex: 2 
         }}>
           <Box sx={{ 
-            background: `${skillsBackground} !important`,
-            border: `1px solid ${primary}30 !important`,
+            background: themeName === 'default' ? '#ffffff !important' : `${skillsBackground} !important`,
+            border: themeName === 'default' ? '1px solid rgba(0,0,0,0.08) !important' : `1px solid ${primary}30 !important`,
             borderRadius: DESIGN_TOKENS.borderRadius.large,
             padding: { xs: DESIGN_TOKENS.spacing.md, md: DESIGN_TOKENS.spacing.xl },
             textAlign: 'center',
-            boxShadow: `0 8px 32px ${primary}20 !important`,
+            boxShadow: themeName === 'default' ? '0 8px 32px rgba(0,0,0,0.08) !important' : `0 8px 32px ${primary}20 !important`,
             mb: DESIGN_TOKENS.spacing.xxl,
             position: 'relative',
             overflow: 'hidden',
@@ -266,18 +268,22 @@ export default function HomeClient({ initialShowIntro }: { initialShowIntro: boo
                 mb: DESIGN_TOKENS.spacing.md,
                 ...DESIGN_TOKENS.typography.h3,
                 fontWeight: 700,
-                textShadow: `0 2px 4px rgba(0,0,0,0.1), 0 0 20px ${primary}40`,
-                background: `linear-gradient(135deg, ${primary}, ${secondary}, ${primary})`,
-                backgroundClip: 'text',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                backgroundSize: '200% 200%',
-                animation: 'gradientShift 4s ease-in-out infinite',
-                '@keyframes gradientShift': {
-                  '0%': { backgroundPosition: '0% 50%' },
-                  '50%': { backgroundPosition: '100% 50%' },
-                  '100%': { backgroundPosition: '0% 50%' },
-                },
+                ...(themeName === 'default'
+                  ? { color: '#1e293b', textShadow: '0 1px 2px rgba(0,0,0,0.06)' }
+                  : {
+                      textShadow: `0 2px 4px rgba(0,0,0,0.1), 0 0 20px ${primary}40`,
+                      background: `linear-gradient(135deg, ${primary}, ${secondary}, ${primary})`,
+                      backgroundClip: 'text',
+                      WebkitBackgroundClip: 'text',
+                      WebkitTextFillColor: 'transparent',
+                      backgroundSize: '200% 200%',
+                      animation: 'gradientShift 4s ease-in-out infinite',
+                      '@keyframes gradientShift': {
+                        '0%': { backgroundPosition: '0% 50%' },
+                        '50%': { backgroundPosition: '100% 50%' },
+                        '100%': { backgroundPosition: '0% 50%' },
+                      },
+                    }),
               }}
             >
               {t('home.sectionSkills')}
