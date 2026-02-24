@@ -17,6 +17,7 @@ import { styled, useTheme } from '@mui/material/styles'
 import Typography from '@mui/material/Typography'
 import { useEffect, useState } from 'react'
 import React from 'react'
+import Image from 'next/image'
 import AppBarComponent from '../components/appBar'
 import ThreeDCardComponent from '../components/ThreeDCard'
 import AnimatedCounter from '../components/shared/AnimatedCounter'
@@ -320,23 +321,26 @@ const ProjectCardWrapper = ({
         
         <ProjectTitleTypography projectName={project.name} isNonDefaultPalette={isNonDefaultPalette} />
         
-        {project.imageUrl && (
+        {project.imageUrl && getImageUrl(project.imageUrl) && (
           <ProjectImageContainer
             sx={{
+              height: { xs: '120px', sm: '150px', md: '170px', xl: '240px' },
               ...(isNonDefaultPalette ? {
                 border: `2px solid ${primary}60`,
                 borderRadius: DESIGN_TOKENS.borderRadius.small,
                 boxShadow: `0 4px 20px ${primary}25, 0 0 0 1px ${primary}20`,
               } : {}),
               '& img': {
-                height: { xs: '120px', sm: '150px', md: '170px', xl: '240px' },
                 ...(isNonDefaultPalette ? { boxShadow: 'none' } : {}),
               },
             }}
           >
-            <img 
-              src={getImageUrl(project.imageUrl)} 
+            <Image
+              src={getImageUrl(project.imageUrl)}
               alt={project.name}
+              fill
+              sizes="(max-width: 600px) 100vw, (max-width: 900px) 50vw, 33vw"
+              style={{ objectFit: 'cover' }}
             />
           </ProjectImageContainer>
         )}

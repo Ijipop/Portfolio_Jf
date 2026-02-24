@@ -15,6 +15,7 @@ import Typography from '@mui/material/Typography'
 import { styled, useTheme } from '@mui/material/styles'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import { useState } from 'react'
+import Image from 'next/image'
 import ThreeDCardComponent from '../components/ThreeDCard'
 import HeaderSection from '../components/shared/HeaderSection'
 import AppBarComponent from '../components/appBar'
@@ -375,19 +376,25 @@ export default function Contact() {
             </Typography>
             {!montrealImgError ? (
               <Box
-                component="img"
-                src="/imgs/images/montreal.png"
-                alt="Montréal"
-                onError={() => setMontrealImgError(true)}
                 sx={{
+                  position: 'relative',
                   width: '100%',
                   height: 80,
                   maxHeight: 80,
-                  objectFit: 'cover',
                   borderRadius: 1,
+                  overflow: 'hidden',
                   display: 'block',
                 }}
-              />
+              >
+                <Image
+                  src="/imgs/images/montreal.png"
+                  alt="Montréal"
+                  fill
+                  sizes="100vw"
+                  style={{ objectFit: 'cover' }}
+                  onError={() => setMontrealImgError(true)}
+                />
+              </Box>
             ) : (
               <Box
                 sx={{
