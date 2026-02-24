@@ -11,32 +11,32 @@ interface SkillTagProps {
 
 export default function SkillTag({ children, size = 'medium', reflectionColor }: SkillTagProps) {
   const { primary, secondary, accent } = useThemeColors()
-  
-  // Générer dynamiquement le gradient hover à partir du thème
+
   const hoverBackground = `linear-gradient(135deg, ${primary} 0%, ${secondary} 25%, ${accent} 50%, ${primary} 75%, ${primary} 100%)`
-  
   const fontSize = size === 'small' ? '0.75rem' : '0.875rem'
-  
+
+  const baseStyle = {
+    display: 'inline-block' as const,
+    background: `linear-gradient(135deg, ${primary} 0%, ${secondary} 100%)`,
+    color: 'white',
+    padding: '4px 12px',
+    borderRadius: DESIGN_TOKENS.borderRadius.medium,
+    fontSize,
+    fontWeight: '500',
+    margin: '4px',
+    boxShadow: `0 2px 8px ${primary}40`,
+    border: `2px solid ${primary}`,
+    visibility: 'visible' as const,
+    opacity: '1',
+    zIndex: '9999',
+    position: 'relative' as const,
+    transition: DESIGN_TOKENS.transitions.normal,
+    cursor: 'pointer',
+  }
+
   return (
     <span
-      style={{
-        display: 'inline-block',
-        background: `linear-gradient(135deg, ${primary} 0%, ${secondary} 100%)`,
-        color: 'white',
-        padding: '4px 12px',
-        borderRadius: DESIGN_TOKENS.borderRadius.medium,
-        fontSize,
-        fontWeight: '500',
-        margin: '4px',
-        boxShadow: `0 2px 8px ${primary}40`,
-        border: `2px solid ${primary}`,
-        visibility: 'visible',
-        opacity: '1',
-        zIndex: '9999',
-        position: 'relative',
-        transition: DESIGN_TOKENS.transitions.normal,
-        cursor: 'pointer',
-      }}
+      style={baseStyle}
       onMouseEnter={(e) => {
         e.currentTarget.style.transform = 'translateY(-3px) scale(1.05)'
         e.currentTarget.style.background = hoverBackground
