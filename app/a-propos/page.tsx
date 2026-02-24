@@ -52,7 +52,9 @@ const FlipCard = styled(Box)(({ theme }) => ({
   }
 }))
 
-const FlipCardInner = styled(Box)<{ flipped: boolean }>(({ theme, flipped }) => ({
+const FlipCardInner = styled(Box, {
+  shouldForwardProp: (prop) => prop !== 'flipped',
+})<{ flipped: boolean }>(({ theme, flipped }) => ({
   position: 'relative',
   width: '100%',
   height: '100%',
