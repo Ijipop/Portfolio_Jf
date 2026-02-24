@@ -304,9 +304,10 @@ export default function Contact() {
           display: 'grid', 
           gridTemplateColumns: { xs: '1fr', md: 'repeat(3, 1fr)' },
           gap: 4,
-          mb: 8
+          mb: 8,
+          alignItems: 'stretch',
         }}>
-          <ThreeDCardComponent floatingElements={2}>
+          <ThreeDCardComponent floatingElements={2} fullHeight>
             <EmailIcon sx={{ fontSize: 48, color: primary, mb: 2 }} />
             <Typography variant="h6" gutterBottom sx={{ color: textColor }}>
               {t('contact.email')}
@@ -348,7 +349,7 @@ export default function Contact() {
             </MuiBox>
           </ThreeDCardComponent>
 
-          <ThreeDCardComponent floatingElements={2}>
+          <ThreeDCardComponent floatingElements={2} fullHeight>
             <PhoneIcon sx={{ fontSize: 48, color: primary, mb: 2 }} />
             <Typography variant="h6" gutterBottom sx={{ color: textColor }}>
               {t('contact.phone')}
@@ -358,7 +359,7 @@ export default function Contact() {
             </Typography>
           </ThreeDCardComponent>
 
-          <ThreeDCardComponent floatingElements={2}>
+          <ThreeDCardComponent floatingElements={2} fullHeight>
             <LocationOnIcon sx={{ fontSize: 48, color: primary, mb: 2 }} />
             <Typography variant="h6" gutterBottom sx={{ color: textColor }}>
               {t('contact.location')}
