@@ -137,6 +137,21 @@ const FlipCardFront = ({ children, sx }: { children: React.ReactNode; sx?: any }
   )
 }
 
+// Animation d'entrée discrète pour l'endos des cartes (relax, professionnel)
+const BackContentAnimated = styled(Box)({
+  '@keyframes backEntrance': {
+    '0%': { opacity: 0, transform: 'translateY(6px)' },
+    '100%': { opacity: 1, transform: 'translateY(0)' },
+  },
+  animation: 'backEntrance 0.6s ease-out',
+  width: '100%',
+  height: '100%',
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'center',
+  alignItems: 'center',
+})
+
 // Composant FlipCardBack fonctionnel pour utiliser les couleurs du thème
 const FlipCardBack = ({ children, sx }: { children: React.ReactNode; sx?: any }) => {
   const theme = useTheme()
@@ -174,7 +189,9 @@ const FlipCardBack = ({ children, sx }: { children: React.ReactNode; sx?: any })
         ...sx
       }}
     >
-      {children}
+      <BackContentAnimated>
+        {children}
+      </BackContentAnimated>
     </Box>
   )
 }
