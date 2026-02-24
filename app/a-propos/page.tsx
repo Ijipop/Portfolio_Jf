@@ -150,7 +150,28 @@ const BackContentAnimated = styled(Box)({
   flexDirection: 'column',
   justifyContent: 'center',
   alignItems: 'center',
+  position: 'relative',
+  zIndex: 1,
 })
+
+// Effet ripple « WOW » sur l'endos : double vague visible, texte reste lisible
+const RippleCircle = styled(Box)({
+  '@keyframes rippleExpand': {
+    '0%': { transform: 'translate(-50%, -50%) scale(0.2)', opacity: 0.6 },
+    '70%': { transform: 'translate(-50%, -50%) scale(1.1)', opacity: 0.25 },
+    '100%': { transform: 'translate(-50%, -50%) scale(1.35)', opacity: 0 },
+  },
+  position: 'absolute',
+  left: '50%',
+  top: '50%',
+  width: '160%',
+  height: '160%',
+  borderRadius: '50%',
+  animation: 'rippleExpand 2.8s ease-out infinite',
+})
+
+// Palettes où le fond est plus sombre/saturé → ripple renforcé pour rester visible
+const STRONG_RIPPLE_PALETTES = ['sunset', 'ocean', 'cyber', 'forest']
 
 // Composant FlipCardBack fonctionnel pour utiliser les couleurs du thème
 const FlipCardBack = ({ children, sx }: { children: React.ReactNode; sx?: any }) => {
@@ -158,10 +179,19 @@ const FlipCardBack = ({ children, sx }: { children: React.ReactNode; sx?: any })
   const { themeName } = useAdvancedTheme()
   const { primary, secondary } = useThemeColors()
   const isDefaultPalette = themeName === 'default'
+  const strongRipple = STRONG_RIPPLE_PALETTES.includes(themeName)
   const backGradient = isDefaultPalette
     ? `linear-gradient(135deg, ${primary}50 0%, ${secondary}50 50%, ${primary}50 100%)`
     : `linear-gradient(135deg, ${primary} 0%, ${secondary} 50%, ${primary} 100%)`
   const backTextColor = getTextColorForBackground(backGradient)
+
+  // Gradient ripple : plus opaque sur Sunset, Ocean, Cyber, Forest pour rester visible
+  const ripple1 = strongRipple
+    ? `radial-gradient(circle at center, ${primary}CC 0%, ${secondary}99 30%, ${primary}80 55%, transparent 75%)`
+    : `radial-gradient(circle at center, ${primary}50 0%, ${secondary}35 35%, ${primary}20 55%, transparent 75%)`
+  const ripple2 = strongRipple
+    ? `radial-gradient(circle at center, ${secondary}CC 0%, ${primary}99 30%, ${secondary}80 55%, transparent 75%)`
+    : `radial-gradient(circle at center, ${secondary}45 0%, ${primary}40 35%, ${secondary}25 55%, transparent 75%)`
 
   return (
     <Box
@@ -189,6 +219,19 @@ const FlipCardBack = ({ children, sx }: { children: React.ReactNode; sx?: any })
         ...sx
       }}
     >
+      {/* Double vague ripple (effet WOW) — renforcé sur Sunset, Ocean, Cyber, Forest */}
+      <Box
+        sx={{
+          position: 'absolute',
+          inset: 0,
+          borderRadius: '8px',
+          overflow: 'hidden',
+          pointerEvents: 'none',
+        }}
+      >
+        <RippleCircle sx={{ background: ripple1, animationDelay: '0s' }} />
+        <RippleCircle sx={{ background: ripple2, animationDelay: '1.4s' }} />
+      </Box>
       <BackContentAnimated>
         {children}
       </BackContentAnimated>
