@@ -177,7 +177,7 @@ export function ThemeSelector() {
             backdropFilter: 'blur(10px)',
             border: '1px solid rgba(255, 255, 255, 0.1)',
             borderRadius: '12px',
-            minWidth: 200
+            minWidth: { xs: 'min(200px, 85vw)', sm: 200 }
           }
         }}
         transformOrigin={{ horizontal: 'right', vertical: 'top' }}

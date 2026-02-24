@@ -12,7 +12,8 @@ import { Alert, Button, Box as MuiBox, Snackbar, TextField, CircularProgress } f
 import Box from '@mui/material/Box'
 import Container from '@mui/material/Container'
 import Typography from '@mui/material/Typography'
-import { styled } from '@mui/material/styles'
+import { styled, useTheme } from '@mui/material/styles'
+import useMediaQuery from '@mui/material/useMediaQuery'
 import { useState } from 'react'
 import ThreeDCardComponent from '../components/ThreeDCard'
 import HeaderSection from '../components/shared/HeaderSection'
@@ -121,6 +122,10 @@ const StyledTextField = styled(TextField, {
 }))
 
 export default function Contact() {
+  const theme = useTheme()
+  const isXlUp = useMediaQuery(theme.breakpoints.up('xl'))
+  const isTallViewport = useMediaQuery('(min-height: 1000px)', { noSsr: true })
+  const useCompactContact = !isXlUp || !isTallViewport
   const textColor = useTextColor()
   const { primary, secondary, accent } = useThemeColors()
   const { themeName } = useAdvancedTheme()
@@ -300,12 +305,12 @@ export default function Contact() {
         subtitle={t('contact.subtitle')}
       />
 
-      <Container maxWidth="lg" sx={{ py: 8, position: 'relative', zIndex: 2 }}>
+      <Container maxWidth="lg" sx={{ py: useCompactContact ? 4 : 8, position: 'relative', zIndex: 2 }}>
         <Box sx={{ 
           display: 'grid', 
           gridTemplateColumns: { xs: '1fr', md: 'repeat(3, 1fr)' },
           gap: 4,
-          mb: 8,
+          mb: useCompactContact ? 4 : 8,
           alignItems: 'stretch',
         }}>
           <ThreeDCardComponent floatingElements={2} fullHeight>
@@ -411,7 +416,7 @@ export default function Contact() {
           margin: '0 auto',
         }}>
           <ThreeDCardComponent floatingElements={2}>
-            <Box sx={{ textAlign: 'center', mb: 4 }}>
+            <Box sx={{ textAlign: 'center', mb: useCompactContact ? 2 : 4 }}>
               <EmailIcon sx={{ fontSize: 56, color: primary, mb: 2 }} />
               <Typography variant="h4" gutterBottom sx={{ fontWeight: 700, color: textColor }}>
                 {t('contact.sendMessage')}
@@ -421,8 +426,8 @@ export default function Contact() {
               </Typography>
             </Box>
             
-            <Box component="form" onSubmit={handleSubmit} sx={{ mt: 4 }}>
-              <Box sx={{ display: 'grid', gap: 3, mb: 3 }}>
+            <Box component="form" onSubmit={handleSubmit} sx={{ mt: useCompactContact ? 2 : 4 }}>
+              <Box sx={{ display: 'grid', gap: useCompactContact ? 2 : 3, mb: useCompactContact ? 2 : 3 }}>
                 <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)' }, gap: 3 }}>
                   <StyledTextField
                     name="name"
@@ -474,7 +479,7 @@ export default function Contact() {
                   required
                   fullWidth
                   multiline
-                  rows={6}
+                  rows={useCompactContact ? 4 : 6}
                   textColor={textColor}
                   isDefaultTheme={themeName === 'default'}
                 />
@@ -493,7 +498,7 @@ export default function Contact() {
           </ThreeDCardComponent>
         </Box>
 
-        <Box sx={{ mt: 8 }}>
+        <Box sx={{ mt: useCompactContact ? 4 : 8 }}>
           <Typography variant="h4" gutterBottom sx={{ mb: 4, textAlign: 'center', fontWeight: 700, color: textColor }}>
             {t('contact.followMe')}
           </Typography>

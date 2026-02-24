@@ -15,7 +15,7 @@ export default function ProjectCard({ children, onClick, reflectionColor }: Proj
       variant="default"
       onClick={onClick}
       reflectionColor={reflectionColor}
-      height="400px"
+      height={{ xs: 280, sm: 320, md: 400 }}
     >
       {children}
     </BaseCard>

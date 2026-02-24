@@ -33,7 +33,10 @@ import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome'
 const FlipCard = styled(Box)(({ theme }) => ({
   backgroundColor: 'transparent',
   width: '100%',
-  height: '400px',
+  height: 400,
+  minHeight: 280,
+  [theme.breakpoints.down('md')]: { height: 320 },
+  [theme.breakpoints.down('sm')]: { height: 280 },
   perspective: '1000px',
   cursor: 'pointer',
   WebkitPerspective: '1000px',
