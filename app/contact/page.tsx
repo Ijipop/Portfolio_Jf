@@ -315,6 +315,7 @@ export default function Contact() {
           alignItems: 'stretch',
         }}>
           <ThreeDCardComponent floatingElements={2} fullHeight>
+            <Box sx={{ textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', height: '100%' }}>
             <EmailIcon sx={{ fontSize: 48, color: primary, mb: 2 }} />
             <Typography variant="h6" gutterBottom sx={{ color: textColor }}>
               {t('contact.email')}
@@ -322,7 +323,7 @@ export default function Contact() {
             <Typography variant="body2" sx={{ mb: 2, color: textColor, opacity: 0.8 }}>
               {emailAddress}
             </Typography>
-            <MuiBox sx={{ display: 'flex', flexDirection: 'column', gap: 1, mt: 2 }}>
+            <MuiBox sx={{ display: 'flex', flexDirection: 'column', gap: 1, mt: 2, width: '100%' }}>
               <EmailButton
                 startIcon={<SendIcon />}
                 onClick={handleOpenEmail}
@@ -354,9 +355,11 @@ export default function Contact() {
                 Copier
               </EmailButton>
             </MuiBox>
+            </Box>
           </ThreeDCardComponent>
 
           <ThreeDCardComponent floatingElements={2} fullHeight>
+            <Box sx={{ textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', height: '100%' }}>
             <PhoneIcon sx={{ fontSize: 48, color: primary, mb: 2 }} />
             <Typography variant="h6" gutterBottom sx={{ color: textColor }}>
               {t('contact.phone')}
@@ -364,9 +367,11 @@ export default function Contact() {
             <Typography variant="body2" sx={{ color: textColor, opacity: 0.8 }}>
               {t('contact.phoneOnRequest')}
             </Typography>
+            </Box>
           </ThreeDCardComponent>
 
           <ThreeDCardComponent floatingElements={2} fullHeight>
+            <Box sx={{ textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', height: '100%' }}>
             <LocationOnIcon sx={{ fontSize: 48, color: primary, mb: 2 }} />
             <Typography variant="h6" gutterBottom sx={{ color: textColor }}>
               {t('contact.location')}
@@ -413,6 +418,7 @@ export default function Contact() {
                 Montréal
               </Box>
             )}
+            </Box>
           </ThreeDCardComponent>
         </Box>
 
