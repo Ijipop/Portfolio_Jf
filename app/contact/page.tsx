@@ -128,6 +128,7 @@ export default function Contact() {
   const [snackbarOpen, setSnackbarOpen] = useState(false)
   const [snackbarMessage, setSnackbarMessage] = useState('')
   const [snackbarSeverity, setSnackbarSeverity] = useState<'success' | 'error'>('success')
+  const [montrealImgError, setMontrealImgError] = useState(false)
   
   // Formulaire de contact
   const [formData, setFormData] = useState({
@@ -364,9 +365,42 @@ export default function Contact() {
             <Typography variant="h6" gutterBottom sx={{ color: textColor }}>
               {t('contact.location')}
             </Typography>
-            <Typography variant="body2" sx={{ color: textColor, opacity: 0.8 }}>
+            <Typography variant="body2" sx={{ mb: 2, color: textColor, opacity: 0.8 }}>
               {t('contact.locationCity')}
             </Typography>
+            {!montrealImgError ? (
+              <Box
+                component="img"
+                src="/imgs/images/montreal.png"
+                alt="Montréal"
+                onError={() => setMontrealImgError(true)}
+                sx={{
+                  width: '100%',
+                  height: 80,
+                  maxHeight: 80,
+                  objectFit: 'cover',
+                  borderRadius: 1,
+                  display: 'block',
+                }}
+              />
+            ) : (
+              <Box
+                sx={{
+                  width: '100%',
+                  height: 80,
+                  maxHeight: 80,
+                  borderRadius: 1,
+                  bgcolor: 'action.hover',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: '0.75rem',
+                  color: 'text.secondary',
+                }}
+              >
+                Montréal
+              </Box>
+            )}
           </ThreeDCardComponent>
         </Box>
 
