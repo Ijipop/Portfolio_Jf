@@ -55,7 +55,7 @@ const SocialIconWrapper = styled(Box)(({ theme }) => ({
     ? '0 4px 20px rgba(74, 144, 226, 0.3)'
     : '0 4px 20px rgba(102, 126, 234, 0.3)',
   '&:hover': {
-    transform: 'scale(1.15) rotate(5deg)',
+    transform: 'translateY(-4px) scale(1.1)',
     boxShadow: theme.palette.mode === 'dark'
       ? '0 8px 30px rgba(74, 144, 226, 0.5)'
       : '0 8px 30px rgba(102, 126, 234, 0.5)',

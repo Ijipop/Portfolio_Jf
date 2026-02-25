@@ -3,7 +3,6 @@
 import { Card, CardContent } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import { motion } from 'framer-motion'
-import { useRef, useState } from 'react'
 import { useAdvancedTheme } from '../contexts/AdvancedThemeContext'
 
 const SimpleCard = styled(Card)(({ theme }) => ({
@@ -20,8 +19,6 @@ const SimpleCard = styled(Card)(({ theme }) => ({
   minHeight: 280,
   [theme.breakpoints.down('md')]: { height: 320 },
   [theme.breakpoints.down('sm')]: { height: 280 },
-  transformStyle: 'preserve-3d',
-  perspective: '1000px',
   '@keyframes gradientShift': {
     '0%': { backgroundPosition: '0% 50%' },
     '50%': { backgroundPosition: '100% 50%' },
@@ -38,29 +35,6 @@ interface SimpleCardProps {
 
 export default function SimpleCardComponent({ children, onClick, className, reflectionColor }: SimpleCardProps) {
   const { customTheme } = useAdvancedTheme()
-  const [rotation, setRotation] = useState({ x: 0, y: 0 })
-  const cardRef = useRef<HTMLDivElement>(null)
-  
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!cardRef.current) return
-    
-    const rect = cardRef.current.getBoundingClientRect()
-    const centerX = rect.left + rect.width / 2
-    const centerY = rect.top + rect.height / 2
-    
-    const mouseX = e.clientX - centerX
-    const mouseY = e.clientY - centerY
-    
-    const rotateX = (mouseY / rect.height) * -10
-    const rotateY = (mouseX / rect.width) * 10
-    
-    setRotation({ x: rotateX, y: rotateY })
-  }
-  
-  const handleMouseLeave = () => {
-    setRotation({ x: 0, y: 0 })
-  }
-  
   const primary = customTheme?.primary || '#3b82f6'
   const secondary = customTheme?.secondary || '#059669'
   const accent = customTheme?.accent || '#8b5cf6'
@@ -71,16 +45,11 @@ export default function SimpleCardComponent({ children, onClick, className, refl
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, ease: "easeOut" }}
       whileHover={{ y: -8 }}
-      style={{ perspective: '1000px' }}
     >
       <SimpleCard 
-        ref={cardRef}
         onClick={onClick} 
         className={className}
-        onMouseMove={handleMouseMove}
-        onMouseLeave={handleMouseLeave}
         sx={{
-          transform: `rotateX(${rotation.x}deg) rotateY(${rotation.y}deg)`,
           '&::before': {
             content: '""',
             position: 'absolute',
@@ -96,7 +65,7 @@ export default function SimpleCardComponent({ children, onClick, className, refl
             animation: 'gradientShift 3s ease-in-out infinite',
           },
           '&:hover': {
-            transform: 'translateY(-16px) scale(1.02) rotateX(5deg) rotateY(5deg) rotateZ(2deg)',
+            transform: 'translateY(-8px) scale(1.02)',
             background: `linear-gradient(145deg, #f0f4ff 0%, #e6f2ff 50%, #dbeafe 100%), linear-gradient(135deg, ${primary}30 0%, ${secondary}30 25%, ${accent}30 50%, ${primary}30 75%, ${primary}30 100%)`,
             boxShadow: `0 25px 50px ${primary}20, 0 0 0 2px ${primary}60, 0 0 30px ${primary}40, 0 0 60px ${secondary}20, inset 0 1px 0 rgba(255, 255, 255, 0.8)`,
             '&::before': {

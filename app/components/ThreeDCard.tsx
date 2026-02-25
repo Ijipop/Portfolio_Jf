@@ -3,7 +3,6 @@
 import { Box, Card, CardContent } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import { motion } from 'framer-motion'
-import { useRef, useState } from 'react'
 
 // 3D Card avec perspective et transformations
 const ThreeDCard = styled(Card)(({ theme }) => ({
@@ -34,7 +33,7 @@ const ThreeDCard = styled(Card)(({ theme }) => ({
     zIndex: 1,
   },
   '&:hover': {
-    transform: 'perspective(1000px) rotateX(5deg) rotateY(5deg) translateZ(20px)',
+    transform: 'translateY(-8px)',
     boxShadow: `0 30px 80px rgba(0, 0, 0, 0.6), 0 0 0 2px var(--card-hover-primary, var(--card-primary)), 0 0 40px var(--card-hover-secondary, var(--card-secondary)), 0 0 60px var(--card-hover-glow, transparent)`,
     '&::before': {
       opacity: 0.5,
@@ -112,23 +111,6 @@ export default function ThreeDCardComponent({
   compact = false,
   fullHeight = false
 }: ThreeDCardProps) {
-  const cardRef = useRef<HTMLDivElement>(null)
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
-  const [isHovered, setIsHovered] = useState(false)
-
-  const handleMouseMove = (e: React.MouseEvent) => {
-    if (!cardRef.current) return
-    
-    const rect = cardRef.current.getBoundingClientRect()
-    const x = e.clientX - rect.left
-    const y = e.clientY - rect.top
-    
-    setMousePosition({ x, y })
-  }
-
-  const handleMouseEnter = () => setIsHovered(true)
-  const handleMouseLeave = () => setIsHovered(false)
-
   return (
     <motion.div
       style={fullHeight ? { height: '100%' } : undefined}
@@ -138,19 +120,11 @@ export default function ThreeDCardComponent({
       whileHover={{ scale: 1.02 }}
     >
       <ThreeDCard
-        ref={cardRef}
         onClick={onClick}
         className={className}
-        onMouseMove={handleMouseMove}
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}
         sx={{
           ...(fullHeight && { height: '100%', minHeight: 0 }),
           ...(compact && { minHeight: '120px', padding: 2 }),
-          transform: isHovered 
-            ? `perspective(1000px) rotateX(${(mousePosition.y - 150) / 20}deg) rotateY(${(mousePosition.x - 150) / 20}deg) translateZ(20px)`
-            : 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateZ(0px)',
-          transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
         }}
       >
         {/* Floating Elements - Positionnés de manière élégante */}
