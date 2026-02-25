@@ -2,6 +2,7 @@
 
 import { Box, Card, CardContent } from '@mui/material'
 import { styled } from '@mui/material/styles'
+import type { SxProps, Theme } from '@mui/material/styles'
 import { motion } from 'framer-motion'
 
 // 3D Card avec perspective et transformations
@@ -101,6 +102,8 @@ interface ThreeDCardProps {
   compact?: boolean
   /** Carte en hauteur 100% pour aligner avec d'autres cartes dans une grille */
   fullHeight?: boolean
+  /** Styles MUI supplémentaires */
+  sx?: SxProps<Theme>
 }
 
 export default function ThreeDCardComponent({ 
@@ -109,7 +112,8 @@ export default function ThreeDCardComponent({
   className, 
   floatingElements = 3,
   compact = false,
-  fullHeight = false
+  fullHeight = false,
+  sx: sxProp
 }: ThreeDCardProps) {
   return (
     <motion.div
@@ -125,6 +129,7 @@ export default function ThreeDCardComponent({
         sx={{
           ...(fullHeight && { height: '100%', minHeight: 0 }),
           ...(compact && { minHeight: '120px', padding: 2 }),
+          ...(sxProp || {}),
         }}
       >
         {/* Floating Elements - Positionnés de manière élégante */}

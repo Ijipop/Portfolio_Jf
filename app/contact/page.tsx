@@ -311,19 +311,19 @@ export default function Contact() {
           display: 'grid', 
           gridTemplateColumns: { xs: '1fr', md: 'repeat(3, 1fr)' },
           gap: 4,
-          mb: useCompactContact ? 4 : 8,
+          mb: useCompactContact ? 6 : 10,
           alignItems: 'stretch',
         }}>
-          <ThreeDCardComponent floatingElements={2} fullHeight>
-            <Box sx={{ textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', height: '100%' }}>
-            <EmailIcon sx={{ fontSize: 48, color: primary, mb: 2 }} />
+          <ThreeDCardComponent floatingElements={2} sx={{ height: '100%', minHeight: { xs: 260, sm: 280 }, padding: { xs: 2, sm: 2.5, md: 3 } }}>
+            <Box sx={{ textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', height: '100%', justifyContent: 'flex-start' }}>
+            <EmailIcon sx={{ fontSize: 40, color: primary, mb: 1.5 }} />
             <Typography variant="h6" gutterBottom sx={{ color: textColor }}>
               {t('contact.email')}
             </Typography>
-            <Typography variant="body2" sx={{ mb: 2, color: textColor, opacity: 0.8 }}>
+            <Typography variant="body2" sx={{ mb: 1.5, color: textColor, opacity: 0.8 }}>
               {emailAddress}
             </Typography>
-            <MuiBox sx={{ display: 'flex', flexDirection: 'column', gap: 1, mt: 2, width: '100%' }}>
+            <MuiBox sx={{ display: 'flex', flexDirection: 'column', gap: 1, mt: 1.5, width: '100%' }}>
               <EmailButton
                 startIcon={<SendIcon />}
                 onClick={handleOpenEmail}
@@ -358,9 +358,9 @@ export default function Contact() {
             </Box>
           </ThreeDCardComponent>
 
-          <ThreeDCardComponent floatingElements={2} fullHeight>
-            <Box sx={{ textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', height: '100%' }}>
-            <PhoneIcon sx={{ fontSize: 48, color: primary, mb: 2 }} />
+          <ThreeDCardComponent floatingElements={2} sx={{ height: '100%', minHeight: { xs: 260, sm: 280 }, padding: { xs: 2, sm: 2.5, md: 3 } }}>
+            <Box sx={{ textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', height: '100%', justifyContent: 'flex-start' }}>
+            <PhoneIcon sx={{ fontSize: 40, color: primary, mb: 1.5 }} />
             <Typography variant="h6" gutterBottom sx={{ color: textColor }}>
               {t('contact.phone')}
             </Typography>
@@ -370,13 +370,13 @@ export default function Contact() {
             </Box>
           </ThreeDCardComponent>
 
-          <ThreeDCardComponent floatingElements={2} fullHeight>
-            <Box sx={{ textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', height: '100%' }}>
-            <LocationOnIcon sx={{ fontSize: 48, color: primary, mb: 2 }} />
+          <ThreeDCardComponent floatingElements={2} sx={{ height: '100%', minHeight: { xs: 260, sm: 280 }, padding: { xs: 2, sm: 2.5, md: 3 } }}>
+            <Box sx={{ textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', height: '100%', justifyContent: 'flex-start' }}>
+            <LocationOnIcon sx={{ fontSize: 40, color: primary, mb: 1.5 }} />
             <Typography variant="h6" gutterBottom sx={{ color: textColor }}>
               {t('contact.location')}
             </Typography>
-            <Typography variant="body2" sx={{ mb: 2, color: textColor, opacity: 0.8 }}>
+            <Typography variant="body2" sx={{ mb: 1.5, color: textColor, opacity: 0.8 }}>
               {t('contact.locationCity')}
             </Typography>
             {!montrealImgError ? (
@@ -384,8 +384,8 @@ export default function Contact() {
                 sx={{
                   position: 'relative',
                   width: '100%',
-                  height: 80,
-                  maxHeight: 80,
+                  height: 64,
+                  maxHeight: 64,
                   borderRadius: 1,
                   overflow: 'hidden',
                   display: 'block',
@@ -404,8 +404,8 @@ export default function Contact() {
               <Box
                 sx={{
                   width: '100%',
-                  height: 80,
-                  maxHeight: 80,
+                  height: 64,
+                  maxHeight: 64,
                   borderRadius: 1,
                   bgcolor: 'action.hover',
                   display: 'flex',
@@ -428,9 +428,9 @@ export default function Contact() {
           maxWidth: '800px',
           margin: '0 auto',
         }}>
-          <ThreeDCardComponent floatingElements={2}>
-            <Box sx={{ textAlign: 'center', mb: useCompactContact ? 2 : 4 }}>
-              <EmailIcon sx={{ fontSize: 56, color: primary, mb: 2 }} />
+          <ThreeDCardComponent floatingElements={2} sx={{ padding: { xs: 2, sm: 3 } }}>
+            <Box sx={{ textAlign: 'center', mb: useCompactContact ? 2 : 3 }}>
+              <EmailIcon sx={{ fontSize: 48, color: primary, mb: 1.5 }} />
               <Typography variant="h4" gutterBottom sx={{ fontWeight: 700, color: textColor }}>
                 {t('contact.sendMessage')}
               </Typography>
@@ -439,8 +439,8 @@ export default function Contact() {
               </Typography>
             </Box>
             
-            <Box component="form" onSubmit={handleSubmit} sx={{ mt: useCompactContact ? 2 : 4 }}>
-              <Box sx={{ display: 'grid', gap: useCompactContact ? 2 : 3, mb: useCompactContact ? 2 : 3 }}>
+            <Box component="form" onSubmit={handleSubmit} sx={{ mt: useCompactContact ? 2 : 3 }}>
+              <Box sx={{ display: 'grid', gap: useCompactContact ? 2 : 2.5, mb: useCompactContact ? 2 : 2.5 }}>
                 <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)' }, gap: 3 }}>
                   <StyledTextField
                     name="name"
@@ -520,9 +520,10 @@ export default function Contact() {
             gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)' },
             gap: 4,
             maxWidth: '600px',
-            mx: 'auto'
+            mx: 'auto',
+            alignItems: 'stretch',
           }}>
-            <ThreeDCardComponent onClick={handleLinkedInClick} floatingElements={2}>
+            <ThreeDCardComponent onClick={handleLinkedInClick} floatingElements={2} sx={{ height: '100%', minHeight: { xs: 220, sm: 240 }, padding: { xs: 2, sm: 2.5 } }}>
               <SocialCardContent>
                 <SocialIconWrapper>
                   <LinkedInIcon sx={{ fontSize: 40 }} />
@@ -539,7 +540,7 @@ export default function Contact() {
               </SocialCardContent>
             </ThreeDCardComponent>
 
-            <ThreeDCardComponent onClick={handleGitHubClick} floatingElements={2}>
+            <ThreeDCardComponent onClick={handleGitHubClick} floatingElements={2} sx={{ height: '100%', minHeight: { xs: 220, sm: 240 }, padding: { xs: 2, sm: 2.5 } }}>
               <SocialCardContent>
                 <SocialIconWrapper>
                   <GitHubIcon sx={{ fontSize: 40 }} />

@@ -229,6 +229,7 @@ const ProjectCardWrapper = ({
         key={project.id} 
         onClick={() => handleProjectClick(project.url)}
         floatingElements={2}
+        sx={{ padding: { xs: 2, sm: 2.5, md: 3 }, minHeight: { xs: 200, md: 220 } }}
       >
         {/* Logo GitHub dans le coin supérieur droit */}
         {project.url && project.url.includes('github') && (
@@ -324,7 +325,7 @@ const ProjectCardWrapper = ({
         {project.imageUrl && getImageUrl(project.imageUrl) && (
           <ProjectImageContainer
             sx={{
-              height: { xs: '120px', sm: '150px', md: '170px', xl: '240px' },
+              height: { xs: '100px', sm: '120px', md: '140px', xl: '200px' },
               ...(isNonDefaultPalette ? {
                 border: `2px solid ${primary}60`,
                 borderRadius: DESIGN_TOKENS.borderRadius.small,
@@ -350,8 +351,8 @@ const ProjectCardWrapper = ({
           paragraph
           sx={{ 
             lineHeight: 1.4,
-            mb: { xs: 1.5, md: 2 },
-            minHeight: { xs: '2rem', md: '3rem' },
+            mb: { xs: 1, md: 1.5 },
+            minHeight: { xs: '1.75rem', md: '2.5rem' },
             fontSize: { xs: '0.85rem', md: '0.9rem' },
             ...(isNonDefaultPalette ? { color: `${primary}ee` } : { color: 'text.secondary' }),
           }}
@@ -364,7 +365,7 @@ const ProjectCardWrapper = ({
           opacity: '1 !important',
           zIndex: 1000,
           position: 'relative',
-          mb: { xs: 1.5, md: 2 }
+          mb: { xs: 1, md: 1.5 }
         }}>
           {project.technologies.split(',').map((tech, techIndex) => (
             <SkillTag key={techIndex} size="small" reflectionColor={reflectionColor}>
