@@ -72,6 +72,34 @@ const TechStack = styled(Box)(({ theme }) => ({
   marginTop: theme.spacing(2),
 }))
 
+// Technologies prioritaires pour le filtre (ordre d'affichage, max ~12)
+const PRIORITY_TECHS = [
+  'React', 'Next.js', 'TypeScript', 'JavaScript', 'Node.js',
+  'Tailwind CSS', 'Material-UI', 'PostgreSQL', 'Prisma', 'Vite',
+  'Supabase', 'Stripe', 'Clerk', 'HTML', 'CSS', 'Python',
+]
+const MAX_FILTER_TECHS = 10
+
+// Normaliser un nom de tech (variantes → canonique)
+function normalizeTechName(raw: string): string {
+  const t = raw.trim()
+  const map: Record<string, string> = {
+    'typescript': 'TypeScript', 'type script': 'TypeScript',
+    'nextjs': 'Next.js', 'next.js': 'Next.js',
+    'material-ui': 'Material-UI', 'material ui': 'Material-UI', 'mui': 'Material-UI',
+    'tailwind': 'Tailwind CSS', 'tailwind css': 'Tailwind CSS',
+    'postgresql': 'PostgreSQL', 'postgres': 'PostgreSQL',
+    'javascript': 'JavaScript', 'js': 'JavaScript',
+    'nodejs': 'Node.js', 'node.js': 'Node.js',
+    'html5': 'HTML', 'html': 'HTML',
+    'css3': 'CSS', 'css': 'CSS',
+    'python': 'Python',     'react': 'React', 'vite': 'Vite',
+    'prisma': 'Prisma', 'supabase': 'Supabase', 'stripe': 'Stripe',
+    'clerk': 'Clerk',
+  }
+  return map[t.toLowerCase()] ?? t
+}
+
 
 
 const AnimatedBox = styled(Box)({
@@ -129,21 +157,20 @@ const FilterContainerLabel = ({ label }: { label: string }) => {
   const textColor = useTextColor()
   
   return (
-    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mr: 2 }}>
+    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.25, mr: 1, flexShrink: 0 }}>
       <FilterListIcon sx={{ 
         color: primary,
-        fontSize: 28,
-        filter: `drop-shadow(0 0 8px ${primary}50)`,
+        fontSize: 22,
+        opacity: 0.9,
         transition: DESIGN_TOKENS.transitions.normal,
       }} />
       <Typography 
         variant="h6" 
         sx={{ 
-          fontWeight: 700,
+          fontWeight: 600,
           color: textColor,
-          fontSize: { xs: '1rem', sm: '1.125rem' },
-          letterSpacing: '0.5px',
-          textShadow: `0 0 10px ${primary}30`,
+          fontSize: { xs: '0.9375rem', sm: '1rem' },
+          letterSpacing: '0.02em',
           transition: DESIGN_TOKENS.transitions.normal,
         }}
       >
@@ -420,17 +447,17 @@ const FilterChipComponent = ({
       sx={{
         borderRadius: DESIGN_TOKENS.borderRadius.small,
         fontWeight: 600,
-        fontSize: '0.875rem',
-        padding: theme.spacing(0.5, 1.5),
+        fontSize: '0.8125rem',
+        padding: theme.spacing(0.6, 1.5),
         cursor: 'pointer',
-        transition: 'transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease, background 0.2s ease',
-        background: `${bgTint} !important`,
+        transition: 'border-color 0.2s ease, background 0.2s ease',
+        background: selected ? `${primary}14 !important` : `${bgTint} !important`,
         color: `${labelColor} !important`,
         border: `1px solid ${borderColor} !important`,
-        boxShadow: `0 2px 6px ${primary}15`,
+        boxShadow: 'none',
         '&:hover': {
-          transform: 'translateY(-2px)',
-          boxShadow: `0 4px 14px ${primary}40`,
+          background: selected ? `${primary}18 !important` : `${primary}08 !important`,
+          borderColor: `${primary}60 !important`,
         },
       }}
     />
@@ -491,30 +518,26 @@ const FilterContainerComponent = ({ children }: { children: React.ReactNode }) =
         flexWrap: 'wrap',
         gap: theme.spacing(1.5),
         alignItems: 'center',
-        marginBottom: theme.spacing(2),
-        padding: theme.spacing(1.5),
+        marginBottom: theme.spacing(3),
+        padding: theme.spacing(2, 2.5),
         [theme.breakpoints.up('md')]: {
-          marginBottom: theme.spacing(3),
-          padding: theme.spacing(2),
-        },
-        [theme.breakpoints.up('xl')]: {
           marginBottom: theme.spacing(4),
+          padding: theme.spacing(2.5, 3),
         },
         background: `${filterBackground} !important`,
-        border: `2px solid ${primary}30 !important`,
-        borderRadius: DESIGN_TOKENS.borderRadius.medium,
-        boxShadow: `0 8px 32px ${primary}15, ${DESIGN_TOKENS.shadows.elevated.light} !important`,
-        backdropFilter: 'blur(10px)',
-        WebkitBackdropFilter: 'blur(10px)',
+        border: `1px solid ${primary}20 !important`,
+        borderRadius: DESIGN_TOKENS.borderRadius.small,
+        boxShadow: `0 2px 12px ${primary}08`,
+        backdropFilter: 'blur(8px)',
+        WebkitBackdropFilter: 'blur(8px)',
         transition: DESIGN_TOKENS.transitions.normal,
         color: `${textColor} !important`,
         '& *': {
           color: 'inherit !important',
         },
         '&:hover': {
-          border: `2px solid ${primary}50 !important`,
-          boxShadow: `0 12px 40px ${primary}25, ${DESIGN_TOKENS.shadows.elevated.light} !important`,
-        }
+          border: `1px solid ${primary}35 !important`,
+        },
       }}
     >
       {children}
@@ -665,21 +688,25 @@ export default function Projets() {
     ['wip', 'en cours', 'en cours de développement'].includes(p.status.toLowerCase())
   ).length
 
-  // Extraire toutes les technologies uniques
-  const getAllTechnologies = () => {
-    const techSet = new Set<string>()
+  // Technologies prioritaires présentes dans les projets (normalisées, limitées)
+  const getDisplayTechnologies = () => {
+    const rawSet = new Set<string>()
     projects.forEach(project => {
-      project.technologies.split(',').forEach(tech => {
-        techSet.add(tech.trim())
-      })
+      project.technologies.split(',').forEach(tech => rawSet.add(tech.trim()))
     })
-    return Array.from(techSet).sort()
+    const normalizedToCanonical = new Map<string, string>()
+    rawSet.forEach(raw => {
+      const canon = normalizeTechName(raw)
+      if (PRIORITY_TECHS.includes(canon)) normalizedToCanonical.set(canon, canon)
+    })
+    const ordered = PRIORITY_TECHS.filter(t => normalizedToCanonical.has(t))
+    return ordered.slice(0, MAX_FILTER_TECHS)
   }
 
-  // Filtrer les projets par technologie
+  // Filtrer les projets par technologie (comparaison normalisée)
   const filteredProjects = selectedTech
-    ? projects.filter(project => 
-        project.technologies.split(',').some(tech => tech.trim().toLowerCase() === selectedTech.toLowerCase())
+    ? projects.filter(project =>
+        project.technologies.split(',').some(tech => normalizeTechName(tech.trim()) === selectedTech)
       )
     : projects
 
@@ -784,7 +811,7 @@ export default function Projets() {
                 selected={selectedTech === null}
                 icon={selectedTech === null ? undefined : <ClearIcon />}
               />
-              {getAllTechnologies().map((tech) => (
+              {getDisplayTechnologies().map((tech) => (
                 <FilterChipComponent
                   key={tech}
                   label={tech}
