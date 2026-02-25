@@ -3,7 +3,6 @@
 import { Box, Card, CardContent } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import { motion } from 'framer-motion'
-import { useRef, useState } from 'react'
 
 // Floating 3D Element - Plus subtil
 const FloatingElement = styled(Box)(({ theme }) => ({
@@ -66,7 +65,7 @@ const UnifiedCard = styled(Card)(({ theme }) => ({
     zIndex: 1,
   },
   '&:hover': {
-    transform: 'perspective(1000px) rotateX(5deg) rotateY(5deg) translateZ(20px)',
+    transform: 'translateY(-8px)',
     boxShadow: theme.palette.mode === 'dark'
       ? '0 30px 80px rgba(0, 0, 0, 0.6), 0 0 0 2px rgba(102, 126, 234, 0.4), 0 0 40px rgba(245, 87, 108, 0.3)'
       : '0 30px 80px rgba(0, 0, 0, 0.2), 0 0 0 2px var(--card-hover-primary), 0 0 40px var(--card-hover-secondary), 0 0 60px var(--card-hover-glow)',
@@ -114,23 +113,6 @@ export default function UnifiedCardComponent({
   sx,
   variant = 'default'
 }: UnifiedCardProps) {
-  const cardRef = useRef<HTMLDivElement>(null)
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
-  const [isHovered, setIsHovered] = useState(false)
-
-  const handleMouseMove = (e: React.MouseEvent) => {
-    if (!cardRef.current) return
-    
-    const rect = cardRef.current.getBoundingClientRect()
-    const x = e.clientX - rect.left
-    const y = e.clientY - rect.top
-    
-    setMousePosition({ x, y })
-  }
-
-  const handleMouseEnter = () => setIsHovered(true)
-  const handleMouseLeave = () => setIsHovered(false)
-
   // Styles spécifiques selon le variant
   const getVariantStyles = () => {
     switch (variant) {
@@ -166,17 +148,9 @@ export default function UnifiedCardComponent({
       whileHover={{ scale: 1.02 }}
     >
       <UnifiedCard
-        ref={cardRef}
         onClick={onClick}
         className={className}
-        onMouseMove={handleMouseMove}
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}
         sx={{
-          transform: isHovered 
-            ? `perspective(1000px) rotateX(${(mousePosition.y - 150) / 20}deg) rotateY(${(mousePosition.x - 150) / 20}deg) translateZ(20px)`
-            : 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateZ(0px)',
-          transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
           ...getVariantStyles(),
           ...sx
         }}

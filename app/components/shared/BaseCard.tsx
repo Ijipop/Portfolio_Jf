@@ -3,7 +3,7 @@
 import { Card, CardContent, useTheme } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import { motion } from 'framer-motion'
-import { ReactNode, useRef, useState, forwardRef, useEffect } from 'react'
+import { ReactNode, useState, forwardRef, useEffect } from 'react'
 import { DESIGN_TOKENS, GRADIENTS } from '../../design-system/constants'
 import { useThemeColors } from '../../hooks/useThemeColors'
 
@@ -12,10 +12,8 @@ const BaseCardStyledComponent = forwardRef<HTMLDivElement, any>(({
   children, 
   onClick, 
   className, 
-  onMouseMove, 
-  onMouseLeave,
   sx
-}, cardRef) => {
+}, ref) => {
   const theme = useTheme()
   const { primary, secondary } = useThemeColors()
   const [cardBackground, setCardBackground] = useState<string>(GRADIENTS.cards.light)
@@ -65,11 +63,9 @@ const BaseCardStyledComponent = forwardRef<HTMLDivElement, any>(({
   
   return (
     <Card
-      ref={cardRef}
+      ref={ref}
       onClick={onClick}
       className={className}
-      onMouseMove={onMouseMove}
-      onMouseLeave={onMouseLeave}
       sx={{
         background: cardBackground,
         border: `1px solid ${primary}20 !important`,
@@ -106,7 +102,7 @@ const BaseCardStyledComponent = forwardRef<HTMLDivElement, any>(({
           transition: DESIGN_TOKENS.transitions.normal,
         },
         '&:hover': {
-          transform: 'translateY(-12px) scale(1.03)',
+          transform: 'translateY(-8px) scale(1.02)',
           border: `1px solid ${primary}40 !important`,
           boxShadow: `${DESIGN_TOKENS.shadows.cardHover.light}, 0 0 30px ${primary}15 !important`,
           background: `${cardBackground} !important`,
@@ -143,37 +139,11 @@ export default function BaseCard({
   reflectionColor 
 }: BaseCardProps) {
   const { primary, secondary, accent } = useThemeColors()
-  const [rotation, setRotation] = useState({ x: 0, y: 0 })
-  const cardRef = useRef<HTMLDivElement>(null)
-
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!cardRef.current || variant !== '3d') return
-    
-    const rect = cardRef.current.getBoundingClientRect()
-    const centerX = rect.left + rect.width / 2
-    const centerY = rect.top + rect.height / 2
-    
-    const mouseX = e.clientX - centerX
-    const mouseY = e.clientY - centerY
-    
-    const rotateX = (mouseY / rect.height) * -10
-    const rotateY = (mouseX / rect.width) * 10
-    
-    setRotation({ x: rotateX, y: rotateY })
-  }
-  
-  const handleMouseLeave = () => {
-    setRotation({ x: 0, y: 0 })
-  }
 
   const getVariantStyles = () => {
     switch (variant) {
       case '3d':
-        return {
-          transformStyle: 'preserve-3d',
-          perspective: '1000px',
-          transform: `rotateX(${rotation.x}deg) rotateY(${rotation.y}deg)`,
-        }
+        return {}
       case 'glass':
         return {
           background: 'rgba(26, 26, 26, 0.25)',
@@ -195,15 +165,11 @@ export default function BaseCard({
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, ease: "easeOut" }}
-      whileHover={variant === '3d' ? {} : { y: -8 }}
-      style={{ perspective: variant === '3d' ? '1000px' : 'none' }}
+      whileHover={{ y: -6 }}
     >
       <BaseCardStyledComponent 
-        ref={cardRef}
         onClick={onClick} 
         className={className}
-        onMouseMove={handleMouseMove}
-        onMouseLeave={handleMouseLeave}
         sx={{
           height: height || (variant === 'feature' ? '100%' : 'auto'),
           minHeight: variant === 'feature' ? '300px' : 'auto',

@@ -123,7 +123,7 @@ export default function HomeClient({ initialShowIntro }: { initialShowIntro: boo
           flexDirection: { xs: 'column', sm: 'row' },
           gap: 2,
           justifyContent: 'center',
-          mt: 4,
+          mt: 2,
           alignItems: 'center'
         }}>
           <CTAButton 
@@ -144,14 +144,17 @@ export default function HomeClient({ initialShowIntro }: { initialShowIntro: boo
       </HeaderSection>
 
       <Container maxWidth="lg" sx={{ py: { xs: 4, md: 8 }, px: { xs: 2, sm: 3, md: 4 }, position: 'relative', zIndex: 2 }}>
-        <GlassContainer sx={{ mb: { xs: DESIGN_TOKENS.spacing.xl, md: DESIGN_TOKENS.spacing.xxl } }}>
+        <GlassContainer sx={{ 
+          mb: { xs: DESIGN_TOKENS.spacing.xl, md: DESIGN_TOKENS.spacing.xxl },
+          p: { xs: 2.5, sm: 3, md: 3.5 },
+        }}>
           <Box sx={{ textAlign: 'center' }}>
             <Typography 
               variant="h1" 
-              gutterBottom 
               sx={{ 
-                mb: { xs: DESIGN_TOKENS.spacing.sm, md: DESIGN_TOKENS.spacing.md },
+                mb: 1,
                 ...DESIGN_TOKENS.typography.h1,
+                fontSize: { xs: '1.75rem', sm: '2rem', md: '2.25rem' },
                 textShadow: `0 2px 4px rgba(0,0,0,0.1), 0 0 20px ${primary}40`,
                 background: `linear-gradient(135deg, ${primary}, ${secondary}, ${primary})`,
                 backgroundClip: 'text',
@@ -165,10 +168,10 @@ export default function HomeClient({ initialShowIntro }: { initialShowIntro: boo
             </Typography>
             <Typography 
               variant="h4" 
-              gutterBottom 
               sx={{ 
-                mb: DESIGN_TOKENS.spacing.md,
+                mb: 1,
                 ...DESIGN_TOKENS.typography.h4,
+                fontSize: { xs: '1rem', sm: '1.125rem', md: '1.25rem' },
                 fontWeight: 400,
                 opacity: 0.9,
                 color: textColor
@@ -179,11 +182,11 @@ export default function HomeClient({ initialShowIntro }: { initialShowIntro: boo
             <Typography 
               variant="body1" 
               sx={{ 
-                maxWidth: 700, 
+                maxWidth: 600, 
                 mx: 'auto',
-                mb: DESIGN_TOKENS.spacing.xl,
+                mb: 2,
                 ...DESIGN_TOKENS.typography.body1,
-                fontSize: { xs: '0.95rem', md: '1.125rem' },
+                fontSize: { xs: '0.875rem', md: '1rem' },
                 color: textColor,
                 opacity: 0.9
               }}
@@ -194,48 +197,48 @@ export default function HomeClient({ initialShowIntro }: { initialShowIntro: boo
             <Box sx={{ 
               display: 'grid',
               gridTemplateColumns: { xs: 'repeat(2, 1fr)', sm: 'repeat(3, 1fr)' },
-              gap: DESIGN_TOKENS.spacing.md,
-              mt: DESIGN_TOKENS.spacing.xl,
-              mb: DESIGN_TOKENS.spacing.lg,
-              maxWidth: 600,
+              gap: { xs: 1.5, sm: 2 },
+              mt: 2,
+              mb: 0,
+              maxWidth: 500,
               mx: 'auto'
             }}>
               <Box>
                 <Typography variant="h3" sx={{ 
-                  ...DESIGN_TOKENS.typography.h3,
+                  fontSize: { xs: '1.5rem', md: '1.75rem' },
                   fontWeight: 700,
                   color: 'primary.main',
-                  mb: 0.5
+                  mb: 0.25
                 }}>
                   1
                 </Typography>
-                <Typography variant="body2" sx={{ color: textColor, opacity: 0.8 }}>
+                <Typography variant="body2" sx={{ fontSize: '0.8rem', color: textColor, opacity: 0.8 }}>
                   {t('home.statsStage')}
                 </Typography>
               </Box>
               <Box>
                 <Typography variant="h3" sx={{ 
-                  ...DESIGN_TOKENS.typography.h3,
+                  fontSize: { xs: '1.5rem', md: '1.75rem' },
                   fontWeight: 700,
                   color: primary,
-                  mb: 0.5
+                  mb: 0.25
                 }}>
                   10+
                 </Typography>
-                <Typography variant="body2" sx={{ color: textColor, opacity: 0.8 }}>
+                <Typography variant="body2" sx={{ fontSize: '0.8rem', color: textColor, opacity: 0.8 }}>
                   {t('home.statsTech')}
                 </Typography>
               </Box>
               <Box sx={{ gridColumn: { xs: 'span 2', sm: 'span 1' } }}>
                 <Typography variant="h3" sx={{ 
-                  ...DESIGN_TOKENS.typography.h3,
+                  fontSize: { xs: '1.25rem', md: '1.5rem' },
                   fontWeight: 700,
                   color: primary,
-                  mb: 0.5
+                  mb: 0.25
                 }}>
                   {t('home.statsAvailable')}
                 </Typography>
-                <Typography variant="body2" sx={{ color: textColor, opacity: 0.8 }}>
+                <Typography variant="body2" sx={{ fontSize: '0.8rem', color: textColor, opacity: 0.8 }}>
                   {t('home.statsAvailableLabel')}
                 </Typography>
               </Box>

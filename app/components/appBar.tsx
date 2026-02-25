@@ -284,34 +284,27 @@ export default function AppBarComponent() {
 						</IconButton>
 					</Box>
 					
-					{/* Langue FR/ENG + Menu + Thème */}
-					<Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
-						<Button
-							size="small"
-							onClick={() => setLocale('fr')}
-							sx={{
-								minWidth: 36,
-								color: locale === 'fr' ? 'white' : 'rgba(255,255,255,0.7)',
-								fontWeight: locale === 'fr' ? 700 : 500,
-								border: locale === 'fr' ? '1px solid rgba(255,255,255,0.8)' : '1px solid transparent',
-								'&:hover': { color: 'white', bgcolor: 'rgba(255,255,255,0.15)' },
-							}}
-						>
-							FR
-						</Button>
-						<Button
-							size="small"
-							onClick={() => setLocale('en')}
-							sx={{
-								minWidth: 36,
-								color: locale === 'en' ? 'white' : 'rgba(255,255,255,0.7)',
-								fontWeight: locale === 'en' ? 700 : 500,
-								border: locale === 'en' ? '1px solid rgba(255,255,255,0.8)' : '1px solid transparent',
-								'&:hover': { color: 'white', bgcolor: 'rgba(255,255,255,0.15)' },
-							}}
-						>
-							ENG
-						</Button>
+					{/* Toggle langue + Thème + Menu admin */}
+					<Box sx={{ display: 'flex', alignItems: 'center', gap: { xs: 0.25, sm: 0.5 } }}>
+						<Box sx={{ mt: 0.5, alignSelf: 'center' }}>
+							<Button
+								size="small"
+								onClick={() => setLocale(locale === 'fr' ? 'en' : 'fr')}
+								sx={{
+									minWidth: 36,
+									fontSize: '0.75rem',
+									px: 0.75,
+									py: 0.375,
+									color: 'white',
+									fontWeight: 700,
+									border: '1px solid rgba(255,255,255,0.8)',
+									'&:hover': { color: 'white', bgcolor: 'rgba(255,255,255,0.15)' },
+								}}
+							>
+								{locale === 'fr' ? 'FR' : 'ENG'}
+							</Button>
+						</Box>
+						<ThemeSelector />
 						<IconButton
 							color="inherit"
 							aria-label="menu"
@@ -319,10 +312,10 @@ export default function AppBarComponent() {
 							aria-controls={open ? 'basic-menu' : undefined}
 							aria-haspopup="true"
 							aria-expanded={open ? 'true' : undefined}
+							sx={{ padding: { xs: '6px', sm: 1 } }}
 						>
 							<MenuIcon />
 						</IconButton>
-						<ThemeSelector />
 					</Box>
 					
 					{/* Menu déroulant pour admin */}

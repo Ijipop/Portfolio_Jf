@@ -148,22 +148,30 @@ export function ThemeSelector() {
     applyTheme(selectedThemeName)
   }
 
+  const currentTheme = THEMES[themeDisplayOrder[currentThemeIndex] ?? 'default']
+
   return (
     <>
-      <Tooltip title={`Thème: ${THEMES[themeDisplayOrder[currentThemeIndex] || 'default'].name}`}>
+      <Tooltip title={`Thème: ${currentTheme.name}`} arrow placement="left">
         <IconButton
           onClick={handleClick}
+          aria-label="Changer le thème"
           sx={{
-            color: 'white',
-            '&:hover': {
-              backgroundColor: 'rgba(255, 255, 255, 0.1)',
-              transform: 'scale(1.1)'
+            width: 40,
+            height: 40,
+            borderRadius: '10px',
+            transition: 'transform 0.2s ease',
+            '&:hover': { transform: 'scale(1.05)' },
+            '@keyframes paletteGlow': {
+              '0%, 100%': { color: currentTheme.primary },
+              '33%': { color: currentTheme.secondary },
+              '66%': { color: currentTheme.accent },
             },
-            transition: 'all 0.3s ease'
+            animation: 'paletteGlow 2.5s ease-in-out infinite',
           }}
         >
-          <Palette />
-          <ArrowDropDown sx={{ ml: 0.5, fontSize: '1rem' }} />
+          <Palette sx={{ fontSize: 20 }} />
+          <ArrowDropDown sx={{ ml: 0.25, fontSize: 18, opacity: 0.9 }} />
         </IconButton>
       </Tooltip>
       
