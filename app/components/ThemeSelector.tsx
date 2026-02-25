@@ -148,22 +148,47 @@ export function ThemeSelector() {
     applyTheme(selectedThemeName)
   }
 
+  const currentTheme = THEMES[themeDisplayOrder[currentThemeIndex] ?? 'default']
+
   return (
     <>
-      <Tooltip title={`Thème: ${THEMES[themeDisplayOrder[currentThemeIndex] || 'default'].name}`}>
+      <Tooltip title={`Thème: ${currentTheme.name}`} arrow placement="left">
         <IconButton
           onClick={handleClick}
+          aria-label="Changer le thème"
           sx={{
+            width: 40,
+            height: 40,
+            borderRadius: '10px',
             color: 'white',
+            backgroundColor: 'rgba(255, 255, 255, 0.06)',
+            border: '1px solid rgba(255, 255, 255, 0.12)',
+            backdropFilter: 'blur(10px)',
+            transition: 'border-color 0.2s ease, transform 0.2s ease, background-color 0.2s ease',
             '&:hover': {
-              backgroundColor: 'rgba(255, 255, 255, 0.1)',
-              transform: 'scale(1.1)'
+              backgroundColor: 'rgba(255, 255, 255, 0.12)',
+              borderColor: 'rgba(255, 255, 255, 0.2)',
+              transform: 'scale(1.05)',
             },
-            transition: 'all 0.3s ease'
+            '@keyframes paletteGlow': {
+              '0%, 100%': {
+                boxShadow: `0 0 14px 2px ${currentTheme.primary}, inset 0 0 20px ${currentTheme.primary}18`,
+                color: currentTheme.primary,
+              },
+              '33%': {
+                boxShadow: `0 0 18px 4px ${currentTheme.secondary}, inset 0 0 20px ${currentTheme.secondary}18`,
+                color: currentTheme.secondary,
+              },
+              '66%': {
+                boxShadow: `0 0 14px 2px ${currentTheme.accent}, inset 0 0 20px ${currentTheme.accent}18`,
+                color: currentTheme.accent,
+              },
+            },
+            animation: 'paletteGlow 2.5s ease-in-out infinite',
           }}
         >
-          <Palette />
-          <ArrowDropDown sx={{ ml: 0.5, fontSize: '1rem' }} />
+          <Palette sx={{ fontSize: 20 }} />
+          <ArrowDropDown sx={{ ml: 0.25, fontSize: 18, opacity: 0.9 }} />
         </IconButton>
       </Tooltip>
       

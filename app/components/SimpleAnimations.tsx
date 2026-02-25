@@ -2,7 +2,7 @@
 
 import { Box, Typography } from '@mui/material'
 import { motion } from 'framer-motion'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useTextColor } from '../hooks/useTextColor'
 import { useThemeColors } from '../hooks/useThemeColors'
 
@@ -18,13 +18,17 @@ export function TypingEffect({
 }) {
   const [displayText, setDisplayText] = useState("")
   const [currentIndex, setCurrentIndex] = useState(0)
+  const prevTextRef = useRef("")
   const textColor = useTextColor()
   const { primary } = useThemeColors()
 
-  // Réinitialiser l’animation quand le texte change (ex. changement de langue)
+  // Réinitialiser seulement quand le texte change vraiment (évite reset en double render / thème)
   useEffect(() => {
-    setDisplayText("")
-    setCurrentIndex(0)
+    if (text !== prevTextRef.current) {
+      prevTextRef.current = text
+      setDisplayText("")
+      setCurrentIndex(0)
+    }
   }, [text])
 
   useEffect(() => {
@@ -39,7 +43,15 @@ export function TypingEffect({
   }, [currentIndex, text, speed])
 
   return (
-    <Box className={className}>
+    <Box
+      className={className}
+      sx={{
+        width: 'fit-content',
+        maxWidth: '100%',
+        mx: 'auto',
+        whiteSpace: 'nowrap',
+      }}
+    >
       <Typography component="span" sx={{ color: textColor }}>
         {displayText}
         <motion.span

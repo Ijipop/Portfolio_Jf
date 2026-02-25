@@ -118,12 +118,17 @@ export default function HeaderSection({ title, subtitle, children }: HeaderSecti
         {subtitle && (
           <Typography 
             variant="h5" 
+            component="div"
             sx={{ 
               opacity: 0.9,
               fontWeight: 300,
-              maxWidth: 600,
-              mx: 'auto',
-              color: textColor
+              color: textColor,
+              fontSize: { xs: '0.95rem', sm: 'inherit' },
+              overflowX: 'auto',
+              overflowY: 'hidden',
+              scrollbarWidth: 'none',
+              msOverflowStyle: 'none',
+              '&::-webkit-scrollbar': { display: 'none' },
             }}
           >
             {subtitle}
