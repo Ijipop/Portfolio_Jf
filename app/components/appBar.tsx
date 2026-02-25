@@ -322,7 +322,25 @@ export default function AppBarComponent() {
 						>
 							<MenuIcon />
 						</IconButton>
-						<ThemeSelector />
+						<Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 0.25 }}>
+							<Box
+								component="span"
+								sx={{
+									fontSize: '0.65rem',
+									lineHeight: 1.2,
+									px: 0.75,
+									py: 0.25,
+									borderRadius: '10px',
+									background: 'rgba(255, 255, 255, 0.2)',
+									color: 'rgba(255, 255, 255, 0.95)',
+									whiteSpace: 'nowrap',
+									fontWeight: 500,
+								}}
+							>
+								{locale === 'fr' ? 'Essayez-moi' : 'Try Me'}
+							</Box>
+							<ThemeSelector />
+						</Box>
 					</Box>
 					
 					{/* Menu déroulant pour admin */}
