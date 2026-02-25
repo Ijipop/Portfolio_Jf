@@ -124,11 +124,12 @@ export default function HeaderSection({ title, subtitle, children }: HeaderSecti
               fontWeight: 300,
               color: textColor,
               fontSize: { xs: '0.95rem', sm: 'inherit' },
-              overflowX: 'auto',
+              overflowX: { xs: 'visible', sm: 'auto' },
               overflowY: 'hidden',
               scrollbarWidth: 'none',
               msOverflowStyle: 'none',
               '&::-webkit-scrollbar': { display: 'none' },
+              maxWidth: '100%',
             }}
           >
             {subtitle}

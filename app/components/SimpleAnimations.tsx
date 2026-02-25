@@ -46,10 +46,11 @@ export function TypingEffect({
     <Box
       className={className}
       sx={{
-        width: 'fit-content',
+        width: { xs: '100%', sm: 'fit-content' },
         maxWidth: '100%',
         mx: 'auto',
-        whiteSpace: 'nowrap',
+        whiteSpace: { xs: 'normal', sm: 'nowrap' },
+        textAlign: { xs: 'center', sm: 'inherit' },
       }}
     >
       <Typography component="span" sx={{ color: textColor }}>
