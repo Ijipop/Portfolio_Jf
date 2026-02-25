@@ -14,6 +14,7 @@ import Chip from '@mui/material/Chip'
 import CircularProgress from '@mui/material/CircularProgress'
 import Container from '@mui/material/Container'
 import { styled, useTheme } from '@mui/material/styles'
+import useMediaQuery from '@mui/material/useMediaQuery'
 import Typography from '@mui/material/Typography'
 import { useEffect, useState } from 'react'
 import React from 'react'
@@ -152,11 +153,12 @@ const FilterContainerLabel = ({ label }: { label: string }) => {
   )
 }
 
-// Composant pour le titre du projet : gradient sur default, couleur palette sur les autres thèmes
+// Composant pour le titre du projet : gradient sur default, couleur palette sur les autres thèmes. Sur mobile, dégradé statique (pas d'animation) pour éviter les glitches.
 const ProjectTitleTypography = ({ projectName, isNonDefaultPalette = false }: { projectName: string; isNonDefaultPalette?: boolean }) => {
   const theme = useTheme()
   const { primary, secondary, accent } = useThemeColors()
-  
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'))
+
   return (
     <Typography 
       variant="h6" 
@@ -172,10 +174,8 @@ const ProjectTitleTypography = ({ projectName, isNonDefaultPalette = false }: { 
               backgroundClip: 'text',
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
-              backgroundSize: '200% 200%',
-              animation: 'gradientShift 3s ease-in-out infinite',
+              ...(isMobile ? {} : { backgroundSize: '200% 200%', animation: 'gradientShift 3s ease-in-out infinite', ...ANIMATIONS.gradientShift }),
               textShadow: `0 0 20px ${primary}40`,
-              ...ANIMATIONS.gradientShift
             }
       }
     >
@@ -202,11 +202,13 @@ const ProjectCardWrapper = ({
   getImageUrl: (imageUrl: string) => string
   viewProjectLabel?: string
 }) => {
+  const theme = useTheme()
   const { primary, secondary, accent } = useThemeColors()
   const textColor = useTextColor()
   const { themeName } = useAdvancedTheme()
   const isNonDefaultPalette = themeName !== 'default'
-  
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'))
+
   // Palette de couleurs pour les reflets basée sur le thème
   const reflectionColors = [
     primary,
@@ -224,7 +226,7 @@ const ProjectCardWrapper = ({
   const reflectionColor = reflectionColors[index % reflectionColors.length]
   
   return (
-    <ScrollReveal key={project.id} direction="up" delay={0.1 * (index % 4)}>
+    <ScrollReveal key={project.id} direction="up" distance={isMobile ? 30 : 50} delay={isMobile ? 0.15 * (index % 4) : 0.1 * (index % 4)}>
       <ThreeDCardComponent 
         key={project.id} 
         onClick={() => handleProjectClick(project.url)}
