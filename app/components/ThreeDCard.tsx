@@ -4,6 +4,7 @@ import { Box, Card, CardContent } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import type { SxProps, Theme } from '@mui/material/styles'
 import { motion } from 'framer-motion'
+import { useEffect, useState } from 'react'
 
 // 3D Card avec perspective et transformations
 const ThreeDCard = styled(Card)(({ theme }) => ({
@@ -115,13 +116,28 @@ export default function ThreeDCardComponent({
   fullHeight = false,
   sx: sxProp
 }: ThreeDCardProps) {
+  const [isMobile, setIsMobile] = useState(false)
+  useEffect(() => {
+    const check = () => {
+      setIsMobile(
+        window.innerWidth < 768 ||
+        /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
+      )
+    }
+    check()
+    window.addEventListener('resize', check)
+    return () => window.removeEventListener('resize', check)
+  }, [])
+
+  const effectiveFloating = isMobile ? 0 : floatingElements
+
   return (
     <motion.div
       style={fullHeight ? { height: '100%' } : undefined}
       initial={{ opacity: 0, scale: 0.9 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.6, ease: "easeOut" }}
-      whileHover={{ scale: 1.02 }}
+      whileHover={isMobile ? undefined : { scale: 1.02 }}
     >
       <ThreeDCard
         onClick={onClick}
@@ -129,11 +145,12 @@ export default function ThreeDCardComponent({
         sx={{
           ...(fullHeight && { height: '100%', minHeight: 0 }),
           ...(compact && { minHeight: '120px', padding: 2 }),
+          ...(isMobile && { transformStyle: 'flat' }),
           ...(sxProp || {}),
         }}
       >
-        {/* Floating Elements - Positionnés de manière élégante */}
-        {floatingElements > 0 && (
+        {/* Floating Elements désactivés sur mobile pour éviter les glitches */}
+        {effectiveFloating > 0 && (
           <>
             <FloatingElement
               sx={{
@@ -145,7 +162,7 @@ export default function ThreeDCardComponent({
                 zIndex: 1,
               }}
             />
-            {floatingElements > 1 && (
+            {effectiveFloating > 1 && (
               <FloatingElement
                 sx={{
                   width: 6,
@@ -157,7 +174,7 @@ export default function ThreeDCardComponent({
                 }}
               />
             )}
-            {floatingElements > 2 && (
+            {effectiveFloating > 2 && (
               <FloatingElement
                 sx={{
                   width: 4,

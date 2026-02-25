@@ -21,10 +21,8 @@
   background: var(--theme-bg) !important;
 }
 
-/* FORCER les couleurs sur tous les éléments */
-body * {
-  transition: all 0.3s ease !important;
-}
+/* Transition globale supprimée : causait des glitches sur mobile (scroll, thème).
+   Les composants gardent leurs transitions MUI / Framer Motion. */
 
 /* Titres avec thème - seulement en dark mode */
 [data-mui-color-scheme="dark"] h1, 

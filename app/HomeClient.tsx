@@ -42,6 +42,15 @@ export default function HomeClient({ initialShowIntro }: { initialShowIntro: boo
   const [skillsBackground, setSkillsBackground] = useState<string>(GRADIENTS.cards.light)
   const [showIntro, setShowIntro] = useState<boolean>(initialShowIntro)
 
+  // Synchroniser avec cookie/sessionStorage après montage pour éviter flash d'hydration
+  useEffect(() => {
+    const seen =
+      typeof window !== 'undefined' &&
+      (sessionStorage.getItem(INTRO_SESSION_KEY) === '1' ||
+        document.cookie.includes('portfolio-intro-seen=1'))
+    if (seen) setShowIntro(false)
+  }, [])
+
   // Mettre à jour le background de la section compétences quand le thème change
   useEffect(() => {
     const updateSkillsBackground = () => {

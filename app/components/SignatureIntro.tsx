@@ -10,7 +10,11 @@ import { useState, useEffect, useCallback } from 'react'
 
 const INTRO_DURATION_MS = 2800
 const SPLIT_DURATION_S = 1.15
+const FADE_DURATION_S = 0.5
 const SPLIT_EASE = [0.25, 0.46, 0.45, 0.94] as const
+
+// Style commun pour forcer une couche GPU et limiter les repaints (évite le flicker sur mobile)
+const panelLayerStyle = { transform: 'translateZ(0)' as const }
 
 interface SignatureIntroProps {
   onComplete: () => void
@@ -21,6 +25,14 @@ export default function SignatureIntro({ onComplete }: SignatureIntroProps) {
   const { t } = useLanguage()
   const [isOpening, setIsOpening] = useState(false)
   const [hasCompleted, setHasCompleted] = useState(false)
+  const [useSimpleFade, setUseSimpleFade] = useState(false)
+
+  useEffect(() => {
+    const isMobile = typeof window !== 'undefined' && window.innerWidth < 768
+    const prefersReducedMotion = typeof window !== 'undefined' &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    setUseSimpleFade(isMobile || prefersReducedMotion)
+  }, [])
 
   const startOpening = useCallback(() => {
     if (isOpening) return
@@ -40,6 +52,78 @@ export default function SignatureIntro({ onComplete }: SignatureIntroProps) {
 
   const gradientBg = `linear-gradient(135deg, ${primary} 0%, ${secondary} 100%)`
 
+  // Variante mobile / reduced-motion : un seul overlay en fade (moins de charge GPU)
+  if (useSimpleFade) {
+    return (
+      <Box
+        sx={{
+          position: 'fixed',
+          inset: 0,
+          zIndex: 9999,
+          overflow: 'hidden',
+          pointerEvents: isOpening ? 'none' : 'auto',
+        }}
+        aria-hidden="true"
+      >
+        <motion.div
+          initial={{ opacity: 1 }}
+          animate={{ opacity: isOpening ? 0 : 1 }}
+          transition={{ duration: FADE_DURATION_S, ease: SPLIT_EASE }}
+          onAnimationComplete={isOpening ? handleAnimationComplete : undefined}
+          style={{
+            position: 'absolute',
+            inset: 0,
+            background: gradientBg,
+            zIndex: 1,
+            ...panelLayerStyle,
+          }}
+        />
+        <Box
+          sx={{
+            position: 'absolute',
+            inset: 0,
+            zIndex: 2,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            pointerEvents: 'none',
+          }}
+        >
+          <Typography
+            variant="h2"
+            component="h1"
+            sx={{
+              color: 'white',
+              fontWeight: 700,
+              fontSize: { xs: '1.75rem', sm: '2.5rem', md: '3rem' },
+              letterSpacing: '-0.02em',
+              textShadow: '0 2px 20px rgba(0,0,0,0.2)',
+            }}
+          >
+            Jean-François Lefebvre
+          </Typography>
+        </Box>
+        <Box sx={{ position: 'absolute', top: 16, right: 16, zIndex: 3, pointerEvents: 'auto' }}>
+          <Button
+            onClick={startOpening}
+            aria-label={t('intro.skip')}
+            sx={{
+              color: 'rgba(255,255,255,0.9)',
+              border: '1px solid rgba(255,255,255,0.5)',
+              '&:hover': {
+                color: 'white',
+                borderColor: 'rgba(255,255,255,0.9)',
+                bgcolor: 'rgba(255,255,255,0.1)',
+              },
+            }}
+          >
+            {t('intro.skip')}
+          </Button>
+        </Box>
+      </Box>
+    )
+  }
+
   return (
     <Box
       sx={{
@@ -51,7 +135,7 @@ export default function SignatureIntro({ onComplete }: SignatureIntroProps) {
       }}
       aria-hidden="true"
     >
-      {/* Left panel – slides left */}
+      {/* Left panel – slides left (couche GPU pour éviter flicker) */}
       <motion.div
         initial={{ x: 0 }}
         animate={{ x: isOpening ? '-100%' : 0 }}
@@ -68,9 +152,10 @@ export default function SignatureIntro({ onComplete }: SignatureIntroProps) {
           width: '50%',
           background: gradientBg,
           zIndex: 1,
+          ...panelLayerStyle,
         }}
       />
-      {/* Right panel – slides right */}
+      {/* Right panel – slides right (couche GPU) */}
       <motion.div
         initial={{ x: 0 }}
         animate={{ x: isOpening ? '100%' : 0 }}
@@ -86,6 +171,7 @@ export default function SignatureIntro({ onComplete }: SignatureIntroProps) {
           width: '50%',
           background: gradientBg,
           zIndex: 1,
+          ...panelLayerStyle,
         }}
       />
 

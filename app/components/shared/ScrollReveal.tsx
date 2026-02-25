@@ -10,14 +10,34 @@ interface ScrollRevealProps {
   distance?: number
 }
 
-export default function ScrollReveal({ 
-  children, 
+export default function ScrollReveal({
+  children,
   delay = 0,
   direction = 'up',
-  distance = 50
+  distance = 50,
 }: ScrollRevealProps) {
   const [isVisible, setIsVisible] = useState(false)
+  const [reducedMotion, setReducedMotion] = useState(false)
+  const [effectiveDistance, setEffectiveDistance] = useState(distance)
   const ref = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const mmReduced = window.matchMedia('(prefers-reduced-motion: reduce)')
+    setReducedMotion(mmReduced.matches)
+    const onReduced = (e: MediaQueryListEvent) => setReducedMotion(e.matches)
+    mmReduced.addEventListener('change', onReduced)
+
+    const updateDistance = () => {
+      setEffectiveDistance(window.innerWidth < 768 ? Math.min(distance, 30) : distance)
+    }
+    updateDistance()
+    window.addEventListener('resize', updateDistance)
+
+    return () => {
+      mmReduced.removeEventListener('change', onReduced)
+      window.removeEventListener('resize', updateDistance)
+    }
+  }, [distance])
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -40,18 +60,20 @@ export default function ScrollReveal({
     }
   }, [])
 
+  const d = reducedMotion ? 0 : effectiveDistance
+
   const getInitialPosition = () => {
     switch (direction) {
       case 'up':
-        return { y: distance, opacity: 0 }
+        return { y: d, opacity: 0 }
       case 'down':
-        return { y: -distance, opacity: 0 }
+        return { y: -d, opacity: 0 }
       case 'left':
-        return { x: distance, opacity: 0 }
+        return { x: d, opacity: 0 }
       case 'right':
-        return { x: -distance, opacity: 0 }
+        return { x: -d, opacity: 0 }
       default:
-        return { y: distance, opacity: 0 }
+        return { y: d, opacity: 0 }
     }
   }
 
@@ -74,8 +96,8 @@ export default function ScrollReveal({
       initial={getInitialPosition()}
       animate={isVisible ? getAnimatePosition() : getInitialPosition()}
       transition={{
-        duration: 0.6,
-        delay,
+        duration: reducedMotion ? 0.15 : 0.6,
+        delay: reducedMotion ? 0 : delay,
         ease: [0.25, 0.46, 0.45, 0.94],
       }}
     >
