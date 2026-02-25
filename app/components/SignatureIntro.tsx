@@ -62,6 +62,8 @@ export default function SignatureIntro({ onComplete }: SignatureIntroProps) {
           zIndex: 9999,
           overflow: 'hidden',
           pointerEvents: isOpening ? 'none' : 'auto',
+          minHeight: '100vh',
+          '@supports (height: 100dvh)': { minHeight: '100dvh' },
         }}
         aria-hidden="true"
       >
@@ -69,7 +71,11 @@ export default function SignatureIntro({ onComplete }: SignatureIntroProps) {
           initial={{ opacity: 1 }}
           animate={{ opacity: isOpening ? 0 : 1 }}
           transition={{ duration: FADE_DURATION_S, ease: SPLIT_EASE }}
-          onAnimationComplete={isOpening ? handleAnimationComplete : undefined}
+          onAnimationComplete={
+            isOpening
+              ? () => setTimeout(() => handleAnimationComplete(), 100)
+              : undefined
+          }
           style={{
             position: 'absolute',
             inset: 0,
@@ -132,6 +138,8 @@ export default function SignatureIntro({ onComplete }: SignatureIntroProps) {
         zIndex: 9999,
         overflow: 'hidden',
         pointerEvents: isOpening ? 'none' : 'auto',
+        minHeight: '100vh',
+        '@supports (height: 100dvh)': { minHeight: '100dvh' },
       }}
       aria-hidden="true"
     >
