@@ -217,6 +217,7 @@ const FlipCardBack = ({ children, sx }: { children: React.ReactNode; sx?: any })
           : `0 8px 32px ${primary}30, ${DESIGN_TOKENS.shadows.elevated.light} !important`,
         transform: 'rotateY(180deg)',
         WebkitTransform: 'rotateY(180deg)',
+        MozTransform: 'rotateY(180deg)',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
@@ -328,10 +329,9 @@ export default function About() {
                 <Box sx={{ 
                   visibility: 'visible !important',
                   opacity: '1 !important',
-                  zIndex: 1000,
                   position: 'relative',
-                  // Cacher les tags sur mobile quand la carte est retournée
-                  display: { xs: flippedCards.who ? 'none' : 'flex', sm: 'flex' },
+                  // Cacher les tags quand la carte est retournée (évite affichage sur l'endos sur Safari/macOS)
+                  display: flippedCards.who ? 'none' : 'flex',
                   flexWrap: 'wrap',
                   justifyContent: 'center',
                   gap: 1
@@ -464,10 +464,9 @@ export default function About() {
                 <Box sx={{ 
                   visibility: 'visible !important',
                   opacity: '1 !important',
-                  zIndex: 1000,
                   position: 'relative',
-                  // Cacher les tags sur mobile quand la carte est retournée
-                  display: { xs: flippedCards.formation ? 'none' : 'flex', sm: 'flex' },
+                  // Cacher les tags quand la carte est retournée (évite affichage sur l'endos sur Safari/macOS)
+                  display: flippedCards.formation ? 'none' : 'flex',
                   flexWrap: 'wrap',
                   justifyContent: 'center',
                   gap: 1
@@ -587,10 +586,9 @@ export default function About() {
                 <Box sx={{ 
                   visibility: 'visible !important',
                   opacity: '1 !important',
-                  zIndex: 1000,
                   position: 'relative',
-                  // Cacher les tags sur mobile quand la carte est retournée
-                  display: { xs: flippedCards.experience ? 'none' : 'flex', sm: 'flex' },
+                  // Cacher les tags quand la carte est retournée (évite affichage sur l'endos sur Safari/macOS)
+                  display: flippedCards.experience ? 'none' : 'flex',
                   flexWrap: 'wrap',
                   justifyContent: 'center',
                   gap: 1

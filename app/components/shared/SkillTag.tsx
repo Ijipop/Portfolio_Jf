@@ -38,13 +38,17 @@ export default function SkillTag({ children, size = 'medium', reflectionColor }:
     <span
       style={baseStyle}
       onMouseEnter={(e) => {
-        e.currentTarget.style.transform = 'translateY(-3px) scale(1.05)'
+        const t = 'translateY(-3px) scale(1.05)'
+        e.currentTarget.style.transform = t
+        ;(e.currentTarget.style as CSSStyleDeclaration & { webkitTransform?: string }).webkitTransform = t
         e.currentTarget.style.background = hoverBackground
         e.currentTarget.style.backgroundSize = '200% 200%'
         e.currentTarget.style.boxShadow = `0 4px 12px ${primary}60, 0 0 20px ${secondary}40`
       }}
       onMouseLeave={(e) => {
-        e.currentTarget.style.transform = 'translateY(0px) scale(1)'
+        const t = 'translateY(0px) scale(1)'
+        e.currentTarget.style.transform = t
+        ;(e.currentTarget.style as CSSStyleDeclaration & { webkitTransform?: string }).webkitTransform = t
         e.currentTarget.style.background = `linear-gradient(135deg, ${primary} 0%, ${secondary} 100%)`
         e.currentTarget.style.backgroundSize = '100% 100%'
         e.currentTarget.style.boxShadow = `0 2px 8px ${primary}40`

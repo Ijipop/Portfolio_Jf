@@ -38,13 +38,17 @@ export default function SimpleSkillTag({ children }: SimpleSkillTagProps) {
         cursor: 'pointer',
       }}
       onMouseEnter={(e) => {
-        e.currentTarget.style.transform = 'translateY(-3px) scale(1.05)'
+        const t = 'translateY(-3px) scale(1.05)'
+        e.currentTarget.style.transform = t
+        ;(e.currentTarget.style as CSSStyleDeclaration & { webkitTransform?: string }).webkitTransform = t
         e.currentTarget.style.background = paletteColors.hover.background
         e.currentTarget.style.backgroundSize = '200% 200%'
         e.currentTarget.style.boxShadow = `0 4px 12px ${paletteColors.hover.shadow}60, 0 0 20px ${paletteColors.hover.glow}40`
       }}
       onMouseLeave={(e) => {
-        e.currentTarget.style.transform = 'translateY(0px) scale(1)'
+        const t = 'translateY(0px) scale(1)'
+        e.currentTarget.style.transform = t
+        ;(e.currentTarget.style as CSSStyleDeclaration & { webkitTransform?: string }).webkitTransform = t
         e.currentTarget.style.background = `linear-gradient(135deg, ${primaryColor} 0%, ${secondaryColor} 100%)`
         e.currentTarget.style.backgroundSize = '100% 100%'
         e.currentTarget.style.boxShadow = `0 2px 8px ${primaryColor}40`
