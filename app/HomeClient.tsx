@@ -25,6 +25,8 @@ import { useLanguage } from './contexts/LanguageContext'
 import { useAdvancedTheme } from './contexts/AdvancedThemeContext'
 import SignatureIntro from './components/SignatureIntro'
 import { useEffect, useState } from 'react'
+import useMediaQuery from '@mui/material/useMediaQuery'
+import { useTheme } from '@mui/material/styles'
 
 const INTRO_SESSION_KEY = 'portfolio-intro-seen'
 
@@ -35,6 +37,8 @@ function setIntroSeenCookie() {
 
 export default function HomeClient({ initialShowIntro }: { initialShowIntro: boolean }) {
   const router = useRouter()
+  const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'))
   const { primary, secondary, accent } = useThemeColors()
   const textColor = useTextColor()
   const { t } = useLanguage()
@@ -376,7 +380,9 @@ export default function HomeClient({ initialShowIntro }: { initialShowIntro: boo
       </Container>
       
       <Footer />
-      <StickyCTA text={t('home.stickyCTA')} onClick={() => router.push('/contact')} />
+      {!isMobile && (
+        <StickyCTA text={t('home.stickyCTA')} onClick={() => router.push('/contact')} />
+      )}
     </PageWrapper>
       )}
     </>
