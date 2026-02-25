@@ -284,26 +284,29 @@ export default function AppBarComponent() {
 						</IconButton>
 					</Box>
 					
-					{/* Toggle langue + Thème + Menu admin */}
-					<Box sx={{ display: 'flex', alignItems: 'center', gap: { xs: 0.25, sm: 0.5 } }}>
-						<Box sx={{ mt: 0.5, alignSelf: 'center' }}>
-							<Button
-								size="small"
-								onClick={() => setLocale(locale === 'fr' ? 'en' : 'fr')}
-								sx={{
-									minWidth: 36,
-									fontSize: '0.75rem',
-									px: 0.75,
-									py: 0.375,
-									color: 'white',
-									fontWeight: 700,
-									border: '1px solid rgba(255,255,255,0.8)',
-									'&:hover': { color: 'white', bgcolor: 'rgba(255,255,255,0.15)' },
-								}}
-							>
-								{locale === 'fr' ? 'FR' : 'ENG'}
-							</Button>
-						</Box>
+					{/* Toggle langue + Thème + Menu (espacés et alignés) */}
+					<Box sx={{ display: 'flex', alignItems: 'center', gap: { xs: 1.5, sm: 2 }, ml: { xs: 0.5, sm: 1 } }}>
+						<Button
+							size="small"
+							onClick={() => setLocale(locale === 'fr' ? 'en' : 'fr')}
+							sx={{
+								minWidth: 40,
+								height: 40,
+								fontSize: '0.75rem',
+								px: 1,
+								py: 0,
+								color: 'white',
+								fontWeight: 700,
+								border: '1px solid rgba(255,255,255,0.8)',
+								borderRadius: '50%',
+								display: 'flex',
+								alignItems: 'center',
+								justifyContent: 'center',
+								'&:hover': { color: 'white', bgcolor: 'rgba(255,255,255,0.15)' },
+							}}
+						>
+							{locale === 'fr' ? 'FR' : 'ENG'}
+						</Button>
 						<ThemeSelector />
 						<IconButton
 							color="inherit"
@@ -312,7 +315,7 @@ export default function AppBarComponent() {
 							aria-controls={open ? 'basic-menu' : undefined}
 							aria-haspopup="true"
 							aria-expanded={open ? 'true' : undefined}
-							sx={{ padding: { xs: '6px', sm: 1 } }}
+							sx={{ padding: 1, width: 40, height: 40 }}
 						>
 							<MenuIcon />
 						</IconButton>
