@@ -14,7 +14,7 @@ interface StickyCTAProps {
 export default function StickyCTA({ 
   text = "Travaillons ensemble", 
   onClick,
-  href = '/contact'
+  href = '/portfolio/contact'
 }: StickyCTAProps) {
   const router = useRouter()
 
