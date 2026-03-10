@@ -1,6 +1,5 @@
 'use client'
 
-import EmojiEventsIcon from '@mui/icons-material/EmojiEvents'
 import PersonIcon from '@mui/icons-material/Person'
 import RotateRightIcon from '@mui/icons-material/RotateRight'
 import SchoolIcon from '@mui/icons-material/School'
@@ -25,10 +24,8 @@ import { useTextColor } from '../../hooks/useTextColor'
 import { useLanguage } from '../../contexts/LanguageContext'
 import { useTheme } from '@mui/material/styles'
 import { getTextColorForBackground } from '../../utils/colorUtils'
-import TimelineIcon from '@mui/icons-material/Timeline'
-import LightbulbIcon from '@mui/icons-material/Lightbulb'
-import GroupWorkIcon from '@mui/icons-material/GroupWork'
-import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome'
+import SoftSkillsSection from './components/SoftSkillsSection'
+import AboutCtaSection from './components/AboutCtaSection'
 
 // FlipCard components spécifiques à cette page (logique complexe)
 const FlipCard = styled(Box)(({ theme }) => ({
@@ -719,124 +716,15 @@ export default function About() {
           </Box>
         </Box>
 
-        {/* Section Soft Skills */}
-        <Box sx={{ 
-          background: 'var(--card-background, linear-gradient(145deg, #e2e8f0 0%, #cbd5e1 50%, #e2e8f0 100%))',
-          border: '1px solid var(--card-primary, rgba(0,0,0,0.08))',
-          borderRadius: DESIGN_TOKENS.borderRadius.large,
-          padding: DESIGN_TOKENS.spacing.xl,
-          textAlign: 'center',
-          boxShadow: '0 8px 32px var(--card-primary, rgba(0,0,0,0.1))',
-          mb: DESIGN_TOKENS.spacing.xxl,
-          position: 'relative',
-          overflow: 'hidden',
-        }}>
-          <Typography 
-            variant="h3" 
-            gutterBottom 
-            sx={{ 
-              marginBottom: DESIGN_TOKENS.spacing.md,
-              fontWeight: 'bold',
-              color: primary,
-              textShadow: `0 2px 4px ${primary}40`
-            }}
-          >
-            {t('about.softSkills')}
-          </Typography>
-          <Box sx={{ 
-            display: 'grid',
-            gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)', md: 'repeat(4, 1fr)' },
-            gap: DESIGN_TOKENS.spacing.md,
-            mt: DESIGN_TOKENS.spacing.lg
-          }}>
-            <Box sx={{ textAlign: 'center' }}>
-              <LightbulbIcon sx={{ fontSize: 48, color: primary, mb: 1 }} />
-              <Typography variant="h6" sx={{ mb: 0.5, fontWeight: 600, color: textColor }}>
-                {t('about.creativity')}
-              </Typography>
-              <Typography variant="body2" sx={{ color: textColor, opacity: 0.8 }}>
-                {t('about.creativityDesc')}
-              </Typography>
-            </Box>
-            <Box sx={{ textAlign: 'center' }}>
-              <GroupWorkIcon sx={{ fontSize: 48, color: primary, mb: 1 }} />
-              <Typography variant="h6" sx={{ mb: 0.5, fontWeight: 600, color: textColor }}>
-                {t('about.collaboration')}
-              </Typography>
-              <Typography variant="body2" sx={{ color: textColor, opacity: 0.8 }}>
-                {t('about.collaborationDesc')}
-              </Typography>
-            </Box>
-            <Box sx={{ textAlign: 'center' }}>
-              <TimelineIcon sx={{ fontSize: 48, color: primary, mb: 1 }} />
-              <Typography variant="h6" sx={{ mb: 0.5, fontWeight: 600, color: textColor }}>
-                {t('about.adaptability')}
-              </Typography>
-              <Typography variant="body2" sx={{ color: textColor, opacity: 0.8 }}>
-                {t('about.adaptabilityDesc')}
-              </Typography>
-            </Box>
-            <Box sx={{ textAlign: 'center' }}>
-              <AutoAwesomeIcon sx={{ fontSize: 48, color: primary, mb: 1 }} />
-              <Typography variant="h6" sx={{ mb: 0.5, fontWeight: 600, color: textColor }}>
-                {t('about.quality')}
-              </Typography>
-              <Typography variant="body2" sx={{ color: textColor, opacity: 0.8 }}>
-                {t('about.qualityDesc')}
-              </Typography>
-            </Box>
-          </Box>
-        </Box>
+        <SoftSkillsSection primary={primary} textColor={textColor} t={t} />
 
-        {/* Section CTA */}
-        <Box sx={{ 
-          textAlign: 'center', 
-          mt: DESIGN_TOKENS.spacing.xxl,
-          mb: DESIGN_TOKENS.spacing.xl
-        }}>
-          <EmojiEventsIcon sx={{ fontSize: 64, color: primary, mb: DESIGN_TOKENS.spacing.md }} />
-          <Typography 
-            variant="h3" 
-            gutterBottom
-            sx={{
-              ...DESIGN_TOKENS.typography.h3,
-              mb: DESIGN_TOKENS.spacing.md,
-              color: textColor
-            }}
-          >
-            {t('about.ctaTitle')}
-          </Typography>
-          <Typography 
-            variant="body1" 
-            sx={{ 
-              maxWidth: 700, 
-              mx: 'auto',
-              mb: DESIGN_TOKENS.spacing.xl,
-              ...DESIGN_TOKENS.typography.body1,
-              fontSize: '1.125rem',
-              color: textColor,
-              opacity: 0.9
-            }}
-          >
-            {t('about.ctaText')}
-          </Typography>
-          <Box sx={{ display: 'flex', gap: 2, justifyContent: 'center', flexWrap: 'wrap' }}>
-            <CTAButton 
-              variant="primary"
-              onClick={() => router.push('/portfolio/contact')}
-              size="large"
-            >
-              {t('about.contactCTA')}
-            </CTAButton>
-            <CTAButton 
-              variant="outline"
-              onClick={() => router.push('/portfolio/projets')}
-              size="large"
-            >
-              {t('home.seeProjects')}
-            </CTAButton>
-          </Box>
-        </Box>
+        <AboutCtaSection
+          primary={primary}
+          textColor={textColor}
+          t={t}
+          onContact={() => router.push('/portfolio/contact')}
+          onProjects={() => router.push('/portfolio/projets')}
+        />
       </Container>
       </InteractiveBackgroundSection>
       

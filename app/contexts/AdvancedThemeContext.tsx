@@ -3,7 +3,9 @@
 import { Box, CssBaseline } from '@mui/material'
 import { createTheme, PaletteMode, ThemeProvider } from '@mui/material/styles'
 import React, { createContext, useContext, useEffect, useState } from 'react'
-import { THEMES, ThemeName, getDefaultTheme, getAvailableThemes } from '../design-system/themes'
+import { usePathname } from 'next/navigation'
+import { THEMES, ThemeName, getAvailableThemes } from '@/design-system/themes'
+import { shouldShowTopology } from '@/utils/topologyRoutes'
 
 interface AdvancedThemeContextType {
   themeName: ThemeName
@@ -16,6 +18,8 @@ const AdvancedThemeContext = createContext<AdvancedThemeContextType | undefined>
 
 export function AdvancedThemeProvider({ children }: { children: React.ReactNode }) {
   const mode: PaletteMode = 'light' // Mode fixe à light
+  const pathname = usePathname()
+  const isTopologyRoute = shouldShowTopology(pathname)
   const [themeName, setThemeName] = useState<ThemeName>('default')
   const customTheme = THEMES[themeName] // Source unique de vérité
 
@@ -74,6 +78,20 @@ export function AdvancedThemeProvider({ children }: { children: React.ReactNode 
       }
     },
     components: {
+      ...(isTopologyRoute && {
+        MuiCssBaseline: {
+          styleOverrides: {
+            html: {
+              background: 'transparent',
+              backgroundColor: 'transparent',
+            },
+            body: {
+              background: 'transparent',
+              backgroundColor: 'transparent',
+            },
+          },
+        },
+      }),
       MuiButton: {
         styleOverrides: {
           root: {
@@ -105,7 +123,7 @@ export function AdvancedThemeProvider({ children }: { children: React.ReactNode 
         }
       }
     }
-  }), [customTheme, mode])
+  }), [customTheme, mode, isTopologyRoute])
 
   return (
     <AdvancedThemeContext.Provider
@@ -120,7 +138,9 @@ export function AdvancedThemeProvider({ children }: { children: React.ReactNode 
         <CssBaseline />
         <Box
           sx={{
-            background: `linear-gradient(135deg, ${customTheme.bg} 0%, ${customTheme.bg2} 25%, ${customTheme.bg} 50%, ${customTheme.bg2} 75%, ${customTheme.bg} 100%)`,
+            background: isTopologyRoute
+              ? 'transparent'
+              : `linear-gradient(135deg, ${customTheme.bg} 0%, ${customTheme.bg2} 25%, ${customTheme.bg} 50%, ${customTheme.bg2} 75%, ${customTheme.bg} 100%)`,
             minHeight: '100vh',
             transition: 'background 0.5s ease'
           }}

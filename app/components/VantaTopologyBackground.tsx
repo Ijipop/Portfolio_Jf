@@ -31,7 +31,7 @@ interface VantaTopologyBackgroundProps {
 export default function VantaTopologyBackground(props?: VantaTopologyBackgroundProps) {
   const { fillContainer = false } = props ?? {}
   const elRef = useRef<HTMLDivElement>(null)
-  const effectRef = useRef<{ destroy: () => void } | null>(null)
+  const effectRef = useRef<{ destroy: () => void; resize?: () => void } | null>(null)
   const [vantaReady, setVantaReady] = useState(false)
   const { themeName } = useAdvancedTheme()
 
@@ -40,6 +40,7 @@ export default function VantaTopologyBackground(props?: VantaTopologyBackgroundP
     if (!el || typeof window === 'undefined') return
 
     let mounted = true
+    let resizeObserver: ResizeObserver | null = null
 
     const loadScript = (src: string): Promise<void> =>
       new Promise((resolve, reject) => {
@@ -67,11 +68,17 @@ export default function VantaTopologyBackground(props?: VantaTopologyBackgroundP
         await loadScript(VANTA_TOPOLOGY_CDN)
         if (!mounted || !elRef.current) return
 
-        const VANTA = (window as unknown as { VANTA: { TOPOLOGY: (opts: Record<string, unknown>) => { destroy: () => void } } }).VANTA
+        const isMobile = typeof window !== 'undefined' && window.innerWidth < 768
+        if (isMobile) {
+          await new Promise((r) => setTimeout(r, 50))
+        }
+        if (!mounted || !elRef.current) return
+
+        const VANTA = (window as unknown as { VANTA: { TOPOLOGY: (opts: Record<string, unknown>) => { destroy: () => void; resize?: () => void } } }).VANTA
         if (!VANTA?.TOPOLOGY) return
 
         const options = getTopologyOptions(themeName as ThemeName)
-        effectRef.current = VANTA.TOPOLOGY({
+        const effect = VANTA.TOPOLOGY({
           el: elRef.current,
           mouseControls: true,
           touchControls: true,
@@ -82,6 +89,13 @@ export default function VantaTopologyBackground(props?: VantaTopologyBackgroundP
           scaleMobile: 1,
           ...options,
         })
+        effectRef.current = effect
+
+        resizeObserver = new ResizeObserver(() => {
+          if (effectRef.current?.resize) effectRef.current.resize()
+        })
+        resizeObserver.observe(el)
+
         requestAnimationFrame(() => {
           if (mounted) setVantaReady(true)
         })
@@ -94,6 +108,8 @@ export default function VantaTopologyBackground(props?: VantaTopologyBackgroundP
     init()
     return () => {
       mounted = false
+      resizeObserver?.disconnect()
+      resizeObserver = null
       if (effectRef.current) {
         effectRef.current.destroy()
         effectRef.current = null
