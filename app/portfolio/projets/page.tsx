@@ -38,6 +38,8 @@ import { useAdvancedTheme } from '../../contexts/AdvancedThemeContext'
 import { useLanguage } from '../../contexts/LanguageContext'
 import { useThemeColors } from '../../hooks/useThemeColors'
 import { useTextColor } from '../../hooks/useTextColor'
+import FilterContainerLabel from './components/FilterContainerLabel'
+import FilterChipComponent from './components/FilterChipComponent'
 
 interface Project {
   id: number
@@ -150,36 +152,6 @@ const StatsGrid = styled(Box)(({ theme }) => ({
     marginBottom: theme.spacing(5),
   },
 }))
-
-// Composant pour le label du filtre
-const FilterContainerLabel = ({ label }: { label: string }) => {
-  const theme = useTheme()
-  const { primary } = useThemeColors()
-  const textColor = useTextColor()
-  
-  return (
-    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.25, mr: 1, flexShrink: 0 }}>
-      <FilterListIcon sx={{ 
-        color: primary,
-        fontSize: 22,
-        opacity: 0.9,
-        transition: DESIGN_TOKENS.transitions.normal,
-      }} />
-      <Typography 
-        variant="h6" 
-        sx={{ 
-          fontWeight: 600,
-          color: textColor,
-          fontSize: { xs: '0.9375rem', sm: '1rem' },
-          letterSpacing: '0.02em',
-          transition: DESIGN_TOKENS.transitions.normal,
-        }}
-      >
-        {label}
-      </Typography>
-    </Box>
-  )
-}
 
 // Composant pour le titre du projet : gradient sur default, couleur palette sur les autres thèmes. Sur mobile, dégradé statique (pas d'animation) pour éviter les glitches.
 const ProjectTitleTypography = ({ projectName, isNonDefaultPalette = false }: { projectName: string; isNonDefaultPalette?: boolean }) => {
@@ -417,51 +389,6 @@ const ProjectCardWrapper = ({
         )}
       </ThreeDCardComponent>
     </ScrollReveal>
-  )
-}
-
-// Pills du filtre : style simple, un seul effet au survol
-const FilterChipComponent = ({ 
-  label, 
-  onClick, 
-  selected, 
-  icon 
-}: { 
-  label: string
-  onClick: () => void
-  selected: boolean
-  icon?: React.ReactElement
-}) => {
-  const theme = useTheme()
-  const { primary } = useThemeColors()
-  const textColor = useTextColor()
-  
-  const borderColor = selected ? primary : `${primary}40`
-  const labelColor = selected ? primary : textColor
-  const bgTint = `${primary}0c`
-
-  return (
-    <Chip
-      label={label}
-      onClick={onClick}
-      icon={icon}
-      sx={{
-        borderRadius: DESIGN_TOKENS.borderRadius.small,
-        fontWeight: 600,
-        fontSize: '0.8125rem',
-        padding: theme.spacing(0.6, 1.5),
-        cursor: 'pointer',
-        transition: 'border-color 0.2s ease, background 0.2s ease',
-        background: selected ? `${primary}14 !important` : `${bgTint} !important`,
-        color: `${labelColor} !important`,
-        border: `1px solid ${borderColor} !important`,
-        boxShadow: 'none',
-        '&:hover': {
-          background: selected ? `${primary}18 !important` : `${primary}08 !important`,
-          borderColor: `${primary}60 !important`,
-        },
-      }}
-    />
   )
 }
 

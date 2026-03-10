@@ -1,12 +1,17 @@
 {
-  "name": "laboratoire2",
+  "name": "portfolio-jfl",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "prisma generate && prisma db push && next build",
+    "build": "prisma generate && next build",
+    "build:prod": "prisma migrate deploy && next build",
     "start": "next start",
     "lint": "next lint",
+    "test": "vitest",
+    "test:unit": "vitest run",
+    "test:e2e": "playwright test",
+    "test:ci": "vitest run --coverage && playwright test",
     "postinstall": "npx prisma generate",
     "db:seed": "npx ts-node prisma/seed.ts",
     "admin:password": "node scripts/changeAdminPassword.js",
@@ -29,12 +34,19 @@
     "resend": "^6.9.2"
   },
   "devDependencies": {
+    "@playwright/test": "^1.58.2",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.2",
+    "@testing-library/user-event": "^14.6.1",
     "@types/node": "^20.10.5",
     "@types/react": "^18.2.45",
     "@types/react-dom": "^18.2.18",
+    "@vitest/coverage-v8": "^4.0.18",
     "eslint": "^8.56.0",
     "eslint-config-next": "14.0.4",
+    "jsdom": "^28.1.0",
     "prisma": "^6.13.0",
-    "typescript": "^5.3.3"
+    "typescript": "^5.3.3",
+    "vitest": "^4.0.18"
   }
 }

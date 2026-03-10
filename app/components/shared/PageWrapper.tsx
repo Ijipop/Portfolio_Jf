@@ -1,11 +1,12 @@
 'use client'
 
 import Box from '@mui/material/Box'
+import React from 'react'
 import { ReactNode, useEffect, useState } from 'react'
 import { usePathname } from 'next/navigation'
-import { GRADIENTS } from '../../design-system/constants'
-import { useAdvancedTheme } from '../../contexts/AdvancedThemeContext'
-import { shouldShowTopology } from '../FullPageTopologyWrapper'
+import { GRADIENTS } from '@/design-system/constants'
+import { useAdvancedTheme } from '@/contexts/AdvancedThemeContext'
+import { shouldShowTopology } from '@/utils/topologyRoutes'
 
 interface PageWrapperProps {
   children: ReactNode

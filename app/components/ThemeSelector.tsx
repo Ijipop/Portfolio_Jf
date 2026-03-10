@@ -92,15 +92,14 @@ export function ThemeSelector() {
   const applyTheme = (themeName: ThemeName) => {
     const theme = THEMES[themeName]
     
-    console.log('🎨 Applying theme:', theme.name, theme.primary)
-    
     // 1. Synchroniser avec AdvancedThemeContext pour mettre à jour le thème Material-UI
     try {
       setAdvancedTheme(themeName)
-      console.log('✅ AdvancedThemeContext updated to:', themeName)
     } catch (error) {
-      console.warn('⚠️ Could not update AdvancedThemeContext:', error)
-              }
+      if (process.env.NODE_ENV === 'development') {
+        console.warn('[ThemeSelector] Could not update AdvancedThemeContext:', error)
+      }
+    }
     
     // 2. Définir UNIQUEMENT les CSS variables (pas de manipulation DOM directe)
     const root = document.documentElement

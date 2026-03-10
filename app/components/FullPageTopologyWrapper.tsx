@@ -4,17 +4,9 @@ import Box from '@mui/material/Box'
 import { ReactNode, useEffect, useRef } from 'react'
 import { usePathname } from 'next/navigation'
 import dynamic from 'next/dynamic'
+import { shouldShowTopology } from '@/utils/topologyRoutes'
 
 const VantaTopologyBackground = dynamic(() => import('./VantaTopologyBackground'), { ssr: false })
-
-const TOPOLOGY_PATH_PREFIXES = ['/portfolio', '/logiciel', '/pageweb']
-
-export function shouldShowTopology(pathname: string | null): boolean {
-  if (!pathname) return false
-  return TOPOLOGY_PATH_PREFIXES.some(
-    (prefix) => pathname === prefix || pathname.startsWith(prefix + '/')
-  )
-}
 
 const contentWrapperSx = {
   minHeight: '100vh',
