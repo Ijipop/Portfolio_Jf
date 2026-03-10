@@ -114,7 +114,7 @@ export default function PageWrapper({
         flexDirection: 'column',
         background: isTopologyRoute ? 'transparent' : (background || GRADIENTS.backgrounds.light),
         position: 'relative',
-        overflow: overflow || 'hidden',
+        overflow: isTopologyRoute ? (overflow ?? 'visible') : (overflow || 'hidden'),
         overflowX: overflowX,
         overflowY: overflowY,
         transition: 'background 0.5s ease',

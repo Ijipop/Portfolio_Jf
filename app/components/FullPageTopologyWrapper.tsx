@@ -1,7 +1,7 @@
 'use client'
 
 import Box from '@mui/material/Box'
-import { ReactNode } from 'react'
+import { ReactNode, useEffect, useRef } from 'react'
 import { usePathname } from 'next/navigation'
 import dynamic from 'next/dynamic'
 
@@ -31,6 +31,14 @@ interface FullPageTopologyWrapperProps {
 export default function FullPageTopologyWrapper({ children }: FullPageTopologyWrapperProps) {
   const pathname = usePathname()
   const show = shouldShowTopology(pathname)
+  const scrollRef = useRef<HTMLDivElement>(null)
+
+  // Remettre le scroll en haut au montage pour éviter titre coupé / contenu décalé
+  useEffect(() => {
+    if (show && scrollRef.current) {
+      scrollRef.current.scrollTop = 0
+    }
+  }, [show, pathname])
 
   if (!show) {
     return <Box component="div" sx={contentWrapperSx}>{children}</Box>
@@ -68,13 +76,28 @@ export default function FullPageTopologyWrapper({ children }: FullPageTopologyWr
       />
       <Box
         component="div"
+        ref={scrollRef}
+        className="topology-scroll-container"
         sx={{
           position: 'relative',
           zIndex: 2,
-          ...contentWrapperSx,
+          height: '100vh',
+          overflowY: 'auto',
+          overflowX: 'hidden',
+          display: 'flex',
+          flexDirection: 'column',
+          width: '100%',
         }}
       >
-        {children}
+        <Box
+          component="div"
+          sx={{
+            flex: '0 0 auto',
+            minHeight: 'min-content',
+          }}
+        >
+          {children}
+        </Box>
       </Box>
     </>
   )
