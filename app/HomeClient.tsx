@@ -141,14 +141,14 @@ export default function HomeClient({ initialShowIntro }: { initialShowIntro: boo
         }}>
           <CTAButton 
             variant="primary"
-            onClick={() => router.push('/projets')}
+            onClick={() => router.push('/portfolio/projets')}
             size="large"
           >
             {t('home.seeProjects')}
           </CTAButton>
           <CTAButton 
             variant="outline"
-            onClick={() => router.push('/contact')}
+            onClick={() => router.push('/portfolio/contact')}
             size="large"
           >
             {t('home.contactMe')}
@@ -337,7 +337,7 @@ export default function HomeClient({ initialShowIntro }: { initialShowIntro: boo
         }}>
           <FadeIn delay={0.8}>
             <HoverScale>
-              <ThreeDCardComponent onClick={() => handleCardClick('/projets')} floatingElements={2}>
+              <ThreeDCardComponent onClick={() => handleCardClick('/portfolio/projets')} floatingElements={2}>
             <CodeIcon sx={{ fontSize: 48, color: primary, mb: 2 }} />
             <Typography variant="h5" gutterBottom sx={{ color: textColor }}>
               {t('home.cardProjects')}
@@ -351,7 +351,7 @@ export default function HomeClient({ initialShowIntro }: { initialShowIntro: boo
 
           <FadeIn delay={1.0}>
             <HoverScale>
-              <ThreeDCardComponent onClick={() => handleCardClick('/a-propos')} floatingElements={3}>
+              <ThreeDCardComponent onClick={() => handleCardClick('/portfolio/a-propos')} floatingElements={3}>
                 <PersonIcon sx={{ fontSize: 48, color: primary, mb: 2 }} />
                 <Typography variant="h5" gutterBottom sx={{ color: textColor }}>
                   {t('home.cardAbout')}
@@ -365,7 +365,7 @@ export default function HomeClient({ initialShowIntro }: { initialShowIntro: boo
 
           <FadeIn delay={1.2}>
             <HoverScale>
-              <ThreeDCardComponent onClick={() => handleCardClick('/contact')} floatingElements={2}>
+              <ThreeDCardComponent onClick={() => handleCardClick('/portfolio/contact')} floatingElements={2}>
                 <ContactSupportIcon sx={{ fontSize: 48, color: primary, mb: 2 }} />
                 <Typography variant="h5" gutterBottom sx={{ color: textColor }}>
                   {t('home.cardContact')}
@@ -381,7 +381,7 @@ export default function HomeClient({ initialShowIntro }: { initialShowIntro: boo
       
       <Footer />
       {!isMobile && (
-        <StickyCTA text={t('home.stickyCTA')} onClick={() => router.push('/contact')} />
+        <StickyCTA text={t('home.stickyCTA')} onClick={() => router.push('/portfolio/contact')} />
       )}
     </PageWrapper>
       )}

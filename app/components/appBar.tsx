@@ -5,6 +5,8 @@ import HomeIcon from '@mui/icons-material/Home';
 import MenuIcon from '@mui/icons-material/Menu';
 import PersonIcon from '@mui/icons-material/Person';
 import WorkIcon from '@mui/icons-material/Work';
+import ComputerIcon from '@mui/icons-material/Computer';
+import PublicIcon from '@mui/icons-material/Public';
 import CTAButton from './shared/CTAButton';
 import { DESIGN_TOKENS } from '../design-system/constants';
 import AppBar from "@mui/material/AppBar";
@@ -44,9 +46,9 @@ export default function AppBarComponent() {
 	const handleMenuItemClick = (routeId: 'home' | 'projects' | 'about' | 'contact' | 'admin') => {
 		switch (routeId) {
 			case 'home': router.push('/'); break;
-			case 'projects': router.push('/projets'); break;
-			case 'about': router.push('/a-propos'); break;
-			case 'contact': router.push('/contact'); break;
+			case 'projects': router.push('/portfolio/projets'); break;
+			case 'about': router.push('/portfolio/a-propos'); break;
+			case 'contact': router.push('/portfolio/contact'); break;
 			case 'admin': router.push('/admin'); break;
 		}
 		handleMenuClose();
@@ -114,16 +116,16 @@ export default function AppBarComponent() {
 					}}>
 						<IconButton
 							color="inherit"
-							onClick={() => router.push('/projets')}
+							onClick={() => router.push('/portfolio/projets')}
 							sx={{
-								color: pathname === '/projets' ? 'white' : 'rgba(255, 255, 255, 0.8)',
-								backgroundColor: pathname === '/projets' ? 'rgba(255, 255, 255, 0.15)' : 'transparent',
+								color: pathname === '/portfolio/projets' ? 'white' : 'rgba(255, 255, 255, 0.8)',
+								backgroundColor: pathname === '/portfolio/projets' ? 'rgba(255, 255, 255, 0.15)' : 'transparent',
 								borderRadius: DESIGN_TOKENS.borderRadius.small,
 								px: { xs: 1, sm: 2 },
 								py: 1,
 								position: 'relative',
 								transition: DESIGN_TOKENS.transitions.normal,
-								...(pathname === '/projets' && {
+								...(pathname === '/portfolio/projets' && {
 									'&::after': {
 										content: '""',
 										position: 'absolute',
@@ -144,23 +146,97 @@ export default function AppBarComponent() {
 							}}
 						>
 							<WorkIcon sx={{ mr: { xs: 0, sm: 1 }, fontSize: { xs: 20, sm: 24 } }} />
-							<Typography variant="body2" sx={{ display: { xs: 'none', sm: 'block' }, fontWeight: pathname === '/projets' ? 600 : 400 }}>
+							<Typography variant="body2" sx={{ display: { xs: 'none', sm: 'block' }, fontWeight: pathname === '/portfolio/projets' ? 600 : 400 }}>
 								{t('nav.projects')}
 							</Typography>
 						</IconButton>
-						
+
 						<IconButton
 							color="inherit"
-							onClick={() => router.push('/a-propos')}
+							onClick={() => router.push('/logiciel')}
 							sx={{
-								color: pathname === '/a-propos' ? 'white' : 'rgba(255, 255, 255, 0.8)',
-								backgroundColor: pathname === '/a-propos' ? 'rgba(255, 255, 255, 0.15)' : 'transparent',
+								color: (pathname === '/logiciel' || pathname.startsWith('/logiciel/')) ? 'white' : 'rgba(255, 255, 255, 0.8)',
+								backgroundColor: (pathname === '/logiciel' || pathname.startsWith('/logiciel/')) ? 'rgba(255, 255, 255, 0.15)' : 'transparent',
 								borderRadius: DESIGN_TOKENS.borderRadius.small,
 								px: { xs: 1, sm: 2 },
 								py: 1,
 								position: 'relative',
 								transition: DESIGN_TOKENS.transitions.normal,
-								...(pathname === '/a-propos' && {
+								...((pathname === '/logiciel' || pathname.startsWith('/logiciel/')) && {
+									'&::after': {
+										content: '""',
+										position: 'absolute',
+										bottom: 0,
+										left: '50%',
+										transform: 'translateX(-50%)',
+										width: '80%',
+										height: '3px',
+										background: 'white',
+										borderRadius: '2px 2px 0 0',
+									}
+								}),
+								'&:hover': {
+									color: 'white',
+									backgroundColor: 'rgba(255, 255, 255, 0.15)',
+									transform: 'translateY(-2px)',
+								},
+							}}
+						>
+							<ComputerIcon sx={{ mr: { xs: 0, sm: 1 }, fontSize: { xs: 20, sm: 24 } }} />
+							<Typography variant="body2" sx={{ display: { xs: 'none', sm: 'block' }, fontWeight: (pathname === '/logiciel' || pathname.startsWith('/logiciel/')) ? 600 : 400 }}>
+								{t('nav.software')}
+							</Typography>
+						</IconButton>
+
+						<IconButton
+							color="inherit"
+							onClick={() => router.push('/pageweb')}
+							sx={{
+								color: pathname === '/pageweb' ? 'white' : 'rgba(255, 255, 255, 0.8)',
+								backgroundColor: pathname === '/pageweb' ? 'rgba(255, 255, 255, 0.15)' : 'transparent',
+								borderRadius: DESIGN_TOKENS.borderRadius.small,
+								px: { xs: 1, sm: 2 },
+								py: 1,
+								position: 'relative',
+								transition: DESIGN_TOKENS.transitions.normal,
+								...(pathname === '/pageweb' && {
+									'&::after': {
+										content: '""',
+										position: 'absolute',
+										bottom: 0,
+										left: '50%',
+										transform: 'translateX(-50%)',
+										width: '80%',
+										height: '3px',
+										background: 'white',
+										borderRadius: '2px 2px 0 0',
+									}
+								}),
+								'&:hover': {
+									color: 'white',
+									backgroundColor: 'rgba(255, 255, 255, 0.15)',
+									transform: 'translateY(-2px)',
+								},
+							}}
+						>
+							<PublicIcon sx={{ mr: { xs: 0, sm: 1 }, fontSize: { xs: 20, sm: 24 } }} />
+							<Typography variant="body2" sx={{ display: { xs: 'none', sm: 'block' }, fontWeight: pathname === '/pageweb' ? 600 : 400 }}>
+								{t('nav.webSites')}
+							</Typography>
+						</IconButton>
+						
+						<IconButton
+							color="inherit"
+							onClick={() => router.push('/portfolio/a-propos')}
+							sx={{
+								color: pathname === '/portfolio/a-propos' ? 'white' : 'rgba(255, 255, 255, 0.8)',
+								backgroundColor: pathname === '/portfolio/a-propos' ? 'rgba(255, 255, 255, 0.15)' : 'transparent',
+								borderRadius: DESIGN_TOKENS.borderRadius.small,
+								px: { xs: 1, sm: 2 },
+								py: 1,
+								position: 'relative',
+								transition: DESIGN_TOKENS.transitions.normal,
+								...(pathname === '/portfolio/a-propos' && {
 									'&::after': {
 										content: '""',
 										position: 'absolute',
@@ -181,23 +257,23 @@ export default function AppBarComponent() {
 							}}
 						>
 							<PersonIcon sx={{ mr: { xs: 0, sm: 1 }, fontSize: { xs: 20, sm: 24 } }} />
-							<Typography variant="body2" sx={{ display: { xs: 'none', sm: 'block' }, fontWeight: pathname === '/a-propos' ? 600 : 400 }}>
+							<Typography variant="body2" sx={{ display: { xs: 'none', sm: 'block' }, fontWeight: pathname === '/portfolio/a-propos' ? 600 : 400 }}>
 								{t('nav.about')}
 							</Typography>
 						</IconButton>
 						
 						<IconButton
 							color="inherit"
-							onClick={() => router.push('/contact')}
+							onClick={() => router.push('/portfolio/contact')}
 							sx={{
-								color: pathname === '/contact' ? 'white' : 'rgba(255, 255, 255, 0.8)',
-								backgroundColor: pathname === '/contact' ? 'rgba(255, 255, 255, 0.15)' : 'transparent',
+								color: pathname === '/portfolio/contact' ? 'white' : 'rgba(255, 255, 255, 0.8)',
+								backgroundColor: pathname === '/portfolio/contact' ? 'rgba(255, 255, 255, 0.15)' : 'transparent',
 								borderRadius: DESIGN_TOKENS.borderRadius.small,
 								px: { xs: 1, sm: 2 },
 								py: 1,
 								position: 'relative',
 								transition: DESIGN_TOKENS.transitions.normal,
-								...(pathname === '/contact' && {
+								...(pathname === '/portfolio/contact' && {
 									'&::after': {
 										content: '""',
 										position: 'absolute',
@@ -218,7 +294,7 @@ export default function AppBarComponent() {
 							}}
 						>
 							<ContactMailIcon sx={{ mr: { xs: 0, sm: 1 }, fontSize: { xs: 20, sm: 24 } }} />
-							<Typography variant="body2" sx={{ display: { xs: 'none', sm: 'block' }, fontWeight: pathname === '/contact' ? 600 : 400 }}>
+							<Typography variant="body2" sx={{ display: { xs: 'none', sm: 'block' }, fontWeight: pathname === '/portfolio/contact' ? 600 : 400 }}>
 								{t('nav.contact')}
 							</Typography>
 						</IconButton>
@@ -234,11 +310,11 @@ export default function AppBarComponent() {
 					}}>
 						<IconButton
 							color="inherit"
-							onClick={() => router.push('/projets')}
+							onClick={() => router.push('/portfolio/projets')}
 							aria-label="projets"
 							sx={{
-								color: pathname === '/projets' ? 'white' : 'rgba(255, 255, 255, 0.7)',
-								backgroundColor: pathname === '/projets' ? 'rgba(255, 255, 255, 0.15)' : 'transparent',
+								color: pathname === '/portfolio/projets' ? 'white' : 'rgba(255, 255, 255, 0.7)',
+								backgroundColor: pathname === '/portfolio/projets' ? 'rgba(255, 255, 255, 0.15)' : 'transparent',
 								padding: '8px',
 								'&:hover': {
 									color: 'white',
@@ -248,14 +324,48 @@ export default function AppBarComponent() {
 						>
 							<WorkIcon />
 						</IconButton>
+
+						<IconButton
+							color="inherit"
+							onClick={() => router.push('/logiciel')}
+							aria-label="logiciel"
+							sx={{
+								color: (pathname === '/logiciel' || pathname.startsWith('/logiciel/')) ? 'white' : 'rgba(255, 255, 255, 0.7)',
+								backgroundColor: (pathname === '/logiciel' || pathname.startsWith('/logiciel/')) ? 'rgba(255, 255, 255, 0.15)' : 'transparent',
+								padding: '8px',
+								'&:hover': {
+									color: 'white',
+									backgroundColor: 'rgba(255, 255, 255, 0.15)',
+								},
+							}}
+						>
+							<ComputerIcon />
+						</IconButton>
+
+						<IconButton
+							color="inherit"
+							onClick={() => router.push('/pageweb')}
+							aria-label="sites web"
+							sx={{
+								color: pathname === '/pageweb' ? 'white' : 'rgba(255, 255, 255, 0.7)',
+								backgroundColor: pathname === '/pageweb' ? 'rgba(255, 255, 255, 0.15)' : 'transparent',
+								padding: '8px',
+								'&:hover': {
+									color: 'white',
+									backgroundColor: 'rgba(255, 255, 255, 0.15)',
+								},
+							}}
+						>
+							<PublicIcon />
+						</IconButton>
 						
 						<IconButton
 							color="inherit"
-							onClick={() => router.push('/a-propos')}
+							onClick={() => router.push('/portfolio/a-propos')}
 							aria-label="à propos"
 							sx={{
-								color: pathname === '/a-propos' ? 'white' : 'rgba(255, 255, 255, 0.7)',
-								backgroundColor: pathname === '/a-propos' ? 'rgba(255, 255, 255, 0.15)' : 'transparent',
+								color: pathname === '/portfolio/a-propos' ? 'white' : 'rgba(255, 255, 255, 0.7)',
+								backgroundColor: pathname === '/portfolio/a-propos' ? 'rgba(255, 255, 255, 0.15)' : 'transparent',
 								padding: '8px',
 								'&:hover': {
 									color: 'white',
@@ -268,11 +378,11 @@ export default function AppBarComponent() {
 						
 						<IconButton
 							color="inherit"
-							onClick={() => router.push('/contact')}
+							onClick={() => router.push('/portfolio/contact')}
 							aria-label="contact"
 							sx={{
-								color: pathname === '/contact' ? 'white' : 'rgba(255, 255, 255, 0.7)',
-								backgroundColor: pathname === '/contact' ? 'rgba(255, 255, 255, 0.15)' : 'transparent',
+								color: pathname === '/portfolio/contact' ? 'white' : 'rgba(255, 255, 255, 0.7)',
+								backgroundColor: pathname === '/portfolio/contact' ? 'rgba(255, 255, 255, 0.15)' : 'transparent',
 								padding: '8px',
 								'&:hover': {
 									color: 'white',

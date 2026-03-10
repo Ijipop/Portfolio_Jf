@@ -66,7 +66,7 @@ export default function Footer() {
   }, [primary, secondary])
 
   const handleEmailClick = () => {
-    router.push('/contact')
+    router.push('/portfolio/contact')
   }
 
   const handleGitHubClick = () => {
@@ -123,7 +123,7 @@ export default function Footer() {
             <CTAButton
               variant="outline"
               size="small"
-              onClick={() => router.push('/contact')}
+              onClick={() => router.push('/portfolio/contact')}
             >
               {t('footer.contactButton')}
             </CTAButton>
@@ -144,7 +144,7 @@ export default function Footer() {
                   color: textColor,
                   '&:hover': { opacity: 1, transform: 'translateX(4px)' }
                 }}
-                onClick={() => router.push('/projets')}
+                onClick={() => router.push('/portfolio/projets')}
               >
                 {t('home.cardProjects')}
               </Typography>
@@ -157,7 +157,7 @@ export default function Footer() {
                   color: textColor,
                   '&:hover': { opacity: 1, transform: 'translateX(4px)' }
                 }}
-                onClick={() => router.push('/a-propos')}
+                onClick={() => router.push('/portfolio/a-propos')}
               >
                 {t('home.cardAbout')}
               </Typography>
@@ -170,7 +170,7 @@ export default function Footer() {
                   color: textColor,
                   '&:hover': { opacity: 1, transform: 'translateX(4px)' }
                 }}
-                onClick={() => router.push('/contact')}
+                onClick={() => router.push('/portfolio/contact')}
               >
                 {t('home.cardContact')}
               </Typography>

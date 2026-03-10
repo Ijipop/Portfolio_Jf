@@ -11,19 +11,19 @@ import Typography from '@mui/material/Typography'
 import { styled } from '@mui/material/styles'
 import { useRouter } from 'next/navigation'
 import { useState, useEffect } from 'react'
-import SkillTag from '../components/shared/SkillTag'
-import HeaderSection from '../components/shared/HeaderSection'
-import AppBarComponent from '../components/appBar'
-import PageWrapper from '../components/shared/PageWrapper'
-import CTAButton from '../components/shared/CTAButton'
-import Footer from '../components/Footer'
-import { useAdvancedTheme } from '../contexts/AdvancedThemeContext'
-import { GRADIENTS, DESIGN_TOKENS } from '../design-system/constants'
-import { useThemeColors } from '../hooks/useThemeColors'
-import { useTextColor } from '../hooks/useTextColor'
-import { useLanguage } from '../contexts/LanguageContext'
+import SkillTag from '../../components/shared/SkillTag'
+import HeaderSection from '../../components/shared/HeaderSection'
+import AppBarComponent from '../../components/appBar'
+import PageWrapper from '../../components/shared/PageWrapper'
+import CTAButton from '../../components/shared/CTAButton'
+import Footer from '../../components/Footer'
+import { useAdvancedTheme } from '../../contexts/AdvancedThemeContext'
+import { GRADIENTS, DESIGN_TOKENS } from '../../design-system/constants'
+import { useThemeColors } from '../../hooks/useThemeColors'
+import { useTextColor } from '../../hooks/useTextColor'
+import { useLanguage } from '../../contexts/LanguageContext'
 import { useTheme } from '@mui/material/styles'
-import { getTextColorForBackground } from '../utils/colorUtils'
+import { getTextColorForBackground } from '../../utils/colorUtils'
 import TimelineIcon from '@mui/icons-material/Timeline'
 import LightbulbIcon from '@mui/icons-material/Lightbulb'
 import GroupWorkIcon from '@mui/icons-material/GroupWork'
@@ -826,14 +826,14 @@ export default function About() {
           <Box sx={{ display: 'flex', gap: 2, justifyContent: 'center', flexWrap: 'wrap' }}>
             <CTAButton 
               variant="primary"
-              onClick={() => router.push('/contact')}
+              onClick={() => router.push('/portfolio/contact')}
               size="large"
             >
               {t('about.contactCTA')}
             </CTAButton>
             <CTAButton 
               variant="outline"
-              onClick={() => router.push('/projets')}
+              onClick={() => router.push('/portfolio/projets')}
               size="large"
             >
               {t('home.seeProjects')}
