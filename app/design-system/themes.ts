@@ -3,6 +3,10 @@
  * Source unique de vérité pour les palettes de couleurs
  */
 
+import { dimHex } from '../utils/colorUtils'
+
+const DIM_AMOUNT = 0.45
+
 export const THEMES = {
   default: {
     name: 'Default',
@@ -18,40 +22,40 @@ export const THEMES = {
     primary: '#00ff88',
     secondary: '#ff0080',
     accent: '#00ffff',
-    bg: '#0a0a0a',
-    bg2: '#000000',
+    bg: dimHex('#0a0a0a', DIM_AMOUNT),
+    bg2: dimHex('#000000', DIM_AMOUNT),
   },
   sunset: {
     name: 'Sunset',
     primary: '#ff6b35',
     secondary: '#ff1744',
     accent: '#ffd700',
-    bg: '#2d1b1b',
-    bg2: '#1a0f0f',
+    bg: dimHex('#2d1b1b', DIM_AMOUNT),
+    bg2: dimHex('#1a0f0f', DIM_AMOUNT),
   },
   ocean: {
     name: 'Ocean',
     primary: '#00bcd4',
     secondary: '#2196f3',
     accent: '#4fc3f7',
-    bg: '#0f172a',
-    bg2: '#0a0f1a',
+    bg: dimHex('#0f172a', DIM_AMOUNT),
+    bg2: dimHex('#0a0f1a', DIM_AMOUNT),
   },
   forest: {
     name: 'Forest',
     primary: '#4caf50',
     secondary: '#8bc34a',
     accent: '#cddc39',
-    bg: '#0f1f0f',
-    bg2: '#0a1a0a',
+    bg: dimHex('#0f1f0f', DIM_AMOUNT),
+    bg2: dimHex('#0a1a0a', DIM_AMOUNT),
   },
   cyber: {
     name: 'Cyber',
     primary: '#9c27b0',
     secondary: '#e91e63',
     accent: '#ff9800',
-    bg: '#1a0a1a',
-    bg2: '#0f0a1a',
+    bg: dimHex('#1a0a1a', DIM_AMOUNT),
+    bg2: dimHex('#0f0a1a', DIM_AMOUNT),
   },
 } as const
 

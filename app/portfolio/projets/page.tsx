@@ -27,6 +27,7 @@ import ScrollReveal from '../../components/shared/ScrollReveal'
 import SkillTag from '../../components/shared/SkillTag'
 import HeaderSection from '../../components/shared/HeaderSection'
 import PageWrapper from '../../components/shared/PageWrapper'
+import InteractiveBackgroundSection from '../../components/shared/InteractiveBackgroundSection'
 import CTAButton from '../../components/shared/CTAButton'
 import Footer from '../../components/Footer'
 import { DESIGN_TOKENS, ANIMATIONS, GRADIENTS } from '../../design-system/constants'
@@ -716,17 +717,19 @@ export default function Projets() {
 
   if (loading) {
     return (
-      <PageWrapper backgroundVariant="default" showParticles={false}>
+      <PageWrapper backgroundVariant="default">
         <AppBarComponent />
-        <Container sx={{ 
-          mt: 4, 
-          display: 'flex', 
-          justifyContent: 'center', 
-          alignItems: 'center',
-          minHeight: '60vh'
-        }}>
-          <LoadingSpinner message="Chargement des projets..." />
-        </Container>
+        <InteractiveBackgroundSection>
+          <Container sx={{ 
+            mt: 4, 
+            display: 'flex', 
+            justifyContent: 'center', 
+            alignItems: 'center',
+            minHeight: '60vh'
+          }}>
+            <LoadingSpinner message="Chargement des projets..." />
+          </Container>
+        </InteractiveBackgroundSection>
       </PageWrapper>
     )
   }
@@ -734,9 +737,6 @@ export default function Projets() {
   return (
     <PageWrapper
       backgroundVariant="projects"
-      particleCount={70}
-      particleSpeed={0.25}
-      particleColors={[primary, secondary, accent]}
       overlayVariant="light"
       overflowX="hidden"
       overflowY="auto"
@@ -749,6 +749,7 @@ export default function Projets() {
         subtitle={t('projects.subtitle')}
       />
 
+      <InteractiveBackgroundSection>
       <Container maxWidth="lg" sx={{ py: { xs: 3, sm: 4, md: 4, xl: 5 }, position: 'relative', zIndex: 2 }}>
         {error && (
           <AnimatedBox>
@@ -886,6 +887,7 @@ export default function Projets() {
           </AnimatedBox>
         )}
       </Container>
+      </InteractiveBackgroundSection>
       
       <Footer />
     </PageWrapper>

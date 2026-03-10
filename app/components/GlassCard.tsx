@@ -8,7 +8,7 @@ import { motion } from 'framer-motion'
 const GlassCard = styled(Card)(({ theme }) => ({
   background: theme.palette.mode === 'dark'
     ? 'rgba(26, 26, 26, 0.25)'
-    : 'var(--card-background, rgba(255, 255, 255, 0.25))',
+    : 'var(--card-background, linear-gradient(145deg, #e2e8f0 0%, #cbd5e1 50%, #e2e8f0 100%))',
   backdropFilter: 'blur(20px)',
   WebkitBackdropFilter: 'blur(20px)',
   border: theme.palette.mode === 'dark'
@@ -81,7 +81,7 @@ const NeumorphicButton = styled(Box)(({ theme }) => ({
 const GlassContainer = styled(Box)(({ theme }) => ({
   background: theme.palette.mode === 'dark'
     ? 'rgba(10, 10, 10, 0.8)'
-    : 'var(--card-background, rgba(248, 250, 252, 0.8))',
+    : 'var(--card-background, linear-gradient(145deg, #e2e8f0 0%, #cbd5e1 50%, #e2e8f0 100%))',
   backdropFilter: 'blur(24px)',
   WebkitBackdropFilter: 'blur(24px)',
   border: theme.palette.mode === 'dark'

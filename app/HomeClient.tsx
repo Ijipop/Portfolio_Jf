@@ -15,6 +15,7 @@ import ThreeDCardComponent from './components/ThreeDCard'
 import AppBarComponent from './components/appBar'
 import HeaderSection from './components/shared/HeaderSection'
 import PageWrapper from './components/shared/PageWrapper'
+import InteractiveBackgroundSection from './components/shared/InteractiveBackgroundSection'
 import CTAButton from './components/shared/CTAButton'
 import StickyCTA from './components/shared/StickyCTA'
 import Footer from './components/Footer'
@@ -110,12 +111,7 @@ export default function HomeClient({ initialShowIntro }: { initialShowIntro: boo
         <SignatureIntro onComplete={handleIntroComplete} />
       )}
       {!showIntro && (
-      <PageWrapper
-      backgroundVariant="default"
-      particleCount={60}
-      particleSpeed={0.2}
-      particleColors={[primary, secondary, accent]}
-    >
+      <PageWrapper backgroundVariant="default">
       <AppBarComponent />
       
       <HeaderSection 
@@ -156,6 +152,7 @@ export default function HomeClient({ initialShowIntro }: { initialShowIntro: boo
         </Box>
       </HeaderSection>
 
+      <InteractiveBackgroundSection>
       <Container maxWidth="lg" sx={{ py: { xs: 4, md: 8 }, px: { xs: 2, sm: 3, md: 4 }, position: 'relative', zIndex: 2 }}>
         <GlassContainer sx={{ 
           mb: { xs: DESIGN_TOKENS.spacing.xl, md: DESIGN_TOKENS.spacing.xxl },
@@ -266,7 +263,7 @@ export default function HomeClient({ initialShowIntro }: { initialShowIntro: boo
           zIndex: 2 
         }}>
           <Box sx={{ 
-            background: themeName === 'default' ? '#ffffff !important' : `${skillsBackground} !important`,
+            background: `${skillsBackground} !important`,
             border: themeName === 'default' ? '1px solid rgba(0,0,0,0.08) !important' : `1px solid ${primary}30 !important`,
             borderRadius: DESIGN_TOKENS.borderRadius.large,
             padding: { xs: DESIGN_TOKENS.spacing.md, md: DESIGN_TOKENS.spacing.xl },
@@ -378,6 +375,7 @@ export default function HomeClient({ initialShowIntro }: { initialShowIntro: boo
           </FadeIn>
         </Box>
       </Container>
+      </InteractiveBackgroundSection>
       
       <Footer />
       {!isMobile && (

@@ -2,13 +2,10 @@
 
 import Box from '@mui/material/Box'
 import { ReactNode, useEffect, useState } from 'react'
-import { useTheme } from '@mui/material/styles'
-import dynamic from 'next/dynamic'
+import { usePathname } from 'next/navigation'
 import { GRADIENTS } from '../../design-system/constants'
-
-const ProfessionalBackground = dynamic(() => import('../ProfessionalBackground'), { ssr: false })
-import { useThemeColors } from '../../hooks/useThemeColors'
 import { useAdvancedTheme } from '../../contexts/AdvancedThemeContext'
+import { shouldShowTopology } from '../FullPageTopologyWrapper'
 
 interface PageWrapperProps {
   children: ReactNode
@@ -19,22 +16,6 @@ interface PageWrapperProps {
    * - 'projects': utilise GRADIENTS.backgrounds.lightProjects
    */
   backgroundVariant?: 'default' | 'alternate' | 'projects'
-  /**
-   * Afficher le système de particules
-   */
-  showParticles?: boolean
-  /**
-   * Nombre de particules (défaut: 120)
-   */
-  particleCount?: number
-  /**
-   * Vitesse des particules (défaut: 0.4)
-   */
-  particleSpeed?: number
-  /**
-   * Couleurs des particules
-   */
-  particleColors?: string[]
   /**
    * Afficher l'overlay radial (::before)
    */
@@ -54,17 +35,14 @@ interface PageWrapperProps {
 export default function PageWrapper({
   children,
   backgroundVariant = 'default',
-  showParticles = true,
-  particleCount = 120,
-  particleSpeed = 0.4,
-  particleColors = ['#ff6b35', '#ff1744', '#3b82f6', '#059669'],
   showRadialOverlay = true,
   overlayVariant = 'dark',
   overflow,
   overflowX,
   overflowY,
 }: PageWrapperProps) {
-  const theme = useTheme()
+  const pathname = usePathname()
+  const isTopologyRoute = shouldShowTopology(pathname)
   const { customTheme } = useAdvancedTheme()
   
   // Fonction pour obtenir le background initial (plus de dépendance au dark mode)
@@ -132,28 +110,29 @@ export default function PageWrapper({
     <Box
       sx={{
         minHeight: '100vh',
-        background: background || GRADIENTS.backgrounds.light,
+        display: 'flex',
+        flexDirection: 'column',
+        background: isTopologyRoute ? 'transparent' : (background || GRADIENTS.backgrounds.light),
         position: 'relative',
         overflow: overflow || 'hidden',
         overflowX: overflowX,
         overflowY: overflowY,
         transition: 'background 0.5s ease',
-        '&::before': {
-          content: '""',
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          background: getOverlay(),
-          pointerEvents: 'none',
-          zIndex: 0,
-        },
+        '&::before': isTopologyRoute
+          ? { content: 'none', display: 'none' }
+          : {
+              content: '""',
+              position: 'fixed',
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              background: getOverlay(),
+              pointerEvents: 'none',
+              zIndex: 0,
+            },
       }}
     >
-      {showParticles && (
-        <ProfessionalBackground />
-      )}
       {children}
     </Box>
   )

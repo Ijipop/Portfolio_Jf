@@ -45,7 +45,7 @@ export default function AppBarComponent() {
 
 	const handleMenuItemClick = (routeId: 'home' | 'projects' | 'about' | 'contact' | 'admin') => {
 		switch (routeId) {
-			case 'home': router.push('/'); break;
+			case 'home': router.push('/portfolio'); break;
 			case 'projects': router.push('/portfolio/projets'); break;
 			case 'about': router.push('/portfolio/a-propos'); break;
 			case 'contact': router.push('/portfolio/contact'); break;
@@ -114,6 +114,42 @@ export default function AppBarComponent() {
 						justifyContent: 'center',
 						alignItems: 'center'
 					}}>
+						<IconButton
+							color="inherit"
+							onClick={() => router.push('/portfolio')}
+							sx={{
+								color: pathname === '/portfolio' ? 'white' : 'rgba(255, 255, 255, 0.8)',
+								backgroundColor: pathname === '/portfolio' ? 'rgba(255, 255, 255, 0.15)' : 'transparent',
+								borderRadius: DESIGN_TOKENS.borderRadius.small,
+								px: { xs: 1, sm: 2 },
+								py: 1,
+								position: 'relative',
+								transition: DESIGN_TOKENS.transitions.normal,
+								...(pathname === '/portfolio' && {
+									'&::after': {
+										content: '""',
+										position: 'absolute',
+										bottom: 0,
+										left: '50%',
+										transform: 'translateX(-50%)',
+										width: '80%',
+										height: '3px',
+										background: 'white',
+										borderRadius: '2px 2px 0 0',
+									}
+								}),
+								'&:hover': {
+									color: 'white',
+									backgroundColor: 'rgba(255, 255, 255, 0.15)',
+									transform: 'translateY(-2px)',
+								},
+							}}
+						>
+							<HomeIcon sx={{ mr: { xs: 0, sm: 1 }, fontSize: { xs: 20, sm: 24 } }} />
+							<Typography variant="body2" sx={{ display: { xs: 'none', sm: 'block' }, fontWeight: pathname === '/portfolio' ? 600 : 400 }}>
+								{t('nav.home')}
+							</Typography>
+						</IconButton>
 						<IconButton
 							color="inherit"
 							onClick={() => router.push('/portfolio/projets')}
@@ -308,6 +344,22 @@ export default function AppBarComponent() {
 						justifyContent: 'center',
 						alignItems: 'center'
 					}}>
+						<IconButton
+							color="inherit"
+							onClick={() => router.push('/portfolio')}
+							aria-label="accueil"
+							sx={{
+								color: pathname === '/portfolio' ? 'white' : 'rgba(255, 255, 255, 0.7)',
+								backgroundColor: pathname === '/portfolio' ? 'rgba(255, 255, 255, 0.15)' : 'transparent',
+								padding: '8px',
+								'&:hover': {
+									color: 'white',
+									backgroundColor: 'rgba(255, 255, 255, 0.15)',
+								},
+							}}
+						>
+							<HomeIcon />
+						</IconButton>
 						<IconButton
 							color="inherit"
 							onClick={() => router.push('/portfolio/projets')}

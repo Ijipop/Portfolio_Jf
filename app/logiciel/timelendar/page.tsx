@@ -5,6 +5,7 @@ import Container from '@mui/material/Container'
 import Typography from '@mui/material/Typography'
 import AppBarComponent from '../../components/appBar'
 import PageWrapper from '../../components/shared/PageWrapper'
+import InteractiveBackgroundSection from '../../components/shared/InteractiveBackgroundSection'
 import Footer from '../../components/Footer'
 import { useLanguage } from '../../contexts/LanguageContext'
 import { DESIGN_TOKENS } from '../../design-system/constants'
@@ -21,8 +22,9 @@ export default function TimelendarPage() {
   const placeholderColor = isDefaultPalette ? undefined : 'rgba(255,255,255,0.8)'
 
   return (
-    <PageWrapper backgroundVariant="default" showParticles={true}>
+    <PageWrapper backgroundVariant="default">
       <AppBarComponent />
+      <InteractiveBackgroundSection>
       <Box
         component="main"
         sx={{
@@ -106,6 +108,7 @@ export default function TimelendarPage() {
           </Box>
         </Container>
       </Box>
+      </InteractiveBackgroundSection>
       <Footer />
     </PageWrapper>
   )

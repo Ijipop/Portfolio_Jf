@@ -8,7 +8,7 @@ import { useEffect, useState } from 'react'
 
 // 3D Card avec perspective et transformations
 const ThreeDCard = styled(Card)(({ theme }) => ({
-  background: 'var(--card-background, linear-gradient(145deg, #ffffff 0%, #f8fafc 50%, #ffffff 100%))',
+  background: 'var(--card-background, linear-gradient(145deg, #e2e8f0 0%, #cbd5e1 50%, #e2e8f0 100%))',
   borderRadius: 24,
   padding: theme.spacing(4),
   boxShadow: theme.palette.mode === 'dark'

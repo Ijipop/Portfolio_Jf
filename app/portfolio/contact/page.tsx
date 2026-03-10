@@ -20,6 +20,7 @@ import ThreeDCardComponent from '../../components/ThreeDCard'
 import HeaderSection from '../../components/shared/HeaderSection'
 import AppBarComponent from '../../components/appBar'
 import PageWrapper from '../../components/shared/PageWrapper'
+import InteractiveBackgroundSection from '../../components/shared/InteractiveBackgroundSection'
 import Footer from '../../components/Footer'
 import CTAButton from '../../components/shared/CTAButton'
 import { DESIGN_TOKENS } from '../../design-system/constants'
@@ -266,12 +267,7 @@ export default function Contact() {
   }
 
   return (
-    <PageWrapper
-      backgroundVariant="alternate"
-      particleCount={50}
-      particleSpeed={0.2}
-      particleColors={[primary, secondary, accent]}
-    >
+    <PageWrapper backgroundVariant="alternate">
       <AppBarComponent />
       
       <HeaderSection 
@@ -279,6 +275,7 @@ export default function Contact() {
         subtitle={t('contact.subtitle')}
       />
 
+      <InteractiveBackgroundSection>
       <Container maxWidth="lg" sx={{ py: useCompactContact ? 4 : 8, position: 'relative', zIndex: 2 }}>
         <Box sx={{ 
           display: 'grid', 
@@ -524,6 +521,7 @@ export default function Contact() {
           </Box>
         </Box>
       </Container>
+      </InteractiveBackgroundSection>
 
       {/* Snackbar pour confirmer la copie */}
       <Snackbar

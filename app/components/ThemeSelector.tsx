@@ -67,7 +67,7 @@ export function ThemeSelector() {
       return {
         primary: theme.primary,
         secondary: theme.secondary,
-        background: `linear-gradient(145deg, ${theme.bg2} 0%, ${theme.bg} 50%, ${theme.bg2} 100%)`,
+        background: 'linear-gradient(145deg, #e2e8f0 0%, #cbd5e1 50%, #e2e8f0 100%)',
         cardGradient: `linear-gradient(145deg, ${theme.primary}12 0%, ${theme.secondary}12 50%, ${theme.primary}12 100%)`
       }
     }

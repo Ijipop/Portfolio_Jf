@@ -15,6 +15,7 @@ import SkillTag from '../../components/shared/SkillTag'
 import HeaderSection from '../../components/shared/HeaderSection'
 import AppBarComponent from '../../components/appBar'
 import PageWrapper from '../../components/shared/PageWrapper'
+import InteractiveBackgroundSection from '../../components/shared/InteractiveBackgroundSection'
 import CTAButton from '../../components/shared/CTAButton'
 import Footer from '../../components/Footer'
 import { useAdvancedTheme } from '../../contexts/AdvancedThemeContext'
@@ -269,12 +270,7 @@ export default function About() {
   }
 
   return (
-    <PageWrapper
-      backgroundVariant="alternate"
-      particleCount={60}
-      particleSpeed={0.25}
-      particleColors={[primary, secondary, accent]}
-    >
+    <PageWrapper backgroundVariant="alternate">
       <AppBarComponent />
       
       {/* Hero Section */}
@@ -283,6 +279,7 @@ export default function About() {
         subtitle={t('about.subtitle')}
       />
 
+      <InteractiveBackgroundSection>
       <Container maxWidth="lg" sx={{ py: 6, position: 'relative', zIndex: 2 }}>
 
         <Box sx={{ 
@@ -666,7 +663,7 @@ export default function About() {
         </Box>
 
         <Box sx={{ 
-          background: 'var(--card-background, linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%))',
+          background: 'var(--card-background, linear-gradient(145deg, #e2e8f0 0%, #cbd5e1 50%, #e2e8f0 100%))',
           border: '1px solid var(--card-primary, rgba(0,0,0,0.08))',
           borderRadius: DESIGN_TOKENS.borderRadius.large,
           padding: 4,
@@ -724,7 +721,7 @@ export default function About() {
 
         {/* Section Soft Skills */}
         <Box sx={{ 
-          background: 'var(--card-background, linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%))',
+          background: 'var(--card-background, linear-gradient(145deg, #e2e8f0 0%, #cbd5e1 50%, #e2e8f0 100%))',
           border: '1px solid var(--card-primary, rgba(0,0,0,0.08))',
           borderRadius: DESIGN_TOKENS.borderRadius.large,
           padding: DESIGN_TOKENS.spacing.xl,
@@ -841,6 +838,7 @@ export default function About() {
           </Box>
         </Box>
       </Container>
+      </InteractiveBackgroundSection>
       
       <Footer />
     </PageWrapper>
