@@ -12,6 +12,7 @@ import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import CTAButton from './shared/CTAButton'
 import { DESIGN_TOKENS } from '../design-system/constants'
+import { useAdvancedTheme } from '../contexts/AdvancedThemeContext'
 import { useThemeColors } from '../hooks/useThemeColors'
 import { getTextColorForBackground } from '../utils/colorUtils'
 import { useLanguage } from '../contexts/LanguageContext'
@@ -21,6 +22,7 @@ export default function Footer() {
   const router = useRouter()
   const theme = useTheme()
   const { primary, secondary } = useThemeColors()
+  const { themeName } = useAdvancedTheme()
   const { t } = useLanguage()
   const [footerBackground, setFooterBackground] = useState<string>(`linear-gradient(135deg, ${primary} 0%, ${secondary} 100%)`)
   const [textColor, setTextColor] = useState<string>('#ffffff')
@@ -30,27 +32,25 @@ export default function Footer() {
     const updateFooterBackground = () => {
       if (typeof window === 'undefined') return
       
-      // Lire les CSS variables définies par ThemeSelector
-      const bg = getComputedStyle(document.documentElement).getPropertyValue('--theme-bg')?.trim()
-      const bg2 = getComputedStyle(document.documentElement).getPropertyValue('--theme-bg2')?.trim()
-      
       let newBackground: string
-      if (bg && bg2) {
-        // Créer un gradient avec les couleurs du thème
-        newBackground = `linear-gradient(135deg, ${bg} 0%, ${bg2} 50%, ${bg} 100%)`
+      if (themeName === 'default') {
+        newBackground = 'linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 50%, #e2e8f0 100%)'
       } else {
-        // Fallback : utiliser primary et secondary
-        newBackground = `linear-gradient(135deg, ${primary} 0%, ${secondary} 100%)`
+        const bg = getComputedStyle(document.documentElement).getPropertyValue('--theme-bg')?.trim()
+        const bg2 = getComputedStyle(document.documentElement).getPropertyValue('--theme-bg2')?.trim()
+        if (bg && bg2) {
+          newBackground = `linear-gradient(135deg, ${bg} 0%, ${bg2} 50%, ${bg} 100%)`
+        } else {
+          newBackground = `linear-gradient(135deg, ${primary} 0%, ${secondary} 100%)`
+        }
       }
       
       setFooterBackground(newBackground)
-      // Déterminer la couleur de texte optimale pour ce background
       setTextColor(getTextColorForBackground(newBackground))
     }
     
     updateFooterBackground()
     
-    // Observer les changements de CSS variables
     const observer = new MutationObserver(updateFooterBackground)
     observer.observe(document.documentElement, {
       attributes: true,
@@ -63,7 +63,7 @@ export default function Footer() {
       observer.disconnect()
       clearInterval(interval)
     }
-  }, [primary, secondary])
+  }, [primary, secondary, themeName])
 
   const handleEmailClick = () => {
     router.push('/portfolio/contact')

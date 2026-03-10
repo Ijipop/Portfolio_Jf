@@ -6,6 +6,7 @@ import Typography from '@mui/material/Typography'
 import { useRouter } from 'next/navigation'
 import AppBarComponent from '../components/appBar'
 import PageWrapper from '../components/shared/PageWrapper'
+import InteractiveBackgroundSection from '../components/shared/InteractiveBackgroundSection'
 import CTAButton from '../components/shared/CTAButton'
 import Footer from '../components/Footer'
 import { useLanguage } from '../contexts/LanguageContext'
@@ -20,8 +21,9 @@ export default function PagewebPage() {
   const bodyColor = isDefaultPalette ? undefined : 'rgba(255,255,255,0.9)'
 
   return (
-    <PageWrapper backgroundVariant="default" showParticles={true}>
+    <PageWrapper backgroundVariant="default">
       <AppBarComponent />
+      <InteractiveBackgroundSection>
       <Box
         component="main"
         sx={{
@@ -68,6 +70,7 @@ export default function PagewebPage() {
           </Box>
         </Container>
       </Box>
+      </InteractiveBackgroundSection>
       <Footer />
     </PageWrapper>
   )

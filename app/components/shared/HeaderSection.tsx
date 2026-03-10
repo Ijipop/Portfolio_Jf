@@ -6,6 +6,7 @@ import Typography from '@mui/material/Typography'
 import { ReactNode, useEffect, useState } from 'react'
 import { DESIGN_TOKENS, GRADIENTS } from '../../design-system/constants'
 import { THEMES } from '../../design-system/themes'
+import { useAdvancedTheme } from '../../contexts/AdvancedThemeContext'
 import { useThemeColors } from '../../hooks/useThemeColors'
 import { useTextColor } from '../../hooks/useTextColor'
 import { useTheme } from '@mui/material/styles'
@@ -24,12 +25,13 @@ interface HeaderSectionProps {
   children?: ReactNode
 }
 
-const defaultHeaderBg = `linear-gradient(135deg, ${THEMES.default.bg} 0%, ${THEMES.default.bg2} 25%, ${THEMES.default.bg} 50%, ${THEMES.default.bg2} 75%, ${THEMES.default.bg} 100%)`
+const defaultHeaderBg = 'linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 25%, #e2e8f0 50%, #cbd5e1 75%, #e2e8f0 100%)'
 
 export default function HeaderSection({ title, subtitle, children }: HeaderSectionProps) {
   const { primary, secondary } = useThemeColors()
   const textColor = useTextColor()
   const theme = useTheme()
+  const { themeName } = useAdvancedTheme()
   const [headerBackground, setHeaderBackground] = useState<string>(defaultHeaderBg)
   
   // Mettre à jour le background du header quand le thème change
@@ -37,12 +39,16 @@ export default function HeaderSection({ title, subtitle, children }: HeaderSecti
     const updateHeaderBackground = () => {
       if (typeof window === 'undefined') return
       
+      if (themeName === 'default') {
+        setHeaderBackground('linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 25%, #e2e8f0 50%, #cbd5e1 75%, #e2e8f0 100%)')
+        return
+      }
+      
       // Lire les CSS variables définies par ThemeSelector
       const bg = getComputedStyle(document.documentElement).getPropertyValue('--theme-bg')?.trim()
       const bg2 = getComputedStyle(document.documentElement).getPropertyValue('--theme-bg2')?.trim()
       
       if (bg && bg2) {
-        // Créer un gradient avec les couleurs du thème
         setHeaderBackground(`linear-gradient(135deg, ${bg} 0%, ${bg2} 25%, ${bg} 50%, ${bg2} 75%, ${bg} 100%)`)
       } else {
         setHeaderBackground(GRADIENTS.backgrounds.headerLight)
@@ -64,7 +70,7 @@ export default function HeaderSection({ title, subtitle, children }: HeaderSecti
       observer.disconnect()
       clearInterval(interval)
     }
-  }, [])
+  }, [themeName])
   
   return (
     <Box

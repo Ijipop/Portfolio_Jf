@@ -76,6 +76,26 @@ body {
   transition: background 0.3s ease;
 }
 
+/* Scrollbar visible sur le conteneur topology (au-dessus du fond) */
+.topology-scroll-container {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, 0.4) rgba(0, 0, 0, 0.1);
+}
+.topology-scroll-container::-webkit-scrollbar {
+  width: 10px;
+}
+.topology-scroll-container::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+}
+.topology-scroll-container::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: 5px;
+}
+.topology-scroll-container::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.5);
+}
+
 /* Titre principal avec thème */
 .theme-title {
   background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));

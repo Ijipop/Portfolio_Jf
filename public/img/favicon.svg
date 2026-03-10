@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <defs>
+    <radialGradient id="bg" cx="0" cy="0" r="1" gradientUnits="objectBoundingBox"
+      gradientTransform="translate(0.1,0.1) scale(1.2)">
+      <stop offset="0" stop-color="#38bdf8"/>
+      <stop offset="0.45" stop-color="#4f46e5"/>
+      <stop offset="0.8" stop-color="#a855f7"/>
+      <stop offset="1" stop-color="#22c55e"/>
+    </radialGradient>
+  </defs>
+  <rect x="0" y="0" width="32" height="32" rx="6" fill="url(#bg)"/>
+  <rect x="3" y="3" width="26" height="26" rx="6" fill="#020617" opacity="0.85"/>
+  <text x="16" y="21.2"
+        font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+        font-size="15" font-weight="800"
+        fill="#e5e7eb" text-anchor="middle" letter-spacing="0.06em">
+    E
+  </text>
+</svg>

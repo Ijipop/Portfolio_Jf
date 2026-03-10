@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import ThemeWrapper from './components/ThemeWrapper'
+import FullPageTopologyWrapper from './components/FullPageTopologyWrapper'
 import './globals.css'
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://ijipop.com'
@@ -26,15 +27,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="fr">
       <body>
         <ThemeWrapper>
-          <div style={{ 
-            minHeight: '100vh', // Minimum height pour desktop
-            display: 'flex', 
-            flexDirection: 'column',
-            width: '100%',
-            overflowX: 'hidden'
-          } as React.CSSProperties}>
+          <FullPageTopologyWrapper>
             {children}
-          </div>
+          </FullPageTopologyWrapper>
         </ThemeWrapper>
       </body>
     </html>

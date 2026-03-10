@@ -5,7 +5,7 @@
 /**
  * Convertit une couleur hex en RGB
  */
-function hexToRgb(hex: string): { r: number; g: number; b: number } | null {
+export function hexToRgb(hex: string): { r: number; g: number; b: number } | null {
   const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex)
   return result
     ? {
@@ -14,6 +14,24 @@ function hexToRgb(hex: string): { r: number; g: number; b: number } | null {
         b: parseInt(result[3], 16),
       }
     : null
+}
+
+/**
+ * Assombrit une couleur hex en la mélangeant avec du noir.
+ * Réduit l'intensité lumineuse pour améliorer la lisibilité du texte sur les fonds.
+ * @param hex - Couleur hexadécimale (ex: '#2d1b1b')
+ * @param amount - Proportion de noir dans le mélange (0 = inchangé, 0.2 = 20% noir)
+ * @returns Couleur hex assombrie
+ */
+export function dimHex(hex: string, amount: number): string {
+  if (amount <= 0) return hex
+  const rgb = hexToRgb(hex)
+  if (!rgb) return hex
+  const factor = Math.max(0, Math.min(1, 1 - amount))
+  const r = Math.round(rgb.r * factor)
+  const g = Math.round(rgb.g * factor)
+  const b = Math.round(rgb.b * factor)
+  return `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`
 }
 
 /**
