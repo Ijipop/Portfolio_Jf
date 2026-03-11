@@ -26,10 +26,12 @@ function getFallbackBgColor(themeName: ThemeName): string {
 interface VantaTopologyBackgroundProps {
   /** Remplir uniquement le conteneur parent (pas de minHeight 100vh). À utiliser dans InteractiveBackgroundSection. */
   fillContainer?: boolean
+  colorHex?: string
+  backgroundHex?: string
 }
 
 export default function VantaTopologyBackground(props?: VantaTopologyBackgroundProps) {
-  const { fillContainer = false } = props ?? {}
+  const { fillContainer = false, colorHex, backgroundHex } = props ?? {}
   const elRef = useRef<HTMLDivElement>(null)
   const effectRef = useRef<{ destroy: () => void; resize?: () => void } | null>(null)
   const [vantaReady, setVantaReady] = useState(false)
@@ -78,6 +80,8 @@ export default function VantaTopologyBackground(props?: VantaTopologyBackgroundP
         if (!VANTA?.TOPOLOGY) return
 
         const options = getTopologyOptions(themeName as ThemeName)
+        const resolvedColor = colorHex ? hexToNumber(colorHex) : options.color
+        const resolvedBackground = backgroundHex ? hexToNumber(backgroundHex) : options.backgroundColor
         const effect = VANTA.TOPOLOGY({
           el: elRef.current,
           mouseControls: true,
@@ -88,6 +92,8 @@ export default function VantaTopologyBackground(props?: VantaTopologyBackgroundP
           scale: 1,
           scaleMobile: 1,
           ...options,
+          color: resolvedColor,
+          backgroundColor: resolvedBackground,
         })
         effectRef.current = effect
 
@@ -117,7 +123,7 @@ export default function VantaTopologyBackground(props?: VantaTopologyBackgroundP
     }
   }, [themeName])
 
-  const fallbackBg = getFallbackBgColor(themeName as ThemeName)
+  const fallbackBg = backgroundHex ?? getFallbackBgColor(themeName as ThemeName)
 
   return (
     <div

@@ -23,6 +23,7 @@ interface FullPageTopologyWrapperProps {
 export default function FullPageTopologyWrapper({ children }: FullPageTopologyWrapperProps) {
   const pathname = usePathname()
   const show = shouldShowTopology(pathname)
+  const isLandingRoute = pathname === '/'
   const scrollRef = useRef<HTMLDivElement>(null)
 
   // Remettre le scroll en haut au montage pour éviter titre coupé / contenu décalé
@@ -50,7 +51,12 @@ export default function FullPageTopologyWrapper({ children }: FullPageTopologyWr
           overflow: 'hidden',
         }}
       >
-        <VantaTopologyBackground key={pathname ?? 'topology'} fillContainer />
+        <VantaTopologyBackground
+          key={pathname ?? 'topology'}
+          fillContainer
+          colorHex={isLandingRoute ? '#89964e' : undefined}
+          backgroundHex={isLandingRoute ? '#222222' : undefined}
+        />
       </Box>
       <Box
         component="div"
