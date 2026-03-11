@@ -3,6 +3,9 @@
 import { Box, Card, CardContent } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import { motion } from 'framer-motion'
+import { usePathname } from 'next/navigation'
+import { shouldShowTopology } from '@/utils/topologyRoutes'
+import { getCardSurfaceSx } from '@/components/shared/cardSurface'
 
 // Floating 3D Element - Plus subtil
 const FloatingElement = styled(Box)(({ theme }) => ({
@@ -113,6 +116,15 @@ export default function UnifiedCardComponent({
   sx,
   variant = 'default'
 }: UnifiedCardProps) {
+  const pathname = usePathname()
+  const isTopologyRoute = shouldShowTopology(pathname)
+
+  const surfaceSx = getCardSurfaceSx({
+    isTopologyRoute,
+    variant: variant === 'glass' ? 'glass' : 'elevated',
+    interactive: true,
+  })
+
   // Styles spécifiques selon le variant
   const getVariantStyles = () => {
     switch (variant) {
@@ -145,13 +157,15 @@ export default function UnifiedCardComponent({
       initial={{ opacity: 0, scale: 0.9 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.6, ease: "easeOut" }}
-      whileHover={{ scale: 1.02 }}
+      whileHover={isTopologyRoute ? undefined : { scale: 1.02 }}
     >
       <UnifiedCard
         onClick={onClick}
         className={className}
         sx={{
           ...getVariantStyles(),
+          ...surfaceSx,
+          ...(isTopologyRoute && { animation: 'none' }),
           ...sx
         }}
       >

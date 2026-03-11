@@ -6,10 +6,10 @@ import PersonIcon from '@mui/icons-material/Person'
 import Box from '@mui/material/Box'
 import Container from '@mui/material/Container'
 import Typography from '@mui/material/Typography'
-import { useRouter } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { GlassContainer } from './components/GlassCard'
 import { LetterAnimations } from './components/LetterAnimations'
-import { FadeIn, HoverScale, TypingEffect } from './components/SimpleAnimations'
+import { FadeIn, TypingEffect } from './components/SimpleAnimations'
 import SkillTag from './components/shared/SkillTag'
 import ThreeDCardComponent from './components/ThreeDCard'
 import AppBarComponent from './components/appBar'
@@ -19,11 +19,13 @@ import InteractiveBackgroundSection from './components/shared/InteractiveBackgro
 import CTAButton from './components/shared/CTAButton'
 import StickyCTA from './components/shared/StickyCTA'
 import Footer from './components/Footer'
-import { DESIGN_TOKENS, GRADIENTS } from './design-system/constants'
+import { DESIGN_TOKENS } from './design-system/constants'
 import { useThemeColors } from './hooks/useThemeColors'
 import { useTextColor } from './hooks/useTextColor'
 import { useLanguage } from './contexts/LanguageContext'
 import { useAdvancedTheme } from './contexts/AdvancedThemeContext'
+import { shouldShowTopology } from './utils/topologyRoutes'
+import { getCardSurfaceSx } from './components/shared/cardSurface'
 import SignatureIntro from './components/SignatureIntro'
 import { useEffect, useState } from 'react'
 import useMediaQuery from '@mui/material/useMediaQuery'
@@ -38,13 +40,14 @@ function setIntroSeenCookie() {
 
 export default function HomeClient({ initialShowIntro }: { initialShowIntro: boolean }) {
   const router = useRouter()
+  const pathname = usePathname()
+  const isTopologyRoute = shouldShowTopology(pathname)
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
   const { primary, secondary, accent } = useThemeColors()
   const textColor = useTextColor()
   const { t } = useLanguage()
   const { themeName } = useAdvancedTheme()
-  const [skillsBackground, setSkillsBackground] = useState<string>(GRADIENTS.cards.light)
   const [showIntro, setShowIntro] = useState<boolean>(initialShowIntro)
 
   // Synchroniser avec cookie/sessionStorage après montage pour éviter flash d'hydration
@@ -54,43 +57,6 @@ export default function HomeClient({ initialShowIntro }: { initialShowIntro: boo
       (sessionStorage.getItem(INTRO_SESSION_KEY) === '1' ||
         document.cookie.includes('portfolio-intro-seen=1'))
     if (seen) setShowIntro(false)
-  }, [])
-
-  // Mettre à jour le background de la section compétences quand le thème change
-  useEffect(() => {
-    const updateSkillsBackground = () => {
-      if (typeof window === 'undefined') return
-      
-      const cardBg = getComputedStyle(document.documentElement).getPropertyValue('--card-background')?.trim()
-      
-      if (cardBg && cardBg !== 'none') {
-        setSkillsBackground(cardBg)
-      } else {
-        const bg = getComputedStyle(document.documentElement).getPropertyValue('--theme-bg')?.trim()
-        const bg2 = getComputedStyle(document.documentElement).getPropertyValue('--theme-bg2')?.trim()
-        
-        if (bg && bg2) {
-          setSkillsBackground(`linear-gradient(145deg, ${bg} 0%, ${bg2} 50%, ${bg} 100%)`)
-        } else {
-          setSkillsBackground(GRADIENTS.cards.light)
-        }
-      }
-    }
-    
-    updateSkillsBackground()
-    
-    const observer = new MutationObserver(updateSkillsBackground)
-    observer.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ['style'],
-    })
-    
-    const interval = setInterval(updateSkillsBackground, 200)
-    
-    return () => {
-      observer.disconnect()
-      clearInterval(interval)
-    }
   }, [])
 
   const handleCardClick = (path: string) => {
@@ -155,6 +121,7 @@ export default function HomeClient({ initialShowIntro }: { initialShowIntro: boo
       <InteractiveBackgroundSection>
       <Container maxWidth="lg" sx={{ py: { xs: 4, md: 8 }, px: { xs: 2, sm: 3, md: 4 }, position: 'relative', zIndex: 2 }}>
         <GlassContainer sx={{ 
+          ...getCardSurfaceSx({ isTopologyRoute, variant: 'glass', level: 'soft', interactive: false }),
           mb: { xs: DESIGN_TOKENS.spacing.xl, md: DESIGN_TOKENS.spacing.xxl },
           p: { xs: 2.5, sm: 3, md: 3.5 },
         }}>
@@ -263,16 +230,13 @@ export default function HomeClient({ initialShowIntro }: { initialShowIntro: boo
           zIndex: 2 
         }}>
           <Box sx={{ 
-            background: `${skillsBackground} !important`,
-            border: themeName === 'default' ? '1px solid rgba(0,0,0,0.08) !important' : `1px solid ${primary}30 !important`,
             borderRadius: DESIGN_TOKENS.borderRadius.large,
             padding: { xs: DESIGN_TOKENS.spacing.md, md: DESIGN_TOKENS.spacing.xl },
             textAlign: 'center',
-            boxShadow: themeName === 'default' ? '0 8px 32px rgba(0,0,0,0.08) !important' : `0 8px 32px ${primary}20 !important`,
             mb: DESIGN_TOKENS.spacing.xxl,
             position: 'relative',
             overflow: 'hidden',
-            backdropFilter: 'blur(10px)',
+            ...getCardSurfaceSx({ isTopologyRoute, variant: 'flat', level: 'soft', interactive: false }),
           }}>
             <Typography 
               variant="h3" 
@@ -333,45 +297,39 @@ export default function HomeClient({ initialShowIntro }: { initialShowIntro: boo
           px: { xs: 1, sm: 0 }
         }}>
           <FadeIn delay={0.8}>
-            <HoverScale>
-              <ThreeDCardComponent onClick={() => handleCardClick('/portfolio/projets')} floatingElements={2}>
-            <CodeIcon sx={{ fontSize: 48, color: primary, mb: 2 }} />
-            <Typography variant="h5" gutterBottom sx={{ color: textColor }}>
-              {t('home.cardProjects')}
-            </Typography>
-            <Typography variant="body1" sx={{ color: textColor, opacity: 0.8 }}>
-              {t('home.cardProjectsDesc')}
-            </Typography>
-          </ThreeDCardComponent>
-            </HoverScale>
+            <ThreeDCardComponent onClick={() => handleCardClick('/portfolio/projets')} floatingElements={2}>
+              <CodeIcon sx={{ fontSize: 48, color: primary, mb: 2 }} />
+              <Typography variant="h5" gutterBottom sx={{ color: textColor }}>
+                {t('home.cardProjects')}
+              </Typography>
+              <Typography variant="body1" sx={{ color: textColor, opacity: 0.8 }}>
+                {t('home.cardProjectsDesc')}
+              </Typography>
+            </ThreeDCardComponent>
           </FadeIn>
 
           <FadeIn delay={1.0}>
-            <HoverScale>
-              <ThreeDCardComponent onClick={() => handleCardClick('/portfolio/a-propos')} floatingElements={3}>
-                <PersonIcon sx={{ fontSize: 48, color: primary, mb: 2 }} />
-                <Typography variant="h5" gutterBottom sx={{ color: textColor }}>
-                  {t('home.cardAbout')}
-                </Typography>
-                <Typography variant="body1" sx={{ color: textColor, opacity: 0.8 }}>
-                  {t('home.cardAboutDesc')}
-                </Typography>
-              </ThreeDCardComponent>
-            </HoverScale>
+            <ThreeDCardComponent onClick={() => handleCardClick('/portfolio/a-propos')} floatingElements={3}>
+              <PersonIcon sx={{ fontSize: 48, color: primary, mb: 2 }} />
+              <Typography variant="h5" gutterBottom sx={{ color: textColor }}>
+                {t('home.cardAbout')}
+              </Typography>
+              <Typography variant="body1" sx={{ color: textColor, opacity: 0.8 }}>
+                {t('home.cardAboutDesc')}
+              </Typography>
+            </ThreeDCardComponent>
           </FadeIn>
 
           <FadeIn delay={1.2}>
-            <HoverScale>
-              <ThreeDCardComponent onClick={() => handleCardClick('/portfolio/contact')} floatingElements={2}>
-                <ContactSupportIcon sx={{ fontSize: 48, color: primary, mb: 2 }} />
-                <Typography variant="h5" gutterBottom sx={{ color: textColor }}>
-                  {t('home.cardContact')}
-                </Typography>
-                <Typography variant="body1" sx={{ color: textColor, opacity: 0.8 }}>
-                  {t('home.cardContactDesc')}
-                </Typography>
-              </ThreeDCardComponent>
-            </HoverScale>
+            <ThreeDCardComponent onClick={() => handleCardClick('/portfolio/contact')} floatingElements={2}>
+              <ContactSupportIcon sx={{ fontSize: 48, color: primary, mb: 2 }} />
+              <Typography variant="h5" gutterBottom sx={{ color: textColor }}>
+                {t('home.cardContact')}
+              </Typography>
+              <Typography variant="body1" sx={{ color: textColor, opacity: 0.8 }}>
+                {t('home.cardContactDesc')}
+              </Typography>
+            </ThreeDCardComponent>
           </FadeIn>
         </Box>
       </Container>

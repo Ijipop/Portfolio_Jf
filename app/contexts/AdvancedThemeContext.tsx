@@ -111,14 +111,9 @@ export function AdvancedThemeProvider({ children }: { children: React.ReactNode 
         styleOverrides: {
           root: {
             borderRadius: '20px',
-            backdropFilter: 'blur(10px)',
-            background: 'rgba(255, 255, 255, 0.8)',
-            border: '1px solid rgba(0, 0, 0, 0.1)',
+            background: 'transparent',
+            border: '1px solid transparent',
             transition: 'all 0.3s ease',
-            '&:hover': {
-              transform: 'translateY(-5px)',
-              boxShadow: `0 20px 40px ${customTheme.primary}20`
-            }
           }
         }
       }

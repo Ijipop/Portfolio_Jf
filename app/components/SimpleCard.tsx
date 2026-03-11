@@ -3,7 +3,10 @@
 import { Card, CardContent } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import { motion } from 'framer-motion'
+import { usePathname } from 'next/navigation'
 import { useAdvancedTheme } from '../contexts/AdvancedThemeContext'
+import { shouldShowTopology } from '@/utils/topologyRoutes'
+import { getCardSurfaceSx } from '@/components/shared/cardSurface'
 
 const SimpleCard = styled(Card)(({ theme }) => ({
   background: 'linear-gradient(145deg, #f0f4ff 0%, #e6f2ff 50%, #dbeafe 100%)',
@@ -34,22 +37,31 @@ interface SimpleCardProps {
 }
 
 export default function SimpleCardComponent({ children, onClick, className, reflectionColor }: SimpleCardProps) {
+  const pathname = usePathname()
+  const isTopologyRoute = shouldShowTopology(pathname)
   const { customTheme } = useAdvancedTheme()
   const primary = customTheme?.primary || '#3b82f6'
   const secondary = customTheme?.secondary || '#059669'
   const accent = customTheme?.accent || '#8b5cf6'
+
+  const surfaceSx = getCardSurfaceSx({
+    isTopologyRoute,
+    variant: 'elevated',
+    interactive: true,
+  })
 
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, ease: "easeOut" }}
-      whileHover={{ y: -8 }}
+      whileHover={isTopologyRoute ? undefined : { y: -8 }}
     >
       <SimpleCard 
         onClick={onClick} 
         className={className}
         sx={{
+          ...surfaceSx,
           '&::before': {
             content: '""',
             position: 'absolute',
@@ -64,18 +76,18 @@ export default function SimpleCardComponent({ children, onClick, className, refl
             zIndex: 1,
             animation: 'gradientShift 3s ease-in-out infinite',
           },
-          '&:hover': {
-            transform: 'translateY(-8px) scale(1.02)',
-            background: `linear-gradient(145deg, #f0f4ff 0%, #e6f2ff 50%, #dbeafe 100%), linear-gradient(135deg, ${primary}30 0%, ${secondary}30 25%, ${accent}30 50%, ${primary}30 75%, ${primary}30 100%)`,
-            boxShadow: `0 25px 50px ${primary}20, 0 0 0 2px ${primary}60, 0 0 30px ${primary}40, 0 0 60px ${secondary}20, inset 0 1px 0 rgba(255, 255, 255, 0.8)`,
-            '&::before': {
-              opacity: 1,
-              background: `linear-gradient(135deg, ${primary}40 0%, ${secondary}40 25%, ${accent}40 50%, ${primary}40 75%, ${primary}40 100%)`,
+          ...(!isTopologyRoute && {
+            '&:hover': {
+              transform: 'translateY(-8px) scale(1.02)',
+              background: `linear-gradient(145deg, #f0f4ff 0%, #e6f2ff 50%, #dbeafe 100%), linear-gradient(135deg, ${primary}30 0%, ${secondary}30 25%, ${accent}30 50%, ${primary}30 75%, ${primary}30 100%)`,
+              boxShadow: `0 25px 50px ${primary}20, 0 0 0 2px ${primary}60, 0 0 30px ${primary}40, 0 0 60px ${secondary}20, inset 0 1px 0 rgba(255, 255, 255, 0.8)`,
+              '&::before': {
+                opacity: 1,
+                background: `linear-gradient(135deg, ${primary}40 0%, ${secondary}40 25%, ${accent}40 50%, ${primary}40 75%, ${primary}40 100%)`,
+              },
+              '&::after': reflectionColor ? { opacity: 1 } : {},
             },
-            '&::after': reflectionColor ? {
-              opacity: 1,
-            } : {}
-          },
+          }),
           '&::after': reflectionColor ? {
             content: '""',
             position: 'absolute',

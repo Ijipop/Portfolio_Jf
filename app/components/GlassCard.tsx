@@ -3,6 +3,9 @@
 import { Box, Card, CardContent } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import { motion } from 'framer-motion'
+import { usePathname } from 'next/navigation'
+import { shouldShowTopology } from '@/utils/topologyRoutes'
+import { getCardSurfaceSx } from '@/components/shared/cardSurface'
 
 // Glassmorphism Card avec effets de verre
 const GlassCard = styled(Card)(({ theme }) => ({
@@ -115,13 +118,21 @@ interface GlassCardProps {
 }
 
 export default function GlassCardComponent({ children, onClick, className }: GlassCardProps) {
+  const pathname = usePathname()
+  const isTopologyRoute = shouldShowTopology(pathname)
+  const surfaceSx = getCardSurfaceSx({
+    isTopologyRoute,
+    variant: 'glass',
+    interactive: true,
+  })
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, ease: "easeOut" }}
     >
-      <GlassCard onClick={onClick} className={className}>
+      <GlassCard onClick={onClick} className={className} sx={surfaceSx}>
         <CardContent sx={{ position: 'relative', zIndex: 2 }}>
           {children}
         </CardContent>

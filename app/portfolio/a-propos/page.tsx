@@ -8,8 +8,9 @@ import Box from '@mui/material/Box'
 import Container from '@mui/material/Container'
 import Typography from '@mui/material/Typography'
 import { styled } from '@mui/material/styles'
-import { useRouter } from 'next/navigation'
+import { useRouter, usePathname } from 'next/navigation'
 import { useState, useEffect } from 'react'
+import { shouldShowTopology } from '@/utils/topologyRoutes'
 import SkillTag from '../../components/shared/SkillTag'
 import HeaderSection from '../../components/shared/HeaderSection'
 import AppBarComponent from '../../components/appBar'
@@ -24,6 +25,7 @@ import { useTextColor } from '../../hooks/useTextColor'
 import { useLanguage } from '../../contexts/LanguageContext'
 import { useTheme } from '@mui/material/styles'
 import { getTextColorForBackground } from '../../utils/colorUtils'
+import { getCardSurfaceSx } from '@/components/shared/cardSurface'
 import SoftSkillsSection from './components/SoftSkillsSection'
 import AboutCtaSection from './components/AboutCtaSection'
 
@@ -67,6 +69,8 @@ const FlipCardInner = styled(Box, {
 // Composant FlipCardFront fonctionnel pour utiliser les couleurs du thème
 const FlipCardFront = ({ children, sx }: { children: React.ReactNode; sx?: any }) => {
   const theme = useTheme()
+  const pathname = usePathname()
+  const isTopologyRoute = shouldShowTopology(pathname)
   const { primary } = useThemeColors()
   const [cardBackground, setCardBackground] = useState<string>(GRADIENTS.cards.light)
 
@@ -106,6 +110,16 @@ const FlipCardFront = ({ children, sx }: { children: React.ReactNode; sx?: any }
     }
   }, [])
 
+  const flipFaceSurfaceSx = getCardSurfaceSx({
+    isTopologyRoute,
+    variant: 'flipFace',
+    level: 'soft',
+    interactive: false,
+  })
+  const glassStyle = isTopologyRoute
+    ? flipFaceSurfaceSx
+    : { background: `${cardBackground} !important` }
+
   return (
     <Box
       sx={{
@@ -115,7 +129,7 @@ const FlipCardFront = ({ children, sx }: { children: React.ReactNode; sx?: any }
         backfaceVisibility: 'hidden',
         WebkitBackfaceVisibility: 'hidden',
         MozBackfaceVisibility: 'hidden',
-        background: `${cardBackground} !important`,
+        ...glassStyle,
         border: `1px solid ${primary}30 !important`,
         borderRadius: '8px',
         padding: theme.spacing(4),
@@ -174,6 +188,8 @@ const STRONG_RIPPLE_PALETTES = ['sunset', 'ocean', 'cyber', 'forest']
 // Composant FlipCardBack fonctionnel pour utiliser les couleurs du thème
 const FlipCardBack = ({ children, sx }: { children: React.ReactNode; sx?: any }) => {
   const theme = useTheme()
+  const pathname = usePathname()
+  const isTopologyRoute = shouldShowTopology(pathname)
   const { themeName } = useAdvancedTheme()
   const { primary, secondary } = useThemeColors()
   const isDefaultPalette = themeName === 'default'
@@ -196,6 +212,16 @@ const FlipCardBack = ({ children, sx }: { children: React.ReactNode; sx?: any })
       ? `radial-gradient(circle at center, ${secondary}CC 0%, ${primary}99 30%, ${secondary}80 55%, transparent 75%)`
       : `radial-gradient(circle at center, ${secondary}45 0%, ${primary}40 35%, ${secondary}25 55%, transparent 75%)`
 
+  const backFlipFaceSurfaceSx = getCardSurfaceSx({
+    isTopologyRoute,
+    variant: 'flipFace',
+    level: 'soft',
+    interactive: false,
+  })
+  const backGlassStyle = isTopologyRoute
+    ? backFlipFaceSurfaceSx
+    : { background: `${backGradient} !important` }
+
   return (
     <Box
       sx={{
@@ -205,7 +231,7 @@ const FlipCardBack = ({ children, sx }: { children: React.ReactNode; sx?: any })
         backfaceVisibility: 'hidden',
         WebkitBackfaceVisibility: 'hidden',
         MozBackfaceVisibility: 'hidden',
-        background: `${backGradient} !important`,
+        ...backGlassStyle,
         border: isDefaultPalette ? '1px solid rgba(147, 197, 253, 0.5) !important' : `1px solid ${primary}40 !important`,
         borderRadius: '8px',
         padding: theme.spacing(4),
