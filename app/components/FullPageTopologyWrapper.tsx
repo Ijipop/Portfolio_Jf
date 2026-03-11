@@ -50,7 +50,7 @@ export default function FullPageTopologyWrapper({ children }: FullPageTopologyWr
           overflow: 'hidden',
         }}
       >
-        <VantaTopologyBackground fillContainer />
+        <VantaTopologyBackground key={pathname ?? 'topology'} fillContainer />
       </Box>
       <Box
         component="div"
