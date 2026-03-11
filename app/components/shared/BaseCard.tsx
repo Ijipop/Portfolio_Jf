@@ -4,8 +4,11 @@ import { Card, CardContent, useTheme } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import { motion } from 'framer-motion'
 import { ReactNode, useState, forwardRef, useEffect } from 'react'
+import { usePathname } from 'next/navigation'
 import { DESIGN_TOKENS, GRADIENTS } from '../../design-system/constants'
 import { useThemeColors } from '../../hooks/useThemeColors'
+import { shouldShowTopology } from '@/utils/topologyRoutes'
+import { getCardSurfaceSx } from '@/components/shared/cardSurface'
 
 // BaseCardStyled comme composant fonctionnel pour utiliser le thème Material-UI
 const BaseCardStyledComponent = forwardRef<HTMLDivElement, any>(({ 
@@ -138,6 +141,8 @@ export default function BaseCard({
   height,
   reflectionColor 
 }: BaseCardProps) {
+  const pathname = usePathname()
+  const isTopologyRoute = shouldShowTopology(pathname)
   const { primary, secondary, accent } = useThemeColors()
 
   const getVariantStyles = () => {
@@ -160,12 +165,18 @@ export default function BaseCard({
     }
   }
 
+  const surfaceSx = getCardSurfaceSx({
+    isTopologyRoute,
+    variant: variant === 'glass' ? 'glass' : 'elevated',
+    interactive: true,
+  })
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, ease: "easeOut" }}
-      whileHover={{ y: -6 }}
+      whileHover={isTopologyRoute ? undefined : { y: -6 }}
     >
       <BaseCardStyledComponent 
         onClick={onClick} 
@@ -179,7 +190,8 @@ export default function BaseCard({
               background: `linear-gradient(135deg, ${reflectionColor}15 0%, transparent 50%, ${reflectionColor}10 100%)`,
               opacity: 1,
             }
-          })
+          }),
+          ...surfaceSx,
         }}
       >
         <CardContent sx={{ 

@@ -5,6 +5,9 @@ import { styled } from '@mui/material/styles'
 import type { SxProps, Theme } from '@mui/material/styles'
 import { motion } from 'framer-motion'
 import { useEffect, useState } from 'react'
+import { usePathname } from 'next/navigation'
+import { shouldShowTopology } from '@/utils/topologyRoutes'
+import { getCardSurfaceSx } from '@/components/shared/cardSurface'
 
 // 3D Card avec perspective et transformations
 const ThreeDCard = styled(Card)(({ theme }) => ({
@@ -116,6 +119,8 @@ export default function ThreeDCardComponent({
   fullHeight = false,
   sx: sxProp
 }: ThreeDCardProps) {
+  const pathname = usePathname()
+  const isTopologyRoute = shouldShowTopology(pathname)
   const [isMobile, setIsMobile] = useState(false)
   useEffect(() => {
     const check = () => {
@@ -131,13 +136,19 @@ export default function ThreeDCardComponent({
 
   const effectiveFloating = isMobile ? 0 : floatingElements
 
+  const surfaceSx = getCardSurfaceSx({
+    isTopologyRoute,
+    variant: 'elevated',
+    interactive: true,
+  })
+
   return (
     <motion.div
       style={fullHeight ? { height: '100%' } : undefined}
       initial={{ opacity: 0, scale: 0.9 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.6, ease: "easeOut" }}
-      whileHover={isMobile ? undefined : { scale: 1.02 }}
+      whileHover={isMobile ? undefined : isTopologyRoute ? undefined : { scale: 1.02 }}
     >
       <ThreeDCard
         onClick={onClick}
@@ -146,6 +157,7 @@ export default function ThreeDCardComponent({
           ...(fullHeight && { height: '100%', minHeight: 0 }),
           ...(compact && { minHeight: '120px', padding: 2 }),
           ...(isMobile && { transformStyle: 'flat' }),
+          ...surfaceSx,
           ...(sxProp || {}),
         }}
       >
