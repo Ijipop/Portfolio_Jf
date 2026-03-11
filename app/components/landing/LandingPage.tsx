@@ -9,7 +9,6 @@ import AccordionSummary from '@mui/material/AccordionSummary'
 import AccordionDetails from '@mui/material/AccordionDetails'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import { useRouter } from 'next/navigation'
-import LandingBackground from './LandingBackground'
 import { useLanguage } from '../../contexts/LanguageContext'
 
 const LANDING_GREEN = '#89964e'
@@ -49,11 +48,9 @@ export default function LandingPage() {
         display: 'flex',
         flexDirection: 'column',
         overflow: 'hidden',
-        backgroundColor: '#222222',
+        backgroundColor: 'transparent',
       }}
     >
-      <LandingBackground />
-
       <Box
         sx={{
           position: 'absolute',
