@@ -167,7 +167,8 @@ export default function BaseCard({
 
   const surfaceSx = getCardSurfaceSx({
     isTopologyRoute,
-    variant: variant === 'glass' ? 'glass' : 'elevated',
+    variant: 'flat',
+    level: 'soft',
     interactive: true,
   })
 

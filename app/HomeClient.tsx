@@ -119,7 +119,7 @@ export default function HomeClient({ initialShowIntro }: { initialShowIntro: boo
       <InteractiveBackgroundSection>
       <Container maxWidth="lg" sx={{ py: { xs: 4, md: 8 }, px: { xs: 2, sm: 3, md: 4 }, position: 'relative', zIndex: 2 }}>
         <GlassContainer sx={{ 
-          ...getCardSurfaceSx({ isTopologyRoute, variant: 'glass', level: 'soft', interactive: false }),
+          ...getCardSurfaceSx({ isTopologyRoute, variant: 'flat', level: 'soft', interactive: false }),
           mb: { xs: DESIGN_TOKENS.spacing.xl, md: DESIGN_TOKENS.spacing.xxl },
           p: { xs: 2.5, sm: 3, md: 3.5 },
         }}>

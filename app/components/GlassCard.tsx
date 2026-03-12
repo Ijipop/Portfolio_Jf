@@ -122,7 +122,8 @@ export default function GlassCardComponent({ children, onClick, className }: Gla
   const isTopologyRoute = shouldShowTopology(pathname)
   const surfaceSx = getCardSurfaceSx({
     isTopologyRoute,
-    variant: 'glass',
+    variant: 'flat',
+    level: 'soft',
     interactive: true,
   })
 

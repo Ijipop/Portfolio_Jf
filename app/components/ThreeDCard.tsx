@@ -138,7 +138,8 @@ export default function ThreeDCardComponent({
 
   const surfaceSx = getCardSurfaceSx({
     isTopologyRoute,
-    variant: 'elevated',
+    variant: 'flat',
+    level: 'soft',
     interactive: true,
   })
 

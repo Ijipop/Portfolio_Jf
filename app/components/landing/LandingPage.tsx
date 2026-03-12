@@ -11,27 +11,28 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import { useRouter } from 'next/navigation'
 import { useLanguage } from '../../contexts/LanguageContext'
 
-const LANDING_GREEN = '#89964e'
-const LANDING_GREEN_RGBA = 'rgba(137, 150, 78,'
+const LANDING_PRIMARY = '#2563eb'
+const LANDING_SECONDARY = '#475569'
+const LANDING_PRIMARY_RGBA = 'rgba(37, 99, 235,'
 
 const accordionButtonPrimary = {
-  bgcolor: `${LANDING_GREEN_RGBA} 0.5)`,
+  bgcolor: `${LANDING_PRIMARY_RGBA} 0.5)`,
   color: 'white',
-  border: `2px solid ${LANDING_GREEN}`,
+  border: `2px solid ${LANDING_PRIMARY}`,
   fontWeight: 600,
   '&:hover': {
-    bgcolor: `${LANDING_GREEN_RGBA} 0.7)`,
-    borderColor: '#a3b35a',
+    bgcolor: `${LANDING_PRIMARY_RGBA} 0.7)`,
+    borderColor: '#3b82f6',
     color: 'white',
   },
 }
 const accordionButtonSecondary = {
   bgcolor: 'transparent',
   color: 'rgba(255,255,255,0.95)',
-  border: `1px solid ${LANDING_GREEN}`,
+  border: `1px solid ${LANDING_PRIMARY}`,
   '&:hover': {
-    bgcolor: `${LANDING_GREEN_RGBA} 0.25)`,
-    borderColor: '#a3b35a',
+    bgcolor: `${LANDING_PRIMARY_RGBA} 0.25)`,
+    borderColor: LANDING_SECONDARY,
     color: 'white',
   },
 }
@@ -126,8 +127,8 @@ export default function LandingPage() {
                 width: '100%',
                 maxWidth: 420,
                 minWidth: 280,
-                backgroundColor: `${LANDING_GREEN_RGBA} 0.2)`,
-                border: `1px solid ${LANDING_GREEN}`,
+                backgroundColor: `${LANDING_PRIMARY_RGBA} 0.2)`,
+                border: `1px solid ${LANDING_PRIMARY}`,
                 borderRadius: '12px !important',
                 overflow: 'hidden',
                 '&:before': { display: 'none' },

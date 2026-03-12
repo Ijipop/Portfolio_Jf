@@ -264,6 +264,8 @@ const FlipCardBack = ({ children, sx }: { children: React.ReactNode; sx?: any })
 
 export default function About() {
   const router = useRouter()
+  const pathname = usePathname()
+  const isTopologyRoute = shouldShowTopology(pathname)
   const { customTheme } = useAdvancedTheme()
   const { primary, secondary, accent } = useThemeColors()
   const textColor = useTextColor()
@@ -675,25 +677,28 @@ export default function About() {
         </Box>
 
         <Box sx={{ 
-          background: 'var(--card-background, linear-gradient(145deg, #e2e8f0 0%, #cbd5e1 50%, #e2e8f0 100%))',
-          border: '1px solid var(--card-primary, rgba(0,0,0,0.08))',
+          ...getCardSurfaceSx({ isTopologyRoute, variant: 'flat', level: 'soft', interactive: false }),
           borderRadius: DESIGN_TOKENS.borderRadius.large,
           padding: 4,
           textAlign: 'center',
-          boxShadow: '0 8px 32px var(--card-primary, rgba(0,0,0,0.1))',
           mb: 8,
           position: 'relative',
           overflow: 'hidden',
-          '&::before': {
-            content: '""',
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            background: `linear-gradient(135deg, var(--card-primary, rgba(30, 58, 138, 0.1)) 0%, var(--card-secondary, rgba(5, 150, 105, 0.1)) 50%, var(--card-primary, rgba(30, 58, 138, 0.05)) 100%)`,
-            opacity: 'var(--card-overlay-opacity, 0.3)',
-          }
+          ...(!isTopologyRoute && {
+            background: 'var(--card-background, linear-gradient(145deg, #e2e8f0 0%, #cbd5e1 50%, #e2e8f0 100%))',
+            border: '1px solid var(--card-primary, rgba(0,0,0,0.08))',
+            boxShadow: '0 8px 32px var(--card-primary, rgba(0,0,0,0.1))',
+            '&::before': {
+              content: '""',
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              background: `linear-gradient(135deg, var(--card-primary, rgba(30, 58, 138, 0.1)) 0%, var(--card-secondary, rgba(5, 150, 105, 0.1)) 50%, var(--card-primary, rgba(30, 58, 138, 0.05)) 100%)`,
+              opacity: 'var(--card-overlay-opacity, 0.3)',
+            },
+          }),
         }}>
           <Typography 
             variant="h4" 

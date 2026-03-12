@@ -6,7 +6,7 @@ import CardActionArea from '@mui/material/CardActionArea'
 import CardContent from '@mui/material/CardContent'
 import Container from '@mui/material/Container'
 import Typography from '@mui/material/Typography'
-import { useRouter } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import AppBarComponent from '../components/appBar'
 import PageWrapper from '../components/shared/PageWrapper'
 import InteractiveBackgroundSection from '../components/shared/InteractiveBackgroundSection'
@@ -16,12 +16,17 @@ import { useLanguage } from '../contexts/LanguageContext'
 import { DESIGN_TOKENS } from '../design-system/constants'
 import { useThemeColors } from '../hooks/useThemeColors'
 import { useTextColor } from '../hooks/useTextColor'
+import { shouldShowTopology } from '../utils/topologyRoutes'
+import { getCardSurfaceSx } from '../components/shared/cardSurface'
 
 export default function LogicielPage() {
   const router = useRouter()
+  const pathname = usePathname()
+  const isTopologyRoute = shouldShowTopology(pathname)
   const { t } = useLanguage()
   const { primary, secondary } = useThemeColors()
   const textColor = useTextColor()
+  const cardSurfaceSx = getCardSurfaceSx({ isTopologyRoute, variant: 'flat', level: 'soft', interactive: false })
 
   return (
     <PageWrapper backgroundVariant="default">
@@ -69,9 +74,12 @@ export default function LogicielPage() {
               maxWidth: 480,
               mx: 'auto',
               borderRadius: DESIGN_TOKENS.borderRadius.medium,
-              background: `linear-gradient(145deg, ${primary}15 0%, ${secondary}10 100%)`,
-              border: `1px solid ${primary}30`,
               overflow: 'hidden',
+              ...cardSurfaceSx,
+              ...(!isTopologyRoute && {
+                background: `linear-gradient(145deg, ${primary}15 0%, ${secondary}10 100%)`,
+                border: `1px solid ${primary}30`,
+              }),
             }}
           >
             <CardActionArea

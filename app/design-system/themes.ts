@@ -10,11 +10,11 @@ const DIM_AMOUNT = 0.45
 export const THEMES = {
   default: {
     name: 'Default',
-    primary: '#89964e',
-    secondary: '#a3b35a',
-    accent: '#d4a55a',
-    bg: '#1f2418',
-    bg2: '#151a10',
+    primary: '#2563eb',
+    secondary: '#475569',
+    accent: '#38bdf8',
+    bg: '#0f172a',
+    bg2: '#1e293b',
     isDefault: true,
   },
   neon: {
