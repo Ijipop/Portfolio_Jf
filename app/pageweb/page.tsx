@@ -10,15 +10,12 @@ import InteractiveBackgroundSection from '../components/shared/InteractiveBackgr
 import CTAButton from '../components/shared/CTAButton'
 import Footer from '../components/Footer'
 import { useLanguage } from '../contexts/LanguageContext'
-import { useAdvancedTheme } from '../contexts/AdvancedThemeContext'
+import { useTextColor } from '../hooks/useTextColor'
 
 export default function PagewebPage() {
   const router = useRouter()
   const { t } = useLanguage()
-  const { themeName } = useAdvancedTheme()
-  const isDefaultPalette = themeName === 'default'
-  const titleColor = isDefaultPalette ? undefined : 'white'
-  const bodyColor = isDefaultPalette ? undefined : 'rgba(255,255,255,0.9)'
+  const textColor = useTextColor()
 
   return (
     <PageWrapper backgroundVariant="default">
@@ -42,7 +39,7 @@ export default function PagewebPage() {
               fontWeight: 700,
               mb: 2,
               textAlign: 'center',
-              ...(titleColor && { color: titleColor }),
+              color: textColor,
             }}
           >
             {t('pageweb.title')}
@@ -54,7 +51,8 @@ export default function PagewebPage() {
               maxWidth: 560,
               mx: 'auto',
               lineHeight: 1.7,
-              ...(bodyColor && { color: bodyColor }),
+              color: textColor,
+              opacity: 0.92,
             }}
           >
             {t('pageweb.intro')}

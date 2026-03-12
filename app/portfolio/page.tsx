@@ -6,7 +6,8 @@ const INTRO_COOKIE_KEY = 'portfolio-intro-seen'
 export default async function PortfolioHomePage() {
   const cookieStore = await cookies()
   const introSeen = cookieStore.get(INTRO_COOKIE_KEY)
-  const initialShowIntro = !introSeen
+  // Intro (rideau avec le nom) désactivée pour l'instant — remettre `!introSeen` pour réactiver
+  const initialShowIntro = false
 
   return <HomeClient initialShowIntro={initialShowIntro} />
 }

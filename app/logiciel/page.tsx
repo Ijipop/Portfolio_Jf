@@ -6,7 +6,7 @@ import CardActionArea from '@mui/material/CardActionArea'
 import CardContent from '@mui/material/CardContent'
 import Container from '@mui/material/Container'
 import Typography from '@mui/material/Typography'
-import { useRouter } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import AppBarComponent from '../components/appBar'
 import PageWrapper from '../components/shared/PageWrapper'
 import InteractiveBackgroundSection from '../components/shared/InteractiveBackgroundSection'
@@ -15,18 +15,18 @@ import Footer from '../components/Footer'
 import { useLanguage } from '../contexts/LanguageContext'
 import { DESIGN_TOKENS } from '../design-system/constants'
 import { useThemeColors } from '../hooks/useThemeColors'
-import { useAdvancedTheme } from '../contexts/AdvancedThemeContext'
+import { useTextColor } from '../hooks/useTextColor'
+import { shouldShowTopology } from '../utils/topologyRoutes'
+import { getCardSurfaceSx } from '../components/shared/cardSurface'
 
 export default function LogicielPage() {
   const router = useRouter()
+  const pathname = usePathname()
+  const isTopologyRoute = shouldShowTopology(pathname)
   const { t } = useLanguage()
   const { primary, secondary } = useThemeColors()
-  const { themeName } = useAdvancedTheme()
-  const isDefaultPalette = themeName === 'default'
-  const titleColor = isDefaultPalette ? undefined : 'white'
-  const bodyColor = isDefaultPalette ? undefined : 'rgba(255,255,255,0.9)'
-  const cardTitleColor = isDefaultPalette ? undefined : 'white'
-  const cardDescColor = isDefaultPalette ? undefined : 'rgba(255,255,255,0.9)'
+  const textColor = useTextColor()
+  const cardSurfaceSx = getCardSurfaceSx({ isTopologyRoute, variant: 'flat', level: 'soft', interactive: false })
 
   return (
     <PageWrapper backgroundVariant="default">
@@ -50,7 +50,7 @@ export default function LogicielPage() {
               fontWeight: 700,
               mb: 2,
               textAlign: 'center',
-              ...(titleColor && { color: titleColor }),
+              color: textColor,
             }}
           >
             {t('logiciel.title')}
@@ -62,7 +62,8 @@ export default function LogicielPage() {
               maxWidth: 560,
               mx: 'auto',
               lineHeight: 1.7,
-              ...(bodyColor && { color: bodyColor }),
+              color: textColor,
+              opacity: 0.92,
             }}
           >
             {t('logiciel.intro')}
@@ -73,9 +74,12 @@ export default function LogicielPage() {
               maxWidth: 480,
               mx: 'auto',
               borderRadius: DESIGN_TOKENS.borderRadius.medium,
-              background: `linear-gradient(145deg, ${primary}15 0%, ${secondary}10 100%)`,
-              border: `1px solid ${primary}30`,
               overflow: 'hidden',
+              ...cardSurfaceSx,
+              ...(!isTopologyRoute && {
+                background: `linear-gradient(145deg, ${primary}15 0%, ${secondary}10 100%)`,
+                border: `1px solid ${primary}30`,
+              }),
             }}
           >
             <CardActionArea
@@ -83,10 +87,10 @@ export default function LogicielPage() {
               sx={{ display: 'block', textAlign: 'left' }}
             >
               <CardContent sx={{ p: 3 }}>
-                <Typography variant="h6" component="h2" sx={{ fontWeight: 600, mb: 1, ...(cardTitleColor && { color: cardTitleColor }) }}>
+                <Typography variant="h6" component="h2" sx={{ fontWeight: 600, mb: 1, color: textColor }}>
                   {t('logiciel.timelendarCardTitle')}
                 </Typography>
-                <Typography variant="body2" sx={{ mb: 2, lineHeight: 1.6, ...(cardDescColor && { color: cardDescColor }) }}>
+                <Typography variant="body2" sx={{ mb: 2, lineHeight: 1.6, color: textColor, opacity: 0.9 }}>
                   {t('logiciel.timelendarCardDesc')}
                 </Typography>
                 <CTAButton

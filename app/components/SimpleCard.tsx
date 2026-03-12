@@ -46,7 +46,8 @@ export default function SimpleCardComponent({ children, onClick, className, refl
 
   const surfaceSx = getCardSurfaceSx({
     isTopologyRoute,
-    variant: 'elevated',
+    variant: 'flat',
+    level: 'soft',
     interactive: true,
   })
 

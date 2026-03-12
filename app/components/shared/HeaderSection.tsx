@@ -4,7 +4,7 @@ import Box from '@mui/material/Box'
 import Container from '@mui/material/Container'
 import Typography from '@mui/material/Typography'
 import { ReactNode, useEffect, useState } from 'react'
-import { DESIGN_TOKENS, GRADIENTS } from '../../design-system/constants'
+import { DESIGN_TOKENS } from '../../design-system/constants'
 import { THEMES } from '../../design-system/themes'
 import { useAdvancedTheme } from '../../contexts/AdvancedThemeContext'
 import { useThemeColors } from '../../hooks/useThemeColors'
@@ -25,24 +25,19 @@ interface HeaderSectionProps {
   children?: ReactNode
 }
 
-const defaultHeaderBg = 'linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 25%, #e2e8f0 50%, #cbd5e1 75%, #e2e8f0 100%)'
-
 export default function HeaderSection({ title, subtitle, children }: HeaderSectionProps) {
   const { primary, secondary } = useThemeColors()
   const textColor = useTextColor()
   const theme = useTheme()
-  const { themeName } = useAdvancedTheme()
-  const [headerBackground, setHeaderBackground] = useState<string>(defaultHeaderBg)
+  const { customTheme } = useAdvancedTheme()
+  const [headerBackground, setHeaderBackground] = useState<string>(
+    `linear-gradient(135deg, ${customTheme.bg} 0%, ${customTheme.bg2} 25%, ${customTheme.bg} 50%, ${customTheme.bg2} 75%, ${customTheme.bg} 100%)`
+  )
   
   // Mettre à jour le background du header quand le thème change
   useEffect(() => {
     const updateHeaderBackground = () => {
       if (typeof window === 'undefined') return
-      
-      if (themeName === 'default') {
-        setHeaderBackground('linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 25%, #e2e8f0 50%, #cbd5e1 75%, #e2e8f0 100%)')
-        return
-      }
       
       // Lire les CSS variables définies par ThemeSelector
       const bg = getComputedStyle(document.documentElement).getPropertyValue('--theme-bg')?.trim()
@@ -51,7 +46,9 @@ export default function HeaderSection({ title, subtitle, children }: HeaderSecti
       if (bg && bg2) {
         setHeaderBackground(`linear-gradient(135deg, ${bg} 0%, ${bg2} 25%, ${bg} 50%, ${bg2} 75%, ${bg} 100%)`)
       } else {
-        setHeaderBackground(GRADIENTS.backgrounds.headerLight)
+        setHeaderBackground(
+          `linear-gradient(135deg, ${customTheme.bg} 0%, ${customTheme.bg2} 25%, ${customTheme.bg} 50%, ${customTheme.bg2} 75%, ${customTheme.bg} 100%)`
+        )
       }
     }
     
@@ -70,7 +67,7 @@ export default function HeaderSection({ title, subtitle, children }: HeaderSecti
       observer.disconnect()
       clearInterval(interval)
     }
-  }, [themeName])
+  }, [customTheme])
   
   return (
     <Box

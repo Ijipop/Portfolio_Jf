@@ -348,15 +348,15 @@ const ProjectCardWrapper = ({
           </ProjectImageContainer>
         )}
         
-        <Typography 
-          variant="body2" 
+        <Typography
+          variant="body2"
           paragraph
-          sx={{ 
+          sx={{
             lineHeight: 1.4,
             mb: { xs: 1, md: 1.5 },
             minHeight: { xs: '1.75rem', md: '2.5rem' },
             fontSize: { xs: '0.85rem', md: '0.9rem' },
-            ...(isNonDefaultPalette ? { color: `${primary}ee` } : { color: 'text.secondary' }),
+            ...(isNonDefaultPalette ? { color: `${primary}ee` } : { color: 'rgba(255,255,255,0.92)' }),
           }}
         >
           {project.description}
@@ -686,69 +686,71 @@ export default function Projets() {
           </AnimatedBox>
         )}
 
-        {/* Stats Section */}
-        <ScrollReveal direction="up" delay={0.1}>
-          <StatsGrid>
-            <ScrollReveal direction="up" delay={0.2}>
-              <ThreeDCardComponent floatingElements={2} compact>
-                <Box sx={{ position: 'relative', zIndex: 2, textAlign: 'center' }}>
-                  <Typography variant="h3" sx={{ fontWeight: 700, color: primary, mb: 0.5, fontSize: { xs: '1.75rem', md: '2rem' } }}>
-                    <AnimatedCounter value={projects.length} />
-                  </Typography>
-                  <Typography variant="body2" sx={{ fontWeight: 600, color: textColor, opacity: 0.9, textTransform: 'uppercase', letterSpacing: '0.5px' }}>
-                    {t('projects.totalProjects')}
-                  </Typography>
-                </Box>
-              </ThreeDCardComponent>
+        {/* Stats Section et Filtres par technologie désactivés pour l'instant */}
+        {false && (
+          <>
+            <ScrollReveal direction="up" delay={0.1}>
+              <StatsGrid>
+                <ScrollReveal direction="up" delay={0.2}>
+                  <ThreeDCardComponent floatingElements={2} compact>
+                    <Box sx={{ position: 'relative', zIndex: 2, textAlign: 'center' }}>
+                      <Typography variant="h3" sx={{ fontWeight: 700, color: primary, mb: 0.5, fontSize: { xs: '1.75rem', md: '2rem' } }}>
+                        <AnimatedCounter value={projects.length} />
+                      </Typography>
+                      <Typography variant="body2" sx={{ fontWeight: 600, color: textColor, opacity: 0.9, textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                        {t('projects.totalProjects')}
+                      </Typography>
+                    </Box>
+                  </ThreeDCardComponent>
+                </ScrollReveal>
+                <ScrollReveal direction="up" delay={0.3}>
+                  <ThreeDCardComponent floatingElements={2} compact>
+                    <Box sx={{ position: 'relative', zIndex: 2, textAlign: 'center' }}>
+                      <Typography variant="h3" sx={{ fontWeight: 700, color: primary, mb: 0.5, fontSize: { xs: '1.75rem', md: '2rem' } }}>
+                        <AnimatedCounter value={getCompletedProjects()} />
+                      </Typography>
+                      <Typography variant="body2" sx={{ fontWeight: 600, color: textColor, opacity: 0.9, textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                        {t('projects.completed')}
+                      </Typography>
+                    </Box>
+                  </ThreeDCardComponent>
+                </ScrollReveal>
+                <ScrollReveal direction="up" delay={0.4}>
+                  <ThreeDCardComponent floatingElements={2} compact>
+                    <Box sx={{ position: 'relative', zIndex: 2, textAlign: 'center' }}>
+                      <Typography variant="h3" sx={{ fontWeight: 700, color: primary, mb: 0.5, fontSize: { xs: '1.75rem', md: '2rem' } }}>
+                        <AnimatedCounter value={getInProgressProjects()} />
+                      </Typography>
+                      <Typography variant="body2" sx={{ fontWeight: 600, color: textColor, opacity: 0.9, textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                        En Cours
+                      </Typography>
+                    </Box>
+                  </ThreeDCardComponent>
+                </ScrollReveal>
+              </StatsGrid>
             </ScrollReveal>
-            <ScrollReveal direction="up" delay={0.3}>
-              <ThreeDCardComponent floatingElements={2} compact>
-                <Box sx={{ position: 'relative', zIndex: 2, textAlign: 'center' }}>
-                  <Typography variant="h3" sx={{ fontWeight: 700, color: primary, mb: 0.5, fontSize: { xs: '1.75rem', md: '2rem' } }}>
-                    <AnimatedCounter value={getCompletedProjects()} />
-                  </Typography>
-                  <Typography variant="body2" sx={{ fontWeight: 600, color: textColor, opacity: 0.9, textTransform: 'uppercase', letterSpacing: '0.5px' }}>
-                    {t('projects.completed')}
-                  </Typography>
-                </Box>
-              </ThreeDCardComponent>
-            </ScrollReveal>
-            <ScrollReveal direction="up" delay={0.4}>
-              <ThreeDCardComponent floatingElements={2} compact>
-                <Box sx={{ position: 'relative', zIndex: 2, textAlign: 'center' }}>
-                  <Typography variant="h3" sx={{ fontWeight: 700, color: primary, mb: 0.5, fontSize: { xs: '1.75rem', md: '2rem' } }}>
-                    <AnimatedCounter value={getInProgressProjects()} />
-                  </Typography>
-                  <Typography variant="body2" sx={{ fontWeight: 600, color: textColor, opacity: 0.9, textTransform: 'uppercase', letterSpacing: '0.5px' }}>
-                    En Cours
-                  </Typography>
-                </Box>
-              </ThreeDCardComponent>
-            </ScrollReveal>
-          </StatsGrid>
-        </ScrollReveal>
-
-        {/* Filtres par technologie */}
-        {projects.length > 0 && (
-          <ScrollReveal direction="up" delay={0.5}>
-            <FilterContainerComponent>
-              <FilterContainerLabel label={t('projects.filterLabel')} />
-              <FilterChipComponent
-                label={t('projects.filterAll')}
-                onClick={() => setSelectedTech(null)}
-                selected={selectedTech === null}
-                icon={selectedTech === null ? undefined : <ClearIcon />}
-              />
-              {getDisplayTechnologies().map((tech) => (
-                <FilterChipComponent
-                  key={tech}
-                  label={tech}
-                  onClick={() => handleTechFilter(tech)}
-                  selected={selectedTech === tech}
-                />
-              ))}
-            </FilterContainerComponent>
-          </ScrollReveal>
+            {projects.length > 0 && (
+              <ScrollReveal direction="up" delay={0.5}>
+                <FilterContainerComponent>
+                  <FilterContainerLabel label={t('projects.filterLabel')} />
+                  <FilterChipComponent
+                    label={t('projects.filterAll')}
+                    onClick={() => setSelectedTech(null)}
+                    selected={selectedTech === null}
+                    icon={selectedTech === null ? undefined : <ClearIcon />}
+                  />
+                  {getDisplayTechnologies().map((tech) => (
+                    <FilterChipComponent
+                      key={tech}
+                      label={tech}
+                      onClick={() => handleTechFilter(tech)}
+                      selected={selectedTech === tech}
+                    />
+                  ))}
+                </FilterContainerComponent>
+              </ScrollReveal>
+            )}
+          </>
         )}
 
         {/* Projects Grid */}

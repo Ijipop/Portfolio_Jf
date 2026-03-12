@@ -26,7 +26,6 @@ import CTAButton from '../../components/shared/CTAButton'
 import { DESIGN_TOKENS } from '../../design-system/constants'
 import { useTextColor } from '../../hooks/useTextColor'
 import { useThemeColors } from '../../hooks/useThemeColors'
-import { useAdvancedTheme } from '../../contexts/AdvancedThemeContext'
 import { useLanguage } from '../../contexts/LanguageContext'
 
 const SocialCardContent = styled(Box)(({ theme }) => ({
@@ -64,8 +63,8 @@ const SocialIconWrapper = styled(Box)(({ theme }) => ({
 }))
 
 const StyledTextField = styled(TextField, {
-  shouldForwardProp: (prop) => prop !== 'textColor' && prop !== 'isDefaultTheme',
-})<{ textColor?: string; isDefaultTheme?: boolean }>(({ theme, textColor, isDefaultTheme }) => ({
+  shouldForwardProp: (prop) => prop !== 'textColor' && prop !== 'helperTextColor',
+})<{ textColor?: string; helperTextColor?: string }>(({ theme, textColor, helperTextColor }) => ({
   '& .MuiOutlinedInput-root': {
     borderRadius: DESIGN_TOKENS.borderRadius.small,
     transition: DESIGN_TOKENS.transitions.normal,
@@ -92,7 +91,7 @@ const StyledTextField = styled(TextField, {
     },
   },
   '& .MuiFormHelperText-root': {
-    color: isDefaultTheme ? 'rgba(0, 0, 0, 0.7)' : 'rgba(255, 255, 255, 0.7)',
+    color: helperTextColor || 'rgba(255, 255, 255, 0.7)',
   },
 }))
 
@@ -103,7 +102,6 @@ export default function Contact() {
   const useCompactContact = !isXlUp || !isTallViewport
   const textColor = useTextColor()
   const { primary, secondary, accent } = useThemeColors()
-  const { themeName } = useAdvancedTheme()
   const { t } = useLanguage()
   const [snackbarOpen, setSnackbarOpen] = useState(false)
   const [snackbarMessage, setSnackbarMessage] = useState('')
@@ -410,7 +408,7 @@ export default function Contact() {
                     required
                     fullWidth
                     textColor={textColor}
-                    isDefaultTheme={themeName === 'default'}
+                    helperTextColor={`${textColor}B3`}
                   />
                   <StyledTextField
                     name="email"
@@ -423,7 +421,7 @@ export default function Contact() {
                     required
                     fullWidth
                     textColor={textColor}
-                    isDefaultTheme={themeName === 'default'}
+                    helperTextColor={`${textColor}B3`}
                   />
                 </Box>
                 
@@ -437,7 +435,7 @@ export default function Contact() {
                   required
                   fullWidth
                   textColor={textColor}
-                  isDefaultTheme={themeName === 'default'}
+                  helperTextColor={`${textColor}B3`}
                 />
                 
                 <StyledTextField
@@ -452,7 +450,7 @@ export default function Contact() {
                   multiline
                   rows={useCompactContact ? 4 : 6}
                   textColor={textColor}
-                  isDefaultTheme={themeName === 'default'}
+                  helperTextColor={`${textColor}B3`}
                 />
               </Box>
               

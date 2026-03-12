@@ -6,7 +6,10 @@ import LightbulbIcon from '@mui/icons-material/Lightbulb'
 import TimelineIcon from '@mui/icons-material/Timeline'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
+import { usePathname } from 'next/navigation'
 import { DESIGN_TOKENS } from '@/design-system/constants'
+import { shouldShowTopology } from '@/utils/topologyRoutes'
+import { getCardSurfaceSx } from '@/components/shared/cardSurface'
 
 interface SoftSkillsSectionProps {
   primary: string
@@ -15,19 +18,26 @@ interface SoftSkillsSectionProps {
 }
 
 export default function SoftSkillsSection({ primary, textColor, t }: SoftSkillsSectionProps) {
+  const pathname = usePathname()
+  const isTopologyRoute = shouldShowTopology(pathname)
+  const surfaceSx = getCardSurfaceSx({ isTopologyRoute, variant: 'flat', level: 'soft', interactive: false })
+
   return (
     <Box
       sx={{
-        background:
-          'var(--card-background, linear-gradient(145deg, #e2e8f0 0%, #cbd5e1 50%, #e2e8f0 100%))',
-        border: '1px solid var(--card-primary, rgba(0,0,0,0.08))',
+        ...surfaceSx,
         borderRadius: DESIGN_TOKENS.borderRadius.large,
         padding: DESIGN_TOKENS.spacing.xl,
         textAlign: 'center',
-        boxShadow: '0 8px 32px var(--card-primary, rgba(0,0,0,0.1))',
         mb: DESIGN_TOKENS.spacing.xxl,
         position: 'relative',
         overflow: 'hidden',
+        ...(!isTopologyRoute && {
+          background:
+            'var(--card-background, linear-gradient(145deg, #e2e8f0 0%, #cbd5e1 50%, #e2e8f0 100%))',
+          border: '1px solid var(--card-primary, rgba(0,0,0,0.08))',
+          boxShadow: '0 8px 32px var(--card-primary, rgba(0,0,0,0.1))',
+        }),
       }}
     >
       <Typography

@@ -23,7 +23,6 @@ import { DESIGN_TOKENS } from './design-system/constants'
 import { useThemeColors } from './hooks/useThemeColors'
 import { useTextColor } from './hooks/useTextColor'
 import { useLanguage } from './contexts/LanguageContext'
-import { useAdvancedTheme } from './contexts/AdvancedThemeContext'
 import { shouldShowTopology } from './utils/topologyRoutes'
 import { getCardSurfaceSx } from './components/shared/cardSurface'
 import SignatureIntro from './components/SignatureIntro'
@@ -47,7 +46,6 @@ export default function HomeClient({ initialShowIntro }: { initialShowIntro: boo
   const { primary, secondary, accent } = useThemeColors()
   const textColor = useTextColor()
   const { t } = useLanguage()
-  const { themeName } = useAdvancedTheme()
   const [showIntro, setShowIntro] = useState<boolean>(initialShowIntro)
 
   // Synchroniser avec cookie/sessionStorage après montage pour éviter flash d'hydration
@@ -121,7 +119,7 @@ export default function HomeClient({ initialShowIntro }: { initialShowIntro: boo
       <InteractiveBackgroundSection>
       <Container maxWidth="lg" sx={{ py: { xs: 4, md: 8 }, px: { xs: 2, sm: 3, md: 4 }, position: 'relative', zIndex: 2 }}>
         <GlassContainer sx={{ 
-          ...getCardSurfaceSx({ isTopologyRoute, variant: 'glass', level: 'soft', interactive: false }),
+          ...getCardSurfaceSx({ isTopologyRoute, variant: 'flat', level: 'soft', interactive: false }),
           mb: { xs: DESIGN_TOKENS.spacing.xl, md: DESIGN_TOKENS.spacing.xxl },
           p: { xs: 2.5, sm: 3, md: 3.5 },
         }}>
@@ -245,22 +243,18 @@ export default function HomeClient({ initialShowIntro }: { initialShowIntro: boo
                 mb: DESIGN_TOKENS.spacing.md,
                 ...DESIGN_TOKENS.typography.h3,
                 fontWeight: 700,
-                ...(themeName === 'default'
-                  ? { color: '#1e293b', textShadow: '0 1px 2px rgba(0,0,0,0.06)' }
-                  : {
-                      textShadow: `0 2px 4px rgba(0,0,0,0.1), 0 0 20px ${primary}40`,
-                      background: `linear-gradient(135deg, ${primary}, ${secondary}, ${primary})`,
-                      backgroundClip: 'text',
-                      WebkitBackgroundClip: 'text',
-                      WebkitTextFillColor: 'transparent',
-                      backgroundSize: '200% 200%',
-                      animation: 'gradientShift 4s ease-in-out infinite',
-                      '@keyframes gradientShift': {
-                        '0%': { backgroundPosition: '0% 50%' },
-                        '50%': { backgroundPosition: '100% 50%' },
-                        '100%': { backgroundPosition: '0% 50%' },
-                      },
-                    }),
+                textShadow: `0 2px 4px rgba(0,0,0,0.1), 0 0 20px ${primary}40`,
+                background: `linear-gradient(135deg, ${primary}, ${secondary}, ${primary})`,
+                backgroundClip: 'text',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                backgroundSize: '200% 200%',
+                animation: 'gradientShift 4s ease-in-out infinite',
+                '@keyframes gradientShift': {
+                  '0%': { backgroundPosition: '0% 50%' },
+                  '50%': { backgroundPosition: '100% 50%' },
+                  '100%': { backgroundPosition: '0% 50%' },
+                },
               }}
             >
               {t('home.sectionSkills')}
