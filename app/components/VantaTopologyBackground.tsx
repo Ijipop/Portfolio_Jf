@@ -46,14 +46,33 @@ export default function VantaTopologyBackground(props?: VantaTopologyBackgroundP
 
     const loadScript = (src: string): Promise<void> =>
       new Promise((resolve, reject) => {
-        if (document.querySelector(`script[src="${src}"]`)) {
-          resolve()
+        const existing = document.querySelector(`script[src="${src}"]`) as HTMLScriptElement | null
+        if (existing) {
+          const alreadyLoaded = existing.getAttribute('data-loaded') === 'true'
+          if (alreadyLoaded) {
+            resolve()
+            return
+          }
+          existing.addEventListener(
+            'load',
+            () => {
+              existing.setAttribute('data-loaded', 'true')
+              resolve()
+            },
+            { once: true }
+          )
+          existing.addEventListener('error', () => reject(new Error(`Failed to load script: ${src}`)), {
+            once: true,
+          })
           return
         }
         const script = document.createElement('script')
         script.src = src
-        script.onload = () => resolve()
-        script.onerror = reject
+        script.onload = () => {
+          script.setAttribute('data-loaded', 'true')
+          resolve()
+        }
+        script.onerror = () => reject(new Error(`Failed to load script: ${src}`))
         document.head.appendChild(script)
       })
 
@@ -77,7 +96,10 @@ export default function VantaTopologyBackground(props?: VantaTopologyBackgroundP
         if (!mounted || !elRef.current) return
 
         const VANTA = (window as unknown as { VANTA: { TOPOLOGY: (opts: Record<string, unknown>) => { destroy: () => void; resize?: () => void } } }).VANTA
-        if (!VANTA?.TOPOLOGY) return
+        if (!VANTA?.TOPOLOGY) {
+          if (mounted) setVantaReady(true)
+          return
+        }
 
         const options = getTopologyOptions(themeName as ThemeName)
         const resolvedColor = colorHex ? hexToNumber(colorHex) : options.color

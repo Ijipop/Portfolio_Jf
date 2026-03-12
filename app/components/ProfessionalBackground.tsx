@@ -3,7 +3,6 @@
 import { Box } from '@mui/material'
 import { useEffect, useRef, useState } from 'react'
 import { useThemeColors } from '../hooks/useThemeColors'
-import { useAdvancedTheme } from '../contexts/AdvancedThemeContext'
 
 interface ProfessionalBackgroundProps {
   className?: string
@@ -13,11 +12,7 @@ export default function ProfessionalBackground({ className }: ProfessionalBackgr
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const animationRef = useRef<number>()
   const { primary, secondary, accent } = useThemeColors()
-  const { themeName } = useAdvancedTheme()
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 })
-  
-  // Ajuster l'opacité selon le thème (plus visible sur default)
-  const isDefaultTheme = themeName === 'default'
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -73,9 +68,7 @@ export default function ProfessionalBackground({ className }: ProfessionalBackgr
         vx: (Math.random() - 0.5) * 0.3,
         vy: (Math.random() - 0.5) * 0.3,
         color: colors[i % colors.length],
-        opacity: isDefaultTheme 
-          ? 0.35 + Math.random() * 0.2 // Beaucoup plus visible sur default
-          : 0.25 + Math.random() * 0.15 // Plus visibles sur les autres thèmes
+        opacity: 0.28 + Math.random() * 0.16
       })
     }
 
@@ -148,7 +141,7 @@ export default function ProfessionalBackground({ className }: ProfessionalBackgr
           cancelAnimationFrame(animationRef.current)
         }
       }
-    }, [dimensions, primary, secondary, accent, isDefaultTheme])
+    }, [dimensions, primary, secondary, accent])
 
   // Détecter mobile et désactiver
   const [isMobile, setIsMobile] = useState(false)
@@ -179,7 +172,7 @@ export default function ProfessionalBackground({ className }: ProfessionalBackgr
         pointerEvents: 'none',
         zIndex: 0,
         overflow: 'hidden',
-        opacity: isDefaultTheme ? 1 : 0.8 // Maximum sur default, un peu moins sur les autres
+        opacity: 0.88
       }}
     >
       <canvas

@@ -15,18 +15,13 @@ import Footer from '../components/Footer'
 import { useLanguage } from '../contexts/LanguageContext'
 import { DESIGN_TOKENS } from '../design-system/constants'
 import { useThemeColors } from '../hooks/useThemeColors'
-import { useAdvancedTheme } from '../contexts/AdvancedThemeContext'
+import { useTextColor } from '../hooks/useTextColor'
 
 export default function LogicielPage() {
   const router = useRouter()
   const { t } = useLanguage()
   const { primary, secondary } = useThemeColors()
-  const { themeName } = useAdvancedTheme()
-  const isDefaultPalette = themeName === 'default'
-  const titleColor = isDefaultPalette ? undefined : 'white'
-  const bodyColor = isDefaultPalette ? undefined : 'rgba(255,255,255,0.9)'
-  const cardTitleColor = isDefaultPalette ? undefined : 'white'
-  const cardDescColor = isDefaultPalette ? undefined : 'rgba(255,255,255,0.9)'
+  const textColor = useTextColor()
 
   return (
     <PageWrapper backgroundVariant="default">
@@ -50,7 +45,7 @@ export default function LogicielPage() {
               fontWeight: 700,
               mb: 2,
               textAlign: 'center',
-              ...(titleColor && { color: titleColor }),
+              color: textColor,
             }}
           >
             {t('logiciel.title')}
@@ -62,7 +57,8 @@ export default function LogicielPage() {
               maxWidth: 560,
               mx: 'auto',
               lineHeight: 1.7,
-              ...(bodyColor && { color: bodyColor }),
+              color: textColor,
+              opacity: 0.92,
             }}
           >
             {t('logiciel.intro')}
@@ -83,10 +79,10 @@ export default function LogicielPage() {
               sx={{ display: 'block', textAlign: 'left' }}
             >
               <CardContent sx={{ p: 3 }}>
-                <Typography variant="h6" component="h2" sx={{ fontWeight: 600, mb: 1, ...(cardTitleColor && { color: cardTitleColor }) }}>
+                <Typography variant="h6" component="h2" sx={{ fontWeight: 600, mb: 1, color: textColor }}>
                   {t('logiciel.timelendarCardTitle')}
                 </Typography>
-                <Typography variant="body2" sx={{ mb: 2, lineHeight: 1.6, ...(cardDescColor && { color: cardDescColor }) }}>
+                <Typography variant="body2" sx={{ mb: 2, lineHeight: 1.6, color: textColor, opacity: 0.9 }}>
                   {t('logiciel.timelendarCardDesc')}
                 </Typography>
                 <CTAButton

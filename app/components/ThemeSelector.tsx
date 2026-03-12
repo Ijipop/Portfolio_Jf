@@ -67,8 +67,8 @@ export function ThemeSelector() {
       return {
         primary: theme.primary,
         secondary: theme.secondary,
-        background: 'linear-gradient(145deg, #e2e8f0 0%, #cbd5e1 50%, #e2e8f0 100%)',
-        cardGradient: `linear-gradient(145deg, ${theme.primary}12 0%, ${theme.secondary}12 50%, ${theme.primary}12 100%)`
+        background: `linear-gradient(145deg, ${theme.bg2}E6 0%, ${theme.bg}E0 50%, ${theme.bg2}E6 100%)`,
+        cardGradient: `linear-gradient(145deg, ${theme.primary}26 0%, ${theme.secondary}22 50%, ${theme.accent}20 100%)`
       }
     }
     
@@ -115,8 +115,8 @@ export function ThemeSelector() {
     root.style.setProperty('--card-secondary', cardColors.secondary)
     root.style.setProperty('--card-background', cardColors.background)
     root.style.setProperty('--card-card-gradient', cardColors.cardGradient)
-    root.style.setProperty('--card-overlay-opacity', themeName === 'default' ? '0.12' : '0.3')
-    root.style.setProperty('--card-decor-opacity', themeName === 'default' ? '0.45' : '0.6')
+    root.style.setProperty('--card-overlay-opacity', themeName === 'default' ? '0.22' : '0.3')
+    root.style.setProperty('--card-decor-opacity', themeName === 'default' ? '0.58' : '0.6')
     
     // 3. Background global avec !important pour override les styles React
     document.body.style.setProperty('background', 

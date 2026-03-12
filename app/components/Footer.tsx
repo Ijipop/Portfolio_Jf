@@ -22,9 +22,11 @@ export default function Footer() {
   const router = useRouter()
   const theme = useTheme()
   const { primary, secondary } = useThemeColors()
-  const { themeName } = useAdvancedTheme()
+  const { customTheme } = useAdvancedTheme()
   const { t } = useLanguage()
-  const [footerBackground, setFooterBackground] = useState<string>(`linear-gradient(135deg, ${primary} 0%, ${secondary} 100%)`)
+  const [footerBackground, setFooterBackground] = useState<string>(
+    `linear-gradient(135deg, ${customTheme.bg} 0%, ${customTheme.bg2} 50%, ${customTheme.bg} 100%)`
+  )
   const [textColor, setTextColor] = useState<string>('#ffffff')
 
   // Mettre à jour le background du footer quand le thème change
@@ -33,16 +35,12 @@ export default function Footer() {
       if (typeof window === 'undefined') return
       
       let newBackground: string
-      if (themeName === 'default') {
-        newBackground = 'linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 50%, #e2e8f0 100%)'
+      const bg = getComputedStyle(document.documentElement).getPropertyValue('--theme-bg')?.trim()
+      const bg2 = getComputedStyle(document.documentElement).getPropertyValue('--theme-bg2')?.trim()
+      if (bg && bg2) {
+        newBackground = `linear-gradient(135deg, ${bg} 0%, ${bg2} 50%, ${bg} 100%)`
       } else {
-        const bg = getComputedStyle(document.documentElement).getPropertyValue('--theme-bg')?.trim()
-        const bg2 = getComputedStyle(document.documentElement).getPropertyValue('--theme-bg2')?.trim()
-        if (bg && bg2) {
-          newBackground = `linear-gradient(135deg, ${bg} 0%, ${bg2} 50%, ${bg} 100%)`
-        } else {
-          newBackground = `linear-gradient(135deg, ${primary} 0%, ${secondary} 100%)`
-        }
+        newBackground = `linear-gradient(135deg, ${customTheme.bg} 0%, ${customTheme.bg2} 50%, ${customTheme.bg} 100%)`
       }
       
       setFooterBackground(newBackground)
@@ -63,7 +61,7 @@ export default function Footer() {
       observer.disconnect()
       clearInterval(interval)
     }
-  }, [primary, secondary, themeName])
+  }, [customTheme])
 
   const handleEmailClick = () => {
     router.push('/portfolio/contact')

@@ -12,9 +12,9 @@ import { getTextColorForBackground } from '../utils/colorUtils'
  * @returns {string} Couleur de texte optimale
  */
 export function useTextColor(): string {
-  const { customTheme, themeName } = useAdvancedTheme()
+  const { customTheme } = useAdvancedTheme()
   const [textColor, setTextColor] = useState<string>(() =>
-    themeName === 'default' ? '#1e293b' : '#ffffff'
+    getTextColorForBackground(`linear-gradient(135deg, ${customTheme.bg} 0%, ${customTheme.bg2} 50%, ${customTheme.bg} 100%)`)
   )
 
   useEffect(() => {
@@ -34,9 +34,8 @@ export function useTextColor(): string {
         const background = `linear-gradient(135deg, ${customTheme.bg} 0%, ${customTheme.bg2} 50%, ${customTheme.bg} 100%)`
         setTextColor(getTextColorForBackground(background))
       } else {
-        // Fallback : déterminer selon le nom du thème
-        // Seul "default" est clair, tous les autres sont sombres
-        setTextColor(themeName === 'default' ? '#1e293b' : '#ffffff')
+        // Fallback de sécurité
+        setTextColor('#ffffff')
       }
     }
 
@@ -52,7 +51,7 @@ export function useTextColor(): string {
     return () => {
       observer.disconnect()
     }
-  }, [customTheme, themeName])
+  }, [customTheme])
 
   return textColor
 }

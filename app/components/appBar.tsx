@@ -1,6 +1,5 @@
 "use client";
 
-import HomeIcon from '@mui/icons-material/Home';
 import MenuIcon from '@mui/icons-material/Menu';
 import { DESIGN_TOKENS } from '@/design-system/constants';
 import AppBar from "@mui/material/AppBar";
@@ -46,10 +45,8 @@ export default function AppBarComponent() {
 		setLoginModalOpen(true);
 	};
 
-	const handleHomeClick = () => {
-		router.push('/portfolio');
-	};
 	const handleNavigate = (path: string) => router.push(path);
+	const handleLogoClick = () => router.push('/');
 
 	return (
 		<>
@@ -69,25 +66,21 @@ export default function AppBarComponent() {
 					minHeight: { xs: '56px', sm: '64px' },
 					minWidth: 0,
 				}}>
-					{/* Bouton Accueil (masqué sur mobile, NavMobile affiche déjà home) */}
-					<IconButton 
-						edge="start" 
-						color="inherit" 
-						aria-label="accueil"
-						onClick={handleHomeClick}
-						sx={{ mr: 1, display: { xs: 'none', sm: 'flex' } }}
-					>
-						<HomeIcon />
-					</IconButton>
-					
-					{/* Titre Portfolio */}
-					<Typography 
-						variant="h6" 
-						component="div" 
-						sx={{ 
+					{/* Titre Portfolio : lien vers la landing (ijipop.com) */}
+					<Typography
+						variant="h6"
+						component="div"
+						onClick={handleLogoClick}
+						role="button"
+						tabIndex={0}
+						onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleLogoClick(); } }}
+						sx={{
 							mr: { xs: 1, sm: 2 },
 							fontSize: { xs: '1rem', sm: '1.25rem' },
-							display: { xs: 'none', sm: 'block' }
+							display: { xs: 'none', sm: 'block' },
+							cursor: 'pointer',
+							userSelect: 'none',
+							'&:hover': { opacity: 0.9 },
 						}}
 					>
 						{t('nav.portfolio')}

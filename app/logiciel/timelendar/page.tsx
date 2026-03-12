@@ -10,16 +10,12 @@ import Footer from '../../components/Footer'
 import { useLanguage } from '../../contexts/LanguageContext'
 import { DESIGN_TOKENS } from '../../design-system/constants'
 import { useThemeColors } from '../../hooks/useThemeColors'
-import { useAdvancedTheme } from '../../contexts/AdvancedThemeContext'
+import { useTextColor } from '../../hooks/useTextColor'
 
 export default function TimelendarPage() {
   const { t } = useLanguage()
   const { primary } = useThemeColors()
-  const { themeName } = useAdvancedTheme()
-  const isDefaultPalette = themeName === 'default'
-  const titleColor = isDefaultPalette ? undefined : 'white'
-  const bodyColor = isDefaultPalette ? undefined : 'rgba(255,255,255,0.9)'
-  const placeholderColor = isDefaultPalette ? undefined : 'rgba(255,255,255,0.8)'
+  const textColor = useTextColor()
 
   return (
     <PageWrapper backgroundVariant="default">
@@ -43,7 +39,7 @@ export default function TimelendarPage() {
               fontWeight: 700,
               mb: 1,
               textAlign: 'center',
-              ...(titleColor && { color: titleColor }),
+              color: textColor,
             }}
           >
             {t('timelendar.title')}
@@ -53,19 +49,20 @@ export default function TimelendarPage() {
             sx={{
               textAlign: 'center',
               mb: 4,
-              ...(bodyColor && { color: bodyColor }),
+              color: textColor,
+              opacity: 0.92,
             }}
           >
             {t('timelendar.subtitle')}
           </Typography>
 
-          <Typography sx={{ mb: 2, lineHeight: 1.8, ...(bodyColor && { color: bodyColor }) }}>
+          <Typography sx={{ mb: 2, lineHeight: 1.8, color: textColor, opacity: 0.92 }}>
             {t('timelendar.intro')}
           </Typography>
-          <Typography sx={{ mb: 2, lineHeight: 1.8, ...(bodyColor && { color: bodyColor }) }}>
+          <Typography sx={{ mb: 2, lineHeight: 1.8, color: textColor, opacity: 0.92 }}>
             {t('timelendar.timeline')}
           </Typography>
-          <Typography sx={{ mb: 4, lineHeight: 1.8, ...(bodyColor && { color: bodyColor }) }}>
+          <Typography sx={{ mb: 4, lineHeight: 1.8, color: textColor, opacity: 0.92 }}>
             {t('timelendar.calendar')}
           </Typography>
 
@@ -86,7 +83,8 @@ export default function TimelendarPage() {
                 alignItems: 'center',
                 justifyContent: 'center',
                 fontSize: '0.875rem',
-                ...(placeholderColor && { color: placeholderColor }),
+                color: textColor,
+                opacity: 0.8,
               }}
             >
               {t('timelendar.imagePlaceholder')}
@@ -100,7 +98,8 @@ export default function TimelendarPage() {
                 alignItems: 'center',
                 justifyContent: 'center',
                 fontSize: '0.875rem',
-                ...(placeholderColor && { color: placeholderColor }),
+                color: textColor,
+                opacity: 0.8,
               }}
             >
               {t('timelendar.imagePlaceholder')}
