@@ -43,8 +43,6 @@ export default function VantaTopologyBackground(props?: VantaTopologyBackgroundP
 
     let mounted = true
     let resizeObserver: ResizeObserver | null = null
-    let idleHandle: number | null = null
-    let usedIdleCallback = false
 
     const loadScript = (src: string): Promise<void> =>
       new Promise((resolve, reject) => {
@@ -96,12 +94,6 @@ export default function VantaTopologyBackground(props?: VantaTopologyBackgroundP
         await loadScript(VANTA_TOPOLOGY_CDN)
         if (!mounted || !elRef.current) return
 
-        const isMobile = typeof window !== 'undefined' && window.innerWidth < 768
-        if (isMobile) {
-          await new Promise((r) => setTimeout(r, 50))
-        }
-        if (!mounted || !elRef.current) return
-
         const VANTA = (window as unknown as { VANTA: { TOPOLOGY: (opts: Record<string, unknown>) => { destroy: () => void; resize?: () => void } } }).VANTA
         if (!VANTA?.TOPOLOGY) {
           if (mounted) setVantaReady(true)
@@ -140,26 +132,10 @@ export default function VantaTopologyBackground(props?: VantaTopologyBackgroundP
       }
     }
 
-    const runInit = () => {
-      init()
-    }
-    if (typeof requestIdleCallback !== 'undefined') {
-      usedIdleCallback = true
-      idleHandle = requestIdleCallback(runInit, { timeout: 2000 })
-    } else {
-      idleHandle = setTimeout(runInit, 0) as unknown as number
-    }
+    init()
 
     return () => {
       mounted = false
-      if (idleHandle !== null) {
-        if (usedIdleCallback && typeof cancelIdleCallback !== 'undefined') {
-          cancelIdleCallback(idleHandle)
-        } else {
-          clearTimeout(idleHandle)
-        }
-        idleHandle = null
-      }
       resizeObserver?.disconnect()
       resizeObserver = null
       if (effectRef.current) {
@@ -185,7 +161,7 @@ export default function VantaTopologyBackground(props?: VantaTopologyBackgroundP
         minWidth: '100%',
         backgroundColor: fallbackBg,
         opacity: vantaReady ? 1 : 0,
-        transition: 'opacity 0.4s ease',
+        transition: 'opacity 0s',
       }}
       aria-hidden
     />

@@ -290,7 +290,7 @@ export default function HomeClient({ initialShowIntro }: { initialShowIntro: boo
           mb: { xs: DESIGN_TOKENS.spacing.xl, md: DESIGN_TOKENS.spacing.xxl },
           px: { xs: 1, sm: 0 }
         }}>
-          <FadeIn delay={0.8}>
+          <FadeIn delay={0}>
             <ThreeDCardComponent onClick={() => handleCardClick('/portfolio/projets')} floatingElements={2}>
               <CodeIcon sx={{ fontSize: 48, color: primary, mb: 2 }} />
               <Typography variant="h5" gutterBottom sx={{ color: textColor }}>
@@ -302,7 +302,7 @@ export default function HomeClient({ initialShowIntro }: { initialShowIntro: boo
             </ThreeDCardComponent>
           </FadeIn>
 
-          <FadeIn delay={1.0}>
+          <FadeIn delay={0}>
             <ThreeDCardComponent onClick={() => handleCardClick('/portfolio/a-propos')} floatingElements={3}>
               <PersonIcon sx={{ fontSize: 48, color: primary, mb: 2 }} />
               <Typography variant="h5" gutterBottom sx={{ color: textColor }}>
@@ -314,7 +314,7 @@ export default function HomeClient({ initialShowIntro }: { initialShowIntro: boo
             </ThreeDCardComponent>
           </FadeIn>
 
-          <FadeIn delay={1.2}>
+          <FadeIn delay={0}>
             <ThreeDCardComponent onClick={() => handleCardClick('/portfolio/contact')} floatingElements={2}>
               <ContactSupportIcon sx={{ fontSize: 48, color: primary, mb: 2 }} />
               <Typography variant="h5" gutterBottom sx={{ color: textColor }}>
