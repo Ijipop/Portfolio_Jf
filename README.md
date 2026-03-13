@@ -1,17 +1,18 @@
 # 🚀 Portfolio Web - Next.js
 
-Portfolio moderne et interactif avec Next.js 14, Material-UI, TypeScript et Prisma. Inclut des effets visuels avancés, des cartes interactives et une interface d'administration complète.
+Portfolio moderne et interactif avec Next.js 14, Material-UI, TypeScript et Prisma. Effets visuels (fond VANTA Topology), cartes interactives, pages Projets / À propos / Contact, et interface d’administration pour la gestion des projets.
 
 ## ✨ Fonctionnalités
 
-- 🎨 **Design moderne** avec dark/light mode
-- 🃏 **Cartes interactives** avec effet de flip 3D
-- 📱 **Responsive design** adaptatif
-- 🔐 **Authentification JWT** sécurisée
-- 🛠️ **Interface d'administration** complète
+- 🎨 **Design** avec palettes de couleurs (thème default et personnalisables)
+- 🌐 **Fond animé** VANTA Topology sur les pages du portfolio
+- 🃏 **Cartes interactives** avec effet 3D et animations
+- 📱 **Responsive** et chargement perçu instantané (animations raccourcies)
+- 🔐 **Authentification JWT** pour l’admin
+- 🛠️ **Interface d’administration** : projets (CRUD), upload d’images
 - 📊 **Gestion des projets** (CRUD)
-- 🎭 **Effets visuels** et animations fluides
-- 🗄️ **Base de données PostgreSQL** avec Prisma
+- 🎭 **Effets visuels** et animations (ScrollReveal, FadeIn, gradientShift)
+- 🗄️ **PostgreSQL** avec Prisma (User, Project)
 
 ## ⚡ Démarrage rapide
 
@@ -72,73 +73,70 @@ npm start
 ```
 Portfolio/
 ├── app/
-│   ├── api/              # API Routes
-│   │   ├── auth/         # Authentification (login, logout)
-│   │   └── projects/     # Gestion des projets (CRUD)
-│   ├── admin/            # Interface d'administration
-│   │   └── dashboard/    # Tableau de bord admin
-│   ├── components/       # Composants réutilisables
-│   │   ├── appBar.tsx    # Barre de navigation
-│   │   ├── Footer.tsx    # Pied de page
-│   │   └── LoginModal.tsx # Modal de connexion
-│   ├── a-propos/         # Page "À propos" avec cartes flip
-│   ├── contact/          # Page de contact
-│   ├── projets/          # Page des projets
-│   └── page.tsx          # Page d'accueil
-├── lib/
-│   └── prisma.ts         # Configuration Prisma
-├── prisma/
-│   └── schema.prisma     # Schéma de base de données
+│   ├── api/                  # API Routes
+│   │   ├── auth/             # Login, logout
+│   │   ├── projects/         # CRUD projets
+│   │   └── upload/           # Upload images (admin)
+│   ├── admin/
+│   │   └── dashboard/        # Gestion des projets (CRUD, images)
+│   ├── components/           # AppBar, Footer, LoginModal, VantaTopologyBackground, cartes, etc.
+│   ├── portfolio/            # Projets, à-propos, contact
+│   ├── design-system/        # Thèmes, constantes
+│   ├── contexts/             # Langue, thème avancé
+│   └── page.tsx              # Accueil
+├── lib/prisma.ts
+├── prisma/schema.prisma      # User, Project
 ├── scripts/
-│   └── createAdminVercel.js # Script de création admin
+│   ├── createAdminVercel.js  # Créer l'admin
+│   ├── createAdminWithEmail.js
+│   ├── changeAdminPassword.js
+│   └── showAdmin.js
 └── public/
-    └── imgs/             # Images et assets
+    └── imgs/projets/         # Images uploadées (projets)
 ```
 
 ## 🎯 Pages et fonctionnalités
 
 ### 🏠 Page d'accueil
-- Présentation avec cartes interactives
-- Effets visuels et animations
-- Navigation fluide
+- Cartes interactives (Projets, À propos, Contact)
+- Fond VANTA Topology, apparition instantanée
 
 ### 👤 À propos
-- **Cartes flip 3D** avec informations personnelles
-- Effets de hover et animations
-- Contenu personnalisable
+- Cartes flip 3D, contenu personnalisable
 
 ### 📁 Projets
-- Affichage des projets avec filtres
-- Cartes avec effets visuels
-- Liens vers les projets
+- Grille de projets avec filtres (technologies, statut)
+- Cartes avec image, description, technologies, lien
 
 ### 📞 Contact
-- Informations de contact
-- Liens sociaux interactifs
-- Design responsive
+- Informations et liens sociaux
 
 ### 🔐 Administration
-- Interface sécurisée pour gérer les projets
-- Authentification JWT
-- CRUD complet des projets
+- **Projets** : CRUD, upload d’images (JPEG/PNG/WEBP/GIF, max 5 Mo)
+- Authentification JWT ; accès via menu « Admin » ou `/admin` puis `/admin/dashboard`
 
 ## 🛠️ Commandes utiles
 
 ```bash
 # Développement
 npm run dev              # Serveur de développement
-npm run build           # Build de production
-npm run start           # Serveur de production
+npm run build            # Build de production
+npm run start            # Serveur de production
 
 # Base de données
-npx prisma studio       # Interface graphique BDD
-npx prisma generate     # Générer le client Prisma
-npx prisma db push      # Appliquer le schéma
-npx prisma migrate dev  # Créer une migration
+npx prisma studio        # Interface graphique BDD
+npx prisma generate      # Générer le client Prisma
+npx prisma db push       # Appliquer le schéma
+npx prisma migrate dev   # Créer une migration
+
+# Admin (scripts)
+npm run admin:create     # Créer un admin (createAdminWithEmail.js)
+npm run admin:show       # Afficher les comptes admin
+npm run admin:password   # Changer le mot de passe (changeAdminPassword.js)
 
 # Utilitaires
-npm run lint            # Vérifier le code
-npm run type-check      # Vérifier TypeScript
+npm run lint             # Vérifier le code
+npm run type-check       # Vérifier TypeScript
 ```
 
 ## 🚀 Déploiement
@@ -165,14 +163,8 @@ JWT_SECRET=votre-clé-secrète
 - Les animations
 
 ### Ajouter des projets
-Utilisez l'interface d'administration ou l'API :
-```bash
-# Via l'interface web
-http://localhost:3000/admin/dashboard
-
-# Via l'API (avec authentification)
-POST /api/projects
-```
+- **Interface** : `http://localhost:3000/admin/dashboard` → formulaire + upload image.
+- **API** : `POST /api/projects` (Bearer JWT), `GET /api/projects`, `PUT/DELETE /api/projects/:id`.
 
 ### Modifier le design
 - **Thème** : `app/components/ThemeWrapper.tsx`
@@ -190,11 +182,13 @@ POST /api/projects
 ## 📝 Technologies utilisées
 
 - **Frontend** : Next.js 14, React, TypeScript
-- **UI** : Material-UI (MUI)
-- **Base de données** : PostgreSQL, Prisma ORM
+- **UI** : Material-UI (MUI), design system (thèmes, constantes)
+- **Effets** : VANTA Topology (p5.js), Framer Motion, ScrollReveal
+- **i18n** : français / anglais
+- **Base de données** : PostgreSQL (Neon), Prisma (User, Project)
 - **Authentification** : JWT, bcrypt
 - **Déploiement** : Vercel, Neon.tech
-- **Styling** : CSS-in-JS, animations CSS
+- **Styling** : CSS-in-JS, animations CSS, chargement optimisé (instantané)
 
 ## 🤝 Contribution
 

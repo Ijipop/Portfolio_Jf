@@ -9,6 +9,7 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
+import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import React from 'react';
 import { useState } from "react";
@@ -46,7 +47,6 @@ export default function AppBarComponent() {
 	};
 
 	const handleNavigate = (path: string) => router.push(path);
-	const handleLogoClick = () => router.push('/');
 
 	return (
 		<>
@@ -66,25 +66,23 @@ export default function AppBarComponent() {
 					minHeight: { xs: '56px', sm: '64px' },
 					minWidth: 0,
 				}}>
-					{/* Titre Portfolio : lien vers la landing (ijipop.com) */}
-					<Typography
-						variant="h6"
-						component="div"
-						onClick={handleLogoClick}
-						role="button"
-						tabIndex={0}
-						onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleLogoClick(); } }}
-						sx={{
-							mr: { xs: 1, sm: 2 },
-							fontSize: { xs: '1rem', sm: '1.25rem' },
-							display: { xs: 'none', sm: 'block' },
-							cursor: 'pointer',
-							userSelect: 'none',
-							'&:hover': { opacity: 0.9 },
-						}}
-					>
-						{t('nav.portfolio')}
-					</Typography>
+					{/* Titre Portfolio : lien vers l'accueil (prefetch activé) */}
+					<Link href="/" style={{ textDecoration: 'none', color: 'inherit' }}>
+						<Typography
+							variant="h6"
+							component="span"
+							sx={{
+								mr: { xs: 1, sm: 2 },
+								fontSize: { xs: '1rem', sm: '1.25rem' },
+								display: { xs: 'none', sm: 'block' },
+								cursor: 'pointer',
+								userSelect: 'none',
+								'&:hover': { opacity: 0.9 },
+							}}
+						>
+							{t('nav.portfolio')}
+						</Typography>
+					</Link>
 					<NavDesktop routes={NAV_ROUTES} pathname={pathname} onNavigate={handleNavigate} t={t} />
 					<NavMobile routes={NAV_ROUTES} pathname={pathname} onNavigate={handleNavigate} />
 					

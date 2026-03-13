@@ -6,7 +6,8 @@ import PersonIcon from '@mui/icons-material/Person'
 import Box from '@mui/material/Box'
 import Container from '@mui/material/Container'
 import Typography from '@mui/material/Typography'
-import { usePathname, useRouter } from 'next/navigation'
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import { GlassContainer } from './components/GlassCard'
 import { LetterAnimations } from './components/LetterAnimations'
 import { FadeIn, TypingEffect } from './components/SimpleAnimations'
@@ -38,7 +39,6 @@ function setIntroSeenCookie() {
 }
 
 export default function HomeClient({ initialShowIntro }: { initialShowIntro: boolean }) {
-  const router = useRouter()
   const pathname = usePathname()
   const isTopologyRoute = shouldShowTopology(pathname)
   const theme = useTheme()
@@ -56,10 +56,6 @@ export default function HomeClient({ initialShowIntro }: { initialShowIntro: boo
         document.cookie.includes('portfolio-intro-seen=1'))
     if (seen) setShowIntro(false)
   }, [])
-
-  const handleCardClick = (path: string) => {
-    router.push(path)
-  }
 
   const handleIntroComplete = () => {
     if (typeof window !== 'undefined') {
@@ -99,20 +95,16 @@ export default function HomeClient({ initialShowIntro }: { initialShowIntro: boo
           mt: 2,
           alignItems: 'center'
         }}>
-          <CTAButton 
-            variant="primary"
-            onClick={() => router.push('/portfolio/projets')}
-            size="large"
-          >
-            {t('home.seeProjects')}
-          </CTAButton>
-          <CTAButton 
-            variant="outline"
-            onClick={() => router.push('/portfolio/contact')}
-            size="large"
-          >
-            {t('home.contactMe')}
-          </CTAButton>
+          <Link href="/portfolio/projets" style={{ textDecoration: 'none' }}>
+            <CTAButton variant="primary" size="large">
+              {t('home.seeProjects')}
+            </CTAButton>
+          </Link>
+          <Link href="/portfolio/contact" style={{ textDecoration: 'none' }}>
+            <CTAButton variant="outline" size="large">
+              {t('home.contactMe')}
+            </CTAButton>
+          </Link>
         </Box>
       </HeaderSection>
 
@@ -291,39 +283,45 @@ export default function HomeClient({ initialShowIntro }: { initialShowIntro: boo
           px: { xs: 1, sm: 0 }
         }}>
           <FadeIn delay={0}>
-            <ThreeDCardComponent onClick={() => handleCardClick('/portfolio/projets')} floatingElements={2}>
-              <CodeIcon sx={{ fontSize: 48, color: primary, mb: 2 }} />
-              <Typography variant="h5" gutterBottom sx={{ color: textColor }}>
-                {t('home.cardProjects')}
-              </Typography>
-              <Typography variant="body1" sx={{ color: textColor, opacity: 0.8 }}>
-                {t('home.cardProjectsDesc')}
-              </Typography>
-            </ThreeDCardComponent>
+            <Link href="/portfolio/projets" style={{ textDecoration: 'none' }}>
+              <ThreeDCardComponent floatingElements={2}>
+                <CodeIcon sx={{ fontSize: 48, color: primary, mb: 2 }} />
+                <Typography variant="h5" gutterBottom sx={{ color: textColor }}>
+                  {t('home.cardProjects')}
+                </Typography>
+                <Typography variant="body1" sx={{ color: textColor, opacity: 0.8 }}>
+                  {t('home.cardProjectsDesc')}
+                </Typography>
+              </ThreeDCardComponent>
+            </Link>
           </FadeIn>
 
           <FadeIn delay={0}>
-            <ThreeDCardComponent onClick={() => handleCardClick('/portfolio/a-propos')} floatingElements={3}>
-              <PersonIcon sx={{ fontSize: 48, color: primary, mb: 2 }} />
-              <Typography variant="h5" gutterBottom sx={{ color: textColor }}>
-                {t('home.cardAbout')}
-              </Typography>
-              <Typography variant="body1" sx={{ color: textColor, opacity: 0.8 }}>
-                {t('home.cardAboutDesc')}
-              </Typography>
-            </ThreeDCardComponent>
+            <Link href="/portfolio/a-propos" style={{ textDecoration: 'none' }}>
+              <ThreeDCardComponent floatingElements={3}>
+                <PersonIcon sx={{ fontSize: 48, color: primary, mb: 2 }} />
+                <Typography variant="h5" gutterBottom sx={{ color: textColor }}>
+                  {t('home.cardAbout')}
+                </Typography>
+                <Typography variant="body1" sx={{ color: textColor, opacity: 0.8 }}>
+                  {t('home.cardAboutDesc')}
+                </Typography>
+              </ThreeDCardComponent>
+            </Link>
           </FadeIn>
 
           <FadeIn delay={0}>
-            <ThreeDCardComponent onClick={() => handleCardClick('/portfolio/contact')} floatingElements={2}>
-              <ContactSupportIcon sx={{ fontSize: 48, color: primary, mb: 2 }} />
-              <Typography variant="h5" gutterBottom sx={{ color: textColor }}>
-                {t('home.cardContact')}
-              </Typography>
-              <Typography variant="body1" sx={{ color: textColor, opacity: 0.8 }}>
-                {t('home.cardContactDesc')}
-              </Typography>
-            </ThreeDCardComponent>
+            <Link href="/portfolio/contact" style={{ textDecoration: 'none' }}>
+              <ThreeDCardComponent floatingElements={2}>
+                <ContactSupportIcon sx={{ fontSize: 48, color: primary, mb: 2 }} />
+                <Typography variant="h5" gutterBottom sx={{ color: textColor }}>
+                  {t('home.cardContact')}
+                </Typography>
+                <Typography variant="body1" sx={{ color: textColor, opacity: 0.8 }}>
+                  {t('home.cardContactDesc')}
+                </Typography>
+              </ThreeDCardComponent>
+            </Link>
           </FadeIn>
         </Box>
       </Container>
@@ -331,7 +329,7 @@ export default function HomeClient({ initialShowIntro }: { initialShowIntro: boo
       
       <Footer />
       {!isMobile && (
-        <StickyCTA text={t('home.stickyCTA')} onClick={() => router.push('/portfolio/contact')} />
+        <StickyCTA text={t('home.stickyCTA')} href="/portfolio/contact" />
       )}
     </PageWrapper>
       )}

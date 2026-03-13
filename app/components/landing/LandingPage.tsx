@@ -8,7 +8,7 @@ import Accordion from '@mui/material/Accordion'
 import AccordionSummary from '@mui/material/AccordionSummary'
 import AccordionDetails from '@mui/material/AccordionDetails'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
-import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 import { useLanguage } from '../../contexts/LanguageContext'
 
 const LANDING_PRIMARY = '#2563eb'
@@ -38,7 +38,6 @@ const accordionButtonSecondary = {
 }
 
 export default function LandingPage() {
-  const router = useRouter()
   const { locale, setLocale, t } = useLanguage()
 
   return (
@@ -147,38 +146,26 @@ export default function LandingPage() {
                 {t('landing.discoverMe')}
               </AccordionSummary>
               <AccordionDetails sx={{ pt: 0, pb: 2, px: 2, flexDirection: 'column', display: 'flex', gap: 1.5 }}>
-                <Button
-                  fullWidth
-                  size="large"
-                  onClick={() => router.push('/portfolio')}
-                  sx={accordionButtonPrimary}
-                >
-                  {t('landing.ctaPortfolio')}
-                </Button>
-                <Button
-                  fullWidth
-                  size="medium"
-                  onClick={() => router.push('/logiciel')}
-                  sx={accordionButtonSecondary}
-                >
-                  {t('nav.software')}
-                </Button>
-                <Button
-                  fullWidth
-                  size="medium"
-                  onClick={() => router.push('/pageweb')}
-                  sx={accordionButtonSecondary}
-                >
-                  {t('nav.webSites')}
-                </Button>
-                <Button
-                  fullWidth
-                  size="large"
-                  onClick={() => router.push('/portfolio/contact')}
-                  sx={accordionButtonSecondary}
-                >
-                  {t('landing.ctaContact')}
-                </Button>
+                <Link href="/portfolio" style={{ textDecoration: 'none' }}>
+                  <Button fullWidth size="large" sx={accordionButtonPrimary}>
+                    {t('landing.ctaPortfolio')}
+                  </Button>
+                </Link>
+                <Link href="/logiciel" style={{ textDecoration: 'none' }}>
+                  <Button fullWidth size="medium" sx={accordionButtonSecondary}>
+                    {t('nav.software')}
+                  </Button>
+                </Link>
+                <Link href="/pageweb" style={{ textDecoration: 'none' }}>
+                  <Button fullWidth size="medium" sx={accordionButtonSecondary}>
+                    {t('nav.webSites')}
+                  </Button>
+                </Link>
+                <Link href="/portfolio/contact" style={{ textDecoration: 'none' }}>
+                  <Button fullWidth size="large" sx={accordionButtonSecondary}>
+                    {t('landing.ctaContact')}
+                  </Button>
+                </Link>
               </AccordionDetails>
             </Accordion>
           </Box>
@@ -203,41 +190,21 @@ export default function LandingPage() {
           Jean-François Lefebvre
         </Typography>
         <Typography component="span" sx={{ mx: 1, color: 'rgba(255,255,255,0.35)' }}>·</Typography>
-        <Typography
-          component="a"
-          href="/portfolio"
-          onClick={(e) => { e.preventDefault(); router.push('/portfolio') }}
-          sx={{ fontSize: '0.875rem', color: 'rgba(255,255,255,0.8)', textDecoration: 'none', '&:hover': { textDecoration: 'underline' } }}
-        >
+        <Link href="/portfolio" style={{ fontSize: '0.875rem', color: 'rgba(255,255,255,0.8)', textDecoration: 'none' }} className="landing-footer-link">
           {t('landing.footerPortfolio')}
-        </Typography>
+        </Link>
         <Typography component="span" sx={{ mx: 1, color: 'rgba(255,255,255,0.35)' }}>·</Typography>
-        <Typography
-          component="a"
-          href="/logiciel"
-          onClick={(e) => { e.preventDefault(); router.push('/logiciel') }}
-          sx={{ fontSize: '0.875rem', color: 'rgba(255,255,255,0.8)', textDecoration: 'none', '&:hover': { textDecoration: 'underline' } }}
-        >
+        <Link href="/logiciel" style={{ fontSize: '0.875rem', color: 'rgba(255,255,255,0.8)', textDecoration: 'none' }} className="landing-footer-link">
           {t('nav.software')}
-        </Typography>
+        </Link>
         <Typography component="span" sx={{ mx: 1, color: 'rgba(255,255,255,0.35)' }}>·</Typography>
-        <Typography
-          component="a"
-          href="/pageweb"
-          onClick={(e) => { e.preventDefault(); router.push('/pageweb') }}
-          sx={{ fontSize: '0.875rem', color: 'rgba(255,255,255,0.8)', textDecoration: 'none', '&:hover': { textDecoration: 'underline' } }}
-        >
+        <Link href="/pageweb" style={{ fontSize: '0.875rem', color: 'rgba(255,255,255,0.8)', textDecoration: 'none' }} className="landing-footer-link">
           {t('nav.webSites')}
-        </Typography>
+        </Link>
         <Typography component="span" sx={{ mx: 1, color: 'rgba(255,255,255,0.35)' }}>·</Typography>
-        <Typography
-          component="a"
-          href="/portfolio/contact"
-          onClick={(e) => { e.preventDefault(); router.push('/portfolio/contact') }}
-          sx={{ fontSize: '0.875rem', color: 'rgba(255,255,255,0.8)', textDecoration: 'none', '&:hover': { textDecoration: 'underline' } }}
-        >
+        <Link href="/portfolio/contact" style={{ fontSize: '0.875rem', color: 'rgba(255,255,255,0.8)', textDecoration: 'none' }} className="landing-footer-link">
           {t('landing.footerContact')}
-        </Typography>
+        </Link>
       </Box>
     </Box>
   )
