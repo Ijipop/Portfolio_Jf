@@ -1,6 +1,7 @@
 'use client'
 
 import Box from '@mui/material/Box'
+import { motion } from 'framer-motion'
 import { ReactNode, useEffect, useRef } from 'react'
 import { usePathname } from 'next/navigation'
 import dynamic from 'next/dynamic'
