@@ -139,6 +139,11 @@ export const translations = {
       timeline: 'Consultez les tâches à accomplir pour l\'année en un coup d\'œil, avec deadlines et priorités.',
       calendar: 'Un calendrier en prime, synchronisé avec Outlook et Apple Calendar.',
       imagePlaceholder: 'Image à venir',
+      downloadsTitle: 'Téléchargements',
+      downloadsIntro: 'Versions disponibles au format .zip (Windows et macOS).',
+      downloadButton: 'Télécharger le .zip',
+      noReleases: 'Aucune version disponible pour le moment.',
+      version: 'Version',
     },
     promo: {
       onePager: {
@@ -329,6 +334,11 @@ export const translations = {
       timeline: 'View tasks for the year at a glance, with deadlines and priorities.',
       calendar: 'A calendar on top, synced with Outlook and Apple Calendar.',
       imagePlaceholder: 'Image coming soon',
+      downloadsTitle: 'Downloads',
+      downloadsIntro: 'Available versions as .zip (Windows and macOS).',
+      downloadButton: 'Download .zip',
+      noReleases: 'No versions available yet.',
+      version: 'Version',
     },
     promo: {
       onePager: {

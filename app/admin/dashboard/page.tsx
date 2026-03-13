@@ -41,6 +41,15 @@ interface Project {
   updatedAt: string;
 }
 
+interface TimelendarRelease {
+  id: number;
+  filePath: string;
+  changelog: string;
+  version: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export default function AdminDashboard() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
@@ -59,6 +68,14 @@ export default function AdminDashboard() {
   const [previewImage, setPreviewImage] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
+
+  // Timelendar releases
+  const [timelendarReleases, setTimelendarReleases] = useState<TimelendarRelease[]>([]);
+  const [timelendarLoading, setTimelendarLoading] = useState(true);
+  const [timelendarChangelog, setTimelendarChangelog] = useState('');
+  const [timelendarVersion, setTimelendarVersion] = useState('');
+  const [timelendarUploading, setTimelendarUploading] = useState(false);
+  const timelendarFileRef = useRef<HTMLInputElement>(null);
 
   // Fonction pour corriger les chemins d'images
   const getImageUrl = (imageUrl: string) => {
@@ -100,6 +117,20 @@ export default function AdminDashboard() {
     }
   }, [router]);
 
+  const fetchTimelendarReleases = useCallback(async () => {
+    try {
+      const response = await fetch('/api/timelendar/releases');
+      const data = await response.json();
+      if (data.success) {
+        setTimelendarReleases(data.data);
+      }
+    } catch (e) {
+      console.error('Timelendar releases:', e);
+    } finally {
+      setTimelendarLoading(false);
+    }
+  }, []);
+
   // Fonction pour nettoyer le localStorage et rediriger
   const clearStorageAndRedirect = useCallback(() => {
     localStorage.removeItem('adminToken');
@@ -118,7 +149,8 @@ export default function AdminDashboard() {
     }
 
     fetchProjects();
-  }, [router, fetchProjects, clearStorageAndRedirect]);
+    fetchTimelendarReleases();
+  }, [router, fetchProjects, fetchTimelendarReleases, clearStorageAndRedirect]);
 
   const handleLogout = () => {
     // Nettoyer le localStorage
@@ -334,6 +366,75 @@ export default function AdminDashboard() {
     }
   };
 
+  const handleTimelendarSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const file = timelendarFileRef.current?.files?.[0];
+    if (!file || !file.name.toLowerCase().endsWith('.zip')) {
+      setError('Veuillez sélectionner un fichier .zip (max 25 Mo).');
+      return;
+    }
+    if (file.size > 25 * 1024 * 1024) {
+      setError('Le fichier est trop volumineux. Taille max : 25 Mo.');
+      return;
+    }
+    const token = localStorage.getItem('adminToken');
+    if (!token) {
+      router.push('/');
+      return;
+    }
+    setTimelendarUploading(true);
+    setError('');
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('changelog', timelendarChangelog.trim() || 'Sans description.');
+      if (timelendarVersion.trim()) formData.append('version', timelendarVersion.trim());
+      const response = await fetch('/api/timelendar/releases', {
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${token}` },
+        body: formData,
+      });
+      const data = await response.json();
+      if (data.success) {
+        setTimelendarChangelog('');
+        setTimelendarVersion('');
+        if (timelendarFileRef.current) timelendarFileRef.current.value = '';
+        await fetchTimelendarReleases();
+      } else {
+        setError(data.error || 'Erreur lors de l\'ajout de la version');
+      }
+    } catch (err) {
+      console.error(err);
+      setError('Erreur lors de l\'upload.');
+    } finally {
+      setTimelendarUploading(false);
+    }
+  };
+
+  const handleDeleteTimelendarRelease = async (id: number) => {
+    if (!confirm('Supprimer cette version Timelendar ?')) return;
+    const token = localStorage.getItem('adminToken');
+    if (!token) {
+      router.push('/');
+      return;
+    }
+    try {
+      const response = await fetch(`/api/timelendar/releases/${id}`, {
+        method: 'DELETE',
+        headers: { 'Authorization': `Bearer ${token}` },
+      });
+      const data = await response.json();
+      if (data.success) {
+        await fetchTimelendarReleases();
+      } else {
+        setError(data.error || 'Erreur lors de la suppression');
+      }
+    } catch (err) {
+      console.error(err);
+      setError('Erreur lors de la suppression');
+    }
+  };
+
   if (loading) {
     return (
       <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh' }}>
@@ -463,6 +564,127 @@ export default function AdminDashboard() {
               </Typography>
             </CardContent>
           </Card>
+        )}
+
+        {/* Timelendar – Versions (.zip + description des changements) */}
+        <Typography variant="h5" component="h2" sx={{ mt: 5, mb: 2, color: '#ffffff' }}>
+          Timelendar – Versions
+        </Typography>
+        <Card sx={{ mb: 2, bgcolor: 'grey.900', color: '#ffffff' }}>
+          <CardContent sx={{ color: '#ffffff' }}>
+            <Typography variant="subtitle2" sx={{ mb: 2, color: 'rgba(255,255,255,0.9)' }}>
+              Ajoutez un fichier .zip (10–20 Mo) et une description des changements. Elle sera affichée sur la page Timelendar.
+            </Typography>
+            <form onSubmit={handleTimelendarSubmit}>
+              <input
+                ref={timelendarFileRef}
+                type="file"
+                accept=".zip"
+                style={{ display: 'none' }}
+                id="timelendar-zip-upload"
+              />
+              <label htmlFor="timelendar-zip-upload">
+                <Button
+                  variant="outlined"
+                  component="span"
+                  startIcon={timelendarUploading ? <CircularProgress size={20} sx={{ color: '#fff' }} /> : <CloudUploadIcon />}
+                  disabled={timelendarUploading}
+                  sx={{ mb: 2, mr: 2, color: '#fff', borderColor: 'rgba(255,255,255,0.5)', '&:hover': { borderColor: '#fff', bgcolor: 'rgba(255,255,255,0.08)' } }}
+                >
+                  {timelendarUploading ? 'Upload en cours...' : 'Choisir un .zip (max 25 Mo)'}
+                </Button>
+              </label>
+              <TextField
+                margin="dense"
+                label="Version (optionnel)"
+                fullWidth
+                variant="outlined"
+                value={timelendarVersion}
+                onChange={(e) => setTimelendarVersion(e.target.value)}
+                placeholder="ex: 1.2.0"
+                sx={{
+                  mb: 1,
+                  '& .MuiInputLabel-root': { color: 'rgba(255,255,255,0.8)' },
+                  '& .MuiInputLabel-root.Mui-focused': { color: '#fff' },
+                  '& .MuiOutlinedInput-root': { color: '#fff' },
+                  '& .MuiOutlinedInput-notchedOutline': { borderColor: 'rgba(255,255,255,0.4)' },
+                  '& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline': { borderColor: 'rgba(255,255,255,0.6)' },
+                  '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': { borderColor: '#fff' },
+                  '& .MuiInputBase-input::placeholder': { color: 'rgba(255,255,255,0.5)', opacity: 1 },
+                }}
+              />
+              <TextField
+                margin="dense"
+                label="Description des changements *"
+                fullWidth
+                multiline
+                rows={3}
+                variant="outlined"
+                value={timelendarChangelog}
+                onChange={(e) => setTimelendarChangelog(e.target.value)}
+                required
+                placeholder="Décrivez les corrections et nouveautés de cette version."
+                sx={{
+                  mb: 2,
+                  '& .MuiInputLabel-root': { color: 'rgba(255,255,255,0.8)' },
+                  '& .MuiInputLabel-root.Mui-focused': { color: '#fff' },
+                  '& .MuiOutlinedInput-root': { color: '#fff' },
+                  '& .MuiOutlinedInput-notchedOutline': { borderColor: 'rgba(255,255,255,0.4)' },
+                  '& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline': { borderColor: 'rgba(255,255,255,0.6)' },
+                  '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': { borderColor: '#fff' },
+                  '& .MuiInputBase-input::placeholder': { color: 'rgba(255,255,255,0.5)', opacity: 1 },
+                }}
+              />
+              <Button type="submit" variant="contained" disabled={timelendarUploading}>
+                Ajouter la version
+              </Button>
+            </form>
+          </CardContent>
+        </Card>
+        {timelendarLoading ? (
+          <Typography sx={{ color: '#ffffff' }}>Chargement des versions...</Typography>
+        ) : (
+          <TableContainer component={Paper} sx={{ mb: 4, bgcolor: 'grey.900' }}>
+            <Table size="small">
+              <TableHead>
+                <TableRow>
+                  <TableCell sx={{ color: '#fff' }}>Date</TableCell>
+                  <TableCell sx={{ color: '#fff' }}>Version</TableCell>
+                  <TableCell sx={{ color: '#fff' }}>Changelog</TableCell>
+                  <TableCell sx={{ color: '#fff' }}>Fichier</TableCell>
+                  <TableCell sx={{ color: '#fff' }}>Actions</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {timelendarReleases.map((r) => (
+                  <TableRow key={r.id}>
+                    <TableCell sx={{ color: '#fff' }}>{new Date(r.createdAt).toLocaleDateString('fr-FR')}</TableCell>
+                    <TableCell sx={{ color: '#fff' }}>{r.version || '—'}</TableCell>
+                    <TableCell sx={{ color: '#fff' }}>
+                      <Typography variant="body2" sx={{ maxWidth: 280, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', color: '#fff' }}>
+                        {r.changelog}
+                      </Typography>
+                    </TableCell>
+                    <TableCell>
+                      <Button size="small" href={r.filePath} target="_blank" rel="noopener noreferrer">
+                        Télécharger
+                      </Button>
+                    </TableCell>
+                    <TableCell>
+                      <IconButton size="small" onClick={() => handleDeleteTimelendarRelease(r.id)} color="error">
+                        <DeleteIcon />
+                      </IconButton>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+            {timelendarReleases.length === 0 && (
+              <Box sx={{ py: 2, textAlign: 'center' }}>
+                <Typography variant="body2" sx={{ color: '#fff' }}>Aucune version Timelendar pour l&apos;instant.</Typography>
+              </Box>
+            )}
+          </TableContainer>
         )}
       </Container>
 
