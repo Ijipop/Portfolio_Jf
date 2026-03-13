@@ -53,9 +53,10 @@ export default function FullPageTopologyWrapper({ children }: FullPageTopologyWr
   }
 
   const content = (
-    <AnimatePresence mode="wait">
+    <AnimatePresence>
       <motion.div
         key={pathname}
+        className="page-transition-enter"
         {...transitionProps}
         style={{ width: '100%', minHeight: 'min-content' }}
       >
