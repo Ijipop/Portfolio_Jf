@@ -9,6 +9,7 @@ import ComputerIcon from '@mui/icons-material/Computer'
 import Box from '@mui/material/Box'
 import IconButton from '@mui/material/IconButton'
 import Typography from '@mui/material/Typography'
+import Link from 'next/link'
 import React from 'react'
 import { DESIGN_TOKENS } from '@/design-system/constants'
 import { NavRoute, NavRouteId } from '@/config/navRoutes'
@@ -51,11 +52,11 @@ export default function NavDesktop({ routes, pathname, onNavigate, t }: NavDeskt
       {routes.map((route) => {
         const active = route.isActive(pathname)
         return (
-          <IconButton
-            key={route.id}
-            color="inherit"
-            onClick={() => onNavigate(route.path)}
-            sx={{
+          <Link key={route.id} href={route.path} style={{ textDecoration: 'none', color: 'inherit' }}>
+            <IconButton
+              color="inherit"
+              component="span"
+              sx={{
               color: active ? 'white' : 'rgba(255, 255, 255, 0.8)',
               backgroundColor: active ? 'rgba(255, 255, 255, 0.15)' : 'transparent',
               borderRadius: DESIGN_TOKENS.borderRadius.small,
@@ -82,15 +83,16 @@ export default function NavDesktop({ routes, pathname, onNavigate, t }: NavDeskt
                 transform: 'translateY(-2px)',
               },
             }}
-          >
-            {renderIcon(route.id)}
-            <Typography
-              variant="body2"
-              sx={{ display: { xs: 'none', sm: 'block' }, fontWeight: active ? 600 : 400 }}
             >
-              {t(route.labelKey)}
-            </Typography>
-          </IconButton>
+              {renderIcon(route.id)}
+              <Typography
+                variant="body2"
+                sx={{ display: { xs: 'none', sm: 'block' }, fontWeight: active ? 600 : 400 }}
+              >
+                {t(route.labelKey)}
+              </Typography>
+            </IconButton>
+          </Link>
         )
       })}
     </Box>

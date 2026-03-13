@@ -1,7 +1,7 @@
 'use client'
 
 import Box from '@mui/material/Box'
-import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 import CTAButton from './CTAButton'
 import { DESIGN_TOKENS } from '../../design-system/constants'
 
@@ -11,21 +11,11 @@ interface StickyCTAProps {
   href?: string
 }
 
-export default function StickyCTA({ 
-  text = "Travaillons ensemble", 
+export default function StickyCTA({
+  text = "Travaillons ensemble",
   onClick,
   href = '/portfolio/contact'
 }: StickyCTAProps) {
-  const router = useRouter()
-
-  const handleClick = () => {
-    if (onClick) {
-      onClick()
-    } else {
-      router.push(href)
-    }
-  }
-
   return (
     <Box
       sx={{
@@ -43,17 +33,20 @@ export default function StickyCTA({
           : '1px solid rgba(0, 0, 0, 0.1)',
         padding: DESIGN_TOKENS.spacing.md,
         boxShadow: '0 -4px 20px rgba(0,0,0,0.1)',
-        display: { xs: 'block', md: 'none' }, // Visible seulement sur mobile
+        display: { xs: 'block', md: 'none' },
       }}
     >
-      <CTAButton
-        variant="primary"
-        fullWidth
-        onClick={handleClick}
-        size="large"
-      >
-        {text}
-      </CTAButton>
+      {onClick ? (
+        <CTAButton variant="primary" fullWidth size="large" onClick={onClick}>
+          {text}
+        </CTAButton>
+      ) : (
+        <Link href={href} style={{ textDecoration: 'none' }}>
+          <CTAButton variant="primary" fullWidth size="large">
+            {text}
+          </CTAButton>
+        </Link>
+      )}
     </Box>
   )
 }
