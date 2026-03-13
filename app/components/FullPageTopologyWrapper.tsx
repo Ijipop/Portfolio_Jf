@@ -1,12 +1,19 @@
 'use client'
 
 import Box from '@mui/material/Box'
-import { motion } from 'framer-motion'
 import { ReactNode, useEffect, useRef } from 'react'
 import { usePathname } from 'next/navigation'
 import dynamic from 'next/dynamic'
+import { motion, AnimatePresence } from 'framer-motion'
 import { shouldShowTopology } from '@/utils/topologyRoutes'
 import { THEMES } from '@/design-system/themes'
+
+const pageTransition = {
+  initial: { opacity: 0 },
+  animate: { opacity: 1 },
+  exit: { opacity: 0 },
+  transition: { duration: 0.35, ease: 'easeOut' as const },
+}
 
 const VantaTopologyBackground = dynamic(() => import('./VantaTopologyBackground'), { ssr: false })
 
@@ -27,6 +34,11 @@ export default function FullPageTopologyWrapper({ children }: FullPageTopologyWr
   const show = shouldShowTopology(pathname)
   const isLandingRoute = pathname === '/'
   const scrollRef = useRef<HTMLDivElement>(null)
+  const isFirstRenderRef = useRef(true)
+
+  useEffect(() => {
+    isFirstRenderRef.current = false
+  }, [])
 
   // Remettre le scroll en haut au montage pour éviter titre coupé / contenu décalé
   useEffect(() => {
@@ -35,20 +47,25 @@ export default function FullPageTopologyWrapper({ children }: FullPageTopologyWr
     }
   }, [show, pathname])
 
-  const pageTransition = {
-    initial: { opacity: 0 },
-    animate: { opacity: 1 },
-    transition: { duration: 0.35, ease: 'easeOut' as const },
+  const transitionProps = {
+    ...pageTransition,
+    initial: isFirstRenderRef.current ? false : pageTransition.initial,
   }
 
+  const content = (
+    <AnimatePresence mode="wait">
+      <motion.div
+        key={pathname}
+        {...transitionProps}
+        style={{ width: '100%', minHeight: 'min-content' }}
+      >
+        {children}
+      </motion.div>
+    </AnimatePresence>
+  )
+
   if (!show) {
-    return (
-      <Box component="div" sx={contentWrapperSx}>
-        <motion.div key={pathname ?? 'content'} {...pageTransition}>
-          {children}
-        </motion.div>
-      </Box>
-    )
+    return <Box component="div" sx={contentWrapperSx}>{content}</Box>
   }
 
   return (
@@ -66,7 +83,7 @@ export default function FullPageTopologyWrapper({ children }: FullPageTopologyWr
         }}
       >
         <VantaTopologyBackground
-          key={pathname ?? 'topology'}
+          key={isLandingRoute ? 'landing' : 'app'}
           fillContainer
           colorHex={isLandingRoute ? THEMES.default.primary : undefined}
           backgroundHex={isLandingRoute ? THEMES.default.bg : undefined}
@@ -108,9 +125,7 @@ export default function FullPageTopologyWrapper({ children }: FullPageTopologyWr
             minHeight: 'min-content',
           }}
         >
-          <motion.div key={pathname ?? 'content'} {...pageTransition}>
-            {children}
-          </motion.div>
+          {content}
         </Box>
       </Box>
     </>
