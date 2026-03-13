@@ -1,6 +1,7 @@
 'use client'
 
 import Box from '@mui/material/Box'
+import { motion } from 'framer-motion'
 import { ReactNode, useEffect, useRef } from 'react'
 import { usePathname } from 'next/navigation'
 import dynamic from 'next/dynamic'
@@ -34,8 +35,20 @@ export default function FullPageTopologyWrapper({ children }: FullPageTopologyWr
     }
   }, [show, pathname])
 
+  const pageTransition = {
+    initial: { opacity: 0 },
+    animate: { opacity: 1 },
+    transition: { duration: 0.35, ease: 'easeOut' as const },
+  }
+
   if (!show) {
-    return <Box component="div" sx={contentWrapperSx}>{children}</Box>
+    return (
+      <Box component="div" sx={contentWrapperSx}>
+        <motion.div key={pathname ?? 'content'} {...pageTransition}>
+          {children}
+        </motion.div>
+      </Box>
+    )
   }
 
   return (
@@ -95,7 +108,9 @@ export default function FullPageTopologyWrapper({ children }: FullPageTopologyWr
             minHeight: 'min-content',
           }}
         >
-          {children}
+          <motion.div key={pathname ?? 'content'} {...pageTransition}>
+            {children}
+          </motion.div>
         </Box>
       </Box>
     </>
