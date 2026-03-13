@@ -43,6 +43,8 @@ export default function VantaTopologyBackground(props?: VantaTopologyBackgroundP
 
     let mounted = true
     let resizeObserver: ResizeObserver | null = null
+    let idleHandle: number | null = null
+    let usedIdleCallback = false
 
     const loadScript = (src: string): Promise<void> =>
       new Promise((resolve, reject) => {
@@ -86,6 +88,11 @@ export default function VantaTopologyBackground(props?: VantaTopologyBackgroundP
 
         await loadScript(P5_CDN)
         if (!mounted) return
+        // Topology uses p5, not THREE. The "[VANTA] No THREE defined on window" message is from the
+        // library and is harmless. Stub window.THREE to silence it.
+        if (typeof (window as unknown as { THREE?: unknown }).THREE === 'undefined') {
+          (window as unknown as { THREE: object }).THREE = {}
+        }
         await loadScript(VANTA_TOPOLOGY_CDN)
         if (!mounted || !elRef.current) return
 
@@ -133,9 +140,26 @@ export default function VantaTopologyBackground(props?: VantaTopologyBackgroundP
       }
     }
 
-    init()
+    const runInit = () => {
+      init()
+    }
+    if (typeof requestIdleCallback !== 'undefined') {
+      usedIdleCallback = true
+      idleHandle = requestIdleCallback(runInit, { timeout: 2000 })
+    } else {
+      idleHandle = setTimeout(runInit, 0) as unknown as number
+    }
+
     return () => {
       mounted = false
+      if (idleHandle !== null) {
+        if (usedIdleCallback && typeof cancelIdleCallback !== 'undefined') {
+          cancelIdleCallback(idleHandle)
+        } else {
+          clearTimeout(idleHandle)
+        }
+        idleHandle = null
+      }
       resizeObserver?.disconnect()
       resizeObserver = null
       if (effectRef.current) {

@@ -226,7 +226,7 @@ const ProjectCardWrapper = ({
   const reflectionColor = reflectionColors[index % reflectionColors.length]
   
   return (
-    <ScrollReveal key={project.id} direction="up" distance={isMobile ? 30 : 50} delay={isMobile ? 0.15 * (index % 4) : 0.1 * (index % 4)}>
+    <ScrollReveal key={project.id} direction="up" distance={isMobile ? 30 : 50} delay={isMobile ? 0.08 * (index % 4) : 0.05 * (index % 4)}>
       <ThreeDCardComponent 
         key={project.id} 
         onClick={() => handleProjectClick(project.url)}
@@ -689,9 +689,9 @@ export default function Projets() {
         {/* Stats Section et Filtres par technologie désactivés pour l'instant */}
         {false && (
           <>
-            <ScrollReveal direction="up" delay={0.1}>
+            <ScrollReveal direction="up" delay={0.05}>
               <StatsGrid>
-                <ScrollReveal direction="up" delay={0.2}>
+                <ScrollReveal direction="up" delay={0.1}>
                   <ThreeDCardComponent floatingElements={2} compact>
                     <Box sx={{ position: 'relative', zIndex: 2, textAlign: 'center' }}>
                       <Typography variant="h3" sx={{ fontWeight: 700, color: primary, mb: 0.5, fontSize: { xs: '1.75rem', md: '2rem' } }}>
@@ -703,7 +703,7 @@ export default function Projets() {
                     </Box>
                   </ThreeDCardComponent>
                 </ScrollReveal>
-                <ScrollReveal direction="up" delay={0.3}>
+                <ScrollReveal direction="up" delay={0.15}>
                   <ThreeDCardComponent floatingElements={2} compact>
                     <Box sx={{ position: 'relative', zIndex: 2, textAlign: 'center' }}>
                       <Typography variant="h3" sx={{ fontWeight: 700, color: primary, mb: 0.5, fontSize: { xs: '1.75rem', md: '2rem' } }}>
@@ -715,7 +715,7 @@ export default function Projets() {
                     </Box>
                   </ThreeDCardComponent>
                 </ScrollReveal>
-                <ScrollReveal direction="up" delay={0.4}>
+                <ScrollReveal direction="up" delay={0.2}>
                   <ThreeDCardComponent floatingElements={2} compact>
                     <Box sx={{ position: 'relative', zIndex: 2, textAlign: 'center' }}>
                       <Typography variant="h3" sx={{ fontWeight: 700, color: primary, mb: 0.5, fontSize: { xs: '1.75rem', md: '2rem' } }}>
@@ -730,7 +730,7 @@ export default function Projets() {
               </StatsGrid>
             </ScrollReveal>
             {projects.length > 0 && (
-              <ScrollReveal direction="up" delay={0.5}>
+              <ScrollReveal direction="up" delay={0.25}>
                 <FilterContainerComponent>
                   <FilterContainerLabel label={t('projects.filterLabel')} />
                   <FilterChipComponent

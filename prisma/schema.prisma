@@ -35,3 +35,14 @@ model Project {
 
   @@map("Project")
 }
+
+model TimelendarRelease {
+  id        Int      @id @default(autoincrement())
+  filePath  String   // chemin public ex: /downloads/timelendar/xxx.zip
+  changelog String   // description des changements
+  version   String?  // optionnel ex: 1.2.0
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("TimelendarRelease")
+}
