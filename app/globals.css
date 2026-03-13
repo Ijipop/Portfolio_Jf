@@ -24,6 +24,11 @@
 /* Transition globale supprimée : causait des glitches sur mobile (scroll, thème).
    Les composants gardent leurs transitions MUI / Framer Motion. */
 
+/* Force opacity 0 on first paint for page transition so Framer fade stays in sync */
+.page-transition-enter {
+  opacity: 0;
+}
+
 /* Titres avec thème - seulement en dark mode */
 [data-mui-color-scheme="dark"] h1, 
 [data-mui-color-scheme="dark"] .MuiTypography-h1 {
