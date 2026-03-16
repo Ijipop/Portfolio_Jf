@@ -9,7 +9,7 @@ import Typography from '@mui/material/Typography'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { GlassContainer } from './components/GlassCard'
-import { LetterAnimations } from './components/LetterAnimations'
+import { RevealTitle } from './components/LetterAnimations'
 import { FadeIn, TypingEffect } from './components/SimpleAnimations'
 import SkillTag from './components/shared/SkillTag'
 import ThreeDCardComponent from './components/ThreeDCard'
@@ -76,9 +76,9 @@ export default function HomeClient({ initialShowIntro }: { initialShowIntro: boo
       
       <HeaderSection 
         title={
-          <LetterAnimations>
+          <RevealTitle delayPerLetter={0.032}>
             {t('home.heroTitle')}
-          </LetterAnimations>
+          </RevealTitle>
         }
         subtitle={
           <TypingEffect 
@@ -278,50 +278,58 @@ export default function HomeClient({ initialShowIntro }: { initialShowIntro: boo
         <Box sx={{ 
           display: 'grid', 
           gridTemplateColumns: { xs: '1fr', md: 'repeat(3, 1fr)' },
+          gridTemplateRows: { md: '260px' },
           gap: { xs: DESIGN_TOKENS.spacing.md, md: DESIGN_TOKENS.spacing.xl },
           mb: { xs: DESIGN_TOKENS.spacing.xl, md: DESIGN_TOKENS.spacing.xxl },
-          px: { xs: 1, sm: 0 }
+          px: { xs: 1, sm: 0 },
+          alignItems: 'stretch',
         }}>
           <FadeIn delay={0}>
-            <Link href="/portfolio/projets" style={{ textDecoration: 'none' }}>
-              <ThreeDCardComponent floatingElements={2}>
-                <CodeIcon sx={{ fontSize: 48, color: primary, mb: 2 }} />
-                <Typography variant="h5" gutterBottom sx={{ color: textColor }}>
-                  {t('home.cardProjects')}
-                </Typography>
-                <Typography variant="body1" sx={{ color: textColor, opacity: 0.8 }}>
-                  {t('home.cardProjectsDesc')}
-                </Typography>
-              </ThreeDCardComponent>
-            </Link>
+            <Box sx={{ display: 'flex', minHeight: 0, height: '100%' }}>
+              <Link href="/portfolio/projets" style={{ textDecoration: 'none', display: 'flex', width: '100%', height: '100%' }}>
+                <ThreeDCardComponent fullHeight floatingElements={2} sx={{ height: '100%', maxHeight: { md: 260 }, overflow: 'hidden' }}>
+                  <CodeIcon sx={{ fontSize: 48, color: primary, mb: 2 }} />
+                  <Typography variant="h5" gutterBottom sx={{ color: textColor }}>
+                    {t('home.cardProjects')}
+                  </Typography>
+                  <Typography variant="body1" sx={{ color: textColor, opacity: 0.8, display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden', lineHeight: 1.5 }}>
+                    {t('home.cardProjectsDesc')}
+                  </Typography>
+                </ThreeDCardComponent>
+              </Link>
+            </Box>
           </FadeIn>
 
           <FadeIn delay={0}>
-            <Link href="/portfolio/a-propos" style={{ textDecoration: 'none' }}>
-              <ThreeDCardComponent floatingElements={3}>
-                <PersonIcon sx={{ fontSize: 48, color: primary, mb: 2 }} />
-                <Typography variant="h5" gutterBottom sx={{ color: textColor }}>
-                  {t('home.cardAbout')}
-                </Typography>
-                <Typography variant="body1" sx={{ color: textColor, opacity: 0.8 }}>
-                  {t('home.cardAboutDesc')}
-                </Typography>
-              </ThreeDCardComponent>
-            </Link>
+            <Box sx={{ display: 'flex', minHeight: 0, height: '100%' }}>
+              <Link href="/portfolio/a-propos" style={{ textDecoration: 'none', display: 'flex', width: '100%', height: '100%' }}>
+                <ThreeDCardComponent fullHeight floatingElements={3} sx={{ height: '100%', maxHeight: { md: 260 }, overflow: 'hidden' }}>
+                  <PersonIcon sx={{ fontSize: 48, color: primary, mb: 2 }} />
+                  <Typography variant="h5" gutterBottom sx={{ color: textColor }}>
+                    {t('home.cardAbout')}
+                  </Typography>
+                  <Typography variant="body1" sx={{ color: textColor, opacity: 0.8, display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden', lineHeight: 1.5 }}>
+                    {t('home.cardAboutDesc')}
+                  </Typography>
+                </ThreeDCardComponent>
+              </Link>
+            </Box>
           </FadeIn>
 
           <FadeIn delay={0}>
-            <Link href="/portfolio/contact" style={{ textDecoration: 'none' }}>
-              <ThreeDCardComponent floatingElements={2}>
-                <ContactSupportIcon sx={{ fontSize: 48, color: primary, mb: 2 }} />
-                <Typography variant="h5" gutterBottom sx={{ color: textColor }}>
-                  {t('home.cardContact')}
-                </Typography>
-                <Typography variant="body1" sx={{ color: textColor, opacity: 0.8 }}>
-                  {t('home.cardContactDesc')}
-                </Typography>
-              </ThreeDCardComponent>
-            </Link>
+            <Box sx={{ display: 'flex', minHeight: 0, height: '100%' }}>
+              <Link href="/portfolio/contact" style={{ textDecoration: 'none', display: 'flex', width: '100%', height: '100%' }}>
+                <ThreeDCardComponent fullHeight floatingElements={2} sx={{ height: '100%', maxHeight: { md: 260 }, overflow: 'hidden' }}>
+                  <ContactSupportIcon sx={{ fontSize: 48, color: primary, mb: 2 }} />
+                  <Typography variant="h5" gutterBottom sx={{ color: textColor }}>
+                    {t('home.cardContact')}
+                  </Typography>
+                  <Typography variant="body1" sx={{ color: textColor, opacity: 0.8, display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden', lineHeight: 1.5 }}>
+                    {t('home.cardContactDesc')}
+                  </Typography>
+                </ThreeDCardComponent>
+              </Link>
+            </Box>
           </FadeIn>
         </Box>
       </Container>

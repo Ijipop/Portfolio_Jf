@@ -149,6 +149,40 @@ export function WaveLetters({
   )
 }
 
+// Révélation progressive au chargement (une seule fois, sobre et pro)
+export function RevealTitle({
+  children,
+  className,
+  delayPerLetter = 0.03,
+}: {
+  children: React.ReactNode
+  className?: string
+  delayPerLetter?: number
+}) {
+  const text = children?.toString() || ''
+  const letters = text.split('')
+
+  return (
+    <span className={className} style={{ display: 'inline-block' }}>
+      {letters.map((letter, index) => (
+        <motion.span
+          key={index}
+          style={{ display: 'inline-block', whiteSpace: letter === ' ' ? 'pre' : 'normal' }}
+          initial={{ opacity: 0, y: 14 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{
+            duration: 0.45,
+            delay: index * delayPerLetter,
+            ease: [0.25, 0.46, 0.45, 0.94],
+          }}
+        >
+          {letter === ' ' ? '\u00A0' : letter}
+        </motion.span>
+      ))}
+    </span>
+  )
+}
+
 // Effet de rotation 3D sur les lettres
 export function Rotate3DLetters({ 
   children,

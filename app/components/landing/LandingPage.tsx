@@ -1,5 +1,6 @@
 'use client'
 
+import { Playfair_Display } from 'next/font/google'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Container from '@mui/material/Container'
@@ -12,6 +13,12 @@ import Link from 'next/link'
 import { useLanguage } from '../../contexts/LanguageContext'
 import { useAdvancedTheme } from '../../contexts/AdvancedThemeContext'
 import MoodThemeWidget from './MoodThemeWidget'
+
+const playfair = Playfair_Display({
+  subsets: ['latin'],
+  weight: ['500', '600', '700'],
+  display: 'swap',
+})
 
 export default function LandingPage() {
   const { locale, setLocale, t } = useLanguage()
@@ -97,15 +104,17 @@ export default function LandingPage() {
           <Typography
             component="h1"
             variant="h1"
+            className={playfair.className}
             sx={{
+              fontFamily: playfair.style.fontFamily,
               textAlign: 'center',
-              fontWeight: 800,
-              fontSize: { xs: '2.25rem', sm: '3rem', md: '3.5rem' },
-              lineHeight: 1.15,
-              letterSpacing: '-0.02em',
+              fontWeight: 700,
+              fontSize: { xs: '1.75rem', sm: '2.25rem', md: '2.5rem' },
+              lineHeight: 1.2,
+              letterSpacing: '0.02em',
               color: 'white',
               textShadow: '0 2px 24px rgba(0,0,0,0.4)',
-              mb: 2,
+              mb: 1.5,
             }}
           >
             {t('landing.heroTitle')}
@@ -113,12 +122,12 @@ export default function LandingPage() {
           <Typography
             sx={{
               textAlign: 'center',
-              color: 'rgba(255,255,255,0.9)',
-              fontSize: { xs: '1rem', sm: '1.125rem' },
-              maxWidth: 480,
+              color: 'rgba(255,255,255,0.92)',
+              fontSize: { xs: '0.95rem', sm: '1.0625rem' },
+              maxWidth: 420,
               mx: 'auto',
               mb: 4,
-              lineHeight: 1.6,
+              lineHeight: 1.5,
             }}
           >
             {t('landing.heroSubtitle')}
