@@ -9,10 +9,16 @@ import { useLanguage } from '../../contexts/LanguageContext'
 import { useAdvancedTheme } from '../../contexts/AdvancedThemeContext'
 import type { ThemeName } from '@/design-system/themes'
 
-export default function MoodThemeWidget() {
+interface MoodThemeWidgetProps {
+  /** Thème pour les couleurs d’affichage (ex. retardé pour synchroniser avec le fond). Si non fourni, utilise le thème du contexte. */
+  displayTheme?: { primary: string; secondary?: string }
+}
+
+export default function MoodThemeWidget({ displayTheme: displayThemeProp }: MoodThemeWidgetProps = {}) {
   const { t, locale } = useLanguage()
   const { setTheme, customTheme } = useAdvancedTheme()
-  const primary = customTheme.primary
+  const themeForColors = displayThemeProp ?? customTheme
+  const primary = themeForColors.primary
   const primaryRgba = primary + '20'
   const primaryRgbaHover = primary + 'CC'
   const [mood, setMood] = useState('')

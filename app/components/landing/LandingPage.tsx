@@ -193,7 +193,7 @@ export default function LandingPage() {
             </Accordion>
           </Box>
           <Box sx={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
-            <MoodThemeWidget />
+            <MoodThemeWidget displayTheme={accordionTheme} />
           </Box>
         </Container>
       </Box>
