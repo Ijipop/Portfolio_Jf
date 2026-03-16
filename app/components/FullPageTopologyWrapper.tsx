@@ -5,9 +5,9 @@ import { ReactNode, useEffect, useRef } from 'react'
 import { usePathname } from 'next/navigation'
 import dynamic from 'next/dynamic'
 import { shouldShowTopology } from '@/utils/topologyRoutes'
-import { THEMES } from '@/design-system/themes'
 
 const VantaTopologyBackground = dynamic(() => import('./VantaTopologyBackground'), { ssr: false })
+const VantaDotsBackground = dynamic(() => import('./VantaDotsBackground'), { ssr: false })
 
 const contentWrapperSx = {
   minHeight: '100vh',
@@ -52,12 +52,11 @@ export default function FullPageTopologyWrapper({ children }: FullPageTopologyWr
           overflow: 'hidden',
         }}
       >
-        <VantaTopologyBackground
-          key={isLandingRoute ? 'landing' : 'app'}
-          fillContainer
-          colorHex={isLandingRoute ? THEMES.default.primary : undefined}
-          backgroundHex={isLandingRoute ? THEMES.default.bg : undefined}
-        />
+        {isLandingRoute ? (
+          <VantaTopologyBackground key="landing" fillContainer />
+        ) : (
+          <VantaDotsBackground key="app" fillContainer />
+        )}
       </Box>
       <Box
         component="div"

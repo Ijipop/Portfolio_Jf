@@ -11,44 +11,47 @@ import {
 	MenuItem,
 	Tooltip
 } from '@mui/material'
-import { useEffect, useState } from 'react'
-import { useAdvancedTheme } from '../contexts/AdvancedThemeContext'
-import { THEMES, ThemeName, getAvailableThemes } from '../design-system/themes'
+import { useEffect, useMemo, useState } from 'react'
+import { useAdvancedTheme } from '@/contexts/AdvancedThemeContext'
+import { THEMES, ThemeName, getAvailableThemes } from '@/design-system/themes'
 
 export function ThemeSelector() {
   const { setTheme: setAdvancedTheme, themeName } = useAdvancedTheme()
   const [currentThemeIndex, setCurrentThemeIndex] = useState(0)
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const open = Boolean(anchorEl)
-  
-  // Ordre d'affichage des thèmes dans le menu
-  const themeDisplayOrder: ThemeName[] = ['default', 'sunset', 'neon', 'ocean', 'forest', 'cyber']
-  
+
+  const themeDisplayOrder = useMemo(() => {
+    try {
+      const list = getAvailableThemes()
+      return list.length > 0 ? list : (['default'] as ThemeName[])
+    } catch {
+      return ['default'] as ThemeName[]
+    }
+  }, [])
+
   // Appliquer le thème au chargement
   useEffect(() => {
     const savedThemeIndex = localStorage.getItem('portfolio-theme')
     const savedThemeName = localStorage.getItem('themeName') as ThemeName
-    
+
     if (savedThemeName && THEMES[savedThemeName]) {
-      // Priorité au themeName (synchronisé avec AdvancedThemeContext)
       const index = themeDisplayOrder.indexOf(savedThemeName)
       if (index !== -1) {
         setCurrentThemeIndex(index)
       }
       applyTheme(savedThemeName)
     } else if (savedThemeIndex) {
-      // Fallback sur l'ancien système (portfolio-theme)
       const themeIndex = parseInt(savedThemeIndex)
       if (themeIndex < themeDisplayOrder.length) {
         setCurrentThemeIndex(themeIndex)
         applyTheme(themeDisplayOrder[themeIndex])
       }
     } else {
-      // Appliquer le thème par défaut au chargement
       applyTheme('default')
     }
   }, [])
-  
+
   // Synchroniser avec AdvancedThemeContext
   useEffect(() => {
     const validThemeName = themeName as ThemeName
@@ -190,11 +193,11 @@ export function ThemeSelector() {
         transformOrigin={{ horizontal: 'right', vertical: 'top' }}
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
-        {themeDisplayOrder.map((themeName, index) => {
-          const theme = THEMES[themeName]
+        {themeDisplayOrder.map((name, index) => {
+          const theme = THEMES[name]
           return (
-          <MenuItem 
-              key={themeName}
+          <MenuItem
+              key={name}
             onClick={() => handleThemeSelect(index)}
             sx={{
               color: 'white',
@@ -217,25 +220,25 @@ export function ThemeSelector() {
                 }}
               />
             </ListItemIcon>
-            <ListItemText 
+            <ListItemText
               primary={theme.name}
-              sx={{ 
+              sx={{
                 '& .MuiListItemText-primary': {
-                    fontWeight: currentThemeIndex === index ? 600 : 400,
-                    color: currentThemeIndex === index ? theme.primary : 'white'
+                  fontWeight: currentThemeIndex === index ? 600 : 400,
+                  color: currentThemeIndex === index ? theme.primary : 'white'
                 }
               }}
             />
-              {currentThemeIndex === index && (
-              <Chip 
-                label="Actif" 
-                size="small" 
-                sx={{ 
+            {currentThemeIndex === index && (
+              <Chip
+                label="Actif"
+                size="small"
+                sx={{
                   bgcolor: theme.primary,
                   color: 'white',
                   fontSize: '0.7rem',
                   height: 20
-                }} 
+                }}
               />
             )}
           </MenuItem>

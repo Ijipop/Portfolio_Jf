@@ -183,7 +183,10 @@ const RippleCircle = styled(Box)({
 })
 
 // Palettes où le fond est plus sombre/saturé → ripple renforcé pour rester visible
-const STRONG_RIPPLE_PALETTES = ['sunset', 'ocean', 'cyber', 'forest']
+const STRONG_RIPPLE_PALETTES = [
+  'sunset', 'ocean', 'cyber', 'forest',
+  'calm', 'midnight', 'aurora', 'coral', 'gold', 'mint', 'wine', 'ice', 'ember'
+]
 
 // Composant FlipCardBack fonctionnel pour utiliser les couleurs du thème
 const FlipCardBack = ({ children, sx }: { children: React.ReactNode; sx?: any }) => {

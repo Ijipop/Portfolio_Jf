@@ -10,35 +10,39 @@ import AccordionDetails from '@mui/material/AccordionDetails'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import Link from 'next/link'
 import { useLanguage } from '../../contexts/LanguageContext'
-
-const LANDING_PRIMARY = '#2563eb'
-const LANDING_SECONDARY = '#475569'
-const LANDING_PRIMARY_RGBA = 'rgba(37, 99, 235,'
-
-const accordionButtonPrimary = {
-  bgcolor: `${LANDING_PRIMARY_RGBA} 0.5)`,
-  color: 'white',
-  border: `2px solid ${LANDING_PRIMARY}`,
-  fontWeight: 600,
-  '&:hover': {
-    bgcolor: `${LANDING_PRIMARY_RGBA} 0.7)`,
-    borderColor: '#3b82f6',
-    color: 'white',
-  },
-}
-const accordionButtonSecondary = {
-  bgcolor: 'transparent',
-  color: 'rgba(255,255,255,0.95)',
-  border: `1px solid ${LANDING_PRIMARY}`,
-  '&:hover': {
-    bgcolor: `${LANDING_PRIMARY_RGBA} 0.25)`,
-    borderColor: LANDING_SECONDARY,
-    color: 'white',
-  },
-}
+import { useAdvancedTheme } from '../../contexts/AdvancedThemeContext'
+import MoodThemeWidget from './MoodThemeWidget'
 
 export default function LandingPage() {
   const { locale, setLocale, t } = useLanguage()
+  const { customTheme } = useAdvancedTheme()
+  const primary = customTheme.primary
+  const secondary = customTheme.secondary
+  const primaryBg = primary + '80'
+  const primaryBgHover = primary + 'CC'
+  const primaryBgLight = primary + '40'
+
+  const accordionButtonPrimary = {
+    bgcolor: primaryBg,
+    color: 'white',
+    border: `2px solid ${primary}`,
+    fontWeight: 600,
+    '&:hover': {
+      bgcolor: primaryBgHover,
+      borderColor: primary,
+      color: 'white',
+    },
+  }
+  const accordionButtonSecondary = {
+    bgcolor: 'transparent',
+    color: 'rgba(255,255,255,0.95)',
+    border: `1px solid ${primary}`,
+    '&:hover': {
+      bgcolor: primaryBgLight,
+      borderColor: secondary,
+      color: 'white',
+    },
+  }
 
   return (
     <Box
@@ -126,8 +130,8 @@ export default function LandingPage() {
                 width: '100%',
                 maxWidth: 420,
                 minWidth: 280,
-                backgroundColor: `${LANDING_PRIMARY_RGBA} 0.2)`,
-                border: `1px solid ${LANDING_PRIMARY}`,
+                backgroundColor: primaryBgLight,
+                border: `1px solid ${primary}`,
                 borderRadius: '12px !important',
                 overflow: 'hidden',
                 '&:before': { display: 'none' },
@@ -168,6 +172,9 @@ export default function LandingPage() {
                 </Link>
               </AccordionDetails>
             </Accordion>
+          </Box>
+          <Box sx={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
+            <MoodThemeWidget />
           </Box>
         </Container>
       </Box>
