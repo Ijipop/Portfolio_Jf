@@ -5,21 +5,18 @@ import { useAdvancedTheme } from '../contexts/AdvancedThemeContext'
 import { THEMES, type ThemeName } from '../design-system/themes'
 
 const THREE_CDN = 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js'
-const VANTA_DOTS_CDN = 'https://cdn.jsdelivr.net/npm/vanta@0.5.24/dist/vanta.dots.min.js'
+const VANTA_RINGS_CDN = 'https://cdn.jsdelivr.net/npm/vanta@0.5.24/dist/vanta.rings.min.js'
 
 function hexToNumber(hex: string): number {
   return parseInt(hex.slice(1), 16)
 }
 
-function getDotsOptions(themeName: ThemeName): Record<string, unknown> {
+function getRingsOptions(themeName: ThemeName): Record<string, unknown> {
   const theme = THEMES[themeName]
   return {
-    color: hexToNumber(theme.primary),
-    color2: hexToNumber(theme.accent),
+    color: hexToNumber(theme.accent),
     backgroundColor: hexToNumber(theme.bg),
-    size: 3,
-    spacing: 35,
-    showLines: true,
+    backgroundAlpha: 1,
   }
 }
 
@@ -27,13 +24,13 @@ function getFallbackBgColor(themeName: ThemeName): string {
   return THEMES[themeName]?.bg ?? '#f8fafc'
 }
 
-interface VantaDotsBackgroundProps {
+interface VantaRingsBackgroundProps {
   fillContainer?: boolean
   colorHex?: string
   backgroundHex?: string
 }
 
-export default function VantaDotsBackground(props?: VantaDotsBackgroundProps) {
+export default function VantaRingsBackground(props?: VantaRingsBackgroundProps) {
   const { fillContainer = false, colorHex, backgroundHex } = props ?? {}
   const elRef = useRef<HTMLDivElement>(null)
   const effectRef = useRef<{ destroy: () => void; resize?: () => void } | null>(null)
@@ -83,21 +80,20 @@ export default function VantaDotsBackground(props?: VantaDotsBackgroundProps) {
 
         await loadScript(THREE_CDN)
         if (!mounted) return
-        await loadScript(VANTA_DOTS_CDN)
+        await loadScript(VANTA_RINGS_CDN)
         if (!mounted || !elRef.current) return
 
-        const VANTA = (window as unknown as { VANTA: { DOTS: (opts: Record<string, unknown>) => { destroy: () => void; resize?: () => void } } }).VANTA
-        if (!VANTA?.DOTS) {
+        const VANTA = (window as unknown as { VANTA: { RINGS: (opts: Record<string, unknown>) => { destroy: () => void; resize?: () => void } } }).VANTA
+        if (!VANTA?.RINGS) {
           if (mounted) setVantaReady(true)
           return
         }
 
-        const options = getDotsOptions(themeName as ThemeName)
+        const options = getRingsOptions(themeName as ThemeName)
         const resolvedColor = colorHex ? hexToNumber(colorHex) : (options.color as number)
-        const resolvedColor2 = colorHex ? hexToNumber(colorHex) : (options.color2 as number)
         const resolvedBackground = backgroundHex ? hexToNumber(backgroundHex) : (options.backgroundColor as number)
 
-        const effect = VANTA.DOTS({
+        const effect = VANTA.RINGS({
           el: elRef.current,
           mouseControls: true,
           touchControls: true,
@@ -107,11 +103,8 @@ export default function VantaDotsBackground(props?: VantaDotsBackgroundProps) {
           scale: 1,
           scaleMobile: 1,
           color: resolvedColor,
-          color2: resolvedColor2,
           backgroundColor: resolvedBackground,
-          size: options.size,
-          spacing: options.spacing,
-          showLines: options.showLines,
+          backgroundAlpha: (options.backgroundAlpha as number) ?? 1,
         })
         effectRef.current = effect
 
@@ -124,7 +117,7 @@ export default function VantaDotsBackground(props?: VantaDotsBackgroundProps) {
           if (mounted) setVantaReady(true)
         })
       } catch (err) {
-        console.warn('[VantaDotsBackground] Vanta DOTS failed to load', err)
+        console.warn('[VantaRingsBackground] Vanta RINGS failed to load', err)
         if (mounted) setVantaReady(true)
       }
     }

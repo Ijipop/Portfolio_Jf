@@ -5,21 +5,25 @@ import { useAdvancedTheme } from '../contexts/AdvancedThemeContext'
 import { THEMES, type ThemeName } from '../design-system/themes'
 
 const THREE_CDN = 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js'
-const VANTA_DOTS_CDN = 'https://cdn.jsdelivr.net/npm/vanta@0.5.24/dist/vanta.dots.min.js'
+const VANTA_CLOUDS2_CDN = 'https://cdn.jsdelivr.net/npm/vanta@0.5.24/dist/vanta.clouds2.min.js'
+
+// Minimal 2x2 noise texture as data URL (THREE.TextureLoader accepts data URLs)
+const NOISE_DATA_URL =
+  'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAACCAYAAABytg0kAAAAEklEQVQI12NgYGD4z0AwwKEDAHpoAAG/0bWnAAAAAElFTkSuQmCC'
 
 function hexToNumber(hex: string): number {
   return parseInt(hex.slice(1), 16)
 }
 
-function getDotsOptions(themeName: ThemeName): Record<string, unknown> {
+function getClouds2Options(themeName: ThemeName): Record<string, unknown> {
   const theme = THEMES[themeName]
   return {
-    color: hexToNumber(theme.primary),
-    color2: hexToNumber(theme.accent),
     backgroundColor: hexToNumber(theme.bg),
-    size: 3,
-    spacing: 35,
-    showLines: true,
+    skyColor: hexToNumber(theme.primary),
+    cloudColor: hexToNumber(theme.secondary),
+    lightColor: hexToNumber(theme.accent),
+    speed: 1,
+    texturePath: NOISE_DATA_URL,
   }
 }
 
@@ -27,14 +31,12 @@ function getFallbackBgColor(themeName: ThemeName): string {
   return THEMES[themeName]?.bg ?? '#f8fafc'
 }
 
-interface VantaDotsBackgroundProps {
+interface VantaClouds2BackgroundProps {
   fillContainer?: boolean
-  colorHex?: string
-  backgroundHex?: string
 }
 
-export default function VantaDotsBackground(props?: VantaDotsBackgroundProps) {
-  const { fillContainer = false, colorHex, backgroundHex } = props ?? {}
+export default function VantaClouds2Background(props?: VantaClouds2BackgroundProps) {
+  const { fillContainer = false } = props ?? {}
   const elRef = useRef<HTMLDivElement>(null)
   const effectRef = useRef<{ destroy: () => void; resize?: () => void } | null>(null)
   const [vantaReady, setVantaReady] = useState(false)
@@ -83,21 +85,17 @@ export default function VantaDotsBackground(props?: VantaDotsBackgroundProps) {
 
         await loadScript(THREE_CDN)
         if (!mounted) return
-        await loadScript(VANTA_DOTS_CDN)
+        await loadScript(VANTA_CLOUDS2_CDN)
         if (!mounted || !elRef.current) return
 
-        const VANTA = (window as unknown as { VANTA: { DOTS: (opts: Record<string, unknown>) => { destroy: () => void; resize?: () => void } } }).VANTA
-        if (!VANTA?.DOTS) {
+        const VANTA = (window as unknown as { VANTA: { CLOUDS2: (opts: Record<string, unknown>) => { destroy: () => void; resize?: () => void } } }).VANTA
+        if (!VANTA?.CLOUDS2) {
           if (mounted) setVantaReady(true)
           return
         }
 
-        const options = getDotsOptions(themeName as ThemeName)
-        const resolvedColor = colorHex ? hexToNumber(colorHex) : (options.color as number)
-        const resolvedColor2 = colorHex ? hexToNumber(colorHex) : (options.color2 as number)
-        const resolvedBackground = backgroundHex ? hexToNumber(backgroundHex) : (options.backgroundColor as number)
-
-        const effect = VANTA.DOTS({
+        const options = getClouds2Options(themeName as ThemeName)
+        const effect = VANTA.CLOUDS2({
           el: elRef.current,
           mouseControls: true,
           touchControls: true,
@@ -105,13 +103,8 @@ export default function VantaDotsBackground(props?: VantaDotsBackgroundProps) {
           minHeight: 200,
           minWidth: 200,
           scale: 1,
-          scaleMobile: 1,
-          color: resolvedColor,
-          color2: resolvedColor2,
-          backgroundColor: resolvedBackground,
-          size: options.size,
-          spacing: options.spacing,
-          showLines: options.showLines,
+          scaleMobile: 4,
+          ...options,
         })
         effectRef.current = effect
 
@@ -124,7 +117,7 @@ export default function VantaDotsBackground(props?: VantaDotsBackgroundProps) {
           if (mounted) setVantaReady(true)
         })
       } catch (err) {
-        console.warn('[VantaDotsBackground] Vanta DOTS failed to load', err)
+        console.warn('[VantaClouds2Background] Vanta CLOUDS2 failed to load', err)
         if (mounted) setVantaReady(true)
       }
     }
@@ -142,7 +135,7 @@ export default function VantaDotsBackground(props?: VantaDotsBackgroundProps) {
     }
   }, [themeName])
 
-  const fallbackBg = backgroundHex ?? getFallbackBgColor(themeName as ThemeName)
+  const fallbackBg = getFallbackBgColor(themeName as ThemeName)
 
   return (
     <div

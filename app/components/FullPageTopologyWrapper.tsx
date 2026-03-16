@@ -6,8 +6,8 @@ import { usePathname } from 'next/navigation'
 import dynamic from 'next/dynamic'
 import { shouldShowTopology } from '@/utils/topologyRoutes'
 
-const VantaTopologyBackground = dynamic(() => import('./VantaTopologyBackground'), { ssr: false })
 const VantaDotsBackground = dynamic(() => import('./VantaDotsBackground'), { ssr: false })
+const VantaTopologyBackground = dynamic(() => import('./VantaTopologyBackground'), { ssr: false })
 
 const contentWrapperSx = {
   minHeight: '100vh',
@@ -24,7 +24,7 @@ interface FullPageTopologyWrapperProps {
 export default function FullPageTopologyWrapper({ children }: FullPageTopologyWrapperProps) {
   const pathname = usePathname()
   const show = shouldShowTopology(pathname)
-  const isLandingRoute = pathname === '/'
+  const isLanding = pathname === '/'
   const scrollRef = useRef<HTMLDivElement>(null)
 
   // Remettre le scroll en haut au montage pour éviter titre coupé / contenu décalé
@@ -52,10 +52,10 @@ export default function FullPageTopologyWrapper({ children }: FullPageTopologyWr
           overflow: 'hidden',
         }}
       >
-        {isLandingRoute ? (
-          <VantaTopologyBackground key="landing" fillContainer />
+        {isLanding ? (
+          <VantaTopologyBackground key="vanta-topology" fillContainer />
         ) : (
-          <VantaDotsBackground key="app" fillContainer />
+          <VantaDotsBackground key="vanta-dots" fillContainer />
         )}
       </Box>
       <Box
