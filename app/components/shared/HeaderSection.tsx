@@ -100,7 +100,7 @@ export default function HeaderSection({ title, subtitle, children }: HeaderSecti
           sx={{ 
             mb: 1,
             fontWeight: 900,
-            fontSize: { xs: '2rem', sm: '2.75rem', md: '3.75rem' },
+            fontSize: { xs: '1.75rem', sm: '2.75rem', md: '3.75rem' },
             textShadow: `0 0 20px ${hexToRgba(primary, 0.8)}, 0 4px 8px rgba(0,0,0,0.3)`,
             letterSpacing: { xs: '0.05em', sm: '0.1em' },
             textTransform: 'uppercase',
