@@ -278,46 +278,48 @@ export default function HomeClient({ initialShowIntro }: { initialShowIntro: boo
         <Box sx={{ 
           display: 'grid', 
           gridTemplateColumns: { xs: '1fr', md: 'repeat(3, 1fr)' },
+          gridTemplateRows: { md: '260px' },
           gap: { xs: DESIGN_TOKENS.spacing.md, md: DESIGN_TOKENS.spacing.xl },
           mb: { xs: DESIGN_TOKENS.spacing.xl, md: DESIGN_TOKENS.spacing.xxl },
-          px: { xs: 1, sm: 0 }
+          px: { xs: 1, sm: 0 },
+          alignItems: 'stretch',
         }}>
-          <FadeIn delay={0}>
-            <Link href="/portfolio/projets" style={{ textDecoration: 'none' }}>
-              <ThreeDCardComponent floatingElements={2}>
+          <FadeIn delay={0} style={{ display: 'flex', minHeight: 0, height: '100%' }}>
+            <Link href="/portfolio/projets" style={{ textDecoration: 'none', display: 'flex', width: '100%', height: '100%' }}>
+              <ThreeDCardComponent fullHeight floatingElements={2} sx={{ height: '100%', maxHeight: { md: 260 }, overflow: 'hidden' }}>
                 <CodeIcon sx={{ fontSize: 48, color: primary, mb: 2 }} />
                 <Typography variant="h5" gutterBottom sx={{ color: textColor }}>
                   {t('home.cardProjects')}
                 </Typography>
-                <Typography variant="body1" sx={{ color: textColor, opacity: 0.8 }}>
+                <Typography variant="body1" sx={{ color: textColor, opacity: 0.8, display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden', lineHeight: 1.5 }}>
                   {t('home.cardProjectsDesc')}
                 </Typography>
               </ThreeDCardComponent>
             </Link>
           </FadeIn>
 
-          <FadeIn delay={0}>
-            <Link href="/portfolio/a-propos" style={{ textDecoration: 'none' }}>
-              <ThreeDCardComponent floatingElements={3}>
+          <FadeIn delay={0} style={{ display: 'flex', minHeight: 0, height: '100%' }}>
+            <Link href="/portfolio/a-propos" style={{ textDecoration: 'none', display: 'flex', width: '100%', height: '100%' }}>
+              <ThreeDCardComponent fullHeight floatingElements={3} sx={{ height: '100%', maxHeight: { md: 260 }, overflow: 'hidden' }}>
                 <PersonIcon sx={{ fontSize: 48, color: primary, mb: 2 }} />
                 <Typography variant="h5" gutterBottom sx={{ color: textColor }}>
                   {t('home.cardAbout')}
                 </Typography>
-                <Typography variant="body1" sx={{ color: textColor, opacity: 0.8 }}>
+                <Typography variant="body1" sx={{ color: textColor, opacity: 0.8, display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden', lineHeight: 1.5 }}>
                   {t('home.cardAboutDesc')}
                 </Typography>
               </ThreeDCardComponent>
             </Link>
           </FadeIn>
 
-          <FadeIn delay={0}>
-            <Link href="/portfolio/contact" style={{ textDecoration: 'none' }}>
-              <ThreeDCardComponent floatingElements={2}>
+          <FadeIn delay={0} style={{ display: 'flex', minHeight: 0, height: '100%' }}>
+            <Link href="/portfolio/contact" style={{ textDecoration: 'none', display: 'flex', width: '100%', height: '100%' }}>
+              <ThreeDCardComponent fullHeight floatingElements={2} sx={{ height: '100%', maxHeight: { md: 260 }, overflow: 'hidden' }}>
                 <ContactSupportIcon sx={{ fontSize: 48, color: primary, mb: 2 }} />
                 <Typography variant="h5" gutterBottom sx={{ color: textColor }}>
                   {t('home.cardContact')}
                 </Typography>
-                <Typography variant="body1" sx={{ color: textColor, opacity: 0.8 }}>
+                <Typography variant="body1" sx={{ color: textColor, opacity: 0.8, display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden', lineHeight: 1.5 }}>
                   {t('home.cardContactDesc')}
                 </Typography>
               </ThreeDCardComponent>

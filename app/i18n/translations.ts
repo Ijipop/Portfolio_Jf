@@ -114,7 +114,7 @@ export const translations = {
     },
     landing: {
       heroTitle: 'Jean-François Lefebvre',
-      heroSubtitle: 'Sites web et petits outils sur mesure. Hébergement et maintenance inclus.',
+      heroSubtitle: 'Sites web et petits outils sur mesure.',
       ctaPortfolio: 'Voir le portfolio',
       ctaContact: 'Discuter de votre projet',
       footerPortfolio: 'Portfolio',
@@ -313,7 +313,7 @@ export const translations = {
     },
     landing: {
       heroTitle: 'Jean-François Lefebvre',
-      heroSubtitle: 'Custom websites and small tools. Hosting and maintenance included.',
+      heroSubtitle: 'Custom websites and small tools.',
       ctaPortfolio: 'View portfolio',
       ctaContact: 'Discuss your project',
       footerPortfolio: 'Portfolio',
