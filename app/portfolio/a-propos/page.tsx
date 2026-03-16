@@ -341,21 +341,6 @@ export default function About() {
                   {t('home.intro')}
                 </Typography>
                 <Box sx={{ 
-                  visibility: 'visible !important',
-                  opacity: '1 !important',
-                  position: 'relative',
-                  // Cacher les tags quand la carte est retournée (évite affichage sur l'endos sur Safari/macOS)
-                  display: flippedCards.who ? 'none' : 'flex',
-                  flexWrap: 'wrap',
-                  justifyContent: 'center',
-                  gap: 1
-                }}>
-                  <SkillTag>Material-UI</SkillTag>
-                  <SkillTag>Prisma</SkillTag>
-                  <SkillTag>PostgreSQL</SkillTag>
-                  <SkillTag>Vercel</SkillTag>
-                </Box>
-                <Box sx={{ 
                   position: 'absolute', 
                   bottom: 16, 
                   right: 16,
@@ -413,7 +398,7 @@ export default function About() {
                   color: textColor,
                   opacity: 0.9
                 }}>
-                  Passionné par l'informatique et les jeux vidéo. Grand consommateur d'applications mobiles et web.
+                  Passionné d'informatique et de jeux vidéo, grand utilisateur d'applications mobiles et web.
                 </Typography>
                 <Typography variant="body1" sx={{ 
                   mb: 2, 
@@ -422,7 +407,7 @@ export default function About() {
                   color: textColor,
                   opacity: 0.9
                 }}>
-                  À 41 ans, je me suis réorienté vers le développement d'applications.  Pour ainsi réalisé mon rêve de travailler dans cette industrie.
+                  À 41 ans, j'ai choisi de me réorienter vers le développement d'applications afin de réaliser mon rêve de travailler dans cette industrie.
                 </Typography>
                 <Typography 
                   variant="body1" 
@@ -434,7 +419,7 @@ export default function About() {
                     textShadow: `0 1px 2px ${primary}40`
                   }}
                 >
-                  Motivé et heureux de pouvoir enfin jumeler passion et travail !
+                  Motivé et heureux de pouvoir enfin allier passion et travail.
                 </Typography>
               </FlipCardBack>
             </FlipCardInner>
@@ -475,20 +460,6 @@ export default function About() {
                 }}>
                   {t('about.formationDesc')}
                 </Typography>
-                <Box sx={{ 
-                  visibility: 'visible !important',
-                  opacity: '1 !important',
-                  position: 'relative',
-                  // Cacher les tags quand la carte est retournée (évite affichage sur l'endos sur Safari/macOS)
-                  display: flippedCards.formation ? 'none' : 'flex',
-                  flexWrap: 'wrap',
-                  justifyContent: 'center',
-                  gap: 1
-                }}>
-                  <SkillTag>Responsive Design</SkillTag>
-                  <SkillTag>GitHub</SkillTag>
-                  <SkillTag>JSON</SkillTag>
-                </Box>
                 <Box sx={{ 
                   position: 'absolute', 
                   bottom: 16, 
@@ -597,20 +568,6 @@ export default function About() {
                 }}>
                   {t('about.experienceText')}
                 </Typography>
-                <Box sx={{ 
-                  visibility: 'visible !important',
-                  opacity: '1 !important',
-                  position: 'relative',
-                  // Cacher les tags quand la carte est retournée (évite affichage sur l'endos sur Safari/macOS)
-                  display: flippedCards.experience ? 'none' : 'flex',
-                  flexWrap: 'wrap',
-                  justifyContent: 'center',
-                  gap: 1
-                }}>
-                  <SkillTag>MVC</SkillTag>
-                  <SkillTag>CRUD</SkillTag>
-                  <SkillTag>REST API</SkillTag>
-                </Box>
                 <Box sx={{ 
                   position: 'absolute', 
                   bottom: 16, 

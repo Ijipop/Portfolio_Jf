@@ -9,7 +9,7 @@ import Typography from '@mui/material/Typography'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { GlassContainer } from './components/GlassCard'
-import { LetterAnimations } from './components/LetterAnimations'
+import { RevealTitle } from './components/LetterAnimations'
 import { FadeIn, TypingEffect } from './components/SimpleAnimations'
 import SkillTag from './components/shared/SkillTag'
 import ThreeDCardComponent from './components/ThreeDCard'
@@ -76,9 +76,9 @@ export default function HomeClient({ initialShowIntro }: { initialShowIntro: boo
       
       <HeaderSection 
         title={
-          <LetterAnimations>
+          <RevealTitle delayPerLetter={0.032}>
             {t('home.heroTitle')}
-          </LetterAnimations>
+          </RevealTitle>
         }
         subtitle={
           <TypingEffect 

@@ -267,7 +267,7 @@ export default function Footer() {
                 © {currentYear} {t('footer.rights')}
               </Typography>
               <Typography variant="body2" sx={{ opacity: 0.6, fontSize: '0.7rem', mt: 0.5, color: textColor }}>
-                Construit avec Next.js & Material-UI
+                {t('footer.builtWith')}
               </Typography>
             </Box>
           </Box>
