@@ -1,5 +1,6 @@
 'use client'
 
+import { useEffect, useState } from 'react'
 import { Playfair_Display } from 'next/font/google'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
@@ -20,11 +21,20 @@ const playfair = Playfair_Display({
   display: 'swap',
 })
 
+const ACCORDION_THEME_DELAY_MS = 500
+
 export default function LandingPage() {
   const { locale, setLocale, t } = useLanguage()
   const { customTheme } = useAdvancedTheme()
-  const primary = customTheme.primary
-  const secondary = customTheme.secondary
+  const [accordionTheme, setAccordionTheme] = useState(customTheme)
+
+  useEffect(() => {
+    const id = setTimeout(() => setAccordionTheme(customTheme), ACCORDION_THEME_DELAY_MS)
+    return () => clearTimeout(id)
+  }, [customTheme.primary, customTheme.secondary])
+
+  const primary = accordionTheme.primary
+  const secondary = accordionTheme.secondary
   const primaryBg = primary + '80'
   const primaryBgHover = primary + 'CC'
   const primaryBgLight = primary + '40'
