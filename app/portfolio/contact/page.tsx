@@ -34,7 +34,8 @@ const SocialCardContent = styled(Box)(({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
-  height: '100%',
+  flex: 1,
+  minHeight: 0,
 }))
 
 const SocialIconWrapper = styled(Box)(({ theme }) => ({
@@ -479,7 +480,7 @@ export default function Contact() {
             mx: 'auto',
             alignItems: 'stretch',
           }}>
-            <ThreeDCardComponent onClick={handleLinkedInClick} floatingElements={2} sx={{ height: '100%', minHeight: { xs: 220, sm: 240 }, padding: { xs: 2, sm: 2.5 } }}>
+            <ThreeDCardComponent onClick={handleLinkedInClick} floatingElements={2} sx={{ height: '100%', minHeight: { xs: 220, sm: 240 }, padding: { xs: 2, sm: 2.5 }, display: 'flex', flexDirection: 'column', '& .MuiCardContent-root': { flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0 } }}>
               <SocialCardContent>
                 <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}>
                   <SocialIconWrapper>
@@ -498,7 +499,7 @@ export default function Contact() {
               </SocialCardContent>
             </ThreeDCardComponent>
 
-            <ThreeDCardComponent onClick={handleGitHubClick} floatingElements={2} sx={{ height: '100%', minHeight: { xs: 220, sm: 240 }, padding: { xs: 2, sm: 2.5 } }}>
+            <ThreeDCardComponent onClick={handleGitHubClick} floatingElements={2} sx={{ height: '100%', minHeight: { xs: 220, sm: 240 }, padding: { xs: 2, sm: 2.5 }, display: 'flex', flexDirection: 'column', '& .MuiCardContent-root': { flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0 } }}>
               <SocialCardContent>
                 <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}>
                   <SocialIconWrapper>
