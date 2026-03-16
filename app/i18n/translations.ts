@@ -119,6 +119,9 @@ export const translations = {
       footerPortfolio: 'Portfolio',
       footerContact: 'Contact',
       discoverMe: 'Découvrez-moi',
+      moodPlaceholder: 'Décris ton humeur en quelques mots',
+      moodCta: 'Changer l\'ambiance',
+      moodError: 'Une erreur est survenue. Réessaie dans un instant.',
     },
     logiciel: {
       title: 'Logiciel',
@@ -314,6 +317,9 @@ export const translations = {
       footerPortfolio: 'Portfolio',
       footerContact: 'Contact',
       discoverMe: 'Discover',
+      moodPlaceholder: 'Describe your mood in a few words',
+      moodCta: 'Change the vibe',
+      moodError: 'Something went wrong. Try again in a moment.',
     },
     logiciel: {
       title: 'Software',
