@@ -5,6 +5,7 @@ import CodeIcon from '@mui/icons-material/Code'
 import ErrorIcon from '@mui/icons-material/Error'
 import GitHubIcon from '@mui/icons-material/GitHub'
 import LaunchIcon from '@mui/icons-material/Launch'
+import DownloadIcon from '@mui/icons-material/Download'
 import ScheduleIcon from '@mui/icons-material/Schedule'
 import TrendingUpIcon from '@mui/icons-material/TrendingUp'
 import Alert from '@mui/material/Alert'
@@ -48,6 +49,7 @@ interface Project {
   technologies: string
   status: string
   url: string
+  downloadUrl?: string | null
   imageUrl?: string
   createdAt: string
   updatedAt: string
@@ -192,7 +194,8 @@ const ProjectCardWrapper = ({
   getStatusIcon,
   getStatusColor,
   getImageUrl,
-  viewProjectLabel = 'Voir le projet'
+  viewProjectLabel = 'Voir le projet',
+  downloadProjectLabel = 'Télécharger le projet',
 }: { 
   project: Project
   index: number
@@ -201,6 +204,7 @@ const ProjectCardWrapper = ({
   getStatusColor: (status: string) => "error" | "success" | "warning" | "info" | "default" | "primary" | "secondary"
   getImageUrl: (imageUrl: string) => string
   viewProjectLabel?: string
+  downloadProjectLabel?: string
 }) => {
   const theme = useTheme()
   const { primary, secondary, accent } = useThemeColors()
@@ -225,14 +229,35 @@ const ProjectCardWrapper = ({
   
   const reflectionColor = reflectionColors[index % reflectionColors.length]
   
+  const imgHeights = { xs: '100px', sm: '120px', md: '140px', xl: '200px' }
+
   return (
     <ScrollReveal key={project.id} direction="up" distance={isMobile ? 30 : 50} delay={isMobile ? 0.08 * (index % 4) : 0.05 * (index % 4)}>
+      <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
       <ThreeDCardComponent 
         key={project.id} 
-        onClick={() => handleProjectClick(project.url)}
+        fullHeight
+        onClick={() => {
+          if (project.url?.trim()) handleProjectClick(project.url)
+          else if (project.downloadUrl?.trim()) handleProjectClick(project.downloadUrl)
+        }}
         floatingElements={2}
-        sx={{ padding: { xs: 2, sm: 2.5, md: 3 }, minHeight: { xs: 200, md: 220 } }}
+        sx={{
+          padding: { xs: 2, sm: 2.5, md: 3 },
+          flex: 1,
+          minHeight: { xs: 320, md: 380 },
+          cursor: project.url?.trim() || project.downloadUrl?.trim() ? 'pointer' : 'default',
+        }}
       >
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            flex: 1,
+            minHeight: 0,
+            height: '100%',
+          }}
+        >
         {/* Logo GitHub dans le coin supérieur droit */}
         {project.url && project.url.includes('github') && (
           <Box
@@ -324,20 +349,29 @@ const ProjectCardWrapper = ({
         
         <ProjectTitleTypography projectName={project.name} isNonDefaultPalette={isNonDefaultPalette} />
         
-        {project.imageUrl && getImageUrl(project.imageUrl) && (
-          <ProjectImageContainer
-            sx={{
-              height: { xs: '100px', sm: '120px', md: '140px', xl: '200px' },
-              ...(isNonDefaultPalette ? {
-                border: `2px solid ${primary}60`,
-                borderRadius: DESIGN_TOKENS.borderRadius.small,
-                boxShadow: `0 4px 20px ${primary}25, 0 0 0 1px ${primary}20`,
-              } : {}),
-              '& img': {
-                ...(isNonDefaultPalette ? { boxShadow: 'none' } : {}),
-              },
-            }}
-          >
+        <ProjectImageContainer
+          sx={{
+            height: imgHeights,
+            flexShrink: 0,
+            ...(isNonDefaultPalette ? {
+              border: `2px solid ${primary}60`,
+              borderRadius: DESIGN_TOKENS.borderRadius.small,
+              boxShadow: `0 4px 20px ${primary}25, 0 0 0 1px ${primary}20`,
+            } : {}),
+            '& img': {
+              ...(isNonDefaultPalette ? { boxShadow: 'none' } : {}),
+            },
+            ...(project.imageUrl && getImageUrl(project.imageUrl)
+              ? {}
+              : {
+                  background: 'rgba(0,0,0,0.12)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }),
+          }}
+        >
+          {project.imageUrl && getImageUrl(project.imageUrl) ? (
             <Image
               src={getImageUrl(project.imageUrl)}
               alt={project.name}
@@ -345,8 +379,12 @@ const ProjectCardWrapper = ({
               sizes="(max-width: 600px) 100vw, (max-width: 900px) 50vw, 33vw"
               style={{ objectFit: 'cover' }}
             />
-          </ProjectImageContainer>
-        )}
+          ) : (
+            <Typography variant="caption" sx={{ opacity: 0.5, color: textColor }}>
+              —
+            </Typography>
+          )}
+        </ProjectImageContainer>
         
         <Typography
           variant="body2"
@@ -354,8 +392,13 @@ const ProjectCardWrapper = ({
           sx={{
             lineHeight: 1.4,
             mb: { xs: 1, md: 1.5 },
-            minHeight: { xs: '1.75rem', md: '2.5rem' },
+            flex: 1,
+            minHeight: { xs: '3.5rem', md: '4.5rem' },
             fontSize: { xs: '0.85rem', md: '0.9rem' },
+            display: '-webkit-box',
+            WebkitLineClamp: 4,
+            WebkitBoxOrient: 'vertical',
+            overflow: 'hidden',
             ...(isNonDefaultPalette ? { color: `${primary}ee` } : { color: 'rgba(255,255,255,0.92)' }),
           }}
         >
@@ -376,18 +419,42 @@ const ProjectCardWrapper = ({
           ))}
         </TechStack>
         
-        {/* CTA pour voir le projet */}
-        {project.url && (
-          <CTAButton
-            variant="primary"
-            size="medium"
-            fullWidth
-            onClick={() => handleProjectClick(project.url)}
-          >
-            {viewProjectLabel}
-          </CTAButton>
-        )}
+        <Box
+          sx={{
+            mt: 'auto',
+            pt: 1,
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 1,
+            flexShrink: 0,
+          }}
+          onClick={(e) => e.stopPropagation()}
+        >
+          {project.url && (
+            <CTAButton
+              variant="primary"
+              size="medium"
+              fullWidth
+              onClick={() => handleProjectClick(project.url)}
+            >
+              {viewProjectLabel}
+            </CTAButton>
+          )}
+          {project.downloadUrl && (
+            <CTAButton
+              variant="secondary"
+              size="medium"
+              fullWidth
+              startIcon={<DownloadIcon />}
+              onClick={() => handleProjectClick(project.downloadUrl!)}
+            >
+              {downloadProjectLabel}
+            </CTAButton>
+          )}
+        </Box>
+        </Box>
       </ThreeDCardComponent>
+      </Box>
     </ScrollReveal>
   )
 }
@@ -765,6 +832,7 @@ export default function Projets() {
               getStatusColor={getStatusColor}
               getImageUrl={getImageUrl}
               viewProjectLabel={t('projects.viewProject')}
+              downloadProjectLabel={t('projects.downloadProject')}
             />
           ))}
         </ProjectsGrid>
