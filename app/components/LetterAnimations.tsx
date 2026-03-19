@@ -150,35 +150,77 @@ export function WaveLetters({
 }
 
 // Révélation progressive au chargement (une seule fois, sobre et pro)
+// Mots en nowrap : pas de césure au milieu d’un mot. Ordre strict gauche → droite (lettres + espaces avec le même décalage).
+const REVEAL_EASE: [number, number, number, number] = [0.22, 1, 0.36, 1]
+
 export function RevealTitle({
   children,
   className,
-  delayPerLetter = 0.03,
+  delayPerLetter = 0.05,
 }: {
   children: React.ReactNode
   className?: string
   delayPerLetter?: number
 }) {
   const text = children?.toString() || ''
-  const letters = text.split('')
+  const chunks = text.split(/(\s+)/)
+  let letterIndex = 0
+  const letterDuration = 0.48
 
   return (
-    <span className={className} style={{ display: 'inline-block' }}>
-      {letters.map((letter, index) => (
-        <motion.span
-          key={index}
-          style={{ display: 'inline-block', whiteSpace: letter === ' ' ? 'pre' : 'normal' }}
-          initial={{ opacity: 0, y: 14 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{
-            duration: 0.45,
-            delay: index * delayPerLetter,
-            ease: [0.25, 0.46, 0.45, 0.94],
-          }}
-        >
-          {letter === ' ' ? '\u00A0' : letter}
-        </motion.span>
-      ))}
+    <span className={className} style={{ display: 'inline-block', maxWidth: '100%', textAlign: 'inherit' }}>
+      {chunks.map((chunk, chunkIndex) => {
+        if (chunk === '') return null
+
+        if (/^\s+$/.test(chunk)) {
+          return (
+            <span key={`sp-${chunkIndex}`} style={{ display: 'inline-block', whiteSpace: 'pre' }}>
+              {chunk.split('').map((char, i) => {
+                const idx = letterIndex++
+                const display = char === ' ' ? '\u00A0' : char
+                return (
+                  <motion.span
+                    key={`sp-${chunkIndex}-${i}`}
+                    style={{ display: 'inline-block', willChange: 'transform, opacity' }}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{
+                      duration: letterDuration,
+                      delay: idx * delayPerLetter,
+                      ease: REVEAL_EASE,
+                    }}
+                  >
+                    {display}
+                  </motion.span>
+                )
+              })}
+            </span>
+          )
+        }
+
+        return (
+          <span key={`w-${chunkIndex}`} style={{ display: 'inline-block', whiteSpace: 'nowrap' }}>
+            {chunk.split('').map((letter, i) => {
+              const idx = letterIndex++
+              return (
+                <motion.span
+                  key={`${chunkIndex}-${i}`}
+                  style={{ display: 'inline-block', willChange: 'transform, opacity' }}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{
+                    duration: letterDuration,
+                    delay: idx * delayPerLetter,
+                    ease: REVEAL_EASE,
+                  }}
+                >
+                  {letter}
+                </motion.span>
+              )
+            })}
+          </span>
+        )
+      })}
     </span>
   )
 }
