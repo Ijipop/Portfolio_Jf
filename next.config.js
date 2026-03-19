@@ -1,5 +1,12 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // Limite des uploads (FormData / Server Actions) — évite le 413 avant d’atteindre la route API
+  experimental: {
+    serverActions: {
+      bodySizeLimit: '50mb',
+    },
+  },
+
   // Image optimization
   images: {
     formats: ['image/webp', 'image/avif'],

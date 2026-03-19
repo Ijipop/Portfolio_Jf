@@ -1,6 +1,6 @@
 "use client";
 
-import { Add as AddIcon, Delete as DeleteIcon, Edit as EditIcon, Logout as LogoutIcon, CloudUpload as CloudUploadIcon } from '@mui/icons-material';
+import { Add as AddIcon, CheckCircle as CheckCircleIcon, Delete as DeleteIcon, Edit as EditIcon, Logout as LogoutIcon, CloudUpload as CloudUploadIcon } from '@mui/icons-material';
 import {
 	Alert,
 	AppBar,
@@ -15,6 +15,7 @@ import {
 	DialogTitle,
 	IconButton,
 	Paper,
+	Snackbar,
 	Table,
 	TableBody,
 	TableCell,
@@ -75,6 +76,8 @@ export default function AdminDashboard() {
   const [timelendarChangelog, setTimelendarChangelog] = useState('');
   const [timelendarVersion, setTimelendarVersion] = useState('');
   const [timelendarUploading, setTimelendarUploading] = useState(false);
+  const [timelendarSuccessOpen, setTimelendarSuccessOpen] = useState(false);
+  const [timelendarSuccessDetail, setTimelendarSuccessDetail] = useState('');
   const timelendarFileRef = useRef<HTMLInputElement>(null);
 
   // Fonction pour corriger les chemins d'images
@@ -370,11 +373,12 @@ export default function AdminDashboard() {
     e.preventDefault();
     const file = timelendarFileRef.current?.files?.[0];
     if (!file || !file.name.toLowerCase().endsWith('.zip')) {
-      setError('Veuillez sélectionner un fichier .zip (max 25 Mo).');
+      setError('Veuillez sélectionner un fichier .zip (max 50 Mo).');
       return;
     }
-    if (file.size > 25 * 1024 * 1024) {
-      setError('Le fichier est trop volumineux. Taille max : 25 Mo.');
+    const maxBytes = 50 * 1024 * 1024;
+    if (file.size > maxBytes) {
+      setError('Le fichier est trop volumineux. Taille max : 50 Mo.');
       return;
     }
     const token = localStorage.getItem('adminToken');
@@ -384,6 +388,7 @@ export default function AdminDashboard() {
     }
     setTimelendarUploading(true);
     setError('');
+    setTimelendarSuccessOpen(false);
     try {
       const formData = new FormData();
       formData.append('file', file);
@@ -394,8 +399,33 @@ export default function AdminDashboard() {
         headers: { 'Authorization': `Bearer ${token}` },
         body: formData,
       });
-      const data = await response.json();
+
+      const ct = response.headers.get('content-type') || '';
+      let data: { success?: boolean; error?: string; message?: string; data?: { version?: string | null } } = {};
+
+      if (ct.includes('application/json')) {
+        data = await response.json();
+      } else {
+        const text = await response.text();
+        if (response.status === 413) {
+          setError(
+            'Le serveur a refusé le fichier (413 — trop volumineux). En local : vérifiez next.config (bodySizeLimit). Sur Vercel gratuit, la limite est d’environ 4,5 Mo par requête : compressez le .zip ou passez à un plan supérieur / hébergement Node.'
+          );
+        } else {
+          setError(text.slice(0, 280) || `Erreur HTTP ${response.status}`);
+        }
+        return;
+      }
+
+      if (!response.ok) {
+        setError(data.error || `Erreur ${response.status}`);
+        return;
+      }
+
       if (data.success) {
+        const v = data.data?.version ? ` v${data.data.version}` : '';
+        setTimelendarSuccessDetail(data.message ? `${data.message}${v}` : `Version Timelendar ajoutée${v} — le .zip est en ligne.`);
+        setTimelendarSuccessOpen(true);
         setTimelendarChangelog('');
         setTimelendarVersion('');
         if (timelendarFileRef.current) timelendarFileRef.current.value = '';
@@ -405,7 +435,7 @@ export default function AdminDashboard() {
       }
     } catch (err) {
       console.error(err);
-      setError('Erreur lors de l\'upload.');
+      setError('Erreur lors de l\'upload (réseau ou réponse invalide).');
     } finally {
       setTimelendarUploading(false);
     }
@@ -462,6 +492,23 @@ export default function AdminDashboard() {
             {error}
           </Alert>
         )}
+
+        <Snackbar
+          open={timelendarSuccessOpen}
+          autoHideDuration={6000}
+          onClose={() => setTimelendarSuccessOpen(false)}
+          anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+        >
+          <Alert
+            onClose={() => setTimelendarSuccessOpen(false)}
+            severity="success"
+            variant="filled"
+            icon={<CheckCircleIcon fontSize="inherit" />}
+            sx={{ width: '100%', maxWidth: 560, alignItems: 'center' }}
+          >
+            {timelendarSuccessDetail || 'Upload Timelendar réussi.'}
+          </Alert>
+        </Snackbar>
 
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
           <Typography variant="h4" component="h1">
@@ -573,7 +620,7 @@ export default function AdminDashboard() {
         <Card sx={{ mb: 2, bgcolor: 'grey.900', color: '#ffffff' }}>
           <CardContent sx={{ color: '#ffffff' }}>
             <Typography variant="subtitle2" sx={{ mb: 2, color: 'rgba(255,255,255,0.9)' }}>
-              Ajoutez un fichier .zip (10–20 Mo) et une description des changements. Elle sera affichée sur la page Timelendar.
+              Ajoutez un fichier .zip (jusqu’à 50 Mo en local / serveur configuré) et une description des changements. Elle sera affichée sur la page Timelendar. Un message de confirmation apparaît en haut après un envoi réussi.
             </Typography>
             <form onSubmit={handleTimelendarSubmit}>
               <input
@@ -591,7 +638,7 @@ export default function AdminDashboard() {
                   disabled={timelendarUploading}
                   sx={{ mb: 2, mr: 2, color: '#fff', borderColor: 'rgba(255,255,255,0.5)', '&:hover': { borderColor: '#fff', bgcolor: 'rgba(255,255,255,0.08)' } }}
                 >
-                  {timelendarUploading ? 'Upload en cours...' : 'Choisir un .zip (max 25 Mo)'}
+                  {timelendarUploading ? 'Upload en cours...' : 'Choisir un .zip (max 50 Mo)'}
                 </Button>
               </label>
               <TextField

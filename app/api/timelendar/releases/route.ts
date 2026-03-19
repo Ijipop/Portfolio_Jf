@@ -6,7 +6,12 @@ import path from 'path'
 import jwt from 'jsonwebtoken'
 
 const UPLOAD_DIR = 'downloads/timelendar'
-const MAX_ZIP_SIZE = 25 * 1024 * 1024 // 25 MB
+/** Taille max du .zip (alignée avec next.config experimental.serverActions.bodySizeLimit) */
+const MAX_ZIP_SIZE = 50 * 1024 * 1024 // 50 MB
+
+export const runtime = 'nodejs'
+/** Vercel / hébergeurs : laisser le temps d’écrire un gros .zip sur disque */
+export const maxDuration = 120
 
 function authToken(request: NextRequest): { ok: true; decoded: unknown } | { ok: false; status: number; error: string } {
   const authHeader = request.headers.get('authorization')
