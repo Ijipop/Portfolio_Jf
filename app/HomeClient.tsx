@@ -76,14 +76,14 @@ export default function HomeClient({ initialShowIntro }: { initialShowIntro: boo
       
       <HeaderSection 
         title={
-          <RevealTitle delayPerLetter={0.032}>
+          <RevealTitle delayPerLetter={0.052}>
             {t('home.heroTitle')}
           </RevealTitle>
         }
         subtitle={
           <TypingEffect 
             text={t('home.heroSubtitle')}
-            speed={50}
+            speed={72}
           />
         }
       >
