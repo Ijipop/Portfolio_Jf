@@ -43,6 +43,11 @@ JWT_SECRET="votre-clé-secrète-jwt-très-longue-et-complexe"
 # Informations admin (optionnel - sera créé via script)
 ADMIN_EMAIL="admin@example.com"
 ADMIN_PASSWORD="votre-mot-de-passe-sécurisé"
+
+# Timelendar sur Vercel : uploads .zip > ~4,5 Mo (limite du corps des requêtes serverless)
+# Créez un store Blob dans le dashboard Vercel et liez BLOB_READ_WRITE_TOKEN au projet.
+# Sans cette variable, l’admin utilise l’upload classique (OK en local, risque 413 sur Vercel).
+# BLOB_READ_WRITE_TOKEN="vercel_blob_rw_..."
 ```
 
 ### 4. Configuration de la base de données

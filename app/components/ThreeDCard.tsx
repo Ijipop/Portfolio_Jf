@@ -155,7 +155,12 @@ export default function ThreeDCardComponent({
         onClick={onClick}
         className={className}
         sx={{
-          ...(fullHeight && { height: '100%', minHeight: 0 }),
+          ...(fullHeight && {
+            height: '100%',
+            minHeight: 0,
+            display: 'flex',
+            flexDirection: 'column',
+          }),
           ...(compact && { minHeight: '120px', padding: 2 }),
           ...(isMobile && { transformStyle: 'flat' }),
           ...surfaceSx,
@@ -202,7 +207,19 @@ export default function ThreeDCardComponent({
           </>
         )}
         
-        <CardContent sx={{ position: 'relative', zIndex: 2 }}>
+        <CardContent
+          sx={{
+            position: 'relative',
+            zIndex: 2,
+            ...(fullHeight && {
+              flex: 1,
+              display: 'flex',
+              flexDirection: 'column',
+              minHeight: 0,
+              overflow: 'hidden',
+            }),
+          }}
+        >
           {children}
         </CardContent>
       </ThreeDCard>

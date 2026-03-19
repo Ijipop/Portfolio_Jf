@@ -1,32 +1,16 @@
 import { prisma } from '@/lib/prisma'
+import { authAdminToken } from '@/lib/auth-admin-request'
 import { NextRequest, NextResponse } from 'next/server'
 import { unlink } from 'fs/promises'
 import path from 'path'
-import jwt from 'jsonwebtoken'
-
-function authToken(request: NextRequest): { ok: true } | { ok: false; status: number; error: string } {
-  const authHeader = request.headers.get('authorization')
-  if (!authHeader || !authHeader.startsWith('Bearer ')) {
-    return { ok: false, status: 401, error: "Token d'authentification requis" }
-  }
-  const token = authHeader.substring(7)
-  try {
-    if (!process.env.JWT_SECRET) {
-      return { ok: false, status: 500, error: 'JWT_SECRET non configuré.' }
-    }
-    jwt.verify(token, process.env.JWT_SECRET)
-    return { ok: true }
-  } catch {
-    return { ok: false, status: 401, error: 'Token invalide ou expiré' }
-  }
-}
+import { del } from '@vercel/blob'
 
 // DELETE /api/timelendar/releases/[id] — supprimer une version (protégé)
 export async function DELETE(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
-  const auth = authToken(request)
+  const auth = authAdminToken(request)
   if (!auth.ok) {
     return NextResponse.json({ success: false, error: auth.error }, { status: auth.status })
   }
@@ -50,16 +34,25 @@ export async function DELETE(
 
     await prisma.timelendarRelease.delete({ where: { id } })
 
-    // Supprimer le fichier du disque (chemin public -> process.cwd() + public)
-    const relativePath = release.filePath.startsWith('/') ? release.filePath.slice(1) : release.filePath
-    const filePath = path.join(process.cwd(), 'public', relativePath)
-    try {
-      const { existsSync } = await import('fs')
-      if (existsSync(filePath)) {
-        await unlink(filePath)
+    if (release.filePath.startsWith('https://') || release.filePath.startsWith('http://')) {
+      if (process.env.BLOB_READ_WRITE_TOKEN) {
+        try {
+          await del(release.filePath)
+        } catch (e) {
+          console.warn('Blob release non supprimé:', release.filePath, e)
+        }
       }
-    } catch (e) {
-      console.warn('Fichier release non supprimé du disque:', filePath, e)
+    } else {
+      const relativePath = release.filePath.startsWith('/') ? release.filePath.slice(1) : release.filePath
+      const filePath = path.join(process.cwd(), 'public', relativePath)
+      try {
+        const { existsSync } = await import('fs')
+        if (existsSync(filePath)) {
+          await unlink(filePath)
+        }
+      } catch (e) {
+        console.warn('Fichier release non supprimé du disque:', filePath, e)
+      }
     }
 
     return NextResponse.json({ success: true, message: 'Version supprimée avec succès' })

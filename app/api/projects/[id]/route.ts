@@ -132,7 +132,7 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
 		}
 
 		const body = await request.json()
-		const { name, description, technologies, status, url, imageUrl } = body
+		const { name, description, technologies, status, url, downloadUrl, imageUrl } = body
 
 		// Validation des données
 		if (!name || typeof name !== 'string' || name.trim().length === 0) {
@@ -201,6 +201,15 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
 			)
 		}
 
+		const dl =
+			typeof downloadUrl === 'string' && downloadUrl.trim().length > 0 ? downloadUrl.trim() : null
+		if (dl && !/^https?:\/\//i.test(dl)) {
+			return NextResponse.json(
+				{ success: false, error: 'L’URL de téléchargement doit commencer par http:// ou https://' },
+				{ status: 400 }
+			)
+		}
+
 		// Mettre à jour le project
 		const updatedProject = await prisma.project.update({
 			where: { id },
@@ -211,6 +220,7 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
 				technologies: technologies.trim(),
 				status: status.trim(),
 				url: url || '',
+				downloadUrl: dl,
 				imageUrl: imageUrl || ''
 			}
 		})

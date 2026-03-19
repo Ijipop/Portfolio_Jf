@@ -29,6 +29,8 @@ model Project {
   technologies String
   status       String
   url          String?
+  /** Lien direct vers binaire (.exe, .dmg, etc.) ou page de téléchargement */
+  downloadUrl  String?
   imageUrl     String?  // URL de l'image du projet
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt

@@ -1,9 +1,9 @@
 import { prisma } from '@/lib/prisma'
+import { authAdminToken } from '@/lib/auth-admin-request'
 import { NextRequest, NextResponse } from 'next/server'
 import { writeFile, mkdir } from 'fs/promises'
 import { existsSync } from 'fs'
 import path from 'path'
-import jwt from 'jsonwebtoken'
 
 const UPLOAD_DIR = 'downloads/timelendar'
 /** Taille max du .zip (alignée avec next.config experimental.serverActions.bodySizeLimit) */
@@ -12,23 +12,6 @@ const MAX_ZIP_SIZE = 50 * 1024 * 1024 // 50 MB
 export const runtime = 'nodejs'
 /** Vercel / hébergeurs : laisser le temps d’écrire un gros .zip sur disque */
 export const maxDuration = 120
-
-function authToken(request: NextRequest): { ok: true; decoded: unknown } | { ok: false; status: number; error: string } {
-  const authHeader = request.headers.get('authorization')
-  if (!authHeader || !authHeader.startsWith('Bearer ')) {
-    return { ok: false, status: 401, error: "Token d'authentification requis" }
-  }
-  const token = authHeader.substring(7)
-  try {
-    if (!process.env.JWT_SECRET) {
-      return { ok: false, status: 500, error: 'JWT_SECRET non configuré.' }
-    }
-    const decoded = jwt.verify(token, process.env.JWT_SECRET)
-    return { ok: true, decoded }
-  } catch {
-    return { ok: false, status: 401, error: 'Token invalide ou expiré' }
-  }
-}
 
 // GET /api/timelendar/releases — liste publique des versions
 export async function GET() {
@@ -48,7 +31,7 @@ export async function GET() {
 
 // POST /api/timelendar/releases — upload .zip + changelog (protégé)
 export async function POST(request: NextRequest) {
-  const auth = authToken(request)
+  const auth = authAdminToken(request)
   if (!auth.ok) {
     return NextResponse.json({ success: false, error: auth.error }, { status: auth.status })
   }

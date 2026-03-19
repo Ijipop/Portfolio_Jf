@@ -29,6 +29,7 @@ import {
 } from '@mui/material';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState, useCallback, useRef } from 'react';
+import { upload } from '@vercel/blob/client';
 
 interface Project {
   id: number;
@@ -37,6 +38,7 @@ interface Project {
   technologies: string;
   status: string;
   url?: string;
+  downloadUrl?: string | null;
   imageUrl?: string;
   createdAt: string;
   updatedAt: string;
@@ -63,6 +65,7 @@ export default function AdminDashboard() {
     technologies: '',
     status: '',
     url: '',
+    downloadUrl: '',
     imageUrl: ''
   });
   const [uploading, setUploading] = useState(false);
@@ -79,6 +82,8 @@ export default function AdminDashboard() {
   const [timelendarSuccessOpen, setTimelendarSuccessOpen] = useState(false);
   const [timelendarSuccessDetail, setTimelendarSuccessDetail] = useState('');
   const timelendarFileRef = useRef<HTMLInputElement>(null);
+  /** null = chargement ; true = upload direct Vercel Blob (contourne ~4,5 Mo sur les fonctions serverless) */
+  const [timelendarBlobUpload, setTimelendarBlobUpload] = useState<boolean | null>(null);
 
   // Fonction pour corriger les chemins d'images
   const getImageUrl = (imageUrl: string) => {
@@ -134,6 +139,16 @@ export default function AdminDashboard() {
     }
   }, []);
 
+  const fetchTimelendarUploadConfig = useCallback(async () => {
+    try {
+      const response = await fetch('/api/timelendar/upload-config');
+      const data = await response.json();
+      setTimelendarBlobUpload(Boolean(data.blobUploadEnabled));
+    } catch {
+      setTimelendarBlobUpload(false);
+    }
+  }, []);
+
   // Fonction pour nettoyer le localStorage et rediriger
   const clearStorageAndRedirect = useCallback(() => {
     localStorage.removeItem('adminToken');
@@ -153,7 +168,8 @@ export default function AdminDashboard() {
 
     fetchProjects();
     fetchTimelendarReleases();
-  }, [router, fetchProjects, fetchTimelendarReleases, clearStorageAndRedirect]);
+    fetchTimelendarUploadConfig();
+  }, [router, fetchProjects, fetchTimelendarReleases, fetchTimelendarUploadConfig, clearStorageAndRedirect]);
 
   const handleLogout = () => {
     // Nettoyer le localStorage
@@ -171,6 +187,7 @@ export default function AdminDashboard() {
         technologies: project.technologies,
         status: project.status,
         url: project.url || '',
+        downloadUrl: project.downloadUrl || '',
         imageUrl: project.imageUrl || ''
       });
       setPreviewImage(project.imageUrl ? getImageUrl(project.imageUrl) : null);
@@ -182,6 +199,7 @@ export default function AdminDashboard() {
         technologies: '',
         status: '',
         url: '',
+        downloadUrl: '',
         imageUrl: ''
       });
       setPreviewImage(null);
@@ -198,6 +216,7 @@ export default function AdminDashboard() {
       technologies: '',
       status: '',
       url: '',
+      downloadUrl: '',
       imageUrl: ''
     });
     setPreviewImage(null);
@@ -390,15 +409,42 @@ export default function AdminDashboard() {
     setError('');
     setTimelendarSuccessOpen(false);
     try {
-      const formData = new FormData();
-      formData.append('file', file);
-      formData.append('changelog', timelendarChangelog.trim() || 'Sans description.');
-      if (timelendarVersion.trim()) formData.append('version', timelendarVersion.trim());
-      const response = await fetch('/api/timelendar/releases', {
-        method: 'POST',
-        headers: { 'Authorization': `Bearer ${token}` },
-        body: formData,
-      });
+      const changelog = timelendarChangelog.trim() || 'Sans description.';
+      const versionTrim = timelendarVersion.trim();
+
+      let response: Response;
+      if (timelendarBlobUpload) {
+        const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
+        const pathname = `timelendar/${Date.now()}_${safeName}`;
+        const blob = await upload(pathname, file, {
+          access: 'public',
+          handleUploadUrl: '/api/timelendar/blob-client',
+          headers: { Authorization: `Bearer ${token}` },
+          multipart: file.size >= 4 * 1024 * 1024,
+        });
+        response = await fetch('/api/timelendar/releases/register', {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            filePath: blob.url,
+            changelog,
+            version: versionTrim || null,
+          }),
+        });
+      } else {
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('changelog', changelog);
+        if (versionTrim) formData.append('version', versionTrim);
+        response = await fetch('/api/timelendar/releases', {
+          method: 'POST',
+          headers: { Authorization: `Bearer ${token}` },
+          body: formData,
+        });
+      }
 
       const ct = response.headers.get('content-type') || '';
       let data: { success?: boolean; error?: string; message?: string; data?: { version?: string | null } } = {};
@@ -409,7 +455,9 @@ export default function AdminDashboard() {
         const text = await response.text();
         if (response.status === 413) {
           setError(
-            'Le serveur a refusé le fichier (413 — trop volumineux). En local : vérifiez next.config (bodySizeLimit). Sur Vercel gratuit, la limite est d’environ 4,5 Mo par requête : compressez le .zip ou passez à un plan supérieur / hébergement Node.'
+            timelendarBlobUpload
+              ? 'Erreur 413 inattendue. Réessayez ou contactez le support.'
+              : 'Le serveur a refusé le fichier (413 — trop volumineux). Sur Vercel, le corps des requêtes vers l’API est plafonné (~4,5 Mo) : ajoutez un store Vercel Blob et la variable BLOB_READ_WRITE_TOKEN sur le projet pour uploader des .zip plus gros, ou réduisez le fichier.'
           );
         } else {
           setError(text.slice(0, 280) || `Erreur HTTP ${response.status}`);
@@ -532,6 +580,7 @@ export default function AdminDashboard() {
                 <TableCell>Technologies</TableCell>
                 <TableCell>Statut</TableCell>
                 <TableCell>URL</TableCell>
+                <TableCell>Téléchargement</TableCell>
                 <TableCell>Image</TableCell>
                 <TableCell>Actions</TableCell>
               </TableRow>
@@ -556,6 +605,18 @@ export default function AdminDashboard() {
                         rel="noopener noreferrer"
                       >
                         Voir
+                      </Button>
+                    )}
+                  </TableCell>
+                  <TableCell>
+                    {project.downloadUrl && (
+                      <Button
+                        size="small"
+                        href={project.downloadUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        Fichier
                       </Button>
                     )}
                   </TableCell>
@@ -620,7 +681,12 @@ export default function AdminDashboard() {
         <Card sx={{ mb: 2, bgcolor: 'grey.900', color: '#ffffff' }}>
           <CardContent sx={{ color: '#ffffff' }}>
             <Typography variant="subtitle2" sx={{ mb: 2, color: 'rgba(255,255,255,0.9)' }}>
-              Ajoutez un fichier .zip (jusqu’à 50 Mo en local / serveur configuré) et une description des changements. Elle sera affichée sur la page Timelendar. Un message de confirmation apparaît en haut après un envoi réussi.
+              {timelendarBlobUpload === null
+                ? 'Chargement du mode d’upload…'
+                : timelendarBlobUpload
+                  ? 'Fichier .zip jusqu’à 50 Mo : envoi direct vers Vercel Blob (adapté à la production Vercel). Puis enregistrement en base.'
+                  : 'Fichier .zip jusqu’à 50 Mo : envoi via l’API (OK en local ; sur Vercel sans Blob, limite ~4,5 Mo par requête — configurez BLOB_READ_WRITE_TOKEN + store Blob).'}
+              {' '}La description s’affiche sur la page Timelendar ; une confirmation apparaît en haut après un envoi réussi.
             </Typography>
             <form onSubmit={handleTimelendarSubmit}>
               <input
@@ -635,10 +701,10 @@ export default function AdminDashboard() {
                   variant="outlined"
                   component="span"
                   startIcon={timelendarUploading ? <CircularProgress size={20} sx={{ color: '#fff' }} /> : <CloudUploadIcon />}
-                  disabled={timelendarUploading}
+                  disabled={timelendarUploading || timelendarBlobUpload === null}
                   sx={{ mb: 2, mr: 2, color: '#fff', borderColor: 'rgba(255,255,255,0.5)', '&:hover': { borderColor: '#fff', bgcolor: 'rgba(255,255,255,0.08)' } }}
                 >
-                  {timelendarUploading ? 'Upload en cours...' : 'Choisir un .zip (max 50 Mo)'}
+                  {timelendarUploading ? 'Upload en cours...' : timelendarBlobUpload === null ? 'Chargement…' : 'Choisir un .zip (max 50 Mo)'}
                 </Button>
               </label>
               <TextField
@@ -682,7 +748,7 @@ export default function AdminDashboard() {
                   '& .MuiInputBase-input::placeholder': { color: 'rgba(255,255,255,0.5)', opacity: 1 },
                 }}
               />
-              <Button type="submit" variant="contained" disabled={timelendarUploading}>
+              <Button type="submit" variant="contained" disabled={timelendarUploading || timelendarBlobUpload === null}>
                 Ajouter la version
               </Button>
             </form>
@@ -787,6 +853,16 @@ export default function AdminDashboard() {
               variant="outlined"
               value={formData.url}
               onChange={(e) => setFormData({ ...formData, url: e.target.value })}
+            />
+            <TextField
+              margin="dense"
+              label="Télécharger le projet"
+              fullWidth
+              variant="outlined"
+              value={formData.downloadUrl}
+              onChange={(e) => setFormData({ ...formData, downloadUrl: e.target.value })}
+              placeholder="https://… (lien .exe, .dmg, page GitHub Releases, etc.)"
+              helperText="URL optionnelle vers un dépôt ou fichier installable pour les visiteurs."
             />
             <Box sx={{ mt: 2, mb: 1 }}>
               <Typography variant="subtitle2" sx={{ mb: 1 }}>
