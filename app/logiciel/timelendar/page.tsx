@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
+import Chip from '@mui/material/Chip'
 import Container from '@mui/material/Container'
 import Typography from '@mui/material/Typography'
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline'
@@ -33,11 +34,14 @@ const FEATURE_KEYS = [
   'timelendar.featureDesktop',
 ] as const
 
+type TimelendarPlatform = 'windows' | 'macos' | 'both'
+
 interface TimelendarRelease {
   id: number
   filePath: string
   changelog: string
   version: string | null
+  platform?: TimelendarPlatform
   createdAt: string
 }
 
@@ -217,6 +221,23 @@ export default function TimelendarPage() {
                           {t('timelendar.version')} {r.version}
                         </Typography>
                       )}
+                      <Chip
+                        size="small"
+                        label={
+                          (r.platform ?? 'both') === 'windows'
+                            ? t('timelendar.platformWindows')
+                            : (r.platform ?? 'both') === 'macos'
+                              ? t('timelendar.platformMacos')
+                              : t('timelendar.platformBoth')
+                        }
+                        sx={{
+                          fontWeight: 600,
+                          borderColor: `${primary}55`,
+                          color: textColor,
+                          bgcolor: `${primary}14`,
+                        }}
+                        variant="outlined"
+                      />
                       <Typography component="span" variant="body2" sx={{ color: textColor, opacity: 0.9 }}>
                         {new Date(r.createdAt).toLocaleDateString(undefined, { dateStyle: 'medium' })}
                       </Typography>
@@ -227,7 +248,6 @@ export default function TimelendarPage() {
                     <Button
                       variant="contained"
                       href={r.filePath}
-                      download
                       target="_blank"
                       rel="noopener noreferrer"
                       sx={{ alignSelf: 'flex-start', fontWeight: 600 }}

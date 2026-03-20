@@ -34,15 +34,17 @@ export async function DELETE(
 
     await prisma.timelendarRelease.delete({ where: { id } })
 
-    if (release.filePath.startsWith('https://') || release.filePath.startsWith('http://')) {
-      if (process.env.BLOB_READ_WRITE_TOKEN) {
-        try {
-          await del(release.filePath)
-        } catch (e) {
-          console.warn('Blob release non supprimé:', release.filePath, e)
-        }
+    const isBlob =
+      /^https?:\/\//i.test(release.filePath) &&
+      release.filePath.toLowerCase().includes('blob.vercel-storage.com')
+
+    if (isBlob && process.env.BLOB_READ_WRITE_TOKEN) {
+      try {
+        await del(release.filePath)
+      } catch (e) {
+        console.warn('Blob release non supprimé:', release.filePath, e)
       }
-    } else {
+    } else if (!release.filePath.startsWith('http://') && !release.filePath.startsWith('https://')) {
       const relativePath = release.filePath.startsWith('/') ? release.filePath.slice(1) : release.filePath
       const filePath = path.join(process.cwd(), 'public', relativePath)
       try {

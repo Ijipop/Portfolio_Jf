@@ -1,17 +1,25 @@
 import { prisma } from '@/lib/prisma'
 import { authAdminToken } from '@/lib/auth-admin-request'
 import { NextRequest, NextResponse } from 'next/server'
-import { writeFile, mkdir } from 'fs/promises'
-import { existsSync } from 'fs'
-import path from 'path'
+import { TimelendarPlatform } from '@prisma/client'
 
-const UPLOAD_DIR = 'downloads/timelendar'
-/** Taille max du .zip (alignée avec next.config experimental.serverActions.bodySizeLimit) */
-const MAX_ZIP_SIZE = 50 * 1024 * 1024 // 50 MB
+const MAX_CHANGELOG = 20_000
 
-export const runtime = 'nodejs'
-/** Vercel / hébergeurs : laisser le temps d’écrire un gros .zip sur disque */
-export const maxDuration = 120
+function isValidZipUrl(urlString: string): boolean {
+  try {
+    const u = new URL(urlString)
+    if (u.protocol !== 'https:' && u.protocol !== 'http:') return false
+    const full = `${u.pathname}${u.search}`.toLowerCase()
+    return full.includes('.zip')
+  } catch {
+    return false
+  }
+}
+
+function parsePlatform(raw: unknown): TimelendarPlatform | null {
+  if (raw === 'windows' || raw === 'macos' || raw === 'both') return raw
+  return null
+}
 
 // GET /api/timelendar/releases — liste publique des versions
 export async function GET() {
@@ -29,7 +37,7 @@ export async function GET() {
   }
 }
 
-// POST /api/timelendar/releases — upload .zip + changelog (protégé)
+/** POST JSON — ajouter une version (URL externe vers .zip + changelog) — protégé */
 export async function POST(request: NextRequest) {
   const auth = authAdminToken(request)
   if (!auth.ok) {
@@ -37,65 +45,60 @@ export async function POST(request: NextRequest) {
   }
 
   try {
-    const formData = await request.formData()
-    const file = formData.get('file') as File | null
-    const changelog = (formData.get('changelog') as string)?.trim() ?? ''
-    const version = (formData.get('version') as string)?.trim() || null
+    const json = (await request.json()) as {
+      fileUrl?: string
+      changelog?: string
+      version?: string | null
+      platform?: string
+    }
 
-    if (!file || file.size === 0) {
+    const fileUrl = typeof json.fileUrl === 'string' ? json.fileUrl.trim() : ''
+    if (!fileUrl || !isValidZipUrl(fileUrl)) {
       return NextResponse.json(
-        { success: false, error: 'Aucun fichier .zip fourni' },
+        {
+          success: false,
+          error:
+            'URL invalide : fournissez une adresse http(s) menant à un fichier .zip (le lien doit contenir « .zip »).',
+        },
         { status: 400 }
       )
     }
 
-    const name = (file.name || '').toLowerCase()
-    if (!name.endsWith('.zip')) {
+    let changelog = typeof json.changelog === 'string' ? json.changelog.trim() : ''
+    if (!changelog) changelog = 'Sans description.'
+    if (changelog.length > MAX_CHANGELOG) {
       return NextResponse.json(
-        { success: false, error: 'Seuls les fichiers .zip sont acceptés' },
+        { success: false, error: `Changelog trop long (max ${MAX_CHANGELOG} caractères).` },
         { status: 400 }
       )
     }
 
-    if (file.size > MAX_ZIP_SIZE) {
-      return NextResponse.json(
-        { success: false, error: `Fichier trop volumineux. Taille max: ${MAX_ZIP_SIZE / 1024 / 1024} MB` },
-        { status: 400 }
-      )
-    }
+    const version =
+      typeof json.version === 'string' && json.version.trim() ? json.version.trim() : null
 
-    const baseDir = path.join(process.cwd(), 'public', UPLOAD_DIR)
-    if (!existsSync(baseDir)) {
-      await mkdir(baseDir, { recursive: true })
-    }
-
-    const timestamp = Date.now()
-    const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_')
-    const fileName = `${timestamp}_${safeName}`
-    const filePath = path.join(baseDir, fileName)
-
-    const bytes = await file.arrayBuffer()
-    await writeFile(filePath, Buffer.from(bytes))
-
-    const publicPath = `/${UPLOAD_DIR}/${fileName}`.replace(/\/+/g, '/')
+    const platform = parsePlatform(json.platform) ?? TimelendarPlatform.both
 
     const release = await prisma.timelendarRelease.create({
       data: {
-        filePath: publicPath,
-        changelog: changelog || 'Sans description.',
+        filePath: fileUrl,
+        changelog,
         version,
+        platform,
       },
     })
 
-    return NextResponse.json({
-      success: true,
-      data: release,
-      message: 'Version ajoutée avec succès',
-    }, { status: 201 })
+    return NextResponse.json(
+      {
+        success: true,
+        data: release,
+        message: 'Version ajoutée avec succès',
+      },
+      { status: 201 }
+    )
   } catch (error) {
     console.error('POST timelendar release:', error)
     return NextResponse.json(
-      { success: false, error: 'Erreur lors de l\'ajout de la version' },
+      { success: false, error: "Erreur lors de l'ajout de la version" },
       { status: 500 }
     )
   }

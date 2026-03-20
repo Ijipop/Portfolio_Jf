@@ -174,10 +174,13 @@ export const translations = {
       privateProject: 'Projet privé – tous droits réservés.',
       imagePlaceholder: 'Image à venir',
       downloadsTitle: 'Téléchargements',
-      downloadsIntro: 'Versions disponibles au format .zip (Windows et macOS).',
+      downloadsIntro: 'Liens vers les archives .zip (hébergées sur un autre site si besoin).',
       downloadButton: 'Télécharger le .zip',
       noReleases: 'Aucune version disponible pour le moment.',
       version: 'Version',
+      platformWindows: 'Windows',
+      platformMacos: 'macOS',
+      platformBoth: 'Windows et macOS',
     },
     promo: {
       onePager: {
@@ -403,10 +406,13 @@ export const translations = {
       privateProject: 'Private project – all rights reserved.',
       imagePlaceholder: 'Image coming soon',
       downloadsTitle: 'Downloads',
-      downloadsIntro: 'Available versions as .zip (Windows and macOS).',
+      downloadsIntro: 'Links to .zip archives (may be hosted on another site).',
       downloadButton: 'Download .zip',
       noReleases: 'No versions available yet.',
       version: 'Version',
+      platformWindows: 'Windows',
+      platformMacos: 'macOS',
+      platformBoth: 'Windows & macOS',
     },
     promo: {
       onePager: {
