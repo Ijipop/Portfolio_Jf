@@ -38,13 +38,20 @@ model Project {
   @@map("Project")
 }
 
+enum TimelendarPlatform {
+  windows
+  macos
+  both
+}
+
 model TimelendarRelease {
-  id        Int      @id @default(autoincrement())
-  filePath  String   // chemin public ex: /downloads/timelendar/xxx.zip
-  changelog String   // description des changements
-  version   String?  // optionnel ex: 1.2.0
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id        Int               @id @default(autoincrement())
+  filePath  String            // URL https vers .zip externe, ou ancien chemin /downloads/…
+  changelog String            // description des changements
+  version   String?           // optionnel ex: 1.2.0
+  platform  TimelendarPlatform @default(both)
+  createdAt DateTime          @default(now())
+  updatedAt DateTime          @updatedAt
 
   @@map("TimelendarRelease")
 }

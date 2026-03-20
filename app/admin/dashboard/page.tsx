@@ -13,8 +13,12 @@ import {
 	DialogActions,
 	DialogContent,
 	DialogTitle,
+	FormControl,
 	IconButton,
+	InputLabel,
+	MenuItem,
 	Paper,
+	Select,
 	Snackbar,
 	Table,
 	TableBody,
@@ -29,7 +33,6 @@ import {
 } from '@mui/material';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState, useCallback, useRef } from 'react';
-import { upload } from '@vercel/blob/client';
 
 interface Project {
   id: number;
@@ -44,11 +47,14 @@ interface Project {
   updatedAt: string;
 }
 
+type TimelendarPlatform = 'windows' | 'macos' | 'both';
+
 interface TimelendarRelease {
   id: number;
   filePath: string;
   changelog: string;
   version: string | null;
+  platform?: TimelendarPlatform;
   createdAt: string;
   updatedAt: string;
 }
@@ -78,12 +84,11 @@ export default function AdminDashboard() {
   const [timelendarLoading, setTimelendarLoading] = useState(true);
   const [timelendarChangelog, setTimelendarChangelog] = useState('');
   const [timelendarVersion, setTimelendarVersion] = useState('');
+  const [timelendarFileUrl, setTimelendarFileUrl] = useState('');
+  const [timelendarPlatform, setTimelendarPlatform] = useState<TimelendarPlatform>('both');
   const [timelendarUploading, setTimelendarUploading] = useState(false);
   const [timelendarSuccessOpen, setTimelendarSuccessOpen] = useState(false);
   const [timelendarSuccessDetail, setTimelendarSuccessDetail] = useState('');
-  const timelendarFileRef = useRef<HTMLInputElement>(null);
-  /** null = chargement ; true = upload direct Vercel Blob (contourne ~4,5 Mo sur les fonctions serverless) */
-  const [timelendarBlobUpload, setTimelendarBlobUpload] = useState<boolean | null>(null);
 
   // Fonction pour corriger les chemins d'images
   const getImageUrl = (imageUrl: string) => {
@@ -139,16 +144,6 @@ export default function AdminDashboard() {
     }
   }, []);
 
-  const fetchTimelendarUploadConfig = useCallback(async () => {
-    try {
-      const response = await fetch('/api/timelendar/upload-config');
-      const data = await response.json();
-      setTimelendarBlobUpload(Boolean(data.blobUploadEnabled));
-    } catch {
-      setTimelendarBlobUpload(false);
-    }
-  }, []);
-
   // Fonction pour nettoyer le localStorage et rediriger
   const clearStorageAndRedirect = useCallback(() => {
     localStorage.removeItem('adminToken');
@@ -168,8 +163,7 @@ export default function AdminDashboard() {
 
     fetchProjects();
     fetchTimelendarReleases();
-    fetchTimelendarUploadConfig();
-  }, [router, fetchProjects, fetchTimelendarReleases, fetchTimelendarUploadConfig, clearStorageAndRedirect]);
+  }, [router, fetchProjects, fetchTimelendarReleases, clearStorageAndRedirect]);
 
   const handleLogout = () => {
     // Nettoyer le localStorage
@@ -390,14 +384,23 @@ export default function AdminDashboard() {
 
   const handleTimelendarSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const file = timelendarFileRef.current?.files?.[0];
-    if (!file || !file.name.toLowerCase().endsWith('.zip')) {
-      setError('Veuillez sélectionner un fichier .zip (max 50 Mo).');
+    const url = timelendarFileUrl.trim();
+    if (!url) {
+      setError('Indiquez une URL vers un fichier .zip (http ou https).');
       return;
     }
-    const maxBytes = 50 * 1024 * 1024;
-    if (file.size > maxBytes) {
-      setError('Le fichier est trop volumineux. Taille max : 50 Mo.');
+    try {
+      const u = new URL(url);
+      if (u.protocol !== 'http:' && u.protocol !== 'https:') {
+        setError('L’URL doit commencer par http:// ou https://');
+        return;
+      }
+      if (!`${u.pathname}${u.search}`.toLowerCase().includes('.zip')) {
+        setError('Le lien doit pointer vers un fichier .zip (l’URL doit contenir « .zip »).');
+        return;
+      }
+    } catch {
+      setError('URL invalide.');
       return;
     }
     const token = localStorage.getItem('adminToken');
@@ -412,39 +415,19 @@ export default function AdminDashboard() {
       const changelog = timelendarChangelog.trim() || 'Sans description.';
       const versionTrim = timelendarVersion.trim();
 
-      let response: Response;
-      if (timelendarBlobUpload) {
-        const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
-        const pathname = `timelendar/${Date.now()}_${safeName}`;
-        const blob = await upload(pathname, file, {
-          access: 'public',
-          handleUploadUrl: '/api/timelendar/blob-client',
-          headers: { Authorization: `Bearer ${token}` },
-          multipart: file.size >= 4 * 1024 * 1024,
-        });
-        response = await fetch('/api/timelendar/releases/register', {
-          method: 'POST',
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            filePath: blob.url,
-            changelog,
-            version: versionTrim || null,
-          }),
-        });
-      } else {
-        const formData = new FormData();
-        formData.append('file', file);
-        formData.append('changelog', changelog);
-        if (versionTrim) formData.append('version', versionTrim);
-        response = await fetch('/api/timelendar/releases', {
-          method: 'POST',
-          headers: { Authorization: `Bearer ${token}` },
-          body: formData,
-        });
-      }
+      const response = await fetch('/api/timelendar/releases', {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          fileUrl: url,
+          changelog,
+          version: versionTrim || null,
+          platform: timelendarPlatform,
+        }),
+      });
 
       const ct = response.headers.get('content-type') || '';
       let data: { success?: boolean; error?: string; message?: string; data?: { version?: string | null } } = {};
@@ -453,15 +436,7 @@ export default function AdminDashboard() {
         data = await response.json();
       } else {
         const text = await response.text();
-        if (response.status === 413) {
-          setError(
-            timelendarBlobUpload
-              ? 'Erreur 413 inattendue. Réessayez ou contactez le support.'
-              : 'Le serveur a refusé le fichier (413 — trop volumineux). Sur Vercel, le corps des requêtes vers l’API est plafonné (~4,5 Mo) : ajoutez un store Vercel Blob et la variable BLOB_READ_WRITE_TOKEN sur le projet pour uploader des .zip plus gros, ou réduisez le fichier.'
-          );
-        } else {
-          setError(text.slice(0, 280) || `Erreur HTTP ${response.status}`);
-        }
+        setError(text.slice(0, 280) || `Erreur HTTP ${response.status}`);
         return;
       }
 
@@ -472,18 +447,18 @@ export default function AdminDashboard() {
 
       if (data.success) {
         const v = data.data?.version ? ` v${data.data.version}` : '';
-        setTimelendarSuccessDetail(data.message ? `${data.message}${v}` : `Version Timelendar ajoutée${v} — le .zip est en ligne.`);
+        setTimelendarSuccessDetail(data.message ? `${data.message}${v}` : `Version Timelendar ajoutée${v}.`);
         setTimelendarSuccessOpen(true);
         setTimelendarChangelog('');
         setTimelendarVersion('');
-        if (timelendarFileRef.current) timelendarFileRef.current.value = '';
+        setTimelendarFileUrl('');
         await fetchTimelendarReleases();
       } else {
         setError(data.error || 'Erreur lors de l\'ajout de la version');
       }
     } catch (err) {
       console.error(err);
-      setError('Erreur lors de l\'upload (réseau ou réponse invalide).');
+      setError('Erreur réseau ou réponse invalide.');
     } finally {
       setTimelendarUploading(false);
     }
@@ -554,7 +529,7 @@ export default function AdminDashboard() {
             icon={<CheckCircleIcon fontSize="inherit" />}
             sx={{ width: '100%', maxWidth: 560, alignItems: 'center' }}
           >
-            {timelendarSuccessDetail || 'Upload Timelendar réussi.'}
+            {timelendarSuccessDetail || 'Version Timelendar enregistrée.'}
           </Alert>
         </Snackbar>
 
@@ -674,39 +649,58 @@ export default function AdminDashboard() {
           </Card>
         )}
 
-        {/* Timelendar – Versions (.zip + description des changements) */}
+        {/* Timelendar – URL .zip externe + plateforme */}
         <Typography variant="h5" component="h2" sx={{ mt: 5, mb: 2, color: '#ffffff' }}>
           Timelendar – Versions
         </Typography>
         <Card sx={{ mb: 2, bgcolor: 'grey.900', color: '#ffffff' }}>
           <CardContent sx={{ color: '#ffffff' }}>
             <Typography variant="subtitle2" sx={{ mb: 2, color: 'rgba(255,255,255,0.9)' }}>
-              {timelendarBlobUpload === null
-                ? 'Chargement du mode d’upload…'
-                : timelendarBlobUpload
-                  ? 'Fichier .zip jusqu’à 50 Mo : envoi direct vers Vercel Blob (adapté à la production Vercel). Puis enregistrement en base.'
-                  : 'Fichier .zip jusqu’à 50 Mo : envoi via l’API (OK en local ; sur Vercel sans Blob, limite ~4,5 Mo par requête — configurez BLOB_READ_WRITE_TOKEN + store Blob).'}
-              {' '}La description s’affiche sur la page Timelendar ; une confirmation apparaît en haut après un envoi réussi.
+              Indiquez une URL publique vers un fichier .zip (hébergé ailleurs : GitHub Releases, site, etc.). Choisissez la plateforme cible (Windows, macOS ou les deux). La liste s’affiche sur la page Timelendar.
             </Typography>
             <form onSubmit={handleTimelendarSubmit}>
-              <input
-                ref={timelendarFileRef}
-                type="file"
-                accept=".zip"
-                style={{ display: 'none' }}
-                id="timelendar-zip-upload"
+              <TextField
+                margin="dense"
+                label="URL du fichier .zip *"
+                fullWidth
+                variant="outlined"
+                value={timelendarFileUrl}
+                onChange={(e) => setTimelendarFileUrl(e.target.value)}
+                required
+                placeholder="https://exemple.com/chemin/vers/fichier.zip"
+                helperText="L’URL doit contenir « .zip » (ex. lien direct ou page de release)."
+                sx={{
+                  mb: 2,
+                  '& .MuiInputLabel-root': { color: 'rgba(255,255,255,0.8)' },
+                  '& .MuiInputLabel-root.Mui-focused': { color: '#fff' },
+                  '& .MuiOutlinedInput-root': { color: '#fff' },
+                  '& .MuiOutlinedInput-notchedOutline': { borderColor: 'rgba(255,255,255,0.4)' },
+                  '& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline': { borderColor: 'rgba(255,255,255,0.6)' },
+                  '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': { borderColor: '#fff' },
+                  '& .MuiFormHelperText-root': { color: 'rgba(255,255,255,0.55)' },
+                }}
               />
-              <label htmlFor="timelendar-zip-upload">
-                <Button
-                  variant="outlined"
-                  component="span"
-                  startIcon={timelendarUploading ? <CircularProgress size={20} sx={{ color: '#fff' }} /> : <CloudUploadIcon />}
-                  disabled={timelendarUploading || timelendarBlobUpload === null}
-                  sx={{ mb: 2, mr: 2, color: '#fff', borderColor: 'rgba(255,255,255,0.5)', '&:hover': { borderColor: '#fff', bgcolor: 'rgba(255,255,255,0.08)' } }}
+              <FormControl fullWidth sx={{ mb: 2 }} variant="outlined">
+                <InputLabel id="timelendar-platform-label" sx={{ color: 'rgba(255,255,255,0.8)' }}>
+                  Plateforme
+                </InputLabel>
+                <Select
+                  labelId="timelendar-platform-label"
+                  label="Plateforme"
+                  value={timelendarPlatform}
+                  onChange={(e) => setTimelendarPlatform(e.target.value as TimelendarPlatform)}
+                  sx={{
+                    color: '#fff',
+                    '& .MuiOutlinedInput-notchedOutline': { borderColor: 'rgba(255,255,255,0.4)' },
+                    '&:hover .MuiOutlinedInput-notchedOutline': { borderColor: 'rgba(255,255,255,0.6)' },
+                    '&.Mui-focused .MuiOutlinedInput-notchedOutline': { borderColor: '#fff' },
+                  }}
                 >
-                  {timelendarUploading ? 'Upload en cours...' : timelendarBlobUpload === null ? 'Chargement…' : 'Choisir un .zip (max 50 Mo)'}
-                </Button>
-              </label>
+                  <MenuItem value="windows">Windows</MenuItem>
+                  <MenuItem value="macos">macOS</MenuItem>
+                  <MenuItem value="both">Windows et macOS</MenuItem>
+                </Select>
+              </FormControl>
               <TextField
                 margin="dense"
                 label="Version (optionnel)"
@@ -748,8 +742,8 @@ export default function AdminDashboard() {
                   '& .MuiInputBase-input::placeholder': { color: 'rgba(255,255,255,0.5)', opacity: 1 },
                 }}
               />
-              <Button type="submit" variant="contained" disabled={timelendarUploading || timelendarBlobUpload === null}>
-                Ajouter la version
+              <Button type="submit" variant="contained" disabled={timelendarUploading} startIcon={timelendarUploading ? <CircularProgress size={20} color="inherit" /> : undefined}>
+                {timelendarUploading ? 'Enregistrement…' : 'Ajouter la version'}
               </Button>
             </form>
           </CardContent>
@@ -763,8 +757,9 @@ export default function AdminDashboard() {
                 <TableRow>
                   <TableCell sx={{ color: '#fff' }}>Date</TableCell>
                   <TableCell sx={{ color: '#fff' }}>Version</TableCell>
+                  <TableCell sx={{ color: '#fff' }}>Plateforme</TableCell>
                   <TableCell sx={{ color: '#fff' }}>Changelog</TableCell>
-                  <TableCell sx={{ color: '#fff' }}>Fichier</TableCell>
+                  <TableCell sx={{ color: '#fff' }}>Lien .zip</TableCell>
                   <TableCell sx={{ color: '#fff' }}>Actions</TableCell>
                 </TableRow>
               </TableHead>
@@ -774,13 +769,20 @@ export default function AdminDashboard() {
                     <TableCell sx={{ color: '#fff' }}>{new Date(r.createdAt).toLocaleDateString('fr-FR')}</TableCell>
                     <TableCell sx={{ color: '#fff' }}>{r.version || '—'}</TableCell>
                     <TableCell sx={{ color: '#fff' }}>
-                      <Typography variant="body2" sx={{ maxWidth: 280, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', color: '#fff' }}>
+                      {(r.platform ?? 'both') === 'windows'
+                        ? 'Windows'
+                        : (r.platform ?? 'both') === 'macos'
+                          ? 'macOS'
+                          : 'Windows et macOS'}
+                    </TableCell>
+                    <TableCell sx={{ color: '#fff' }}>
+                      <Typography variant="body2" sx={{ maxWidth: 220, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', color: '#fff' }}>
                         {r.changelog}
                       </Typography>
                     </TableCell>
                     <TableCell>
                       <Button size="small" href={r.filePath} target="_blank" rel="noopener noreferrer">
-                        Télécharger
+                        Ouvrir
                       </Button>
                     </TableCell>
                     <TableCell>
