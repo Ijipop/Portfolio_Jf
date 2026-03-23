@@ -3,6 +3,8 @@
 import { useEffect, useRef, useState } from 'react'
 import { useAdvancedTheme } from '../contexts/AdvancedThemeContext'
 import { THEMES, type ThemeName } from '../design-system/themes'
+import { useVantaPerformance } from '@/hooks/useVantaPerformance'
+import { loadExternalScript } from '@/utils/vantaScriptLoader'
 
 const P5_CDN = 'https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.7.0/p5.min.js'
 const VANTA_TOPOLOGY_CDN = 'https://cdn.jsdelivr.net/npm/vanta@0.5.24/dist/vanta.topology.min.js'
@@ -36,6 +38,7 @@ export default function VantaTopologyBackground(props?: VantaTopologyBackgroundP
   const effectRef = useRef<{ destroy: () => void; resize?: () => void } | null>(null)
   const [vantaReady, setVantaReady] = useState(false)
   const { themeName } = useAdvancedTheme()
+  const { isActive, mode, targetFps } = useVantaPerformance(elRef)
 
   useEffect(() => {
     const el = elRef.current
@@ -43,38 +46,18 @@ export default function VantaTopologyBackground(props?: VantaTopologyBackgroundP
 
     let mounted = true
     let resizeObserver: ResizeObserver | null = null
+    let resizeRaf = 0
+    let lastResizeAt = 0
 
-    const loadScript = (src: string): Promise<void> =>
-      new Promise((resolve, reject) => {
-        const existing = document.querySelector(`script[src="${src}"]`) as HTMLScriptElement | null
-        if (existing) {
-          const alreadyLoaded = existing.getAttribute('data-loaded') === 'true'
-          if (alreadyLoaded) {
-            resolve()
-            return
-          }
-          existing.addEventListener(
-            'load',
-            () => {
-              existing.setAttribute('data-loaded', 'true')
-              resolve()
-            },
-            { once: true }
-          )
-          existing.addEventListener('error', () => reject(new Error(`Failed to load script: ${src}`)), {
-            once: true,
-          })
-          return
+    if (!isActive) {
+      setVantaReady(false)
+      return () => {
+        if (effectRef.current) {
+          effectRef.current.destroy()
+          effectRef.current = null
         }
-        const script = document.createElement('script')
-        script.src = src
-        script.onload = () => {
-          script.setAttribute('data-loaded', 'true')
-          resolve()
-        }
-        script.onerror = () => reject(new Error(`Failed to load script: ${src}`))
-        document.head.appendChild(script)
-      })
+      }
+    }
 
     const init = async () => {
       try {
@@ -84,14 +67,14 @@ export default function VantaTopologyBackground(props?: VantaTopologyBackgroundP
           return
         }
 
-        await loadScript(P5_CDN)
+        await loadExternalScript(P5_CDN)
         if (!mounted) return
         // Topology uses p5, not THREE. The "[VANTA] No THREE defined on window" message is from the
         // library and is harmless. Stub window.THREE to silence it.
         if (typeof (window as unknown as { THREE?: unknown }).THREE === 'undefined') {
           (window as unknown as { THREE: object }).THREE = {}
         }
-        await loadScript(VANTA_TOPOLOGY_CDN)
+        await loadExternalScript(VANTA_TOPOLOGY_CDN)
         if (!mounted || !elRef.current) return
 
         const VANTA = (window as unknown as { VANTA: { TOPOLOGY: (opts: Record<string, unknown>) => { destroy: () => void; resize?: () => void } } }).VANTA
@@ -105,7 +88,7 @@ export default function VantaTopologyBackground(props?: VantaTopologyBackgroundP
         const resolvedBackground = backgroundHex ? hexToNumber(backgroundHex) : options.backgroundColor
         const effect = VANTA.TOPOLOGY({
           el: elRef.current,
-          mouseControls: true,
+          mouseControls: mode === 'normal',
           touchControls: true,
           gyroControls: false,
           minHeight: 200,
@@ -119,7 +102,15 @@ export default function VantaTopologyBackground(props?: VantaTopologyBackgroundP
         effectRef.current = effect
 
         resizeObserver = new ResizeObserver(() => {
-          if (effectRef.current?.resize) effectRef.current.resize()
+          if (resizeRaf) return
+          resizeRaf = requestAnimationFrame(() => {
+            resizeRaf = 0
+            const now = performance.now()
+            const minDelta = 1000 / targetFps
+            if (now - lastResizeAt < minDelta) return
+            lastResizeAt = now
+            if (effectRef.current?.resize) effectRef.current.resize()
+          })
         })
         resizeObserver.observe(el)
 
@@ -138,12 +129,14 @@ export default function VantaTopologyBackground(props?: VantaTopologyBackgroundP
       mounted = false
       resizeObserver?.disconnect()
       resizeObserver = null
+      if (resizeRaf) cancelAnimationFrame(resizeRaf)
+      resizeRaf = 0
       if (effectRef.current) {
         effectRef.current.destroy()
         effectRef.current = null
       }
     }
-  }, [themeName])
+  }, [themeName, colorHex, backgroundHex, isActive, mode, targetFps])
 
   const fallbackBg = backgroundHex ?? getFallbackBgColor(themeName as ThemeName)
 

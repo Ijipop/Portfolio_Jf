@@ -32,7 +32,7 @@ export async function POST(request: NextRequest) {
     const jsonResponse = await handleUpload({
       body,
       request,
-      onBeforeGenerateToken: async (pathname, _clientPayload, _multipart) => {
+      onBeforeGenerateToken: async (pathname) => {
         const lower = pathname.toLowerCase()
         if (!lower.endsWith('.zip')) {
           throw new Error('Seuls les fichiers .zip sont acceptés')

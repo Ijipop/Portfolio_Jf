@@ -5,6 +5,7 @@ import { ReactNode, useEffect, useRef } from 'react'
 import { usePathname } from 'next/navigation'
 import dynamic from 'next/dynamic'
 import { shouldShowTopology } from '@/utils/topologyRoutes'
+import { preloadExternalScripts } from '@/utils/vantaScriptLoader'
 
 const VantaDotsBackground = dynamic(() => import('./VantaDotsBackground'), { ssr: false })
 const VantaTopologyBackground = dynamic(() => import('./VantaTopologyBackground'), { ssr: false })
@@ -33,6 +34,30 @@ export default function FullPageTopologyWrapper({ children }: FullPageTopologyWr
       scrollRef.current.scrollTop = 0
     }
   }, [show, pathname])
+
+  useEffect(() => {
+    if (!show) return
+
+    const preload = () =>
+      preloadExternalScripts([
+        'https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js',
+        'https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.7.0/p5.min.js',
+        'https://cdn.jsdelivr.net/npm/vanta@0.5.24/dist/vanta.dots.min.js',
+        'https://cdn.jsdelivr.net/npm/vanta@0.5.24/dist/vanta.topology.min.js',
+      ])
+
+    if (typeof window !== 'undefined' && 'requestIdleCallback' in window) {
+      const id = (window as unknown as { requestIdleCallback: (cb: () => void) => number }).requestIdleCallback(
+        preload
+      )
+      return () => {
+        ;(window as unknown as { cancelIdleCallback?: (idleId: number) => void }).cancelIdleCallback?.(id)
+      }
+    }
+
+    const timer = globalThis.setTimeout(preload, 0)
+    return () => globalThis.clearTimeout(timer)
+  }, [show])
 
   if (!show) {
     return <Box component="div" sx={contentWrapperSx}>{children}</Box>
