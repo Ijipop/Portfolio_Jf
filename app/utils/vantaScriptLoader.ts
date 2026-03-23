@@ -64,5 +64,13 @@ export async function loadExternalScript(src: string, timeoutMs = VANTA_SCRIPT_T
 
 export async function preloadExternalScripts(sources: string[]): Promise<void> {
   if (typeof window === 'undefined') return
-  await Promise.allSettled(sources.map((src) => loadExternalScript(src)))
+  // Preserve dependency order: Vanta effect scripts expect their engine globals
+  // (THREE / p5) to already exist when they execute.
+  for (const src of sources) {
+    try {
+      await loadExternalScript(src)
+    } catch {
+      // Individual components keep their own fallback path. Preload should stay best-effort.
+    }
+  }
 }
