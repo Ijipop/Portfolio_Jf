@@ -77,10 +77,13 @@ export function GraphicsModeProvider({ children }: { children: React.ReactNode }
         localStorage.getItem(GRAPHICS_OVERRIDE_KEY)
     )
 
-    if (!isProduction && !forcedMode) {
+    if (!forcedMode) {
       sessionStorage.removeItem(GRAPHICS_MODE_KEY)
       sessionStorage.removeItem(GRAPHICS_REASON_KEY)
       sessionStorage.removeItem(METRIC_BREACH_KEY)
+    }
+
+    if (!isProduction && !forcedMode) {
       setGraphicsMode('full')
       setDowngradeReason(null)
       return
