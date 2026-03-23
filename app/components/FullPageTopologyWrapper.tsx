@@ -4,6 +4,8 @@ import Box from '@mui/material/Box'
 import { ReactNode, useEffect, useRef } from 'react'
 import { usePathname } from 'next/navigation'
 import dynamic from 'next/dynamic'
+import { useAdvancedTheme } from '@/contexts/AdvancedThemeContext'
+import { useGraphicsMode } from '@/contexts/GraphicsModeContext'
 import { shouldShowTopology } from '@/utils/topologyRoutes'
 import { preloadExternalScripts } from '@/utils/vantaScriptLoader'
 
@@ -27,6 +29,9 @@ export default function FullPageTopologyWrapper({ children }: FullPageTopologyWr
   const show = shouldShowTopology(pathname)
   const isLanding = pathname === '/'
   const scrollRef = useRef<HTMLDivElement>(null)
+  const { customTheme } = useAdvancedTheme()
+  const { isLightMode } = useGraphicsMode()
+  const useLightFallback = show && isLightMode
 
   // Remettre le scroll en haut au montage pour éviter titre coupé / contenu décalé
   useEffect(() => {
@@ -36,7 +41,7 @@ export default function FullPageTopologyWrapper({ children }: FullPageTopologyWr
   }, [show, pathname])
 
   useEffect(() => {
-    if (!show) return
+    if (!show || useLightFallback) return
 
     const preload = () =>
       preloadExternalScripts([
@@ -57,7 +62,7 @@ export default function FullPageTopologyWrapper({ children }: FullPageTopologyWr
 
     const timer = globalThis.setTimeout(preload, 0)
     return () => globalThis.clearTimeout(timer)
-  }, [show])
+  }, [show, useLightFallback])
 
   if (!show) {
     return <Box component="div" sx={contentWrapperSx}>{children}</Box>
@@ -75,9 +80,18 @@ export default function FullPageTopologyWrapper({ children }: FullPageTopologyWr
           bottom: 0,
           zIndex: 0,
           overflow: 'hidden',
+          pointerEvents: 'none',
         }}
       >
-        {isLanding ? (
+        {useLightFallback ? (
+          <Box
+            sx={{
+              width: '100%',
+              height: '100%',
+              background: `radial-gradient(circle at 20% 20%, ${customTheme.primary}22 0%, transparent 35%), radial-gradient(circle at 80% 30%, ${customTheme.secondary}18 0%, transparent 30%), linear-gradient(135deg, ${customTheme.bg} 0%, ${customTheme.bg2} 100%)`,
+            }}
+          />
+        ) : isLanding ? (
           <VantaTopologyBackground key="vanta-topology" fillContainer />
         ) : (
           <VantaDotsBackground key="vanta-dots" fillContainer />
@@ -92,7 +106,7 @@ export default function FullPageTopologyWrapper({ children }: FullPageTopologyWr
           right: 0,
           bottom: 0,
           zIndex: 1,
-          background: 'rgba(0, 0, 0, 0.18)',
+          background: useLightFallback ? 'rgba(0, 0, 0, 0.08)' : 'rgba(0, 0, 0, 0.18)',
           pointerEvents: 'none',
         }}
         aria-hidden

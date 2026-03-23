@@ -43,7 +43,7 @@ export default function HomeClient({ initialShowIntro }: { initialShowIntro: boo
   const isTopologyRoute = shouldShowTopology(pathname)
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
-  const { primary, secondary, accent } = useThemeColors()
+  const { primary, secondary } = useThemeColors()
   const textColor = useTextColor()
   const { t } = useLanguage()
   const [showIntro, setShowIntro] = useState<boolean>(initialShowIntro)
@@ -86,6 +86,7 @@ export default function HomeClient({ initialShowIntro }: { initialShowIntro: boo
             speed={72}
           />
         }
+        tagline={t('home.heroTagline')}
       >
         <Box sx={{ 
           display: 'flex', 

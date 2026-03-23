@@ -13,6 +13,9 @@ export function shouldShowTopology(pathname: string | null): boolean {
   const scope = getTopologyScope()
   if (scope === 'global') return true
 
+  // Accueil : même en mode ciblé, le hero doit garder le fond animé (topology landing).
+  if (pathname === '/') return true
+
   return TOPOLOGY_PATH_PREFIXES.some(
     (prefix) => pathname === prefix || pathname.startsWith(`${prefix}/`)
   )

@@ -1,6 +1,7 @@
 'use client'
 
-import { RefObject, useEffect, useMemo, useState } from 'react'
+import { RefObject, useEffect, useRef, useState } from 'react'
+import { useGraphicsMode } from '@/contexts/GraphicsModeContext'
 
 type VantaMode = 'normal' | 'degraded'
 
@@ -11,53 +12,35 @@ interface VantaPerformanceState {
 }
 
 /**
- * Runtime perf state for heavy canvas effects:
- * - pauses when hidden/unfocused/out-of-view
- * - degrades cadence to ~30fps on slower devices
+ * Runtime perf state for heavy canvas effects.
+ * - On ne met en pause que lorsque l’onglet est caché (économie batterie).
+ * - Ne pas utiliser hasFocus / IntersectionObserver sur un fond fixed plein écran :
+ *   ça peut laisser isActive à false (Safari, iframe, DevTools) + bloquer les clics.
+ * - mode/targetFps : stockés en ref pour éviter de re-monter Vanta (deps useEffect) en boucle.
  */
-export function useVantaPerformance(elRef: RefObject<HTMLElement>): VantaPerformanceState {
+export function useVantaPerformance(_elRef: RefObject<HTMLElement>): VantaPerformanceState {
   const [isVisibleTab, setIsVisibleTab] = useState(
     typeof document !== 'undefined' ? document.visibilityState === 'visible' : true
   )
-  const [isFocused, setIsFocused] = useState(
-    typeof document !== 'undefined' ? document.hasFocus() : true
-  )
-  const [isInViewport, setIsInViewport] = useState(true)
-  const [mode, setMode] = useState<VantaMode>('normal')
+  const { graphicsMode, requestLightMode } = useGraphicsMode()
 
-  const isActive = isVisibleTab && isFocused && isInViewport
+  const modeRef = useRef<VantaMode>('normal')
+  const targetFpsRef = useRef(60)
+  const lightModeRequestedRef = useRef(false)
+  const [, bump] = useState(0)
+
+  const isActive = isVisibleTab && graphicsMode === 'full'
 
   useEffect(() => {
     if (typeof window === 'undefined') return
 
     const onVisibility = () => setIsVisibleTab(document.visibilityState === 'visible')
-    const onFocus = () => setIsFocused(true)
-    const onBlur = () => setIsFocused(false)
-
     document.addEventListener('visibilitychange', onVisibility)
-    window.addEventListener('focus', onFocus)
-    window.addEventListener('blur', onBlur)
 
     return () => {
       document.removeEventListener('visibilitychange', onVisibility)
-      window.removeEventListener('focus', onFocus)
-      window.removeEventListener('blur', onBlur)
     }
   }, [])
-
-  useEffect(() => {
-    const el = elRef.current
-    if (!el || typeof window === 'undefined') return
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        setIsInViewport(entry.isIntersecting)
-      },
-      { threshold: 0.01 }
-    )
-    observer.observe(el)
-    return () => observer.disconnect()
-  }, [elRef])
 
   useEffect(() => {
     if (!isActive || typeof window === 'undefined') return
@@ -79,7 +62,19 @@ export function useVantaPerformance(elRef: RefObject<HTMLElement>): VantaPerform
 
       if (frameCount >= 45) {
         const slowRatio = slowFrames / frameCount
-        setMode(slowRatio > 0.45 ? 'degraded' : 'normal')
+        const nextMode: VantaMode = slowRatio > 0.45 ? 'degraded' : 'normal'
+        const nextFps = nextMode === 'degraded' ? 30 : 60
+
+        if (process.env.NODE_ENV === 'production' && slowRatio > 0.7 && !lightModeRequestedRef.current) {
+          lightModeRequestedRef.current = true
+          requestLightMode(`slow-frames-${Math.round(slowRatio * 100)}`)
+        }
+
+        if (modeRef.current !== nextMode || targetFpsRef.current !== nextFps) {
+          modeRef.current = nextMode
+          targetFpsRef.current = nextFps
+          bump((n) => n + 1)
+        }
         frameCount = 0
         slowFrames = 0
       }
@@ -92,9 +87,11 @@ export function useVantaPerformance(elRef: RefObject<HTMLElement>): VantaPerform
       running = false
       cancelAnimationFrame(raf)
     }
-  }, [isActive])
+  }, [isActive, requestLightMode])
 
-  const targetFps = useMemo(() => (mode === 'degraded' ? 30 : 60), [mode])
-
-  return { isActive, mode, targetFps }
+  return {
+    isActive,
+    mode: modeRef.current,
+    targetFps: targetFpsRef.current,
+  }
 }

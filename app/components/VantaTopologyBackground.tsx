@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { useAdvancedTheme } from '../contexts/AdvancedThemeContext'
 import { THEMES, type ThemeName } from '../design-system/themes'
 import { useVantaPerformance } from '@/hooks/useVantaPerformance'
@@ -34,20 +34,34 @@ interface VantaTopologyBackgroundProps {
 
 export default function VantaTopologyBackground(props?: VantaTopologyBackgroundProps) {
   const { fillContainer = false, colorHex, backgroundHex } = props ?? {}
-  const elRef = useRef<HTMLDivElement>(null)
+  const [containerEl, setContainerEl] = useState<HTMLDivElement | null>(null)
+  const elRef = useRef<HTMLDivElement | null>(null)
   const effectRef = useRef<{ destroy: () => void; resize?: () => void } | null>(null)
   const [vantaReady, setVantaReady] = useState(false)
   const { themeName } = useAdvancedTheme()
-  const { isActive, mode, targetFps } = useVantaPerformance(elRef)
+  const { isActive, targetFps } = useVantaPerformance(elRef)
+  const targetFpsRef = useRef(targetFps)
+  useEffect(() => {
+    targetFpsRef.current = targetFps
+  }, [targetFps])
 
   useEffect(() => {
-    const el = elRef.current
+    elRef.current = containerEl
+  }, [containerEl])
+
+  const setContainerRef = useCallback((node: HTMLDivElement | null) => {
+    setContainerEl(node)
+  }, [])
+
+  useEffect(() => {
+    const el = containerEl
     if (!el || typeof window === 'undefined') return
 
     let mounted = true
     let resizeObserver: ResizeObserver | null = null
     let resizeRaf = 0
     let lastResizeAt = 0
+    let safetyTimer: ReturnType<typeof setTimeout> | undefined
 
     if (!isActive) {
       setVantaReady(false)
@@ -67,18 +81,29 @@ export default function VantaTopologyBackground(props?: VantaTopologyBackgroundP
           return
         }
 
+        safetyTimer = setTimeout(() => {
+          if (mounted) setVantaReady(true)
+        }, 15000)
+
         await loadExternalScript(P5_CDN)
-        if (!mounted) return
+        if (!mounted) {
+          if (safetyTimer) clearTimeout(safetyTimer)
+          return
+        }
         // Topology uses p5, not THREE. The "[VANTA] No THREE defined on window" message is from the
         // library and is harmless. Stub window.THREE to silence it.
         if (typeof (window as unknown as { THREE?: unknown }).THREE === 'undefined') {
           (window as unknown as { THREE: object }).THREE = {}
         }
         await loadExternalScript(VANTA_TOPOLOGY_CDN)
-        if (!mounted || !elRef.current) return
+        if (!mounted || !el) {
+          if (safetyTimer) clearTimeout(safetyTimer)
+          return
+        }
 
         const VANTA = (window as unknown as { VANTA: { TOPOLOGY: (opts: Record<string, unknown>) => { destroy: () => void; resize?: () => void } } }).VANTA
         if (!VANTA?.TOPOLOGY) {
+          if (safetyTimer) clearTimeout(safetyTimer)
           if (mounted) setVantaReady(true)
           return
         }
@@ -87,8 +112,8 @@ export default function VantaTopologyBackground(props?: VantaTopologyBackgroundP
         const resolvedColor = colorHex ? hexToNumber(colorHex) : options.color
         const resolvedBackground = backgroundHex ? hexToNumber(backgroundHex) : options.backgroundColor
         const effect = VANTA.TOPOLOGY({
-          el: elRef.current,
-          mouseControls: mode === 'normal',
+          el,
+          mouseControls: true,
           touchControls: true,
           gyroControls: false,
           minHeight: 200,
@@ -106,7 +131,7 @@ export default function VantaTopologyBackground(props?: VantaTopologyBackgroundP
           resizeRaf = requestAnimationFrame(() => {
             resizeRaf = 0
             const now = performance.now()
-            const minDelta = 1000 / targetFps
+            const minDelta = 1000 / Math.max(1, targetFpsRef.current)
             if (now - lastResizeAt < minDelta) return
             lastResizeAt = now
             if (effectRef.current?.resize) effectRef.current.resize()
@@ -115,10 +140,14 @@ export default function VantaTopologyBackground(props?: VantaTopologyBackgroundP
         resizeObserver.observe(el)
 
         requestAnimationFrame(() => {
-          if (mounted) setVantaReady(true)
+          if (mounted) {
+            if (safetyTimer) clearTimeout(safetyTimer)
+            setVantaReady(true)
+          }
         })
       } catch (err) {
         console.warn('[VantaTopologyBackground] Vanta TOPOLOGY failed to load', err)
+        if (safetyTimer) clearTimeout(safetyTimer)
         if (mounted) setVantaReady(true)
       }
     }
@@ -127,6 +156,7 @@ export default function VantaTopologyBackground(props?: VantaTopologyBackgroundP
 
     return () => {
       mounted = false
+      if (safetyTimer) clearTimeout(safetyTimer)
       resizeObserver?.disconnect()
       resizeObserver = null
       if (resizeRaf) cancelAnimationFrame(resizeRaf)
@@ -136,13 +166,13 @@ export default function VantaTopologyBackground(props?: VantaTopologyBackgroundP
         effectRef.current = null
       }
     }
-  }, [themeName, colorHex, backgroundHex, isActive, mode, targetFps])
+  }, [containerEl, themeName, colorHex, backgroundHex, isActive])
 
   const fallbackBg = backgroundHex ?? getFallbackBgColor(themeName as ThemeName)
 
   return (
     <div
-      ref={elRef}
+      ref={setContainerRef}
       style={{
         position: 'absolute',
         top: 0,
@@ -153,8 +183,10 @@ export default function VantaTopologyBackground(props?: VantaTopologyBackgroundP
         minHeight: fillContainer ? '100%' : '100vh',
         minWidth: '100%',
         backgroundColor: fallbackBg,
-        opacity: vantaReady ? 1 : 0,
-        transition: 'opacity 0s',
+        // Toujours montrer au moins le fond (évite écran « vide » si init async bloque ou ref ratée).
+        opacity: 1,
+        transition: vantaReady ? 'opacity 0.35s ease' : 'none',
+        pointerEvents: 'none',
       }}
       aria-hidden
     />

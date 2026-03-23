@@ -20,6 +20,7 @@ export const translations = {
     home: {
       heroTitle: "Création de sites web et d'outils sur mesure",
       heroSubtitle: 'Des solutions simples, modernes et adaptées à votre réalité.',
+      heroTagline: 'Je crée des sites web et outils sur mesure pour PME, avec hébergement inclus.',
       role: 'Sites web, petits logiciels web et maintenance pour travailleurs autonomes et petites entreprises.',
       intro: "Je crée des sites web et des outils numériques simples pour aider les petites entreprises à mieux présenter leurs services ou alléger certaines tâches du quotidien. J'offre aussi l'hébergement, les mises à jour et un accompagnement technique clair.",
       seeProjects: 'Voir mes projets',
@@ -252,6 +253,7 @@ export const translations = {
     home: {
       heroTitle: 'Custom websites and tools',
       heroSubtitle: 'Simple, modern solutions tailored to your reality.',
+      heroTagline: 'I build custom websites and tools for small businesses, with hosting included.',
       role: 'Websites, small web tools, and maintenance for freelancers and small businesses.',
       intro: 'I build websites and simple digital tools to help small businesses present their services better or lighten everyday tasks. I also offer hosting, updates, and clear technical support.',
       seeProjects: 'View my projects',

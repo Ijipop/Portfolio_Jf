@@ -16,7 +16,6 @@ import HeaderSection from '../../components/shared/HeaderSection'
 import AppBarComponent from '../../components/appBar'
 import PageWrapper from '../../components/shared/PageWrapper'
 import InteractiveBackgroundSection from '../../components/shared/InteractiveBackgroundSection'
-import CTAButton from '../../components/shared/CTAButton'
 import Footer from '../../components/Footer'
 import { useAdvancedTheme } from '../../contexts/AdvancedThemeContext'
 import { GRADIENTS, DESIGN_TOKENS } from '../../design-system/constants'
@@ -270,7 +269,7 @@ export default function About() {
   const pathname = usePathname()
   const isTopologyRoute = shouldShowTopology(pathname)
   const { customTheme } = useAdvancedTheme()
-  const { primary, secondary, accent } = useThemeColors()
+  const { primary, secondary } = useThemeColors()
   const textColor = useTextColor()
   const { t } = useLanguage()
   const [flippedCards, setFlippedCards] = useState<{ [key: string]: boolean }>({

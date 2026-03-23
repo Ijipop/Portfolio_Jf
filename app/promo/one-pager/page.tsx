@@ -1,6 +1,7 @@
 'use client'
 
 import Image from 'next/image'
+import Link from 'next/link'
 import { useLanguage } from '../../contexts/LanguageContext'
 import './promo-one-pager.css'
 
@@ -90,6 +91,11 @@ export default function PromoOnePagerPage() {
         <footer className="footer">
           <div><strong>EvePics.eu</strong> — {t(p('footerTagline'))}</div>
           <div>{t(p('footerContact'))}</div>
+          <div style={{ marginTop: '8px' }}>
+            <Link href="/portfolio/contact" style={{ color: 'inherit', fontWeight: 700, textDecoration: 'underline' }}>
+              {t('home.contactMe')}
+            </Link>
+          </div>
         </footer>
       </div>
     </div>
