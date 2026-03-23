@@ -1,6 +1,7 @@
 'use client'
 
 import { useAdvancedTheme } from '../contexts/AdvancedThemeContext'
+import { DESIGN_TOKENS } from '../design-system/constants'
 import { getPaletteTokens } from '../design-system/themes'
 
 interface SimpleSkillTagProps {
@@ -32,7 +33,7 @@ export default function SimpleSkillTag({ children }: SimpleSkillTagProps) {
         border: `2px solid ${primaryColor}`,
         visibility: 'visible',
         opacity: '1',
-        zIndex: '9999',
+        zIndex: DESIGN_TOKENS.zIndex.floatingTag,
         position: 'relative',
         transition: 'all 0.3s ease',
         cursor: 'pointer',

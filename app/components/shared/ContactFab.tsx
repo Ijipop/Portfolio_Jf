@@ -27,7 +27,7 @@ export default function ContactFab() {
         position: 'fixed',
         right: { md: 24, lg: 32 },
         bottom: { md: 24, lg: 32 },
-        zIndex: DESIGN_TOKENS.zIndex.modal - 2,
+        zIndex: DESIGN_TOKENS.zIndex.floatingAction,
         display: { xs: 'none', md: 'block' },
       }}
     >

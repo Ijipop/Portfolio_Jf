@@ -2,6 +2,7 @@
 
 import { RefObject, useEffect, useRef, useState } from 'react'
 import { useGraphicsMode } from '@/contexts/GraphicsModeContext'
+import { shouldDowngradeFromSlowFrames } from '@/utils/graphicsModeRules'
 
 type VantaMode = 'normal' | 'degraded'
 
@@ -23,6 +24,7 @@ export function useVantaPerformance(_elRef: RefObject<HTMLElement>): VantaPerfor
     typeof document !== 'undefined' ? document.visibilityState === 'visible' : true
   )
   const { graphicsMode, requestLightMode } = useGraphicsMode()
+  const isProduction = process.env.NODE_ENV === 'production'
 
   const modeRef = useRef<VantaMode>('normal')
   const targetFpsRef = useRef(60)
@@ -65,7 +67,7 @@ export function useVantaPerformance(_elRef: RefObject<HTMLElement>): VantaPerfor
         const nextMode: VantaMode = slowRatio > 0.45 ? 'degraded' : 'normal'
         const nextFps = nextMode === 'degraded' ? 30 : 60
 
-        if (process.env.NODE_ENV === 'production' && slowRatio > 0.7 && !lightModeRequestedRef.current) {
+        if (shouldDowngradeFromSlowFrames(slowRatio, isProduction) && !lightModeRequestedRef.current) {
           lightModeRequestedRef.current = true
           requestLightMode(`slow-frames-${Math.round(slowRatio * 100)}`)
         }
@@ -87,7 +89,7 @@ export function useVantaPerformance(_elRef: RefObject<HTMLElement>): VantaPerfor
       running = false
       cancelAnimationFrame(raf)
     }
-  }, [isActive, requestLightMode])
+  }, [isActive, isProduction, requestLightMode])
 
   return {
     isActive,

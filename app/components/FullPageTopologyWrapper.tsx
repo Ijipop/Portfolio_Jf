@@ -7,6 +7,7 @@ import dynamic from 'next/dynamic'
 import { useAdvancedTheme } from '@/contexts/AdvancedThemeContext'
 import { useGraphicsMode } from '@/contexts/GraphicsModeContext'
 import { shouldShowTopology } from '@/utils/topologyRoutes'
+import { VANTA_PRELOAD_SOURCES } from '@/utils/vantaAssets'
 import { preloadExternalScripts } from '@/utils/vantaScriptLoader'
 
 const VantaDotsBackground = dynamic(() => import('./VantaDotsBackground'), { ssr: false })
@@ -30,8 +31,8 @@ export default function FullPageTopologyWrapper({ children }: FullPageTopologyWr
   const isLanding = pathname === '/'
   const scrollRef = useRef<HTMLDivElement>(null)
   const { customTheme } = useAdvancedTheme()
-  const { isLightMode } = useGraphicsMode()
-  const useLightFallback = show && isLightMode
+  const { graphicsMode, downgradeReason } = useGraphicsMode()
+  const useLightFallback = show && graphicsMode === 'light'
 
   // Remettre le scroll en haut au montage pour éviter titre coupé / contenu décalé
   useEffect(() => {
@@ -43,13 +44,7 @@ export default function FullPageTopologyWrapper({ children }: FullPageTopologyWr
   useEffect(() => {
     if (!show || useLightFallback) return
 
-    const preload = () =>
-      preloadExternalScripts([
-        'https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js',
-        'https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.7.0/p5.min.js',
-        'https://cdn.jsdelivr.net/npm/vanta@0.5.24/dist/vanta.dots.min.js',
-        'https://cdn.jsdelivr.net/npm/vanta@0.5.24/dist/vanta.topology.min.js',
-      ])
+    const preload = () => preloadExternalScripts([...VANTA_PRELOAD_SOURCES])
 
     if (typeof window !== 'undefined' && 'requestIdleCallback' in window) {
       const id = (window as unknown as { requestIdleCallback: (cb: () => void) => number }).requestIdleCallback(
@@ -72,6 +67,9 @@ export default function FullPageTopologyWrapper({ children }: FullPageTopologyWr
     <>
       <Box
         component="div"
+        data-testid="graphics-background-layer"
+        data-graphics-mode={useLightFallback ? 'light' : 'full'}
+        data-graphics-reason={downgradeReason ?? 'none'}
         sx={{
           position: 'fixed',
           top: 0,

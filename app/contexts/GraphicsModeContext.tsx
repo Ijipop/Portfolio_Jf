@@ -1,14 +1,18 @@
 'use client'
 
 import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
-
-type GraphicsMode = 'full' | 'light'
-
-interface GraphicsMetric {
-  name: string
-  value: number
-  rating?: string
-}
+import {
+  type GraphicsMetric,
+  type GraphicsMode,
+  GRAPHICS_MODE_KEY,
+  GRAPHICS_OVERRIDE_KEY,
+  GRAPHICS_REASON_KEY,
+  METRIC_BREACH_KEY,
+  evaluateGraphicsMetricBreach,
+  resolveGraphicsModeOverride,
+  resolveInitialGraphicsDecision,
+  shouldPersistGraphicsDowngrade,
+} from '@/utils/graphicsModeRules'
 
 interface GraphicsModeContextValue {
   graphicsMode: GraphicsMode
@@ -18,44 +22,17 @@ interface GraphicsModeContextValue {
   reportMetric: (metric: GraphicsMetric) => void
 }
 
-const GRAPHICS_MODE_KEY = 'portfolio-graphics-mode'
-const GRAPHICS_REASON_KEY = 'portfolio-graphics-reason'
-const METRIC_BREACH_KEY = 'portfolio-graphics-breach-count'
-
 const GraphicsModeContext = createContext<GraphicsModeContextValue | undefined>(undefined)
-
-function getInitialReason(): string | null {
-  if (typeof window === 'undefined') return null
-
-  const nav = navigator as Navigator & {
-    connection?: { saveData?: boolean }
-    deviceMemory?: number
-  }
-
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    return 'prefers-reduced-motion'
-  }
-
-  if (nav.connection?.saveData) {
-    return 'save-data'
-  }
-
-  if (typeof nav.deviceMemory === 'number' && nav.deviceMemory <= 2) {
-    return 'low-device-memory'
-  }
-
-  if (typeof navigator.hardwareConcurrency === 'number' && navigator.hardwareConcurrency <= 2) {
-    return 'low-hardware-concurrency'
-  }
-
-  return null
-}
 
 export function GraphicsModeProvider({ children }: { children: React.ReactNode }) {
   const [graphicsMode, setGraphicsMode] = useState<GraphicsMode>('full')
   const [downgradeReason, setDowngradeReason] = useState<string | null>(null)
 
-  const shouldPersistLightMode = useCallback(() => process.env.NODE_ENV === 'production', [])
+  const isProduction = process.env.NODE_ENV === 'production'
+  const shouldPersistLightMode = useCallback(
+    () => shouldPersistGraphicsDowngrade(isProduction),
+    [isProduction]
+  )
 
   const requestLightMode = useCallback((reason: string) => {
     setGraphicsMode('light')
@@ -68,58 +45,61 @@ export function GraphicsModeProvider({ children }: { children: React.ReactNode }
   }, [shouldPersistLightMode])
 
   const reportMetric = useCallback((metric: GraphicsMetric) => {
-    if (typeof window === 'undefined' || process.env.NODE_ENV !== 'production') {
-      return
-    }
-
-    const isBadLcp = metric.name === 'LCP' && metric.value > 4000
-    const isBadInp = metric.name === 'INP' && metric.value > 350
-
-    if (!isBadLcp && !isBadInp) {
-      sessionStorage.removeItem(METRIC_BREACH_KEY)
+    if (typeof window === 'undefined') {
       return
     }
 
     const previousCount = Number(sessionStorage.getItem(METRIC_BREACH_KEY) ?? '0')
-    const nextCount = previousCount + 1
-    sessionStorage.setItem(METRIC_BREACH_KEY, String(nextCount))
+    const evaluation = evaluateGraphicsMetricBreach(metric, previousCount, isProduction)
 
-    // Evite de couper Vanta sur un pic isolé ; il faut au moins 2 signaux mauvais dans la session.
-    if (nextCount < 2) return
-
-    if (isBadLcp) {
-      requestLightMode(`lcp-${Math.round(metric.value)}`)
-    }
-
-    if (isBadInp) {
-      requestLightMode(`inp-${Math.round(metric.value)}`)
-    }
-  }, [requestLightMode])
-
-  useEffect(() => {
-    if (typeof window === 'undefined') return
-
-    if (process.env.NODE_ENV !== 'production') {
-      sessionStorage.removeItem(GRAPHICS_MODE_KEY)
-      sessionStorage.removeItem(GRAPHICS_REASON_KEY)
+    if (evaluation.nextCount === 0) {
       sessionStorage.removeItem(METRIC_BREACH_KEY)
       return
     }
 
-    const storedMode = sessionStorage.getItem(GRAPHICS_MODE_KEY)
-    const storedReason = sessionStorage.getItem(GRAPHICS_REASON_KEY)
+    sessionStorage.setItem(METRIC_BREACH_KEY, String(evaluation.nextCount))
 
-    if (storedMode === 'light') {
-      setGraphicsMode('light')
-      setDowngradeReason(storedReason)
+    if (evaluation.shouldDowngrade && evaluation.reason) {
+      requestLightMode(evaluation.reason)
+    }
+  }, [isProduction, requestLightMode])
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+
+    const nav = navigator as Navigator & {
+      connection?: { saveData?: boolean }
+      deviceMemory?: number
+    }
+
+    const forcedMode = resolveGraphicsModeOverride(
+      process.env.NEXT_PUBLIC_FORCE_GRAPHICS_MODE ??
+        localStorage.getItem(GRAPHICS_OVERRIDE_KEY)
+    )
+
+    if (!isProduction && !forcedMode) {
+      sessionStorage.removeItem(GRAPHICS_MODE_KEY)
+      sessionStorage.removeItem(GRAPHICS_REASON_KEY)
+      sessionStorage.removeItem(METRIC_BREACH_KEY)
+      setGraphicsMode('full')
+      setDowngradeReason(null)
       return
     }
 
-    const initialReason = getInitialReason()
-    if (initialReason) {
-      requestLightMode(initialReason)
-    }
-  }, [requestLightMode])
+    const initialDecision = resolveInitialGraphicsDecision({
+      forcedMode,
+      persistedMode: resolveGraphicsModeOverride(sessionStorage.getItem(GRAPHICS_MODE_KEY)),
+      persistedReason: sessionStorage.getItem(GRAPHICS_REASON_KEY),
+      prefersReducedMotion: window.matchMedia('(prefers-reduced-motion: reduce)').matches,
+      saveData: nav.connection?.saveData ?? false,
+      deviceMemory: nav.deviceMemory,
+      hardwareConcurrency: navigator.hardwareConcurrency,
+      isProduction,
+    })
+
+    setGraphicsMode(initialDecision.mode)
+    setDowngradeReason(initialDecision.reason)
+  }, [isProduction])
 
   const value = useMemo<GraphicsModeContextValue>(() => ({
     graphicsMode,

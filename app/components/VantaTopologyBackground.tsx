@@ -4,10 +4,8 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { useAdvancedTheme } from '../contexts/AdvancedThemeContext'
 import { THEMES, type ThemeName } from '../design-system/themes'
 import { useVantaPerformance } from '@/hooks/useVantaPerformance'
+import { P5_CDN, VANTA_TOPOLOGY_CDN } from '@/utils/vantaAssets'
 import { loadExternalScript } from '@/utils/vantaScriptLoader'
-
-const P5_CDN = 'https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.7.0/p5.min.js'
-const VANTA_TOPOLOGY_CDN = 'https://cdn.jsdelivr.net/npm/vanta@0.5.24/dist/vanta.topology.min.js'
 
 function hexToNumber(hex: string): number {
   return parseInt(hex.slice(1), 16)
@@ -173,6 +171,8 @@ export default function VantaTopologyBackground(props?: VantaTopologyBackgroundP
   return (
     <div
       ref={setContainerRef}
+      data-testid="vanta-background"
+      data-vanta-kind="topology"
       style={{
         position: 'absolute',
         top: 0,

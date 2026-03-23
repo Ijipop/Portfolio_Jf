@@ -1,7 +1,15 @@
-import { describe, expect, it } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { shouldShowTopology } from '../topologyRoutes'
 
 describe('shouldShowTopology', () => {
+  beforeEach(() => {
+    vi.unstubAllEnvs()
+  })
+
+  afterEach(() => {
+    vi.unstubAllEnvs()
+  })
+
   it('returns true for allowed roots', () => {
     expect(shouldShowTopology('/portfolio')).toBe(true)
     expect(shouldShowTopology('/logiciel')).toBe(true)
@@ -15,10 +23,14 @@ describe('shouldShowTopology', () => {
   })
 
   it('returns false for non-target routes', () => {
-    expect(shouldShowTopology('/')).toBe(false)
+    vi.stubEnv('NEXT_PUBLIC_TOPOLOGY_SCOPE', 'targeted')
     expect(shouldShowTopology('/admin')).toBe(false)
     expect(shouldShowTopology('/promo/business-card')).toBe(false)
     expect(shouldShowTopology(null)).toBe(false)
+  })
+
+  it('keeps topology enabled on landing page', () => {
+    expect(shouldShowTopology('/')).toBe(true)
   })
 })
 

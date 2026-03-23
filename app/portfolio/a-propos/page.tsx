@@ -305,7 +305,7 @@ export default function About() {
           mb: 8
         }}>
           {/* Carte Qui suis-je */}
-          <FlipCard onClick={() => handleCardFlip('who')}>
+          <FlipCard data-testid="about-flip-card-who" onClick={() => handleCardFlip('who')}>
             <FlipCardInner 
               flipped={flippedCards.who}
               sx={{
@@ -397,7 +397,7 @@ export default function About() {
                   color: textColor,
                   opacity: 0.9
                 }}>
-                  Passionné d'informatique et de jeux vidéo, grand utilisateur d'applications mobiles et web.
+                  {"Passionné d'informatique et de jeux vidéo, grand utilisateur d'applications mobiles et web."}
                 </Typography>
                 <Typography variant="body1" sx={{ 
                   mb: 2, 
@@ -406,7 +406,7 @@ export default function About() {
                   color: textColor,
                   opacity: 0.9
                 }}>
-                  À 41 ans, j'ai choisi de me réorienter vers le développement d'applications afin de réaliser mon rêve de travailler dans cette industrie.
+                  {"À 41 ans, j'ai choisi de me réorienter vers le développement d'applications afin de réaliser mon rêve de travailler dans cette industrie."}
                 </Typography>
                 <Typography 
                   variant="body1" 
@@ -425,7 +425,7 @@ export default function About() {
           </FlipCard>
 
           {/* Carte Formation */}
-          <FlipCard onClick={() => handleCardFlip('formation')}>
+          <FlipCard data-testid="about-flip-card-formation" onClick={() => handleCardFlip('formation')}>
             <FlipCardInner 
               flipped={flippedCards.formation}
               sx={{
@@ -517,7 +517,7 @@ export default function About() {
                   color: textColor,
                   opacity: 0.9
                 }}>
-                  • DEP en soutien informatique à l'ÉMICA (2023-2024)
+                  {"• DEP en soutien informatique à l'ÉMICA (2023-2024)"}
                 </Typography>
                 <Typography variant="body1" sx={{ 
                   mb: 1, 
@@ -526,14 +526,14 @@ export default function About() {
                   color: textColor,
                   opacity: 0.9
                 }}>
-                  • AEC Développement de logiciels, sécurité d'applications de bureau, mobiles et Web au Cégep De Maisonneuve (2024-2026)
+                  {"• AEC Développement de logiciels, sécurité d'applications de bureau, mobiles et Web au Cégep De Maisonneuve (2024-2026)"}
                 </Typography>
               </FlipCardBack>
             </FlipCardInner>
           </FlipCard>
 
           {/* Carte Expérience */}
-          <FlipCard onClick={() => handleCardFlip('experience')}>
+          <FlipCard data-testid="about-flip-card-experience" onClick={() => handleCardFlip('experience')}>
             <FlipCardInner 
               flipped={flippedCards.experience}
               sx={{
@@ -678,7 +678,7 @@ export default function About() {
             gap: 1,
             visibility: 'visible !important',
             opacity: '1 !important',
-            zIndex: 1000,
+            zIndex: DESIGN_TOKENS.zIndex.elevated,
             position: 'relative'
           }}>
           <SkillTag>Python</SkillTag>

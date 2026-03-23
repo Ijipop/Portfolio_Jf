@@ -21,7 +21,7 @@ export default function AdminPage() {
     }}>
       <div style={{ textAlign: 'center' }}>
         <h2>Redirection vers le dashboard...</h2>
-        <p>Si vous n'êtes pas redirigé automatiquement, <a href="/admin/dashboard">cliquez ici</a></p>
+        <p>Si vous n&apos;êtes pas redirigé automatiquement, <a href="/admin/dashboard">cliquez ici</a></p>
       </div>
     </div>
   );

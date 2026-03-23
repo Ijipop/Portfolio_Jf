@@ -1,5 +1,7 @@
 'use client'
 
+import { VANTA_SCRIPT_TIMEOUT_MS } from '@/utils/vantaAssets'
+
 const scriptPromises = new Map<string, Promise<void>>()
 
 function withTimeout<T>(promise: Promise<T>, ms: number, label: string): Promise<T> {
@@ -48,7 +50,7 @@ function ensureScriptLoaded(src: string): Promise<void> {
   })
 }
 
-export async function loadExternalScript(src: string, timeoutMs = 12000): Promise<void> {
+export async function loadExternalScript(src: string, timeoutMs = VANTA_SCRIPT_TIMEOUT_MS): Promise<void> {
   if (typeof window === 'undefined') return
   if (!scriptPromises.has(src)) {
     const promise = withTimeout(ensureScriptLoaded(src), timeoutMs, src).catch((err) => {

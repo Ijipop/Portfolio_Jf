@@ -259,7 +259,7 @@ export default function HomeClient({ initialShowIntro }: { initialShowIntro: boo
               gap: 1.5,
               visibility: 'visible !important',
               opacity: '1 !important',
-              zIndex: 1000,
+              zIndex: DESIGN_TOKENS.zIndex.elevated,
               position: 'relative'
             }}>
               <SkillTag>Python</SkillTag>

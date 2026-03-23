@@ -23,7 +23,7 @@ export default function StickyCTA({
         bottom: 0,
         left: 0,
         right: 0,
-        zIndex: DESIGN_TOKENS.zIndex.modal - 1,
+        zIndex: DESIGN_TOKENS.zIndex.stickyBar,
         background: (theme) => theme.palette.mode === 'dark'
           ? 'linear-gradient(to top, rgba(26, 26, 26, 0.95) 0%, rgba(26, 26, 26, 0.9) 100%)'
           : 'linear-gradient(to top, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.9) 100%)',

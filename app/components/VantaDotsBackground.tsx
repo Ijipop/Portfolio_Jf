@@ -4,10 +4,8 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { useAdvancedTheme } from '../contexts/AdvancedThemeContext'
 import { THEMES, type ThemeName } from '../design-system/themes'
 import { useVantaPerformance } from '@/hooks/useVantaPerformance'
+import { THREE_CDN, VANTA_DOTS_CDN } from '@/utils/vantaAssets'
 import { loadExternalScript } from '@/utils/vantaScriptLoader'
-
-const THREE_CDN = 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js'
-const VANTA_DOTS_CDN = 'https://cdn.jsdelivr.net/npm/vanta@0.5.24/dist/vanta.dots.min.js'
 
 function hexToNumber(hex: string): number {
   return parseInt(hex.slice(1), 16)
@@ -176,6 +174,8 @@ export default function VantaDotsBackground(props?: VantaDotsBackgroundProps) {
   return (
     <div
       ref={setContainerRef}
+      data-testid="vanta-background"
+      data-vanta-kind="dots"
       style={{
         position: 'absolute',
         top: 0,

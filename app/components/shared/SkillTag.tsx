@@ -28,7 +28,7 @@ export default function SkillTag({ children, size = 'medium', reflectionColor }:
     border: `2px solid ${primary}`,
     visibility: 'visible' as const,
     opacity: '1',
-    zIndex: '9999',
+    zIndex: DESIGN_TOKENS.zIndex.floatingTag,
     position: 'relative' as const,
     transition: DESIGN_TOKENS.transitions.normal,
     cursor: 'pointer',
