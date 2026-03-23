@@ -100,6 +100,10 @@ export const DESIGN_TOKENS = {
     elevated: 2,
     overlay: 10,
     modal: 1000,
+    floatingTag: 3,
+    stickyBar: 1100,
+    floatingAction: 1110,
+    introOverlay: 1400,
   },
 } as const
 

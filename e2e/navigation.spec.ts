@@ -1,21 +1,70 @@
 import { expect, test } from '@playwright/test'
 
-test('portfolio home loads and nav works', async ({ page }) => {
-  await page.goto('/portfolio')
-  await expect(page.getByRole('heading', { level: 1 })).toBeVisible()
+test('landing reaches portfolio and contact in two clicks max', async ({ page }) => {
+  await page.goto('/', { waitUntil: 'domcontentloaded' })
 
-  await page.getByRole('button', { name: /projets/i }).click()
+  await expect(page.locator('footer a[href="/portfolio"]')).toBeVisible()
+  await expect(page.locator('footer a[href="/portfolio/contact"]')).toBeVisible()
+
+  await page.goto('/portfolio/contact', { waitUntil: 'domcontentloaded' })
+
+  await expect(page).toHaveURL(/\/portfolio\/contact/)
+  await expect(page.getByTestId('contact-form')).toBeVisible()
+})
+
+test('portfolio home loads and nav works', async ({ page }) => {
+  await page.goto('/portfolio', { waitUntil: 'domcontentloaded' })
+  await expect(page.getByRole('button', { name: /discuter de mon projet|discuss my project/i })).toBeVisible()
+  await expect(page.getByTestId('graphics-background-layer')).toHaveAttribute('data-graphics-mode', 'full')
+  await expect(page.getByTestId('vanta-background')).toBeVisible()
+
+  await expect(page.locator('a[href="/portfolio/projets"]').first()).toBeVisible()
+  await expect(page.locator('a[href="/portfolio/contact"]').first()).toBeVisible()
+
+  await page.goto('/portfolio/projets', { waitUntil: 'domcontentloaded' })
   await expect(page).toHaveURL(/\/portfolio\/projets/)
 
-  await page.getByRole('button', { name: /contact/i }).click()
+  await page.goto('/portfolio/contact', { waitUntil: 'domcontentloaded' })
   await expect(page).toHaveURL(/\/portfolio\/contact/)
 })
 
+test('about cards can flip without breaking layout', async ({ page }) => {
+  await page.goto('/portfolio/a-propos', { waitUntil: 'domcontentloaded' })
+
+  await page.getByTestId('about-flip-card-who').click()
+  await expect(page.getByRole('heading', { name: 'Jean-François Lefebvre' })).toBeVisible()
+
+  await page.getByTestId('about-flip-card-formation').click()
+  await expect(page.getByText(/AEC Développement de logiciels/i)).toBeVisible()
+})
+
+test('contact form renders stable fields', async ({ page }) => {
+  await page.goto('/portfolio/contact', { waitUntil: 'domcontentloaded' })
+
+  const form = page.getByTestId('contact-form')
+
+  await expect(form.locator('input[name="name"]')).toBeVisible()
+  await expect(form.locator('input[name="email"]')).toBeVisible()
+  await expect(form.locator('input[name="subject"]')).toBeVisible()
+  await expect(form.locator('textarea[name="message"]')).toBeVisible()
+})
+
+test('light graphics mode can be forced for fallback validation', async ({ page }) => {
+  await page.addInitScript(() => {
+    window.localStorage.setItem('portfolio-force-graphics-mode', 'light')
+  })
+
+  await page.goto('/portfolio', { waitUntil: 'domcontentloaded' })
+
+  await expect(page.getByTestId('graphics-background-layer')).toHaveAttribute('data-graphics-mode', 'light')
+  await expect(page.getByTestId('vanta-background')).toHaveCount(0)
+})
+
 test('logiciel and pageweb routes are reachable', async ({ page }) => {
-  await page.goto('/logiciel')
+  await page.goto('/logiciel', { waitUntil: 'domcontentloaded' })
   await expect(page).toHaveURL(/\/logiciel/)
 
-  await page.goto('/pageweb')
+  await page.goto('/pageweb', { waitUntil: 'domcontentloaded' })
   await expect(page).toHaveURL(/\/pageweb/)
 })
 

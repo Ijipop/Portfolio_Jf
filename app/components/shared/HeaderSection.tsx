@@ -22,10 +22,11 @@ const hexToRgba = (hex: string, alpha: number) => {
 interface HeaderSectionProps {
   title: string | ReactNode
   subtitle?: string | ReactNode
+  tagline?: string | ReactNode
   children?: ReactNode
 }
 
-export default function HeaderSection({ title, subtitle, children }: HeaderSectionProps) {
+export default function HeaderSection({ title, subtitle, tagline, children }: HeaderSectionProps) {
   const { primary, secondary } = useThemeColors()
   const textColor = useTextColor()
   const theme = useTheme()
@@ -136,6 +137,25 @@ export default function HeaderSection({ title, subtitle, children }: HeaderSecti
             }}
           >
             {subtitle}
+          </Typography>
+        )}
+        {tagline && (
+          <Typography
+            variant="body1"
+            component="div"
+            sx={{
+              mt: 1.5,
+              mx: 'auto',
+              maxWidth: 760,
+              fontSize: { xs: '0.95rem', sm: '1.05rem' },
+              fontWeight: 600,
+              lineHeight: 1.6,
+              color: textColor,
+              position: 'relative',
+              zIndex: 1,
+            }}
+          >
+            {tagline}
           </Typography>
         )}
         {children}

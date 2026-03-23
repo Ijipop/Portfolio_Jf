@@ -1,11 +1,11 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { useAdvancedTheme } from '../contexts/AdvancedThemeContext'
 import { THEMES, type ThemeName } from '../design-system/themes'
-
-const THREE_CDN = 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js'
-const VANTA_DOTS_CDN = 'https://cdn.jsdelivr.net/npm/vanta@0.5.24/dist/vanta.dots.min.js'
+import { useVantaPerformance } from '@/hooks/useVantaPerformance'
+import { THREE_CDN, VANTA_DOTS_CDN } from '@/utils/vantaAssets'
+import { loadExternalScript } from '@/utils/vantaScriptLoader'
 
 function hexToNumber(hex: string): number {
   return parseInt(hex.slice(1), 16)
@@ -35,43 +35,44 @@ interface VantaDotsBackgroundProps {
 
 export default function VantaDotsBackground(props?: VantaDotsBackgroundProps) {
   const { fillContainer = false, colorHex, backgroundHex } = props ?? {}
-  const elRef = useRef<HTMLDivElement>(null)
+  const [containerEl, setContainerEl] = useState<HTMLDivElement | null>(null)
+  const elRef = useRef<HTMLDivElement | null>(null)
   const effectRef = useRef<{ destroy: () => void; resize?: () => void } | null>(null)
   const [vantaReady, setVantaReady] = useState(false)
   const { themeName } = useAdvancedTheme()
+  const { isActive, targetFps } = useVantaPerformance(elRef)
+  const targetFpsRef = useRef(targetFps)
+  useEffect(() => {
+    targetFpsRef.current = targetFps
+  }, [targetFps])
 
   useEffect(() => {
-    const el = elRef.current
+    elRef.current = containerEl
+  }, [containerEl])
+
+  const setContainerRef = useCallback((node: HTMLDivElement | null) => {
+    setContainerEl(node)
+  }, [])
+
+  useEffect(() => {
+    const el = containerEl
     if (!el || typeof window === 'undefined') return
 
     let mounted = true
     let resizeObserver: ResizeObserver | null = null
+    let resizeRaf = 0
+    let lastResizeAt = 0
+    let safetyTimer: ReturnType<typeof setTimeout> | undefined
 
-    const loadScript = (src: string): Promise<void> =>
-      new Promise((resolve, reject) => {
-        const existing = document.querySelector(`script[src="${src}"]`) as HTMLScriptElement | null
-        if (existing) {
-          const alreadyLoaded = existing.getAttribute('data-loaded') === 'true'
-          if (alreadyLoaded) {
-            resolve()
-            return
-          }
-          existing.addEventListener('load', () => {
-            existing.setAttribute('data-loaded', 'true')
-            resolve()
-          }, { once: true })
-          existing.addEventListener('error', () => reject(new Error(`Failed to load script: ${src}`)), { once: true })
-          return
+    if (!isActive) {
+      setVantaReady(false)
+      return () => {
+        if (effectRef.current) {
+          effectRef.current.destroy()
+          effectRef.current = null
         }
-        const script = document.createElement('script')
-        script.src = src
-        script.onload = () => {
-          script.setAttribute('data-loaded', 'true')
-          resolve()
-        }
-        script.onerror = () => reject(new Error(`Failed to load script: ${src}`))
-        document.head.appendChild(script)
-      })
+      }
+    }
 
     const init = async () => {
       try {
@@ -81,13 +82,24 @@ export default function VantaDotsBackground(props?: VantaDotsBackgroundProps) {
           return
         }
 
-        await loadScript(THREE_CDN)
-        if (!mounted) return
-        await loadScript(VANTA_DOTS_CDN)
-        if (!mounted || !elRef.current) return
+        safetyTimer = setTimeout(() => {
+          if (mounted) setVantaReady(true)
+        }, 15000)
+
+        await loadExternalScript(THREE_CDN)
+        if (!mounted) {
+          if (safetyTimer) clearTimeout(safetyTimer)
+          return
+        }
+        await loadExternalScript(VANTA_DOTS_CDN)
+        if (!mounted || !el) {
+          if (safetyTimer) clearTimeout(safetyTimer)
+          return
+        }
 
         const VANTA = (window as unknown as { VANTA: { DOTS: (opts: Record<string, unknown>) => { destroy: () => void; resize?: () => void } } }).VANTA
         if (!VANTA?.DOTS) {
+          if (safetyTimer) clearTimeout(safetyTimer)
           if (mounted) setVantaReady(true)
           return
         }
@@ -98,7 +110,7 @@ export default function VantaDotsBackground(props?: VantaDotsBackgroundProps) {
         const resolvedBackground = backgroundHex ? hexToNumber(backgroundHex) : (options.backgroundColor as number)
 
         const effect = VANTA.DOTS({
-          el: elRef.current,
+          el,
           mouseControls: true,
           touchControls: true,
           gyroControls: false,
@@ -116,15 +128,27 @@ export default function VantaDotsBackground(props?: VantaDotsBackgroundProps) {
         effectRef.current = effect
 
         resizeObserver = new ResizeObserver(() => {
-          if (effectRef.current?.resize) effectRef.current.resize()
+          if (resizeRaf) return
+          resizeRaf = requestAnimationFrame(() => {
+            resizeRaf = 0
+            const now = performance.now()
+            const minDelta = 1000 / Math.max(1, targetFpsRef.current)
+            if (now - lastResizeAt < minDelta) return
+            lastResizeAt = now
+            if (effectRef.current?.resize) effectRef.current.resize()
+          })
         })
         resizeObserver.observe(el)
 
         requestAnimationFrame(() => {
-          if (mounted) setVantaReady(true)
+          if (mounted) {
+            if (safetyTimer) clearTimeout(safetyTimer)
+            setVantaReady(true)
+          }
         })
       } catch (err) {
         console.warn('[VantaDotsBackground] Vanta DOTS failed to load', err)
+        if (safetyTimer) clearTimeout(safetyTimer)
         if (mounted) setVantaReady(true)
       }
     }
@@ -133,20 +157,25 @@ export default function VantaDotsBackground(props?: VantaDotsBackgroundProps) {
 
     return () => {
       mounted = false
+      if (safetyTimer) clearTimeout(safetyTimer)
       resizeObserver?.disconnect()
       resizeObserver = null
+      if (resizeRaf) cancelAnimationFrame(resizeRaf)
+      resizeRaf = 0
       if (effectRef.current) {
         effectRef.current.destroy()
         effectRef.current = null
       }
     }
-  }, [themeName])
+  }, [containerEl, themeName, colorHex, backgroundHex, isActive])
 
   const fallbackBg = backgroundHex ?? getFallbackBgColor(themeName as ThemeName)
 
   return (
     <div
-      ref={elRef}
+      ref={setContainerRef}
+      data-testid="vanta-background"
+      data-vanta-kind="dots"
       style={{
         position: 'absolute',
         top: 0,
@@ -157,8 +186,9 @@ export default function VantaDotsBackground(props?: VantaDotsBackgroundProps) {
         minHeight: fillContainer ? '100%' : '100vh',
         minWidth: '100%',
         backgroundColor: fallbackBg,
-        opacity: vantaReady ? 1 : 0,
-        transition: 'opacity 0s',
+        opacity: 1,
+        transition: vantaReady ? 'opacity 0.35s ease' : 'none',
+        pointerEvents: 'none',
       }}
       aria-hidden
     />

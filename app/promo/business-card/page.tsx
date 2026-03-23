@@ -1,6 +1,7 @@
 'use client'
 
 import Image from 'next/image'
+import Link from 'next/link'
 import { useLanguage } from '../../contexts/LanguageContext'
 import './promo-business-card.css'
 
@@ -37,6 +38,11 @@ export default function PromoBusinessCardPage() {
               {t(p('noApp'))}
             </div>
           </div>
+        </div>
+        <div style={{ marginTop: '12px', textAlign: 'center' }}>
+          <Link href="/portfolio/contact" style={{ color: 'inherit', fontWeight: 700, textDecoration: 'underline' }}>
+            {t('home.contactMe')}
+          </Link>
         </div>
       </div>
     </div>

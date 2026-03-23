@@ -396,7 +396,7 @@ export default function Contact() {
               </Typography>
             </Box>
             
-            <Box component="form" onSubmit={handleSubmit} sx={{ mt: useCompactContact ? 2 : 3 }}>
+            <Box data-testid="contact-form" component="form" onSubmit={handleSubmit} sx={{ mt: useCompactContact ? 2 : 3 }}>
               <Box sx={{ display: 'grid', gap: useCompactContact ? 2 : 2.5, mb: useCompactContact ? 2 : 2.5 }}>
                 <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)' }, gap: 3 }}>
                   <StyledTextField

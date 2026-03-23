@@ -408,7 +408,7 @@ const ProjectCardWrapper = ({
         <TechStack sx={{
           visibility: 'visible !important',
           opacity: '1 !important',
-          zIndex: 1000,
+          zIndex: DESIGN_TOKENS.zIndex.elevated,
           position: 'relative',
           mb: { xs: 1, md: 1.5 }
         }}>

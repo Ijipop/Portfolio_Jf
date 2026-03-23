@@ -1,4 +1,6 @@
 import type { Metadata } from 'next'
+import WebVitalsReporter from './components/WebVitalsReporter'
+import ContactFab from './components/shared/ContactFab'
 import ThemeWrapper from './components/ThemeWrapper'
 import FullPageTopologyWrapper from './components/FullPageTopologyWrapper'
 import './globals.css'
@@ -27,9 +29,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="fr">
       <body>
         <ThemeWrapper>
+          <WebVitalsReporter />
           <FullPageTopologyWrapper>
             {children}
           </FullPageTopologyWrapper>
+          <ContactFab />
         </ThemeWrapper>
       </body>
     </html>

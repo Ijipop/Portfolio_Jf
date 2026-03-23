@@ -124,6 +124,8 @@ const BaseCardStyledComponent = forwardRef<HTMLDivElement, any>(({
   )
 })
 
+BaseCardStyledComponent.displayName = 'BaseCardStyledComponent'
+
 interface BaseCardProps {
   children: ReactNode
   onClick?: () => void

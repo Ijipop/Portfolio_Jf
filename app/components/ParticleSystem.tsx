@@ -52,11 +52,6 @@ export default function ParticleSystem({
     return () => window.removeEventListener('resize', checkMobile)
   }, [])
 
-  // Désactiver sur mobile pour la performance
-  if (isMobile) {
-    return null
-  }
-
   // Initialiser les particules
   const initParticles = () => {
     const particles: Particle[] = []
@@ -177,6 +172,8 @@ export default function ParticleSystem({
 
   // Gérer le redimensionnement et l'initialisation
   useEffect(() => {
+    if (isMobile) return
+
     const handleResize = () => {
       const canvas = canvasRef.current
       if (!canvas) return
@@ -213,10 +210,12 @@ export default function ParticleSystem({
       clearTimeout(timer)
       window.removeEventListener('resize', handleResize)
     }
-  }, [])
+  }, [isMobile])
 
   // Initialiser les particules quand les dimensions changent
   useEffect(() => {
+    if (isMobile) return
+
     if (dimensions.width > 0 && dimensions.height > 0) {
       initParticles()
     }
@@ -224,6 +223,8 @@ export default function ParticleSystem({
 
   // Démarrer l'animation
   useEffect(() => {
+    if (isMobile) return
+
     if (particlesRef.current.length > 0) {
       updateParticles()
     }
@@ -237,6 +238,8 @@ export default function ParticleSystem({
 
   // Observer pour détecter la visibilité du composant
   useEffect(() => {
+    if (isMobile) return
+
     const canvas = canvasRef.current
     if (!canvas) return
 
@@ -254,11 +257,11 @@ export default function ParticleSystem({
     observer.observe(canvas)
     
     return () => observer.disconnect()
-  }, [dimensions])
+  }, [dimensions, isMobile])
 
   // Gérer l'interaction avec la souris
   useEffect(() => {
-    if (!mouseInteraction) return
+    if (isMobile || !mouseInteraction) return
 
     const handleMouseMove = (e: MouseEvent) => {
       const canvas = canvasRef.current
@@ -274,6 +277,11 @@ export default function ParticleSystem({
     window.addEventListener('mousemove', handleMouseMove)
     return () => window.removeEventListener('mousemove', handleMouseMove)
   }, [mouseInteraction])
+
+  // Désactiver le rendu sur mobile pour préserver les performances.
+  if (isMobile) {
+    return null
+  }
 
   return (
     <Box

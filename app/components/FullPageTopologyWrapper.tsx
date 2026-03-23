@@ -4,7 +4,11 @@ import Box from '@mui/material/Box'
 import { ReactNode, useEffect, useRef } from 'react'
 import { usePathname } from 'next/navigation'
 import dynamic from 'next/dynamic'
+import { useAdvancedTheme } from '@/contexts/AdvancedThemeContext'
+import { useGraphicsMode } from '@/contexts/GraphicsModeContext'
 import { shouldShowTopology } from '@/utils/topologyRoutes'
+import { VANTA_PRELOAD_SOURCES } from '@/utils/vantaAssets'
+import { preloadExternalScripts } from '@/utils/vantaScriptLoader'
 
 const VantaDotsBackground = dynamic(() => import('./VantaDotsBackground'), { ssr: false })
 const VantaTopologyBackground = dynamic(() => import('./VantaTopologyBackground'), { ssr: false })
@@ -26,6 +30,9 @@ export default function FullPageTopologyWrapper({ children }: FullPageTopologyWr
   const show = shouldShowTopology(pathname)
   const isLanding = pathname === '/'
   const scrollRef = useRef<HTMLDivElement>(null)
+  const { customTheme } = useAdvancedTheme()
+  const { graphicsMode, downgradeReason } = useGraphicsMode()
+  const useLightFallback = show && graphicsMode === 'light'
 
   // Remettre le scroll en haut au montage pour éviter titre coupé / contenu décalé
   useEffect(() => {
@@ -33,6 +40,24 @@ export default function FullPageTopologyWrapper({ children }: FullPageTopologyWr
       scrollRef.current.scrollTop = 0
     }
   }, [show, pathname])
+
+  useEffect(() => {
+    if (!show || useLightFallback) return
+
+    const preload = () => preloadExternalScripts([...VANTA_PRELOAD_SOURCES])
+
+    if (typeof window !== 'undefined' && 'requestIdleCallback' in window) {
+      const id = (window as unknown as { requestIdleCallback: (cb: () => void) => number }).requestIdleCallback(
+        preload
+      )
+      return () => {
+        ;(window as unknown as { cancelIdleCallback?: (idleId: number) => void }).cancelIdleCallback?.(id)
+      }
+    }
+
+    const timer = globalThis.setTimeout(preload, 0)
+    return () => globalThis.clearTimeout(timer)
+  }, [show, useLightFallback])
 
   if (!show) {
     return <Box component="div" sx={contentWrapperSx}>{children}</Box>
@@ -42,6 +67,9 @@ export default function FullPageTopologyWrapper({ children }: FullPageTopologyWr
     <>
       <Box
         component="div"
+        data-testid="graphics-background-layer"
+        data-graphics-mode={useLightFallback ? 'light' : 'full'}
+        data-graphics-reason={downgradeReason ?? 'none'}
         sx={{
           position: 'fixed',
           top: 0,
@@ -50,9 +78,18 @@ export default function FullPageTopologyWrapper({ children }: FullPageTopologyWr
           bottom: 0,
           zIndex: 0,
           overflow: 'hidden',
+          pointerEvents: 'none',
         }}
       >
-        {isLanding ? (
+        {useLightFallback ? (
+          <Box
+            sx={{
+              width: '100%',
+              height: '100%',
+              background: `radial-gradient(circle at 20% 20%, ${customTheme.primary}22 0%, transparent 35%), radial-gradient(circle at 80% 30%, ${customTheme.secondary}18 0%, transparent 30%), linear-gradient(135deg, ${customTheme.bg} 0%, ${customTheme.bg2} 100%)`,
+            }}
+          />
+        ) : isLanding ? (
           <VantaTopologyBackground key="vanta-topology" fillContainer />
         ) : (
           <VantaDotsBackground key="vanta-dots" fillContainer />
@@ -67,7 +104,7 @@ export default function FullPageTopologyWrapper({ children }: FullPageTopologyWr
           right: 0,
           bottom: 0,
           zIndex: 1,
-          background: 'rgba(0, 0, 0, 0.18)',
+          background: useLightFallback ? 'rgba(0, 0, 0, 0.08)' : 'rgba(0, 0, 0, 0.18)',
           pointerEvents: 'none',
         }}
         aria-hidden

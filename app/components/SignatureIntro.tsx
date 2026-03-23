@@ -4,6 +4,7 @@ import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import Button from '@mui/material/Button'
 import { motion, AnimatePresence } from 'framer-motion'
+import { DESIGN_TOKENS } from '@/design-system/constants'
 import { useThemeColors } from '../hooks/useThemeColors'
 import { useLanguage } from '../contexts/LanguageContext'
 import { useState, useEffect, useCallback } from 'react'
@@ -59,7 +60,7 @@ export default function SignatureIntro({ onComplete }: SignatureIntroProps) {
         sx={{
           position: 'fixed',
           inset: 0,
-          zIndex: 9999,
+          zIndex: DESIGN_TOKENS.zIndex.introOverlay,
           overflow: 'hidden',
           pointerEvents: isOpening ? 'none' : 'auto',
           minHeight: '100vh',
@@ -135,7 +136,7 @@ export default function SignatureIntro({ onComplete }: SignatureIntroProps) {
       sx={{
         position: 'fixed',
         inset: 0,
-        zIndex: 9999,
+        zIndex: DESIGN_TOKENS.zIndex.introOverlay,
         overflow: 'hidden',
         pointerEvents: isOpening ? 'none' : 'auto',
         minHeight: '100vh',
