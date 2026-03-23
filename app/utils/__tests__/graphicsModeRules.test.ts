@@ -29,32 +29,34 @@ describe('graphicsModeRules', () => {
     })
   })
 
-  it('uses persisted light mode in production', () => {
+  it('uses explicit forced overrides', () => {
     const decision = resolveInitialGraphicsDecision({
-      persistedMode: 'light',
-      persistedReason: 'inp-420',
+      forcedMode: 'light',
       isProduction: true,
     })
 
     expect(decision).toEqual({
       mode: 'light',
-      reason: 'inp-420',
+      reason: 'forced-light-mode',
     })
   })
 
-  it('downgrades immediately for initial production low-motion signals', () => {
+  it('keeps full mode in production even with low-motion signals', () => {
     const decision = resolveInitialGraphicsDecision({
       prefersReducedMotion: true,
+      saveData: true,
+      deviceMemory: 1,
+      hardwareConcurrency: 1,
       isProduction: true,
     })
 
     expect(decision).toEqual({
-      mode: 'light',
-      reason: 'prefers-reduced-motion',
+      mode: 'full',
+      reason: null,
     })
   })
 
-  it('requires two metric breaches before downgrading', () => {
+  it('ignores metric breaches for automatic downgrading', () => {
     const firstBreach = evaluateGraphicsMetricBreach(
       { name: 'LCP', value: 4500 },
       0,
@@ -67,14 +69,14 @@ describe('graphicsModeRules', () => {
     )
 
     expect(firstBreach).toEqual({
-      nextCount: 1,
+      nextCount: 0,
       shouldDowngrade: false,
       reason: null,
     })
     expect(secondBreach).toEqual({
-      nextCount: 2,
-      shouldDowngrade: true,
-      reason: 'lcp-4500',
+      nextCount: 0,
+      shouldDowngrade: false,
+      reason: null,
     })
   })
 
@@ -87,5 +89,9 @@ describe('graphicsModeRules', () => {
       reason: null,
     })
     expect(shouldDowngradeFromSlowFrames(0.9, false)).toBe(false)
+  })
+
+  it('does not downgrade from slow frames in production either', () => {
+    expect(shouldDowngradeFromSlowFrames(0.95, true)).toBe(false)
   })
 })
