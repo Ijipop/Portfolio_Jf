@@ -25,8 +25,10 @@ function sendMetric(metric: WebVitalsMetric) {
     path: window.location.pathname,
   })
 
+  // Blob + type explicite : sinon sendBeacon envoie souvent text/plain et la route peut mal parser le corps.
   if (navigator.sendBeacon) {
-    navigator.sendBeacon(REPORT_ENDPOINT, payload)
+    const blob = new Blob([payload], { type: 'application/json' })
+    navigator.sendBeacon(REPORT_ENDPOINT, blob)
     return
   }
 
