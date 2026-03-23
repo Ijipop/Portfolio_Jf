@@ -52,7 +52,8 @@ export function resolveGraphicsModeOverride(value: string | null | undefined): G
 }
 
 export function shouldPersistGraphicsDowngrade(isProduction: boolean): boolean {
-  return isProduction
+  void isProduction
+  return false
 }
 
 export function resolveInitialGraphicsDecision(input: InitialGraphicsDecisionInput): InitialGraphicsDecision {
@@ -63,47 +64,13 @@ export function resolveInitialGraphicsDecision(input: InitialGraphicsDecisionInp
     }
   }
 
-  if (input.persistedMode === LIGHT_MODE) {
-    return {
-      mode: LIGHT_MODE,
-      reason: input.persistedReason ?? 'persisted-light-mode',
-    }
-  }
-
-  if (!input.isProduction) {
-    return {
-      mode: FULL_MODE,
-      reason: null,
-    }
-  }
-
-  if (input.prefersReducedMotion) {
-    return {
-      mode: LIGHT_MODE,
-      reason: 'prefers-reduced-motion',
-    }
-  }
-
-  if (input.saveData) {
-    return {
-      mode: LIGHT_MODE,
-      reason: 'save-data',
-    }
-  }
-
-  if (typeof input.deviceMemory === 'number' && input.deviceMemory <= 2) {
-    return {
-      mode: LIGHT_MODE,
-      reason: 'low-device-memory',
-    }
-  }
-
-  if (typeof input.hardwareConcurrency === 'number' && input.hardwareConcurrency <= 2) {
-    return {
-      mode: LIGHT_MODE,
-      reason: 'low-hardware-concurrency',
-    }
-  }
+  void input.persistedMode
+  void input.persistedReason
+  void input.prefersReducedMotion
+  void input.saveData
+  void input.deviceMemory
+  void input.hardwareConcurrency
+  void input.isProduction
 
   return {
     mode: FULL_MODE,
@@ -116,49 +83,18 @@ export function evaluateGraphicsMetricBreach(
   currentCount: number,
   isProduction: boolean
 ): MetricBreachEvaluation {
-  if (!isProduction) {
-    return {
-      nextCount: 0,
-      shouldDowngrade: false,
-      reason: null,
-    }
-  }
-
-  const isBadLcp = metric.name === 'LCP' && metric.value > 4000
-  const isBadInp = metric.name === 'INP' && metric.value > 350
-
-  if (!isBadLcp && !isBadInp) {
-    return {
-      nextCount: 0,
-      shouldDowngrade: false,
-      reason: null,
-    }
-  }
-
-  const nextCount = currentCount + 1
-  if (nextCount < 2) {
-    return {
-      nextCount,
-      shouldDowngrade: false,
-      reason: null,
-    }
-  }
-
-  if (isBadLcp) {
-    return {
-      nextCount,
-      shouldDowngrade: true,
-      reason: `lcp-${Math.round(metric.value)}`,
-    }
-  }
-
+  void metric
+  void currentCount
+  void isProduction
   return {
-    nextCount,
-    shouldDowngrade: true,
-    reason: `inp-${Math.round(metric.value)}`,
+    nextCount: 0,
+    shouldDowngrade: false,
+    reason: null,
   }
 }
 
 export function shouldDowngradeFromSlowFrames(slowRatio: number, isProduction: boolean): boolean {
-  return isProduction && slowRatio > 0.7
+  void slowRatio
+  void isProduction
+  return false
 }
