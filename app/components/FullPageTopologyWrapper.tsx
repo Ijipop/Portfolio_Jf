@@ -3,15 +3,13 @@
 import Box from '@mui/material/Box'
 import { ReactNode, useEffect, useRef } from 'react'
 import { usePathname } from 'next/navigation'
-import dynamic from 'next/dynamic'
 import { useAdvancedTheme } from '@/contexts/AdvancedThemeContext'
 import { useGraphicsMode } from '@/contexts/GraphicsModeContext'
 import { shouldShowTopology } from '@/utils/topologyRoutes'
 import { VANTA_PRELOAD_SOURCES } from '@/utils/vantaAssets'
 import { preloadExternalScripts } from '@/utils/vantaScriptLoader'
-
-const VantaDotsBackground = dynamic(() => import('./VantaDotsBackground'), { ssr: false })
-const VantaTopologyBackground = dynamic(() => import('./VantaTopologyBackground'), { ssr: false })
+import VantaDotsBackground from './VantaDotsBackground'
+import VantaTopologyBackground from './VantaTopologyBackground'
 
 const contentWrapperSx = {
   minHeight: '100vh',
