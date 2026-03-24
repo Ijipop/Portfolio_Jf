@@ -33,6 +33,7 @@ import {
 } from '@mui/material';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState, useCallback, useRef } from 'react';
+import { navigateProjectUrl } from '@/lib/navigateProjectUrl';
 
 interface Project {
   id: number;
@@ -82,6 +83,13 @@ export default function AdminDashboard() {
   const [previewImage, setPreviewImage] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
+
+  const handleOpenProjectUrl = useCallback(
+    (url: string) => {
+      navigateProjectUrl(url, router);
+    },
+    [router]
+  );
 
   // Timelendar releases
   const [timelendarReleases, setTimelendarReleases] = useState<TimelendarRelease[]>([]);
@@ -547,9 +555,7 @@ export default function AdminDashboard() {
                     {project.url && (
                       <Button
                         size="small"
-                        href={project.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
+                        onClick={() => handleOpenProjectUrl(project.url!)}
                       >
                         Voir
                       </Button>

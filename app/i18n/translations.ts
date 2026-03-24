@@ -20,9 +20,11 @@ export const translations = {
     home: {
       heroTitle: "Création de sites web et d'outils sur mesure",
       heroSubtitle: 'Des solutions simples, modernes et adaptées à votre réalité.',
-      heroTagline: 'Je crée des sites web et outils sur mesure pour PME, avec hébergement inclus.',
-      role: 'Sites web, petits logiciels web et maintenance pour travailleurs autonomes et petites entreprises.',
-      intro: "Je crée des sites web et des outils numériques simples pour aider les petites entreprises à mieux présenter leurs services ou alléger certaines tâches du quotidien. J'offre aussi l'hébergement, les mises à jour et un accompagnement technique clair.",
+      heroTagline:
+        'Je crée des sites web et outils sur mesure pour des particuliers et des PME.',
+      role: "Développeur spécialisé en création de sites web et d'applications sur mesure pour travailleurs autonomes et petites entreprises.",
+      intro:
+        "Mon objectif : créer des outils simples, efficaces et faciles à utiliser, tout en offrant un accompagnement technique fiable.\n\nSoutien technique disponible à distance ou en personne sur l'île de Montréal.",
       seeProjects: 'Voir mes projets',
       contactMe: 'Discutons de votre projet',
       statsStage: 'Stage terminé',
@@ -258,9 +260,11 @@ export const translations = {
     home: {
       heroTitle: 'Custom websites and tools',
       heroSubtitle: 'Simple, modern solutions tailored to your reality.',
-      heroTagline: 'I build custom websites and tools for small businesses, with hosting included.',
-      role: 'Websites, small web tools, and maintenance for freelancers and small businesses.',
-      intro: 'I build websites and simple digital tools to help small businesses present their services better or lighten everyday tasks. I also offer hosting, updates, and clear technical support.',
+      heroTagline:
+        'I build custom websites and tools for individuals and small businesses.',
+      role: 'Developer specialized in custom websites and applications for freelancers and small businesses.',
+      intro:
+        'My goal: build tools that are simple, effective, and easy to use, with reliable technical support.\n\nSupport available remotely or in person on the Island of Montreal.',
       seeProjects: 'View my projects',
       contactMe: 'Let\'s discuss your project',
       statsStage: 'Internship completed',
