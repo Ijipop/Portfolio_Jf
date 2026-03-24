@@ -11,7 +11,6 @@ import { usePathname } from 'next/navigation'
 import { GlassContainer } from './components/GlassCard'
 import { RevealTitle } from './components/LetterAnimations'
 import { FadeIn, TypingEffect } from './components/SimpleAnimations'
-import SkillTag from './components/shared/SkillTag'
 import ThreeDCardComponent from './components/ThreeDCard'
 import AppBarComponent from './components/appBar'
 import HeaderSection from './components/shared/HeaderSection'
@@ -151,75 +150,14 @@ export default function HomeClient({ initialShowIntro }: { initialShowIntro: boo
                 ...DESIGN_TOKENS.typography.body1,
                 fontSize: { xs: '0.875rem', md: '1rem' },
                 color: textColor,
-                opacity: 0.9
+                opacity: 0.9,
+                whiteSpace: 'pre-line',
               }}
             >
               {t('home.intro')}
             </Typography>
           </Box>
         </GlassContainer>
-
-        <Container maxWidth="lg" sx={{ 
-          py: { xs: DESIGN_TOKENS.spacing.xl, md: DESIGN_TOKENS.spacing.xxl }, 
-          px: { xs: 2, sm: 3, md: 4 }, 
-          position: 'relative', 
-          zIndex: 2 
-        }}>
-          <Box sx={{ 
-            borderRadius: DESIGN_TOKENS.borderRadius.large,
-            padding: { xs: DESIGN_TOKENS.spacing.md, md: DESIGN_TOKENS.spacing.xl },
-            textAlign: 'center',
-            mb: DESIGN_TOKENS.spacing.xxl,
-            position: 'relative',
-            overflow: 'hidden',
-            ...getCardSurfaceSx({ isTopologyRoute, variant: 'flat', level: 'soft', interactive: false }),
-          }}>
-            <Typography 
-              variant="h3" 
-              gutterBottom 
-              sx={{ 
-                mb: DESIGN_TOKENS.spacing.md,
-                ...DESIGN_TOKENS.typography.h3,
-                fontWeight: 700,
-                textShadow: `0 2px 4px rgba(0,0,0,0.1), 0 0 20px ${primary}40`,
-                background: `linear-gradient(135deg, ${primary}, ${secondary}, ${primary})`,
-                backgroundClip: 'text',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                backgroundSize: '200% 200%',
-                animation: 'gradientShift 4s ease-in-out infinite',
-                '@keyframes gradientShift': {
-                  '0%': { backgroundPosition: '0% 50%' },
-                  '50%': { backgroundPosition: '100% 50%' },
-                  '100%': { backgroundPosition: '0% 50%' },
-                },
-              }}
-            >
-              {t('home.sectionSkills')}
-            </Typography>
-            <Box sx={{ 
-              display: 'flex', 
-              flexWrap: 'wrap', 
-              justifyContent: 'center',
-              gap: 1.5,
-              visibility: 'visible !important',
-              opacity: '1 !important',
-              zIndex: DESIGN_TOKENS.zIndex.elevated,
-              position: 'relative'
-            }}>
-              <SkillTag>Python</SkillTag>
-              <SkillTag>Java</SkillTag>
-              <SkillTag>React</SkillTag>
-              <SkillTag>Next.js</SkillTag>
-              <SkillTag>TypeScript</SkillTag>
-              <SkillTag>JavaScript</SkillTag>
-              <SkillTag>SQL</SkillTag>
-              <SkillTag>CSS3</SkillTag>
-              <SkillTag>HTML5</SkillTag>
-              <SkillTag>Git</SkillTag>
-            </Box>
-          </Box>
-        </Container>
 
         <Box sx={{ 
           display: 'grid', 

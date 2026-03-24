@@ -293,7 +293,7 @@ export default function About() {
                   color: textColor,
                   opacity: 0.9
                 }}>
-                  {t('home.intro')}
+                  {t('home.role')}
                 </Typography>
                 <Box sx={{ 
                   position: 'absolute', 

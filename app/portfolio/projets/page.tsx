@@ -19,6 +19,7 @@ import useMediaQuery from '@mui/material/useMediaQuery'
 import Typography from '@mui/material/Typography'
 import { useCallback, useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { navigateProjectUrl } from '@/lib/navigateProjectUrl'
 import React from 'react'
 import Image from 'next/image'
 import AppBarComponent from '../../components/appBar'
@@ -658,43 +659,7 @@ export default function Projets() {
 
   const handleProjectClick = useCallback(
     (url: string) => {
-      const trimmed = url.trim()
-      if (!trimmed || typeof window === 'undefined') return
-
-      if (trimmed.startsWith('//')) {
-        try {
-          const u = new URL(trimmed, window.location.origin)
-          if (u.origin === window.location.origin) {
-            void router.push(`${u.pathname}${u.search}${u.hash}`)
-          } else {
-            window.open(u.href, '_blank', 'noopener,noreferrer')
-          }
-        } catch {
-          window.open(trimmed, '_blank', 'noopener,noreferrer')
-        }
-        return
-      }
-
-      if (trimmed.startsWith('/')) {
-        void router.push(trimmed)
-        return
-      }
-
-      if (/^https?:\/\//i.test(trimmed)) {
-        try {
-          const u = new URL(trimmed)
-          if (u.origin === window.location.origin) {
-            void router.push(`${u.pathname}${u.search}${u.hash}`)
-          } else {
-            window.open(trimmed, '_blank', 'noopener,noreferrer')
-          }
-        } catch {
-          window.open(trimmed, '_blank', 'noopener,noreferrer')
-        }
-        return
-      }
-
-      void router.push(`/${trimmed.replace(/^\/+/, '')}`)
+      navigateProjectUrl(url, router)
     },
     [router]
   )
