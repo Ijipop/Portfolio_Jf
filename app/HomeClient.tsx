@@ -96,11 +96,6 @@ export default function HomeClient({ initialShowIntro }: { initialShowIntro: boo
           mt: 2,
           alignItems: 'center'
         }}>
-          <Link href="/portfolio/projets" style={{ textDecoration: 'none' }}>
-            <CTAButton variant="primary" size="large">
-              {t('home.seeProjects')}
-            </CTAButton>
-          </Link>
           <Link href="/portfolio/contact" style={{ textDecoration: 'none' }}>
             <CTAButton variant="outline" size="large">
               {t('home.contactMe')}

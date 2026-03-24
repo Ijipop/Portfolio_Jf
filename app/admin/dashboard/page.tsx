@@ -40,6 +40,8 @@ interface Project {
   description: string;
   technologies: string;
   status: string;
+  projectType: 'logiciel' | 'web';
+  displayOrder: number;
   url?: string;
   downloadUrl?: string | null;
   imageUrl?: string;
@@ -70,6 +72,8 @@ export default function AdminDashboard() {
     description: '',
     technologies: '',
     status: '',
+    projectType: 'web' as 'logiciel' | 'web',
+    displayOrder: 0,
     url: '',
     downloadUrl: '',
     imageUrl: ''
@@ -180,6 +184,8 @@ export default function AdminDashboard() {
         description: project.description,
         technologies: project.technologies,
         status: project.status,
+        projectType: project.projectType ?? 'web',
+        displayOrder: project.displayOrder ?? 0,
         url: project.url || '',
         downloadUrl: project.downloadUrl || '',
         imageUrl: project.imageUrl || ''
@@ -192,6 +198,8 @@ export default function AdminDashboard() {
         description: '',
         technologies: '',
         status: '',
+        projectType: 'web',
+        displayOrder: 0,
         url: '',
         downloadUrl: '',
         imageUrl: ''
@@ -209,6 +217,8 @@ export default function AdminDashboard() {
       description: '',
       technologies: '',
       status: '',
+      projectType: 'web',
+      displayOrder: 0,
       url: '',
       downloadUrl: '',
       imageUrl: ''
@@ -554,6 +564,8 @@ export default function AdminDashboard() {
                 <TableCell>Description</TableCell>
                 <TableCell>Technologies</TableCell>
                 <TableCell>Statut</TableCell>
+                <TableCell>Type</TableCell>
+                <TableCell>Ordre</TableCell>
                 <TableCell>URL</TableCell>
                 <TableCell>Téléchargement</TableCell>
                 <TableCell>Image</TableCell>
@@ -571,6 +583,8 @@ export default function AdminDashboard() {
                   </TableCell>
                   <TableCell>{project.technologies}</TableCell>
                   <TableCell>{project.status}</TableCell>
+                  <TableCell>{project.projectType === 'logiciel' ? 'Logiciel' : 'Sites web'}</TableCell>
+                  <TableCell>{project.displayOrder ?? 0}</TableCell>
                   <TableCell>
                     {project.url && (
                       <Button
@@ -847,6 +861,39 @@ export default function AdminDashboard() {
               value={formData.status}
               onChange={(e) => setFormData({ ...formData, status: e.target.value })}
               required
+            />
+            <FormControl margin="dense" fullWidth required>
+              <InputLabel id="project-type-label">Type de projet</InputLabel>
+              <Select
+                labelId="project-type-label"
+                label="Type de projet"
+                value={formData.projectType}
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    projectType: (e.target.value as 'logiciel' | 'web') ?? 'web',
+                  })
+                }
+              >
+                <MenuItem value="logiciel">Logiciel</MenuItem>
+                <MenuItem value="web">Sites web</MenuItem>
+              </Select>
+            </FormControl>
+            <TextField
+              margin="dense"
+              label="Ordre d'affichage"
+              fullWidth
+              type="number"
+              variant="outlined"
+              value={formData.displayOrder}
+              onChange={(e) =>
+                setFormData({
+                  ...formData,
+                  displayOrder: Math.max(0, Number(e.target.value) || 0),
+                })
+              }
+              inputProps={{ min: 0, step: 1 }}
+              helperText="Plus petit nombre = affiché en premier."
             />
             <TextField
               margin="dense"

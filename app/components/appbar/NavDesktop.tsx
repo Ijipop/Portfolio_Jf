@@ -3,9 +3,7 @@
 import ContactMailIcon from '@mui/icons-material/ContactMail'
 import HomeIcon from '@mui/icons-material/Home'
 import PersonIcon from '@mui/icons-material/Person'
-import PublicIcon from '@mui/icons-material/Public'
 import WorkIcon from '@mui/icons-material/Work'
-import ComputerIcon from '@mui/icons-material/Computer'
 import Box from '@mui/material/Box'
 import IconButton from '@mui/material/IconButton'
 import Typography from '@mui/material/Typography'
@@ -27,10 +25,6 @@ function renderIcon(id: NavRouteId) {
       return <HomeIcon sx={{ mr: { xs: 0, sm: 1 }, fontSize: { xs: 20, sm: 24 } }} />
     case 'projects':
       return <WorkIcon sx={{ mr: { xs: 0, sm: 1 }, fontSize: { xs: 20, sm: 24 } }} />
-    case 'software':
-      return <ComputerIcon sx={{ mr: { xs: 0, sm: 1 }, fontSize: { xs: 20, sm: 24 } }} />
-    case 'websites':
-      return <PublicIcon sx={{ mr: { xs: 0, sm: 1 }, fontSize: { xs: 20, sm: 24 } }} />
     case 'about':
       return <PersonIcon sx={{ mr: { xs: 0, sm: 1 }, fontSize: { xs: 20, sm: 24 } }} />
     case 'contact':

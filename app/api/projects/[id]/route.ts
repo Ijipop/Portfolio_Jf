@@ -2,6 +2,18 @@ import { prisma } from '@/lib/prisma'
 import { NextRequest, NextResponse } from 'next/server'
 import jwt from 'jsonwebtoken'
 
+type ProjectType = 'logiciel' | 'web'
+
+function parseProjectType(input: unknown): ProjectType {
+  return input === 'logiciel' ? 'logiciel' : 'web'
+}
+
+function parseDisplayOrder(input: unknown): number {
+  const value = typeof input === 'number' ? input : Number(input)
+  if (!Number.isFinite(value)) return 0
+  return Math.max(0, Math.trunc(value))
+}
+
 // DELETE /api/projects/[id] - Supprimer un project par ID (PROTÉGÉ)
 export async function DELETE(request: NextRequest, { params }: { params: { id: string } })
 {
@@ -132,7 +144,7 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
 		}
 
 		const body = await request.json()
-		const { name, description, technologies, status, url, downloadUrl, imageUrl } = body
+		const { name, description, technologies, status, url, downloadUrl, imageUrl, projectType, displayOrder } = body
 
 		// Validation des données
 		if (!name || typeof name !== 'string' || name.trim().length === 0) {
@@ -213,16 +225,17 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
 		// Mettre à jour le project
 		const updatedProject = await prisma.project.update({
 			where: { id },
-			data:
-			{
+			data: {
 				name: name.trim(),
 				description: description.trim(),
 				technologies: technologies.trim(),
 				status: status.trim(),
 				url: url || '',
 				downloadUrl: dl,
-				imageUrl: imageUrl || ''
-			}
+				imageUrl: imageUrl || '',
+        projectType: parseProjectType(projectType),
+        displayOrder: parseDisplayOrder(displayOrder),
+			} as any
 		})
 
 		return NextResponse.json({
