@@ -1,14 +1,12 @@
 'use client'
 
-import ContentCopyIcon from '@mui/icons-material/ContentCopy'
 import EmailIcon from '@mui/icons-material/Email'
 import GitHubIcon from '@mui/icons-material/GitHub'
 import LinkedInIcon from '@mui/icons-material/LinkedIn'
 import LocationOnIcon from '@mui/icons-material/LocationOn'
-import PhoneIcon from '@mui/icons-material/Phone'
 import SendIcon from '@mui/icons-material/Send'
 import CheckCircleIcon from '@mui/icons-material/CheckCircle'
-import { Alert, Box as MuiBox, Snackbar, TextField, CircularProgress } from '@mui/material'
+import { Alert, Snackbar, TextField, CircularProgress } from '@mui/material'
 import Box from '@mui/material/Box'
 import Container from '@mui/material/Container'
 import Typography from '@mui/material/Typography'
@@ -124,39 +122,12 @@ export default function Contact() {
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
 
-  const emailAddress = 'ijipop82@gmail.com'
-
   const handleGitHubClick = () => {
     window.open('https://github.com/Ijipop', '_blank')
   }
 
   const handleLinkedInClick = () => {
     window.open('https://www.linkedin.com/in/jean-fran%C3%A7ois-lefebvre-92380329a/', '_blank')
-  }
-
-  const handleOpenEmail = () => {
-    const subject = encodeURIComponent('Contact depuis votre portfolio')
-    const body = encodeURIComponent('Bonjour Jean-François,\n\n')
-    const mailtoLink = `mailto:${emailAddress}?subject=${subject}&body=${body}`
-    window.open(mailtoLink)
-  }
-
-  const handleCopyEmail = async () => {
-    try {
-      await navigator.clipboard.writeText(emailAddress)
-      setSnackbarMessage('Adresse email copiée !')
-      setSnackbarOpen(true)
-    } catch (err) {
-      // Fallback pour les navigateurs plus anciens
-      const textArea = document.createElement('textarea')
-      textArea.value = emailAddress
-      document.body.appendChild(textArea)
-      textArea.select()
-      document.execCommand('copy')
-      document.body.removeChild(textArea)
-      setSnackbarMessage('Adresse email copiée !')
-      setSnackbarOpen(true)
-    }
   }
 
   const handleCloseSnackbar = () => {
@@ -276,114 +247,11 @@ export default function Contact() {
 
       <InteractiveBackgroundSection>
       <Container maxWidth="lg" sx={{ py: useCompactContact ? 4 : 8, position: 'relative', zIndex: 2 }}>
-        <Box sx={{ 
-          display: 'grid', 
-          gridTemplateColumns: { xs: '1fr', md: 'repeat(3, 1fr)' },
-          gap: 4,
-          mb: useCompactContact ? 6 : 10,
-          alignItems: 'stretch',
-        }}>
-          <ThreeDCardComponent floatingElements={2} sx={{ height: '100%', minHeight: { xs: 260, sm: 280 }, padding: { xs: 2, sm: 2.5, md: 3 } }}>
-            <Box sx={{ textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', height: '100%', justifyContent: 'flex-start' }}>
-            <EmailIcon sx={{ fontSize: 40, color: primary, mb: 1.5 }} />
-            <Typography variant="h6" gutterBottom sx={{ color: textColor }}>
-              {t('contact.email')}
-            </Typography>
-            <Typography variant="body2" sx={{ mb: 1.5, color: textColor, opacity: 0.8 }}>
-              {emailAddress}
-            </Typography>
-            <MuiBox sx={{ display: 'flex', flexDirection: 'column', gap: 1, mt: 1.5, width: '100%' }}>
-              <CTAButton
-                variant="primary"
-                startIcon={<SendIcon />}
-                onClick={handleOpenEmail}
-                fullWidth
-                size="small"
-              >
-                Ouvrir Email
-              </CTAButton>
-              <CTAButton
-                variant="outline"
-                startIcon={<ContentCopyIcon />}
-                onClick={handleCopyEmail}
-                fullWidth
-                size="small"
-              >
-                Copier
-              </CTAButton>
-            </MuiBox>
-            </Box>
-          </ThreeDCardComponent>
-
-          <ThreeDCardComponent floatingElements={2} sx={{ height: '100%', minHeight: { xs: 260, sm: 280 }, padding: { xs: 2, sm: 2.5, md: 3 } }}>
-            <Box sx={{ textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', height: '100%', justifyContent: 'flex-start' }}>
-            <PhoneIcon sx={{ fontSize: 40, color: primary, mb: 1.5 }} />
-            <Typography variant="h6" gutterBottom sx={{ color: textColor }}>
-              {t('contact.phone')}
-            </Typography>
-            <Typography variant="body2" sx={{ color: textColor, opacity: 0.8 }}>
-              {t('contact.phoneOnRequest')}
-            </Typography>
-            </Box>
-          </ThreeDCardComponent>
-
-          <ThreeDCardComponent floatingElements={2} sx={{ height: '100%', minHeight: { xs: 260, sm: 280 }, padding: { xs: 2, sm: 2.5, md: 3 } }}>
-            <Box sx={{ textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', height: '100%', justifyContent: 'flex-start' }}>
-            <LocationOnIcon sx={{ fontSize: 40, color: primary, mb: 1.5 }} />
-            <Typography variant="h6" gutterBottom sx={{ color: textColor }}>
-              {t('contact.location')}
-            </Typography>
-            <Typography variant="body2" sx={{ mb: 1.5, color: textColor, opacity: 0.8 }}>
-              {t('contact.locationCity')}
-            </Typography>
-            {!montrealImgError ? (
-              <Box
-                sx={{
-                  position: 'relative',
-                  width: '100%',
-                  height: 64,
-                  maxHeight: 64,
-                  borderRadius: 1,
-                  overflow: 'hidden',
-                  display: 'block',
-                }}
-              >
-                <Image
-                  src="/imgs/images/montreal.png"
-                  alt="Montréal"
-                  fill
-                  sizes="100vw"
-                  style={{ objectFit: 'cover' }}
-                  onError={() => setMontrealImgError(true)}
-                />
-              </Box>
-            ) : (
-              <Box
-                sx={{
-                  width: '100%',
-                  height: 64,
-                  maxHeight: 64,
-                  borderRadius: 1,
-                  bgcolor: 'action.hover',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  fontSize: '0.75rem',
-                  color: 'text.secondary',
-                }}
-              >
-                Montréal
-              </Box>
-            )}
-            </Box>
-          </ThreeDCardComponent>
-        </Box>
-
         {/* Formulaire de contact */}
         <Box sx={{ 
-          gridColumn: { xs: '1fr', md: 'span 3' },
           maxWidth: '800px',
           margin: '0 auto',
+          mb: useCompactContact ? 4 : 6,
         }}>
           <ThreeDCardComponent floatingElements={2} sx={{ padding: { xs: 2, sm: 3 } }}>
             <Box sx={{ textAlign: 'center', mb: useCompactContact ? 2 : 3 }}>
@@ -464,6 +332,59 @@ export default function Contact() {
               >
                 {isSubmitting ? t('contact.sending') : t('contact.sendButton')}
               </CTAButton>
+            </Box>
+          </ThreeDCardComponent>
+        </Box>
+
+        <Box sx={{ maxWidth: 420, mx: 'auto', mb: useCompactContact ? 4 : 6 }}>
+          <ThreeDCardComponent floatingElements={2} sx={{ minHeight: { xs: 230, sm: 260 }, padding: { xs: 2, sm: 2.5, md: 3 } }}>
+            <Box sx={{ textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', height: '100%', justifyContent: 'flex-start' }}>
+              <LocationOnIcon sx={{ fontSize: 40, color: primary, mb: 1.5 }} />
+              <Typography variant="h6" gutterBottom sx={{ color: textColor }}>
+                {t('contact.location')}
+              </Typography>
+              <Typography variant="body2" sx={{ mb: 1.5, color: textColor, opacity: 0.8 }}>
+                {t('contact.locationCity')}
+              </Typography>
+              {!montrealImgError ? (
+                <Box
+                  sx={{
+                    position: 'relative',
+                    width: '100%',
+                    height: 64,
+                    maxHeight: 64,
+                    borderRadius: 1,
+                    overflow: 'hidden',
+                    display: 'block',
+                  }}
+                >
+                  <Image
+                    src="/imgs/images/montreal.png"
+                    alt="Montréal"
+                    fill
+                    sizes="100vw"
+                    style={{ objectFit: 'cover' }}
+                    onError={() => setMontrealImgError(true)}
+                  />
+                </Box>
+              ) : (
+                <Box
+                  sx={{
+                    width: '100%',
+                    height: 64,
+                    maxHeight: 64,
+                    borderRadius: 1,
+                    bgcolor: 'action.hover',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: '0.75rem',
+                    color: 'text.secondary',
+                  }}
+                >
+                  Montréal
+                </Box>
+              )}
             </Box>
           </ThreeDCardComponent>
         </Box>
