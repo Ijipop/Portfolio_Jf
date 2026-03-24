@@ -4,9 +4,53 @@ import jwt from 'jsonwebtoken';
 import { NextRequest, NextResponse } from 'next/server';
 
 const prisma = new PrismaClient();
+const WINDOW_MS = 10 * 60 * 1000;
+const MAX_ATTEMPTS = 8;
+const attemptsByIp = new Map<string, { count: number; firstAttemptAt: number }>();
+
+function getClientIp(request: NextRequest): string {
+  const forwardedFor = request.headers.get('x-forwarded-for');
+  if (forwardedFor) {
+    return forwardedFor.split(',')[0]?.trim() || 'unknown';
+  }
+  return request.headers.get('x-real-ip')?.trim() || 'unknown';
+}
+
+function checkRateLimit(ip: string): boolean {
+  const now = Date.now();
+  const entry = attemptsByIp.get(ip);
+  if (!entry) return true;
+  if (now - entry.firstAttemptAt > WINDOW_MS) {
+    attemptsByIp.delete(ip);
+    return true;
+  }
+  return entry.count < MAX_ATTEMPTS;
+}
+
+function bumpRateLimit(ip: string) {
+  const now = Date.now();
+  const entry = attemptsByIp.get(ip);
+  if (!entry || now - entry.firstAttemptAt > WINDOW_MS) {
+    attemptsByIp.set(ip, { count: 1, firstAttemptAt: now });
+    return;
+  }
+  attemptsByIp.set(ip, { ...entry, count: entry.count + 1 });
+}
+
+function resetRateLimit(ip: string) {
+  attemptsByIp.delete(ip);
+}
 
 export async function POST(request: NextRequest) {
   try {
+    const clientIp = getClientIp(request);
+    if (!checkRateLimit(clientIp)) {
+      return NextResponse.json(
+        { message: 'Trop de tentatives. Réessayez dans quelques minutes.' },
+        { status: 429 }
+      );
+    }
+
     const { email, password } = await request.json();
 
     // Validation des champs
@@ -33,6 +77,7 @@ export async function POST(request: NextRequest) {
 
     if (!user) {
       console.log(`Tentative de connexion avec email non trouvé: ${email.toLowerCase().trim()}`);
+      bumpRateLimit(clientIp);
       return NextResponse.json(
         { message: 'Email ou mot de passe incorrect' },
         { status: 401 }
@@ -44,6 +89,7 @@ export async function POST(request: NextRequest) {
     
     if (!isValidPassword) {
       console.log(`Mot de passe incorrect pour l'utilisateur: ${user.email}`);
+      bumpRateLimit(clientIp);
       return NextResponse.json(
         { message: 'Email ou mot de passe incorrect' },
         { status: 401 }
@@ -69,12 +115,20 @@ export async function POST(request: NextRequest) {
       role: user.role
     };
 
-    // Retourner le token et les informations utilisateur
-    return NextResponse.json({
+    resetRateLimit(clientIp);
+    const response = NextResponse.json({
       message: 'Connexion réussie',
       token: token,
       user: userResponse
     });
+    response.cookies.set('adminToken', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: process.env.NODE_ENV === 'production' ? 'strict' : 'lax',
+      maxAge: 60 * 60 * 24,
+      path: '/'
+    });
+    return response;
 
   } catch (error) {
     console.error('Erreur de connexion:', error);

@@ -1,55 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { authAdminToken } from '@/lib/auth-admin-request'
 import { writeFile, mkdir } from 'fs/promises'
 import { existsSync } from 'fs'
 import path from 'path'
-import jwt from 'jsonwebtoken'
 
 // POST /api/upload - Uploader une image (PROTÉGÉ)
 export async function POST(request: NextRequest) {
-  // Vérifier l'authentification
-  const authHeader = request.headers.get('authorization')
-  if (!authHeader || !authHeader.startsWith('Bearer ')) {
-    return NextResponse.json(
-      { success: false, error: 'Token d\'authentification requis' },
-      { status: 401 }
-    )
-  }
-
-  const token = authHeader.substring(7)
-  try {
-    if (!process.env.JWT_SECRET) {
-      console.error('❌ JWT_SECRET non configuré dans les variables d\'environnement')
-      console.error('💡 Vérifiez que JWT_SECRET est dans votre fichier .env et redémarrez le serveur')
-      return NextResponse.json(
-        { success: false, error: 'Configuration serveur manquante. JWT_SECRET non configuré.' },
-        { status: 500 }
-      )
-    }
-    
-    console.log('🔍 Vérification du token JWT...')
-    console.log('📝 JWT_SECRET présent:', process.env.JWT_SECRET ? 'Oui (longueur: ' + process.env.JWT_SECRET.length + ')' : 'Non')
-    console.log('📝 Token reçu:', token.substring(0, 20) + '...')
-    
-    const decoded = jwt.verify(token, process.env.JWT_SECRET)
-    console.log('✅ Token valide pour l\'utilisateur:', (decoded as any).email || (decoded as any).userId)
-  } catch (error: any) {
-    console.error('❌ Erreur de vérification du token:', error.name, error.message)
-    if (error.name === 'TokenExpiredError') {
-      console.error('⏰ Token expiré à:', error.expiredAt)
-    } else if (error.name === 'JsonWebTokenError') {
-      console.error('🔐 Erreur JWT:', error.message)
-    }
-    return NextResponse.json(
-      { 
-        success: false, 
-        error: error.name === 'TokenExpiredError' 
-          ? 'Votre session a expiré. Veuillez vous reconnecter.' 
-          : error.name === 'JsonWebTokenError'
-          ? 'Token invalide. Veuillez vous reconnecter.'
-          : 'Token invalide ou expiré' 
-      },
-      { status: 401 }
-    )
+  const auth = authAdminToken(request)
+  if (!auth.ok) {
+    return NextResponse.json({ success: false, error: auth.error }, { status: auth.status })
   }
 
   try {

@@ -1,6 +1,6 @@
 import { prisma } from '@/lib/prisma'
+import { authAdminToken } from '@/lib/auth-admin-request'
 import { NextRequest, NextResponse } from 'next/server'
-import jwt from 'jsonwebtoken'
 
 type ProjectType = 'logiciel' | 'web'
 
@@ -50,26 +50,9 @@ export async function GET()
 // POST /api/projects - Ajouter un nouveau project (PROTÉGÉ)
 export async function POST(request: NextRequest)
 {
-	// Vérifier l'authentification
-	const authHeader = request.headers.get('authorization')
-	if (!authHeader || !authHeader.startsWith('Bearer ')) {
-		return NextResponse.json(
-			{ success: false, error: 'Token d\'authentification requis' },
-			{ status: 401 }
-		)
-	}
-
-	const token = authHeader.substring(7)
-	try {
-		if (!process.env.JWT_SECRET) {
-			throw new Error('JWT_SECRET non configuré')
-		}
-		jwt.verify(token, process.env.JWT_SECRET)
-	} catch (error) {
-		return NextResponse.json(
-			{ success: false, error: 'Token invalide ou expiré' },
-			{ status: 401 }
-		)
+	const auth = authAdminToken(request)
+	if (!auth.ok) {
+		return NextResponse.json({ success: false, error: auth.error }, { status: auth.status })
 	}
 
 	try

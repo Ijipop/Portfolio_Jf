@@ -1,19 +1,12 @@
 "use client";
 
-import MenuIcon from '@mui/icons-material/Menu';
-import { DESIGN_TOKENS } from '@/design-system/constants';
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
-import IconButton from "@mui/material/IconButton";
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import React from 'react';
-import { useState } from "react";
-import LoginModal from '@/components/LoginModal';
 import { ThemeSelector } from '@/components/ThemeSelector';
 import { useThemeColors } from '@/hooks/useThemeColors';
 import { useLanguage } from '@/contexts/LanguageContext';
@@ -25,26 +18,10 @@ import { NAV_ROUTES } from '@/config/navRoutes';
 import './components.css';
 
 export default function AppBarComponent() {
-	const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-	const [loginModalOpen, setLoginModalOpen] = useState(false);
-	const open = Boolean(anchorEl);
 	const router = useRouter();
 	const pathname = usePathname();
 	const { primary, secondary } = useThemeColors();
 	const { locale, setLocale, t } = useLanguage();
-
-	const handleMenuClick = (event: React.MouseEvent<HTMLElement>) => {
-		setAnchorEl(event.currentTarget);
-	};
-
-	const handleMenuClose = () => {
-		setAnchorEl(null);
-	};
-
-	const handleAdminClick = () => {
-		handleMenuClose();
-		setLoginModalOpen(true);
-	};
 
 	const handleNavigate = (path: string) => router.push(path);
 
@@ -110,47 +87,9 @@ export default function AppBarComponent() {
 							{locale === 'fr' ? 'FR' : 'ENG'}
 						</Button>
 						<ThemeSelector />
-						<IconButton
-							color="inherit"
-							aria-label="menu"
-							onClick={handleMenuClick}
-							aria-controls={open ? 'basic-menu' : undefined}
-							aria-haspopup="true"
-							aria-expanded={open ? 'true' : undefined}
-							sx={{ padding: 1, width: 40, height: 40 }}
-						>
-							<MenuIcon />
-						</IconButton>
 					</Box>
-					
-					{/* Menu déroulant pour admin */}
-					<Menu
-						id="basic-menu"
-						anchorEl={anchorEl}
-						open={open}
-						onClose={handleMenuClose}
-						disableEnforceFocus
-						disableAutoFocus
-						disableRestoreFocus
-						sx={{
-							'& .MuiPaper-root': {
-								background: `linear-gradient(145deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.95) 100%) !important`,
-								border: `1px solid ${primary}30 !important`,
-								borderRadius: DESIGN_TOKENS.borderRadius.small,
-								boxShadow: `0 8px 32px ${primary}20 !important`,
-								mt: 1,
-								minWidth: 180,
-							}
-						}}
-					>
-						<MenuItem onClick={handleAdminClick}>{t('nav.admin')}</MenuItem>
-					</Menu>
 				</Toolbar>
 			</AppBar>
-			<LoginModal 
-				open={loginModalOpen} 
-				onClose={() => setLoginModalOpen(false)} 
-			/>
 		</>
 	)
 }

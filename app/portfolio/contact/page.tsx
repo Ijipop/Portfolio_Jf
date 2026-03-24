@@ -350,12 +350,12 @@ export default function Contact() {
                 <Box
                   sx={{
                     position: 'relative',
-                    width: '100%',
-                    height: 64,
-                    maxHeight: 64,
+                    width: { xs: 150, sm: 180 },
+                    aspectRatio: '1 / 1',
                     borderRadius: 1,
                     overflow: 'hidden',
                     display: 'block',
+                    mx: 'auto',
                   }}
                 >
                   <Image
@@ -370,9 +370,8 @@ export default function Contact() {
               ) : (
                 <Box
                   sx={{
-                    width: '100%',
-                    height: 64,
-                    maxHeight: 64,
+                    width: { xs: 150, sm: 180 },
+                    aspectRatio: '1 / 1',
                     borderRadius: 1,
                     bgcolor: 'action.hover',
                     display: 'flex',
@@ -380,6 +379,7 @@ export default function Contact() {
                     justifyContent: 'center',
                     fontSize: '0.75rem',
                     color: 'text.secondary',
+                    mx: 'auto',
                   }}
                 >
                   Montréal

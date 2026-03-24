@@ -17,7 +17,8 @@ import Container from '@mui/material/Container'
 import { styled, useTheme } from '@mui/material/styles'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import Typography from '@mui/material/Typography'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
 import React from 'react'
 import Image from 'next/image'
 import AppBarComponent from '../../components/appBar'
@@ -576,6 +577,7 @@ const ProjectImageContainer = styled(Box)(({ theme }) => ({
 }))
 
 export default function Projets() {
+  const router = useRouter()
   const { primary, secondary, accent } = useThemeColors()
   const textColor = useTextColor()
   const { t } = useLanguage()
@@ -654,11 +656,48 @@ export default function Projets() {
     }
   }
 
-  const handleProjectClick = (url: string) => {
-    if (url && url.trim() !== '') {
-      window.open(url, '_blank', 'noopener,noreferrer')
-    }
-  }
+  const handleProjectClick = useCallback(
+    (url: string) => {
+      const trimmed = url.trim()
+      if (!trimmed || typeof window === 'undefined') return
+
+      if (trimmed.startsWith('//')) {
+        try {
+          const u = new URL(trimmed, window.location.origin)
+          if (u.origin === window.location.origin) {
+            void router.push(`${u.pathname}${u.search}${u.hash}`)
+          } else {
+            window.open(u.href, '_blank', 'noopener,noreferrer')
+          }
+        } catch {
+          window.open(trimmed, '_blank', 'noopener,noreferrer')
+        }
+        return
+      }
+
+      if (trimmed.startsWith('/')) {
+        void router.push(trimmed)
+        return
+      }
+
+      if (/^https?:\/\//i.test(trimmed)) {
+        try {
+          const u = new URL(trimmed)
+          if (u.origin === window.location.origin) {
+            void router.push(`${u.pathname}${u.search}${u.hash}`)
+          } else {
+            window.open(trimmed, '_blank', 'noopener,noreferrer')
+          }
+        } catch {
+          window.open(trimmed, '_blank', 'noopener,noreferrer')
+        }
+        return
+      }
+
+      void router.push(`/${trimmed.replace(/^\/+/, '')}`)
+    },
+    [router]
+  )
 
   // Fonction pour corriger les chemins d'images
   const getImageUrl = (imageUrl: string) => {
