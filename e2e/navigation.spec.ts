@@ -3,8 +3,9 @@ import { expect, test } from '@playwright/test'
 test('landing reaches portfolio and contact in two clicks max', async ({ page }) => {
   await page.goto('/', { waitUntil: 'domcontentloaded' })
 
-  await expect(page.locator('footer a[href="/portfolio"]')).toBeVisible()
-  await expect(page.locator('footer a[href="/portfolio/contact"]')).toBeVisible()
+  // Home is at `/`; Footer is a Box (no <footer> tag), so target links directly
+  await expect(page.locator('a[href="/portfolio/projets"]').first()).toBeVisible()
+  await expect(page.locator('a[href="/portfolio/contact"]').first()).toBeVisible()
 
   await page.goto('/portfolio/contact', { waitUntil: 'domcontentloaded' })
 
@@ -14,7 +15,9 @@ test('landing reaches portfolio and contact in two clicks max', async ({ page })
 
 test('portfolio home loads and nav works', async ({ page }) => {
   await page.goto('/portfolio', { waitUntil: 'domcontentloaded' })
-  await expect(page.getByRole('button', { name: /discuter de mon projet|discuss my project/i })).toBeVisible()
+  await expect(
+    page.getByText(/discutons de votre projet|let's discuss your project/i).first()
+  ).toBeVisible()
   await expect(page.getByTestId('graphics-background-layer')).toHaveAttribute('data-graphics-mode', 'full')
   await expect(page.getByTestId('vanta-background')).toBeVisible()
 
