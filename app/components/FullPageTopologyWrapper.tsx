@@ -9,7 +9,6 @@ import { shouldShowTopology } from '@/utils/topologyRoutes'
 import { VANTA_PRELOAD_SOURCES } from '@/utils/vantaAssets'
 import { preloadExternalScripts } from '@/utils/vantaScriptLoader'
 import VantaDotsBackground from './VantaDotsBackground'
-import VantaTopologyBackground from './VantaTopologyBackground'
 
 const contentWrapperSx = {
   minHeight: '100vh',
@@ -26,7 +25,6 @@ interface FullPageTopologyWrapperProps {
 export default function FullPageTopologyWrapper({ children }: FullPageTopologyWrapperProps) {
   const pathname = usePathname()
   const show = shouldShowTopology(pathname)
-  const isLanding = pathname === '/'
   const scrollRef = useRef<HTMLDivElement>(null)
   const { customTheme } = useAdvancedTheme()
   const { graphicsMode, downgradeReason } = useGraphicsMode()
@@ -87,8 +85,6 @@ export default function FullPageTopologyWrapper({ children }: FullPageTopologyWr
               background: `radial-gradient(circle at 20% 20%, ${customTheme.primary}22 0%, transparent 35%), radial-gradient(circle at 80% 30%, ${customTheme.secondary}18 0%, transparent 30%), linear-gradient(135deg, ${customTheme.bg} 0%, ${customTheme.bg2} 100%)`,
             }}
           />
-        ) : isLanding ? (
-          <VantaTopologyBackground key="vanta-topology" fillContainer />
         ) : (
           <VantaDotsBackground key="vanta-dots" fillContainer />
         )}

@@ -23,8 +23,6 @@ vi.mock('../../contexts/LanguageContext', () => ({
         'nav.portfolio': 'Portfolio',
         'nav.home': 'Accueil',
         'nav.projects': 'Projets',
-        'nav.software': 'Logiciel',
-        'nav.webSites': 'Sites web',
         'nav.about': 'À propos',
         'nav.contact': 'Contact',
         'nav.admin': 'Admin',
@@ -49,7 +47,7 @@ describe('AppBarComponent', () => {
     render(<AppBarComponent />)
     expect(screen.getByText('Accueil')).toBeInTheDocument()
     expect(screen.getByText('Projets')).toBeInTheDocument()
-    expect(screen.getByText('Logiciel')).toBeInTheDocument()
+    expect(screen.getByText('À propos')).toBeInTheDocument()
     expect(screen.getByText('Contact')).toBeInTheDocument()
   })
 

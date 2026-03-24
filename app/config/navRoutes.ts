@@ -1,4 +1,4 @@
-export type NavRouteId = 'home' | 'projects' | 'software' | 'websites' | 'about' | 'contact'
+export type NavRouteId = 'home' | 'projects' | 'about' | 'contact'
 
 export interface NavRoute {
   id: NavRouteId
@@ -22,20 +22,6 @@ export const NAV_ROUTES: NavRoute[] = [
     path: '/portfolio/projets',
     ariaLabel: 'projets',
     isActive: (pathname) => pathname === '/portfolio/projets',
-  },
-  {
-    id: 'software',
-    labelKey: 'nav.software',
-    path: '/logiciel',
-    ariaLabel: 'logiciel',
-    isActive: (pathname) => pathname === '/logiciel' || pathname.startsWith('/logiciel/'),
-  },
-  {
-    id: 'websites',
-    labelKey: 'nav.webSites',
-    path: '/pageweb',
-    ariaLabel: 'sites web',
-    isActive: (pathname) => pathname === '/pageweb',
   },
   {
     id: 'about',

@@ -28,6 +28,8 @@ model Project {
   description  String
   technologies String
   status       String
+  projectType  ProjectType @default(web)
+  displayOrder Int      @default(0)
   url          String?
   /** Lien direct vers binaire (.exe, .dmg, etc.) ou page de téléchargement */
   downloadUrl  String?
@@ -36,6 +38,11 @@ model Project {
   updatedAt    DateTime @updatedAt
 
   @@map("Project")
+}
+
+enum ProjectType {
+  logiciel
+  web
 }
 
 enum TimelendarPlatform {

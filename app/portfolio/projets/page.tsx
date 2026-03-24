@@ -17,7 +17,8 @@ import Container from '@mui/material/Container'
 import { styled, useTheme } from '@mui/material/styles'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import Typography from '@mui/material/Typography'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
 import React from 'react'
 import Image from 'next/image'
 import AppBarComponent from '../../components/appBar'
@@ -48,6 +49,8 @@ interface Project {
   description: string
   technologies: string
   status: string
+  projectType?: 'logiciel' | 'web'
+  displayOrder?: number
   url: string
   downloadUrl?: string | null
   imageUrl?: string
@@ -574,6 +577,7 @@ const ProjectImageContainer = styled(Box)(({ theme }) => ({
 }))
 
 export default function Projets() {
+  const router = useRouter()
   const { primary, secondary, accent } = useThemeColors()
   const textColor = useTextColor()
   const { t } = useLanguage()
@@ -581,10 +585,15 @@ export default function Projets() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [selectedTech, setSelectedTech] = useState<string | null>(null)
+  const [selectedProjectType, setSelectedProjectType] = useState<'logiciel' | 'web'>('logiciel')
 
   useEffect(() => {
     fetchProjects()
   }, [])
+
+  useEffect(() => {
+    setSelectedTech(null)
+  }, [selectedProjectType])
 
   const fetchProjects = async () => {
     try {
@@ -647,11 +656,48 @@ export default function Projets() {
     }
   }
 
-  const handleProjectClick = (url: string) => {
-    if (url && url.trim() !== '') {
-      window.open(url, '_blank', 'noopener,noreferrer')
-    }
-  }
+  const handleProjectClick = useCallback(
+    (url: string) => {
+      const trimmed = url.trim()
+      if (!trimmed || typeof window === 'undefined') return
+
+      if (trimmed.startsWith('//')) {
+        try {
+          const u = new URL(trimmed, window.location.origin)
+          if (u.origin === window.location.origin) {
+            void router.push(`${u.pathname}${u.search}${u.hash}`)
+          } else {
+            window.open(u.href, '_blank', 'noopener,noreferrer')
+          }
+        } catch {
+          window.open(trimmed, '_blank', 'noopener,noreferrer')
+        }
+        return
+      }
+
+      if (trimmed.startsWith('/')) {
+        void router.push(trimmed)
+        return
+      }
+
+      if (/^https?:\/\//i.test(trimmed)) {
+        try {
+          const u = new URL(trimmed)
+          if (u.origin === window.location.origin) {
+            void router.push(`${u.pathname}${u.search}${u.hash}`)
+          } else {
+            window.open(trimmed, '_blank', 'noopener,noreferrer')
+          }
+        } catch {
+          window.open(trimmed, '_blank', 'noopener,noreferrer')
+        }
+        return
+      }
+
+      void router.push(`/${trimmed.replace(/^\/+/, '')}`)
+    },
+    [router]
+  )
 
   // Fonction pour corriger les chemins d'images
   const getImageUrl = (imageUrl: string) => {
@@ -699,11 +745,20 @@ export default function Projets() {
   }
 
   // Filtrer les projets par technologie (comparaison normalisée)
+  const projectsByType = projects.filter((project) => (project.projectType ?? 'web') === selectedProjectType)
+
+  const orderedProjects = [...projectsByType].sort((a, b) => {
+    const orderA = a.displayOrder ?? 0
+    const orderB = b.displayOrder ?? 0
+    if (orderA !== orderB) return orderA - orderB
+    return a.id - b.id
+  })
+
   const filteredProjects = selectedTech
-    ? projects.filter(project =>
+    ? orderedProjects.filter(project =>
         project.technologies.split(',').some(tech => normalizeTechName(tech.trim()) === selectedTech)
       )
-    : projects
+    : orderedProjects
 
   const handleTechFilter = (tech: string) => {
     setSelectedTech(selectedTech === tech ? null : tech)
@@ -821,6 +876,23 @@ export default function Projets() {
         )}
 
         {/* Projects Grid */}
+        <Box sx={{ display: 'flex', justifyContent: 'center', gap: 1.5, mb: 3, flexWrap: 'wrap' }}>
+          <Button
+            variant={selectedProjectType === 'logiciel' ? 'contained' : 'outlined'}
+            onClick={() => setSelectedProjectType('logiciel')}
+            sx={{ minWidth: 140 }}
+          >
+            {t('nav.software')}
+          </Button>
+          <Button
+            variant={selectedProjectType === 'web' ? 'contained' : 'outlined'}
+            onClick={() => setSelectedProjectType('web')}
+            sx={{ minWidth: 140 }}
+          >
+            {t('nav.webSites')}
+          </Button>
+        </Box>
+
         <ProjectsGrid>
           {filteredProjects.map((project, index) => (
             <ProjectCardWrapper
@@ -837,7 +909,7 @@ export default function Projets() {
           ))}
         </ProjectsGrid>
         
-        {filteredProjects.length === 0 && projects.length > 0 && (
+        {filteredProjects.length === 0 && projectsByType.length > 0 && (
           <AnimatedBox>
             <Box sx={{ 
               textAlign: 'center', 
@@ -864,7 +936,7 @@ export default function Projets() {
           </AnimatedBox>
         )}
 
-        {projects.length === 0 && !error && (
+        {projectsByType.length === 0 && !error && (
           <AnimatedBox>
             <Box sx={{ 
               textAlign: 'center', 
@@ -875,7 +947,7 @@ export default function Projets() {
             }}>
               <CodeIcon sx={{ fontSize: 64, color: '#667eea', mb: 2 }} />
               <Typography variant="h5" color="text.secondary" gutterBottom>
-                {t('projects.noProjectsAvailable')}
+                {selectedProjectType === 'logiciel' ? 'Aucun logiciel pour le moment' : 'Aucun site web pour le moment'}
               </Typography>
               <Typography variant="body1" color="text.secondary">
                 {t('projects.comingSoon')}

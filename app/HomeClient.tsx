@@ -96,11 +96,6 @@ export default function HomeClient({ initialShowIntro }: { initialShowIntro: boo
           mt: 2,
           alignItems: 'center'
         }}>
-          <Link href="/portfolio/projets" style={{ textDecoration: 'none' }}>
-            <CTAButton variant="primary" size="large">
-              {t('home.seeProjects')}
-            </CTAButton>
-          </Link>
           <Link href="/portfolio/contact" style={{ textDecoration: 'none' }}>
             <CTAButton variant="outline" size="large">
               {t('home.contactMe')}
@@ -161,56 +156,6 @@ export default function HomeClient({ initialShowIntro }: { initialShowIntro: boo
             >
               {t('home.intro')}
             </Typography>
-            
-            <Box sx={{ 
-              display: 'grid',
-              gridTemplateColumns: { xs: 'repeat(2, 1fr)', sm: 'repeat(3, 1fr)' },
-              gap: { xs: 1.5, sm: 2 },
-              mt: 2,
-              mb: 0,
-              maxWidth: 500,
-              mx: 'auto'
-            }}>
-              <Box>
-                <Typography variant="h3" sx={{ 
-                  fontSize: { xs: '1.5rem', md: '1.75rem' },
-                  fontWeight: 700,
-                  color: 'primary.main',
-                  mb: 0.25
-                }}>
-                  1
-                </Typography>
-                <Typography variant="body2" sx={{ fontSize: '0.8rem', color: textColor, opacity: 0.8 }}>
-                  {t('home.statsStage')}
-                </Typography>
-              </Box>
-              <Box>
-                <Typography variant="h3" sx={{ 
-                  fontSize: { xs: '1.5rem', md: '1.75rem' },
-                  fontWeight: 700,
-                  color: primary,
-                  mb: 0.25
-                }}>
-                  10+
-                </Typography>
-                <Typography variant="body2" sx={{ fontSize: '0.8rem', color: textColor, opacity: 0.8 }}>
-                  {t('home.statsTech')}
-                </Typography>
-              </Box>
-              <Box sx={{ gridColumn: { xs: 'span 2', sm: 'span 1' } }}>
-                <Typography variant="h3" sx={{ 
-                  fontSize: { xs: '1.25rem', md: '1.5rem' },
-                  fontWeight: 700,
-                  color: primary,
-                  mb: 0.25
-                }}>
-                  {t('home.statsAvailable')}
-                </Typography>
-                <Typography variant="body2" sx={{ fontSize: '0.8rem', color: textColor, opacity: 0.8 }}>
-                  {t('home.statsAvailableLabel')}
-                </Typography>
-              </Box>
-            </Box>
           </Box>
         </GlassContainer>
 

@@ -24,7 +24,7 @@ export const translations = {
       role: 'Sites web, petits logiciels web et maintenance pour travailleurs autonomes et petites entreprises.',
       intro: "Je crée des sites web et des outils numériques simples pour aider les petites entreprises à mieux présenter leurs services ou alléger certaines tâches du quotidien. J'offre aussi l'hébergement, les mises à jour et un accompagnement technique clair.",
       seeProjects: 'Voir mes projets',
-      contactMe: 'Discuter de mon projet',
+      contactMe: 'Discutons de votre projet',
       statsStage: 'Stage terminé',
       statsTech: 'Technologies maîtrisées',
       statsAvailable: 'Disponible',
@@ -89,6 +89,11 @@ export const translations = {
       qualityDesc: 'Code propre et maintenable',
       ctaTitle: 'Discutons de votre projet',
       ctaText: "Projet web, outil sur mesure ou hébergement : décrivez-moi votre besoin, je vous propose une solution adaptée.",
+      whoCardP1:
+        "Passionné d'informatique et de jeux vidéo, grand utilisateur d'applications mobiles et web.",
+      whoCardP2:
+        "À la suite d'un AVC à 38 ans, j'ai choisi de me réorienter vers le développement d'applications afin de réaliser mon rêve de travailler dans cette industrie.",
+      whoCardP3: 'Motivé et heureux de pouvoir enfin allier passion et travail.',
     },
     projects: {
       title: 'Projets',
@@ -257,7 +262,7 @@ export const translations = {
       role: 'Websites, small web tools, and maintenance for freelancers and small businesses.',
       intro: 'I build websites and simple digital tools to help small businesses present their services better or lighten everyday tasks. I also offer hosting, updates, and clear technical support.',
       seeProjects: 'View my projects',
-      contactMe: 'Discuss my project',
+      contactMe: 'Let\'s discuss your project',
       statsStage: 'Internship completed',
       statsTech: 'Technologies mastered',
       statsAvailable: 'Available',
@@ -322,6 +327,11 @@ export const translations = {
       qualityDesc: 'Clean and maintainable code',
       ctaTitle: 'Discuss your project',
       ctaText: 'Web project, custom tool, or hosting? Describe your need and I will propose a solution that fits.',
+      whoCardP1:
+        'Passionate about computing and video games, and a heavy user of mobile and web applications.',
+      whoCardP2:
+        'After a stroke at age 38, I chose to retrain in application development to fulfill my dream of working in this industry.',
+      whoCardP3: 'Motivated and glad to finally bring passion and work together.',
     },
     projects: {
       title: 'Projects',

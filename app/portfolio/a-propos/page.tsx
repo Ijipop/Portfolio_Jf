@@ -133,7 +133,7 @@ const FlipCardFront = ({ children, sx }: { children: React.ReactNode; sx?: any }
         borderRadius: '8px',
         padding: theme.spacing(4),
         textAlign: 'center',
-        boxShadow: `0 8px 32px ${primary}15, ${DESIGN_TOKENS.shadows.elevated.light} !important`,
+        boxShadow: `${DESIGN_TOKENS.shadows.elevated.light} !important`,
         transition: DESIGN_TOKENS.transitions.slow,
         display: 'flex',
         flexDirection: 'column',
@@ -165,45 +165,14 @@ const BackContentAnimated = styled(Box)({
   zIndex: 1,
 })
 
-// Effet ripple « WOW » sur l'endos : double vague visible, texte reste lisible
-const RippleCircle = styled(Box)({
-  '@keyframes rippleExpand': {
-    '0%': { transform: 'translate(-50%, -50%) scale(0.2)', opacity: 0.6 },
-    '70%': { transform: 'translate(-50%, -50%) scale(1.1)', opacity: 0.25 },
-    '100%': { transform: 'translate(-50%, -50%) scale(1.35)', opacity: 0 },
-  },
-  position: 'absolute',
-  left: '50%',
-  top: '50%',
-  width: '160%',
-  height: '160%',
-  borderRadius: '50%',
-  animation: 'rippleExpand 2.8s ease-out infinite',
-})
-
-// Palettes où le fond est plus sombre/saturé → ripple renforcé pour rester visible
-const STRONG_RIPPLE_PALETTES = [
-  'sunset', 'ocean', 'cyber', 'forest',
-  'calm', 'midnight', 'aurora', 'coral', 'gold', 'mint', 'wine', 'ice', 'ember'
-]
-
 // Composant FlipCardBack fonctionnel pour utiliser les couleurs du thème
 const FlipCardBack = ({ children, sx }: { children: React.ReactNode; sx?: any }) => {
   const theme = useTheme()
   const pathname = usePathname()
   const isTopologyRoute = shouldShowTopology(pathname)
-  const { themeName } = useAdvancedTheme()
   const { primary, secondary } = useThemeColors()
-  const strongRipple = STRONG_RIPPLE_PALETTES.includes(themeName)
   const backGradient = `linear-gradient(135deg, ${primary}CC 0%, ${secondary}B3 50%, ${primary}CC 100%)`
   const backTextColor = getTextColorForBackground(backGradient)
-
-  const ripple1 = strongRipple
-    ? `radial-gradient(circle at center, ${primary}CC 0%, ${secondary}99 30%, ${primary}80 55%, transparent 75%)`
-    : `radial-gradient(circle at center, ${primary}50 0%, ${secondary}35 35%, ${primary}20 55%, transparent 75%)`
-  const ripple2 = strongRipple
-    ? `radial-gradient(circle at center, ${secondary}CC 0%, ${primary}99 30%, ${secondary}80 55%, transparent 75%)`
-    : `radial-gradient(circle at center, ${secondary}45 0%, ${primary}40 35%, ${secondary}25 55%, transparent 75%)`
 
   const backFlipFaceSurfaceSx = getCardSurfaceSx({
     isTopologyRoute,
@@ -229,7 +198,7 @@ const FlipCardBack = ({ children, sx }: { children: React.ReactNode; sx?: any })
         borderRadius: '8px',
         padding: theme.spacing(4),
         textAlign: 'center',
-        boxShadow: `0 8px 32px ${primary}30, ${DESIGN_TOKENS.shadows.elevated.light} !important`,
+        boxShadow: `${DESIGN_TOKENS.shadows.elevated.light} !important`,
         transform: 'rotateY(180deg)',
         WebkitTransform: 'rotateY(180deg)',
         MozTransform: 'rotateY(180deg)',
@@ -242,19 +211,6 @@ const FlipCardBack = ({ children, sx }: { children: React.ReactNode; sx?: any })
         ...sx
       }}
     >
-      {/* Double vague ripple (effet WOW) — renforcé sur Sunset, Ocean, Cyber, Forest */}
-      <Box
-        sx={{
-          position: 'absolute',
-          inset: 0,
-          borderRadius: '8px',
-          overflow: 'hidden',
-          pointerEvents: 'none',
-        }}
-      >
-        <RippleCircle sx={{ background: ripple1, animationDelay: '0s' }} />
-        <RippleCircle sx={{ background: ripple2, animationDelay: '1.4s' }} />
-      </Box>
       <BackContentAnimated>
         {children}
       </BackContentAnimated>
@@ -397,7 +353,7 @@ export default function About() {
                   color: textColor,
                   opacity: 0.9
                 }}>
-                  {"Passionné d'informatique et de jeux vidéo, grand utilisateur d'applications mobiles et web."}
+                  {t('about.whoCardP1')}
                 </Typography>
                 <Typography variant="body1" sx={{ 
                   mb: 2, 
@@ -406,7 +362,7 @@ export default function About() {
                   color: textColor,
                   opacity: 0.9
                 }}>
-                  {"À 41 ans, j'ai choisi de me réorienter vers le développement d'applications afin de réaliser mon rêve de travailler dans cette industrie."}
+                  {t('about.whoCardP2')}
                 </Typography>
                 <Typography 
                   variant="body1" 
@@ -418,7 +374,7 @@ export default function About() {
                     textShadow: `0 1px 2px ${primary}40`
                   }}
                 >
-                  Motivé et heureux de pouvoir enfin allier passion et travail.
+                  {t('about.whoCardP3')}
                 </Typography>
               </FlipCardBack>
             </FlipCardInner>

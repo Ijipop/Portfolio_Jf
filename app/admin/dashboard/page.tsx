@@ -40,6 +40,8 @@ interface Project {
   description: string;
   technologies: string;
   status: string;
+  projectType: 'logiciel' | 'web';
+  displayOrder: number;
   url?: string;
   downloadUrl?: string | null;
   imageUrl?: string;
@@ -70,6 +72,8 @@ export default function AdminDashboard() {
     description: '',
     technologies: '',
     status: '',
+    projectType: 'web' as 'logiciel' | 'web',
+    displayOrder: 0,
     url: '',
     downloadUrl: '',
     imageUrl: ''
@@ -128,7 +132,7 @@ export default function AdminDashboard() {
     } finally {
       setLoading(false);
     }
-  }, [router]);
+  }, []);
 
   const fetchTimelendarReleases = useCallback(async () => {
     try {
@@ -144,32 +148,35 @@ export default function AdminDashboard() {
     }
   }, []);
 
-  // Fonction pour nettoyer le localStorage et rediriger
-  const clearStorageAndRedirect = useCallback(() => {
-    localStorage.removeItem('adminToken');
-    localStorage.removeItem('adminUser');
-    router.push('/');
+  const redirectToAdminLogin = useCallback(() => {
+    router.push('/admin');
   }, [router]);
 
   useEffect(() => {
-    // Vérifier si l'utilisateur est connecté
-    const token = localStorage.getItem('adminToken');
-    const user = localStorage.getItem('adminUser');
-    
-    if (!token || !user) {
-      clearStorageAndRedirect();
-      return;
+    const verifySession = async () => {
+      try {
+        const response = await fetch('/api/auth/session');
+        if (!response.ok) {
+          redirectToAdminLogin();
+          return;
+        }
+        fetchProjects();
+        fetchTimelendarReleases();
+      } catch {
+        redirectToAdminLogin();
+      }
+    };
+    void verifySession();
+  }, [fetchProjects, fetchTimelendarReleases, redirectToAdminLogin]);
+
+  const handleLogout = async () => {
+    try {
+      await fetch('/api/auth/logout', { method: 'POST' });
+    } catch (error) {
+      console.error('Logout:', error);
+    } finally {
+      router.push('/');
     }
-
-    fetchProjects();
-    fetchTimelendarReleases();
-  }, [router, fetchProjects, fetchTimelendarReleases, clearStorageAndRedirect]);
-
-  const handleLogout = () => {
-    // Nettoyer le localStorage
-    localStorage.removeItem('adminToken');
-    localStorage.removeItem('adminUser');
-    router.push('/');
   };
 
   const handleOpenDialog = (project?: Project) => {
@@ -180,6 +187,8 @@ export default function AdminDashboard() {
         description: project.description,
         technologies: project.technologies,
         status: project.status,
+        projectType: project.projectType ?? 'web',
+        displayOrder: project.displayOrder ?? 0,
         url: project.url || '',
         downloadUrl: project.downloadUrl || '',
         imageUrl: project.imageUrl || ''
@@ -192,6 +201,8 @@ export default function AdminDashboard() {
         description: '',
         technologies: '',
         status: '',
+        projectType: 'web',
+        displayOrder: 0,
         url: '',
         downloadUrl: '',
         imageUrl: ''
@@ -209,6 +220,8 @@ export default function AdminDashboard() {
       description: '',
       technologies: '',
       status: '',
+      projectType: 'web',
+      displayOrder: 0,
       url: '',
       downloadUrl: '',
       imageUrl: ''
@@ -249,29 +262,12 @@ export default function AdminDashboard() {
     setError('');
 
     try {
-      // Vérifier que l'utilisateur est connecté
-      const token = localStorage.getItem('adminToken');
-      const user = localStorage.getItem('adminUser');
-      
-      if (!token || !user) {
-        setError('Session expirée. Veuillez vous reconnecter.');
-        setUploading(false);
-        setPreviewImage(null);
-        setTimeout(() => {
-          router.push('/');
-        }, 2000);
-        return;
-      }
-
       const uploadFormData = new FormData();
       uploadFormData.append('file', file);
 
       const response = await fetch('/api/upload', {
         method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`
-          // Ne pas définir Content-Type - le navigateur le fait automatiquement pour FormData
-        },
+        // Ne pas définir Content-Type - le navigateur le fait automatiquement pour FormData
         body: uploadFormData
       });
 
@@ -281,7 +277,7 @@ export default function AdminDashboard() {
         
         if (response.status === 401) {
           setError('❌ Session expirée. Redirection vers la page d\'accueil...');
-          clearStorageAndRedirect();
+          redirectToAdminLogin();
         } else {
           setError(errorData.error || `Erreur ${response.status}: ${errorData.message || 'Erreur lors de l\'upload'}`);
         }
@@ -316,20 +312,13 @@ export default function AdminDashboard() {
     }
 
     try {
-      const token = localStorage.getItem('adminToken');
-      if (!token) {
-        router.push('/');
-        return;
-      }
-
       const url = editingProject ? `/api/projects/${editingProject.id}` : '/api/projects';
       const method = editingProject ? 'PUT' : 'POST';
 
       const response = await fetch(url, {
         method,
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify(formData)
       });
@@ -355,17 +344,8 @@ export default function AdminDashboard() {
     }
 
     try {
-      const token = localStorage.getItem('adminToken');
-      if (!token) {
-        router.push('/');
-        return;
-      }
-
       const response = await fetch(`/api/projects/${id}`, {
-        method: 'DELETE',
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
+        method: 'DELETE'
       });
 
       const data = await response.json();
@@ -403,11 +383,6 @@ export default function AdminDashboard() {
       setError('URL invalide.');
       return;
     }
-    const token = localStorage.getItem('adminToken');
-    if (!token) {
-      router.push('/');
-      return;
-    }
     setTimelendarUploading(true);
     setError('');
     setTimelendarSuccessOpen(false);
@@ -418,7 +393,6 @@ export default function AdminDashboard() {
       const response = await fetch('/api/timelendar/releases', {
         method: 'POST',
         headers: {
-          Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
@@ -466,15 +440,9 @@ export default function AdminDashboard() {
 
   const handleDeleteTimelendarRelease = async (id: number) => {
     if (!confirm('Supprimer cette version Timelendar ?')) return;
-    const token = localStorage.getItem('adminToken');
-    if (!token) {
-      router.push('/');
-      return;
-    }
     try {
       const response = await fetch(`/api/timelendar/releases/${id}`, {
         method: 'DELETE',
-        headers: { 'Authorization': `Bearer ${token}` },
       });
       const data = await response.json();
       if (data.success) {
@@ -554,6 +522,8 @@ export default function AdminDashboard() {
                 <TableCell>Description</TableCell>
                 <TableCell>Technologies</TableCell>
                 <TableCell>Statut</TableCell>
+                <TableCell>Type</TableCell>
+                <TableCell>Ordre</TableCell>
                 <TableCell>URL</TableCell>
                 <TableCell>Téléchargement</TableCell>
                 <TableCell>Image</TableCell>
@@ -571,6 +541,8 @@ export default function AdminDashboard() {
                   </TableCell>
                   <TableCell>{project.technologies}</TableCell>
                   <TableCell>{project.status}</TableCell>
+                  <TableCell>{project.projectType === 'logiciel' ? 'Logiciel' : 'Sites web'}</TableCell>
+                  <TableCell>{project.displayOrder ?? 0}</TableCell>
                   <TableCell>
                     {project.url && (
                       <Button
@@ -847,6 +819,39 @@ export default function AdminDashboard() {
               value={formData.status}
               onChange={(e) => setFormData({ ...formData, status: e.target.value })}
               required
+            />
+            <FormControl margin="dense" fullWidth required>
+              <InputLabel id="project-type-label">Type de projet</InputLabel>
+              <Select
+                labelId="project-type-label"
+                label="Type de projet"
+                value={formData.projectType}
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    projectType: (e.target.value as 'logiciel' | 'web') ?? 'web',
+                  })
+                }
+              >
+                <MenuItem value="logiciel">Logiciel</MenuItem>
+                <MenuItem value="web">Sites web</MenuItem>
+              </Select>
+            </FormControl>
+            <TextField
+              margin="dense"
+              label="Ordre d'affichage"
+              fullWidth
+              type="number"
+              variant="outlined"
+              value={formData.displayOrder}
+              onChange={(e) =>
+                setFormData({
+                  ...formData,
+                  displayOrder: Math.max(0, Number(e.target.value) || 0),
+                })
+              }
+              inputProps={{ min: 0, step: 1 }}
+              helperText="Plus petit nombre = affiché en premier."
             />
             <TextField
               margin="dense"

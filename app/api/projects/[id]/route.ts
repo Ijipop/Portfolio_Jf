@@ -1,30 +1,25 @@
 import { prisma } from '@/lib/prisma'
+import { authAdminToken } from '@/lib/auth-admin-request'
 import { NextRequest, NextResponse } from 'next/server'
-import jwt from 'jsonwebtoken'
+
+type ProjectType = 'logiciel' | 'web'
+
+function parseProjectType(input: unknown): ProjectType {
+  return input === 'logiciel' ? 'logiciel' : 'web'
+}
+
+function parseDisplayOrder(input: unknown): number {
+  const value = typeof input === 'number' ? input : Number(input)
+  if (!Number.isFinite(value)) return 0
+  return Math.max(0, Math.trunc(value))
+}
 
 // DELETE /api/projects/[id] - Supprimer un project par ID (PROTÉGÉ)
 export async function DELETE(request: NextRequest, { params }: { params: { id: string } })
 {
-	// Vérifier l'authentification
-	const authHeader = request.headers.get('authorization')
-	if (!authHeader || !authHeader.startsWith('Bearer ')) {
-		return NextResponse.json(
-			{ success: false, error: 'Token d\'authentification requis' },
-			{ status: 401 }
-		)
-	}
-
-	const token = authHeader.substring(7)
-	try {
-		if (!process.env.JWT_SECRET) {
-			throw new Error('JWT_SECRET non configuré')
-		}
-		jwt.verify(token, process.env.JWT_SECRET)
-	} catch (error) {
-		return NextResponse.json(
-			{ success: false, error: 'Token invalide ou expiré' },
-			{ status: 401 }
-		)
+	const auth = authAdminToken(request)
+	if (!auth.ok) {
+		return NextResponse.json({ success: false, error: auth.error }, { status: auth.status })
 	}
 
 	try
@@ -91,26 +86,9 @@ export async function DELETE(request: NextRequest, { params }: { params: { id: s
 // PUT /api/projects/[id] - Modifier un project par ID (PROTÉGÉ)
 export async function PUT(request: NextRequest, { params }: { params: { id: string } })
 {
-	// Vérifier l'authentification
-	const authHeader = request.headers.get('authorization')
-	if (!authHeader || !authHeader.startsWith('Bearer ')) {
-		return NextResponse.json(
-			{ success: false, error: 'Token d\'authentification requis' },
-			{ status: 401 }
-		)
-	}
-
-	const token = authHeader.substring(7)
-	try {
-		if (!process.env.JWT_SECRET) {
-			throw new Error('JWT_SECRET non configuré')
-		}
-		jwt.verify(token, process.env.JWT_SECRET)
-	} catch (error) {
-		return NextResponse.json(
-			{ success: false, error: 'Token invalide ou expiré' },
-			{ status: 401 }
-		)
+	const auth = authAdminToken(request)
+	if (!auth.ok) {
+		return NextResponse.json({ success: false, error: auth.error }, { status: auth.status })
 	}
 
 	try
@@ -132,7 +110,7 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
 		}
 
 		const body = await request.json()
-		const { name, description, technologies, status, url, downloadUrl, imageUrl } = body
+		const { name, description, technologies, status, url, downloadUrl, imageUrl, projectType, displayOrder } = body
 
 		// Validation des données
 		if (!name || typeof name !== 'string' || name.trim().length === 0) {
@@ -213,16 +191,17 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
 		// Mettre à jour le project
 		const updatedProject = await prisma.project.update({
 			where: { id },
-			data:
-			{
+			data: {
 				name: name.trim(),
 				description: description.trim(),
 				technologies: technologies.trim(),
 				status: status.trim(),
 				url: url || '',
 				downloadUrl: dl,
-				imageUrl: imageUrl || ''
-			}
+				imageUrl: imageUrl || '',
+        projectType: parseProjectType(projectType),
+        displayOrder: parseDisplayOrder(displayOrder),
+			} as any
 		})
 
 		return NextResponse.json({
