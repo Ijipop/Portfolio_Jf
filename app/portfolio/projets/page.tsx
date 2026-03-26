@@ -59,6 +59,13 @@ interface Project {
   updatedAt: string
 }
 
+type TimelendarPlatform = 'windows' | 'macos' | 'both'
+
+interface TimelendarRelease {
+  filePath: string
+  platform?: TimelendarPlatform
+}
+
 // Composants stylisés
 
 const StatusChip = styled(Chip)(({ theme, color }: any) => ({
@@ -198,8 +205,12 @@ const ProjectCardWrapper = ({
   getStatusIcon,
   getStatusColor,
   getImageUrl,
+  timelendarWindowsUrl,
+  timelendarMacosUrl,
   viewProjectLabel = 'Voir le projet',
   downloadProjectLabel = 'Télécharger le projet',
+  downloadTimelendarPcLabel = 'Télécharger Timelendar PC',
+  downloadTimelendarMacosLabel = 'Télécharger Timelendar macOS',
 }: { 
   project: Project
   index: number
@@ -207,8 +218,12 @@ const ProjectCardWrapper = ({
   getStatusIcon: (status: string) => React.ReactElement
   getStatusColor: (status: string) => "error" | "success" | "warning" | "info" | "default" | "primary" | "secondary"
   getImageUrl: (imageUrl: string) => string
+  timelendarWindowsUrl?: string | null
+  timelendarMacosUrl?: string | null
   viewProjectLabel?: string
   downloadProjectLabel?: string
+  downloadTimelendarPcLabel?: string
+  downloadTimelendarMacosLabel?: string
 }) => {
   const theme = useTheme()
   const { primary, secondary, accent } = useThemeColors()
@@ -234,6 +249,12 @@ const ProjectCardWrapper = ({
   const reflectionColor = reflectionColors[index % reflectionColors.length]
   
   const imgHeights = { xs: '100px', sm: '120px', md: '140px', xl: '200px' }
+  const lowerName = project.name.toLowerCase()
+  const lowerUrl = (project.url ?? '').toLowerCase()
+  const isTimelendarProject = lowerName.includes('timelendar') || lowerUrl.includes('/logiciel/timelendar')
+  const hasProjectAction = project.url?.trim()
+    || (!isTimelendarProject && project.downloadUrl?.trim())
+    || (isTimelendarProject && (timelendarWindowsUrl || timelendarMacosUrl))
 
   return (
     <ScrollReveal key={project.id} direction="up" distance={isMobile ? 30 : 50} delay={isMobile ? 0.08 * (index % 4) : 0.05 * (index % 4)}>
@@ -243,14 +264,16 @@ const ProjectCardWrapper = ({
         fullHeight
         onClick={() => {
           if (project.url?.trim()) handleProjectClick(project.url)
-          else if (project.downloadUrl?.trim()) handleProjectClick(project.downloadUrl)
+          else if (!isTimelendarProject && project.downloadUrl?.trim()) handleProjectClick(project.downloadUrl)
+          else if (isTimelendarProject && timelendarWindowsUrl) handleProjectClick(timelendarWindowsUrl)
+          else if (isTimelendarProject && timelendarMacosUrl) handleProjectClick(timelendarMacosUrl)
         }}
         floatingElements={2}
         sx={{
           padding: { xs: 2, sm: 2.5, md: 3 },
           flex: 1,
           minHeight: { xs: 320, md: 380 },
-          cursor: project.url?.trim() || project.downloadUrl?.trim() ? 'pointer' : 'default',
+          cursor: hasProjectAction ? 'pointer' : 'default',
         }}
       >
         <Box
@@ -444,7 +467,32 @@ const ProjectCardWrapper = ({
               {viewProjectLabel}
             </CTAButton>
           )}
-          {project.downloadUrl && (
+          {isTimelendarProject ? (
+            <>
+              {timelendarWindowsUrl ? (
+                <CTAButton
+                  variant="secondary"
+                  size="medium"
+                  fullWidth
+                  startIcon={<DownloadIcon />}
+                  onClick={() => handleProjectClick(timelendarWindowsUrl)}
+                >
+                  {downloadTimelendarPcLabel}
+                </CTAButton>
+              ) : null}
+              {timelendarMacosUrl ? (
+                <CTAButton
+                  variant="secondary"
+                  size="medium"
+                  fullWidth
+                  startIcon={<DownloadIcon />}
+                  onClick={() => handleProjectClick(timelendarMacosUrl)}
+                >
+                  {downloadTimelendarMacosLabel}
+                </CTAButton>
+              ) : null}
+            </>
+          ) : project.downloadUrl ? (
             <CTAButton
               variant="secondary"
               size="medium"
@@ -454,7 +502,7 @@ const ProjectCardWrapper = ({
             >
               {downloadProjectLabel}
             </CTAButton>
-          )}
+          ) : null}
         </Box>
         </Box>
       </ThreeDCardComponent>
@@ -587,9 +635,12 @@ export default function Projets() {
   const [error, setError] = useState<string | null>(null)
   const [selectedTech, setSelectedTech] = useState<string | null>(null)
   const [selectedProjectType, setSelectedProjectType] = useState<'logiciel' | 'web'>('logiciel')
+  const [timelendarWindowsUrl, setTimelendarWindowsUrl] = useState<string | null>(null)
+  const [timelendarMacosUrl, setTimelendarMacosUrl] = useState<string | null>(null)
 
   useEffect(() => {
     fetchProjects()
+    fetchTimelendarReleases()
   }, [])
 
   useEffect(() => {
@@ -610,6 +661,34 @@ export default function Projets() {
       setError('Erreur de connexion')
     } finally {
       setLoading(false)
+    }
+  }
+
+  const fetchTimelendarReleases = async () => {
+    try {
+      const response = await fetch('/api/timelendar/releases')
+      const data = await response.json()
+      if (!data?.success || !Array.isArray(data.data)) return
+      const releases: TimelendarRelease[] = data.data
+
+      let latestWindows: string | null = null
+      let latestMacos: string | null = null
+
+      for (const release of releases) {
+        const platform = release.platform ?? 'both'
+        if (!latestWindows && (platform === 'windows' || platform === 'both')) {
+          latestWindows = release.filePath
+        }
+        if (!latestMacos && (platform === 'macos' || platform === 'both')) {
+          latestMacos = release.filePath
+        }
+        if (latestWindows && latestMacos) break
+      }
+
+      setTimelendarWindowsUrl(latestWindows)
+      setTimelendarMacosUrl(latestMacos)
+    } catch {
+      // Ignore silently: la page reste utilisable sans releases Timelendar.
     }
   }
 
@@ -659,6 +738,11 @@ export default function Projets() {
 
   const handleProjectClick = useCallback(
     (url: string) => {
+      const normalized = url.trim().toLowerCase()
+      if (normalized.includes('/logiciel/timelendar')) {
+        void router.push('/logiciel/timelendar')
+        return
+      }
       navigateProjectUrl(url, router)
     },
     [router]
@@ -868,8 +952,12 @@ export default function Projets() {
               getStatusIcon={getStatusIcon}
               getStatusColor={getStatusColor}
               getImageUrl={getImageUrl}
+              timelendarWindowsUrl={timelendarWindowsUrl}
+              timelendarMacosUrl={timelendarMacosUrl}
               viewProjectLabel={t('projects.viewProject')}
               downloadProjectLabel={t('projects.downloadProject')}
+              downloadTimelendarPcLabel={t('projects.downloadTimelendarPc')}
+              downloadTimelendarMacosLabel={t('projects.downloadTimelendarMacos')}
             />
           ))}
         </ProjectsGrid>
