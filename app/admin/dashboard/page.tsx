@@ -634,7 +634,7 @@ export default function AdminDashboard() {
         <Card sx={{ mb: 2, bgcolor: 'grey.900', color: '#ffffff' }}>
           <CardContent sx={{ color: '#ffffff' }}>
             <Typography variant="subtitle2" sx={{ mb: 2, color: 'rgba(255,255,255,0.9)' }}>
-              Indiquez une URL publique vers un fichier .zip (hébergé ailleurs : GitHub Releases, site, etc.). Choisissez la plateforme cible (Windows, macOS ou les deux). La liste s’affiche sur la page Timelendar.
+              Indiquez une URL publique vers un fichier .zip (hébergé ailleurs : GitHub Releases, site, etc.). Pour macOS, utilisez un .zip qui contient votre fichier .dmg. Choisissez la plateforme cible (Windows, macOS ou les deux). La liste s’affiche sur la page Timelendar.
             </Typography>
             <form onSubmit={handleTimelendarSubmit}>
               <TextField
@@ -646,7 +646,7 @@ export default function AdminDashboard() {
                 onChange={(e) => setTimelendarFileUrl(e.target.value)}
                 required
                 placeholder="https://exemple.com/chemin/vers/fichier.zip"
-                helperText="L’URL doit contenir « .zip » (ex. lien direct ou page de release)."
+                helperText="L’URL doit contenir « .zip » (pour macOS: archive .zip contenant le .dmg)."
                 sx={{
                   mb: 2,
                   '& .MuiInputLabel-root': { color: 'rgba(255,255,255,0.8)' },

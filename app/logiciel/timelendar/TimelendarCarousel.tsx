@@ -209,7 +209,7 @@ export default function TimelendarCarousel({ title, emptyMessage }: Props) {
               pt: 2,
               pb: 0.5,
               minHeight: { xs: '3.2em', sm: '2.8em' },
-              fontSize: { xs: '0.9rem', sm: '0.95rem' },
+              fontSize: { xs: '0.98rem', sm: '1.03rem' },
               fontWeight: 500,
             }}
           >
@@ -310,7 +310,7 @@ export default function TimelendarCarousel({ title, emptyMessage }: Props) {
                 textAlign: 'center',
                 maxWidth: 640,
                 lineHeight: 1.5,
-                fontSize: '0.95rem',
+                fontSize: '1.03rem',
               }}
             >
               {t(GALLERY_CAP_KEYS[index])}
