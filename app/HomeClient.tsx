@@ -158,6 +158,7 @@ export default function HomeClient({ initialShowIntro }: { initialShowIntro: boo
             component="span"
             sx={{
               display: 'inline-block',
+              mt: { xs: 0.45, sm: 0.6 },
               fontSize: { xs: '0.9rem', sm: '1rem', md: '1.08rem' },
               letterSpacing: '0.06em',
               textTransform: 'uppercase',
