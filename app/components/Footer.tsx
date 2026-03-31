@@ -80,7 +80,12 @@ export default function Footer() {
     <Box
       component="footer"
       sx={{
-        background: `${footerBackground} !important`,
+        background:
+          'linear-gradient(145deg, rgba(255, 255, 255, 0.13) 0%, rgba(241, 245, 249, 0.1) 50%, rgba(255, 255, 255, 0.12) 100%) !important',
+        backdropFilter: 'blur(14px) saturate(1.05)',
+        WebkitBackdropFilter: 'blur(14px) saturate(1.05)',
+        borderTop: '1px solid rgba(148, 163, 184, 0.22)',
+        boxShadow: '0 -6px 18px rgba(2, 6, 23, 0.14), inset 0 1px 0 rgba(255, 255, 255, 0.2)',
         color: `${textColor} !important`,
         padding: theme.spacing(4, 0, 2),
         marginTop: 'auto',

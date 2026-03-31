@@ -80,7 +80,7 @@ export default function HomeClient({ initialShowIntro }: { initialShowIntro: boo
             component="span"
             sx={{
               display: 'inline-block',
-              fontSize: { xs: '3rem', sm: '4.4rem', md: '5.8rem' },
+              fontSize: { xs: '3.5rem', sm: '5rem', md: '6.6rem' },
               fontWeight: 900,
               letterSpacing: { xs: '0.03em', sm: '0.05em' },
               textTransform: 'none',
