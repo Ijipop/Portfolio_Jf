@@ -18,8 +18,8 @@ export const translations = {
       skip: 'Passer',
     },
     home: {
-      heroTitle: "Création de sites web et d'outils sur mesure",
-      heroSubtitle: 'Des solutions simples, modernes et adaptées à votre réalité.',
+      heroTitle: 'Ijipop',
+      heroSubtitle: 'Développeur',
       heroTagline:
         'Je crée des sites web et outils sur mesure pour des particuliers et des PME.',
       role: "Développeur spécialisé en création de sites web et d'applications sur mesure pour travailleurs autonomes et petites entreprises.",
@@ -260,8 +260,8 @@ export const translations = {
       skip: 'Skip',
     },
     home: {
-      heroTitle: 'Custom websites and tools',
-      heroSubtitle: 'Simple, modern solutions tailored to your reality.',
+      heroTitle: 'Ijipop',
+      heroSubtitle: 'Developer',
       heroTagline:
         'I build custom websites and tools for individuals and small businesses.',
       role: 'Developer specialized in custom websites and applications for freelancers and small businesses.',

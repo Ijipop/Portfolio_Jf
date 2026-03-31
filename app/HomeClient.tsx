@@ -9,8 +9,7 @@ import Typography from '@mui/material/Typography'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { GlassContainer } from './components/GlassCard'
-import { RevealTitle } from './components/LetterAnimations'
-import { FadeIn, TypingEffect } from './components/SimpleAnimations'
+import { FadeIn } from './components/SimpleAnimations'
 import ThreeDCardComponent from './components/ThreeDCard'
 import AppBarComponent from './components/appBar'
 import HeaderSection from './components/shared/HeaderSection'
@@ -45,6 +44,8 @@ export default function HomeClient({ initialShowIntro }: { initialShowIntro: boo
   const { primary, secondary } = useThemeColors()
   const textColor = useTextColor()
   const { t } = useLanguage()
+  const heroBrand = t('home.heroTitle')
+  const heroBrandDisplay = heroBrand.toLowerCase()
   const [showIntro, setShowIntro] = useState<boolean>(initialShowIntro)
 
   // Synchroniser avec cookie/sessionStorage après montage pour éviter flash d'hydration
@@ -75,15 +76,96 @@ export default function HomeClient({ initialShowIntro }: { initialShowIntro: boo
       
       <HeaderSection 
         title={
-          <RevealTitle delayPerLetter={0.052}>
-            {t('home.heroTitle')}
-          </RevealTitle>
+          <Typography
+            component="span"
+            sx={{
+              display: 'inline-block',
+              fontSize: { xs: '3rem', sm: '4.4rem', md: '5.8rem' },
+              fontWeight: 900,
+              letterSpacing: { xs: '0.03em', sm: '0.05em' },
+              textTransform: 'none',
+              lineHeight: 1.05,
+              position: 'relative',
+              mb: { xs: 0.9, sm: 1.2 },
+            }}
+          >
+            <Box
+              component="span"
+              data-text={heroBrand}
+              sx={{
+                position: 'relative',
+                display: 'inline-block',
+                color: 'transparent',
+                background: `linear-gradient(180deg, #ffffff 0%, ${secondary} 30%, ${primary} 62%, ${primary}c9 100%)`,
+                WebkitBackgroundClip: 'text',
+                backgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                textShadow: `0 0 14px ${primary}1f`,
+                animation: 'ijipopGlitchBase 3.4s infinite steps(1, end)',
+                '@keyframes ijipopGlitchBase': {
+                  '0%, 92%, 100%': { transform: 'translate(0, 0)' },
+                  '93%': { transform: 'translate(1px, -1px)' },
+                  '94%': { transform: 'translate(-1px, 1px)' },
+                  '95%': { transform: 'translate(1px, 0)' },
+                  '96%': { transform: 'translate(0, -1px)' },
+                },
+                '&::before, &::after': {
+                  content: 'attr(data-text)',
+                  position: 'absolute',
+                  left: 0,
+                  top: 0,
+                  width: '100%',
+                  height: '100%',
+                  pointerEvents: 'none',
+                  opacity: 0.78,
+                },
+                '&::before': {
+                  color: primary,
+                  transform: 'translate(-1px, 0)',
+                  clipPath: 'polygon(0 2%, 100% 2%, 100% 44%, 0 44%)',
+                  animation: 'ijipopGlitchTop 2.6s infinite steps(2, end)',
+                  opacity: 0.55,
+                },
+                '&::after': {
+                  color: primary,
+                  transform: 'translate(1px, 0)',
+                  clipPath: 'polygon(0 58%, 100% 58%, 100% 100%, 0 100%)',
+                  animation: 'ijipopGlitchBottom 2.1s infinite steps(2, end)',
+                  opacity: 0.4,
+                },
+                '@keyframes ijipopGlitchTop': {
+                  '0%, 88%, 100%': { transform: 'translate(0, 0)' },
+                  '89%': { transform: 'translate(-2px, -1px)' },
+                  '90%': { transform: 'translate(2px, 1px)' },
+                  '91%': { transform: 'translate(-1px, 0)' },
+                },
+                '@keyframes ijipopGlitchBottom': {
+                  '0%, 86%, 100%': { transform: 'translate(0, 0)' },
+                  '87%': { transform: 'translate(2px, 1px)' },
+                  '88%': { transform: 'translate(-2px, -1px)' },
+                  '89%': { transform: 'translate(1px, 0)' },
+                },
+              }}
+            >
+              {heroBrandDisplay}
+            </Box>
+          </Typography>
         }
         subtitle={
-          <TypingEffect 
-            text={t('home.heroSubtitle')}
-            speed={72}
-          />
+          <Typography
+            component="span"
+            sx={{
+              display: 'inline-block',
+              fontSize: { xs: '0.9rem', sm: '1rem', md: '1.08rem' },
+              letterSpacing: '0.06em',
+              textTransform: 'uppercase',
+              fontWeight: 500,
+              opacity: 0.9,
+              color: textColor,
+            }}
+          >
+            {t('home.heroSubtitle')}
+          </Typography>
         }
         tagline={t('home.heroTagline')}
       >
