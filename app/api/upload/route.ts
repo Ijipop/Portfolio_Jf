@@ -4,7 +4,36 @@ import { writeFile, mkdir } from 'fs/promises'
 import { existsSync } from 'fs'
 import path from 'path'
 
-// POST /api/upload - Uploader une image (PROTÉGÉ)
+export const runtime = 'nodejs'
+
+const DOWNLOAD_MAX_BYTES = 50 * 1024 * 1024 // 50 Mo (aligné sur serverActions.bodySizeLimit)
+
+function sanitizeOriginalName(name: string): string {
+  return name.replace(/[^a-zA-Z0-9.-]/g, '_')
+}
+
+function isAllowedDownloadMime(ext: string, mime: string): boolean {
+  const m = (mime || '').toLowerCase()
+  if (m === '' || m === 'application/octet-stream') return true
+  if (ext === '.zip') {
+    return (
+      m === 'application/zip' ||
+      m === 'application/x-zip-compressed' ||
+      m === 'multipart/x-zip'
+    )
+  }
+  if (ext === '.exe') {
+    return (
+      m === 'application/x-msdownload' ||
+      m === 'application/vnd.microsoft.portable-executable' ||
+      m === 'application/x-dosexec' ||
+      m === 'application/x-msdos-program'
+    )
+  }
+  return false
+}
+
+// POST /api/upload — image projet (kind=image ou défaut) ou fichier téléchargeable .zip/.exe (kind=download), PROTÉGÉ admin
 export async function POST(request: NextRequest) {
   const auth = authAdminToken(request)
   if (!auth.ok) {
@@ -14,6 +43,7 @@ export async function POST(request: NextRequest) {
   try {
     const formData = await request.formData()
     const file = formData.get('file') as File
+    const kind = String(formData.get('kind') ?? 'image').toLowerCase()
 
     if (!file) {
       return NextResponse.json(
@@ -22,7 +52,55 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Vérifier le type de fichier
+    if (kind === 'download') {
+      const originalName = sanitizeOriginalName(file.name)
+      const ext = path.extname(originalName).toLowerCase()
+      if (ext !== '.zip' && ext !== '.exe') {
+        return NextResponse.json(
+          { success: false, error: 'Extension non autorisée. Utilisez .zip ou .exe' },
+          { status: 400 }
+        )
+      }
+      if (!isAllowedDownloadMime(ext, file.type)) {
+        return NextResponse.json(
+          { success: false, error: 'Type de fichier non reconnu pour cette extension' },
+          { status: 400 }
+        )
+      }
+      if (file.size > DOWNLOAD_MAX_BYTES) {
+        return NextResponse.json(
+          { success: false, error: 'Le fichier est trop volumineux. Taille maximale: 50 Mo' },
+          { status: 400 }
+        )
+      }
+
+      const timestamp = Date.now()
+      const fileName = `${timestamp}_${originalName}`
+      const uploadDir = path.join(process.cwd(), 'public', 'downloads', 'projets')
+      if (!existsSync(uploadDir)) {
+        await mkdir(uploadDir, { recursive: true })
+      }
+
+      const bytes = await file.arrayBuffer()
+      const buffer = Buffer.from(bytes)
+      const filePath = path.join(uploadDir, fileName)
+      await writeFile(filePath, buffer)
+
+      const publicUrl = `/downloads/projets/${fileName}`
+
+      return NextResponse.json({
+        success: true,
+        data: {
+          url: publicUrl,
+          fileName,
+          size: file.size,
+          type: file.type
+        },
+        message: 'Fichier uploadé avec succès'
+      })
+    }
+
+    // kind === image (défaut)
     const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/gif']
     if (!allowedTypes.includes(file.type)) {
       return NextResponse.json(
@@ -31,7 +109,6 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Vérifier la taille (max 5MB)
     const maxSize = 5 * 1024 * 1024 // 5MB
     if (file.size > maxSize) {
       return NextResponse.json(
@@ -40,27 +117,22 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Créer le nom de fichier unique
     const timestamp = Date.now()
-    const originalName = file.name.replace(/[^a-zA-Z0-9.-]/g, '_')
+    const originalName = sanitizeOriginalName(file.name)
     const fileName = `${timestamp}_${originalName}`
-    
-    // Chemin de destination
+
     const uploadDir = path.join(process.cwd(), 'public', 'imgs', 'projets')
-    
-    // Créer le dossier s'il n'existe pas
+
     if (!existsSync(uploadDir)) {
       await mkdir(uploadDir, { recursive: true })
     }
 
-    // Lire le fichier et l'écrire
     const bytes = await file.arrayBuffer()
     const buffer = Buffer.from(bytes)
     const filePath = path.join(uploadDir, fileName)
-    
+
     await writeFile(filePath, buffer)
 
-    // Retourner l'URL relative pour l'utiliser dans l'application
     const imageUrl = `/imgs/projets/${fileName}`
 
     return NextResponse.json({
@@ -78,7 +150,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(
       {
         success: false,
-        error: 'Erreur lors de l\'upload de l\'image'
+        error: 'Erreur lors de l\'upload du fichier'
       },
       {
         status: 500
