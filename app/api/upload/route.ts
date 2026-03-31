@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { put } from '@vercel/blob'
 import { authAdminToken } from '@/lib/auth-admin-request'
 import { writeFile, mkdir } from 'fs/promises'
 import { existsSync } from 'fs'
@@ -42,6 +43,40 @@ function isAllowedDownloadMime(ext: string, mime: string): boolean {
     )
   }
   return false
+}
+
+/** Écrit sous `public/…` et renvoie une URL relative. */
+async function writePublicFile(diskSubdir: string[], fileName: string, buffer: Buffer): Promise<string> {
+  const uploadDir = path.join(process.cwd(), 'public', ...diskSubdir)
+  if (!existsSync(uploadDir)) {
+    await mkdir(uploadDir, { recursive: true })
+  }
+  const filePath = path.join(uploadDir, fileName)
+  await writeFile(filePath, buffer)
+  return `/${diskSubdir.join('/')}/${fileName}`
+}
+
+/**
+ * Par défaut (pas de token) : écriture dans `public/` — même comportement qu’avant (local, VPS, etc.).
+ * Si `BLOB_READ_WRITE_TOKEN` est défini : envoi vers Vercel Blob (URL absolue), optionnel pour les hébergeurs sans disque inscriptible.
+ */
+async function persistUploadedFile(
+  blobPathname: string,
+  buffer: Buffer,
+  contentType: string | undefined,
+  diskSubdir: string[],
+  fileName: string
+): Promise<string> {
+  const token = process.env.BLOB_READ_WRITE_TOKEN
+  if (token) {
+    const blob = await put(blobPathname, buffer, {
+      access: 'public',
+      token,
+      contentType: contentType || undefined,
+    })
+    return blob.url
+  }
+  return writePublicFile(diskSubdir, fileName, buffer)
 }
 
 // POST /api/upload — image projet (kind=image ou défaut) ou fichier téléchargeable .zip/.exe (kind=download), PROTÉGÉ admin
@@ -97,17 +132,16 @@ export async function POST(request: NextRequest) {
 
       const timestamp = Date.now()
       const fileName = `${timestamp}_${originalName}`
-      const uploadDir = path.join(process.cwd(), 'public', 'downloads', 'projets')
-      if (!existsSync(uploadDir)) {
-        await mkdir(uploadDir, { recursive: true })
-      }
 
       const bytes = await file.arrayBuffer()
       const buffer = Buffer.from(bytes)
-      const filePath = path.join(uploadDir, fileName)
-      await writeFile(filePath, buffer)
-
-      const publicUrl = `/downloads/projets/${fileName}`
+      const publicUrl = await persistUploadedFile(
+        `portfolio/projets-downloads/${fileName}`,
+        buffer,
+        normalizedMime(file.type) || undefined,
+        ['downloads', 'projets'],
+        fileName
+      )
 
       return NextResponse.json({
         success: true,
@@ -140,22 +174,18 @@ export async function POST(request: NextRequest) {
     }
 
     const timestamp = Date.now()
-    const originalName = sanitizeOriginalName(file.name)
+    const originalName = sanitizeOriginalName(sourceName)
     const fileName = `${timestamp}_${originalName}`
-
-    const uploadDir = path.join(process.cwd(), 'public', 'imgs', 'projets')
-
-    if (!existsSync(uploadDir)) {
-      await mkdir(uploadDir, { recursive: true })
-    }
 
     const bytes = await file.arrayBuffer()
     const buffer = Buffer.from(bytes)
-    const filePath = path.join(uploadDir, fileName)
-
-    await writeFile(filePath, buffer)
-
-    const imageUrl = `/imgs/projets/${fileName}`
+    const imageUrl = await persistUploadedFile(
+      `portfolio/projets-images/${fileName}`,
+      buffer,
+      imageMime || undefined,
+      ['imgs', 'projets'],
+      fileName
+    )
 
     return NextResponse.json({
       success: true,
@@ -174,8 +204,9 @@ export async function POST(request: NextRequest) {
     const code = err?.code
     let message = 'Erreur lors de l\'upload du fichier'
     if (code === 'EROFS' || code === 'EACCES' || code === 'EPERM') {
-      message =
-        'Écriture impossible sur le disque (dossier protégé ou hébergement sans stockage persistant). En local, vérifiez les droits sur le dossier public/. Sur Vercel, utilisez une URL externe ou un stockage type Blob/S3.'
+      message = process.env.BLOB_READ_WRITE_TOKEN
+        ? 'Écriture refusée malgré le token Blob — vérifiez BLOB_READ_WRITE_TOKEN et les logs serveur.'
+        : 'Impossible d’écrire sur le disque du serveur (fréquent sur certains clouds sans stockage local). En local ou sur un VPS, les fichiers vont dans public/ comme avant. Sur un hébergement sans disque inscriptible : collez une URL pour l’image ou le téléchargement, ou ajoutez optionnellement BLOB_READ_WRITE_TOKEN (Vercel Blob).'
     } else if (process.env.NODE_ENV === 'development' && err?.message) {
       message = `Upload: ${err.message}`
     }

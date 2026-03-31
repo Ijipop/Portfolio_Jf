@@ -292,8 +292,11 @@ export default function AdminDashboard() {
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({ error: 'Erreur inconnue' }));
-        console.error('Erreur upload:', errorData);
-        
+        console.error(
+          'Erreur upload image:',
+          typeof errorData?.error === 'string' ? errorData.error : JSON.stringify(errorData)
+        );
+
         if (response.status === 401) {
           setError('❌ Session expirée. Redirection vers la page d\'accueil...');
           redirectToAdminLogin();
@@ -354,6 +357,10 @@ export default function AdminDashboard() {
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({ error: 'Erreur inconnue' }));
+        console.error(
+          'Erreur upload fichier projet:',
+          typeof errorData?.error === 'string' ? errorData.error : JSON.stringify(errorData)
+        );
         if (response.status === 401) {
           setError('❌ Session expirée. Redirection vers la page d\'accueil...');
           redirectToAdminLogin();
@@ -864,6 +871,13 @@ export default function AdminDashboard() {
         </DialogTitle>
         <form onSubmit={handleSubmit}>
           <DialogContent>
+            <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+              Par défaut, les fichiers vont dans <code>public/</code> sur la machine qui exécute Node — comme avant
+              (développement local, VPS, etc.). Le stockage <strong>Vercel Blob</strong> reste{' '}
+              <strong>optionnel</strong> : si vous définissez <code>BLOB_READ_WRITE_TOKEN</code>, les uploads passent
+              par Blob au lieu du disque (pratique quand le serveur ne peut pas écrire dans <code>public/</code>).
+              Timelendar utilise sa propre entrée (page Timelendar).
+            </Typography>
             <TextField
               autoFocus
               margin="dense"
@@ -986,7 +1000,8 @@ export default function AdminDashboard() {
                 </Button>
               </label>
               <Typography variant="caption" color="text.secondary" display="block" sx={{ mt: 0.5 }}>
-                Remplit automatiquement le champ ci-dessus avec un lien vers le fichier hébergé sur ce site.
+                Met à jour le champ avec l’URL du fichier (chemin relatif sous <code>public/</code> par défaut, ou URL
+                absolue si Blob est configuré).
               </Typography>
             </Box>
             <Box sx={{ mt: 2, mb: 1 }}>
