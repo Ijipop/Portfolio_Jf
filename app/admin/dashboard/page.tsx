@@ -285,6 +285,7 @@ export default function AdminDashboard() {
 
       const response = await fetch('/api/upload', {
         method: 'POST',
+        credentials: 'include',
         // Ne pas définir Content-Type - le navigateur le fait automatiquement pour FormData
         body: uploadFormData
       });
@@ -347,6 +348,7 @@ export default function AdminDashboard() {
 
       const response = await fetch('/api/upload', {
         method: 'POST',
+        credentials: 'include',
         body: uploadFormData
       });
 
