@@ -44,6 +44,7 @@ interface Project {
   projectType: 'logiciel' | 'web';
   displayOrder: number;
   url?: string;
+  siteUrl?: string | null;
   downloadUrl?: string | null;
   imageUrl?: string;
   createdAt: string;
@@ -76,6 +77,7 @@ export default function AdminDashboard() {
     projectType: 'web' as 'logiciel' | 'web',
     displayOrder: 0,
     url: '',
+    siteUrl: '',
     downloadUrl: '',
     imageUrl: ''
   });
@@ -198,6 +200,7 @@ export default function AdminDashboard() {
         projectType: project.projectType ?? 'web',
         displayOrder: project.displayOrder ?? 0,
         url: project.url || '',
+        siteUrl: project.siteUrl || '',
         downloadUrl: project.downloadUrl || '',
         imageUrl: project.imageUrl || ''
       });
@@ -212,6 +215,7 @@ export default function AdminDashboard() {
         projectType: 'web',
         displayOrder: 0,
         url: '',
+        siteUrl: '',
         downloadUrl: '',
         imageUrl: ''
       });
@@ -231,6 +235,7 @@ export default function AdminDashboard() {
       projectType: 'web',
       displayOrder: 0,
       url: '',
+      siteUrl: '',
       downloadUrl: '',
       imageUrl: ''
     });
@@ -593,6 +598,15 @@ export default function AdminDashboard() {
                     )}
                   </TableCell>
                   <TableCell>
+                    {project.siteUrl && (
+                      <Button
+                        size="small"
+                        onClick={() => handleOpenProjectUrl(project.siteUrl!)}
+                        sx={{ mr: 0.5 }}
+                      >
+                        Voir le site
+                      </Button>
+                    )}
                     <IconButton
                       size="small"
                       onClick={() => handleOpenDialog(project)}
@@ -866,6 +880,16 @@ export default function AdminDashboard() {
               variant="outlined"
               value={formData.url}
               onChange={(e) => setFormData({ ...formData, url: e.target.value })}
+            />
+            <TextField
+              margin="dense"
+              label="Voir le site"
+              fullWidth
+              variant="outlined"
+              value={formData.siteUrl}
+              onChange={(e) => setFormData({ ...formData, siteUrl: e.target.value })}
+              placeholder="https://… (site en ligne / vitrine)"
+              helperText="URL optionnelle pour la pastille “Voir le site” sur la carte."
             />
             <TextField
               margin="dense"

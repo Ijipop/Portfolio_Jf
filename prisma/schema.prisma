@@ -31,6 +31,8 @@ model Project {
   projectType  ProjectType @default(web)
   displayOrder Int      @default(0)
   url          String?
+  /** Lien vers le site en ligne (vitrine/demo) */
+  siteUrl      String?
   /** Lien direct vers binaire (.exe, .dmg, etc.) ou page de téléchargement */
   downloadUrl  String?
   imageUrl     String?  // URL de l'image du projet

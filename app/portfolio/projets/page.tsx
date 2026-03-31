@@ -53,6 +53,7 @@ interface Project {
   projectType?: 'logiciel' | 'web'
   displayOrder?: number
   url: string
+  siteUrl?: string | null
   downloadUrl?: string | null
   imageUrl?: string
   createdAt: string
@@ -208,6 +209,7 @@ const ProjectCardWrapper = ({
   timelendarWindowsUrl,
   timelendarMacosUrl,
   viewProjectLabel = 'Voir le projet',
+  viewSiteLabel = 'Voir le site',
   downloadProjectLabel = 'Télécharger le projet',
   downloadTimelendarPcLabel = 'Télécharger Timelendar PC',
   downloadTimelendarMacosLabel = 'Télécharger Timelendar macOS',
@@ -221,6 +223,7 @@ const ProjectCardWrapper = ({
   timelendarWindowsUrl?: string | null
   timelendarMacosUrl?: string | null
   viewProjectLabel?: string
+  viewSiteLabel?: string
   downloadProjectLabel?: string
   downloadTimelendarPcLabel?: string
   downloadTimelendarMacosLabel?: string
@@ -465,6 +468,16 @@ const ProjectCardWrapper = ({
               onClick={() => handleProjectClick(project.url)}
             >
               {viewProjectLabel}
+            </CTAButton>
+          )}
+          {project.siteUrl && (
+            <CTAButton
+              variant="secondary"
+              size="medium"
+              fullWidth
+              onClick={() => handleProjectClick(project.siteUrl!)}
+            >
+              {viewSiteLabel}
             </CTAButton>
           )}
           {isTimelendarProject ? (
@@ -955,6 +968,7 @@ export default function Projets() {
               timelendarWindowsUrl={timelendarWindowsUrl}
               timelendarMacosUrl={timelendarMacosUrl}
               viewProjectLabel={t('projects.viewProject')}
+              viewSiteLabel={t('projects.viewSite')}
               downloadProjectLabel={t('projects.downloadProject')}
               downloadTimelendarPcLabel={t('projects.downloadTimelendarPc')}
               downloadTimelendarMacosLabel={t('projects.downloadTimelendarMacos')}
