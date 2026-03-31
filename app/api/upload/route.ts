@@ -9,11 +9,22 @@ export const runtime = 'nodejs'
 const DOWNLOAD_MAX_BYTES = 50 * 1024 * 1024 // 50 Mo (aligné sur serverActions.bodySizeLimit)
 
 function sanitizeOriginalName(name: string): string {
-  return name.replace(/[^a-zA-Z0-9.-]/g, '_')
+  return (name || 'file').replace(/[^a-zA-Z0-9.-]/g, '_')
+}
+
+function getUploadBlobName(entry: Blob): string {
+  if (entry instanceof File && entry.name?.trim()) {
+    return entry.name.trim()
+  }
+  return 'upload.bin'
+}
+
+function normalizedMime(mime: string): string {
+  return (mime || '').split(';')[0].trim().toLowerCase()
 }
 
 function isAllowedDownloadMime(ext: string, mime: string): boolean {
-  const m = (mime || '').toLowerCase()
+  const m = normalizedMime(mime)
   if (m === '' || m === 'application/octet-stream') return true
   if (ext === '.zip') {
     return (
@@ -42,18 +53,28 @@ export async function POST(request: NextRequest) {
 
   try {
     const formData = await request.formData()
-    const file = formData.get('file') as File
+    const raw = formData.get('file')
     const kind = String(formData.get('kind') ?? 'image').toLowerCase()
 
-    if (!file) {
+    if (!raw || typeof raw === 'string') {
       return NextResponse.json(
         { success: false, error: 'Aucun fichier fourni' },
         { status: 400 }
       )
     }
 
+    if (!(raw instanceof Blob)) {
+      return NextResponse.json(
+        { success: false, error: 'Format de fichier invalide' },
+        { status: 400 }
+      )
+    }
+
+    const file = raw
+    const sourceName = getUploadBlobName(file)
+
     if (kind === 'download') {
-      const originalName = sanitizeOriginalName(file.name)
+      const originalName = sanitizeOriginalName(sourceName)
       const ext = path.extname(originalName).toLowerCase()
       if (ext !== '.zip' && ext !== '.exe') {
         return NextResponse.json(
@@ -102,7 +123,8 @@ export async function POST(request: NextRequest) {
 
     // kind === image (défaut)
     const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/gif']
-    if (!allowedTypes.includes(file.type)) {
+    const imageMime = normalizedMime(file.type)
+    if (!allowedTypes.includes(imageMime)) {
       return NextResponse.json(
         { success: false, error: 'Type de fichier non autorisé. Utilisez JPEG, PNG, WEBP ou GIF' },
         { status: 400 }
@@ -146,11 +168,22 @@ export async function POST(request: NextRequest) {
       message: 'Image uploadée avec succès'
     })
   } catch (error) {
-    console.error('Erreur lors de l\'upload:', error)
+    const err = error as NodeJS.ErrnoException & Error
+    console.error('Erreur lors de l\'upload:', err?.message, err)
+
+    const code = err?.code
+    let message = 'Erreur lors de l\'upload du fichier'
+    if (code === 'EROFS' || code === 'EACCES' || code === 'EPERM') {
+      message =
+        'Écriture impossible sur le disque (dossier protégé ou hébergement sans stockage persistant). En local, vérifiez les droits sur le dossier public/. Sur Vercel, utilisez une URL externe ou un stockage type Blob/S3.'
+    } else if (process.env.NODE_ENV === 'development' && err?.message) {
+      message = `Upload: ${err.message}`
+    }
+
     return NextResponse.json(
       {
         success: false,
-        error: 'Erreur lors de l\'upload du fichier'
+        error: message
       },
       {
         status: 500
