@@ -82,8 +82,10 @@ export default function AdminDashboard() {
     imageUrl: ''
   });
   const [uploading, setUploading] = useState(false);
+  const [uploadingDownload, setUploadingDownload] = useState(false);
   const [previewImage, setPreviewImage] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const downloadFileInputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
 
   const handleOpenProjectUrl = useCallback(
@@ -243,6 +245,9 @@ export default function AdminDashboard() {
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
     }
+    if (downloadFileInputRef.current) {
+      downloadFileInputRef.current.value = '';
+    }
   };
 
   const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -313,6 +318,62 @@ export default function AdminDashboard() {
       setPreviewImage(null);
     } finally {
       setUploading(false);
+    }
+  };
+
+  const handleDownloadFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const name = file.name.toLowerCase();
+    if (!name.endsWith('.zip') && !name.endsWith('.exe')) {
+      setError('Extension non autorisée. Utilisez .zip ou .exe');
+      return;
+    }
+
+    const maxSize = 50 * 1024 * 1024;
+    if (file.size > maxSize) {
+      setError('Le fichier est trop volumineux. Taille maximale: 50 Mo');
+      return;
+    }
+
+    setUploadingDownload(true);
+    setError('');
+
+    try {
+      const uploadFormData = new FormData();
+      uploadFormData.append('file', file);
+      uploadFormData.append('kind', 'download');
+
+      const response = await fetch('/api/upload', {
+        method: 'POST',
+        body: uploadFormData
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({ error: 'Erreur inconnue' }));
+        if (response.status === 401) {
+          setError('❌ Session expirée. Redirection vers la page d\'accueil...');
+          redirectToAdminLogin();
+        } else {
+          setError(errorData.error || `Erreur ${response.status}: ${errorData.message || 'Erreur lors de l\'upload'}`);
+        }
+        return;
+      }
+
+      const data = await response.json();
+
+      if (data.success) {
+        setFormData((prev) => ({ ...prev, downloadUrl: data.data.url }));
+        setError('');
+      } else {
+        setError(data.error || 'Erreur lors de l\'upload du fichier');
+      }
+    } catch (err) {
+      console.error('Erreur:', err);
+      setError('Erreur de connexion lors de l\'upload. Vérifiez votre connexion internet.');
+    } finally {
+      setUploadingDownload(false);
     }
   };
 
@@ -901,6 +962,31 @@ export default function AdminDashboard() {
               placeholder="https://… (lien .exe, .dmg, page GitHub Releases, etc.)"
               helperText="URL optionnelle vers un dépôt ou fichier installable pour les visiteurs."
             />
+            <Box sx={{ mt: 1, mb: 1 }}>
+              <input
+                ref={downloadFileInputRef}
+                accept=".zip,.exe,application/zip,application/x-zip-compressed,application/octet-stream,application/x-msdownload"
+                style={{ display: 'none' }}
+                id="project-download-upload"
+                type="file"
+                onChange={handleDownloadFileSelect}
+              />
+              <label htmlFor="project-download-upload">
+                <Button
+                  variant="outlined"
+                  component="span"
+                  startIcon={uploadingDownload ? <CircularProgress size={20} /> : <CloudUploadIcon />}
+                  disabled={uploadingDownload}
+                  fullWidth
+                  size="small"
+                >
+                  {uploadingDownload ? 'Upload en cours…' : 'Uploader un fichier (.zip ou .exe, max 50 Mo)'}
+                </Button>
+              </label>
+              <Typography variant="caption" color="text.secondary" display="block" sx={{ mt: 0.5 }}>
+                Remplit automatiquement le champ ci-dessus avec un lien vers le fichier hébergé sur ce site.
+              </Typography>
+            </Box>
             <Box sx={{ mt: 2, mb: 1 }}>
               <Typography variant="subtitle2" sx={{ mb: 1 }}>
                 Image du projet
