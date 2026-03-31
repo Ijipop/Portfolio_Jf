@@ -110,7 +110,7 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
 		}
 
 		const body = await request.json()
-		const { name, description, technologies, status, url, downloadUrl, imageUrl, projectType, displayOrder } = body
+		const { name, description, technologies, status, url, siteUrl, downloadUrl, imageUrl, projectType, displayOrder } = body
 
 		// Validation des données
 		if (!name || typeof name !== 'string' || name.trim().length === 0) {
@@ -179,6 +179,15 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
 			)
 		}
 
+		const site =
+			typeof siteUrl === 'string' && siteUrl.trim().length > 0 ? siteUrl.trim() : null
+		if (site && !/^https?:\/\//i.test(site)) {
+			return NextResponse.json(
+				{ success: false, error: 'L’URL du site doit commencer par http:// ou https://' },
+				{ status: 400 }
+			)
+		}
+
 		const dl =
 			typeof downloadUrl === 'string' && downloadUrl.trim().length > 0 ? downloadUrl.trim() : null
 		if (dl && !/^https?:\/\//i.test(dl)) {
@@ -197,6 +206,7 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
 				technologies: technologies.trim(),
 				status: status.trim(),
 				url: url || '',
+				siteUrl: site,
 				downloadUrl: dl,
 				imageUrl: imageUrl || '',
         projectType: parseProjectType(projectType),
