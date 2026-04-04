@@ -13,6 +13,11 @@ export const translations = {
       admin: 'Admin',
       software: 'Logiciel',
       webSites: 'Sites web',
+      presentationBeige: 'Site',
+      presentationDev: 'Créa',
+      presentationBeigeHint: 'Palette sobre, sans animation de fond (pour visiteurs / clients)',
+      presentationDevHint: 'Thèmes néon et effet de fond (version créateur)',
+      presentationToggleGroup: 'Choisir le mode d’affichage du site',
     },
     intro: {
       skip: 'Passer',
@@ -256,6 +261,11 @@ export const translations = {
       admin: 'Admin',
       software: 'Software',
       webSites: 'Websites',
+      presentationBeige: 'Site',
+      presentationDev: 'Dev',
+      presentationBeigeHint: 'Softer palette, no animated background (visitors / clients)',
+      presentationDevHint: 'Neon themes and background effect (creator view)',
+      presentationToggleGroup: 'Choose site display mode',
     },
     intro: {
       skip: 'Skip',

@@ -144,6 +144,16 @@ export const THEMES = {
     bg2: dimHex('#431407', DIM_AMOUNT),
     moodHint: 'intense, passion, braise, feu',
   },
+  /** Palette sobre (mode « Site » / beige) — latte, crème, brun très pâle */
+  latte: {
+    name: 'Latte',
+    primary: '#5c4d3c',
+    secondary: '#8b7355',
+    accent: '#6b7f6a',
+    bg: '#f7f3eb',
+    bg2: '#efe8dc',
+    moodHint: 'portfolio client, sobre, crème et beige',
+  },
 } as const
 
 export type ThemeName = keyof typeof THEMES
@@ -194,6 +204,11 @@ export function getPaletteTokens(themeName: ThemeName): PaletteTokens {
  */
 export function getAvailableThemes(): ThemeName[] {
   return Object.keys(THEMES) as ThemeName[]
+}
+
+/** Thèmes affichés en mode Créa (exclut latte, réservé au mode Site) */
+export function getDevThemeChoices(): ThemeName[] {
+  return (Object.keys(THEMES) as ThemeName[]).filter((name) => name !== 'latte')
 }
 
 /**

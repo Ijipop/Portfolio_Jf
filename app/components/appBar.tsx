@@ -8,6 +8,8 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import React from 'react';
 import { ThemeSelector } from '@/components/ThemeSelector';
+import { PresentationModeToggle } from '@/components/PresentationModeToggle';
+import { usePresentationMode } from '@/contexts/PresentationModeContext';
 import { useThemeColors } from '@/hooks/useThemeColors';
 import { useLanguage } from '@/contexts/LanguageContext';
 import Button from '@mui/material/Button';
@@ -22,6 +24,7 @@ export default function AppBarComponent() {
 	const pathname = usePathname();
 	const { primary, secondary } = useThemeColors();
 	const { locale, setLocale, t } = useLanguage();
+	const { mode: presentationMode } = usePresentationMode();
 
 	const handleNavigate = (path: string) => router.push(path);
 
@@ -86,7 +89,8 @@ export default function AppBarComponent() {
 						>
 							{locale === 'fr' ? 'FR' : 'ENG'}
 						</Button>
-						<ThemeSelector />
+						<PresentationModeToggle />
+						{presentationMode === 'dev' && <ThemeSelector />}
 					</Box>
 				</Toolbar>
 			</AppBar>
