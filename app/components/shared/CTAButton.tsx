@@ -120,7 +120,7 @@ const StyledCTAButton = styled(Button, {
   }
 })
 
-const MotionCTAButton = motion(StyledCTAButton)
+const MotionCTAButton = motion.create(StyledCTAButton)
 
 export default function CTAButton({
   children,
