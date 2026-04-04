@@ -26,7 +26,20 @@ vi.mock('../../contexts/LanguageContext', () => ({
         'nav.about': 'À propos',
         'nav.contact': 'Contact',
         'nav.admin': 'Admin',
+        'nav.presentationBeige': 'Site',
+        'nav.presentationDev': 'Créa',
+        'nav.presentationBeigeHint': '',
+        'nav.presentationDevHint': '',
+        'nav.presentationToggleGroup': '',
       }[key] ?? key),
+  }),
+}))
+
+vi.mock('../../contexts/PresentationModeContext', () => ({
+  usePresentationMode: () => ({
+    mode: 'dev' as const,
+    setMode: vi.fn(),
+    hydrated: true,
   }),
 }))
 

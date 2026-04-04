@@ -6,6 +6,19 @@ import React, { createContext, useContext, useEffect, useState } from 'react'
 import { usePathname } from 'next/navigation'
 import { THEMES, ThemeName, getAvailableThemes } from '@/design-system/themes'
 import { shouldShowTopology } from '@/utils/topologyRoutes'
+import { syncPortfolioThemeToDocument } from '@/utils/syncPortfolioThemeToDocument'
+import { usePresentationMode } from '@/contexts/PresentationModeContext'
+
+const LAST_DEV_THEME_KEY = 'lastDevThemeName'
+
+function readInitialThemeName(): ThemeName {
+  if (typeof window === 'undefined') return 'latte'
+  const pres = localStorage.getItem('presentationMode') ?? 'beige'
+  if (pres === 'beige') return 'latte'
+  const t = localStorage.getItem('themeName') as ThemeName
+  if (t && THEMES[t] && t !== 'latte') return t
+  return 'default'
+}
 
 interface AdvancedThemeContextType {
   themeName: ThemeName
@@ -20,27 +33,45 @@ export function AdvancedThemeProvider({ children }: { children: React.ReactNode 
   const mode: PaletteMode = 'light' // Mode fixe à light
   const pathname = usePathname()
   const isTopologyRoute = shouldShowTopology(pathname)
-  const [themeName, setThemeName] = useState<ThemeName>('default')
+  const { mode: presentationMode, hydrated: presentationHydrated } = usePresentationMode()
+  const [themeName, setThemeName] = useState<ThemeName>(readInitialThemeName)
   const customTheme = THEMES[themeName] // Source unique de vérité
 
-  // Charger les préférences depuis localStorage
   useEffect(() => {
-    const savedTheme = localStorage.getItem('themeName') as ThemeName
-    
-    if (savedTheme && THEMES[savedTheme]) {
-      setThemeName(savedTheme)
+    if (!presentationHydrated) return
+    if (presentationMode === 'beige') {
+      const saved = localStorage.getItem('themeName') as ThemeName
+      if (saved && saved !== 'latte' && THEMES[saved]) {
+        localStorage.setItem(LAST_DEV_THEME_KEY, saved)
+      }
+      setThemeName('latte')
+      localStorage.setItem('themeName', 'latte')
+      return
     }
-  }, [])
+    const last = localStorage.getItem(LAST_DEV_THEME_KEY) as ThemeName
+    const fromLs = localStorage.getItem('themeName') as ThemeName
+    const fromLast = last && THEMES[last] && last !== 'latte' ? last : null
+    const fromThemeLs = fromLs && THEMES[fromLs] && fromLs !== 'latte' ? fromLs : null
+    const pick = fromLast || fromThemeLs || 'default'
+    setThemeName(pick)
+    localStorage.setItem('themeName', pick)
+  }, [presentationMode, presentationHydrated])
+
+  useEffect(() => {
+    syncPortfolioThemeToDocument(themeName)
+  }, [themeName])
 
   const setTheme = (newThemeName: ThemeName) => {
-    if (THEMES[newThemeName]) {
-      setThemeName(newThemeName)
-      localStorage.setItem('themeName', newThemeName)
-    }
+    if (!THEMES[newThemeName]) return
+    if (presentationMode === 'beige' && newThemeName !== 'latte') return
+    setThemeName(newThemeName)
+    localStorage.setItem('themeName', newThemeName)
   }
 
   // Créer le thème MUI avec les couleurs personnalisées
   // Utiliser useMemo pour recréer le thème quand customTheme change
+  const isBeigePresentation = presentationMode === 'beige'
+
   const theme = React.useMemo(() => createTheme({
     palette: {
       mode,
@@ -55,8 +86,8 @@ export function AdvancedThemeProvider({ children }: { children: React.ReactNode 
         dark: customTheme.secondary + 'CC'
       },
       background: {
-        default: '#f5f7fa',
-        paper: '#ffffff'
+        default: isBeigePresentation ? '#faf8f5' : '#f5f7fa',
+        paper: isBeigePresentation ? '#fffefb' : '#ffffff'
       }
     },
     typography: {
@@ -101,8 +132,10 @@ export function AdvancedThemeProvider({ children }: { children: React.ReactNode 
             padding: '12px 24px',
             transition: 'all 0.3s ease',
             '&:hover': {
-              transform: 'translateY(-2px)',
-              boxShadow: `0 8px 25px ${customTheme.primary}40`
+              transform: isBeigePresentation ? 'translateY(-1px)' : 'translateY(-2px)',
+              boxShadow: isBeigePresentation
+                ? '0 6px 18px rgba(92, 77, 60, 0.12)'
+                : `0 8px 25px ${customTheme.primary}40`
             }
           }
         }
@@ -118,7 +151,7 @@ export function AdvancedThemeProvider({ children }: { children: React.ReactNode 
         }
       }
     }
-  }), [customTheme, mode, isTopologyRoute])
+  }), [customTheme, mode, isTopologyRoute, isBeigePresentation])
 
   return (
     <AdvancedThemeContext.Provider

@@ -14,6 +14,11 @@ test('landing reaches portfolio and contact in two clicks max', async ({ page })
 })
 
 test('portfolio home loads and nav works', async ({ page }) => {
+  // Mode présentation « dev » : sinon défaut beige → fond statique, pas Vanta (voir PresentationModeContext)
+  await page.addInitScript(() => {
+    window.localStorage.setItem('presentationMode', 'dev')
+  })
+
   await page.goto('/portfolio', { waitUntil: 'domcontentloaded' })
   await expect(
     page.getByText(/discutons de votre projet|let's discuss your project/i).first()
@@ -54,6 +59,7 @@ test('contact form renders stable fields', async ({ page }) => {
 
 test('light graphics mode can be forced for fallback validation', async ({ page }) => {
   await page.addInitScript(() => {
+    window.localStorage.setItem('presentationMode', 'dev')
     window.localStorage.setItem('portfolio-force-graphics-mode', 'light')
   })
 

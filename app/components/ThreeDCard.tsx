@@ -216,7 +216,10 @@ export default function ThreeDCardComponent({
               display: 'flex',
               flexDirection: 'column',
               minHeight: 0,
-              overflow: 'hidden',
+              // visible : ombre CTA non coupée sur un rectangle ; pas de overflow:auto ici
+              // (sinon scale/translate/shadow au hover déclenchent des scrollbars).
+              overflow: 'visible',
+              pb: 4,
             }),
           }}
         >

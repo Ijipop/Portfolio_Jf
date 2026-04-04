@@ -5,6 +5,7 @@ import { ReactNode, useEffect, useRef } from 'react'
 import { usePathname } from 'next/navigation'
 import { useAdvancedTheme } from '@/contexts/AdvancedThemeContext'
 import { useGraphicsMode } from '@/contexts/GraphicsModeContext'
+import { usePresentationMode } from '@/contexts/PresentationModeContext'
 import { shouldShowTopology } from '@/utils/topologyRoutes'
 import { VANTA_PRELOAD_SOURCES } from '@/utils/vantaAssets'
 import { preloadExternalScripts } from '@/utils/vantaScriptLoader'
@@ -28,7 +29,10 @@ export default function FullPageTopologyWrapper({ children }: FullPageTopologyWr
   const scrollRef = useRef<HTMLDivElement>(null)
   const { customTheme } = useAdvancedTheme()
   const { graphicsMode, downgradeReason } = useGraphicsMode()
+  const { mode: presentationMode } = usePresentationMode()
   const useLightFallback = show && graphicsMode === 'light'
+  const useStaticProBackground = presentationMode === 'beige'
+  const useGradientOnly = useLightFallback || useStaticProBackground
 
   // Remettre le scroll en haut au montage pour éviter titre coupé / contenu décalé
   useEffect(() => {
@@ -38,7 +42,7 @@ export default function FullPageTopologyWrapper({ children }: FullPageTopologyWr
   }, [show, pathname])
 
   useEffect(() => {
-    if (!show || useLightFallback) return
+    if (!show || useGradientOnly) return
 
     const preload = () => preloadExternalScripts([...VANTA_PRELOAD_SOURCES])
 
@@ -53,7 +57,7 @@ export default function FullPageTopologyWrapper({ children }: FullPageTopologyWr
 
     const timer = globalThis.setTimeout(preload, 0)
     return () => globalThis.clearTimeout(timer)
-  }, [show, useLightFallback])
+  }, [show, useGradientOnly])
 
   if (!show) {
     return <Box component="div" sx={contentWrapperSx}>{children}</Box>
@@ -64,8 +68,10 @@ export default function FullPageTopologyWrapper({ children }: FullPageTopologyWr
       <Box
         component="div"
         data-testid="graphics-background-layer"
-        data-graphics-mode={useLightFallback ? 'light' : 'full'}
-        data-graphics-reason={downgradeReason ?? 'none'}
+        data-graphics-mode={
+          useStaticProBackground ? 'beige' : useLightFallback ? 'light' : 'full'
+        }
+        data-graphics-reason={useStaticProBackground ? 'presentation-beige' : downgradeReason ?? 'none'}
         sx={{
           position: 'fixed',
           top: 0,
@@ -77,12 +83,14 @@ export default function FullPageTopologyWrapper({ children }: FullPageTopologyWr
           pointerEvents: 'none',
         }}
       >
-        {useLightFallback ? (
+        {useGradientOnly ? (
           <Box
             sx={{
               width: '100%',
               height: '100%',
-              background: `radial-gradient(circle at 20% 20%, ${customTheme.primary}22 0%, transparent 35%), radial-gradient(circle at 80% 30%, ${customTheme.secondary}18 0%, transparent 30%), linear-gradient(135deg, ${customTheme.bg} 0%, ${customTheme.bg2} 100%)`,
+              background: useStaticProBackground
+                ? `linear-gradient(165deg, ${customTheme.bg} 0%, ${customTheme.bg2} 45%, ${customTheme.bg} 100%)`
+                : `radial-gradient(circle at 20% 20%, ${customTheme.primary}22 0%, transparent 35%), radial-gradient(circle at 80% 30%, ${customTheme.secondary}18 0%, transparent 30%), linear-gradient(135deg, ${customTheme.bg} 0%, ${customTheme.bg2} 100%)`,
             }}
           />
         ) : (
@@ -98,7 +106,11 @@ export default function FullPageTopologyWrapper({ children }: FullPageTopologyWr
           right: 0,
           bottom: 0,
           zIndex: 1,
-          background: useLightFallback ? 'rgba(0, 0, 0, 0.08)' : 'rgba(0, 0, 0, 0.18)',
+          background: useStaticProBackground
+            ? 'rgba(255, 255, 255, 0.38)'
+            : useLightFallback
+              ? 'rgba(0, 0, 0, 0.08)'
+              : 'rgba(0, 0, 0, 0.18)',
           pointerEvents: 'none',
         }}
         aria-hidden

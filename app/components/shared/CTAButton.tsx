@@ -64,10 +64,6 @@ const StyledCTAButton = styled(Button, {
     '&:hover::before': {
       left: '100%',
     },
-    '&:active': {
-      transform: 'scale(0.98)',
-      transition: 'transform 0.1s ease',
-    },
     '&:active::after': {
       width: '300px',
       height: '300px',
@@ -83,9 +79,9 @@ const StyledCTAButton = styled(Button, {
       padding: theme.spacing(1.5, 3),
       fontSize: '1rem',
       boxShadow: `0 4px 20px ${hexToRgba(primaryColor, 0.3)}`,
-      '&:hover': {
+      '&&:hover': {
         background: `linear-gradient(135deg, ${primaryColor} 0%, ${secondaryColor} 100%)`,
-        transform: 'translateY(-3px) scale(1.02)',
+        borderRadius: DESIGN_TOKENS.borderRadius.medium,
         boxShadow: `0 12px 40px ${hexToRgba(primaryColor, 0.6)}, 0 0 20px ${hexToRgba(primaryColor, 0.2)}`,
       },
     }
@@ -99,9 +95,9 @@ const StyledCTAButton = styled(Button, {
       padding: theme.spacing(1.5, 3),
       fontSize: '1rem',
       boxShadow: `0 4px 20px ${hexToRgba(primaryColor, 0.3)}`,
-      '&:hover': {
+      '&&:hover': {
         background: `linear-gradient(135deg, ${primaryColor} 0%, ${secondaryColor} 100%)`,
-        transform: 'translateY(-3px) scale(1.02)',
+        borderRadius: DESIGN_TOKENS.borderRadius.medium,
         boxShadow: `0 12px 40px ${hexToRgba(primaryColor, 0.6)}, 0 0 20px ${hexToRgba(primaryColor, 0.2)}`,
       },
     }
@@ -115,14 +111,16 @@ const StyledCTAButton = styled(Button, {
     color: primaryColor,
     padding: theme.spacing(1.5, 3),
     fontSize: '1rem',
-    '&:hover': {
+    '&&:hover': {
       background: hexToRgba(primaryColor, 0.15),
       border: `2px solid ${primaryColor}`,
-      transform: 'translateY(-3px) scale(1.02)',
+      borderRadius: DESIGN_TOKENS.borderRadius.medium,
       boxShadow: `0 8px 25px ${hexToRgba(primaryColor, 0.2)}, 0 0 15px ${hexToRgba(primaryColor, 0.15)}`,
     },
   }
 })
+
+const MotionCTAButton = motion.create(StyledCTAButton)
 
 export default function CTAButton({
   children,
@@ -151,20 +149,17 @@ export default function CTAButton({
   }
 
   return (
-    <motion.div
-      whileHover={{ scale: 1.02 }}
-      whileTap={{ scale: 0.98 }}
+    <MotionCTAButton
+      ctaVariant={variant}
+      primaryColor={primary}
+      secondaryColor={secondary}
+      {...buttonProps}
+      whileHover={disabled ? undefined : { y: -3, scale: 1.02 }}
+      whileTap={disabled ? undefined : { scale: 0.98 }}
       transition={{ type: 'spring', stiffness: 400, damping: 17 }}
     >
-      <StyledCTAButton 
-        ctaVariant={variant} 
-        primaryColor={primary}
-        secondaryColor={secondary}
-        {...buttonProps}
-      >
-        {children}
-      </StyledCTAButton>
-    </motion.div>
+      {children}
+    </MotionCTAButton>
   )
 }
 
