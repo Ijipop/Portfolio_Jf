@@ -147,8 +147,8 @@ export const THEMES = {
   /** Palette sobre (mode « Site » / beige) — latte, crème, brun très pâle */
   latte: {
     name: 'Latte',
-    primary: '#5c4d3c',
-    secondary: '#8b7355',
+    primary: '#786b5f',
+    secondary: '#9a8b7b',
     accent: '#6b7f6a',
     bg: '#f7f3eb',
     bg2: '#efe8dc',
