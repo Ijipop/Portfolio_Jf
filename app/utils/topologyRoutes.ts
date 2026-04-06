@@ -10,6 +10,9 @@ function getTopologyScope(): TopologyScope {
 export function shouldShowTopology(pathname: string | null): boolean {
   if (!pathname) return false
 
+  // Labs / pages de test : pas de fond Vanta plein écran (évite 2 contextes WebGL + masque le canvas du lab).
+  if (pathname.startsWith('/test')) return false
+
   const scope = getTopologyScope()
   if (scope === 'global') return true
 

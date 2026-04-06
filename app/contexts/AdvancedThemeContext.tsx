@@ -11,14 +11,8 @@ import { usePresentationMode } from '@/contexts/PresentationModeContext'
 
 const LAST_DEV_THEME_KEY = 'lastDevThemeName'
 
-function readInitialThemeName(): ThemeName {
-  if (typeof window === 'undefined') return 'latte'
-  const pres = localStorage.getItem('presentationMode') ?? 'beige'
-  if (pres === 'beige') return 'latte'
-  const t = localStorage.getItem('themeName') as ThemeName
-  if (t && THEMES[t] && t !== 'latte') return t
-  return 'default'
-}
+/** Même valeur SSR et premier rendu client — localStorage appliqué après hydratation (voir effet presentationHydrated). */
+const SSR_THEME_NAME: ThemeName = 'latte'
 
 interface AdvancedThemeContextType {
   themeName: ThemeName
@@ -34,7 +28,7 @@ export function AdvancedThemeProvider({ children }: { children: React.ReactNode 
   const pathname = usePathname()
   const isTopologyRoute = shouldShowTopology(pathname)
   const { mode: presentationMode, hydrated: presentationHydrated } = usePresentationMode()
-  const [themeName, setThemeName] = useState<ThemeName>(readInitialThemeName)
+  const [themeName, setThemeName] = useState<ThemeName>(SSR_THEME_NAME)
   const customTheme = THEMES[themeName] // Source unique de vérité
 
   useEffect(() => {

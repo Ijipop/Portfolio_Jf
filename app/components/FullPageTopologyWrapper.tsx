@@ -89,7 +89,7 @@ export default function FullPageTopologyWrapper({ children }: FullPageTopologyWr
               width: '100%',
               height: '100%',
               background: useStaticProBackground
-                ? `linear-gradient(165deg, ${customTheme.bg} 0%, ${customTheme.bg2} 45%, ${customTheme.bg} 100%)`
+                ? `radial-gradient(circle at 14% 16%, ${customTheme.primary}28 0%, transparent 40%), radial-gradient(circle at 88% 22%, ${customTheme.accent}24 0%, transparent 34%), radial-gradient(circle at 50% 92%, ${customTheme.secondary}14 0%, transparent 45%), linear-gradient(165deg, ${customTheme.bg} 0%, ${customTheme.bg2} 48%, ${customTheme.bg} 100%)`
                 : `radial-gradient(circle at 20% 20%, ${customTheme.primary}22 0%, transparent 35%), radial-gradient(circle at 80% 30%, ${customTheme.secondary}18 0%, transparent 30%), linear-gradient(135deg, ${customTheme.bg} 0%, ${customTheme.bg2} 100%)`,
             }}
           />
@@ -107,7 +107,7 @@ export default function FullPageTopologyWrapper({ children }: FullPageTopologyWr
           bottom: 0,
           zIndex: 1,
           background: useStaticProBackground
-            ? 'rgba(255, 255, 255, 0.38)'
+            ? 'rgba(247, 243, 235, 0.22)'
             : useLightFallback
               ? 'rgba(0, 0, 0, 0.08)'
               : 'rgba(0, 0, 0, 0.18)',

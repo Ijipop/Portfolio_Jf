@@ -7,8 +7,7 @@ import Box from '@mui/material/Box'
 import Container from '@mui/material/Container'
 import Typography from '@mui/material/Typography'
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
-import { GlassContainer } from './components/GlassCard'
+import HomeHeroIntroCard from './components/home/HomeHeroIntroCard'
 import { FadeIn } from './components/SimpleAnimations'
 import ThreeDCardComponent from './components/ThreeDCard'
 import AppBarComponent from './components/appBar'
@@ -22,8 +21,6 @@ import { DESIGN_TOKENS } from './design-system/constants'
 import { useThemeColors } from './hooks/useThemeColors'
 import { useTextColor } from './hooks/useTextColor'
 import { useLanguage } from './contexts/LanguageContext'
-import { shouldShowTopology } from './utils/topologyRoutes'
-import { getCardSurfaceSx } from './components/shared/cardSurface'
 import SignatureIntro from './components/SignatureIntro'
 import { useEffect, useState } from 'react'
 import useMediaQuery from '@mui/material/useMediaQuery'
@@ -37,8 +34,6 @@ function setIntroSeenCookie() {
 }
 
 export default function HomeClient({ initialShowIntro }: { initialShowIntro: boolean }) {
-  const pathname = usePathname()
-  const isTopologyRoute = shouldShowTopology(pathname)
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
   const { primary, secondary } = useThemeColors()
@@ -190,59 +185,7 @@ export default function HomeClient({ initialShowIntro }: { initialShowIntro: boo
 
       <InteractiveBackgroundSection>
       <Container maxWidth="lg" sx={{ py: { xs: 4, md: 8 }, px: { xs: 2, sm: 3, md: 4 }, position: 'relative', zIndex: 2 }}>
-        <GlassContainer sx={{ 
-          ...getCardSurfaceSx({ isTopologyRoute, variant: 'flat', level: 'soft', interactive: false }),
-          mb: { xs: DESIGN_TOKENS.spacing.xl, md: DESIGN_TOKENS.spacing.xxl },
-          p: { xs: 2.5, sm: 3, md: 3.5 },
-        }}>
-          <Box sx={{ textAlign: 'center' }}>
-            <Typography 
-              variant="h1" 
-              sx={{ 
-                mb: 1,
-                ...DESIGN_TOKENS.typography.h1,
-                fontSize: { xs: '1.75rem', sm: '2rem', md: '2.25rem' },
-                textShadow: `0 2px 4px rgba(0,0,0,0.1), 0 0 20px ${primary}40`,
-                background: `linear-gradient(135deg, ${primary}, ${secondary}, ${primary})`,
-                backgroundClip: 'text',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                backgroundSize: '200% 200%',
-                animation: 'gradientShift 4s ease-in-out infinite',
-              }}
-            >
-              Jean-François Lefebvre
-            </Typography>
-            <Typography 
-              variant="h4" 
-              sx={{ 
-                mb: 1,
-                ...DESIGN_TOKENS.typography.h4,
-                fontSize: { xs: '1rem', sm: '1.125rem', md: '1.25rem' },
-                fontWeight: 400,
-                opacity: 0.9,
-                color: textColor
-              }}
-            >
-              {t('home.role')}
-            </Typography>
-            <Typography 
-              variant="body1" 
-              sx={{ 
-                maxWidth: 600, 
-                mx: 'auto',
-                mb: 2,
-                ...DESIGN_TOKENS.typography.body1,
-                fontSize: { xs: '0.875rem', md: '1rem' },
-                color: textColor,
-                opacity: 0.9,
-                whiteSpace: 'pre-line',
-              }}
-            >
-              {t('home.intro')}
-            </Typography>
-          </Box>
-        </GlassContainer>
+        <HomeHeroIntroCard />
 
         <Box sx={{ 
           display: 'grid', 
