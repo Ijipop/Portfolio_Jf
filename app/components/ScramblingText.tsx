@@ -3,7 +3,7 @@
 import Box from '@mui/material/Box'
 import Typography, { TypographyProps } from '@mui/material/Typography'
 import type { SxProps, Theme } from '@mui/material/styles'
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 
 /** Glyphes pour l’effet « chaos » (français + ponctuation courante). */
 const SCRAMBLE_CHARSET =
@@ -46,6 +46,60 @@ function makeRandomDisplay(length: number): string[] {
 function sxToArray(sx: TypographyProps['sx']): NonNullable<TypographyProps['sx']>[] {
   if (sx == null) return []
   return Array.isArray(sx) ? sx : [sx]
+}
+
+type GlyphSlot = Extract<Slot, { kind: 'glyph' }>
+
+/** Au-delà, pas de nowrap sur le mot (évite débordement sur très petits écrans). */
+const MAX_GLYPHS_PER_WORD_NOWRAP = 26
+
+/**
+ * Évite qu’un glyphe en inline-block soit seul en fin de ligne (ex. « s » d’un pluriel).
+ * Chaque mot (suite de glyphes entre espaces / sauts de ligne) reste sur une ligne.
+ */
+function renderSlotsGroupedByWord(
+  slots: Slot[],
+  renderGlyph: (slot: GlyphSlot, indexInText: number) => ReactNode,
+): ReactNode[] {
+  const out: ReactNode[] = []
+  let i = 0
+  let wordSeq = 0
+  while (i < slots.length) {
+    const s = slots[i]
+    if (!s) break
+    if (s.kind === 'newline') {
+      out.push(<br key={`nl-${i}`} />)
+      i += 1
+      continue
+    }
+    if (s.kind === 'space') {
+      out.push(
+        <Box component="span" key={`sp-${i}`}>
+          {' '}
+        </Box>,
+      )
+      i += 1
+      continue
+    }
+    const start = i
+    const run: GlyphSlot[] = []
+    while (i < slots.length && slots[i]!.kind === 'glyph') {
+      run.push(slots[i] as GlyphSlot)
+      i += 1
+    }
+    const inner = run.map((glyph, j) => renderGlyph(glyph, start + j))
+    const nowrap = run.length > 0 && run.length <= MAX_GLYPHS_PER_WORD_NOWRAP
+    out.push(
+      <Box
+        component="span"
+        key={`wd-${start}-${wordSeq++}`}
+        sx={nowrap ? { whiteSpace: 'nowrap' } : undefined}
+      >
+        {inner}
+      </Box>,
+    )
+  }
+  return out
 }
 
 export type ScramblingTextProps = Omit<TypographyProps, 'children'> & {
@@ -155,36 +209,25 @@ export default function ScramblingText({
   }
 
   if (phase === 'settled') {
+    const settledNodes = renderSlotsGroupedByWord(slots, (slot, indexInText) => (
+      <Box
+        component="span"
+        key={`g-${indexInText}-${slot.scrambleIndex}`}
+        aria-hidden
+        data-scramble-index={slot.scrambleIndex}
+        sx={{
+          display: 'inline-block',
+          minWidth: '0.35em',
+          textAlign: 'center',
+          ...letterSx,
+        }}
+      >
+        {slot.target}
+      </Box>
+    ))
     return (
       <Typography {...typographyProps} aria-label={label}>
-        {slots.map((slot, i) => {
-          if (slot.kind === 'newline') {
-            return <br key={`nl-${i}`} />
-          }
-          if (slot.kind === 'space') {
-            return (
-              <Box component="span" key={`sp-${i}`}>
-                {' '}
-              </Box>
-            )
-          }
-          return (
-            <Box
-              component="span"
-              key={`g-${i}-${slot.scrambleIndex}`}
-              aria-hidden
-              data-scramble-index={slot.scrambleIndex}
-              sx={{
-                display: 'inline-block',
-                minWidth: '0.35em',
-                textAlign: 'center',
-                ...letterSx,
-              }}
-            >
-              {slot.target}
-            </Box>
-          )
-        })}
+        {settledNodes}
       </Typography>
     )
   }
@@ -201,22 +244,12 @@ export default function ScramblingText({
     margin: 0,
   }
 
-  const scrambleSpans = slots.map((slot, i) => {
-    if (slot.kind === 'newline') {
-      return <br key={`nl-${i}`} />
-    }
-    if (slot.kind === 'space') {
-      return (
-        <Box component="span" key={`sp-${i}`}>
-          {' '}
-        </Box>
-      )
-    }
+  const scrambleSpans = renderSlotsGroupedByWord(slots, (slot, indexInText) => {
     const ch = displayGlyphs[slot.scrambleIndex] ?? slot.target
     return (
       <Box
         component="span"
-        key={`g-${i}-${slot.scrambleIndex}`}
+        key={`g-${indexInText}-${slot.scrambleIndex}`}
         aria-hidden
         data-scramble-index={slot.scrambleIndex}
         sx={{
