@@ -16,6 +16,13 @@ import { shouldShowTopology } from '@/utils/topologyRoutes'
 
 const ASCII_FIGURE = [' o ', '/|\\', '/ \\'].join('\n')
 
+/** Réduit veuves / orphelines sur mobile (mode beige, texte normal). */
+const mobileProseWrapSx = {
+  '@supports (text-wrap: pretty)': { textWrap: 'pretty' as const },
+  orphans: 2,
+  widows: 2,
+} as const
+
 /** Pivot pour les regards gauche / droite (haut du personnage). */
 const LOOK_TRANSFORM_ORIGIN = '50% 28%'
 /** Pivot pour le coup de pied (pieds au sol). */
@@ -230,6 +237,7 @@ export default function HomeHeroIntroCard() {
                 fontWeight: 400,
                 opacity: 0.9,
                 color: textColor,
+                ...(!scrambleEnabled ? mobileProseWrapSx : {}),
               }}
             />
             <ScramblingText
@@ -246,6 +254,8 @@ export default function HomeHeroIntroCard() {
                 color: textColor,
                 opacity: 0.9,
                 whiteSpace: 'pre-line',
+                hyphens: 'auto',
+                ...(!scrambleEnabled ? mobileProseWrapSx : {}),
               }}
             />
           </Box>
