@@ -52,8 +52,10 @@ export function AdvancedThemeProvider({ children }: { children: React.ReactNode 
   }, [presentationMode, presentationHydrated])
 
   useEffect(() => {
-    syncPortfolioThemeToDocument(themeName)
-  }, [themeName])
+    syncPortfolioThemeToDocument(themeName, {
+      beigePresentation: presentationMode === 'beige',
+    })
+  }, [themeName, presentationMode])
 
   const setTheme = (newThemeName: ThemeName) => {
     if (!THEMES[newThemeName]) return

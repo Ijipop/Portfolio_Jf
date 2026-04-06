@@ -7,6 +7,7 @@ import { useAdvancedTheme } from '@/contexts/AdvancedThemeContext'
 import { useGraphicsMode } from '@/contexts/GraphicsModeContext'
 import { usePresentationMode } from '@/contexts/PresentationModeContext'
 import { shouldShowTopology } from '@/utils/topologyRoutes'
+import { getBeigePresentationTopologyBackground } from '@/utils/syncPortfolioThemeToDocument'
 import { VANTA_PRELOAD_SOURCES } from '@/utils/vantaAssets'
 import { preloadExternalScripts } from '@/utils/vantaScriptLoader'
 import VantaDotsBackground from './VantaDotsBackground'
@@ -89,7 +90,7 @@ export default function FullPageTopologyWrapper({ children }: FullPageTopologyWr
               width: '100%',
               height: '100%',
               background: useStaticProBackground
-                ? `radial-gradient(circle at 14% 16%, ${customTheme.primary}28 0%, transparent 40%), radial-gradient(circle at 88% 22%, ${customTheme.accent}24 0%, transparent 34%), radial-gradient(circle at 50% 92%, ${customTheme.secondary}14 0%, transparent 45%), linear-gradient(165deg, ${customTheme.bg} 0%, ${customTheme.bg2} 48%, ${customTheme.bg} 100%)`
+                ? getBeigePresentationTopologyBackground(customTheme)
                 : `radial-gradient(circle at 20% 20%, ${customTheme.primary}22 0%, transparent 35%), radial-gradient(circle at 80% 30%, ${customTheme.secondary}18 0%, transparent 30%), linear-gradient(135deg, ${customTheme.bg} 0%, ${customTheme.bg2} 100%)`,
             }}
           />
@@ -107,7 +108,7 @@ export default function FullPageTopologyWrapper({ children }: FullPageTopologyWr
           bottom: 0,
           zIndex: 1,
           background: useStaticProBackground
-            ? 'rgba(247, 243, 235, 0.22)'
+            ? 'rgba(247, 243, 235, 0.1)'
             : useLightFallback
               ? 'rgba(0, 0, 0, 0.08)'
               : 'rgba(0, 0, 0, 0.18)',
