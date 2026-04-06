@@ -32,5 +32,12 @@ describe('shouldShowTopology', () => {
   it('keeps topology enabled on landing page', () => {
     expect(shouldShowTopology('/')).toBe(true)
   })
+
+  it('excludes /test routes so labs can use their own WebGL canvas', () => {
+    vi.stubEnv('NEXT_PUBLIC_TOPOLOGY_SCOPE', 'global')
+    expect(shouldShowTopology('/test/vanta-birds')).toBe(false)
+    vi.stubEnv('NEXT_PUBLIC_TOPOLOGY_SCOPE', 'targeted')
+    expect(shouldShowTopology('/test/vanta-birds')).toBe(false)
+  })
 })
 
