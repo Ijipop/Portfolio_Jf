@@ -16,6 +16,23 @@ function escapeHtml(s: string): string {
     .replace(/"/g, '&quot;')
 }
 
+/** Styles inline pour rendu correct dans Gmail / Outlook / Apple Mail */
+const TD_LABEL =
+  'padding:10px 14px;border:1px solid #dee2e6;background:#f1f3f5;font-weight:600;width:34%;vertical-align:top;color:#212529;font-size:14px;'
+const TD_VALUE =
+  'padding:10px 14px;border:1px solid #dee2e6;vertical-align:top;color:#212529;font-size:14px;line-height:1.5;'
+const TABLE =
+  'width:100%;max-width:720px;border-collapse:collapse;margin:0 0 16px 0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;'
+
+function emailRow(label: string, value: string): string {
+  const cell = escapeHtml(value).replace(/\n/g, '<br />')
+  return `<tr><td style="${TD_LABEL}">${escapeHtml(label)}</td><td style="${TD_VALUE}">${cell}</td></tr>`
+}
+
+function wrapTable(rows: string): string {
+  return `<table role="presentation" cellpadding="0" cellspacing="0" style="${TABLE}">${rows}</table>`
+}
+
 const SITE_TYPE_LABELS: Record<string, string> = {
   vitrine: 'Site vitrine / présentation d’entreprise',
   portfolio: 'Portfolio',
@@ -33,19 +50,19 @@ const BUDGET_LABELS: Record<string, string> = {
 }
 
 function formatProjectWebHtml(pw: Record<string, unknown>): string | null {
-  const parts: string[] = []
+  const rows: string[] = []
 
   const siteType = typeof pw.siteType === 'string' ? pw.siteType : ''
   if (siteType && SITE_TYPE_LABELS[siteType]) {
-    let line = `<p><strong>Type de site :</strong> ${escapeHtml(SITE_TYPE_LABELS[siteType])}</p>`
+    let val = SITE_TYPE_LABELS[siteType]
     if (siteType === 'other' && typeof pw.siteTypeOther === 'string' && pw.siteTypeOther.trim()) {
-      line += `<p><strong>Précision :</strong> ${escapeHtml(pw.siteTypeOther.trim())}</p>`
+      val += ` — ${pw.siteTypeOther.trim()}`
     }
-    parts.push(line)
+    rows.push(emailRow('Type de site', val))
   }
 
   if (typeof pw.mainGoal === 'string' && pw.mainGoal.trim()) {
-    parts.push(`<p><strong>Objectif principal :</strong><br>${escapeHtml(pw.mainGoal.trim()).replace(/\n/g, '<br />')}</p>`)
+    rows.push(emailRow('Objectif principal', pw.mainGoal.trim()))
   }
 
   const sectionBits: string[] = []
@@ -61,11 +78,11 @@ function formatProjectWebHtml(pw: Record<string, unknown>): string | null {
     sectionBits.push(detail ? `Autre — ${detail}` : 'Autre')
   }
   if (sectionBits.length) {
-    parts.push(`<p><strong>Pages / sections :</strong> ${escapeHtml(sectionBits.join(', '))}</p>`)
+    rows.push(emailRow('Pages / sections', sectionBits.join(', ')))
   }
 
   if (typeof pw.pagesSections === 'string' && pw.pagesSections.trim()) {
-    parts.push(`<p><strong>Pages / sections (texte) :</strong><br>${escapeHtml(pw.pagesSections.trim()).replace(/\n/g, '<br />')}</p>`)
+    rows.push(emailRow('Pages / sections (texte)', pw.pagesSections.trim()))
   }
 
   const contentBits: string[] = []
@@ -74,32 +91,32 @@ function formatProjectWebHtml(pw: Record<string, unknown>): string | null {
   if (pw.contentBranding === true) contentBits.push('Couleurs / identité visuelle')
   if (pw.contentNeedHelp === true) contentBits.push('Besoin d’aide pour le contenu')
   if (contentBits.length) {
-    parts.push(`<p><strong>Contenu prêt :</strong> ${escapeHtml(contentBits.join(', '))}</p>`)
+    rows.push(emailRow('Contenu prêt', contentBits.join(', ')))
   }
 
   if (typeof pw.exampleLinks === 'string' && pw.exampleLinks.trim()) {
-    parts.push(`<p><strong>Exemples de sites :</strong><br>${escapeHtml(pw.exampleLinks.trim()).replace(/\n/g, '<br />')}</p>`)
+    rows.push(emailRow('Exemples de sites', pw.exampleLinks.trim()))
   }
 
   if (typeof pw.features === 'string' && pw.features.trim()) {
-    parts.push(`<p><strong>Fonctionnalités :</strong><br>${escapeHtml(pw.features.trim()).replace(/\n/g, '<br />')}</p>`)
+    rows.push(emailRow('Fonctionnalités', pw.features.trim()))
   }
 
   if (typeof pw.deadline === 'string' && pw.deadline.trim()) {
-    parts.push(`<p><strong>Échéance :</strong> ${escapeHtml(pw.deadline.trim())}</p>`)
+    rows.push(emailRow('Échéance', pw.deadline.trim()))
   }
 
   const budget = typeof pw.budget === 'string' ? pw.budget : ''
   if (budget && BUDGET_LABELS[budget]) {
-    parts.push(`<p><strong>Budget :</strong> ${escapeHtml(BUDGET_LABELS[budget])}</p>`)
+    rows.push(emailRow('Budget', BUDGET_LABELS[budget]))
   }
 
-  if (parts.length === 0) return null
+  if (rows.length === 0) return null
 
   return `
-    <hr />
-    <h3>Demande de projet web</h3>
-    ${parts.join('\n')}
+    <hr style="border:none;border-top:1px solid #dee2e6;margin:24px 0;" />
+    <h3 style="font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;font-size:16px;color:#212529;margin:0 0 12px 0;">Demande de projet web</h3>
+    ${wrapTable(rows.join(''))}
   `
 }
 
@@ -191,18 +208,27 @@ export async function POST(request: NextRequest) {
       )
     }
 
+    const mainRows = [
+      emailRow('Nom', String(name)),
+      emailRow('E-mail (répondre)', String(email)),
+      emailRow('Sujet', String(subject)),
+      emailRow('Message', String(message)),
+    ].join('')
+
+    const htmlBody = `
+      <div style="font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:#212529;">
+        <p style="margin:0 0 12px 0;font-size:15px;font-weight:600;">Nouveau message — Portfolio</p>
+        ${wrapTable(mainRows)}
+        ${projectSection}
+      </div>
+    `
+
     const { data, error } = await resend.emails.send({
       from: fromAddress,
       to: contactEmail,
       replyTo: email,
       subject: `[Portfolio] ${subject}`,
-      html: `
-        <p><strong>De:</strong> ${escapeHtml(String(name))} &lt;${escapeHtml(String(email))}&gt;</p>
-        <p><strong>Sujet:</strong> ${escapeHtml(String(subject))}</p>
-        <hr />
-        <p>${escapeHtml(String(message)).replace(/\n/g, '<br />')}</p>
-        ${projectSection}
-      `
+      html: htmlBody,
     })
 
     if (error) {
