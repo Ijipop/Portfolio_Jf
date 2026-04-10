@@ -1,7 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { Resend } from 'resend'
 
-const resend = new Resend(process.env.RESEND_API_KEY)
+/** Ne pas instancier Resend au chargement du module : sans RESEND_API_KEY le constructeur lance et provoque un 500. */
+function createResendClient(): Resend | null {
+  const key = process.env.RESEND_API_KEY?.trim()
+  if (!key) return null
+  return new Resend(key)
+}
 
 function escapeHtml(s: string): string {
   return String(s)
@@ -98,14 +103,40 @@ function formatProjectWebHtml(pw: Record<string, unknown>): string | null {
   `
 }
 
+function resendErrorToMessage(error: unknown): string {
+  if (error && typeof error === 'object' && 'message' in error) {
+    const m = (error as { message: unknown }).message
+    if (typeof m === 'string' && m.trim()) return m.trim()
+  }
+  return 'Erreur lors de l\'envoi du message'
+}
+
 // POST /api/contact - Envoyer un message de contact via Resend
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json()
+    let body: Record<string, unknown>
+    try {
+      body = (await request.json()) as Record<string, unknown>
+    } catch {
+      return NextResponse.json(
+        { success: false, error: 'Requête JSON invalide' },
+        { status: 400 }
+      )
+    }
+
     const { name, email, subject, message, projectWeb } = body
 
     // Validation des champs
-    if (!name || !email || !subject || !message) {
+    if (
+      typeof name !== 'string' ||
+      typeof email !== 'string' ||
+      typeof subject !== 'string' ||
+      typeof message !== 'string' ||
+      !name ||
+      !email ||
+      !subject ||
+      !message
+    ) {
       return NextResponse.json(
         {
           success: false,
@@ -133,10 +164,11 @@ export async function POST(request: NextRequest) {
         '[contact] CONTACT_EMAIL non défini — utilisation du repli. Définissez CONTACT_EMAIL sur Vercel (Production).'
       )
     }
-    if (!process.env.RESEND_API_KEY) {
-      console.error('RESEND_API_KEY manquant')
+    const resend = createResendClient()
+    if (!resend) {
+      console.error('[contact] RESEND_API_KEY manquant ou vide — ajoutez-le dans Portfolio/.env.local et redémarrez next dev')
       return NextResponse.json(
-        { success: false, error: 'Configuration email manquante' },
+        { success: false, error: 'Configuration email manquante (RESEND_API_KEY)' },
         { status: 500 }
       )
     }
@@ -174,9 +206,15 @@ export async function POST(request: NextRequest) {
     })
 
     if (error) {
+      const errMsg = resendErrorToMessage(error)
       console.error('[contact] Erreur Resend:', JSON.stringify(error, null, 2))
+      if (/not verified|domain is not verified/i.test(errMsg)) {
+        console.warn(
+          '[contact] Le domaine dans RESEND_FROM doit correspondre à un domaine « Verified » dans le même compte Resend que RESEND_API_KEY. Voir https://resend.com/domains'
+        )
+      }
       return NextResponse.json(
-        { success: false, error: 'Erreur lors de l\'envoi du message' },
+        { success: false, error: errMsg },
         { status: 500 }
       )
     }
@@ -191,13 +229,11 @@ export async function POST(request: NextRequest) {
       message: 'Message envoyé avec succès ! Je vous répondrai dans les plus brefs délais.'
     })
   } catch (error) {
-    console.error('Erreur lors de l\'envoi du message:', error)
-    return NextResponse.json(
-      {
-        success: false,
-        error: 'Erreur lors de l\'envoi du message'
-      },
-      { status: 500 }
-    )
+    console.error('[contact] Exception:', error)
+    const message =
+      error instanceof Error && error.message
+        ? error.message
+        : 'Erreur lors de l\'envoi du message'
+    return NextResponse.json({ success: false, error: message }, { status: 500 })
   }
 }
