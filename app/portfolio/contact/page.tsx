@@ -21,6 +21,10 @@ import PageWrapper from '../../components/shared/PageWrapper'
 import InteractiveBackgroundSection from '../../components/shared/InteractiveBackgroundSection'
 import Footer from '../../components/Footer'
 import CTAButton from '../../components/shared/CTAButton'
+import ProjectWebBriefSection, {
+  emptyProjectWebBrief,
+  type ProjectWebBriefState,
+} from '../../components/contact/ProjectWebBriefSection'
 import { DESIGN_TOKENS } from '../../design-system/constants'
 import { useTextColor } from '../../hooks/useTextColor'
 import { useThemeColors } from '../../hooks/useThemeColors'
@@ -114,6 +118,8 @@ export default function Contact() {
     subject: '',
     message: '',
   })
+  const [includeProjectWeb, setIncludeProjectWeb] = useState(false)
+  const [projectWeb, setProjectWeb] = useState<ProjectWebBriefState>(() => emptyProjectWebBrief())
   const [formErrors, setFormErrors] = useState({
     name: '',
     email: '',
@@ -212,7 +218,10 @@ export default function Contact() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          ...formData,
+          ...(includeProjectWeb ? { projectWeb } : {}),
+        }),
       })
       
       const data = await response.json()
@@ -222,6 +231,8 @@ export default function Contact() {
         setSnackbarSeverity('success')
         setFormData({ name: '', email: '', subject: '', message: '' })
         setFormErrors({ name: '', email: '', subject: '', message: '' })
+        setIncludeProjectWeb(false)
+        setProjectWeb(emptyProjectWebBrief())
       } else {
         setSnackbarMessage(data.error || t('contact.sendError'))
         setSnackbarSeverity('error')
@@ -320,6 +331,15 @@ export default function Contact() {
                   rows={useCompactContact ? 4 : 6}
                   textColor={textColor}
                   helperTextColor={`${textColor}B3`}
+                />
+
+                <ProjectWebBriefSection
+                  include={includeProjectWeb}
+                  onIncludeChange={setIncludeProjectWeb}
+                  value={projectWeb}
+                  onChange={setProjectWeb}
+                  textColor={textColor}
+                  compact={useCompactContact}
                 />
               </Box>
               
