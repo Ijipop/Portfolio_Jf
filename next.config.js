@@ -1,6 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Limite des uploads (FormData / Server Actions) — évite le 413 avant d’atteindre la route API
+  // Si le build échoue avec « ESLint must be installed » : lancer `npm install` dans ce dossier (Portfolio),
+  // ou décommenter : eslint: { ignoreDuringBuilds: true } (le lint reste disponible via `npm run lint`).
   experimental: {
     serverActions: {
       bodySizeLimit: '50mb',
