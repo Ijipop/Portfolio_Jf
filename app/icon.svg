@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <title>iji</title>
+  <defs>
+    <linearGradient id="iji" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fdba74"/>
+      <stop offset="45%" stop-color="#fb923c"/>
+      <stop offset="100%" stop-color="#ea580c"/>
+    </linearGradient>
+  </defs>
+  <rect width="32" height="32" rx="7" fill="#121212"/>
+  <!-- j: vertical stem + horizontal hook at 90deg -->
+  <g fill="url(#iji)">
+    <!-- i -->
+    <rect x="6" y="4" width="4" height="4"/>
+    <rect x="6" y="9" width="2" height="14"/>
+    <rect x="8" y="9" width="2" height="14"/>
+    <!-- j: dot + vertical stem -->
+    <rect x="14" y="4" width="4" height="4"/>
+    <rect x="14" y="9" width="2" height="20"/>
+    <rect x="16" y="9" width="2" height="20"/>
+    <!-- horizontal bar: 90deg under j stem; air y23-28 under 1st i -->
+    <rect x="6" y="29" width="12" height="2"/>
+    <!-- i -->
+    <rect x="22" y="4" width="4" height="4"/>
+    <rect x="22" y="9" width="2" height="14"/>
+    <rect x="24" y="9" width="2" height="14"/>
+  </g>
+</svg>
