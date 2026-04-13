@@ -10,8 +10,6 @@ const BRAND_GLITCH_GRADIENT =
 const GLITCH_LAYER = '#9a3412'
 const GLITCH_BEFORE_OPACITY = 0.42
 const GLITCH_AFTER_OPACITY = 0.38
-/** Halo discret sur le gros titre accueil uniquement. */
-const HERO_AMBER_GLOW = '0 0 22px rgba(234, 88, 12, 0.42)'
 
 export type IjipopGlitchTitleProps = {
   /** Texte brut (traduction). En `page`, affichage en capitales pour coller aux titres de section. */
@@ -40,7 +38,6 @@ export default function IjipopGlitchTitle({ text, variant = 'page' }: IjipopGlit
 
   const fillGradient = BRAND_GLITCH_GRADIENT
   const glitchRgb = GLITCH_LAYER
-  const textShadow = variant === 'hero' ? HERO_AMBER_GLOW : 'none'
 
   return (
     <Typography
@@ -70,7 +67,7 @@ export default function IjipopGlitchTitle({ text, variant = 'page' }: IjipopGlit
           WebkitBackgroundClip: 'text',
           backgroundClip: 'text',
           WebkitTextFillColor: 'transparent',
-          textShadow,
+          textShadow: 'none',
           animation: 'ijipopGlitchBase 3.6s infinite steps(1, end)',
           '@keyframes ijipopGlitchBase': {
             '0%, 74%, 100%': { transform: 'translate(0, 0) skewX(0deg)', opacity: 1 },
