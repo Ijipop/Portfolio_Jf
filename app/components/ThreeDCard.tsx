@@ -211,6 +211,7 @@ export default function ThreeDCardComponent({
           sx={{
             position: 'relative',
             zIndex: 2,
+            backgroundColor: 'transparent',
             ...(fullHeight && {
               flex: 1,
               display: 'flex',

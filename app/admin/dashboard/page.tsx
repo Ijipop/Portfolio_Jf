@@ -31,8 +31,10 @@ import {
 	Typography,
 	CircularProgress
 } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState, useCallback, useRef } from 'react';
+import { getProjectImageLetterboxGlassSx } from '@/components/shared/cardSurface';
+import { useEffect, useState, useCallback, useRef, useMemo } from 'react';
 import { navigateProjectUrl } from '@/lib/navigateProjectUrl';
 
 interface Project {
@@ -42,6 +44,7 @@ interface Project {
   technologies: string;
   status: string;
   projectType: 'logiciel' | 'web';
+  webAudience?: 'personal' | 'professional' | null;
   displayOrder: number;
   url?: string;
   siteUrl?: string | null;
@@ -63,6 +66,92 @@ interface TimelendarRelease {
   updatedAt: string;
 }
 
+const ADMIN_PROJECT_TABLE_COL_SPAN = 11;
+
+type AdminDashboardProjectRowProps = {
+  project: Project;
+  getImageUrl: (imageUrl: string) => string;
+  handleOpenProjectUrl: (url: string) => void;
+  handleOpenDialog: (project?: Project) => void;
+  handleDelete: (id: number) => void;
+};
+
+function AdminDashboardProjectRow({
+  project,
+  getImageUrl,
+  handleOpenProjectUrl,
+  handleOpenDialog,
+  handleDelete,
+}: AdminDashboardProjectRowProps) {
+  return (
+    <TableRow>
+      <TableCell>{project.name}</TableCell>
+      <TableCell>
+        <Typography variant="body2" sx={{ maxWidth: 200, overflow: 'hidden', textOverflow: 'ellipsis' }}>
+          {project.description}
+        </Typography>
+      </TableCell>
+      <TableCell>{project.technologies}</TableCell>
+      <TableCell>{project.status}</TableCell>
+      <TableCell>{project.projectType === 'logiciel' ? 'Logiciel' : 'Sites web'}</TableCell>
+      <TableCell>
+        {project.projectType === 'logiciel'
+          ? '—'
+          : project.webAudience === 'personal'
+            ? 'Perso'
+            : 'Pro'}
+      </TableCell>
+      <TableCell>{project.displayOrder ?? 0}</TableCell>
+      <TableCell>
+        {project.url && (
+          <Button size="small" onClick={() => handleOpenProjectUrl(project.url!)}>
+            Voir
+          </Button>
+        )}
+      </TableCell>
+      <TableCell>
+        {project.downloadUrl && (
+          <Button size="small" href={project.downloadUrl} target="_blank" rel="noopener noreferrer">
+            Fichier
+          </Button>
+        )}
+      </TableCell>
+      <TableCell>
+        {project.imageUrl && (
+          <Box
+            component="img"
+            src={getImageUrl(project.imageUrl)}
+            alt={project.name}
+            sx={{
+              width: 50,
+              height: 50,
+              objectFit: 'cover',
+              borderRadius: 1,
+              display: 'block',
+            }}
+            onError={(e) => {
+              (e.target as HTMLImageElement).style.display = 'none';
+            }}
+          />
+        )}
+      </TableCell>
+      <TableCell>
+        {project.siteUrl && (
+          <Button size="small" onClick={() => handleOpenProjectUrl(project.siteUrl!)} sx={{ mr: 0.5 }}>
+            Voir le site
+          </Button>
+        )}
+        <IconButton size="small" onClick={() => handleOpenDialog(project)} color="primary">
+          <EditIcon />
+        </IconButton>
+        <IconButton size="small" onClick={() => handleDelete(project.id)} color="error">
+          <DeleteIcon />
+        </IconButton>
+      </TableCell>
+    </TableRow>
+  );
+}
+
 export default function AdminDashboard() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
@@ -75,6 +164,7 @@ export default function AdminDashboard() {
     technologies: '',
     status: '',
     projectType: 'web' as 'logiciel' | 'web',
+    webAudience: 'professional' as 'personal' | 'professional',
     displayOrder: 0,
     url: '',
     siteUrl: '',
@@ -87,6 +177,7 @@ export default function AdminDashboard() {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const downloadFileInputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
+  const theme = useTheme();
 
   const handleOpenProjectUrl = useCallback(
     (url: string) => {
@@ -128,9 +219,25 @@ export default function AdminDashboard() {
     return imageUrl;
   };
 
+  const projectsWebSorted = useMemo(
+    () =>
+      projects
+        .filter((p) => (p.projectType ?? 'web') === 'web')
+        .sort((a, b) => a.name.localeCompare(b.name, 'fr', { sensitivity: 'base' })),
+    [projects]
+  );
+
+  const projectsLogicielSorted = useMemo(
+    () =>
+      projects
+        .filter((p) => p.projectType === 'logiciel')
+        .sort((a, b) => a.name.localeCompare(b.name, 'fr', { sensitivity: 'base' })),
+    [projects]
+  );
+
   const fetchProjects = useCallback(async () => {
     try {
-      const response = await fetch('/api/projects');
+      const response = await fetch('/api/projects', { credentials: 'include' });
       const data = await response.json();
       
       if (data.success) {
@@ -148,7 +255,7 @@ export default function AdminDashboard() {
 
   const fetchTimelendarReleases = useCallback(async () => {
     try {
-      const response = await fetch('/api/timelendar/releases');
+      const response = await fetch('/api/timelendar/releases', { credentials: 'include' });
       const data = await response.json();
       if (data.success) {
         setTimelendarReleases(data.data);
@@ -167,8 +274,9 @@ export default function AdminDashboard() {
   useEffect(() => {
     const verifySession = async () => {
       try {
-        const response = await fetch('/api/auth/session');
-        if (!response.ok) {
+        const response = await fetch('/api/auth/session', { credentials: 'include' });
+        const data = await response.json().catch(() => ({}));
+        if (!data.authenticated) {
           redirectToAdminLogin();
           return;
         }
@@ -183,7 +291,7 @@ export default function AdminDashboard() {
 
   const handleLogout = async () => {
     try {
-      await fetch('/api/auth/logout', { method: 'POST' });
+      await fetch('/api/auth/logout', { method: 'POST', credentials: 'include' });
     } catch (error) {
       console.error('Logout:', error);
     } finally {
@@ -200,6 +308,7 @@ export default function AdminDashboard() {
         technologies: project.technologies,
         status: project.status,
         projectType: project.projectType ?? 'web',
+        webAudience: project.webAudience === 'personal' ? 'personal' : 'professional',
         displayOrder: project.displayOrder ?? 0,
         url: project.url || '',
         siteUrl: project.siteUrl || '',
@@ -215,6 +324,7 @@ export default function AdminDashboard() {
         technologies: '',
         status: '',
         projectType: 'web',
+        webAudience: 'professional',
         displayOrder: 0,
         url: '',
         siteUrl: '',
@@ -235,6 +345,7 @@ export default function AdminDashboard() {
       technologies: '',
       status: '',
       projectType: 'web',
+      webAudience: 'professional',
       displayOrder: 0,
       url: '',
       siteUrl: '',
@@ -398,12 +509,17 @@ export default function AdminDashboard() {
       const url = editingProject ? `/api/projects/${editingProject.id}` : '/api/projects';
       const method = editingProject ? 'PUT' : 'POST';
 
+      const payload = {
+        ...formData,
+        webAudience: formData.projectType === 'web' ? formData.webAudience : null,
+      };
       const response = await fetch(url, {
         method,
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(formData)
+        credentials: 'include',
+        body: JSON.stringify(payload)
       });
 
       const data = await response.json();
@@ -428,7 +544,8 @@ export default function AdminDashboard() {
 
     try {
       const response = await fetch(`/api/projects/${id}`, {
-        method: 'DELETE'
+        method: 'DELETE',
+        credentials: 'include',
       });
 
       const data = await response.json();
@@ -475,6 +592,7 @@ export default function AdminDashboard() {
 
       const response = await fetch('/api/timelendar/releases', {
         method: 'POST',
+        credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
         },
@@ -526,6 +644,7 @@ export default function AdminDashboard() {
     try {
       const response = await fetch(`/api/timelendar/releases/${id}`, {
         method: 'DELETE',
+        credentials: 'include',
       });
       const data = await response.json();
       if (data.success) {
@@ -606,6 +725,7 @@ export default function AdminDashboard() {
                 <TableCell>Technologies</TableCell>
                 <TableCell>Statut</TableCell>
                 <TableCell>Type</TableCell>
+                <TableCell>Web perso/pro</TableCell>
                 <TableCell>Ordre</TableCell>
                 <TableCell>URL</TableCell>
                 <TableCell>Téléchargement</TableCell>
@@ -614,85 +734,45 @@ export default function AdminDashboard() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {projects.map((project) => (
-                <TableRow key={project.id}>
-                  <TableCell>{project.name}</TableCell>
-                  <TableCell>
-                    <Typography variant="body2" sx={{ maxWidth: 200, overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                      {project.description}
-                    </Typography>
-                  </TableCell>
-                  <TableCell>{project.technologies}</TableCell>
-                  <TableCell>{project.status}</TableCell>
-                  <TableCell>{project.projectType === 'logiciel' ? 'Logiciel' : 'Sites web'}</TableCell>
-                  <TableCell>{project.displayOrder ?? 0}</TableCell>
-                  <TableCell>
-                    {project.url && (
-                      <Button
-                        size="small"
-                        onClick={() => handleOpenProjectUrl(project.url!)}
-                      >
-                        Voir
-                      </Button>
-                    )}
-                  </TableCell>
-                  <TableCell>
-                    {project.downloadUrl && (
-                      <Button
-                        size="small"
-                        href={project.downloadUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        Fichier
-                      </Button>
-                    )}
-                  </TableCell>
-                  <TableCell>
-                    {project.imageUrl && (
-                      <Box
-                        component="img"
-                        src={getImageUrl(project.imageUrl)}
-                        alt={project.name}
-                        sx={{ 
-                          width: 50, 
-                          height: 50, 
-                          objectFit: 'cover', 
-                          borderRadius: 1,
-                          display: 'block'
-                        }}
-                        onError={(e) => {
-                          (e.target as HTMLImageElement).style.display = 'none';
-                        }}
-                      />
-                    )}
-                  </TableCell>
-                  <TableCell>
-                    {project.siteUrl && (
-                      <Button
-                        size="small"
-                        onClick={() => handleOpenProjectUrl(project.siteUrl!)}
-                        sx={{ mr: 0.5 }}
-                      >
-                        Voir le site
-                      </Button>
-                    )}
-                    <IconButton
-                      size="small"
-                      onClick={() => handleOpenDialog(project)}
-                      color="primary"
-                    >
-                      <EditIcon />
-                    </IconButton>
-                    <IconButton
-                      size="small"
-                      onClick={() => handleDelete(project.id)}
-                      color="error"
-                    >
-                      <DeleteIcon />
-                    </IconButton>
+              {projectsWebSorted.length > 0 && (
+                <TableRow>
+                  <TableCell
+                    colSpan={ADMIN_PROJECT_TABLE_COL_SPAN}
+                    sx={{ bgcolor: 'action.hover', fontWeight: 600, py: 1.5 }}
+                  >
+                    Sites web
                   </TableCell>
                 </TableRow>
+              )}
+              {projectsWebSorted.map((project) => (
+                <AdminDashboardProjectRow
+                  key={project.id}
+                  project={project}
+                  getImageUrl={getImageUrl}
+                  handleOpenProjectUrl={handleOpenProjectUrl}
+                  handleOpenDialog={handleOpenDialog}
+                  handleDelete={handleDelete}
+                />
+              ))}
+              {projectsLogicielSorted.length > 0 && (
+                <TableRow>
+                  <TableCell
+                    colSpan={ADMIN_PROJECT_TABLE_COL_SPAN}
+                    sx={{ bgcolor: 'action.hover', fontWeight: 600, py: 1.5 }}
+                  >
+                    Logiciel
+                  </TableCell>
+                </TableRow>
+              )}
+              {projectsLogicielSorted.map((project) => (
+                <AdminDashboardProjectRow
+                  key={project.id}
+                  project={project}
+                  getImageUrl={getImageUrl}
+                  handleOpenProjectUrl={handleOpenProjectUrl}
+                  handleOpenDialog={handleOpenDialog}
+                  handleDelete={handleDelete}
+                />
               ))}
             </TableBody>
           </Table>
@@ -934,6 +1014,25 @@ export default function AdminDashboard() {
                 <MenuItem value="web">Sites web</MenuItem>
               </Select>
             </FormControl>
+            {formData.projectType === 'web' && (
+              <FormControl margin="dense" fullWidth>
+                <InputLabel id="web-audience-label">Public cible (sites web)</InputLabel>
+                <Select
+                  labelId="web-audience-label"
+                  label="Public cible (sites web)"
+                  value={formData.webAudience}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      webAudience: e.target.value as 'personal' | 'professional',
+                    })
+                  }
+                >
+                  <MenuItem value="professional">Réalisation professionnelle</MenuItem>
+                  <MenuItem value="personal">Projet personnel</MenuItem>
+                </Select>
+              </FormControl>
+            )}
             <TextField
               margin="dense"
               label="Ordre d'affichage"
@@ -1029,7 +1128,19 @@ export default function AdminDashboard() {
                 </Button>
               </label>
               {previewImage && (
-                <Box sx={{ mt: 2, mb: 2 }}>
+                <Box
+                  sx={{
+                    mt: 2,
+                    mb: 2,
+                    borderRadius: 2,
+                    overflow: 'hidden',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    minHeight: 120,
+                    ...getProjectImageLetterboxGlassSx(theme.palette.mode, { nestedTint: true }),
+                  }}
+                >
                   <Box
                     component="img"
                     src={previewImage}
@@ -1038,8 +1149,7 @@ export default function AdminDashboard() {
                       width: '100%',
                       maxHeight: 300,
                       objectFit: 'contain',
-                      borderRadius: 2,
-                      border: '1px solid #e0e0e0'
+                      display: 'block',
                     }}
                   />
                 </Box>

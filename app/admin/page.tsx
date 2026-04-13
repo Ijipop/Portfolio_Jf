@@ -18,8 +18,9 @@ export default function AdminPage() {
   useEffect(() => {
     const verifySession = async () => {
       try {
-        const response = await fetch('/api/auth/session')
-        if (response.ok) {
+        const response = await fetch('/api/auth/session', { credentials: 'include' })
+        const data = await response.json().catch(() => ({}))
+        if (data.authenticated) {
           router.replace('/admin/dashboard')
         }
       } catch {

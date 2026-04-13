@@ -7,10 +7,18 @@ type AdminJwtPayload = {
   role?: string
 }
 
+/**
+ * Contrôle de session pour l’admin (client).
+ * Réponse 200 + { authenticated: boolean } pour éviter les 401 « bruyants » dans la console
+ * quand l’utilisateur n’est tout simplement pas connecté.
+ */
 export async function GET(request: NextRequest) {
   const auth = authAdminToken(request)
   if (!auth.ok) {
-    return NextResponse.json({ authenticated: false, error: auth.error }, { status: auth.status })
+    return NextResponse.json({
+      authenticated: false,
+      error: auth.error ?? null,
+    })
   }
 
   const decoded = auth.decoded as AdminJwtPayload
