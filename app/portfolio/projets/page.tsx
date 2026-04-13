@@ -67,11 +67,27 @@ interface Project {
   updatedAt: string
 }
 
-type TimelendarPlatform = 'windows' | 'macos' | 'both'
+/** Vignettes par défaut (public/imgs/images/) pour des projets connus. */
+function resolveProjectCardImage(project: Project): string | undefined {
+  const n = project.name.toLowerCase()
+  const u = (project.url ?? '').toLowerCase()
+  if (n.includes('thermo') && n.includes('trappeur')) return 'imgs/images/Thermo.png'
+  if (
+    n.includes('timelendr') ||
+    n.includes('timelendar') ||
+    u.includes('/logiciel/timelendr') ||
+    u.includes('/logiciel/timelendar')
+  ) {
+    return 'imgs/images/timelendr.png'
+  }
+  return undefined
+}
 
-interface TimelendarRelease {
+type TimelendrPlatform = 'windows' | 'macos' | 'both'
+
+interface TimelendrRelease {
   filePath: string
-  platform?: TimelendarPlatform
+  platform?: TimelendrPlatform
 }
 
 // Composants stylisés
@@ -213,13 +229,13 @@ const ProjectCardWrapper = ({
   getStatusIcon,
   getStatusColor,
   getImageUrl,
-  timelendarWindowsUrl,
-  timelendarMacosUrl,
+  timelendrWindowsUrl,
+  timelendrMacosUrl,
   viewProjectLabel = 'Voir le projet',
   viewSiteLabel = 'Voir le site',
   downloadProjectLabel = 'Télécharger le projet',
-  downloadTimelendarPcLabel = 'Télécharger Timelendar PC',
-  downloadTimelendarMacosLabel = 'Télécharger Timelendar macOS',
+  downloadTimelendrPcLabel = 'Télécharger Timelendr PC',
+  downloadTimelendrMacosLabel = 'Télécharger Timelendr macOS',
 }: { 
   project: Project
   index: number
@@ -227,13 +243,13 @@ const ProjectCardWrapper = ({
   getStatusIcon: (status: string) => React.ReactElement
   getStatusColor: (status: string) => "error" | "success" | "warning" | "info" | "default" | "primary" | "secondary"
   getImageUrl: (imageUrl: string) => string
-  timelendarWindowsUrl?: string | null
-  timelendarMacosUrl?: string | null
+  timelendrWindowsUrl?: string | null
+  timelendrMacosUrl?: string | null
   viewProjectLabel?: string
   viewSiteLabel?: string
   downloadProjectLabel?: string
-  downloadTimelendarPcLabel?: string
-  downloadTimelendarMacosLabel?: string
+  downloadTimelendrPcLabel?: string
+  downloadTimelendrMacosLabel?: string
 }) => {
   const theme = useTheme()
   const { primary, secondary, accent } = useThemeColors()
@@ -261,10 +277,17 @@ const ProjectCardWrapper = ({
 
   const lowerName = project.name.toLowerCase()
   const lowerUrl = (project.url ?? '').toLowerCase()
-  const isTimelendarProject = lowerName.includes('timelendar') || lowerUrl.includes('/logiciel/timelendar')
+  const isTimelendrProject =
+    lowerName.includes('timelendr') ||
+    lowerName.includes('timelendar') ||
+    lowerUrl.includes('/logiciel/timelendr') ||
+    lowerUrl.includes('/logiciel/timelendar')
   const hasProjectAction = project.url?.trim()
-    || (!isTimelendarProject && project.downloadUrl?.trim())
-    || (isTimelendarProject && (timelendarWindowsUrl || timelendarMacosUrl))
+    || (!isTimelendrProject && project.downloadUrl?.trim())
+    || (isTimelendrProject && (timelendrWindowsUrl || timelendrMacosUrl))
+
+  const cardImageRaw = resolveProjectCardImage(project) ?? project.imageUrl
+  const cardImageHref = cardImageRaw ? getImageUrl(cardImageRaw) : ''
 
   const threeDCardSurfaceSx =
     presentationMode === 'beige'
@@ -307,9 +330,9 @@ const ProjectCardWrapper = ({
         fullHeight
         onClick={() => {
           if (project.url?.trim()) handleProjectClick(project.url)
-          else if (!isTimelendarProject && project.downloadUrl?.trim()) handleProjectClick(project.downloadUrl)
-          else if (isTimelendarProject && timelendarWindowsUrl) handleProjectClick(timelendarWindowsUrl)
-          else if (isTimelendarProject && timelendarMacosUrl) handleProjectClick(timelendarMacosUrl)
+          else if (!isTimelendrProject && project.downloadUrl?.trim()) handleProjectClick(project.downloadUrl)
+          else if (isTimelendrProject && timelendrWindowsUrl) handleProjectClick(timelendrWindowsUrl)
+          else if (isTimelendrProject && timelendrMacosUrl) handleProjectClick(timelendrMacosUrl)
         }}
         floatingElements={2}
         sx={threeDCardSurfaceSx}
@@ -421,7 +444,7 @@ const ProjectCardWrapper = ({
             mx: 'auto',
             aspectRatio: '1 / 1',
             flexShrink: 0,
-            ...(project.imageUrl && getImageUrl(project.imageUrl)
+            ...(cardImageHref
               ? { background: 'transparent' }
               : {
                   background: 'rgba(0,0,0,0.12)',
@@ -439,9 +462,9 @@ const ProjectCardWrapper = ({
             },
           }}
         >
-          {project.imageUrl && getImageUrl(project.imageUrl) ? (
+          {cardImageHref ? (
             <Image
-              src={getImageUrl(project.imageUrl)}
+              src={cardImageHref}
               alt={project.name}
               fill
               sizes="(max-width: 600px) 100vw, (max-width: 900px) 50vw, 33vw"
@@ -518,28 +541,28 @@ const ProjectCardWrapper = ({
               {viewSiteLabel}
             </CTAButton>
           )}
-          {isTimelendarProject ? (
+          {isTimelendrProject ? (
             <>
-              {timelendarWindowsUrl ? (
+              {timelendrWindowsUrl ? (
                 <CTAButton
                   variant="secondary"
                   size="medium"
                   fullWidth
                   startIcon={<DownloadIcon />}
-                  onClick={() => handleProjectClick(timelendarWindowsUrl)}
+                  onClick={() => handleProjectClick(timelendrWindowsUrl)}
                 >
-                  {downloadTimelendarPcLabel}
+                  {downloadTimelendrPcLabel}
                 </CTAButton>
               ) : null}
-              {timelendarMacosUrl ? (
+              {timelendrMacosUrl ? (
                 <CTAButton
                   variant="secondary"
                   size="medium"
                   fullWidth
                   startIcon={<DownloadIcon />}
-                  onClick={() => handleProjectClick(timelendarMacosUrl)}
+                  onClick={() => handleProjectClick(timelendrMacosUrl)}
                 >
-                  {downloadTimelendarMacosLabel}
+                  {downloadTimelendrMacosLabel}
                 </CTAButton>
               ) : null}
             </>
@@ -672,8 +695,8 @@ export default function Projets() {
   const [error, setError] = useState<string | null>(null)
   const [selectedTech, setSelectedTech] = useState<string | null>(null)
   const [selectedProjectType, setSelectedProjectType] = useState<'logiciel' | 'web'>('web')
-  const [timelendarWindowsUrl, setTimelendarWindowsUrl] = useState<string | null>(null)
-  const [timelendarMacosUrl, setTimelendarMacosUrl] = useState<string | null>(null)
+  const [timelendrWindowsUrl, setTimelendrWindowsUrl] = useState<string | null>(null)
+  const [timelendrMacosUrl, setTimelendrMacosUrl] = useState<string | null>(null)
 
   const sectionGlassBg = useCardBackgroundFromThemeVars(GRADIENTS.cards.light)
   const glassProjectSectionAccordionSx = useMemo(
@@ -735,7 +758,7 @@ export default function Projets() {
 
   useEffect(() => {
     fetchProjects()
-    fetchTimelendarReleases()
+    fetchTimelendrReleases()
   }, [])
 
   useEffect(() => {
@@ -759,12 +782,12 @@ export default function Projets() {
     }
   }
 
-  const fetchTimelendarReleases = async () => {
+  const fetchTimelendrReleases = async () => {
     try {
-      const response = await fetch('/api/timelendar/releases')
+      const response = await fetch('/api/timelendr/releases')
       const data = await response.json()
       if (!data?.success || !Array.isArray(data.data)) return
-      const releases: TimelendarRelease[] = data.data
+      const releases: TimelendrRelease[] = data.data
 
       let latestWindows: string | null = null
       let latestMacos: string | null = null
@@ -780,10 +803,10 @@ export default function Projets() {
         if (latestWindows && latestMacos) break
       }
 
-      setTimelendarWindowsUrl(latestWindows)
-      setTimelendarMacosUrl(latestMacos)
+      setTimelendrWindowsUrl(latestWindows)
+      setTimelendrMacosUrl(latestMacos)
     } catch {
-      // Ignore silently: la page reste utilisable sans releases Timelendar.
+      // Ignore silently: la page reste utilisable sans releases Timelendr.
     }
   }
 
@@ -834,8 +857,8 @@ export default function Projets() {
   const handleProjectClick = useCallback(
     (url: string) => {
       const normalized = url.trim().toLowerCase()
-      if (normalized.includes('/logiciel/timelendar')) {
-        void router.push('/logiciel/timelendar')
+      if (normalized.includes('/logiciel/timelendr') || normalized.includes('/logiciel/timelendar')) {
+        void router.push('/logiciel/timelendr')
         return
       }
       navigateProjectUrl(url, router)
@@ -1072,13 +1095,13 @@ export default function Projets() {
                         getStatusIcon={getStatusIcon}
                         getStatusColor={getStatusColor}
                         getImageUrl={getImageUrl}
-                        timelendarWindowsUrl={timelendarWindowsUrl}
-                        timelendarMacosUrl={timelendarMacosUrl}
+                        timelendrWindowsUrl={timelendrWindowsUrl}
+                        timelendrMacosUrl={timelendrMacosUrl}
                         viewProjectLabel={t('projects.viewProject')}
                         viewSiteLabel={t('projects.viewSite')}
                         downloadProjectLabel={t('projects.downloadProject')}
-                        downloadTimelendarPcLabel={t('projects.downloadTimelendarPc')}
-                        downloadTimelendarMacosLabel={t('projects.downloadTimelendarMacos')}
+                        downloadTimelendrPcLabel={t('projects.downloadTimelendrPc')}
+                        downloadTimelendrMacosLabel={t('projects.downloadTimelendrMacos')}
                       />
                     ))}
                   </ProjectsGrid>
@@ -1115,13 +1138,13 @@ export default function Projets() {
                         getStatusIcon={getStatusIcon}
                         getStatusColor={getStatusColor}
                         getImageUrl={getImageUrl}
-                        timelendarWindowsUrl={timelendarWindowsUrl}
-                        timelendarMacosUrl={timelendarMacosUrl}
+                        timelendrWindowsUrl={timelendrWindowsUrl}
+                        timelendrMacosUrl={timelendrMacosUrl}
                         viewProjectLabel={t('projects.viewProject')}
                         viewSiteLabel={t('projects.viewSite')}
                         downloadProjectLabel={t('projects.downloadProject')}
-                        downloadTimelendarPcLabel={t('projects.downloadTimelendarPc')}
-                        downloadTimelendarMacosLabel={t('projects.downloadTimelendarMacos')}
+                        downloadTimelendrPcLabel={t('projects.downloadTimelendrPc')}
+                        downloadTimelendrMacosLabel={t('projects.downloadTimelendrMacos')}
                       />
                     ))}
                   </ProjectsGrid>
@@ -1140,13 +1163,13 @@ export default function Projets() {
                 getStatusIcon={getStatusIcon}
                 getStatusColor={getStatusColor}
                 getImageUrl={getImageUrl}
-                timelendarWindowsUrl={timelendarWindowsUrl}
-                timelendarMacosUrl={timelendarMacosUrl}
+                timelendrWindowsUrl={timelendrWindowsUrl}
+                timelendrMacosUrl={timelendrMacosUrl}
                 viewProjectLabel={t('projects.viewProject')}
                 viewSiteLabel={t('projects.viewSite')}
                 downloadProjectLabel={t('projects.downloadProject')}
-                downloadTimelendarPcLabel={t('projects.downloadTimelendarPc')}
-                downloadTimelendarMacosLabel={t('projects.downloadTimelendarMacos')}
+                downloadTimelendrPcLabel={t('projects.downloadTimelendrPc')}
+                downloadTimelendrMacosLabel={t('projects.downloadTimelendrMacos')}
               />
             ))}
           </ProjectsGrid>

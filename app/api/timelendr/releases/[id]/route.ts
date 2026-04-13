@@ -5,7 +5,7 @@ import { unlink } from 'fs/promises'
 import path from 'path'
 import { del } from '@vercel/blob'
 
-// DELETE /api/timelendar/releases/[id] — supprimer une version (protégé)
+// DELETE /api/timelendr/releases/[id] — supprimer une version (protégé)
 export async function DELETE(
   request: NextRequest,
   { params }: { params: { id: string } }
@@ -24,7 +24,7 @@ export async function DELETE(
       )
     }
 
-    const release = await prisma.timelendarRelease.findUnique({ where: { id } })
+    const release = await prisma.timelendrRelease.findUnique({ where: { id } })
     if (!release) {
       return NextResponse.json(
         { success: false, error: 'Version non trouvée' },
@@ -32,7 +32,7 @@ export async function DELETE(
       )
     }
 
-    await prisma.timelendarRelease.delete({ where: { id } })
+    await prisma.timelendrRelease.delete({ where: { id } })
 
     const isBlob =
       /^https?:\/\//i.test(release.filePath) &&
@@ -59,7 +59,7 @@ export async function DELETE(
 
     return NextResponse.json({ success: true, message: 'Version supprimée avec succès' })
   } catch (error) {
-    console.error('DELETE timelendar release:', error)
+    console.error('DELETE timelendr release:', error)
     return NextResponse.json(
       { success: false, error: 'Erreur lors de la suppression' },
       { status: 500 }

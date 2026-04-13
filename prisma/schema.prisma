@@ -54,18 +54,20 @@ enum WebProjectAudience {
   professional
 }
 
-enum TimelendarPlatform {
+enum TimelendrPlatform {
   windows
   macos
   both
+
+  @@map("TimelendarPlatform")
 }
 
-model TimelendarRelease {
+model TimelendrRelease {
   id        Int               @id @default(autoincrement())
   filePath  String            // URL https vers .zip externe, ou ancien chemin /downloads/…
   changelog String            // description des changements
   version   String?           // optionnel ex: 1.2.0
-  platform  TimelendarPlatform @default(both)
+  platform  TimelendrPlatform @default(both)
   createdAt DateTime          @default(now())
   updatedAt DateTime          @updatedAt
 

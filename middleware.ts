@@ -11,6 +11,8 @@ function isProtectedApi(pathname: string, method: string): boolean {
   return (
     pathname.startsWith('/api/projects') ||
     pathname.startsWith('/api/upload') ||
+    pathname.startsWith('/api/timelendr/releases') ||
+    pathname.startsWith('/api/timelendr/blob-client') ||
     pathname.startsWith('/api/timelendar/releases') ||
     pathname.startsWith('/api/timelendar/blob-client')
   )
@@ -37,5 +39,11 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/admin/:path*', '/api/projects/:path*', '/api/upload/:path*', '/api/timelendar/:path*'],
+  matcher: [
+    '/admin/:path*',
+    '/api/projects/:path*',
+    '/api/upload/:path*',
+    '/api/timelendr/:path*',
+    '/api/timelendar/:path*',
+  ],
 }

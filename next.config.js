@@ -24,7 +24,14 @@ const nextConfig = {
 
   // Compression
   compress: true,
-  
+
+  async redirects() {
+    return [
+      { source: '/logiciel/timelendar', destination: '/logiciel/timelendr', permanent: true },
+      { source: '/api/timelendar/:path*', destination: '/api/timelendr/:path*', permanent: true },
+    ]
+  },
+
   // Headers de sécurité et performance
   async headers() {
     return [

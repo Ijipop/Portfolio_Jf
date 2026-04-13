@@ -10,37 +10,38 @@ import { DESIGN_TOKENS } from '@/design-system/constants'
 import { useThemeColors } from '@/hooks/useThemeColors'
 import { useTextColor } from '@/hooks/useTextColor'
 import { getCardSurfaceSx } from '@/components/shared/cardSurface'
+import {
+  figureWithSword,
+  greetFigure,
+  sitFigure,
+  swordGlyph,
+  walkingFigure,
+} from '@/components/home/asciiHero/figures'
+import type { DevHeroPhase } from '@/components/home/asciiHero/phases'
+import { prefersReducedMotion } from '@/components/home/asciiHero/phases'
+import { ASCII_BUILD_CODE, ASCII_SWORD_CODE } from '@/components/home/asciiHero/snippets'
+import {
+  CHAR_MS,
+  CHAR_MS_CLEAR,
+  FALL_DURATION_S,
+  FALL_FROM_Y,
+  IDLE_MS,
+  IDLE_POSE_MS,
+  PICKUP_MOVE_DURATION_S,
+  PICKUP_PAUSE_S,
+  PING_DURATION_S,
+  SCROLL_DELTA_THRESHOLD,
+  SWORD_DROP_DURATION_S,
+  SWORD_LAND_Y,
+  SWORD_START_Y,
+  TILT_MAX_DEG,
+  WALK_SHORT_DURATION_S,
+  WALK_SHORT_RATIO,
+} from '@/components/home/asciiHero/timings'
+import { useCodeTypewriter } from '@/components/home/asciiHero/useCodeTypewriter'
 
-/** Snippet affiché en mode Créa : code qui « construit » le bonhomme ASCII. */
-export const ASCII_BUILD_CODE = [
-  '// figure ASCII',
-  'const figure = [',
-  "  ' o ',",
-  "  '/|\\',",
-  "  '/ \\',",
-  "].join('\\n')",
-].join('\n')
+export { ASCII_BUILD_CODE } from '@/components/home/asciiHero/snippets'
 
-const CHAR_MS = 34
-const PING_DURATION_S = 3.2
-
-const LINE_HEAD = ' o '
-const LINE_BODY = '/|\\'
-const LINE_LEGS = ['/ \\', '\\ /'] as const
-
-function walkingFigure(legFrame: 0 | 1) {
-  return [LINE_HEAD, LINE_BODY, LINE_LEGS[legFrame]].join('\n')
-}
-
-const GREET_FIGURE = [' \\o/ ', '  |  ', ' / \\ '].join('\n')
-const SIT_FIGURE = [' o ', '/|\\', ' ¯¯¯ '].join('\n')
-
-const IDLE_MS = 15_000
-const IDLE_POSE_MS = 1600
-const TILT_MAX_DEG = 7
-const SCROLL_DELTA_THRESHOLD = 16
-
-type DevIntroPhase = 'typing' | 'walking'
 type InteractionLock = 'none' | 'scroll' | 'idle'
 
 export type HomeHeroDevCodeIntroProps = {
@@ -49,25 +50,45 @@ export type HomeHeroDevCodeIntroProps = {
   isTopologyRoute: boolean
 }
 
-function prefersReducedMotion(): boolean {
-  if (typeof window === 'undefined') return false
-  return window.matchMedia('(prefers-reduced-motion: reduce)').matches
-}
-
 export default function HomeHeroDevCodeIntro({ name, role, isTopologyRoute }: HomeHeroDevCodeIntroProps) {
   const theme = useTheme()
   const { primary, secondary, accent } = useThemeColors()
   const textColor = useTextColor()
-  const codeLen = ASCII_BUILD_CODE.length
 
-  const [phase, setPhase] = useState<DevIntroPhase>('typing')
-  const [typedLen, setTypedLen] = useState(0)
+  const [phase, setPhase] = useState<DevHeroPhase>('typingBuild')
+  const [codeSource, setCodeSource] = useState(ASCII_BUILD_CODE)
   const [legFrame, setLegFrame] = useState<0 | 1>(0)
   const [asciiReplace, setAsciiReplace] = useState<string | null>(null)
+  const [holdingSword, setHoldingSword] = useState(false)
+  const [swordSceneVisible, setSwordSceneVisible] = useState(false)
+
+  const phaseRef = useRef(phase)
+  phaseRef.current = phase
+
+  const typewriterMode =
+    phase === 'typingBuild' ? 'forward' : phase === 'clearCode' ? 'backward' : phase === 'typingSword' ? 'forward' : 'off'
+
+  const { typedLen, resetLength, setLength } = useCodeTypewriter({
+    source: codeSource,
+    charMs: phase === 'clearCode' ? CHAR_MS_CLEAR : CHAR_MS,
+    mode: typewriterMode,
+    onForwardComplete: () => {
+      const p = phaseRef.current
+      if (p === 'typingBuild') setPhase('falling')
+      if (p === 'typingSword') setPhase('swordScene')
+    },
+    onBackwardComplete: () => {
+      setCodeSource(ASCII_SWORD_CODE)
+      resetLength()
+      setPhase('typingSword')
+    },
+  })
 
   const wrapRef = useRef<HTMLDivElement>(null)
   const trackRef = useRef<HTMLDivElement>(null)
+  const fallLayerRef = useRef<HTMLDivElement>(null)
   const tiltRef = useRef<HTMLDivElement>(null)
+  const swordRef = useRef<HTMLDivElement>(null)
   const walkTlRef = useRef<gsap.core.Timeline | null>(null)
   const rotateToRef = useRef<((value: number) => void) | null>(null)
   const lockRef = useRef<InteractionLock>('none')
@@ -75,13 +96,15 @@ export default function HomeHeroDevCodeIntro({ name, role, isTopologyRoute }: Ho
   const idleTimerRef = useRef<number | null>(null)
   const lastScrollYRef = useRef(0)
   const greetTlRef = useRef<gsap.core.Timeline | null>(null)
+  const cinematicLockRef = useRef(false)
 
+  const reduced = prefersReducedMotion()
 
   const asciiColor =
     theme.palette.mode === 'dark' ? primary : accent || primary
   const asciiSx = {
     fontFamily: 'ui-monospace, "Cascadia Code", Consolas, monospace',
-    fontSize: { xs: '0.55rem', sm: '0.62rem', md: '0.7rem' },
+    fontSize: { xs: '0.68rem', sm: '0.78rem', md: '0.88rem' },
     lineHeight: 1.2,
     color: asciiColor,
     textShadow: `0 0 12px ${asciiColor}55, 0 1px 2px rgba(0,0,0,0.35)`,
@@ -99,9 +122,11 @@ export default function HomeHeroDevCodeIntro({ name, role, isTopologyRoute }: Ho
     }
   }, [])
 
+  const isInteractive = phase === 'interactiveWalk' && !reduced
+
   const scheduleIdle = useCallback(() => {
-    if (prefersReducedMotion()) return
-    if (phase !== 'walking') return
+    if (reduced) return
+    if (!isInteractive) return
     clearIdleTimer()
     idleTimerRef.current = window.setTimeout(() => {
       if (lockRef.current !== 'none') return
@@ -122,7 +147,7 @@ export default function HomeHeroDevCodeIntro({ name, role, isTopologyRoute }: Ho
       }
 
       if (kind === 0) {
-        setAsciiReplace(SIT_FIGURE)
+        setAsciiReplace(sitFigure)
         window.setTimeout(finishIdle, IDLE_POSE_MS)
       } else if (kind === 1) {
         gsap.to(tilt, {
@@ -144,66 +169,162 @@ export default function HomeHeroDevCodeIntro({ name, role, isTopologyRoute }: Ho
         })
       }
     }, IDLE_MS)
-  }, [phase, clearIdleTimer])
+  }, [reduced, isInteractive, clearIdleTimer])
 
   useLayoutEffect(() => {
     if (typeof window === 'undefined') return
-    if (prefersReducedMotion()) {
-      setTypedLen(codeLen)
-      setPhase('walking')
-    }
-  }, [codeLen])
-
-  useEffect(() => {
-    if (phase !== 'typing') return
-    if (typedLen >= codeLen) {
-      setPhase('walking')
-      return
-    }
-    const id = window.setTimeout(() => {
-      setTypedLen((n) => Math.min(n + 1, codeLen))
-    }, CHAR_MS)
-    return () => clearTimeout(id)
-  }, [phase, typedLen, codeLen])
+    if (!prefersReducedMotion()) return
+    setCodeSource(ASCII_SWORD_CODE)
+    setLength(ASCII_SWORD_CODE.length)
+    setHoldingSword(true)
+    setPhase('interactiveWalk')
+    cinematicLockRef.current = false
+  }, [setLength])
 
   useLayoutEffect(() => {
-    if (phase !== 'walking') return
+    if (reduced) return
+    if (phase !== 'falling') return
+    const fallEl = fallLayerRef.current
+    if (!fallEl) return
+
+    cinematicLockRef.current = true
+    gsap.killTweensOf(fallEl)
+    gsap.set(fallEl, { y: FALL_FROM_Y })
+    const tw = gsap.to(fallEl, {
+      y: 0,
+      duration: FALL_DURATION_S,
+      ease: 'power2.out',
+      onComplete: () => setPhase('walkShort'),
+    })
+    return () => {
+      tw.kill()
+    }
+  }, [phase, reduced])
+
+  useLayoutEffect(() => {
+    if (reduced) return
+    if (phase !== 'walkShort') return
     const wrap = wrapRef.current
     const track = trackRef.current
     if (!wrap || !track) return
 
-    if (prefersReducedMotion()) {
-      const maxX = Math.max(0, wrap.offsetWidth - track.offsetWidth)
-      gsap.set(track, { x: maxX * 0.5, opacity: 1 })
-      if (tiltRef.current) gsap.set(tiltRef.current, { rotation: 0, y: 0, scaleY: 1 })
-      return
+    walkTlRef.current?.kill()
+    const maxX = Math.max(0, wrap.offsetWidth - track.offsetWidth)
+    const targetX = maxX * WALK_SHORT_RATIO
+    gsap.set(track, { x: 0 })
+
+    let leg = 0
+    const legTimer = window.setInterval(() => {
+      leg ^= 1
+      setLegFrame(leg as 0 | 1)
+    }, 260)
+
+    const tw = gsap.to(track, {
+      x: targetX,
+      duration: WALK_SHORT_DURATION_S,
+      ease: 'sine.inOut',
+      onComplete: () => {
+        clearInterval(legTimer)
+        setPhase('clearCode')
+      },
+    })
+
+    return () => {
+      clearInterval(legTimer)
+      tw.kill()
+    }
+  }, [phase, reduced])
+
+  useLayoutEffect(() => {
+    if (reduced) return
+    if (phase !== 'swordScene') return
+    const wrap = wrapRef.current
+    const track = trackRef.current
+    const sword = swordRef.current
+    if (!wrap || !track || !sword) return
+
+    cinematicLockRef.current = true
+    setSwordSceneVisible(true)
+    gsap.killTweensOf(sword)
+    gsap.set(sword, { y: SWORD_START_Y, opacity: 1 })
+
+    const finishScene = () => {
+      setHoldingSword(true)
+      setSwordSceneVisible(false)
+      gsap.set(sword, { opacity: 0, y: SWORD_START_Y })
+      cinematicLockRef.current = false
+      setPhase('interactiveWalk')
     }
 
-    const buildWalk = () => {
-      walkTlRef.current?.kill()
-      const maxX = Math.max(0, wrap.offsetWidth - track.offsetWidth)
-      gsap.set(track, { x: 0 })
-      const tl = gsap.timeline({ repeat: -1 })
-      tl.to(track, {
-        x: maxX,
-        duration: PING_DURATION_S,
-        ease: 'sine.inOut',
-        onComplete: () => setLegFrame(1),
-      })
-      tl.to(track, {
-        x: 0,
-        duration: PING_DURATION_S,
-        ease: 'sine.inOut',
-        onComplete: () => setLegFrame(0),
-      })
-      walkTlRef.current = tl
-    }
+    const tl = gsap.timeline()
 
-    buildWalk()
+    tl.to(sword, {
+      y: SWORD_LAND_Y,
+      duration: SWORD_DROP_DURATION_S,
+      ease: 'bounce.out',
+    })
+
+    tl.to(track, {
+      x: () => {
+        const tr = track.getBoundingClientRect()
+        const sr = sword.getBoundingClientRect()
+        const handX = tr.left + tr.width * 0.66
+        const curX = Number(gsap.getProperty(track, 'x')) || 0
+        return curX + (sr.left - handX)
+      },
+      duration: PICKUP_MOVE_DURATION_S,
+      ease: 'power2.inOut',
+    })
+
+    tl.call(finishScene, undefined, `+=${PICKUP_PAUSE_S}`)
+
+    return () => {
+      tl.kill()
+    }
+  }, [phase, reduced])
+
+  const buildInteractiveWalk = useCallback(() => {
+    const wrap = wrapRef.current
+    const track = trackRef.current
+    if (!wrap || !track) return
+
+    walkTlRef.current?.kill()
+    const maxX = Math.max(0, wrap.offsetWidth - track.offsetWidth)
+    const cx = Number(gsap.getProperty(track, 'x')) || 0
+    const clamped = Math.max(0, Math.min(maxX, cx))
+    gsap.set(track, { x: clamped })
+
+    const durOut = PING_DURATION_S * (maxX < 1 ? 1 : 1 - clamped / maxX)
+    const durBack = PING_DURATION_S * (maxX < 1 ? 1 : clamped / maxX)
+
+    const tl = gsap.timeline({ repeat: -1 })
+    tl.to(track, {
+      x: maxX,
+      duration: Math.max(0.45, durOut),
+      ease: 'sine.inOut',
+      onComplete: () => setLegFrame(1),
+    })
+    tl.to(track, {
+      x: 0,
+      duration: Math.max(0.45, durBack),
+      ease: 'sine.inOut',
+      onComplete: () => setLegFrame(0),
+    })
+    walkTlRef.current = tl
+  }, [])
+
+  useLayoutEffect(() => {
+    if (reduced) return
+    if (phase !== 'interactiveWalk') return
+    const wrap = wrapRef.current
+    const track = trackRef.current
+    if (!wrap || !track) return
+
+    buildInteractiveWalk()
     const ro =
       typeof ResizeObserver !== 'undefined'
         ? new ResizeObserver(() => {
-            buildWalk()
+            buildInteractiveWalk()
           })
         : null
     ro?.observe(wrap)
@@ -213,10 +334,10 @@ export default function HomeHeroDevCodeIntro({ name, role, isTopologyRoute }: Ho
       walkTlRef.current?.kill()
       walkTlRef.current = null
     }
-  }, [phase])
+  }, [phase, reduced, buildInteractiveWalk])
 
   useLayoutEffect(() => {
-    if (phase !== 'walking' || prefersReducedMotion()) {
+    if (!isInteractive) {
       rotateToRef.current = null
       return
     }
@@ -226,20 +347,20 @@ export default function HomeHeroDevCodeIntro({ name, role, isTopologyRoute }: Ho
     return () => {
       rotateToRef.current = null
     }
-  }, [phase])
+  }, [isInteractive])
 
   useEffect(() => {
-    if (phase !== 'walking' || prefersReducedMotion()) {
+    if (!isInteractive) {
       clearIdleTimer()
       return
     }
     lastScrollYRef.current = typeof window !== 'undefined' ? window.scrollY : 0
     scheduleIdle()
     return () => clearIdleTimer()
-  }, [phase, scheduleIdle, clearIdleTimer])
+  }, [isInteractive, scheduleIdle, clearIdleTimer])
 
   useEffect(() => {
-    if (phase !== 'walking' || prefersReducedMotion()) return
+    if (!isInteractive) return
 
     const onScroll = () => {
       scheduleIdle()
@@ -260,7 +381,7 @@ export default function HomeHeroDevCodeIntro({ name, role, isTopologyRoute }: Ho
       lockRef.current = 'scroll'
       greetTlRef.current?.kill()
       tlWalk.pause()
-      setAsciiReplace(GREET_FIGURE)
+      setAsciiReplace(greetFigure)
 
       greetTlRef.current = gsap.timeline({
         onComplete: () => {
@@ -279,12 +400,12 @@ export default function HomeHeroDevCodeIntro({ name, role, isTopologyRoute }: Ho
 
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
-  }, [phase, scheduleIdle])
+  }, [isInteractive, scheduleIdle])
 
   const onPointerMove = (e: React.PointerEvent) => {
-    if (prefersReducedMotion()) return
+    if (reduced) return
     scheduleIdle()
-    if (lockRef.current !== 'none') return
+    if (lockRef.current !== 'none' || cinematicLockRef.current) return
     const wrap = wrapRef.current
     const rot = rotateToRef.current
     if (!wrap || !rot) return
@@ -297,12 +418,13 @@ export default function HomeHeroDevCodeIntro({ name, role, isTopologyRoute }: Ho
   }
 
   const onPointerLeave = () => {
-    if (prefersReducedMotion()) return
+    if (reduced) return
     rotateToRef.current?.(0)
   }
 
-  const showWalker = phase === 'walking'
-  const displayAscii = asciiReplace ?? walkingFigure(legFrame)
+  const showWalker = phase !== 'typingBuild' || reduced
+  const displayAscii =
+    asciiReplace ?? (holdingSword ? figureWithSword : walkingFigure(legFrame))
 
   const titleLetterSx = {
     textShadow: `0 2px 4px rgba(0,0,0,0.1), 0 0 20px ${primary}40`,
@@ -320,7 +442,7 @@ export default function HomeHeroDevCodeIntro({ name, role, isTopologyRoute }: Ho
       onPointerMove={onPointerMove}
       onPointerLeave={onPointerLeave}
       onPointerDown={() => {
-        if (!prefersReducedMotion()) scheduleIdle()
+        if (!reduced && isInteractive) scheduleIdle()
       }}
       sx={{
         position: 'relative',
@@ -337,21 +459,49 @@ export default function HomeHeroDevCodeIntro({ name, role, isTopologyRoute }: Ho
             bottom: '100%',
             left: 0,
             right: 0,
-            mb: 0.25,
+            mb: 0,
             pointerEvents: 'none',
+            minHeight: { xs: '6.25rem', sm: '6.75rem', md: '7rem' },
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'flex-end',
+            alignItems: 'center',
           }}
         >
-          <Box ref={trackRef} sx={{ display: 'inline-block', willChange: 'transform' }}>
+          {(phase === 'swordScene' || swordSceneVisible) && (
             <Box
-              ref={tiltRef}
               sx={{
-                display: 'inline-block',
-                transformOrigin: '50% 100%',
-                willChange: 'transform',
+                position: 'absolute',
+                left: { xs: '58%', sm: '56%' },
+                top: 0,
+                transform: 'translateX(-50%)',
               }}
             >
-              <Box component="pre" aria-hidden sx={{ ...asciiSx, m: 0, p: 0 }}>
-                {displayAscii}
+              <Box
+                ref={swordRef}
+                sx={{
+                  willChange: 'transform, opacity',
+                }}
+              >
+                <Box component="pre" aria-hidden sx={{ ...asciiSx, m: 0, p: 0, opacity: 0.95 }}>
+                  {swordGlyph}
+                </Box>
+              </Box>
+            </Box>
+          )}
+          <Box ref={trackRef} sx={{ display: 'inline-block', willChange: 'transform' }}>
+            <Box ref={fallLayerRef} sx={{ display: 'inline-block', willChange: 'transform' }}>
+              <Box
+                ref={tiltRef}
+                sx={{
+                  display: 'inline-block',
+                  transformOrigin: '50% 100%',
+                  willChange: 'transform',
+                }}
+              >
+                <Box component="pre" aria-hidden sx={{ ...asciiSx, m: 0, p: 0 }}>
+                  {displayAscii}
+                </Box>
               </Box>
             </Box>
           </Box>
@@ -413,7 +563,7 @@ export default function HomeHeroDevCodeIntro({ name, role, isTopologyRoute }: Ho
             }}
           >
             <Box component="code" sx={{ whiteSpace: 'pre', display: 'block' }}>
-              {ASCII_BUILD_CODE.slice(0, typedLen)}
+              {codeSource.slice(0, typedLen)}
             </Box>
           </Box>
         </Box>

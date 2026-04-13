@@ -54,14 +54,14 @@ interface Project {
   updatedAt: string;
 }
 
-type TimelendarPlatform = 'windows' | 'macos' | 'both';
+type TimelendrPlatform = 'windows' | 'macos' | 'both';
 
-interface TimelendarRelease {
+interface TimelendrRelease {
   id: number;
   filePath: string;
   changelog: string;
   version: string | null;
-  platform?: TimelendarPlatform;
+  platform?: TimelendrPlatform;
   createdAt: string;
   updatedAt: string;
 }
@@ -186,16 +186,16 @@ export default function AdminDashboard() {
     [router]
   );
 
-  // Timelendar releases
-  const [timelendarReleases, setTimelendarReleases] = useState<TimelendarRelease[]>([]);
-  const [timelendarLoading, setTimelendarLoading] = useState(true);
-  const [timelendarChangelog, setTimelendarChangelog] = useState('');
-  const [timelendarVersion, setTimelendarVersion] = useState('');
-  const [timelendarFileUrl, setTimelendarFileUrl] = useState('');
-  const [timelendarPlatform, setTimelendarPlatform] = useState<TimelendarPlatform>('both');
-  const [timelendarUploading, setTimelendarUploading] = useState(false);
-  const [timelendarSuccessOpen, setTimelendarSuccessOpen] = useState(false);
-  const [timelendarSuccessDetail, setTimelendarSuccessDetail] = useState('');
+  // Timelendr releases
+  const [timelendrReleases, setTimelendrReleases] = useState<TimelendrRelease[]>([]);
+  const [timelendrLoading, setTimelendrLoading] = useState(true);
+  const [timelendrChangelog, setTimelendrChangelog] = useState('');
+  const [timelendrVersion, setTimelendrVersion] = useState('');
+  const [timelendrFileUrl, setTimelendrFileUrl] = useState('');
+  const [timelendrPlatform, setTimelendrPlatform] = useState<TimelendrPlatform>('both');
+  const [timelendrUploading, setTimelendrUploading] = useState(false);
+  const [timelendrSuccessOpen, setTimelendrSuccessOpen] = useState(false);
+  const [timelendrSuccessDetail, setTimelendrSuccessDetail] = useState('');
 
   // Fonction pour corriger les chemins d'images
   const getImageUrl = (imageUrl: string) => {
@@ -253,17 +253,17 @@ export default function AdminDashboard() {
     }
   }, []);
 
-  const fetchTimelendarReleases = useCallback(async () => {
+  const fetchTimelendrReleases = useCallback(async () => {
     try {
-      const response = await fetch('/api/timelendar/releases', { credentials: 'include' });
+      const response = await fetch('/api/timelendr/releases', { credentials: 'include' });
       const data = await response.json();
       if (data.success) {
-        setTimelendarReleases(data.data);
+        setTimelendrReleases(data.data);
       }
     } catch (e) {
-      console.error('Timelendar releases:', e);
+      console.error('Timelendr releases:', e);
     } finally {
-      setTimelendarLoading(false);
+      setTimelendrLoading(false);
     }
   }, []);
 
@@ -281,13 +281,13 @@ export default function AdminDashboard() {
           return;
         }
         fetchProjects();
-        fetchTimelendarReleases();
+        fetchTimelendrReleases();
       } catch {
         redirectToAdminLogin();
       }
     };
     void verifySession();
-  }, [fetchProjects, fetchTimelendarReleases, redirectToAdminLogin]);
+  }, [fetchProjects, fetchTimelendrReleases, redirectToAdminLogin]);
 
   const handleLogout = async () => {
     try {
@@ -562,9 +562,9 @@ export default function AdminDashboard() {
     }
   };
 
-  const handleTimelendarSubmit = async (e: React.FormEvent) => {
+  const handleTimelendrSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const url = timelendarFileUrl.trim();
+    const url = timelendrFileUrl.trim();
     if (!url) {
       setError('Indiquez une URL vers un fichier .zip (http ou https).');
       return;
@@ -583,14 +583,14 @@ export default function AdminDashboard() {
       setError('URL invalide.');
       return;
     }
-    setTimelendarUploading(true);
+    setTimelendrUploading(true);
     setError('');
-    setTimelendarSuccessOpen(false);
+    setTimelendrSuccessOpen(false);
     try {
-      const changelog = timelendarChangelog.trim() || 'Sans description.';
-      const versionTrim = timelendarVersion.trim();
+      const changelog = timelendrChangelog.trim() || 'Sans description.';
+      const versionTrim = timelendrVersion.trim();
 
-      const response = await fetch('/api/timelendar/releases', {
+      const response = await fetch('/api/timelendr/releases', {
         method: 'POST',
         credentials: 'include',
         headers: {
@@ -600,7 +600,7 @@ export default function AdminDashboard() {
           fileUrl: url,
           changelog,
           version: versionTrim || null,
-          platform: timelendarPlatform,
+          platform: timelendrPlatform,
         }),
       });
 
@@ -622,12 +622,12 @@ export default function AdminDashboard() {
 
       if (data.success) {
         const v = data.data?.version ? ` v${data.data.version}` : '';
-        setTimelendarSuccessDetail(data.message ? `${data.message}${v}` : `Version Timelendar ajoutée${v}.`);
-        setTimelendarSuccessOpen(true);
-        setTimelendarChangelog('');
-        setTimelendarVersion('');
-        setTimelendarFileUrl('');
-        await fetchTimelendarReleases();
+        setTimelendrSuccessDetail(data.message ? `${data.message}${v}` : `Version Timelendr ajoutée${v}.`);
+        setTimelendrSuccessOpen(true);
+        setTimelendrChangelog('');
+        setTimelendrVersion('');
+        setTimelendrFileUrl('');
+        await fetchTimelendrReleases();
       } else {
         setError(data.error || 'Erreur lors de l\'ajout de la version');
       }
@@ -635,20 +635,20 @@ export default function AdminDashboard() {
       console.error(err);
       setError('Erreur réseau ou réponse invalide.');
     } finally {
-      setTimelendarUploading(false);
+      setTimelendrUploading(false);
     }
   };
 
-  const handleDeleteTimelendarRelease = async (id: number) => {
-    if (!confirm('Supprimer cette version Timelendar ?')) return;
+  const handleDeleteTimelendrRelease = async (id: number) => {
+    if (!confirm('Supprimer cette version Timelendr ?')) return;
     try {
-      const response = await fetch(`/api/timelendar/releases/${id}`, {
+      const response = await fetch(`/api/timelendr/releases/${id}`, {
         method: 'DELETE',
         credentials: 'include',
       });
       const data = await response.json();
       if (data.success) {
-        await fetchTimelendarReleases();
+        await fetchTimelendrReleases();
       } else {
         setError(data.error || 'Erreur lors de la suppression');
       }
@@ -687,19 +687,19 @@ export default function AdminDashboard() {
         )}
 
         <Snackbar
-          open={timelendarSuccessOpen}
+          open={timelendrSuccessOpen}
           autoHideDuration={6000}
-          onClose={() => setTimelendarSuccessOpen(false)}
+          onClose={() => setTimelendrSuccessOpen(false)}
           anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
         >
           <Alert
-            onClose={() => setTimelendarSuccessOpen(false)}
+            onClose={() => setTimelendrSuccessOpen(false)}
             severity="success"
             variant="filled"
             icon={<CheckCircleIcon fontSize="inherit" />}
             sx={{ width: '100%', maxWidth: 560, alignItems: 'center' }}
           >
-            {timelendarSuccessDetail || 'Version Timelendar enregistrée.'}
+            {timelendrSuccessDetail || 'Version Timelendr enregistrée.'}
           </Alert>
         </Snackbar>
 
@@ -791,23 +791,23 @@ export default function AdminDashboard() {
           </Card>
         )}
 
-        {/* Timelendar – URL .zip externe + plateforme */}
+        {/* Timelendr – URL .zip externe + plateforme */}
         <Typography variant="h5" component="h2" sx={{ mt: 5, mb: 2, color: '#ffffff' }}>
-          Timelendar – Versions
+          Timelendr – Versions
         </Typography>
         <Card sx={{ mb: 2, bgcolor: 'grey.900', color: '#ffffff' }}>
           <CardContent sx={{ color: '#ffffff' }}>
             <Typography variant="subtitle2" sx={{ mb: 2, color: 'rgba(255,255,255,0.9)' }}>
-              Indiquez une URL publique vers un fichier .zip (hébergé ailleurs : GitHub Releases, site, etc.). Pour macOS, utilisez un .zip qui contient votre fichier .dmg. Choisissez la plateforme cible (Windows, macOS ou les deux). La liste s’affiche sur la page Timelendar.
+              Indiquez une URL publique vers un fichier .zip (hébergé ailleurs : GitHub Releases, site, etc.). Pour macOS, utilisez un .zip qui contient votre fichier .dmg. Choisissez la plateforme cible (Windows, macOS ou les deux). La liste s’affiche sur la page Timelendr.
             </Typography>
-            <form onSubmit={handleTimelendarSubmit}>
+            <form onSubmit={handleTimelendrSubmit}>
               <TextField
                 margin="dense"
                 label="URL du fichier .zip *"
                 fullWidth
                 variant="outlined"
-                value={timelendarFileUrl}
-                onChange={(e) => setTimelendarFileUrl(e.target.value)}
+                value={timelendrFileUrl}
+                onChange={(e) => setTimelendrFileUrl(e.target.value)}
                 required
                 placeholder="https://exemple.com/chemin/vers/fichier.zip"
                 helperText="L’URL doit contenir « .zip » (pour macOS: archive .zip contenant le .dmg)."
@@ -823,14 +823,14 @@ export default function AdminDashboard() {
                 }}
               />
               <FormControl fullWidth sx={{ mb: 2 }} variant="outlined">
-                <InputLabel id="timelendar-platform-label" sx={{ color: 'rgba(255,255,255,0.8)' }}>
+                <InputLabel id="timelendr-platform-label" sx={{ color: 'rgba(255,255,255,0.8)' }}>
                   Plateforme
                 </InputLabel>
                 <Select
-                  labelId="timelendar-platform-label"
+                  labelId="timelendr-platform-label"
                   label="Plateforme"
-                  value={timelendarPlatform}
-                  onChange={(e) => setTimelendarPlatform(e.target.value as TimelendarPlatform)}
+                  value={timelendrPlatform}
+                  onChange={(e) => setTimelendrPlatform(e.target.value as TimelendrPlatform)}
                   sx={{
                     color: '#fff',
                     '& .MuiOutlinedInput-notchedOutline': { borderColor: 'rgba(255,255,255,0.4)' },
@@ -848,8 +848,8 @@ export default function AdminDashboard() {
                 label="Version (optionnel)"
                 fullWidth
                 variant="outlined"
-                value={timelendarVersion}
-                onChange={(e) => setTimelendarVersion(e.target.value)}
+                value={timelendrVersion}
+                onChange={(e) => setTimelendrVersion(e.target.value)}
                 placeholder="ex: 1.2.0"
                 sx={{
                   mb: 1,
@@ -869,8 +869,8 @@ export default function AdminDashboard() {
                 multiline
                 rows={3}
                 variant="outlined"
-                value={timelendarChangelog}
-                onChange={(e) => setTimelendarChangelog(e.target.value)}
+                value={timelendrChangelog}
+                onChange={(e) => setTimelendrChangelog(e.target.value)}
                 required
                 placeholder="Décrivez les corrections et nouveautés de cette version."
                 sx={{
@@ -884,13 +884,13 @@ export default function AdminDashboard() {
                   '& .MuiInputBase-input::placeholder': { color: 'rgba(255,255,255,0.5)', opacity: 1 },
                 }}
               />
-              <Button type="submit" variant="contained" disabled={timelendarUploading} startIcon={timelendarUploading ? <CircularProgress size={20} color="inherit" /> : undefined}>
-                {timelendarUploading ? 'Enregistrement…' : 'Ajouter la version'}
+              <Button type="submit" variant="contained" disabled={timelendrUploading} startIcon={timelendrUploading ? <CircularProgress size={20} color="inherit" /> : undefined}>
+                {timelendrUploading ? 'Enregistrement…' : 'Ajouter la version'}
               </Button>
             </form>
           </CardContent>
         </Card>
-        {timelendarLoading ? (
+        {timelendrLoading ? (
           <Typography sx={{ color: '#ffffff' }}>Chargement des versions...</Typography>
         ) : (
           <TableContainer component={Paper} sx={{ mb: 4, bgcolor: 'grey.900' }}>
@@ -906,7 +906,7 @@ export default function AdminDashboard() {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {timelendarReleases.map((r) => (
+                {timelendrReleases.map((r) => (
                   <TableRow key={r.id}>
                     <TableCell sx={{ color: '#fff' }}>{new Date(r.createdAt).toLocaleDateString('fr-FR')}</TableCell>
                     <TableCell sx={{ color: '#fff' }}>{r.version || '—'}</TableCell>
@@ -928,7 +928,7 @@ export default function AdminDashboard() {
                       </Button>
                     </TableCell>
                     <TableCell>
-                      <IconButton size="small" onClick={() => handleDeleteTimelendarRelease(r.id)} color="error">
+                      <IconButton size="small" onClick={() => handleDeleteTimelendrRelease(r.id)} color="error">
                         <DeleteIcon />
                       </IconButton>
                     </TableCell>
@@ -936,9 +936,9 @@ export default function AdminDashboard() {
                 ))}
               </TableBody>
             </Table>
-            {timelendarReleases.length === 0 && (
+            {timelendrReleases.length === 0 && (
               <Box sx={{ py: 2, textAlign: 'center' }}>
-                <Typography variant="body2" sx={{ color: '#fff' }}>Aucune version Timelendar pour l&apos;instant.</Typography>
+                <Typography variant="body2" sx={{ color: '#fff' }}>Aucune version Timelendr pour l&apos;instant.</Typography>
               </Box>
             )}
           </TableContainer>
@@ -956,7 +956,7 @@ export default function AdminDashboard() {
               (développement local, VPS, etc.). Le stockage <strong>Vercel Blob</strong> reste{' '}
               <strong>optionnel</strong> : si vous définissez <code>BLOB_READ_WRITE_TOKEN</code>, les uploads passent
               par Blob au lieu du disque (pratique quand le serveur ne peut pas écrire dans <code>public/</code>).
-              Timelendar utilise sa propre entrée (page Timelendar).
+              Timelendr utilise sa propre entrée (page Timelendr).
             </Typography>
             <TextField
               autoFocus

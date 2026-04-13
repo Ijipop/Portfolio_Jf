@@ -83,20 +83,20 @@ export default function LogicielPage() {
             }}
           >
             <CardActionArea
-              onClick={() => router.push('/logiciel/timelendar')}
+              onClick={() => router.push('/logiciel/timelendr')}
               sx={{ display: 'block', textAlign: 'left' }}
             >
               <CardContent sx={{ p: 3 }}>
                 <Typography variant="h6" component="h2" sx={{ fontWeight: 600, mb: 1, color: textColor }}>
-                  {t('logiciel.timelendarCardTitle')}
+                  {t('logiciel.timelendrCardTitle')}
                 </Typography>
                 <Typography variant="body2" sx={{ mb: 2, lineHeight: 1.6, color: textColor, opacity: 0.9 }}>
-                  {t('logiciel.timelendarCardDesc')}
+                  {t('logiciel.timelendrCardDesc')}
                 </Typography>
                 <CTAButton
                   variant="primary"
                   size="medium"
-                  onClick={() => router.push('/logiciel/timelendar')}
+                  onClick={() => router.push('/logiciel/timelendr')}
                 >
                   {t('logiciel.learnMore')}
                 </CTAButton>

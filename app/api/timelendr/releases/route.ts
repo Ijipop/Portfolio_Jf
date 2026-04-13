@@ -1,7 +1,7 @@
 import { prisma } from '@/lib/prisma'
 import { authAdminToken } from '@/lib/auth-admin-request'
 import { NextRequest, NextResponse } from 'next/server'
-import { TimelendarPlatform } from '@prisma/client'
+import { TimelendrPlatform } from '@prisma/client'
 
 const MAX_CHANGELOG = 20_000
 
@@ -16,20 +16,20 @@ function isValidZipUrl(urlString: string): boolean {
   }
 }
 
-function parsePlatform(raw: unknown): TimelendarPlatform | null {
+function parsePlatform(raw: unknown): TimelendrPlatform | null {
   if (raw === 'windows' || raw === 'macos' || raw === 'both') return raw
   return null
 }
 
-// GET /api/timelendar/releases — liste publique des versions
+// GET /api/timelendr/releases — liste publique des versions
 export async function GET() {
   try {
-    const releases = await prisma.timelendarRelease.findMany({
+    const releases = await prisma.timelendrRelease.findMany({
       orderBy: { createdAt: 'desc' },
     })
     return NextResponse.json({ success: true, data: releases })
   } catch (error) {
-    console.error('GET timelendar releases:', error)
+    console.error('GET timelendr releases:', error)
     return NextResponse.json(
       { success: false, error: 'Erreur lors de la récupération des versions' },
       { status: 500 }
@@ -76,9 +76,9 @@ export async function POST(request: NextRequest) {
     const version =
       typeof json.version === 'string' && json.version.trim() ? json.version.trim() : null
 
-    const platform = parsePlatform(json.platform) ?? TimelendarPlatform.both
+    const platform = parsePlatform(json.platform) ?? TimelendrPlatform.both
 
-    const release = await prisma.timelendarRelease.create({
+    const release = await prisma.timelendrRelease.create({
       data: {
         filePath: fileUrl,
         changelog,
@@ -96,7 +96,7 @@ export async function POST(request: NextRequest) {
       { status: 201 }
     )
   } catch (error) {
-    console.error('POST timelendar release:', error)
+    console.error('POST timelendr release:', error)
     return NextResponse.json(
       { success: false, error: "Erreur lors de l'ajout de la version" },
       { status: 500 }

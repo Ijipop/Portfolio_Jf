@@ -18,40 +18,40 @@ import { useTextColor } from '../../hooks/useTextColor'
 import { getCardSurfaceSx } from '@/components/shared/cardSurface'
 import { shouldShowTopology } from '@/utils/topologyRoutes'
 import { usePathname } from 'next/navigation'
-import TimelendarCarousel from './TimelendarCarousel'
+import TimelendrCarousel from './TimelendrCarousel'
 
 const FEATURE_KEYS = [
-  'timelendar.featureCalendar',
-  'timelendar.featureTimeline',
-  'timelendar.featureEvents',
-  'timelendar.featureDeadlines',
-  'timelendar.featureTodo',
-  'timelendar.featureBackup',
-  'timelendar.featureColors',
-  'timelendar.featurePro',
-  'timelendar.featureOffline',
-  'timelendar.featureBilingual',
-  'timelendar.featureDesktop',
+  'timelendr.featureCalendar',
+  'timelendr.featureTimeline',
+  'timelendr.featureEvents',
+  'timelendr.featureDeadlines',
+  'timelendr.featureTodo',
+  'timelendr.featureBackup',
+  'timelendr.featureColors',
+  'timelendr.featurePro',
+  'timelendr.featureOffline',
+  'timelendr.featureBilingual',
+  'timelendr.featureDesktop',
 ] as const
 
-type TimelendarPlatform = 'windows' | 'macos' | 'both'
+type TimelendrPlatform = 'windows' | 'macos' | 'both'
 
-interface TimelendarRelease {
+interface TimelendrRelease {
   id: number
   filePath: string
   changelog: string
   version: string | null
-  platform?: TimelendarPlatform
+  platform?: TimelendrPlatform
   createdAt: string
 }
 
-export default function TimelendarPage() {
+export default function TimelendrPage() {
   const { t } = useLanguage()
   const { primary } = useThemeColors()
   const textColor = useTextColor()
   const pathname = usePathname()
   const isTopologyRoute = shouldShowTopology(pathname)
-  const [releases, setReleases] = useState<TimelendarRelease[]>([])
+  const [releases, setReleases] = useState<TimelendrRelease[]>([])
 
   const cardSx = getCardSurfaceSx({
     isTopologyRoute,
@@ -61,7 +61,7 @@ export default function TimelendarPage() {
   })
 
   useEffect(() => {
-    fetch('/api/timelendar/releases')
+    fetch('/api/timelendr/releases')
       .then((res) => res.json())
       .then((data) => data.success && setReleases(data.data))
       .catch(() => {})
@@ -98,7 +98,7 @@ export default function TimelendarPage() {
                   WebkitTextFillColor: 'transparent',
                 }}
               >
-                {t('timelendar.title')}
+                {t('timelendr.title')}
               </Typography>
               <Typography
                 variant="h6"
@@ -110,7 +110,7 @@ export default function TimelendarPage() {
                   fontSize: { xs: '1rem', sm: '1.125rem' },
                 }}
               >
-                {t('timelendar.subtitle')}
+                {t('timelendr.subtitle')}
               </Typography>
               <Typography
                 sx={{
@@ -121,11 +121,11 @@ export default function TimelendarPage() {
                   fontSize: { xs: '0.95rem', sm: '1rem' },
                 }}
               >
-                {t('timelendar.intro')}
+                {t('timelendr.intro')}
               </Typography>
             </Box>
 
-            <TimelendarCarousel title={t('timelendar.galleryTitle')} emptyMessage={t('timelendar.galleryEmpty')} />
+            <TimelendrCarousel title={t('timelendr.galleryTitle')} emptyMessage={t('timelendr.galleryEmpty')} />
 
             <Typography
               variant="h4"
@@ -137,7 +137,7 @@ export default function TimelendarPage() {
                 fontSize: { xs: '1.35rem', sm: '1.6rem' },
               }}
             >
-              {t('timelendar.featuresTitle')}
+              {t('timelendr.featuresTitle')}
             </Typography>
             <Box
               sx={{
@@ -193,14 +193,14 @@ export default function TimelendarPage() {
               variant="h5"
               sx={{ fontWeight: 700, mb: 1.5, mt: 2, color: textColor }}
             >
-              {t('timelendar.downloadsTitle')}
+              {t('timelendr.downloadsTitle')}
             </Typography>
             <Typography sx={{ mb: 2.5, color: textColor, opacity: 0.9, lineHeight: 1.7 }}>
-              {t('timelendar.downloadsIntro')}
+              {t('timelendr.downloadsIntro')}
             </Typography>
             {releases.length === 0 ? (
               <Typography sx={{ color: textColor, opacity: 0.9, mb: 4 }}>
-                {t('timelendar.noReleases')}
+                {t('timelendr.noReleases')}
               </Typography>
             ) : (
               <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, mb: 5 }}>
@@ -218,17 +218,17 @@ export default function TimelendarPage() {
                     <Box sx={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 1, mb: 1 }}>
                       {r.version && (
                         <Typography component="span" variant="subtitle2" sx={{ color: textColor, fontWeight: 600 }}>
-                          {t('timelendar.version')} {r.version}
+                          {t('timelendr.version')} {r.version}
                         </Typography>
                       )}
                       <Chip
                         size="small"
                         label={
                           (r.platform ?? 'both') === 'windows'
-                            ? t('timelendar.platformWindows')
+                            ? t('timelendr.platformWindows')
                             : (r.platform ?? 'both') === 'macos'
-                              ? t('timelendar.platformMacos')
-                              : t('timelendar.platformBoth')
+                              ? t('timelendr.platformMacos')
+                              : t('timelendr.platformBoth')
                         }
                         sx={{
                           fontWeight: 600,
@@ -252,7 +252,7 @@ export default function TimelendarPage() {
                       rel="noopener noreferrer"
                       sx={{ alignSelf: 'flex-start', fontWeight: 600 }}
                     >
-                      {t('timelendar.downloadButton')}
+                      {t('timelendr.downloadButton')}
                     </Button>
                   </Box>
                 ))}
@@ -272,16 +272,16 @@ export default function TimelendarPage() {
               }}
             >
               <Typography variant="h6" sx={{ fontWeight: 700, color: textColor, mb: 2 }}>
-                {t('timelendar.securityTitle')}
+                {t('timelendr.securityTitle')}
               </Typography>
               <Typography sx={{ color: textColor, opacity: 0.92, lineHeight: 1.75, mb: 2 }}>
-                {t('timelendar.securityLead')}
+                {t('timelendr.securityLead')}
               </Typography>
               <Typography sx={{ color: textColor, opacity: 0.92, lineHeight: 1.75, mb: 2 }}>
-                {t('timelendar.securityP1')}
+                {t('timelendr.securityP1')}
               </Typography>
               <Typography sx={{ color: textColor, opacity: 0.92, lineHeight: 1.75 }}>
-                {t('timelendar.securityP2')}
+                {t('timelendr.securityP2')}
               </Typography>
             </Box>
 
@@ -297,7 +297,7 @@ export default function TimelendarPage() {
                 pb: 2,
               }}
             >
-              {t('timelendar.privateProject')}
+              {t('timelendr.privateProject')}
             </Typography>
           </Container>
         </Box>
