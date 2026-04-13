@@ -3,7 +3,7 @@
 import Box from '@mui/material/Box'
 import Container from '@mui/material/Container'
 import Typography from '@mui/material/Typography'
-import { ReactNode, useEffect, useState } from 'react'
+import { ReactNode, isValidElement, useEffect, useState } from 'react'
 import { DESIGN_TOKENS } from '../../design-system/constants'
 import { THEMES } from '../../design-system/themes'
 import { useAdvancedTheme } from '../../contexts/AdvancedThemeContext'
@@ -27,7 +27,8 @@ interface HeaderSectionProps {
 }
 
 export default function HeaderSection({ title, subtitle, tagline, children }: HeaderSectionProps) {
-  const { primary, secondary } = useThemeColors()
+  const titleIsGlitch = isValidElement(title)
+  const { primary } = useThemeColors()
   const textColor = useTextColor()
   const theme = useTheme()
   const { customTheme } = useAdvancedTheme()
@@ -106,11 +107,11 @@ export default function HeaderSection({ title, subtitle, tagline, children }: He
           sx={{ 
             mb: 1,
             fontWeight: 900,
-            fontSize: { xs: '1.75rem', sm: '2.75rem', md: '3.75rem' },
-            textShadow: `0 0 20px ${hexToRgba(primary, 0.8)}, 0 4px 8px rgba(0,0,0,0.3)`,
-            letterSpacing: { xs: '0.05em', sm: '0.1em' },
-            textTransform: 'uppercase',
-            color: primary,
+            fontSize: titleIsGlitch ? 'inherit' : { xs: '1.75rem', sm: '2.75rem', md: '3.75rem' },
+            textShadow: titleIsGlitch ? 'none' : `0 0 20px ${hexToRgba(primary, 0.8)}, 0 4px 8px rgba(0,0,0,0.3)`,
+            letterSpacing: titleIsGlitch ? 'inherit' : { xs: '0.05em', sm: '0.1em' },
+            textTransform: titleIsGlitch ? 'none' : 'uppercase',
+            color: titleIsGlitch ? 'transparent' : primary,
             filter: 'none',
             textRendering: 'optimizeLegibility',
             WebkitFontSmoothing: 'antialiased',

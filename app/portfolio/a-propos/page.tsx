@@ -13,6 +13,7 @@ import { useState, useEffect } from 'react'
 import { shouldShowTopology } from '@/utils/topologyRoutes'
 import SkillTag from '../../components/shared/SkillTag'
 import HeaderSection from '../../components/shared/HeaderSection'
+import IjipopGlitchTitle from '../../components/shared/IjipopGlitchTitle'
 import AppBarComponent from '../../components/appBar'
 import PageWrapper from '../../components/shared/PageWrapper'
 import InteractiveBackgroundSection from '../../components/shared/InteractiveBackgroundSection'
@@ -27,6 +28,7 @@ import { getTextColorForBackground } from '../../utils/colorUtils'
 import { getCardSurfaceSx } from '@/components/shared/cardSurface'
 import SoftSkillsSection from './components/SoftSkillsSection'
 import AboutCtaSection from './components/AboutCtaSection'
+import AboutPersonalStorySection from './components/AboutPersonalStorySection'
 
 // FlipCard components spécifiques à cette page (logique complexe)
 const FlipCard = styled(Box)(({ theme }) => ({
@@ -247,7 +249,7 @@ export default function About() {
       
       {/* Hero Section */}
       <HeaderSection 
-        title={t('about.title')}
+        title={<IjipopGlitchTitle text={t('about.title')} />}
         subtitle={t('about.subtitle')}
       />
 
@@ -356,25 +358,12 @@ export default function About() {
                   {t('about.whoCardP1')}
                 </Typography>
                 <Typography variant="body1" sx={{ 
-                  mb: 2, 
                   textAlign: 'left', 
                   lineHeight: 1.6,
                   color: textColor,
                   opacity: 0.9
                 }}>
                   {t('about.whoCardP2')}
-                </Typography>
-                <Typography 
-                  variant="body1" 
-                  sx={{ 
-                    textAlign: 'left', 
-                    lineHeight: 1.6, 
-                    fontWeight: 'bold', 
-                    color: textColor,
-                    textShadow: `0 1px 2px ${primary}40`
-                  }}
-                >
-                  {t('about.whoCardP3')}
                 </Typography>
               </FlipCardBack>
             </FlipCardInner>
@@ -590,6 +579,8 @@ export default function About() {
             </FlipCardInner>
           </FlipCard>
         </Box>
+
+        <AboutPersonalStorySection t={t} primary={primary} textColor={textColor} />
 
         <Box sx={{ 
           ...getCardSurfaceSx({ isTopologyRoute, variant: 'flat', level: 'soft', interactive: false }),

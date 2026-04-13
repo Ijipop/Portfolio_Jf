@@ -6,6 +6,10 @@ export type DevHeroPhase =
   | 'typingSword'
   | 'swordScene'
   | 'interactiveWalk'
+  | 'typingSpawn'
+  | 'combat'
+  | 'typingExplode'
+  | 'heroExplode'
 
 export function prefersReducedMotion(): boolean {
   if (typeof window === 'undefined') return false

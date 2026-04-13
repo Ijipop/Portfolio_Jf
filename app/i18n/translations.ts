@@ -138,10 +138,16 @@ export const translations = {
       ctaTitle: 'Discutons de votre projet',
       ctaText: "Projet web, outil sur mesure ou hébergement : décrivez-moi votre besoin, je vous propose une solution adaptée.",
       whoCardP1:
-        "Passionné d'informatique et de jeux vidéo, grand utilisateur d'applications mobiles et web.",
+        'Je suis avant tout un passionné : de technologie, de jeux vidéo et de création.',
       whoCardP2:
-        "À la suite d'un AVC à 38 ans, j'ai choisi de me réorienter vers le développement d'applications afin de réaliser mon rêve de travailler dans cette industrie.",
-      whoCardP3: 'Motivé et heureux de pouvoir enfin allier passion et travail.',
+        'Aujourd’hui, je mets cette passion au service de projets web et logiciels pensés avec cœur, écoute et attention aux détails.',
+      photoPortraitAlt: 'Portrait de Jean-François Lefebvre',
+      personalStoryP1:
+        "Survivant d'un AVC à l'âge de 38 ans et père de deux enfants, j'ai dû réinventer ma trajectoire professionnelle pour bâtir un avenir qui me permet de travailler de la maison, près de ceux qui comptent le plus pour moi.",
+      personalStoryP2:
+        "Ce qui a d'abord commencé comme une réorientation de carrière est rapidement devenu une véritable passion. Aujourd'hui, je mets cette passion au service des autres en créant des sites web et des logiciels sur mesure, pensés avec soin, humanité et souci du détail.",
+      personalStoryP3:
+        "Chaque projet que je réalise est pour moi bien plus qu'un simple mandat : c'est l'occasion de créer quelque chose d'utile, de beau et de durable, qui reflète réellement les besoins et la vision de mes clients.",
     },
     projects: {
       title: 'Projets',
@@ -432,10 +438,16 @@ export const translations = {
       ctaTitle: 'Discuss your project',
       ctaText: 'Web project, custom tool, or hosting? Describe your need and I will propose a solution that fits.',
       whoCardP1:
-        'Passionate about computing and video games, and a heavy user of mobile and web applications.',
+        "Above all, I'm passionate about technology, video games, and creation.",
       whoCardP2:
-        'After a stroke at age 38, I chose to retrain in application development to fulfill my dream of working in this industry.',
-      whoCardP3: 'Motivated and glad to finally bring passion and work together.',
+        'Today I channel that passion into web and software projects—with heart, listening, and attention to detail.',
+      photoPortraitAlt: 'Portrait of Jean-François Lefebvre',
+      personalStoryP1:
+        'A stroke survivor at age 38 and father of two, I had to reinvent my career path to build a future that lets me work from home, close to the people who matter most.',
+      personalStoryP2:
+        'What began as a career change quickly became a real passion. Today I put that passion to work for others by building custom websites and software—crafted with care, humanity, and attention to detail.',
+      personalStoryP3:
+        "Every project I take on is far more than a job to me: it's a chance to create something useful, beautiful, and lasting that truly reflects my clients' needs and vision.",
     },
     projects: {
       title: 'Projects',
