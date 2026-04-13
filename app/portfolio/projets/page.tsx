@@ -18,6 +18,7 @@ import Chip from '@mui/material/Chip'
 import CircularProgress from '@mui/material/CircularProgress'
 import Container from '@mui/material/Container'
 import { styled, useTheme } from '@mui/material/styles'
+import type { SxProps, Theme } from '@mui/material/styles'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import Typography from '@mui/material/Typography'
 import { useCallback, useEffect, useMemo, useState } from 'react'
@@ -83,6 +84,15 @@ function resolveProjectCardImage(project: Project): string | undefined {
   return undefined
 }
 
+/** Onglet Web : cible du bouton « Voir le site » — `siteUrl` si présent, sinon `url` si ce n’est pas GitHub (site / démo sans champ dédié). */
+function getWebViewSiteButtonHref(project: Project): string | null {
+  const site = project.siteUrl?.trim()
+  if (site) return site
+  const u = project.url?.trim()
+  if (u && !u.toLowerCase().includes('github')) return u
+  return null
+}
+
 type TimelendrPlatform = 'windows' | 'macos' | 'both'
 
 interface TimelendrRelease {
@@ -108,8 +118,8 @@ const StatusChip = styled(Chip)(({ theme, color }: any) => ({
 const TechStack = styled(Box)(({ theme }) => ({
   display: 'flex',
   flexWrap: 'wrap',
-  gap: theme.spacing(1),
-  marginTop: theme.spacing(2),
+  gap: theme.spacing(0.5),
+  marginTop: theme.spacing(0.75),
 }))
 
 // Technologies prioritaires pour le filtre (ordre d'affichage, max ~12)
@@ -153,22 +163,23 @@ const AnimatedBox = styled(Box)({
 const ProjectsGrid = styled(Box)(({ theme }) => ({
   display: 'grid',
   gridTemplateColumns: 'repeat(2, 1fr)',
-  gap: theme.spacing(2),
+  alignItems: 'stretch',
+  gap: theme.spacing(1.25),
   [theme.breakpoints.down('sm')]: {
     gridTemplateColumns: '1fr',
-    gap: theme.spacing(2),
+    gap: theme.spacing(1.25),
   },
   [theme.breakpoints.down('md')]: {
     gridTemplateColumns: '1fr',
-    gap: theme.spacing(2),
+    gap: theme.spacing(1.25),
   },
   [theme.breakpoints.up('lg')]: {
     gridTemplateColumns: 'repeat(2, 1fr)',
-    gap: theme.spacing(3),
+    gap: theme.spacing(1.75),
   },
   [theme.breakpoints.up('xl')]: {
-    gap: theme.spacing(4),
-  }
+    gap: theme.spacing(2),
+  },
 }))
 
 const StatsGrid = styled(Box)(({ theme }) => ({
@@ -198,23 +209,31 @@ const ProjectTitleTypography = ({ projectName, isNonDefaultPalette = false }: { 
 
   return (
     <Typography 
-      variant="h6" 
+      variant="subtitle2" 
       component="h2" 
-      gutterBottom
-      sx={ 
-        isNonDefaultPalette
-          ? { fontWeight: 700, mb: 1.5, color: primary, textShadow: `0 0 12px ${primary}40` }
-          : { 
+      sx={{
+        ...(        isNonDefaultPalette
+          ? {
               fontWeight: 700,
-              mb: 1.5,
+              mb: 0.5,
+              textAlign: 'left',
+              fontSize: { xs: '0.82rem', sm: '0.88rem', md: '0.92rem' },
+              color: primary,
+              textShadow: `0 0 12px ${primary}40`,
+            }
+          : {
+              fontWeight: 700,
+              mb: 0.5,
+              textAlign: 'left',
+              fontSize: { xs: '0.82rem', sm: '0.88rem', md: '0.92rem' },
               background: `linear-gradient(45deg, ${primary}, ${secondary}, ${accent}, ${primary})`,
               backgroundClip: 'text',
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
               ...(isMobile ? {} : { backgroundSize: '200% 200%', animation: 'gradientShift 3s ease-in-out infinite', ...ANIMATIONS.gradientShift }),
               textShadow: `0 0 20px ${primary}40`,
-            }
-      }
+            }),
+      }}
     >
       {projectName}
     </Typography>
@@ -236,6 +255,8 @@ const ProjectCardWrapper = ({
   downloadProjectLabel = 'Télécharger le projet',
   downloadTimelendrPcLabel = 'Télécharger Timelendr PC',
   downloadTimelendrMacosLabel = 'Télécharger Timelendr macOS',
+  /** `web` : seul CTA « Voir le site » (pas de « Voir le projet »). `logiciel` : comportement inchangé. */
+  cardVariant = 'logiciel',
 }: { 
   project: Project
   index: number
@@ -250,6 +271,7 @@ const ProjectCardWrapper = ({
   downloadProjectLabel?: string
   downloadTimelendrPcLabel?: string
   downloadTimelendrMacosLabel?: string
+  cardVariant?: 'web' | 'logiciel'
 }) => {
   const theme = useTheme()
   const { primary, secondary, accent } = useThemeColors()
@@ -282,304 +304,359 @@ const ProjectCardWrapper = ({
     lowerName.includes('timelendar') ||
     lowerUrl.includes('/logiciel/timelendr') ||
     lowerUrl.includes('/logiciel/timelendar')
-  const hasProjectAction = project.url?.trim()
+  const hasProjectAction =
+    project.url?.trim()
+    || project.siteUrl?.trim()
     || (!isTimelendrProject && project.downloadUrl?.trim())
     || (isTimelendrProject && (timelendrWindowsUrl || timelendrMacosUrl))
 
   const cardImageRaw = resolveProjectCardImage(project) ?? project.imageUrl
   const cardImageHref = cardImageRaw ? getImageUrl(cardImageRaw) : ''
 
+  const linkIconButtonSx = {
+    flexShrink: 0,
+    background: 'rgba(255, 255, 255, 0.95)',
+    borderRadius: '50%',
+    padding: 1,
+    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
+    border: '2px solid rgba(0, 0, 0, 0.1)',
+    transition: DESIGN_TOKENS.transitions.normal,
+    pointerEvents: 'auto' as const,
+    '&:hover': {
+      transform: 'scale(1.15)',
+      boxShadow: '0 8px 24px rgba(0, 0, 0, 0.2)',
+    },
+  }
+
   const threeDCardSurfaceSx =
     presentationMode === 'beige'
       ? {
-          padding: { xs: 2, sm: 2.5, md: 3 },
-          flex: 1,
-          minHeight: { xs: 400, md: 460 },
+          padding: 0,
+          overflow: 'hidden',
+          minHeight: 'fit-content',
+          display: 'flex',
+          flexDirection: 'column',
+          '& .MuiCardContent-root': {
+            padding: 0,
+            '&:last-child': { paddingBottom: 0 },
+          },
           cursor: hasProjectAction ? 'pointer' : 'default',
-          // Mode Site : le fond est sur des calques fixed (hors stacking du scroll) — backdrop-filter ne les voit pas.
-          // Même image + halos que FullPageTopologyWrapper, ancrés à la fenêtre pour aligner les bandes vignette.
           background: `${getBeigePresentationTopologyBackground(customTheme)} !important`,
           backgroundAttachment: 'fixed',
           backdropFilter: 'none',
           WebkitBackdropFilter: 'none',
           border: `1px solid ${primary}28`,
-          boxShadow: '0 12px 32px rgba(92, 77, 60, 0.14), 0 0 0 1px rgba(139, 126, 114, 0.12)',
+          boxShadow: '0 8px 24px rgba(92, 77, 60, 0.1), 0 0 0 1px rgba(139, 126, 114, 0.08)',
         }
       : {
-          padding: { xs: 2, sm: 2.5, md: 3 },
-          flex: 1,
-          minHeight: { xs: 400, md: 460 },
+          padding: 0,
+          overflow: 'hidden',
+          minHeight: 'fit-content',
+          display: 'flex',
+          flexDirection: 'column',
+          '& .MuiCardContent-root': {
+            padding: 0,
+            '&:last-child': { paddingBottom: 0 },
+          },
           cursor: hasProjectAction ? 'pointer' : 'default',
           background: 'transparent !important',
-          backdropFilter: 'blur(18px) saturate(1.06)',
-          WebkitBackdropFilter: 'blur(18px) saturate(1.06)',
+          backdropFilter: 'blur(12px) saturate(1.04)',
+          WebkitBackdropFilter: 'blur(12px) saturate(1.04)',
           border: `1px solid ${
-            theme.palette.mode === 'dark' ? 'rgba(255,255,255,0.14)' : `${primary}33`
+            theme.palette.mode === 'dark' ? 'rgba(255,255,255,0.12)' : `${primary}28`
           }`,
           boxShadow:
             theme.palette.mode === 'dark'
-              ? '0 20px 48px rgba(0,0,0,0.45)'
-              : '0 12px 36px rgba(15,23,42,0.1), 0 0 0 1px rgba(15,23,42,0.06)',
+              ? '0 12px 32px rgba(0,0,0,0.35)'
+              : '0 8px 28px rgba(15,23,42,0.08), 0 0 0 1px rgba(15,23,42,0.05)',
         }
 
+  let primaryHref: string | null = null
+  let primaryLabel = viewProjectLabel
+  if (project.url?.trim()) {
+    primaryHref = project.url.trim()
+    primaryLabel = viewProjectLabel
+  } else if (project.siteUrl?.trim()) {
+    primaryHref = project.siteUrl.trim()
+    primaryLabel = viewSiteLabel
+  } else if (!isTimelendrProject && project.downloadUrl?.trim()) {
+    primaryHref = project.downloadUrl!.trim()
+    primaryLabel = downloadProjectLabel
+  } else if (isTimelendrProject && timelendrWindowsUrl) {
+    primaryHref = timelendrWindowsUrl
+    primaryLabel = downloadTimelendrPcLabel
+  } else if (isTimelendrProject && timelendrMacosUrl) {
+    primaryHref = timelendrMacosUrl
+    primaryLabel = downloadTimelendrMacosLabel
+  }
+
+  const secondaryBtnSx = {
+    alignSelf: 'flex-start' as const,
+    py: 0.5,
+    px: 1.25,
+    fontSize: '0.75rem',
+    textTransform: 'none' as const,
+  }
+
+  const webViewSiteHref = cardVariant === 'web' ? getWebViewSiteButtonHref(project) : null
+
   return (
-    <ScrollReveal key={project.id} direction="up" distance={isMobile ? 30 : 50} delay={isMobile ? 0.08 * (index % 4) : 0.05 * (index % 4)}>
-      <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
-      <ThreeDCardComponent 
-        key={project.id} 
-        fullHeight
-        onClick={() => {
-          if (project.url?.trim()) handleProjectClick(project.url)
-          else if (!isTimelendrProject && project.downloadUrl?.trim()) handleProjectClick(project.downloadUrl)
-          else if (isTimelendrProject && timelendrWindowsUrl) handleProjectClick(timelendrWindowsUrl)
-          else if (isTimelendrProject && timelendrMacosUrl) handleProjectClick(timelendrMacosUrl)
+    <ScrollReveal
+      key={project.id}
+      fillHeight
+      direction="up"
+      distance={isMobile ? 30 : 50}
+      delay={isMobile ? 0.08 * (index % 4) : 0.05 * (index % 4)}
+    >
+      <Box
+        sx={{
+          width: '100%',
+          flex: 1,
+          minHeight: 0,
+          display: 'flex',
+          flexDirection: 'column',
         }}
-        floatingElements={2}
-        sx={threeDCardSurfaceSx}
       >
-        <Box
-          sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            flex: 1,
-            minHeight: 0,
-            height: '100%',
+        <ThreeDCardComponent
+          key={project.id}
+          subtle
+          fullHeight
+          floatingElements={0}
+          onClick={() => {
+            if (project.url?.trim()) handleProjectClick(project.url)
+            else if (project.siteUrl?.trim()) handleProjectClick(project.siteUrl)
+            else if (!isTimelendrProject && project.downloadUrl?.trim()) handleProjectClick(project.downloadUrl)
+            else if (isTimelendrProject && timelendrWindowsUrl) handleProjectClick(timelendrWindowsUrl)
+            else if (isTimelendrProject && timelendrMacosUrl) handleProjectClick(timelendrMacosUrl)
           }}
+          sx={threeDCardSurfaceSx as SxProps<Theme>}
         >
-        {/* Logo GitHub dans le coin supérieur droit */}
-        {project.url && project.url.includes('github') && (
           <Box
             sx={{
-              position: 'absolute',
-              top: 12,
-              right: 12,
-              background: 'rgba(255, 255, 255, 0.95)',
-              borderRadius: '50%',
-              padding: 1.5,
-              boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
-              border: '2px solid rgba(0, 0, 0, 0.1)',
-              zIndex: DESIGN_TOKENS.zIndex.overlay,
-              transition: DESIGN_TOKENS.transitions.normal,
-              pointerEvents: 'auto',
-              '&:hover': {
-                transform: 'scale(1.15)',
-                boxShadow: '0 8px 24px rgba(0, 0, 0, 0.2)',
-              }
+              display: 'flex',
+              flexDirection: 'column',
+              textAlign: 'left',
+              alignItems: 'stretch',
+              width: '100%',
+              flex: 1,
+              minHeight: 0,
             }}
           >
-            <GitHubIcon 
-              sx={{ 
-                fontSize: 22, 
-                color: '#000000',
-                filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.1))'
-              }} 
-            />
-          </Box>
-        )}
-
-        {/* Icône générique pour autres liens */}
-        {project.url && !project.url.includes('github') && (
-          <Box
-            sx={{
-              position: 'absolute',
-              top: 12,
-              right: 12,
-              background: 'rgba(255, 255, 255, 0.95)',
-              borderRadius: '50%',
-              padding: 1.5,
-              boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
-              border: '2px solid rgba(0, 0, 0, 0.1)',
-              zIndex: DESIGN_TOKENS.zIndex.overlay,
-              transition: DESIGN_TOKENS.transitions.normal,
-              pointerEvents: 'auto',
-              '&:hover': {
-                transform: 'scale(1.15)',
-                boxShadow: '0 8px 24px rgba(0, 0, 0, 0.2)',
-              }
-            }}
-          >
-            <LaunchIcon 
-              sx={{ 
-                fontSize: 22, 
-                color: '#000000',
-                filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.1))'
-              }} 
-            />
-          </Box>
-        )}
-
-        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 1.5 }}>
-          <StatusChip
-            icon={getStatusIcon(project.status)}
-            label={project.status}
-            color={getStatusColor(project.status)}
-            size="small"
-          />
-          {/* Métriques du projet */}
-          <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
-            {project.createdAt && (
-              <Box sx={{ 
-                display: 'flex', 
-                alignItems: 'center', 
-                gap: 0.5,
-                color: textColor,
-                opacity: 0.8,
-                fontSize: '0.75rem'
-              }}>
-                <AccessTimeIcon sx={{ fontSize: 14 }} />
-                <Typography variant="caption" sx={{ fontSize: '0.7rem' }}>
-                  {new Date(project.createdAt).getFullYear()}
+            <ProjectImageContainer
+              sx={{
+                width: '100%',
+                maxWidth: 'none',
+                mx: 0,
+                mb: 0,
+                aspectRatio: '16 / 9',
+                flexShrink: 0,
+                borderRadius: 0,
+                ...(cardImageHref
+                  ? { background: 'rgba(0,0,0,0.06)' }
+                  : {
+                      background: 'rgba(0,0,0,0.12)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }),
+                ...(isNonDefaultPalette
+                  ? {
+                      border: 'none',
+                      borderBottom: `1px solid ${primary}35`,
+                      boxShadow: 'none',
+                    }
+                  : {}),
+                '& img': {
+                  objectFit: 'contain',
+                  ...(isNonDefaultPalette ? { boxShadow: 'none' } : {}),
+                },
+              }}
+            >
+              {cardImageHref ? (
+                <Image
+                  src={cardImageHref}
+                  alt={project.name}
+                  fill
+                  sizes="(max-width: 600px) 100vw, (max-width: 900px) 50vw, 33vw"
+                  style={{ objectFit: 'contain' }}
+                />
+              ) : (
+                <Typography variant="caption" sx={{ opacity: 0.5, color: textColor }}>
+                  —
                 </Typography>
+              )}
+            </ProjectImageContainer>
+
+            <Box
+              sx={{
+                px: { xs: 1, sm: 1.25, md: 1.5 },
+                pt: { xs: 1, sm: 1.15, md: 1.25 },
+                pb: { xs: 1, sm: 1.25, md: 1.5 },
+                display: 'flex',
+                flexDirection: 'column',
+                flex: 1,
+                minHeight: 0,
+              }}
+            >
+              <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 1, mb: 0.35, flexShrink: 0 }}>
+                <StatusChip
+                  icon={getStatusIcon(project.status)}
+                  label={project.status}
+                  color={getStatusColor(project.status)}
+                  size="small"
+                />
+                {project.url && project.url.includes('github') && (
+                  <Box sx={{ ...linkIconButtonSx, zIndex: DESIGN_TOKENS.zIndex.overlay }} aria-hidden>
+                    <GitHubIcon sx={{ fontSize: 18, color: '#000000', filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.1))' }} />
+                  </Box>
+                )}
+                {project.url && !project.url.includes('github') && (
+                  <Box sx={{ ...linkIconButtonSx, zIndex: DESIGN_TOKENS.zIndex.overlay }} aria-hidden>
+                    <LaunchIcon sx={{ fontSize: 18, color: '#000000', filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.1))' }} />
+                  </Box>
+                )}
               </Box>
-            )}
-          </Box>
-        </Box>
-        
-        <ProjectTitleTypography projectName={project.name} isNonDefaultPalette={isNonDefaultPalette} />
-        
-        <ProjectImageContainer
-          sx={{
-            width: '100%',
-            maxWidth: 300,
-            mx: 'auto',
-            aspectRatio: '1 / 1',
-            flexShrink: 0,
-            ...(cardImageHref
-              ? { background: 'transparent' }
-              : {
-                  background: 'rgba(0,0,0,0.12)',
+
+              {project.createdAt && (
+                <Box
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 0.5,
+                    mb: 0.65,
+                    flexShrink: 0,
+                    color: textColor,
+                    opacity: 0.9,
+                    fontSize: '0.7rem',
+                  }}
+                >
+                  <AccessTimeIcon sx={{ fontSize: 14 }} />
+                  <Typography variant="caption" component="span" sx={{ fontSize: '0.68rem' }}>
+                    {new Date(project.createdAt).getFullYear()}
+                  </Typography>
+                </Box>
+              )}
+
+              <ProjectTitleTypography projectName={project.name} isNonDefaultPalette={isNonDefaultPalette} />
+
+              <Typography
+                variant="body2"
+                paragraph
+                sx={{
+                  textAlign: 'left',
+                  lineHeight: 1.35,
+                  mb: { xs: 0.5, md: 0.65 },
+                  fontSize: { xs: '0.72rem', sm: '0.75rem', md: '0.78rem' },
+                  display: '-webkit-box',
+                  WebkitLineClamp: 3,
+                  WebkitBoxOrient: 'vertical',
+                  overflow: 'hidden',
+                  ...(isNonDefaultPalette ? { color: `${primary}ee` } : { color: 'rgba(255,255,255,0.92)' }),
+                }}
+              >
+                {project.description}
+              </Typography>
+
+              <TechStack
+                sx={{
+                  visibility: 'visible !important',
+                  opacity: '1 !important',
+                  zIndex: DESIGN_TOKENS.zIndex.elevated,
+                  position: 'relative',
+                  justifyContent: 'flex-start',
+                  mb: { xs: 0.5, md: 0.65 },
+                }}
+              >
+                {project.technologies.split(',').map((tech, techIndex) => (
+                  <SkillTag key={techIndex} size="small" reflectionColor={reflectionColor}>
+                    {tech.trim()}
+                  </SkillTag>
+                ))}
+              </TechStack>
+
+              <Box
+                sx={{
+                  pt: 0.25,
+                  mt: 'auto',
                   display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }),
-            ...(isNonDefaultPalette ? {
-              border: `2px solid ${primary}60`,
-              borderRadius: DESIGN_TOKENS.borderRadius.small,
-              boxShadow: `0 4px 20px ${primary}25, 0 0 0 1px ${primary}20`,
-            } : {}),
-            '& img': {
-              ...(isNonDefaultPalette ? { boxShadow: 'none' } : {}),
-            },
-          }}
-        >
-          {cardImageHref ? (
-            <Image
-              src={cardImageHref}
-              alt={project.name}
-              fill
-              sizes="(max-width: 600px) 100vw, (max-width: 900px) 50vw, 33vw"
-              style={{ objectFit: 'contain' }}
-            />
-          ) : (
-            <Typography variant="caption" sx={{ opacity: 0.5, color: textColor }}>
-              —
-            </Typography>
-          )}
-        </ProjectImageContainer>
-        
-        <Typography
-          variant="body2"
-          paragraph
-          sx={{
-            lineHeight: 1.4,
-            mb: { xs: 1, md: 1.5 },
-            flex: 1,
-            minHeight: { xs: '3.5rem', md: '4.5rem' },
-            fontSize: { xs: '0.85rem', md: '0.9rem' },
-            display: '-webkit-box',
-            WebkitLineClamp: 4,
-            WebkitBoxOrient: 'vertical',
-            overflow: 'hidden',
-            ...(isNonDefaultPalette ? { color: `${primary}ee` } : { color: 'rgba(255,255,255,0.92)' }),
-          }}
-        >
-          {project.description}
-        </Typography>
-        
-        <TechStack sx={{
-          visibility: 'visible !important',
-          opacity: '1 !important',
-          zIndex: DESIGN_TOKENS.zIndex.elevated,
-          position: 'relative',
-          mb: { xs: 1, md: 1.5 }
-        }}>
-          {project.technologies.split(',').map((tech, techIndex) => (
-            <SkillTag key={techIndex} size="small" reflectionColor={reflectionColor}>
-              {tech.trim()}
-            </SkillTag>
-          ))}
-        </TechStack>
-        
-        <Box
-          sx={{
-            mt: 'auto',
-            pt: 1,
-            display: 'flex',
-            flexDirection: 'column',
-            gap: 1,
-            flexShrink: 0,
-          }}
-          onClick={(e) => e.stopPropagation()}
-        >
-          {project.url && (
-            <CTAButton
-              variant="primary"
-              size="medium"
-              fullWidth
-              onClick={() => handleProjectClick(project.url)}
-            >
-              {viewProjectLabel}
-            </CTAButton>
-          )}
-          {project.siteUrl && (
-            <CTAButton
-              variant="secondary"
-              size="medium"
-              fullWidth
-              onClick={() => handleProjectClick(project.siteUrl!)}
-            >
-              {viewSiteLabel}
-            </CTAButton>
-          )}
-          {isTimelendrProject ? (
-            <>
-              {timelendrWindowsUrl ? (
-                <CTAButton
-                  variant="secondary"
-                  size="medium"
-                  fullWidth
-                  startIcon={<DownloadIcon />}
-                  onClick={() => handleProjectClick(timelendrWindowsUrl)}
-                >
-                  {downloadTimelendrPcLabel}
-                </CTAButton>
-              ) : null}
-              {timelendrMacosUrl ? (
-                <CTAButton
-                  variant="secondary"
-                  size="medium"
-                  fullWidth
-                  startIcon={<DownloadIcon />}
-                  onClick={() => handleProjectClick(timelendrMacosUrl)}
-                >
-                  {downloadTimelendrMacosLabel}
-                </CTAButton>
-              ) : null}
-            </>
-          ) : project.downloadUrl ? (
-            <CTAButton
-              variant="secondary"
-              size="medium"
-              fullWidth
-              startIcon={<DownloadIcon />}
-              onClick={() => handleProjectClick(project.downloadUrl!)}
-            >
-              {downloadProjectLabel}
-            </CTAButton>
-          ) : null}
-        </Box>
-        </Box>
-      </ThreeDCardComponent>
+                  flexDirection: 'column',
+                  alignItems: 'flex-start',
+                  gap: 0.5,
+                  flexShrink: 0,
+                  width: '100%',
+                }}
+                onClick={(e) => e.stopPropagation()}
+              >
+                {cardVariant === 'web' ? (
+                  webViewSiteHref ? (
+                    <CTAButton
+                      variant="primary"
+                      size="small"
+                      onClick={() => handleProjectClick(webViewSiteHref)}
+                    >
+                      {viewSiteLabel}
+                    </CTAButton>
+                  ) : null
+                ) : (
+                  <>
+                    {primaryHref && (
+                      <CTAButton variant="primary" size="small" onClick={() => handleProjectClick(primaryHref)}>
+                        {primaryLabel}
+                      </CTAButton>
+                    )}
+                    {project.siteUrl?.trim() && primaryHref !== project.siteUrl.trim() && (
+                      <Button
+                        variant="outlined"
+                        color="primary"
+                        size="small"
+                        sx={secondaryBtnSx}
+                        onClick={() => handleProjectClick(project.siteUrl!)}
+                      >
+                        {viewSiteLabel}
+                      </Button>
+                    )}
+                    {isTimelendrProject && timelendrWindowsUrl && primaryHref !== timelendrWindowsUrl && (
+                      <Button
+                        variant="outlined"
+                        color="primary"
+                        size="small"
+                        sx={secondaryBtnSx}
+                        startIcon={<DownloadIcon sx={{ fontSize: 18 }} />}
+                        onClick={() => handleProjectClick(timelendrWindowsUrl)}
+                      >
+                        {downloadTimelendrPcLabel}
+                      </Button>
+                    )}
+                    {isTimelendrProject && timelendrMacosUrl && primaryHref !== timelendrMacosUrl && (
+                      <Button
+                        variant="outlined"
+                        color="primary"
+                        size="small"
+                        sx={secondaryBtnSx}
+                        startIcon={<DownloadIcon sx={{ fontSize: 18 }} />}
+                        onClick={() => handleProjectClick(timelendrMacosUrl)}
+                      >
+                        {downloadTimelendrMacosLabel}
+                      </Button>
+                    )}
+                    {!isTimelendrProject && project.downloadUrl?.trim() && primaryHref !== project.downloadUrl.trim() && (
+                      <Button
+                        variant="outlined"
+                        color="primary"
+                        size="small"
+                        sx={secondaryBtnSx}
+                        startIcon={<DownloadIcon sx={{ fontSize: 18 }} />}
+                        onClick={() => handleProjectClick(project.downloadUrl!)}
+                      >
+                        {downloadProjectLabel}
+                      </Button>
+                    )}
+                  </>
+                )}
+              </Box>
+            </Box>
+          </Box>
+        </ThreeDCardComponent>
       </Box>
     </ScrollReveal>
   )
@@ -673,8 +750,8 @@ const ProjectImageContainer = styled(Box)(({ theme }) => ({
   position: 'relative',
   overflow: 'hidden',
   borderRadius: DESIGN_TOKENS.borderRadius.small,
-  marginBottom: theme.spacing(1.5),
-  [theme.breakpoints.up('lg')]: { marginBottom: theme.spacing(2) },
+  marginBottom: theme.spacing(0.5),
+  [theme.breakpoints.up('lg')]: { marginBottom: theme.spacing(0.65) },
   '& img': {
     transition: DESIGN_TOKENS.transitions.slow,
     width: '100%',
@@ -1102,6 +1179,7 @@ export default function Projets() {
                         downloadProjectLabel={t('projects.downloadProject')}
                         downloadTimelendrPcLabel={t('projects.downloadTimelendrPc')}
                         downloadTimelendrMacosLabel={t('projects.downloadTimelendrMacos')}
+                        cardVariant="web"
                       />
                     ))}
                   </ProjectsGrid>
@@ -1145,6 +1223,7 @@ export default function Projets() {
                         downloadProjectLabel={t('projects.downloadProject')}
                         downloadTimelendrPcLabel={t('projects.downloadTimelendrPc')}
                         downloadTimelendrMacosLabel={t('projects.downloadTimelendrMacos')}
+                        cardVariant="web"
                       />
                     ))}
                   </ProjectsGrid>
