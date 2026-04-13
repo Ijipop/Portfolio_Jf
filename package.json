@@ -19,7 +19,8 @@
     "db:seed": "npx ts-node prisma/seed.ts",
     "admin:password": "node scripts/changeAdminPassword.js",
     "admin:create": "node scripts/createAdminWithEmail.js",
-    "admin:show": "node scripts/showAdmin.js"
+    "admin:show": "node scripts/showAdmin.js",
+    "favicon": "node scripts/generate-favicon.mjs"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
@@ -53,6 +54,8 @@
     "eslint-config-next": "14.2.31",
     "jsdom": "^28.1.0",
     "prisma": "^6.13.0",
+    "sharp": "^0.34.5",
+    "to-ico": "^1.1.5",
     "typescript": "^5.3.3",
     "vitest": "^4.0.18",
     "yaml": "^2.8.3"
