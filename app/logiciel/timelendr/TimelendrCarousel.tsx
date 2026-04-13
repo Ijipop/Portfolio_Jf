@@ -20,14 +20,14 @@ import { usePathname } from 'next/navigation'
 import { useLanguage } from '@/contexts/LanguageContext'
 
 const GALLERY_CAP_KEYS = [
-  'timelendar.galleryCap1',
-  'timelendar.galleryCap2',
-  'timelendar.galleryCap3',
-  'timelendar.galleryCap4',
-  'timelendar.galleryCap5',
-  'timelendar.galleryCap6',
-  'timelendar.galleryCap7',
-  'timelendar.galleryCap8',
+  'timelendr.galleryCap1',
+  'timelendr.galleryCap2',
+  'timelendr.galleryCap3',
+  'timelendr.galleryCap4',
+  'timelendr.galleryCap5',
+  'timelendr.galleryCap6',
+  'timelendr.galleryCap7',
+  'timelendr.galleryCap8',
 ] as const
 
 type Props = {
@@ -35,7 +35,7 @@ type Props = {
   emptyMessage: string
 }
 
-export default function TimelendarCarousel({ title, emptyMessage }: Props) {
+export default function TimelendrCarousel({ title, emptyMessage }: Props) {
   const { t } = useLanguage()
   const pathname = usePathname()
   const isTopologyRoute = shouldShowTopology(pathname)
@@ -49,13 +49,13 @@ export default function TimelendarCarousel({ title, emptyMessage }: Props) {
 
   useEffect(() => {
     let cancelled = false
-    fetch('/img/timelendar/gallery.json')
+    fetch('/img/timelendr/gallery.json')
       .then((r) => (r.ok ? r.json() : []))
       .then((data) => {
         if (cancelled || !Array.isArray(data)) return
         const urls = data
           .filter((f: unknown) => typeof f === 'string' && f.endsWith('.png'))
-          .map((f: string) => `/img/timelendar/${f.replace(/^\/+/, '')}`)
+          .map((f: string) => `/img/timelendr/${f.replace(/^\/+/, '')}`)
         setSlides(urls)
         setIndex(0)
         setFailedSrc(null)
@@ -263,7 +263,7 @@ export default function TimelendarCarousel({ title, emptyMessage }: Props) {
         }}
       >
         <IconButton
-          aria-label={t('timelendar.lightboxClose')}
+          aria-label={t('timelendr.lightboxClose')}
           onClick={() => setLightboxOpen(false)}
           sx={{
             position: 'fixed',
@@ -319,7 +319,7 @@ export default function TimelendarCarousel({ title, emptyMessage }: Props) {
             </Typography>
           )}
           <Typography sx={{ mt: 1.5, color: 'rgba(255,255,255,0.5)', fontSize: '0.8rem' }}>
-            {t('timelendar.lightboxHint')}
+            {t('timelendr.lightboxHint')}
           </Typography>
         </Box>
       </Dialog>

@@ -8,6 +8,8 @@ interface ScrollRevealProps {
   delay?: number
   direction?: 'up' | 'down' | 'left' | 'right'
   distance?: number
+  /** Remplit la hauteur de la cellule grille (cartes alignées). */
+  fillHeight?: boolean
 }
 
 export default function ScrollReveal({
@@ -15,6 +17,7 @@ export default function ScrollReveal({
   delay = 0,
   direction = 'up',
   distance = 50,
+  fillHeight = false,
 }: ScrollRevealProps) {
   const [isVisible, setIsVisible] = useState(false)
   const [reducedMotion, setReducedMotion] = useState(false)
@@ -93,6 +96,11 @@ export default function ScrollReveal({
   return (
     <motion.div
       ref={ref}
+      style={
+        fillHeight
+          ? { height: '100%', display: 'flex', flexDirection: 'column', minHeight: 0 }
+          : undefined
+      }
       initial={getInitialPosition()}
       animate={isVisible ? getAnimatePosition() : getInitialPosition()}
       transition={{

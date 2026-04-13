@@ -1,7 +1,7 @@
 'use client'
 
 import { Box, Card, CardContent } from '@mui/material'
-import { styled } from '@mui/material/styles'
+import { styled, useTheme } from '@mui/material/styles'
 import type { SxProps, Theme } from '@mui/material/styles'
 import { motion } from 'framer-motion'
 import { useEffect, useState } from 'react'
@@ -106,6 +106,8 @@ interface ThreeDCardProps {
   compact?: boolean
   /** Carte en hauteur 100% pour aligner avec d'autres cartes dans une grille */
   fullHeight?: boolean
+  /** Moins d’effets (hover scale, pastilles flottantes) — ex. cartes projets */
+  subtle?: boolean
   /** Styles MUI supplémentaires */
   sx?: SxProps<Theme>
 }
@@ -117,8 +119,10 @@ export default function ThreeDCardComponent({
   floatingElements = 3,
   compact = false,
   fullHeight = false,
+  subtle = false,
   sx: sxProp
 }: ThreeDCardProps) {
+  const theme = useTheme()
   const pathname = usePathname()
   const isTopologyRoute = shouldShowTopology(pathname)
   const [isMobile, setIsMobile] = useState(false)
@@ -134,7 +138,7 @@ export default function ThreeDCardComponent({
     return () => window.removeEventListener('resize', check)
   }, [])
 
-  const effectiveFloating = isMobile ? 0 : floatingElements
+  const effectiveFloating = subtle || isMobile ? 0 : floatingElements
 
   const surfaceSx = getCardSurfaceSx({
     isTopologyRoute,
@@ -149,7 +153,9 @@ export default function ThreeDCardComponent({
       initial={{ opacity: 0, scale: 0.9 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.6, ease: "easeOut" }}
-      whileHover={isMobile ? undefined : isTopologyRoute ? undefined : { scale: 1.02 }}
+      whileHover={
+        subtle || isMobile || isTopologyRoute ? undefined : { scale: 1.02 }
+      }
     >
       <ThreeDCard
         onClick={onClick}
@@ -162,6 +168,17 @@ export default function ThreeDCardComponent({
             flexDirection: 'column',
           }),
           ...(compact && { minHeight: '120px', padding: 2 }),
+          ...(subtle && {
+            ...(fullHeight ? { minHeight: 0 } : { minHeight: 'auto' }),
+            '&:hover': {
+              transform: 'translateY(-2px)',
+              boxShadow:
+                theme.palette.mode === 'dark'
+                  ? '0 10px 28px rgba(0,0,0,0.35)'
+                  : '0 6px 20px rgba(15,23,42,0.1)',
+              '&::before': { opacity: 0.12 },
+            },
+          }),
           ...(isMobile && { transformStyle: 'flat' }),
           ...surfaceSx,
           ...(sxProp || {}),

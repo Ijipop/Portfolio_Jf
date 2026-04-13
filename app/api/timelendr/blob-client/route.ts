@@ -48,7 +48,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(jsonResponse)
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Erreur upload Blob'
-    console.error('timelendar blob-client:', error)
+    console.error('timelendr blob-client:', error)
     return NextResponse.json({ success: false, error: message }, { status: 400 })
   }
 }

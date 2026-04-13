@@ -1,6 +1,6 @@
 {
   "functions": {
-    "app/api/timelendar/releases/route.ts": {
+    "app/api/timelendr/releases/route.ts": {
       "maxDuration": 120
     }
   }

@@ -19,7 +19,7 @@ describe('shouldShowTopology', () => {
   it('returns true for allowed nested routes', () => {
     expect(shouldShowTopology('/portfolio/projets')).toBe(true)
     expect(shouldShowTopology('/portfolio/contact')).toBe(true)
-    expect(shouldShowTopology('/logiciel/timelendar')).toBe(true)
+    expect(shouldShowTopology('/logiciel/timelendr')).toBe(true)
   })
 
   it('returns false for non-target routes', () => {

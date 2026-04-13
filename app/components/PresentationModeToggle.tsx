@@ -3,7 +3,6 @@
 import React from 'react'
 import ToggleButton from '@mui/material/ToggleButton'
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup'
-import Tooltip from '@mui/material/Tooltip'
 import { useLanguage } from '@/contexts/LanguageContext'
 import { usePresentationMode } from '@/contexts/PresentationModeContext'
 
@@ -39,16 +38,12 @@ export function PresentationModeToggle() {
         },
       }}
     >
-      <Tooltip title={t('nav.presentationBeigeHint')} arrow>
-        <ToggleButton value="beige" aria-label={t('nav.presentationBeige')}>
-          {t('nav.presentationBeige')}
-        </ToggleButton>
-      </Tooltip>
-      <Tooltip title={t('nav.presentationDevHint')} arrow>
-        <ToggleButton value="dev" aria-label={t('nav.presentationDev')}>
-          {t('nav.presentationDev')}
-        </ToggleButton>
-      </Tooltip>
+      <ToggleButton value="beige" aria-label={t('nav.presentationBeige')}>
+        {t('nav.presentationBeige')}
+      </ToggleButton>
+      <ToggleButton value="dev" aria-label={t('nav.presentationDev')}>
+        {t('nav.presentationDev')}
+      </ToggleButton>
     </ToggleButtonGroup>
   )
 }
