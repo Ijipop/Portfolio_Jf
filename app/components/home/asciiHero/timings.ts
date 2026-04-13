@@ -29,3 +29,21 @@ export const IDLE_MS = 15_000
 export const IDLE_POSE_MS = 1600
 export const TILT_MAX_DEG = 7
 export const SCROLL_DELTA_THRESHOLD = 16
+
+/** Délai après l’épée avant la séquence spawn / combat (ms). */
+export const SPAWN_SEQUENCE_DELAY_MS = 2200
+
+/** Écart horizontal (px) entre silhouette héros et slime avant le coup (héros à gauche du slime). */
+export const COMBAT_HERO_STANDOFF_PX = 10
+
+/** Combat : retour au centre de l’arène avant le code explode. */
+export const COMBAT_RETURN_CENTER_S = 0.55
+export const COMBAT_PAUSE_AFTER_CENTER_MS = 240
+
+/** Disparition du slime après le coup (court = combat plus serré). */
+export const COMBAT_SLIME_SHRINK_S = 0.16
+/** Pause entre deux slimes après disparition. */
+export const COMBAT_KILL_GAP_MS = 55
+
+/** Après l’anim d’explosion du héros ASCII, avant prose / promenade. */
+export const HERO_EXPLODE_END_DELAY_MS = 480

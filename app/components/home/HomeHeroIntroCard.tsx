@@ -45,6 +45,7 @@ export default function HomeHeroIntroCard() {
         <HomeHeroDevCodeIntro
           name="Jean-François Lefebvre"
           role={t('home.role')}
+          intro={t('home.intro')}
           isTopologyRoute={isTopologyRoute}
         />
       </Box>
@@ -116,6 +117,7 @@ export default function HomeHeroIntroCard() {
                 opacity: 0.9,
                 whiteSpace: 'pre-line',
                 hyphens: 'auto',
+                textAlign: 'center',
                 ...mobileProseWrapSx,
               }}
             />
