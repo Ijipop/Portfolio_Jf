@@ -1,5 +1,7 @@
 'use client'
 
+import type { PaletteMode } from '@mui/material'
+
 export type CardSurfaceVariant = 'glass' | 'elevated' | 'flat' | 'flipFace'
 export type CardSurfaceLevel = 'soft' | 'balanced'
 
@@ -73,5 +75,37 @@ export function getCardSurfaceSx({
       },
     }),
   }
+}
+
+/**
+ * Bandes autour d’une image en object-fit contain.
+ * - Par défaut : transparent (pour laisser voir le fond de page à travers une carte « vitrée »).
+ * - nestedTint : léger dégradé + flou quand le parent est opaque (ex. dialogue admin).
+ */
+export function getProjectImageLetterboxGlassSx(
+  mode: PaletteMode,
+  options?: { nestedTint?: boolean }
+) {
+  if (options?.nestedTint) {
+    if (mode === 'dark') {
+      return {
+        background:
+          'linear-gradient(145deg, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0.05) 50%, rgba(148,163,184,0.12) 100%)',
+        backdropFilter: 'blur(12px) saturate(1.08)',
+        WebkitBackdropFilter: 'blur(12px) saturate(1.08)',
+      } as const
+    }
+    return {
+      background:
+        'linear-gradient(145deg, rgba(255,255,255,0.52) 0%, rgba(255,255,255,0.3) 50%, rgba(241,245,249,0.42) 100%)',
+      backdropFilter: 'blur(14px) saturate(1.05)',
+      WebkitBackdropFilter: 'blur(14px) saturate(1.05)',
+    } as const
+  }
+  return {
+    background: 'transparent',
+    backdropFilter: 'none',
+    WebkitBackdropFilter: 'none',
+  } as const
 }
 

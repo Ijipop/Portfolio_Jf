@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import Image from 'next/image'
 import Box from '@mui/material/Box'
+import { useTheme } from '@mui/material/styles'
 import Dialog from '@mui/material/Dialog'
 import IconButton from '@mui/material/IconButton'
 import Typography from '@mui/material/Typography'
@@ -13,7 +14,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { useThemeColors } from '@/hooks/useThemeColors'
 import { useTextColor } from '@/hooks/useTextColor'
 import { DESIGN_TOKENS } from '@/design-system/constants'
-import { getCardSurfaceSx } from '@/components/shared/cardSurface'
+import { getCardSurfaceSx, getProjectImageLetterboxGlassSx } from '@/components/shared/cardSurface'
 import { shouldShowTopology } from '@/utils/topologyRoutes'
 import { usePathname } from 'next/navigation'
 import { useLanguage } from '@/contexts/LanguageContext'
@@ -38,6 +39,7 @@ export default function TimelendarCarousel({ title, emptyMessage }: Props) {
   const { t } = useLanguage()
   const pathname = usePathname()
   const isTopologyRoute = shouldShowTopology(pathname)
+  const theme = useTheme()
   const { primary } = useThemeColors()
   const textColor = useTextColor()
   const [slides, setSlides] = useState<string[]>([])
@@ -121,7 +123,7 @@ export default function TimelendarCarousel({ title, emptyMessage }: Props) {
           position: 'relative',
           borderRadius: DESIGN_TOKENS.borderRadius.medium,
           overflow: 'hidden',
-          bgcolor: 'rgba(0,0,0,0.35)',
+          ...getProjectImageLetterboxGlassSx(theme.palette.mode),
           border: `1px solid ${primary}35`,
           aspectRatio: { xs: '4/3', sm: '16/10' },
           maxHeight: { sm: 520 },

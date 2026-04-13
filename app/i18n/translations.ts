@@ -161,6 +161,11 @@ export const translations = {
       resetFilter: 'Réinitialiser le filtre',
       noProjectsAvailable: 'Aucun projet disponible',
       comingSoon: 'Mes projets apparaîtront ici bientôt !',
+      webSectionPersonalTitle: 'Projets personnels',
+      webSectionPersonalSubtitle: 'Expérimentations, side projects et apprentissage.',
+      webSectionProfessionalTitle: 'Réalisations professionnelles',
+      webSectionProfessionalSubtitle: 'Sites et outils livrés pour des clients ou en contexte professionnel.',
+      webSectionEmpty: 'Aucun projet dans cette catégorie pour le moment.',
     },
     footer: {
       tagline: 'Sites web et petits outils sur mesure. Hébergement inclus.',
@@ -450,6 +455,11 @@ export const translations = {
       resetFilter: 'Reset filter',
       noProjectsAvailable: 'No projects available',
       comingSoon: 'My projects will appear here soon!',
+      webSectionPersonalTitle: 'Personal projects',
+      webSectionPersonalSubtitle: 'Experiments, side projects, and learning.',
+      webSectionProfessionalTitle: 'Professional work',
+      webSectionProfessionalSubtitle: 'Sites and tools delivered for clients or in a professional context.',
+      webSectionEmpty: 'No projects in this category yet.',
     },
     footer: {
       tagline: 'Custom websites and small tools. Hosting included.',

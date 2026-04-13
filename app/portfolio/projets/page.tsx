@@ -8,6 +8,9 @@ import LaunchIcon from '@mui/icons-material/Launch'
 import DownloadIcon from '@mui/icons-material/Download'
 import ScheduleIcon from '@mui/icons-material/Schedule'
 import TrendingUpIcon from '@mui/icons-material/TrendingUp'
+import Accordion from '@mui/material/Accordion'
+import AccordionDetails from '@mui/material/AccordionDetails'
+import AccordionSummary from '@mui/material/AccordionSummary'
 import Alert from '@mui/material/Alert'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
@@ -17,7 +20,7 @@ import Container from '@mui/material/Container'
 import { styled, useTheme } from '@mui/material/styles'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import Typography from '@mui/material/Typography'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { navigateProjectUrl } from '@/lib/navigateProjectUrl'
 import React from 'react'
@@ -34,15 +37,18 @@ import InteractiveBackgroundSection from '../../components/shared/InteractiveBac
 import CTAButton from '../../components/shared/CTAButton'
 import Footer from '../../components/Footer'
 import { DESIGN_TOKENS, ANIMATIONS, GRADIENTS } from '../../design-system/constants'
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import AccessTimeIcon from '@mui/icons-material/AccessTime'
 import FilterListIcon from '@mui/icons-material/FilterList'
 import ClearIcon from '@mui/icons-material/Clear'
 import { useAdvancedTheme } from '../../contexts/AdvancedThemeContext'
+import { usePresentationMode } from '../../contexts/PresentationModeContext'
 import { useLanguage } from '../../contexts/LanguageContext'
 import { useThemeColors } from '../../hooks/useThemeColors'
 import { useTextColor } from '../../hooks/useTextColor'
 import FilterContainerLabel from './components/FilterContainerLabel'
 import FilterChipComponent from './components/FilterChipComponent'
+import { getBeigePresentationTopologyBackground } from '@/utils/syncPortfolioThemeToDocument'
 
 interface Project {
   id: number
@@ -51,6 +57,7 @@ interface Project {
   technologies: string
   status: string
   projectType?: 'logiciel' | 'web'
+  webAudience?: 'personal' | 'professional' | null
   displayOrder?: number
   url: string
   siteUrl?: string | null
@@ -231,7 +238,8 @@ const ProjectCardWrapper = ({
   const theme = useTheme()
   const { primary, secondary, accent } = useThemeColors()
   const textColor = useTextColor()
-  const { themeName } = useAdvancedTheme()
+  const { themeName, customTheme } = useAdvancedTheme()
+  const { mode: presentationMode } = usePresentationMode()
   const isNonDefaultPalette = themeName !== 'default'
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
 
@@ -250,14 +258,46 @@ const ProjectCardWrapper = ({
   ]
   
   const reflectionColor = reflectionColors[index % reflectionColors.length]
-  
-  const imgHeights = { xs: '100px', sm: '120px', md: '140px', xl: '200px' }
+
   const lowerName = project.name.toLowerCase()
   const lowerUrl = (project.url ?? '').toLowerCase()
   const isTimelendarProject = lowerName.includes('timelendar') || lowerUrl.includes('/logiciel/timelendar')
   const hasProjectAction = project.url?.trim()
     || (!isTimelendarProject && project.downloadUrl?.trim())
     || (isTimelendarProject && (timelendarWindowsUrl || timelendarMacosUrl))
+
+  const threeDCardSurfaceSx =
+    presentationMode === 'beige'
+      ? {
+          padding: { xs: 2, sm: 2.5, md: 3 },
+          flex: 1,
+          minHeight: { xs: 400, md: 460 },
+          cursor: hasProjectAction ? 'pointer' : 'default',
+          // Mode Site : le fond est sur des calques fixed (hors stacking du scroll) — backdrop-filter ne les voit pas.
+          // Même image + halos que FullPageTopologyWrapper, ancrés à la fenêtre pour aligner les bandes vignette.
+          background: `${getBeigePresentationTopologyBackground(customTheme)} !important`,
+          backgroundAttachment: 'fixed',
+          backdropFilter: 'none',
+          WebkitBackdropFilter: 'none',
+          border: `1px solid ${primary}28`,
+          boxShadow: '0 12px 32px rgba(92, 77, 60, 0.14), 0 0 0 1px rgba(139, 126, 114, 0.12)',
+        }
+      : {
+          padding: { xs: 2, sm: 2.5, md: 3 },
+          flex: 1,
+          minHeight: { xs: 400, md: 460 },
+          cursor: hasProjectAction ? 'pointer' : 'default',
+          background: 'transparent !important',
+          backdropFilter: 'blur(18px) saturate(1.06)',
+          WebkitBackdropFilter: 'blur(18px) saturate(1.06)',
+          border: `1px solid ${
+            theme.palette.mode === 'dark' ? 'rgba(255,255,255,0.14)' : `${primary}33`
+          }`,
+          boxShadow:
+            theme.palette.mode === 'dark'
+              ? '0 20px 48px rgba(0,0,0,0.45)'
+              : '0 12px 36px rgba(15,23,42,0.1), 0 0 0 1px rgba(15,23,42,0.06)',
+        }
 
   return (
     <ScrollReveal key={project.id} direction="up" distance={isMobile ? 30 : 50} delay={isMobile ? 0.08 * (index % 4) : 0.05 * (index % 4)}>
@@ -272,12 +312,7 @@ const ProjectCardWrapper = ({
           else if (isTimelendarProject && timelendarMacosUrl) handleProjectClick(timelendarMacosUrl)
         }}
         floatingElements={2}
-        sx={{
-          padding: { xs: 2, sm: 2.5, md: 3 },
-          flex: 1,
-          minHeight: { xs: 320, md: 380 },
-          cursor: hasProjectAction ? 'pointer' : 'default',
-        }}
+        sx={threeDCardSurfaceSx}
       >
         <Box
           sx={{
@@ -381,8 +416,19 @@ const ProjectCardWrapper = ({
         
         <ProjectImageContainer
           sx={{
-            height: imgHeights,
+            width: '100%',
+            maxWidth: 300,
+            mx: 'auto',
+            aspectRatio: '1 / 1',
             flexShrink: 0,
+            ...(project.imageUrl && getImageUrl(project.imageUrl)
+              ? { background: 'transparent' }
+              : {
+                  background: 'rgba(0,0,0,0.12)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }),
             ...(isNonDefaultPalette ? {
               border: `2px solid ${primary}60`,
               borderRadius: DESIGN_TOKENS.borderRadius.small,
@@ -391,14 +437,6 @@ const ProjectCardWrapper = ({
             '& img': {
               ...(isNonDefaultPalette ? { boxShadow: 'none' } : {}),
             },
-            ...(project.imageUrl && getImageUrl(project.imageUrl)
-              ? {}
-              : {
-                  background: 'rgba(0,0,0,0.12)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }),
           }}
         >
           {project.imageUrl && getImageUrl(project.imageUrl) ? (
@@ -407,7 +445,7 @@ const ProjectCardWrapper = ({
               alt={project.name}
               fill
               sizes="(max-width: 600px) 100vw, (max-width: 900px) 50vw, 33vw"
-              style={{ objectFit: 'cover' }}
+              style={{ objectFit: 'contain' }}
             />
           ) : (
             <Typography variant="caption" sx={{ opacity: 0.5, color: textColor }}>
@@ -524,53 +562,56 @@ const ProjectCardWrapper = ({
   )
 }
 
-// FilterContainer comme composant fonctionnel pour réagir aux changements de thème
-const FilterContainerComponent = ({ children }: { children: React.ReactNode }) => {
-  const theme = useTheme()
-  const { primary } = useThemeColors()
-  const textColor = useTextColor()
-  const [filterBackground, setFilterBackground] = useState<string>(GRADIENTS.cards.light)
-  
-  // Mettre à jour le background du filtre quand le thème change
+/** Fond type carte / verre aligné sur --card-background et le thème (même logique que les cartes projet). */
+function useCardBackgroundFromThemeVars(fallback: string) {
+  const [filterBackground, setFilterBackground] = useState(fallback)
+
   useEffect(() => {
     const updateFilterBackground = () => {
       if (typeof window === 'undefined') return
-      
-      // Lire les CSS variables définies par ThemeSelector
+
       const cardBg = getComputedStyle(document.documentElement).getPropertyValue('--card-background')?.trim()
-      
+
       if (cardBg && cardBg !== 'none') {
         setFilterBackground(cardBg)
       } else {
-        // Fallback : créer un gradient avec les couleurs du thème
         const bg = getComputedStyle(document.documentElement).getPropertyValue('--theme-bg')?.trim()
         const bg2 = getComputedStyle(document.documentElement).getPropertyValue('--theme-bg2')?.trim()
-        
+
         if (bg && bg2) {
           setFilterBackground(`linear-gradient(145deg, ${bg} 0%, ${bg2} 50%, ${bg} 100%)`)
         } else {
-          setFilterBackground(GRADIENTS.cards.light)
+          setFilterBackground(fallback)
         }
       }
     }
-    
+
     updateFilterBackground()
-    
-    // Observer les changements de CSS variables
+
     const observer = new MutationObserver(updateFilterBackground)
     observer.observe(document.documentElement, {
       attributes: true,
       attributeFilter: ['style'],
     })
-    
+
     const interval = setInterval(updateFilterBackground, 200)
-    
+
     return () => {
       observer.disconnect()
       clearInterval(interval)
     }
-  }, [])
-  
+  }, [fallback])
+
+  return filterBackground
+}
+
+// FilterContainer comme composant fonctionnel pour réagir aux changements de thème
+const FilterContainerComponent = ({ children }: { children: React.ReactNode }) => {
+  const theme = useTheme()
+  const { primary } = useThemeColors()
+  const textColor = useTextColor()
+  const filterBackground = useCardBackgroundFromThemeVars(GRADIENTS.cards.light)
+
   return (
     <Box
       sx={{
@@ -614,27 +655,9 @@ const ProjectImageContainer = styled(Box)(({ theme }) => ({
   '& img': {
     transition: DESIGN_TOKENS.transitions.slow,
     width: '100%',
-    objectFit: 'cover',
+    objectFit: 'contain',
     borderRadius: DESIGN_TOKENS.borderRadius.small,
     boxShadow: '0 4px 20px rgba(0, 0, 0, 0.1)',
-  },
-  '&:hover img': {
-    transform: 'scale(1.1)',
-  },
-  '&::after': {
-    content: '""',
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    background: 'linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.3) 100%)',
-    opacity: 0,
-    transition: DESIGN_TOKENS.transitions.normal,
-    pointerEvents: 'none',
-  },
-  '&:hover::after': {
-    opacity: 1,
   },
 }))
 
@@ -643,13 +666,72 @@ export default function Projets() {
   const { primary, secondary, accent } = useThemeColors()
   const textColor = useTextColor()
   const { t } = useLanguage()
+  const { mode: presentationMode } = usePresentationMode()
   const [projects, setProjects] = useState<Project[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [selectedTech, setSelectedTech] = useState<string | null>(null)
-  const [selectedProjectType, setSelectedProjectType] = useState<'logiciel' | 'web'>('logiciel')
+  const [selectedProjectType, setSelectedProjectType] = useState<'logiciel' | 'web'>('web')
   const [timelendarWindowsUrl, setTimelendarWindowsUrl] = useState<string | null>(null)
   const [timelendarMacosUrl, setTimelendarMacosUrl] = useState<string | null>(null)
+
+  const sectionGlassBg = useCardBackgroundFromThemeVars(GRADIENTS.cards.light)
+  const glassProjectSectionAccordionSx = useMemo(
+    () =>
+      ({
+        background: `${sectionGlassBg} !important`,
+        backdropFilter: 'blur(10px)',
+        WebkitBackdropFilter: 'blur(10px)',
+        border: `1px solid ${primary}22 !important`,
+        borderRadius: `${DESIGN_TOKENS.borderRadius.medium}px`,
+        boxShadow: `0 2px 16px ${primary}10, inset 0 1px 0 rgba(255, 255, 255, 0.12)`,
+        overflow: 'hidden',
+        '&:before': { display: 'none' },
+        transition: DESIGN_TOKENS.transitions.normal,
+        '&:hover': {
+          border: `1px solid ${primary}38 !important`,
+          boxShadow: `0 4px 20px ${primary}14, inset 0 1px 0 rgba(255, 255, 255, 0.16)`,
+        },
+        '& .MuiAccordionSummary-root': {
+          backgroundColor: 'transparent',
+          color: textColor,
+        },
+        '& .MuiAccordionDetails-root': {
+          backgroundColor: 'transparent',
+          color: textColor,
+        },
+      }) as const,
+    [sectionGlassBg, primary, textColor],
+  )
+
+  const webSectionAccordionSx = useMemo(() => {
+    if (presentationMode === 'beige') {
+      return {
+        background: 'transparent !important',
+        backdropFilter: 'none',
+        WebkitBackdropFilter: 'none',
+        border: `1px solid ${primary}22`,
+        borderRadius: `${DESIGN_TOKENS.borderRadius.medium}px`,
+        boxShadow: 'none',
+        overflow: 'hidden',
+        '&:before': { display: 'none' },
+        transition: DESIGN_TOKENS.transitions.normal,
+        '&:hover': {
+          border: `1px solid ${primary}32`,
+          boxShadow: 'none',
+        },
+        '& .MuiAccordionSummary-root': {
+          backgroundColor: 'transparent',
+          color: textColor,
+        },
+        '& .MuiAccordionDetails-root': {
+          backgroundColor: 'transparent',
+          color: textColor,
+        },
+      } as const
+    }
+    return glassProjectSectionAccordionSx
+  }, [presentationMode, glassProjectSectionAccordionSx, primary, textColor])
 
   useEffect(() => {
     fetchProjects()
@@ -822,6 +904,9 @@ export default function Projets() {
       )
     : orderedProjects
 
+  const webPersonalProjects = filteredProjects.filter((p) => p.webAudience === 'personal')
+  const webProfessionalProjects = filteredProjects.filter((p) => p.webAudience !== 'personal')
+
   const handleTechFilter = (tech: string) => {
     setSelectedTech(selectedTech === tech ? null : tech)
   }
@@ -940,41 +1025,132 @@ export default function Projets() {
         {/* Projects Grid */}
         <Box sx={{ display: 'flex', justifyContent: 'center', gap: 1.5, mb: 3, flexWrap: 'wrap' }}>
           <Button
-            variant={selectedProjectType === 'logiciel' ? 'contained' : 'outlined'}
-            onClick={() => setSelectedProjectType('logiciel')}
-            sx={{ minWidth: 140 }}
-          >
-            {t('nav.software')}
-          </Button>
-          <Button
             variant={selectedProjectType === 'web' ? 'contained' : 'outlined'}
             onClick={() => setSelectedProjectType('web')}
             sx={{ minWidth: 140 }}
           >
             {t('nav.webSites')}
           </Button>
+          <Button
+            variant={selectedProjectType === 'logiciel' ? 'contained' : 'outlined'}
+            onClick={() => setSelectedProjectType('logiciel')}
+            sx={{ minWidth: 140 }}
+          >
+            {t('nav.software')}
+          </Button>
         </Box>
 
-        <ProjectsGrid>
-          {filteredProjects.map((project, index) => (
-            <ProjectCardWrapper
-              key={project.id}
-              project={project}
-              index={index}
-              handleProjectClick={handleProjectClick}
-              getStatusIcon={getStatusIcon}
-              getStatusColor={getStatusColor}
-              getImageUrl={getImageUrl}
-              timelendarWindowsUrl={timelendarWindowsUrl}
-              timelendarMacosUrl={timelendarMacosUrl}
-              viewProjectLabel={t('projects.viewProject')}
-              viewSiteLabel={t('projects.viewSite')}
-              downloadProjectLabel={t('projects.downloadProject')}
-              downloadTimelendarPcLabel={t('projects.downloadTimelendarPc')}
-              downloadTimelendarMacosLabel={t('projects.downloadTimelendarMacos')}
-            />
-          ))}
-        </ProjectsGrid>
+        {selectedProjectType === 'web' ? (
+          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
+            <Accordion
+              defaultExpanded={false}
+              disableGutters
+              elevation={0}
+              sx={webSectionAccordionSx}
+            >
+              <AccordionSummary expandIcon={<ExpandMoreIcon sx={{ color: textColor, opacity: 0.85 }} />}>
+                <Typography variant="subtitle1" sx={{ fontWeight: 700, color: textColor }}>
+                  {t('projects.webSectionPersonalTitle')}
+                </Typography>
+              </AccordionSummary>
+              <AccordionDetails sx={{ pt: 0 }}>
+                <Typography variant="body2" sx={{ mb: 2, color: textColor, opacity: 0.82 }}>
+                  {t('projects.webSectionPersonalSubtitle')}
+                </Typography>
+                {webPersonalProjects.length === 0 ? (
+                  <Typography variant="body2" sx={{ color: textColor, opacity: 0.75 }}>
+                    {t('projects.webSectionEmpty')}
+                  </Typography>
+                ) : (
+                  <ProjectsGrid>
+                    {webPersonalProjects.map((project, index) => (
+                      <ProjectCardWrapper
+                        key={project.id}
+                        project={project}
+                        index={index}
+                        handleProjectClick={handleProjectClick}
+                        getStatusIcon={getStatusIcon}
+                        getStatusColor={getStatusColor}
+                        getImageUrl={getImageUrl}
+                        timelendarWindowsUrl={timelendarWindowsUrl}
+                        timelendarMacosUrl={timelendarMacosUrl}
+                        viewProjectLabel={t('projects.viewProject')}
+                        viewSiteLabel={t('projects.viewSite')}
+                        downloadProjectLabel={t('projects.downloadProject')}
+                        downloadTimelendarPcLabel={t('projects.downloadTimelendarPc')}
+                        downloadTimelendarMacosLabel={t('projects.downloadTimelendarMacos')}
+                      />
+                    ))}
+                  </ProjectsGrid>
+                )}
+              </AccordionDetails>
+            </Accordion>
+            <Accordion
+              defaultExpanded
+              disableGutters
+              elevation={0}
+              sx={webSectionAccordionSx}
+            >
+              <AccordionSummary expandIcon={<ExpandMoreIcon sx={{ color: textColor, opacity: 0.85 }} />}>
+                <Typography variant="subtitle1" sx={{ fontWeight: 700, color: textColor }}>
+                  {t('projects.webSectionProfessionalTitle')}
+                </Typography>
+              </AccordionSummary>
+              <AccordionDetails sx={{ pt: 0 }}>
+                <Typography variant="body2" sx={{ mb: 2, color: textColor, opacity: 0.82 }}>
+                  {t('projects.webSectionProfessionalSubtitle')}
+                </Typography>
+                {webProfessionalProjects.length === 0 ? (
+                  <Typography variant="body2" sx={{ color: textColor, opacity: 0.75 }}>
+                    {t('projects.webSectionEmpty')}
+                  </Typography>
+                ) : (
+                  <ProjectsGrid>
+                    {webProfessionalProjects.map((project, index) => (
+                      <ProjectCardWrapper
+                        key={project.id}
+                        project={project}
+                        index={index}
+                        handleProjectClick={handleProjectClick}
+                        getStatusIcon={getStatusIcon}
+                        getStatusColor={getStatusColor}
+                        getImageUrl={getImageUrl}
+                        timelendarWindowsUrl={timelendarWindowsUrl}
+                        timelendarMacosUrl={timelendarMacosUrl}
+                        viewProjectLabel={t('projects.viewProject')}
+                        viewSiteLabel={t('projects.viewSite')}
+                        downloadProjectLabel={t('projects.downloadProject')}
+                        downloadTimelendarPcLabel={t('projects.downloadTimelendarPc')}
+                        downloadTimelendarMacosLabel={t('projects.downloadTimelendarMacos')}
+                      />
+                    ))}
+                  </ProjectsGrid>
+                )}
+              </AccordionDetails>
+            </Accordion>
+          </Box>
+        ) : (
+          <ProjectsGrid>
+            {filteredProjects.map((project, index) => (
+              <ProjectCardWrapper
+                key={project.id}
+                project={project}
+                index={index}
+                handleProjectClick={handleProjectClick}
+                getStatusIcon={getStatusIcon}
+                getStatusColor={getStatusColor}
+                getImageUrl={getImageUrl}
+                timelendarWindowsUrl={timelendarWindowsUrl}
+                timelendarMacosUrl={timelendarMacosUrl}
+                viewProjectLabel={t('projects.viewProject')}
+                viewSiteLabel={t('projects.viewSite')}
+                downloadProjectLabel={t('projects.downloadProject')}
+                downloadTimelendarPcLabel={t('projects.downloadTimelendarPc')}
+                downloadTimelendarMacosLabel={t('projects.downloadTimelendarMacos')}
+              />
+            ))}
+          </ProjectsGrid>
+        )}
         
         {filteredProjects.length === 0 && projectsByType.length > 0 && (
           <AnimatedBox>

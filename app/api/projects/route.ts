@@ -1,5 +1,7 @@
 import { prisma } from '@/lib/prisma'
 import { authAdminToken } from '@/lib/auth-admin-request'
+import { messageForProjectSaveError } from '@/lib/prisma-project-save-error'
+import { resolveWebAudience } from '@/lib/project-web-audience'
 import { NextRequest, NextResponse } from 'next/server'
 
 type ProjectType = 'logiciel' | 'web'
@@ -58,7 +60,8 @@ export async function POST(request: NextRequest)
 	try
 	{
 		const body = await request.json()
-		const { name, description, technologies, status, url, siteUrl, downloadUrl, imageUrl, projectType, displayOrder } = body
+		const { name, description, technologies, status, url, siteUrl, downloadUrl, imageUrl, projectType, displayOrder, webAudience } = body
+		const pt = parseProjectType(projectType)
 
 		// Validation des données
 		if (!name || typeof name !== 'string' || name.trim().length === 0) {
@@ -138,9 +141,10 @@ export async function POST(request: NextRequest)
 				siteUrl: site,
 				downloadUrl: dl,
 				imageUrl: imageUrl || '',
-        projectType: parseProjectType(projectType),
-        displayOrder: parseDisplayOrder(displayOrder),
-			} as any
+				projectType: pt,
+				displayOrder: parseDisplayOrder(displayOrder),
+				webAudience: resolveWebAudience(webAudience, pt),
+			},
 		})
 
 		return NextResponse.json(
@@ -160,7 +164,7 @@ export async function POST(request: NextRequest)
 		return NextResponse.json(
 			{
 				success: false,
-				error: 'Erreur lors de la création du project'
+				error: messageForProjectSaveError(error, 'Erreur lors de la création du project'),
 			},
 			{
 				status: 500

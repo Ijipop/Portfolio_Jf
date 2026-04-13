@@ -36,6 +36,8 @@ model Project {
   /** Lien direct vers binaire (.exe, .dmg, etc.) ou page de téléchargement */
   downloadUrl  String?
   imageUrl     String?  // URL de l'image du projet
+  /** Sites web uniquement : perso vs pro (null pour logiciel ou héritage) */
+  webAudience  WebProjectAudience?
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
@@ -45,6 +47,11 @@ model Project {
 enum ProjectType {
   logiciel
   web
+}
+
+enum WebProjectAudience {
+  personal
+  professional
 }
 
 enum TimelendarPlatform {
