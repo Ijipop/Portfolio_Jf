@@ -13,6 +13,7 @@ import { useState, useEffect } from 'react'
 import { shouldShowTopology } from '@/utils/topologyRoutes'
 import SkillTag from '../../components/shared/SkillTag'
 import HeaderSection from '../../components/shared/HeaderSection'
+import IjipopGlitchTitle from '../../components/shared/IjipopGlitchTitle'
 import AppBarComponent from '../../components/appBar'
 import PageWrapper from '../../components/shared/PageWrapper'
 import InteractiveBackgroundSection from '../../components/shared/InteractiveBackgroundSection'
@@ -248,7 +249,7 @@ export default function About() {
       
       {/* Hero Section */}
       <HeaderSection 
-        title={t('about.title')}
+        title={<IjipopGlitchTitle text={t('about.title')} />}
         subtitle={t('about.subtitle')}
       />
 

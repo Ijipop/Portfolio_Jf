@@ -39,6 +39,7 @@ import {
   SCROLL_DELTA_THRESHOLD,
   SPAWN_SEQUENCE_DELAY_MS,
   COMBAT_HERO_STANDOFF_PX,
+  COMBAT_PAUSE_AFTER_SPAWN_MS,
   COMBAT_RETURN_CENTER_S,
   COMBAT_PAUSE_AFTER_CENTER_MS,
   COMBAT_SLIME_SHRINK_S,
@@ -657,6 +658,9 @@ export default function HomeHeroDevCodeIntro({
       await new Promise<void>((r) => {
         requestAnimationFrame(() => requestAnimationFrame(() => r()))
       })
+      if (isStale()) return
+
+      await new Promise<void>((r) => setTimeout(r, COMBAT_PAUSE_AFTER_SPAWN_MS))
       if (isStale()) return
 
       for (let index = 0; index < strikeOrder.length; index++) {

@@ -36,6 +36,9 @@ export const SPAWN_SEQUENCE_DELAY_MS = 2200
 /** Écart horizontal (px) entre silhouette héros et slime avant le coup (héros à gauche du slime). */
 export const COMBAT_HERO_STANDOFF_PX = 10
 
+/** Pause après l’apparition des slimes avant la première marche vers le slime (ms). */
+export const COMBAT_PAUSE_AFTER_SPAWN_MS = 520
+
 /** Combat : retour au centre de l’arène avant le code explode. */
 export const COMBAT_RETURN_CENTER_S = 0.55
 export const COMBAT_PAUSE_AFTER_CENTER_MS = 240

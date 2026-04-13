@@ -33,6 +33,7 @@ import LoadingSpinner from '../../components/shared/LoadingSpinner'
 import ScrollReveal from '../../components/shared/ScrollReveal'
 import SkillTag from '../../components/shared/SkillTag'
 import HeaderSection from '../../components/shared/HeaderSection'
+import IjipopGlitchTitle from '../../components/shared/IjipopGlitchTitle'
 import PageWrapper from '../../components/shared/PageWrapper'
 import InteractiveBackgroundSection from '../../components/shared/InteractiveBackgroundSection'
 import CTAButton from '../../components/shared/CTAButton'
@@ -1041,7 +1042,7 @@ export default function Projets() {
       
       {/* Hero Section */}
       <HeaderSection 
-        title={t('projects.title')}
+        title={<IjipopGlitchTitle text={t('projects.title')} />}
         subtitle={t('projects.subtitle')}
       />
 
