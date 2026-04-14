@@ -5,6 +5,7 @@ import CircularProgress from '@mui/material/CircularProgress'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import type { SxProps, Theme } from '@mui/material/styles'
 import { useCallback, useEffect, useLayoutEffect, useRef, useState, type ReactNode } from 'react'
+import { isIOSTouchDevice } from '@/utils/isIOSClient'
 
 export type FrameSequencePlayerProps = {
   /** URL absolue du manifest JSON : liste de noms de fichiers dans l’ord. */
@@ -24,6 +25,11 @@ export type FrameSequencePlayerProps = {
    * Sans ça, le premier tour peut être très saccadé (décodage à la volée).
    */
   preloadFrames?: boolean
+  /**
+   * Nombre max d’images en préchargement en parallèle (évite OOM si beaucoup de PNG lourds).
+   * Par défaut : bas sur iOS / tactile Apple, plus élevé ailleurs.
+   */
+  preloadConcurrency?: number
 }
 
 function joinFrameUrl(baseHref: string, filename: string): string {
@@ -51,9 +57,21 @@ function preloadOne(url: string, signal: AbortSignal): Promise<void> {
   })
 }
 
-function preloadFrameUrls(urls: string[], signal: AbortSignal): Promise<void> {
-  if (signal.aborted) return Promise.resolve()
-  return Promise.all(urls.map((url) => preloadOne(url, signal))).then(() => undefined)
+async function preloadFrameUrls(urls: string[], signal: AbortSignal, concurrency: number): Promise<void> {
+  if (signal.aborted || urls.length === 0) return
+  const n = Math.max(1, Math.floor(concurrency))
+  let cursor = 0
+
+  async function worker(): Promise<void> {
+    while (!signal.aborted) {
+      const i = cursor++
+      if (i >= urls.length) return
+      await preloadOne(urls[i]!, signal)
+    }
+  }
+
+  const pool = Math.min(n, urls.length)
+  await Promise.all(Array.from({ length: pool }, () => worker()))
 }
 
 export default function FrameSequencePlayer({
@@ -65,6 +83,7 @@ export default function FrameSequencePlayer({
   onFrameCount,
   emptyFallback,
   preloadFrames = true,
+  preloadConcurrency,
 }: FrameSequencePlayerProps) {
   const [frames, setFrames] = useState<string[]>([])
   const [manifestLoading, setManifestLoading] = useState(true)
@@ -133,7 +152,9 @@ export default function FrameSequencePlayer({
     const ac = new AbortController()
     preloadAbortRef.current = ac
     setPreloadDone(false)
-    preloadFrameUrls(urlsRef.current, ac.signal)
+    const concurrency =
+      preloadConcurrency ?? (typeof navigator !== 'undefined' && isIOSTouchDevice() ? 2 : 8)
+    preloadFrameUrls(urlsRef.current, ac.signal, concurrency)
       .then(() => {
         if (!ac.signal.aborted) setPreloadDone(true)
       })
@@ -141,7 +162,7 @@ export default function FrameSequencePlayer({
         if (!ac.signal.aborted) setPreloadDone(true)
       })
     return () => ac.abort()
-  }, [frames, preloadFrames])
+  }, [frames, preloadFrames, preloadConcurrency])
 
   /**
    * RAF + cadence stable : une frame affichée par tick max ; pas de setState ici

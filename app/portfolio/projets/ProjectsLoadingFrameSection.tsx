@@ -16,6 +16,8 @@ type ProjectsLoadingFrameSectionProps = {
 }
 
 function ProjectsLoadingPngFallback({ message }: { message: string }) {
+  /** iOS : ne pas précharger ~230 PNG en parallèle (OOM WebKit) ; lecture à la volée. */
+  const eagerPreloadFrames = !isIOSTouchDevice()
   const [gearsCount, setGearsCount] = useState<number | null>(null)
   const [textCount, setTextCount] = useState<number | null>(null)
 
@@ -53,6 +55,7 @@ function ProjectsLoadingPngFallback({ message }: { message: string }) {
           baseHref={PROJECTS_LOADING_FRAMES.gears.baseHref}
           fps={18}
           alt=""
+          preloadFrames={eagerPreloadFrames}
           onFrameCount={setGearsCount}
           emptyFallback={
             <Box
@@ -87,6 +90,7 @@ function ProjectsLoadingPngFallback({ message }: { message: string }) {
           baseHref={PROJECTS_LOADING_FRAMES.loadingText.baseHref}
           fps={18}
           alt=""
+          preloadFrames={eagerPreloadFrames}
           onFrameCount={setTextCount}
           sx={{
             maxHeight: { xs: 'min(22vw, 96px)', sm: 120, md: 140 },
