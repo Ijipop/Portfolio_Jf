@@ -4,7 +4,7 @@ import Box from '@mui/material/Box'
 import CircularProgress from '@mui/material/CircularProgress'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import type { SxProps, Theme } from '@mui/material/styles'
-import { useCallback, useEffect, useRef, useState, type ReactNode } from 'react'
+import { useCallback, useEffect, useLayoutEffect, useRef, useState, type ReactNode } from 'react'
 
 export type FrameSequencePlayerProps = {
   /** URL absolue du manifest JSON : liste de noms de fichiers dans l’ord. */
@@ -19,6 +19,11 @@ export type FrameSequencePlayerProps = {
   onFrameCount?: (count: number) => void
   /** Affiché si le manifest est OK mais 0 frame (ex. assets manquants sur un environnement). */
   emptyFallback?: ReactNode
+  /**
+   * Précharge et décode toutes les frames avant de lancer la boucle (recommandé).
+   * Sans ça, le premier tour peut être très saccadé (décodage à la volée).
+   */
+  preloadFrames?: boolean
 }
 
 function joinFrameUrl(baseHref: string, filename: string): string {
@@ -31,6 +36,26 @@ function joinFrameUrl(baseHref: string, filename: string): string {
   return `${base}/${safe}`
 }
 
+/** Décode chaque image une fois pour peupler le cache du navigateur avant la lecture. */
+function preloadOne(url: string, signal: AbortSignal): Promise<void> {
+  if (signal.aborted) return Promise.resolve()
+  return new Promise((resolve) => {
+    const img = new Image()
+    const finish = () => {
+      img.decode().then(() => resolve()).catch(() => resolve())
+    }
+    img.onerror = () => resolve()
+    img.src = url
+    if (img.complete) finish()
+    else img.onload = finish
+  })
+}
+
+function preloadFrameUrls(urls: string[], signal: AbortSignal): Promise<void> {
+  if (signal.aborted) return Promise.resolve()
+  return Promise.all(urls.map((url) => preloadOne(url, signal))).then(() => undefined)
+}
+
 export default function FrameSequencePlayer({
   manifestHref,
   baseHref,
@@ -39,11 +64,17 @@ export default function FrameSequencePlayer({
   sx,
   onFrameCount,
   emptyFallback,
+  preloadFrames = true,
 }: FrameSequencePlayerProps) {
   const [frames, setFrames] = useState<string[]>([])
   const [manifestLoading, setManifestLoading] = useState(true)
-  const [index, setIndex] = useState(0)
+  const [preloadDone, setPreloadDone] = useState(false)
   const reducedMotion = useMediaQuery('(prefers-reduced-motion: reduce)', { noSsr: true })
+
+  const imgRef = useRef<HTMLImageElement | null>(null)
+  const indexRef = useRef(0)
+  const urlsRef = useRef<string[]>([])
+  const preloadAbortRef = useRef<AbortController | null>(null)
 
   const notifyCount = useCallback(
     (count: number) => {
@@ -85,21 +116,50 @@ export default function FrameSequencePlayer({
     }
   }, [manifestHref, notifyCount])
 
+  useEffect(() => {
+    urlsRef.current = frames.map((f) => joinFrameUrl(baseHref, f))
+  }, [frames, baseHref])
+
+  useEffect(() => {
+    if (frames.length === 0) {
+      setPreloadDone(false)
+      return
+    }
+    if (!preloadFrames) {
+      setPreloadDone(true)
+      return
+    }
+    preloadAbortRef.current?.abort()
+    const ac = new AbortController()
+    preloadAbortRef.current = ac
+    setPreloadDone(false)
+    preloadFrameUrls(urlsRef.current, ac.signal)
+      .then(() => {
+        if (!ac.signal.aborted) setPreloadDone(true)
+      })
+      .catch(() => {
+        if (!ac.signal.aborted) setPreloadDone(true)
+      })
+    return () => ac.abort()
+  }, [frames, preloadFrames])
+
   /**
-   * RAF + cadence stable : au plus **une** frame affichée par tick d’animation pour éviter les rafales
-   * (onglet en arrière-plan, jank mobile) qui donnent un effet saccadé.
+   * RAF + cadence stable : une frame affichée par tick max ; pas de setState ici
+   * (évite ~18 re-renders React/s par lecteur → gros gain sur mobile).
    */
   const lastTickRef = useRef(0)
   const carryRef = useRef(0)
 
   useEffect(() => {
-    if (frames.length === 0) return
+    if (frames.length === 0 || !preloadDone) return
     if (reducedMotion) return
 
     const frameMs = Math.max(1000 / 60, 1000 / fps)
     let rafId = 0
     lastTickRef.current = performance.now()
     carryRef.current = 0
+    const urls = urlsRef.current
+    const len = urls.length
 
     const loop = (now: number) => {
       const dt = now - lastTickRef.current
@@ -107,21 +167,26 @@ export default function FrameSequencePlayer({
       carryRef.current += dt
       if (carryRef.current >= frameMs) {
         carryRef.current -= frameMs
-        setIndex((i) => {
-          const len = frames.length
-          if (len === 0) return 0
-          return (i + 1) % len
-        })
+        indexRef.current = (indexRef.current + 1) % len
+        const el = imgRef.current
+        const nextSrc = urls[indexRef.current]
+        if (el && nextSrc) el.src = nextSrc
       }
       rafId = requestAnimationFrame(loop)
     }
     rafId = requestAnimationFrame(loop)
     return () => cancelAnimationFrame(rafId)
-  }, [frames, fps, reducedMotion])
+  }, [frames, fps, reducedMotion, preloadDone])
 
-  useEffect(() => {
-    setIndex(0)
-  }, [frames])
+  useLayoutEffect(() => {
+    indexRef.current = 0
+    const el = imgRef.current
+    const urls = urlsRef.current
+    if (el && urls.length > 0) {
+      const first = urls[0]
+      if (first && el.src !== first) el.src = first
+    }
+  }, [frames, preloadDone])
 
   if (manifestLoading) {
     return (
@@ -135,13 +200,21 @@ export default function FrameSequencePlayer({
     return emptyFallback ? <>{emptyFallback}</> : null
   }
 
-  const frameIndex = reducedMotion ? 0 : index
-  const src = joinFrameUrl(baseHref, frames[frameIndex])
+  if (preloadFrames && !preloadDone) {
+    return (
+      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minWidth: 80, minHeight: 80, ...sx }}>
+        <CircularProgress size={28} />
+      </Box>
+    )
+  }
+
+  const initialSrc = urlsRef.current[0] ?? ''
 
   return (
     <Box
       component="img"
-      src={src}
+      ref={imgRef}
+      src={initialSrc}
       alt={alt}
       loading="eager"
       decoding="async"
