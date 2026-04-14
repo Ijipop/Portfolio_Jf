@@ -53,6 +53,9 @@ export default function LoadingLoopVideo({ webmSrc, mp4Src, sx, onMediaError }: 
         verticalAlign: 'middle',
         pointerEvents: 'none',
         userSelect: 'none',
+        objectFit: 'contain',
+        objectPosition: 'center',
+        bgcolor: 'transparent',
         ...sx,
       }}
     >
