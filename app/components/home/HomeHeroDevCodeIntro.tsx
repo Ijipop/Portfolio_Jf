@@ -40,10 +40,17 @@ import {
   SPAWN_SEQUENCE_DELAY_MS,
   COMBAT_HERO_STANDOFF_PX,
   COMBAT_PAUSE_AFTER_SPAWN_MS,
+  COMBAT_APPROACH_FIRST_S,
+  COMBAT_APPROACH_SECOND_S,
   COMBAT_RETURN_CENTER_S,
   COMBAT_PAUSE_AFTER_CENTER_MS,
   COMBAT_SLIME_SHRINK_S,
   COMBAT_KILL_GAP_MS,
+  COMBAT_STRIKE_TILT_IN_S,
+  COMBAT_STRIKE_TILT_OUT_S,
+  COMBAT_STRIKE_KNOCK_OUT_S,
+  COMBAT_STRIKE_KNOCK_BACK_S,
+  COMBAT_STRIKE_SHRINK_START_S,
   HERO_EXPLODE_END_DELAY_MS,
   SWORD_DROP_DURATION_S,
   SWORD_LAND_Y,
@@ -561,7 +568,7 @@ export default function HomeHeroDevCodeIntro({
       tweens.push(
         gsap.to(el, {
           y: -5,
-          duration: 0.55 + id * 0.08,
+          duration: 0.62 + id * 0.09,
           yoyo: true,
           repeat: -1,
           ease: 'sine.inOut',
@@ -589,7 +596,8 @@ export default function HomeHeroDevCodeIntro({
 
     /** Centre (0) puis droite (1). */
     const strikeOrder = [0, 1] as const
-    const approachDuration = (stepIndex: number) => (stepIndex === 0 ? 0.3 : 0.52)
+    const approachDuration = (stepIndex: number) =>
+      stepIndex === 0 ? COMBAT_APPROACH_FIRST_S : COMBAT_APPROACH_SECOND_S
     const pauseBeforeNextWalkMs = COMBAT_KILL_GAP_MS
 
     const killStrike = (id: number, strikeIndex: number): Promise<void> => {
@@ -606,7 +614,7 @@ export default function HomeHeroDevCodeIntro({
           finished = true
           resolve()
         }
-        const safety = window.setTimeout(done, 1200)
+        const safety = window.setTimeout(done, 1600)
         const tl = gsap.timeline({
           onComplete: () => {
             clearTimeout(safety)
@@ -624,21 +632,21 @@ export default function HomeHeroDevCodeIntro({
             tilt!,
             {
               rotation: strikeIndex % 2 === 0 ? 13 : -11,
-              duration: 0.055,
+              duration: COMBAT_STRIKE_TILT_IN_S,
               ease: 'power2.out',
             },
             0
           )
-          tl.to(tilt!, { rotation: 0, duration: 0.07, ease: 'sine.out' }, 0.045)
+          tl.to(tilt!, { rotation: 0, duration: COMBAT_STRIKE_TILT_OUT_S, ease: 'sine.out' }, 0.06)
         }
         if (hasNode) {
           tl.fromTo(
             node!,
             { x: 0, scale: 1, opacity: 1, rotation: 0 },
-            { x: 4, duration: 0.035, ease: 'power2.out' },
+            { x: 4, duration: COMBAT_STRIKE_KNOCK_OUT_S, ease: 'power2.out' },
             0
           )
-          tl.to(node!, { x: 0, duration: 0.032, ease: 'sine.in' }, 0.028)
+          tl.to(node!, { x: 0, duration: COMBAT_STRIKE_KNOCK_BACK_S, ease: 'sine.in' }, 0.036)
           tl.to(
             node!,
             {
@@ -648,7 +656,7 @@ export default function HomeHeroDevCodeIntro({
               duration: COMBAT_SLIME_SHRINK_S,
               ease: 'power2.in',
             },
-            0.05
+            COMBAT_STRIKE_SHRINK_START_S
           )
         }
       })
