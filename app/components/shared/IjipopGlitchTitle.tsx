@@ -2,14 +2,33 @@
 
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
+import { useMemo } from 'react'
 import { useLanguage } from '@/contexts/LanguageContext'
+import { usePresentationMode } from '@/contexts/PresentationModeContext'
+import { useThemeColors } from '@/hooks/useThemeColors'
+import { dimHex, hexToRgb } from '@/utils/colorUtils'
 
-/** Dégradé commun accueil + sous-pages : ambre → orange → rouge brique. */
+/** Dégradé « marque » : accueil en mode Site (beige) uniquement — ambre → orange → rouge brique. */
 const BRAND_GLITCH_GRADIENT =
   'linear-gradient(165deg, #ffedd5 0%, #fdba74 14%, #fb923c 38%, #ea580c 62%, #b91c1c 86%, #7f1d1d 100%)'
-const GLITCH_LAYER = '#9a3412'
+const BRAND_GLITCH_LAYER = '#9a3412'
 const GLITCH_BEFORE_OPACITY = 0.42
 const GLITCH_AFTER_OPACITY = 0.38
+
+function mixWithWhite(hex: string, ratio: number): string {
+  const rgb = hexToRgb(hex)
+  if (!rgb) return hex
+  const t = Math.max(0, Math.min(1, ratio))
+  const r = Math.round(rgb.r + (255 - rgb.r) * t)
+  const g = Math.round(rgb.g + (255 - rgb.g) * t)
+  const b = Math.round(rgb.b + (255 - rgb.b) * t)
+  return `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`
+}
+
+/** Dégradé ijipop aligné sur la palette active (sous-pages). */
+function buildPaletteGlitchGradient(primary: string, secondary: string, accent: string): string {
+  return `linear-gradient(165deg, ${mixWithWhite(primary, 0.88)} 0%, ${mixWithWhite(primary, 0.45)} 14%, ${primary} 38%, ${secondary} 62%, ${dimHex(secondary, 0.28)} 86%, ${dimHex(accent, 0.42)} 100%)`
+}
 
 export type IjipopGlitchTitleProps = {
   /** Texte brut (traduction). En `page`, affichage en capitales pour coller aux titres de section. */
@@ -20,6 +39,20 @@ export type IjipopGlitchTitleProps = {
 
 export default function IjipopGlitchTitle({ text, variant = 'page' }: IjipopGlitchTitleProps) {
   const { locale } = useLanguage()
+  const { mode: presentationMode } = usePresentationMode()
+  const { primary, secondary, accent } = useThemeColors()
+
+  const { fillGradient, glitchRgb } = useMemo(() => {
+    const useBrandHero =
+      variant === 'hero' && presentationMode === 'beige'
+    if (!useBrandHero) {
+      return {
+        fillGradient: buildPaletteGlitchGradient(primary, secondary, accent),
+        glitchRgb: dimHex(primary, 0.5),
+      }
+    }
+    return { fillGradient: BRAND_GLITCH_GRADIENT, glitchRgb: BRAND_GLITCH_LAYER }
+  }, [variant, presentationMode, primary, secondary, accent])
 
   const display =
     variant === 'hero'
@@ -35,9 +68,6 @@ export default function IjipopGlitchTitle({ text, variant = 'page' }: IjipopGlit
   const letterSpacing = variant === 'hero' ? { xs: '0.03em', sm: '0.05em' } : { xs: '0.05em', sm: '0.1em' }
 
   const mb = variant === 'hero' ? { xs: 0.9, sm: 1.2 } : 0
-
-  const fillGradient = BRAND_GLITCH_GRADIENT
-  const glitchRgb = GLITCH_LAYER
 
   return (
     <Typography

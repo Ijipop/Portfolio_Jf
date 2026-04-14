@@ -37,11 +37,12 @@ export function useThemeColors(): ThemeColors {
       const root = document.documentElement
       const cssPrimary = getComputedStyle(root).getPropertyValue('--primary-color')?.trim()
       const cssSecondary = getComputedStyle(root).getPropertyValue('--secondary-color')?.trim()
+      const cssAccent = getComputedStyle(root).getPropertyValue('--accent-color')?.trim()
 
       setColors({
         primary: cssPrimary || customTheme?.primary || muiTheme.palette.primary.main || '#3b82f6',
         secondary: cssSecondary || customTheme?.secondary || muiTheme.palette.secondary.main || '#059669',
-        accent: customTheme?.accent || '#ff6b35',
+        accent: cssAccent || customTheme?.accent || '#ff6b35',
       })
     }
 

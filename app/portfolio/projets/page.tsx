@@ -391,6 +391,12 @@ const ProjectCardWrapper = ({
     primaryLabel = downloadTimelendrMacosLabel
   }
 
+  /** Timelendr : lien « projet » + téléchargements → une ligne (projet à gauche, DL à droite) pour aligner le bas avec les autres cartes. */
+  const timelendrDownloadsBesideProject =
+    isTimelendrProject &&
+    Boolean(project.url?.trim()) &&
+    Boolean(timelendrWindowsUrl || timelendrMacosUrl)
+
   const secondaryBtnSx = {
     alignSelf: 'flex-start' as const,
     py: 0.5,
@@ -598,6 +604,83 @@ const ProjectCardWrapper = ({
                       {viewSiteLabel}
                     </CTAButton>
                   ) : null
+                ) : timelendrDownloadsBesideProject ? (
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      flexDirection: 'row',
+                      flexWrap: 'wrap',
+                      alignItems: 'center',
+                      width: '100%',
+                      gap: 1,
+                      rowGap: 0.75,
+                    }}
+                  >
+                    {primaryHref && (
+                      <Box sx={{ flexShrink: 0 }}>
+                        <CTAButton variant="primary" size="small" onClick={() => handleProjectClick(primaryHref)}>
+                          {primaryLabel}
+                        </CTAButton>
+                      </Box>
+                    )}
+                    <Box
+                      sx={{
+                        display: 'flex',
+                        flexDirection: 'row',
+                        flexWrap: 'nowrap',
+                        alignItems: 'stretch',
+                        justifyContent: 'flex-start',
+                        gap: 0.5,
+                        flex: '1 1 0',
+                        minWidth: { xs: '100%', sm: 0 },
+                        maxWidth: { xs: '100%', sm: 400 },
+                        marginLeft: { xs: 0, sm: 'auto' },
+                      }}
+                    >
+                      {timelendrWindowsUrl && primaryHref !== timelendrWindowsUrl && (
+                        <Button
+                          variant="outlined"
+                          color="primary"
+                          size="small"
+                          sx={{
+                            ...secondaryBtnSx,
+                            alignSelf: 'stretch',
+                            flex: '1 1 0',
+                            minWidth: 0,
+                            justifyContent: 'center',
+                            px: { xs: 1, sm: 1.35 },
+                            py: 0.65,
+                            fontSize: '0.75rem',
+                          }}
+                          startIcon={<DownloadIcon sx={{ fontSize: 18 }} />}
+                          onClick={() => handleProjectClick(timelendrWindowsUrl)}
+                        >
+                          {downloadTimelendrPcLabel}
+                        </Button>
+                      )}
+                      {timelendrMacosUrl && primaryHref !== timelendrMacosUrl && (
+                        <Button
+                          variant="outlined"
+                          color="primary"
+                          size="small"
+                          sx={{
+                            ...secondaryBtnSx,
+                            alignSelf: 'stretch',
+                            flex: '1 1 0',
+                            minWidth: 0,
+                            justifyContent: 'center',
+                            px: { xs: 1, sm: 1.35 },
+                            py: 0.65,
+                            fontSize: '0.75rem',
+                          }}
+                          startIcon={<DownloadIcon sx={{ fontSize: 18 }} />}
+                          onClick={() => handleProjectClick(timelendrMacosUrl)}
+                        >
+                          {downloadTimelendrMacosLabel}
+                        </Button>
+                      )}
+                    </Box>
+                  </Box>
                 ) : (
                   <>
                     {primaryHref && (

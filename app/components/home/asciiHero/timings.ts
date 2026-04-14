@@ -37,16 +37,27 @@ export const SPAWN_SEQUENCE_DELAY_MS = 2200
 export const COMBAT_HERO_STANDOFF_PX = 10
 
 /** Pause après l’apparition des slimes avant la première marche vers le slime (ms). */
-export const COMBAT_PAUSE_AFTER_SPAWN_MS = 520
+export const COMBAT_PAUSE_AFTER_SPAWN_MS = 680
+
+/** Marche ciné vers le slime (1er puis 2e) — un peu plus lent pour la lisibilité. */
+export const COMBAT_APPROACH_FIRST_S = 0.38
+export const COMBAT_APPROACH_SECOND_S = 0.64
 
 /** Combat : retour au centre de l’arène avant le code explode. */
-export const COMBAT_RETURN_CENTER_S = 0.55
-export const COMBAT_PAUSE_AFTER_CENTER_MS = 240
+export const COMBAT_RETURN_CENTER_S = 0.68
+export const COMBAT_PAUSE_AFTER_CENTER_MS = 320
 
 /** Disparition du slime après le coup (court = combat plus serré). */
-export const COMBAT_SLIME_SHRINK_S = 0.16
+export const COMBAT_SLIME_SHRINK_S = 0.22
 /** Pause entre deux slimes après disparition. */
-export const COMBAT_KILL_GAP_MS = 55
+export const COMBAT_KILL_GAP_MS = 120
+
+/** Coup d’épée + recul slime (ciné) — légèrement étiré. */
+export const COMBAT_STRIKE_TILT_IN_S = 0.075
+export const COMBAT_STRIKE_TILT_OUT_S = 0.095
+export const COMBAT_STRIKE_KNOCK_OUT_S = 0.048
+export const COMBAT_STRIKE_KNOCK_BACK_S = 0.044
+export const COMBAT_STRIKE_SHRINK_START_S = 0.07
 
 /** Après l’anim d’explosion du héros ASCII, avant prose / promenade. */
 export const HERO_EXPLODE_END_DELAY_MS = 480
