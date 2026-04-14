@@ -2,17 +2,22 @@
 
 import { Box, CssBaseline } from '@mui/material'
 import { createTheme, PaletteMode, ThemeProvider } from '@mui/material/styles'
+import type { ThemeOptions } from '@mui/material/styles'
 import React, { createContext, useContext, useEffect, useState } from 'react'
 import { usePathname } from 'next/navigation'
 import { THEMES, ThemeName, getAvailableThemes } from '@/design-system/themes'
 import { shouldShowTopology } from '@/utils/topologyRoutes'
 import { syncPortfolioThemeToDocument } from '@/utils/syncPortfolioThemeToDocument'
 import { usePresentationMode } from '@/contexts/PresentationModeContext'
+import { DESIGN_TOKENS } from '@/design-system/constants'
 
 const LAST_DEV_THEME_KEY = 'lastDevThemeName'
 
 /** Même valeur SSR et premier rendu client — localStorage appliqué après hydratation (voir effet presentationHydrated). */
 const SSR_THEME_NAME: ThemeName = 'latte'
+
+const FONT_STACK = 'var(--font-inter), system-ui, -apple-system, "Segoe UI", sans-serif'
+const TYPO = DESIGN_TOKENS.typography
 
 interface AdvancedThemeContextType {
   themeName: ThemeName
@@ -87,22 +92,55 @@ export function AdvancedThemeProvider({ children }: { children: React.ReactNode 
       }
     },
     typography: {
-      fontFamily: '"Inter", "Roboto", "Helvetica", "Arial", sans-serif',
-      h1: {
-        fontWeight: 700,
-        fontSize: '3.5rem',
-        lineHeight: 1.2
-      },
-      h2: {
+      fontFamily: FONT_STACK,
+      /* DESIGN_TOKENS utilise des fontSize responsive — cast pour compatibilité ThemeOptions MUI */
+      h1: { ...TYPO.h1, fontFamily: FONT_STACK } as ThemeOptions['typography'] extends { h1?: infer H }
+        ? H
+        : never,
+      h2: { ...TYPO.h2, fontFamily: FONT_STACK } as ThemeOptions['typography'] extends { h2?: infer H }
+        ? H
+        : never,
+      h3: { ...TYPO.h3, fontFamily: FONT_STACK } as ThemeOptions['typography'] extends { h3?: infer H }
+        ? H
+        : never,
+      h4: { ...TYPO.h4, fontFamily: FONT_STACK } as ThemeOptions['typography'] extends { h4?: infer H }
+        ? H
+        : never,
+      h5: { ...TYPO.h5, fontFamily: FONT_STACK },
+      h6: { ...TYPO.h6, fontFamily: FONT_STACK },
+      body1: { ...TYPO.body1, fontFamily: FONT_STACK },
+      body2: { ...TYPO.body2, fontFamily: FONT_STACK },
+      subtitle1: {
+        fontFamily: FONT_STACK,
         fontWeight: 600,
-        fontSize: '2.5rem',
-        lineHeight: 1.3
+        fontSize: '1rem',
+        lineHeight: 1.5,
       },
-      h3: {
+      subtitle2: {
+        fontFamily: FONT_STACK,
+        fontWeight: 500,
+        fontSize: '0.875rem',
+        lineHeight: 1.57,
+      },
+      caption: {
+        fontFamily: FONT_STACK,
+        fontWeight: 400,
+        fontSize: '0.75rem',
+        lineHeight: 1.66,
+      },
+      overline: {
+        fontFamily: FONT_STACK,
         fontWeight: 600,
-        fontSize: '2rem',
-        lineHeight: 1.4
-      }
+        fontSize: '0.75rem',
+        lineHeight: 2.66,
+        letterSpacing: '0.08em',
+        textTransform: 'uppercase',
+      },
+      button: {
+        fontFamily: FONT_STACK,
+        fontWeight: 600,
+        textTransform: 'none',
+      },
     },
     components: {
       ...(isTopologyRoute && {

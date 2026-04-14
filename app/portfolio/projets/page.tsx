@@ -1233,7 +1233,7 @@ export default function Projets() {
               sx={webSectionAccordionSx}
             >
               <AccordionSummary expandIcon={<ExpandMoreIcon sx={{ color: textColor, opacity: 0.85 }} />}>
-                <Typography variant="subtitle1" sx={{ fontWeight: 700, color: textColor }}>
+                <Typography variant="subtitle1" sx={{ fontWeight: 700, color: primary }}>
                   {t('projects.webSectionPersonalTitle')}
                 </Typography>
               </AccordionSummary>
@@ -1277,7 +1277,7 @@ export default function Projets() {
               sx={webSectionAccordionSx}
             >
               <AccordionSummary expandIcon={<ExpandMoreIcon sx={{ color: textColor, opacity: 0.85 }} />}>
-                <Typography variant="subtitle1" sx={{ fontWeight: 700, color: textColor }}>
+                <Typography variant="subtitle1" sx={{ fontWeight: 700, color: primary }}>
                   {t('projects.webSectionProfessionalTitle')}
                 </Typography>
               </AccordionSummary>

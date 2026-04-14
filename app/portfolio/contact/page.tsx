@@ -268,7 +268,7 @@ export default function Contact() {
           <ThreeDCardComponent floatingElements={2} sx={{ padding: { xs: 2, sm: 3 } }}>
             <Box sx={{ textAlign: 'center', mb: useCompactContact ? 2 : 3 }}>
               <EmailIcon sx={{ fontSize: 48, color: primary, mb: 1.5 }} />
-              <Typography variant="h4" gutterBottom sx={{ fontWeight: 700, color: textColor }}>
+              <Typography variant="h4" gutterBottom sx={{ fontWeight: 700, color: primary }}>
                 {t('contact.sendMessage')}
               </Typography>
               <Typography variant="body1" sx={{ color: textColor, opacity: 0.9 }}>
@@ -361,7 +361,7 @@ export default function Contact() {
           <ThreeDCardComponent floatingElements={2} sx={{ minHeight: { xs: 230, sm: 260 }, padding: { xs: 2, sm: 2.5, md: 3 } }}>
             <Box sx={{ textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', height: '100%', justifyContent: 'flex-start' }}>
               <LocationOnIcon sx={{ fontSize: 40, color: primary, mb: 1.5 }} />
-              <Typography variant="h6" gutterBottom sx={{ color: textColor }}>
+              <Typography variant="h6" gutterBottom sx={{ color: primary }}>
                 {t('contact.location')}
               </Typography>
               <Typography variant="body2" sx={{ mb: 1.5, color: textColor, opacity: 0.8 }}>
@@ -411,7 +411,7 @@ export default function Contact() {
         </Box>
 
         <Box sx={{ mt: useCompactContact ? 4 : 8 }}>
-          <Typography variant="h4" gutterBottom sx={{ mb: 4, textAlign: 'center', fontWeight: 700, color: textColor }}>
+          <Typography variant="h4" gutterBottom sx={{ mb: 4, textAlign: 'center', fontWeight: 700, color: primary }}>
             {t('contact.followMe')}
           </Typography>
           <Box sx={{ 
@@ -428,7 +428,7 @@ export default function Contact() {
                   <SocialIconWrapper>
                     <LinkedInIcon sx={{ fontSize: 40 }} />
                   </SocialIconWrapper>
-                  <Typography variant="h6" gutterBottom sx={{ fontWeight: 600, color: textColor }}>
+                  <Typography variant="h6" gutterBottom sx={{ fontWeight: 600, color: primary }}>
                     LinkedIn
                   </Typography>
                   <Typography variant="body2" sx={{ mb: 2, color: textColor, opacity: 0.8 }}>
@@ -447,7 +447,7 @@ export default function Contact() {
                   <SocialIconWrapper>
                     <GitHubIcon sx={{ fontSize: 40 }} />
                   </SocialIconWrapper>
-                  <Typography variant="h6" gutterBottom sx={{ fontWeight: 600, color: textColor }}>
+                  <Typography variant="h6" gutterBottom sx={{ fontWeight: 600, color: primary }}>
                     GitHub
                   </Typography>
                   <Typography variant="body2" sx={{ mb: 2, color: textColor, opacity: 0.8 }}>
