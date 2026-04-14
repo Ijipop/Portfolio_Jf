@@ -26,6 +26,7 @@ import { useLanguage } from '../../contexts/LanguageContext'
 import { useTheme } from '@mui/material/styles'
 import { getTextColorForBackground } from '../../utils/colorUtils'
 import { getCardSurfaceSx } from '@/components/shared/cardSurface'
+import ScrollReveal from '../../components/shared/ScrollReveal'
 import SoftSkillsSection from './components/SoftSkillsSection'
 import AboutCtaSection from './components/AboutCtaSection'
 import AboutPersonalStorySection from './components/AboutPersonalStorySection'
@@ -256,6 +257,7 @@ export default function About() {
       <InteractiveBackgroundSection>
       <Container maxWidth="lg" sx={{ py: 6, position: 'relative', zIndex: 2 }}>
 
+        <ScrollReveal direction="up" delay={0.05}>
         <Box sx={{ 
           display: 'grid', 
           gridTemplateColumns: { xs: '1fr', md: 'repeat(3, 1fr)' },
@@ -579,9 +581,13 @@ export default function About() {
             </FlipCardInner>
           </FlipCard>
         </Box>
+        </ScrollReveal>
 
+        <ScrollReveal direction="up" delay={0.1}>
         <AboutPersonalStorySection t={t} primary={primary} textColor={textColor} />
+        </ScrollReveal>
 
+        <ScrollReveal direction="up" delay={0.15}>
         <Box sx={{ 
           ...getCardSurfaceSx({ isTopologyRoute, variant: 'flat', level: 'soft', interactive: false }),
           borderRadius: DESIGN_TOKENS.borderRadius.large,
@@ -641,9 +647,13 @@ export default function About() {
 
           </Box>
         </Box>
+        </ScrollReveal>
 
+        <ScrollReveal direction="up" delay={0.2}>
         <SoftSkillsSection primary={primary} textColor={textColor} t={t} />
+        </ScrollReveal>
 
+        <ScrollReveal direction="up" delay={0.25}>
         <AboutCtaSection
           primary={primary}
           textColor={textColor}
@@ -651,6 +661,7 @@ export default function About() {
           onContact={() => router.push('/portfolio/contact')}
           onProjects={() => router.push('/portfolio/projets')}
         />
+        </ScrollReveal>
       </Container>
       </InteractiveBackgroundSection>
       
