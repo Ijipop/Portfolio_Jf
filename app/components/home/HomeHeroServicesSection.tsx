@@ -55,7 +55,11 @@ export default function HomeHeroServicesSection() {
           overflow: isDevPresentation ? 'visible' : 'hidden',
           p: { xs: 3, sm: 4, md: 4.5 },
           width: '100%',
-          borderRadius: DESIGN_TOKENS.borderRadius.xlarge,
+          /** Sur mobile, 32px sur une carte quasi pleine largeur paraît trop « pilule » ; on aligne sur le rayon des cartes grille. */
+          borderRadius: {
+            xs: DESIGN_TOKENS.borderRadius.medium,
+            sm: DESIGN_TOKENS.borderRadius.xlarge,
+          },
           border: `1px solid ${alpha(primary, isDark ? 0.22 : 0.14)}`,
           boxShadow: isDark
             ? '0 24px 48px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.06)'
