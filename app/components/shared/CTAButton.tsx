@@ -1,7 +1,7 @@
 'use client'
 
 /**
- * CTA : sans-serif gras aligné sur le thème (Inter via `theme.typography.fontFamily`), pas Cormorant.
+ * CTA : sans-serif gras aligné sur le thème (`theme.typography.fontFamily`, Inter).
  * Couleurs / dégradés = `primary`·`secondary` du thème actif (beige·dev inchangés côté logique).
  */
 

@@ -2,7 +2,6 @@
 
 import Typography from '@mui/material/Typography'
 import type { SxProps, Theme } from '@mui/material/styles'
-import { sectionDisplaySerif } from '@/fonts'
 import { useTextColor } from '@/hooks/useTextColor'
 import type { ReactNode } from 'react'
 
@@ -14,7 +13,7 @@ export interface SectionDisplayTitleProps {
   sx?: SxProps<Theme>
 }
 
-/** Titres de section en Cormorant (court, 3–10 mots). Pas pour hero Ijipop ni CTA. */
+/** Titres de section (même stack Inter que le thème). Pas pour hero Ijipop ni CTA. */
 export default function SectionDisplayTitle({
   children,
   component,
@@ -29,9 +28,8 @@ export default function SectionDisplayTitle({
       id={id}
       component={component}
       variant="h2"
-      className={sectionDisplaySerif.className}
       sx={{
-        fontFamily: `${sectionDisplaySerif.style.fontFamily}, serif`,
+        fontFamily: (theme) => theme.typography.fontFamily,
         fontWeight: 600,
         fontSize: { xs: 'clamp(1.35rem, 4.8vw, 1.65rem)', sm: '1.95rem', md: '2.15rem' },
         lineHeight: { xs: 1.2, sm: 1.22 },
