@@ -102,6 +102,7 @@ function ProjectsLoadingPngFallback({ message }: { message: string }) {
 export default function ProjectsLoadingFrameSection({ message = '' }: ProjectsLoadingFrameSectionProps) {
   const [usePngFallback, setUsePngFallback] = useState(false)
   const reducedMotion = useMediaQuery('(prefers-reduced-motion: reduce)', { noSsr: true })
+  const onVideoFail = useCallback(() => setUsePngFallback(true), [])
 
   if (reducedMotion) {
     return <LoadingSpinner message={message} />
@@ -110,8 +111,6 @@ export default function ProjectsLoadingFrameSection({ message = '' }: ProjectsLo
   if (usePngFallback) {
     return <ProjectsLoadingPngFallback message={message} />
   }
-
-  const onVideoFail = useCallback(() => setUsePngFallback(true), [])
 
   return (
     <Box
