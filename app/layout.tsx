@@ -3,7 +3,7 @@ import WebVitalsReporter from './components/WebVitalsReporter'
 import ContactFab from './components/shared/ContactFab'
 import ThemeWrapper from './components/ThemeWrapper'
 import FullPageTopologyWrapper from './components/FullPageTopologyWrapper'
-import { inter, sectionDisplaySerif } from './fonts'
+import { inter } from './fonts'
 import './globals.css'
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://ijipop.com'
@@ -43,7 +43,7 @@ export const viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="fr" className={`${inter.variable} ${sectionDisplaySerif.variable}`}>
+    <html lang="fr" className={inter.variable}>
       <body>
         <ThemeWrapper>
           <WebVitalsReporter />

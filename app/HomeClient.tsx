@@ -27,6 +27,25 @@ import { useTheme } from '@mui/material/styles'
 
 const INTRO_SESSION_KEY = 'portfolio-intro-seen'
 
+/** Grille accueil : un peu plus de large utile pour le texte sur mobile ; hauteur libre. */
+const HOME_GRID_CARD_SX = {
+  height: '100%',
+  minHeight: 0,
+  p: { xs: 2.25, sm: 3, md: 4 },
+} as const
+
+/** Corps des cartes : retours à la ligne plus propres ; « : » orphelin évité côté contenu (espace fine insécable dans les FR). */
+const HOME_CARD_DESC_TYPO_SX = {
+  opacity: 0.85,
+  lineHeight: 1.55,
+  flex: 1,
+  overflowWrap: 'break-word' as const,
+  orphans: 2,
+  widows: 2,
+  hyphens: 'auto' as const,
+  '@supports (text-wrap: pretty)': { textWrap: 'pretty' as const },
+}
+
 function setIntroSeenCookie() {
   if (typeof document === 'undefined') return
   document.cookie = `${INTRO_SESSION_KEY}=1; path=/`
@@ -85,7 +104,6 @@ export default function HomeClient({ initialShowIntro }: { initialShowIntro: boo
         <Box sx={{ 
           display: 'grid', 
           gridTemplateColumns: { xs: '1fr', md: 'repeat(3, 1fr)' },
-          gridTemplateRows: { md: '260px' },
           gap: { xs: DESIGN_TOKENS.spacing.md, md: DESIGN_TOKENS.spacing.xl },
           mb: { xs: DESIGN_TOKENS.spacing.xl, md: DESIGN_TOKENS.spacing.xxl },
           px: { xs: 1, sm: 0 },
@@ -94,12 +112,12 @@ export default function HomeClient({ initialShowIntro }: { initialShowIntro: boo
           <FadeIn delay={0}>
             <Box sx={{ display: 'flex', minHeight: 0, height: '100%' }}>
               <Link href="/portfolio/projets" style={{ textDecoration: 'none', display: 'flex', width: '100%', height: '100%' }}>
-                <ThreeDCardComponent fullHeight floatingElements={2} sx={{ height: '100%', maxHeight: { md: 260 }, overflow: 'hidden' }}>
+                <ThreeDCardComponent fullHeight floatingElements={2} sx={HOME_GRID_CARD_SX}>
                   <CodeIcon sx={{ fontSize: 48, color: primary, mb: 2 }} />
                   <Typography variant="h5" gutterBottom sx={{ color: textColor }}>
                     {t('home.cardProjects')}
                   </Typography>
-                  <Typography variant="body1" sx={{ color: textColor, opacity: 0.8, display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden', lineHeight: 1.5 }}>
+                  <Typography variant="body1" sx={{ color: textColor, ...HOME_CARD_DESC_TYPO_SX }}>
                     {t('home.cardProjectsDesc')}
                   </Typography>
                 </ThreeDCardComponent>
@@ -110,12 +128,12 @@ export default function HomeClient({ initialShowIntro }: { initialShowIntro: boo
           <FadeIn delay={0}>
             <Box sx={{ display: 'flex', minHeight: 0, height: '100%' }}>
               <Link href="/portfolio/a-propos" style={{ textDecoration: 'none', display: 'flex', width: '100%', height: '100%' }}>
-                <ThreeDCardComponent fullHeight floatingElements={3} sx={{ height: '100%', maxHeight: { md: 260 }, overflow: 'hidden' }}>
+                <ThreeDCardComponent fullHeight floatingElements={3} sx={HOME_GRID_CARD_SX}>
                   <PersonIcon sx={{ fontSize: 48, color: primary, mb: 2 }} />
                   <Typography variant="h5" gutterBottom sx={{ color: textColor }}>
                     {t('home.cardAbout')}
                   </Typography>
-                  <Typography variant="body1" sx={{ color: textColor, opacity: 0.8, display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden', lineHeight: 1.5 }}>
+                  <Typography variant="body1" sx={{ color: textColor, ...HOME_CARD_DESC_TYPO_SX }}>
                     {t('home.cardAboutDesc')}
                   </Typography>
                 </ThreeDCardComponent>
@@ -126,12 +144,12 @@ export default function HomeClient({ initialShowIntro }: { initialShowIntro: boo
           <FadeIn delay={0}>
             <Box sx={{ display: 'flex', minHeight: 0, height: '100%' }}>
               <Link href="/portfolio/contact" style={{ textDecoration: 'none', display: 'flex', width: '100%', height: '100%' }}>
-                <ThreeDCardComponent fullHeight floatingElements={2} sx={{ height: '100%', maxHeight: { md: 260 }, overflow: 'hidden' }}>
+                <ThreeDCardComponent fullHeight floatingElements={2} sx={HOME_GRID_CARD_SX}>
                   <ContactSupportIcon sx={{ fontSize: 48, color: primary, mb: 2 }} />
                   <Typography variant="h5" gutterBottom sx={{ color: textColor }}>
                     {t('home.cardContact')}
                   </Typography>
-                  <Typography variant="body1" sx={{ color: textColor, opacity: 0.8, display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden', lineHeight: 1.5 }}>
+                  <Typography variant="body1" sx={{ color: textColor, ...HOME_CARD_DESC_TYPO_SX }}>
                     {t('home.cardContactDesc')}
                   </Typography>
                 </ThreeDCardComponent>

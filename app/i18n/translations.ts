@@ -47,12 +47,12 @@ export const translations = {
       sectionSkills: 'Technologies & Compétences',
       cardProjects: 'Mes Projets',
       cardProjectsDesc:
-        'Réalisations web et petits outils : sites livrés, refontes et mandats pour indépendants et PME.',
+        'Réalisations web et petits outils\u202f: sites livrés, refontes et mandats pour indépendants et PME.',
       cardAbout: 'À Propos',
       cardAboutDesc: 'Mon parcours et comment je peux vous aider avec un site ou un outil sur mesure.',
       cardContact: 'Contact',
       cardContactDesc:
-        'Nouveau site, refonte, mises à jour ou petit outil : parlons de votre besoin.',
+        'Nouveau site, refonte, mises à jour ou petit outil\u202f: parlons de votre besoin.',
       stickyCTA: 'Discuter de votre projet',
     },
     contact: {
