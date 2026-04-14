@@ -3,10 +3,11 @@
 import Box from '@mui/material/Box'
 import CircularProgress from '@mui/material/CircularProgress'
 import useMediaQuery from '@mui/material/useMediaQuery'
-import { useCallback, useState } from 'react'
+import { useCallback, useLayoutEffect, useState } from 'react'
 import FrameSequencePlayer from '@/components/shared/FrameSequencePlayer'
 import LoadingLoopVideo from '@/components/shared/LoadingLoopVideo'
 import LoadingSpinner from '@/components/shared/LoadingSpinner'
+import { isIOSTouchDevice } from '@/utils/isIOSClient'
 import { PROJECTS_LOADING_FRAMES, PROJECTS_LOADING_VIDEO } from './projectsLoadingAssets'
 
 type ProjectsLoadingFrameSectionProps = {
@@ -101,14 +102,20 @@ function ProjectsLoadingPngFallback({ message }: { message: string }) {
 
 export default function ProjectsLoadingFrameSection({ message = '' }: ProjectsLoadingFrameSectionProps) {
   const [usePngFallback, setUsePngFallback] = useState(false)
+  /** Safari iOS : MP4 sans alpha → bandes noires ; WebKit dimensionne mal les vidéos → PNG (même pipeline que le repli erreur). */
+  const [iosUsePng, setIosUsePng] = useState(false)
   const reducedMotion = useMediaQuery('(prefers-reduced-motion: reduce)', { noSsr: true })
   const onVideoFail = useCallback(() => setUsePngFallback(true), [])
+
+  useLayoutEffect(() => {
+    if (isIOSTouchDevice()) setIosUsePng(true)
+  }, [])
 
   if (reducedMotion) {
     return <LoadingSpinner message={message} />
   }
 
-  if (usePngFallback) {
+  if (usePngFallback || iosUsePng) {
     return <ProjectsLoadingPngFallback message={message} />
   }
 
