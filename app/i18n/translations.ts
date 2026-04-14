@@ -175,6 +175,7 @@ export const translations = {
       webSectionEmpty: 'Aucun projet dans cette catégorie pour le moment.',
     },
     footer: {
+      landmarkLabel: 'Pied de page du site',
       tagline: 'Sites web et petits outils sur mesure. Hébergement inclus.',
       contactPrompt: 'Un projet site web ou un petit outil ? Discutons-en !',
       contactButton: 'Me contacter',
@@ -476,6 +477,7 @@ export const translations = {
       webSectionEmpty: 'No projects in this category yet.',
     },
     footer: {
+      landmarkLabel: 'Site footer',
       tagline: 'Custom websites and small tools. Hosting included.',
       contactPrompt: 'A website or small tool in mind? Let\'s talk!',
       contactButton: 'Contact me',

@@ -10,8 +10,12 @@ const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://ijipop.com'
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
-  title: 'PortFolio',
-  description: 'PortFolio de Jean-François Lefebvre',
+  title: {
+    default: 'Jean-François Lefebvre',
+    template: '%s | Jean-François Lefebvre',
+  },
+  description:
+    'Développement web et logiciels sur mesure pour particuliers et PME — de l’idée à la mise en production.',
   icons: {
     /** ICO + PNG = compatibilité maximale ; SVG = net sur navigateurs récents */
     icon: [
@@ -21,8 +25,10 @@ export const metadata: Metadata = {
     ],
   },
   openGraph: {
+    type: 'website',
+    locale: 'fr_CA',
     url: '/',
-    siteName: 'PortFolio Jean-François Lefebvre',
+    siteName: 'Jean-François Lefebvre',
   },
 }
 
