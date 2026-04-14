@@ -1100,13 +1100,18 @@ export default function Projets() {
       <PageWrapper backgroundVariant="default">
         <AppBarComponent />
         <InteractiveBackgroundSection>
-          <Container sx={{ 
-            mt: 4, 
-            display: 'flex', 
-            justifyContent: 'center', 
-            alignItems: 'center',
-            minHeight: '60vh'
-          }}>
+          <Container
+            maxWidth="lg"
+            sx={{
+              mt: { xs: 2, sm: 3, md: 4 },
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              minHeight: { xs: 'min(55dvh, 520px)', sm: '58vh' },
+              px: { xs: 1.5, sm: 2 },
+              width: '100%',
+            }}
+          >
             <ProjectsLoadingFrameSection />
           </Container>
         </InteractiveBackgroundSection>

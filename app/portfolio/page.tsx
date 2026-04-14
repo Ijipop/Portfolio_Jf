@@ -7,11 +7,11 @@ const INTRO_COOKIE_KEY = 'portfolio-intro-seen'
 export const metadata: Metadata = {
   title: 'Portfolio',
   description:
-    'Je crée des sites web et des outils sur mesure pour des particuliers et des PME. Découvrez mes projets et contactez-moi pour votre prochain mandat.',
+    'Ijipop — création de sites web, refonte et mises à jour pour PME et indépendants. Découvrez les réalisations et contactez pour un mandat à Montréal ou en télétravail.',
   openGraph: {
     title: 'Portfolio | Jean-François Lefebvre',
     description:
-      'Sites web et applications sur mesure pour travailleurs autonomes et petites entreprises — Montréal.',
+      'Sites vitrine, refonte de site et maintenance pour petites entreprises — portfolio et prise de contact.',
     url: '/portfolio',
   },
 }

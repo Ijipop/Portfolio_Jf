@@ -8,6 +8,7 @@ import AppBarComponent from '../components/appBar'
 import PageWrapper from '../components/shared/PageWrapper'
 import InteractiveBackgroundSection from '../components/shared/InteractiveBackgroundSection'
 import CTAButton from '../components/shared/CTAButton'
+import SectionDisplayTitle from '../components/shared/SectionDisplayTitle'
 import Footer from '../components/Footer'
 import { useLanguage } from '../contexts/LanguageContext'
 import { useTextColor } from '../hooks/useTextColor'
@@ -28,22 +29,13 @@ export default function PagewebPage() {
           zIndex: 1,
           flex: 1,
           py: { xs: 4, sm: 6, md: 8 },
-          px: 2,
+          px: { xs: 1.5, sm: 2, md: 3 },
         }}
       >
         <Container maxWidth="md">
-          <Typography
-            component="h1"
-            variant="h4"
-            sx={{
-              fontWeight: 700,
-              mb: 2,
-              textAlign: 'center',
-              color: textColor,
-            }}
-          >
+          <SectionDisplayTitle component="h1" sx={{ mb: 2 }}>
             {t('pageweb.title')}
-          </Typography>
+          </SectionDisplayTitle>
           <Typography
             sx={{
               textAlign: 'center',

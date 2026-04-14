@@ -2,7 +2,7 @@
 
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
-import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useLayoutEffect, useRef, useState, type ReactNode } from 'react'
 import gsap from 'gsap'
 import { GlassContainer } from '@/components/GlassCard'
 import { DESIGN_TOKENS } from '@/design-system/constants'
@@ -68,9 +68,14 @@ type InteractionLock = 'none' | 'scroll' | 'idle'
 export type HomeHeroDevCodeIntroProps = {
   name: string
   role: string
-  /** Texte corps comme en mode Site (home.intro). */
+  /** Texte affiché après la séquence ASCII (carte embarquée : mêmes paragraphes que le mode Site). */
   intro: string
   isTopologyRoute: boolean
+  /** Dans la carte principale (HomeHeroServicesSection) : pas de second verre ni nom/rôle dupliqués sous le hero. */
+  embedded?: boolean
+  /** Réf. du `GlassContainer` : la marche ASCII se fait sur tout le conteneur (pas dans le bloc titre/code). */
+  walkSurfaceRef?: React.RefObject<HTMLDivElement | null>
+  sectionTitle?: ReactNode
 }
 
 function centerTrackOnCard(
@@ -147,6 +152,9 @@ export default function HomeHeroDevCodeIntro({
   role,
   intro,
   isTopologyRoute,
+  embedded = false,
+  walkSurfaceRef,
+  sectionTitle,
 }: HomeHeroDevCodeIntroProps) {
   const { primary, secondary } = useThemeColors()
   const textColor = useTextColor()
@@ -204,6 +212,8 @@ export default function HomeHeroDevCodeIntro({
   resetLengthRef.current = resetLength
 
   const wrapRef = useRef<HTMLDivElement>(null)
+  /** Surface de marche (carte verre) en embedded ; sinon le `Box` wrapper standalone. */
+  const activeWrapRef = embedded && walkSurfaceRef ? walkSurfaceRef : wrapRef
   const cardRef = useRef<HTMLDivElement>(null)
   /** Arène : même largeur que les positions % des slimes. */
   const combatArenaRef = useRef<HTMLDivElement>(null)
@@ -346,7 +356,7 @@ export default function HomeHeroDevCodeIntro({
   useLayoutEffect(() => {
     if (reduced) return
     if (phase !== 'walkShort') return
-    const wrap = wrapRef.current
+    const wrap = activeWrapRef.current
     const track = trackRef.current
     if (!wrap || !track) return
 
@@ -380,7 +390,7 @@ export default function HomeHeroDevCodeIntro({
   useLayoutEffect(() => {
     if (reduced) return
     if (phase !== 'swordScene') return
-    const wrap = wrapRef.current
+    const wrap = activeWrapRef.current
     const track = trackRef.current
     const sword = swordRef.current
     if (!wrap || !track || !sword) return
@@ -427,7 +437,7 @@ export default function HomeHeroDevCodeIntro({
 
   const buildInteractiveWalk = useCallback(() => {
     if (holdingSwordRef.current) return
-    const wrap = wrapRef.current
+    const wrap = activeWrapRef.current
     const track = trackRef.current
     if (!wrap || !track) return
 
@@ -457,7 +467,7 @@ export default function HomeHeroDevCodeIntro({
   }, [])
 
   const applySwordIdleLayout = useCallback(() => {
-    const wrap = wrapRef.current
+    const wrap = activeWrapRef.current
     const card = cardRef.current
     const track = trackRef.current
     if (!wrap || !card || !track) return
@@ -470,7 +480,7 @@ export default function HomeHeroDevCodeIntro({
   useLayoutEffect(() => {
     if (reduced) return
     if (phase !== 'interactiveWalk') return
-    const wrap = wrapRef.current
+    const wrap = activeWrapRef.current
     const track = trackRef.current
     if (!wrap || !track) return
 
@@ -858,7 +868,7 @@ export default function HomeHeroDevCodeIntro({
     if (lockRef.current !== 'none' || cinematicLockRef.current) return
     if (codeTypingLocked) return
     if (!canTiltHero) return
-    const wrap = wrapRef.current
+    const wrap = activeWrapRef.current
     const rot = rotateToRef.current
     if (!wrap || !rot) return
     const rect = wrap.getBoundingClientRect()
@@ -888,25 +898,12 @@ export default function HomeHeroDevCodeIntro({
     animation: 'gradientShift 4s ease-in-out infinite',
   } as const
 
+  /** Marche sur tout le `GlassContainer` lorsque `walkSurfaceRef` est fourni. */
+  const embeddedInCard = Boolean(embedded && walkSurfaceRef)
   const clipW = cardWidth ?? '100%'
+  const arenaInnerWidth = embeddedInCard ? '100%' : typeof clipW === 'number' ? clipW : '100%'
 
-  return (
-    <Box
-      ref={wrapRef}
-      onPointerMove={onPointerMove}
-      onPointerLeave={onPointerLeave}
-      onPointerDown={() => {
-        if (!reduced && isInteractive) scheduleIdle()
-      }}
-      sx={{
-        position: 'relative',
-        overflow: 'visible',
-        flex: { sm: '0 1 auto' },
-        width: { xs: '100%', sm: 'auto' },
-        maxWidth: '100%',
-      }}
-    >
-      {showWalker && (
+  const walkerAndArena = showWalker && (
         <Box
           sx={{
             position: 'absolute',
@@ -915,25 +912,26 @@ export default function HomeHeroDevCodeIntro({
             right: 0,
             mb: 0,
             pointerEvents: 'none',
-            minHeight: { xs: '6.25rem', sm: '6.75rem', md: '7rem' },
+            minHeight: { xs: '5.25rem', sm: '6.5rem', md: '7rem' },
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'flex-end',
             alignItems: 'center',
+            zIndex: 5,
           }}
         >
           <Box
             ref={combatArenaRef}
             sx={{
               position: 'relative',
-              width: typeof clipW === 'number' ? clipW : '100%',
+              width: arenaInnerWidth,
               maxWidth: '100%',
               overflow: 'hidden',
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
               justifyContent: 'flex-end',
-              minHeight: { xs: '5.5rem', sm: '6rem' },
+              minHeight: { xs: '4.75rem', sm: '5.75rem', md: '6rem' },
             }}
           >
             {(phase === 'swordScene' || swordSceneVisible) && (
@@ -1019,90 +1017,200 @@ export default function HomeHeroDevCodeIntro({
               ))}
           </Box>
         </Box>
-      )}
+  )
 
-      <GlassContainer
-        ref={cardRef}
-        sx={{
-          ...getCardSurfaceSx({ isTopologyRoute, variant: 'flat', level: 'soft', interactive: false }),
-          p: { xs: 2.5, sm: 3, md: 3.5 },
-        }}
-      >
-        <Box sx={{ textAlign: 'center' }}>
+  const embeddedCodeBlock = (
+    <Box ref={cardRef} sx={{ width: '100%', position: 'relative', zIndex: 1 }}>
+      <Box sx={{ textAlign: 'center' }}>
+        {introRevealed ? (
           <Typography
-            variant="h1"
+            variant="body1"
             sx={{
-              mb: 1,
-              ...DESIGN_TOKENS.typography.h1,
-              fontSize: { xs: '1.75rem', sm: '2rem', md: '2.25rem' },
-              ...titleLetterSx,
-            }}
-          >
-            {name}
-          </Typography>
-          <Typography
-            variant="h4"
-            sx={{
-              mb: 1,
-              ...DESIGN_TOKENS.typography.h4,
-              fontSize: { xs: '1rem', sm: '1.125rem', md: '1.25rem' },
-              fontWeight: 400,
-              opacity: 0.9,
+              maxWidth: 600,
+              mx: 'auto',
+              mb: 2,
+              ...DESIGN_TOKENS.typography.body1,
+              fontSize: { xs: '0.875rem', md: '1rem' },
               color: textColor,
+              opacity: 0.9,
+              whiteSpace: 'pre-line',
+              hyphens: 'auto',
+              textAlign: 'center',
+              ...mobileProseWrapSx,
             }}
           >
-            {role}
+            {intro}
           </Typography>
-          {introRevealed ? (
-            <Typography
-              variant="body1"
-              sx={{
-                maxWidth: 600,
-                mx: 'auto',
-                mb: 2,
-                ...DESIGN_TOKENS.typography.body1,
-                fontSize: { xs: '0.875rem', md: '1rem' },
-                color: textColor,
-                opacity: 0.9,
-                whiteSpace: 'pre-line',
-                hyphens: 'auto',
-                textAlign: 'center',
-                ...mobileProseWrapSx,
-              }}
-            >
-              {intro}
-            </Typography>
-          ) : (
-            <Box
-              component="pre"
-              sx={{
-                m: 0,
-                mt: 1,
-                p: { xs: 1.25, sm: 1.5 },
-                textAlign: 'left',
-                maxWidth: 600,
-                mx: 'auto',
-                mb: 2,
-                fontFamily: 'ui-monospace, "Cascadia Code", Consolas, monospace',
-                fontSize: { xs: '0.7rem', sm: '0.78rem', md: '0.82rem' },
-                lineHeight: 1.45,
-                color: textColor,
-                opacity: 0.95,
-                overflowX: 'auto',
-                borderRadius: 1,
-                bgcolor: (mui) =>
-                  mui.palette.mode === 'dark' ? 'rgba(0,0,0,0.2)' : 'rgba(0,0,0,0.04)',
-                border: '1px solid',
-                borderColor: 'divider',
-              }}
-            >
-              <Box component="code" sx={{ whiteSpace: 'pre', display: 'block' }}>
-                {codeSource.slice(0, typedLen)}
-              </Box>
+        ) : (
+          <Box
+            component="pre"
+            sx={{
+              m: 0,
+              mt: 1,
+              p: { xs: 1, sm: 1.5 },
+              textAlign: 'left',
+              maxWidth: { xs: '100%', sm: 600 },
+              mx: 'auto',
+              mb: 2,
+              fontFamily: 'ui-monospace, "Cascadia Code", Consolas, monospace',
+              fontSize: { xs: '0.65rem', sm: '0.78rem', md: '0.82rem' },
+              lineHeight: 1.45,
+              color: textColor,
+              opacity: 0.95,
+              overflowX: 'auto',
+              borderRadius: 1,
+              bgcolor: (mui) => (mui.palette.mode === 'dark' ? 'rgba(0,0,0,0.2)' : 'rgba(0,0,0,0.04)'),
+              border: '1px solid',
+              borderColor: 'divider',
+            }}
+          >
+            <Box component="code" sx={{ whiteSpace: 'pre', display: 'block' }}>
+              {codeSource.slice(0, typedLen)}
             </Box>
-          )}
+          </Box>
+        )}
+      </Box>
+    </Box>
+  )
+
+  if (embeddedInCard) {
+    return (
+      <>
+        {walkerAndArena}
+        <Box
+          sx={{
+            position: 'absolute',
+            inset: 0,
+            zIndex: 3,
+            pointerEvents: introRevealed ? 'none' : 'auto',
+          }}
+          onPointerMove={onPointerMove}
+          onPointerLeave={onPointerLeave}
+          onPointerDown={() => {
+            if (!reduced && isInteractive) scheduleIdle()
+          }}
+        />
+        <Box
+          sx={{
+            position: 'relative',
+            zIndex: 2,
+            textAlign: 'center',
+            pt: { xs: 0.5, sm: 0.75 },
+            px: { xs: 1, sm: 1.25, md: 1.5 },
+            pb: { xs: 0.5, sm: 0 },
+          }}
+        >
+          {sectionTitle}
+          {embeddedCodeBlock}
         </Box>
-      </GlassContainer>
+      </>
+    )
+  }
+
+  return (
+    <Box
+      ref={wrapRef}
+      onPointerMove={onPointerMove}
+      onPointerLeave={onPointerLeave}
+      onPointerDown={() => {
+        if (!reduced && isInteractive) scheduleIdle()
+      }}
+      sx={{
+        position: 'relative',
+        overflow: 'visible',
+        flex: { sm: '0 1 auto' },
+        width: { xs: '100%', sm: 'auto' },
+        maxWidth: '100%',
+        ...(embedded ? { mt: { xs: 0.5, sm: 1 } } : {}),
+      }}
+    >
+      {walkerAndArena}
+      {embedded ? (
+        embeddedCodeBlock
+      ) : (
+        <GlassContainer
+          ref={cardRef}
+          sx={{
+            ...getCardSurfaceSx({ isTopologyRoute, variant: 'flat', level: 'soft', interactive: false }),
+            p: { xs: 2.5, sm: 3, md: 3.5 },
+          }}
+        >
+          <Box sx={{ textAlign: 'center' }}>
+            <Typography
+              variant="h1"
+              sx={{
+                mb: 1,
+                ...DESIGN_TOKENS.typography.h1,
+                fontSize: { xs: '1.75rem', sm: '2rem', md: '2.25rem' },
+                ...titleLetterSx,
+              }}
+            >
+              {name}
+            </Typography>
+            <Typography
+              variant="h4"
+              sx={{
+                mb: 1,
+                ...DESIGN_TOKENS.typography.h4,
+                fontSize: { xs: '1rem', sm: '1.125rem', md: '1.25rem' },
+                fontWeight: 400,
+                opacity: 0.9,
+                color: textColor,
+              }}
+            >
+              {role}
+            </Typography>
+            {introRevealed ? (
+              <Typography
+                variant="body1"
+                sx={{
+                  maxWidth: 600,
+                  mx: 'auto',
+                  mb: 2,
+                  ...DESIGN_TOKENS.typography.body1,
+                  fontSize: { xs: '0.875rem', md: '1rem' },
+                  color: textColor,
+                  opacity: 0.9,
+                  whiteSpace: 'pre-line',
+                  hyphens: 'auto',
+                  textAlign: 'center',
+                  ...mobileProseWrapSx,
+                }}
+              >
+                {intro}
+              </Typography>
+            ) : (
+              <Box
+                component="pre"
+                sx={{
+                  m: 0,
+                  mt: 1,
+                  p: { xs: 1.25, sm: 1.5 },
+                  textAlign: 'left',
+                  maxWidth: 600,
+                  mx: 'auto',
+                  mb: 2,
+                  fontFamily: 'ui-monospace, "Cascadia Code", Consolas, monospace',
+                  fontSize: { xs: '0.7rem', sm: '0.78rem', md: '0.82rem' },
+                  lineHeight: 1.45,
+                  color: textColor,
+                  opacity: 0.95,
+                  overflowX: 'auto',
+                  borderRadius: 1,
+                  bgcolor: (mui) =>
+                    mui.palette.mode === 'dark' ? 'rgba(0,0,0,0.2)' : 'rgba(0,0,0,0.04)',
+                  border: '1px solid',
+                  borderColor: 'divider',
+                }}
+              >
+                <Box component="code" sx={{ whiteSpace: 'pre', display: 'block' }}>
+                  {codeSource.slice(0, typedLen)}
+                </Box>
+              </Box>
+            )}
+          </Box>
+        </GlassContainer>
+      )}
     </Box>
   )
 }

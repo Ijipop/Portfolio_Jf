@@ -28,6 +28,7 @@ interface HeaderSectionProps {
 
 export default function HeaderSection({ title, subtitle, tagline, children }: HeaderSectionProps) {
   const titleIsGlitch = isValidElement(title)
+  const subtitleIsElement = isValidElement(subtitle)
   const { primary } = useThemeColors()
   const textColor = useTextColor()
   const theme = useTheme()
@@ -125,45 +126,73 @@ export default function HeaderSection({ title, subtitle, tagline, children }: He
         >
           {title}
         </Typography>
-        {subtitle && (
-          <Typography 
-            variant="h5" 
-            component="div"
-            sx={{ 
-              opacity: 0.9,
-              fontWeight: 300,
-              color: textColor,
-              fontSize: { xs: '0.95rem', sm: 'inherit' },
-              overflowX: { xs: 'visible', sm: 'auto' },
-              overflowY: 'hidden',
-              scrollbarWidth: 'none',
-              msOverflowStyle: 'none',
-              '&::-webkit-scrollbar': { display: 'none' },
-              maxWidth: '100%',
-            }}
-          >
-            {subtitle}
-          </Typography>
-        )}
-        {tagline && (
-          <Typography
-            variant="body1"
-            component="div"
-            sx={{
-              mt: 1.5,
-              mx: 'auto',
-              maxWidth: 760,
-              fontSize: { xs: '0.95rem', sm: '1.05rem' },
-              fontWeight: 600,
-              lineHeight: 1.6,
-              color: textColor,
-              position: 'relative',
-              zIndex: 1,
-            }}
-          >
-            {tagline}
-          </Typography>
-        )}
+        {subtitle &&
+          (subtitleIsElement ? (
+            <Box
+              sx={{
+                position: 'relative',
+                zIndex: 1,
+                mx: 'auto',
+                maxWidth: '100%',
+                width: '100%',
+              }}
+            >
+              {subtitle}
+            </Box>
+          ) : (
+            <Typography
+              variant="h5"
+              component="div"
+              sx={{
+                opacity: 0.9,
+                fontWeight: 300,
+                color: textColor,
+                fontSize: { xs: '0.95rem', sm: 'inherit' },
+                overflowX: { xs: 'visible', sm: 'auto' },
+                overflowY: 'hidden',
+                scrollbarWidth: 'none',
+                msOverflowStyle: 'none',
+                '&::-webkit-scrollbar': { display: 'none' },
+                maxWidth: '100%',
+              }}
+            >
+              {subtitle}
+            </Typography>
+          ))}
+        {tagline &&
+          (isValidElement(tagline) ? (
+            <Box
+              sx={{
+                mt: { xs: 1.25, sm: 1.5 },
+                mx: 'auto',
+                maxWidth: 960,
+                width: '100%',
+                position: 'relative',
+                zIndex: 1,
+              }}
+            >
+              {tagline}
+            </Box>
+          ) : (
+            <Typography
+              variant="body1"
+              component="div"
+              sx={{
+                mt: 1.5,
+                mx: 'auto',
+                maxWidth: 760,
+                fontSize: { xs: '0.95rem', sm: '1.05rem' },
+                fontWeight: 600,
+                lineHeight: 1.6,
+                color: textColor,
+                position: 'relative',
+                zIndex: 1,
+                whiteSpace: 'pre-line',
+              }}
+            >
+              {tagline}
+            </Typography>
+          ))}
         {children}
       </Container>
     </Box>

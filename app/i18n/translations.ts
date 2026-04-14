@@ -24,9 +24,17 @@ export const translations = {
     },
     home: {
       heroTitle: 'Ijipop',
-      heroSubtitle: 'Développeur',
+      heroSubtitle: 'Création de sites & accompagnement PME',
       heroTagline:
-        'Je crée des sites web et outils sur mesure pour des particuliers et des PME.',
+        'Sites vitrine, refonte et mise en ligne pour indépendants et PME.\n\nMises à jour, contenu et entretien : je reste disponible après la livraison pour que votre site reste à jour.\n\nPetits outils et automatisation sur mesure lorsque c’est le bon complément.',
+      heroRealName: 'Jean-François Lefebvre',
+      heroOneLiner: 'Développeur web freelance · Montréal',
+      ctaRealizations: 'Voir mes réalisations',
+      mainSectionTitle: 'Des sites web clairs, rapides et professionnels',
+      mainSectionP1:
+        'Sites vitrine, refonte et outils numériques sur mesure pour indépendants et PME.',
+      mainSectionP2:
+        'Du site web au petit logiciel adapté à vos besoins, je vous accompagne avant et après la mise en ligne.',
       role: "Développeur spécialisé en création de sites web et d'applications sur mesure pour travailleurs autonomes et petites entreprises.",
       intro:
         "Mon objectif : créer des outils simples, efficaces et faciles à utiliser, tout en offrant un accompagnement technique fiable.\n\nSoutien technique disponible à distance ou en personne sur l'île de Montréal.",
@@ -38,16 +46,19 @@ export const translations = {
       statsAvailableLabel: 'Pour nouveaux projets',
       sectionSkills: 'Technologies & Compétences',
       cardProjects: 'Mes Projets',
-      cardProjectsDesc: "Sites web et petits outils que j'ai conçus.",
+      cardProjectsDesc:
+        'Réalisations web et petits outils : sites livrés, refontes et mandats pour indépendants et PME.',
       cardAbout: 'À Propos',
       cardAboutDesc: 'Mon parcours et comment je peux vous aider avec un site ou un outil sur mesure.',
       cardContact: 'Contact',
-      cardContactDesc: 'Discutons de votre projet : site web, petit outil ou maintenance.',
+      cardContactDesc:
+        'Nouveau site, refonte, mises à jour ou petit outil : parlons de votre besoin.',
       stickyCTA: 'Discuter de votre projet',
     },
     contact: {
       title: 'Contact',
-      subtitle: 'Prenons contact et discutons !',
+      subtitle:
+        'Nouveau site, refonte ou site existant à mettre à jour ? Écrivez-moi — réponse rapide.',
       email: 'Email',
       phone: 'Téléphone',
       phoneOnRequest: 'Sur demande !',
@@ -176,7 +187,7 @@ export const translations = {
     },
     footer: {
       landmarkLabel: 'Pied de page du site',
-      tagline: 'Sites web et petits outils sur mesure. Hébergement inclus.',
+      tagline: 'Création et mise à jour de sites web pour PME. Petits outils sur mesure. Hébergement inclus.',
       contactPrompt: 'Un projet site web ou un petit outil ? Discutons-en !',
       contactButton: 'Me contacter',
       rights: 'Tous droits réservés.',
@@ -326,9 +337,17 @@ export const translations = {
     },
     home: {
       heroTitle: 'Ijipop',
-      heroSubtitle: 'Developer',
+      heroSubtitle: 'Websites & ongoing client care',
       heroTagline:
-        'I build custom websites and tools for individuals and small businesses.',
+        'Showcase sites, redesigns and go-live support for freelancers and small businesses.\n\nUpdates, content changes and upkeep—I stay available after launch so your site stays current.\n\nCustom tools and light automation when that’s the right fit.',
+      heroRealName: 'Jean-François Lefebvre',
+      heroOneLiner: 'Freelance web developer · Montreal',
+      ctaRealizations: 'View my work',
+      mainSectionTitle: 'Clear, fast, professional websites',
+      mainSectionP1:
+        'Showcase sites, redesigns and bespoke digital tools for freelancers and small businesses.',
+      mainSectionP2:
+        'From your website to a small app tailored to your needs—I support you before and after launch.',
       role: 'Developer specialized in custom websites and applications for freelancers and small businesses.',
       intro:
         'My goal: build tools that are simple, effective, and easy to use, with reliable technical support.\n\nSupport available remotely or in person on the Island of Montreal.',
@@ -340,16 +359,19 @@ export const translations = {
       statsAvailableLabel: 'For new projects',
       sectionSkills: 'Technologies & Skills',
       cardProjects: 'My Projects',
-      cardProjectsDesc: 'Websites and small tools I have built.',
+      cardProjectsDesc:
+        'Web work and small tools: shipped sites, redesigns, and projects for freelancers and SMBs.',
       cardAbout: 'About',
       cardAboutDesc: 'My background and how I can help you with a site or a custom tool.',
       cardContact: 'Contact',
-      cardContactDesc: "Let's discuss your project: website, small tool, or maintenance.",
+      cardContactDesc:
+        'New site, redesign, updates, or a small tool—tell me what you need.',
       stickyCTA: 'Discuss your project',
     },
     contact: {
       title: 'Contact',
-      subtitle: "Let's get in touch and discuss!",
+      subtitle:
+        'New site, redesign, or updates to an existing site? Message me—I reply quickly.',
       email: 'Email',
       phone: 'Phone',
       phoneOnRequest: 'On request!',
@@ -478,7 +500,7 @@ export const translations = {
     },
     footer: {
       landmarkLabel: 'Site footer',
-      tagline: 'Custom websites and small tools. Hosting included.',
+      tagline: 'Website builds and ongoing updates for small businesses. Custom tools. Hosting included.',
       contactPrompt: 'A website or small tool in mind? Let\'s talk!',
       contactButton: 'Contact me',
       rights: 'All rights reserved.',

@@ -3,11 +3,11 @@ import type { Metadata } from 'next'
 export const metadata: Metadata = {
   title: 'Projets',
   description:
-    'Mes réalisations — sites web et petits outils sur mesure pour indépendants et PME. Filtrez par technologie et consultez les détails de chaque projet.',
+    'Réalisations web sites vitrine et refonte, petits outils et mandats pour PME. Filtrez par technologie — Montréal et projets à distance.',
   openGraph: {
     title: 'Projets | Jean-François Lefebvre',
     description:
-      'Réalisations web et projets personnels : expérimentations, mandats clients et applications.',
+      'Portfolio développeur web : sites web, refonte et logiciels pour indépendants et petites entreprises.',
     url: '/portfolio/projets',
   },
 }
