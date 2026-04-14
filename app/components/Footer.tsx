@@ -79,6 +79,7 @@ export default function Footer() {
   return (
     <Box
       component="footer"
+      aria-label={t('footer.landmarkLabel')}
       sx={{
         background:
           'linear-gradient(145deg, rgba(255, 255, 255, 0.13) 0%, rgba(241, 245, 249, 0.1) 50%, rgba(255, 255, 255, 0.12) 100%) !important',

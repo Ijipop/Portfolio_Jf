@@ -1,5 +1,10 @@
 'use client'
 
+/**
+ * CTA : sans-serif gras aligné sur le thème (Inter via `theme.typography.fontFamily`), pas Cormorant.
+ * Couleurs / dégradés = `primary`·`secondary` du thème actif (beige·dev inchangés côté logique).
+ */
+
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
 import Button from '@mui/material/Button'
 import { styled } from '@mui/material/styles'
@@ -30,9 +35,17 @@ const hexToRgba = (hex: string, alpha: number) => {
 
 const StyledCTAButton = styled(Button, {
   shouldForwardProp: (prop) => prop !== 'ctaVariant' && prop !== 'primaryColor' && prop !== 'secondaryColor',
-})<{ ctaVariant: string; primaryColor?: string; secondaryColor?: string }>(({ theme, ctaVariant, primaryColor = '#1e3a8a', secondaryColor = '#059669' }) => {
+})<{ ctaVariant: string; primaryColor?: string; secondaryColor?: string }>((props) => {
+  const { theme, ctaVariant, primaryColor = '#1e3a8a', secondaryColor = '#059669' } = props
+  const size = (props as { ownerState?: { size?: 'small' | 'medium' | 'large' } }).ownerState?.size ?? 'medium'
+  const padY = size === 'large' ? 1.5 : size === 'small' ? 0.5 : 1
+  const padX = size === 'large' ? 3 : size === 'small' ? 2 : 2.5
+  const fontSize = size === 'large' ? '1rem' : size === 'small' ? '0.8125rem' : '0.9375rem'
+  const pad = theme.spacing(padY, padX)
+
   const baseStyles: any = {
     borderRadius: DESIGN_TOKENS.borderRadius.medium,
+    fontFamily: theme.typography.fontFamily,
     fontWeight: 600,
     textTransform: 'none',
     transition: DESIGN_TOKENS.transitions.normal,
@@ -76,8 +89,8 @@ const StyledCTAButton = styled(Button, {
       ...baseStyles,
       background: `linear-gradient(135deg, ${primaryColor} 0%, ${secondaryColor} 100%)`,
       color: 'white',
-      padding: theme.spacing(1.5, 3),
-      fontSize: '1rem',
+      padding: pad,
+      fontSize,
       boxShadow: `0 4px 20px ${hexToRgba(primaryColor, 0.3)}`,
       '&&:hover': {
         background: `linear-gradient(135deg, ${primaryColor} 0%, ${secondaryColor} 100%)`,
@@ -92,8 +105,8 @@ const StyledCTAButton = styled(Button, {
       ...baseStyles,
       background: `linear-gradient(135deg, ${primaryColor} 0%, ${secondaryColor} 100%)`,
       color: 'white',
-      padding: theme.spacing(1.5, 3),
-      fontSize: '1rem',
+      padding: pad,
+      fontSize,
       boxShadow: `0 4px 20px ${hexToRgba(primaryColor, 0.3)}`,
       '&&:hover': {
         background: `linear-gradient(135deg, ${primaryColor} 0%, ${secondaryColor} 100%)`,
@@ -109,8 +122,8 @@ const StyledCTAButton = styled(Button, {
     background: 'transparent',
     border: `2px solid ${hexToRgba(primaryColor, 0.5)}`,
     color: primaryColor,
-    padding: theme.spacing(1.5, 3),
-    fontSize: '1rem',
+    padding: pad,
+    fontSize,
     '&&:hover': {
       background: hexToRgba(primaryColor, 0.15),
       border: `2px solid ${primaryColor}`,

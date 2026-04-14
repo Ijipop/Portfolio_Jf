@@ -4,7 +4,7 @@ import Box from '@mui/material/Box'
 import CircularProgress from '@mui/material/CircularProgress'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import type { SxProps, Theme } from '@mui/material/styles'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState, type ReactNode } from 'react'
 
 export type FrameSequencePlayerProps = {
   /** URL absolue du manifest JSON : liste de noms de fichiers dans l’ord. */
@@ -17,6 +17,8 @@ export type FrameSequencePlayerProps = {
   sx?: SxProps<Theme>
   /** Appelé une fois le manifest parsé (nombre de frames valides). */
   onFrameCount?: (count: number) => void
+  /** Affiché si le manifest est OK mais 0 frame (ex. assets manquants sur un environnement). */
+  emptyFallback?: ReactNode
 }
 
 function joinFrameUrl(baseHref: string, filename: string): string {
@@ -36,6 +38,7 @@ export default function FrameSequencePlayer({
   alt,
   sx,
   onFrameCount,
+  emptyFallback,
 }: FrameSequencePlayerProps) {
   const [frames, setFrames] = useState<string[]>([])
   const [manifestLoading, setManifestLoading] = useState(true)
@@ -82,15 +85,38 @@ export default function FrameSequencePlayer({
     }
   }, [manifestHref, notifyCount])
 
+  /**
+   * RAF + cadence stable : au plus **une** frame affichée par tick d’animation pour éviter les rafales
+   * (onglet en arrière-plan, jank mobile) qui donnent un effet saccadé.
+   */
+  const lastTickRef = useRef(0)
+  const carryRef = useRef(0)
+
   useEffect(() => {
     if (frames.length === 0) return
     if (reducedMotion) return
 
-    const ms = Math.max(16, 1000 / fps)
-    const id = window.setInterval(() => {
-      setIndex((i) => (i + 1) % frames.length)
-    }, ms)
-    return () => window.clearInterval(id)
+    const frameMs = Math.max(1000 / 60, 1000 / fps)
+    let rafId = 0
+    lastTickRef.current = performance.now()
+    carryRef.current = 0
+
+    const loop = (now: number) => {
+      const dt = now - lastTickRef.current
+      lastTickRef.current = now
+      carryRef.current += dt
+      if (carryRef.current >= frameMs) {
+        carryRef.current -= frameMs
+        setIndex((i) => {
+          const len = frames.length
+          if (len === 0) return 0
+          return (i + 1) % len
+        })
+      }
+      rafId = requestAnimationFrame(loop)
+    }
+    rafId = requestAnimationFrame(loop)
+    return () => cancelAnimationFrame(rafId)
   }, [frames, fps, reducedMotion])
 
   useEffect(() => {
@@ -106,7 +132,7 @@ export default function FrameSequencePlayer({
   }
 
   if (frames.length === 0) {
-    return null
+    return emptyFallback ? <>{emptyFallback}</> : null
   }
 
   const frameIndex = reducedMotion ? 0 : index
@@ -117,13 +143,20 @@ export default function FrameSequencePlayer({
       component="img"
       src={src}
       alt={alt}
+      loading="eager"
+      decoding="async"
+      fetchPriority="high"
       sx={{
         display: 'block',
         maxWidth: '100%',
         height: 'auto',
+        minHeight: 1,
         objectFit: 'contain',
         userSelect: 'none',
         pointerEvents: 'none',
+        transform: 'translateZ(0)',
+        backfaceVisibility: 'hidden',
+        WebkitBackfaceVisibility: 'hidden',
         ...sx,
       }}
     />

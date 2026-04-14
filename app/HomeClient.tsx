@@ -7,15 +7,13 @@ import Box from '@mui/material/Box'
 import Container from '@mui/material/Container'
 import Typography from '@mui/material/Typography'
 import Link from 'next/link'
-import HomeHeroIntroCard from './components/home/HomeHeroIntroCard'
+import HomeHeroServicesSection from './components/home/HomeHeroServicesSection'
+import PortfolioHomeHero from './components/home/PortfolioHomeHero'
 import { FadeIn } from './components/SimpleAnimations'
 import ThreeDCardComponent from './components/ThreeDCard'
 import AppBarComponent from './components/appBar'
-import HeaderSection from './components/shared/HeaderSection'
-import IjipopGlitchTitle from './components/shared/IjipopGlitchTitle'
 import PageWrapper from './components/shared/PageWrapper'
 import InteractiveBackgroundSection from './components/shared/InteractiveBackgroundSection'
-import CTAButton from './components/shared/CTAButton'
 import StickyCTA from './components/shared/StickyCTA'
 import Footer from './components/Footer'
 import { DESIGN_TOKENS } from './design-system/constants'
@@ -40,7 +38,6 @@ export default function HomeClient({ initialShowIntro }: { initialShowIntro: boo
   const { primary } = useThemeColors()
   const textColor = useTextColor()
   const { t } = useLanguage()
-  const heroBrand = t('home.heroTitle')
   const [showIntro, setShowIntro] = useState<boolean>(initialShowIntro)
 
   // Synchroniser avec cookie/sessionStorage après montage pour éviter flash d'hydration
@@ -68,47 +65,22 @@ export default function HomeClient({ initialShowIntro }: { initialShowIntro: boo
       {!showIntro && (
       <PageWrapper backgroundVariant="default">
       <AppBarComponent />
-      
-      <HeaderSection 
-        title={<IjipopGlitchTitle text={heroBrand} variant="hero" />}
-        subtitle={
-          <Typography
-            component="span"
-            sx={{
-              display: 'inline-block',
-              mt: { xs: 0.45, sm: 0.6 },
-              fontSize: { xs: '0.9rem', sm: '1rem', md: '1.08rem' },
-              letterSpacing: '0.06em',
-              textTransform: 'uppercase',
-              fontWeight: 500,
-              opacity: 0.9,
-              color: textColor,
-            }}
-          >
-            {t('home.heroSubtitle')}
-          </Typography>
-        }
-        tagline={t('home.heroTagline')}
-      >
-        <Box sx={{ 
-          display: 'flex', 
-          flexDirection: { xs: 'column', sm: 'row' },
-          gap: 2,
-          justifyContent: 'center',
-          mt: 2,
-          alignItems: 'center'
-        }}>
-          <Link href="/portfolio/contact" style={{ textDecoration: 'none' }}>
-            <CTAButton variant="outline" size="large">
-              {t('home.contactMe')}
-            </CTAButton>
-          </Link>
-        </Box>
-      </HeaderSection>
+
+      <PortfolioHomeHero />
 
       <InteractiveBackgroundSection>
-      <Container maxWidth="lg" sx={{ py: { xs: 4, md: 8 }, px: { xs: 2, sm: 3, md: 4 }, position: 'relative', zIndex: 2 }}>
-        <HomeHeroIntroCard />
+      <Container
+        maxWidth="lg"
+        sx={{
+          /** Espace au-dessus du bloc présentation (60px desktop, un peu moins sur très petit écran). */
+          pt: { xs: 'clamp(36px, 10vw, 60px)', sm: '60px' },
+          pb: { xs: 3, sm: 4, md: 8 },
+          px: { xs: 1.5, sm: 3, md: 4 },
+          position: 'relative',
+          zIndex: 2,
+        }}
+      >
+        <HomeHeroServicesSection />
 
         <Box sx={{ 
           display: 'grid', 

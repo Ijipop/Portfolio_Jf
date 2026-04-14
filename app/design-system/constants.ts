@@ -1,6 +1,9 @@
 /**
  * Design System Constants
  * Centralisé tous les tokens de design pour une cohérence visuelle
+ *
+ * Typographie : conventions dans `app/fonts.ts` (Cormorant pour `SectionDisplayTitle`,
+ * Inter pour le corps via le thème, `CTAButton` en sans-serif gras).
  */
 
 export const DESIGN_TOKENS = {

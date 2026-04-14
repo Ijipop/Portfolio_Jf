@@ -3,7 +3,7 @@ import { expect, test } from '@playwright/test'
 test('landing reaches portfolio and contact in two clicks max', async ({ page }) => {
   await page.goto('/', { waitUntil: 'domcontentloaded' })
 
-  // Home is at `/`; Footer is a Box (no <footer> tag), so target links directly
+  await expect(page.getByRole('contentinfo')).toBeVisible()
   await expect(page.locator('a[href="/portfolio/projets"]').first()).toBeVisible()
   await expect(page.locator('a[href="/portfolio/contact"]').first()).toBeVisible()
 
@@ -48,6 +48,8 @@ test('about cards can flip without breaking layout', async ({ page }) => {
 
 test('contact form renders stable fields', async ({ page }) => {
   await page.goto('/portfolio/contact', { waitUntil: 'domcontentloaded' })
+
+  await expect(page.getByRole('contentinfo')).toBeVisible()
 
   const form = page.getByTestId('contact-form')
 

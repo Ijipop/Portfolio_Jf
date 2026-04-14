@@ -104,8 +104,8 @@ export default function ScrollReveal({
       initial={getInitialPosition()}
       animate={isVisible ? getAnimatePosition() : getInitialPosition()}
       transition={{
-        duration: 0,
-        delay: 0,
+        duration: reducedMotion ? 0 : 0.55,
+        delay: reducedMotion ? 0 : isVisible ? delay : 0,
         ease: [0.25, 0.46, 0.45, 0.94],
       }}
     >
