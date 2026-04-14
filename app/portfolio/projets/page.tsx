@@ -29,7 +29,7 @@ import Image from 'next/image'
 import AppBarComponent from '../../components/appBar'
 import ThreeDCardComponent from '../../components/ThreeDCard'
 import AnimatedCounter from '../../components/shared/AnimatedCounter'
-import LoadingSpinner from '../../components/shared/LoadingSpinner'
+import ProjectsLoadingFrameSection from './ProjectsLoadingFrameSection'
 import ScrollReveal from '../../components/shared/ScrollReveal'
 import SkillTag from '../../components/shared/SkillTag'
 import HeaderSection from '../../components/shared/HeaderSection'
@@ -1107,7 +1107,7 @@ export default function Projets() {
             alignItems: 'center',
             minHeight: '60vh'
           }}>
-            <LoadingSpinner message="Chargement des projets..." />
+            <ProjectsLoadingFrameSection />
           </Container>
         </InteractiveBackgroundSection>
       </PageWrapper>

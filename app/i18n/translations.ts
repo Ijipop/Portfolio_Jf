@@ -151,6 +151,7 @@ export const translations = {
     },
     projects: {
       title: 'Projets',
+      loading: 'Chargement des projets...',
       subtitle: 'Mes réalisations',
       filterLabel: 'Filtrer par technologie:',
       filterAll: 'Tous',
@@ -451,6 +452,7 @@ export const translations = {
     },
     projects: {
       title: 'Projects',
+      loading: 'Loading projects...',
       subtitle: 'My work',
       filterLabel: 'Filter by technology:',
       filterAll: 'All',
