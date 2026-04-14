@@ -8,7 +8,7 @@ import { usePresentationMode } from '@/contexts/PresentationModeContext'
 import { useThemeColors } from '@/hooks/useThemeColors'
 import { dimHex, hexToRgb } from '@/utils/colorUtils'
 
-/** Dégradé « marque » : accueil en mode Site (beige) uniquement — ambre → orange → rouge brique. */
+/** Dégradé « marque » : mode Site (beige) — ambre → orange (#ea580c) → rouge brique. */
 const BRAND_GLITCH_GRADIENT =
   'linear-gradient(165deg, #ffedd5 0%, #fdba74 14%, #fb923c 38%, #ea580c 62%, #b91c1c 86%, #7f1d1d 100%)'
 const BRAND_GLITCH_LAYER = '#9a3412'
@@ -43,16 +43,15 @@ export default function IjipopGlitchTitle({ text, variant = 'page' }: IjipopGlit
   const { primary, secondary, accent } = useThemeColors()
 
   const { fillGradient, glitchRgb } = useMemo(() => {
-    const useBrandHero =
-      variant === 'hero' && presentationMode === 'beige'
-    if (!useBrandHero) {
-      return {
-        fillGradient: buildPaletteGlitchGradient(primary, secondary, accent),
-        glitchRgb: dimHex(primary, 0.5),
-      }
+    /** Mode Site (beige) : même dégradé ijipop que l’accueil pour hero et pages portfolio. */
+    if (presentationMode === 'beige') {
+      return { fillGradient: BRAND_GLITCH_GRADIENT, glitchRgb: BRAND_GLITCH_LAYER }
     }
-    return { fillGradient: BRAND_GLITCH_GRADIENT, glitchRgb: BRAND_GLITCH_LAYER }
-  }, [variant, presentationMode, primary, secondary, accent])
+    return {
+      fillGradient: buildPaletteGlitchGradient(primary, secondary, accent),
+      glitchRgb: dimHex(primary, 0.5),
+    }
+  }, [presentationMode, primary, secondary, accent])
 
   const display =
     variant === 'hero'

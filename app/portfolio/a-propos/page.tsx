@@ -283,7 +283,7 @@ export default function About() {
                   variant="h5" 
                   gutterBottom 
                   sx={{ 
-                    fontWeight: 'bold',
+                    fontWeight: 600,
                     color: primary,
                     textShadow: `0 2px 4px ${primary}40`
                   }}
@@ -342,7 +342,7 @@ export default function About() {
                   sx={{ 
                     color: textColor,
                     marginBottom: '16px', 
-                    fontWeight: 'bold',
+                    fontWeight: 600,
                     textShadow: `0 2px 4px ${primary}40`
                   }}
                 >
@@ -390,7 +390,7 @@ export default function About() {
                   variant="h5" 
                   gutterBottom 
                   sx={{ 
-                    fontWeight: 'bold',
+                    fontWeight: 600,
                     color: primary,
                     textShadow: `0 2px 4px ${primary}40`
                   }}
@@ -449,7 +449,7 @@ export default function About() {
                   sx={{ 
                     color: textColor,
                     marginBottom: '16px', 
-                    fontWeight: 'bold',
+                    fontWeight: 600,
                     textShadow: `0 2px 4px ${primary}40`
                   }}
                 >
@@ -498,7 +498,7 @@ export default function About() {
                   variant="h5" 
                   gutterBottom 
                   sx={{ 
-                    fontWeight: 'bold',
+                    fontWeight: 600,
                     color: primary,
                     textShadow: `0 2px 4px ${primary}40`
                   }}
@@ -557,7 +557,7 @@ export default function About() {
                   sx={{ 
                     color: textColor,
                     marginBottom: '16px', 
-                    fontWeight: 'bold',
+                    fontWeight: 600,
                     textShadow: `0 2px 4px ${primary}40`
                   }}
                 >
@@ -568,7 +568,7 @@ export default function About() {
                   sx={{ 
                     textAlign: 'center', 
                     lineHeight: 1.6, 
-                    fontWeight: 'bold', 
+                    fontWeight: 600, 
                     color: textColor,
                     textShadow: `0 1px 2px ${primary}40`
                   }}
@@ -611,7 +611,7 @@ export default function About() {
             gutterBottom 
             sx={{ 
               marginBottom: '24px',
-              fontWeight: 'bold',
+              fontWeight: 700,
               color: primary,
               textShadow: `0 2px 4px ${primary}40`
             }}

@@ -45,7 +45,7 @@ export default function SoftSkillsSection({ primary, textColor, t }: SoftSkillsS
         gutterBottom
         sx={{
           marginBottom: DESIGN_TOKENS.spacing.md,
-          fontWeight: 'bold',
+          fontWeight: 700,
           color: primary,
           textShadow: `0 2px 4px ${primary}40`,
         }}
