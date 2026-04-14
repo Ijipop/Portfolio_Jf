@@ -75,29 +75,32 @@ export default function LoadingSpinner({
         </Box>
       </motion.div>
       
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.2 }}
-      >
-        <Typography 
-          variant="h6" 
-          color="text.secondary"
-          sx={{
-            fontWeight: 500,
-            background: (theme) => theme.palette.mode === 'dark'
-              ? 'linear-gradient(45deg, #ffffff 0%, #e0f2fe 50%, #ffffff 100%)'
-              : 'linear-gradient(45deg, #1e3a8a 0%, #3b82f6 50%, #1e3a8a 100%)',
-            backgroundClip: 'text',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
-            backgroundSize: '200% 200%',
-            animation: 'gradientShift 3s ease-in-out infinite',
-          }}
+      {message.trim().length > 0 && (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
         >
-          {message}
-        </Typography>
-      </motion.div>
+          <Typography
+            variant="h6"
+            color="text.secondary"
+            sx={{
+              fontWeight: 500,
+              background: (theme) =>
+                theme.palette.mode === 'dark'
+                  ? 'linear-gradient(45deg, #ffffff 0%, #e0f2fe 50%, #ffffff 100%)'
+                  : 'linear-gradient(45deg, #1e3a8a 0%, #3b82f6 50%, #1e3a8a 100%)',
+              backgroundClip: 'text',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundSize: '200% 200%',
+              animation: 'gradientShift 3s ease-in-out infinite',
+            }}
+          >
+            {message}
+          </Typography>
+        </motion.div>
+      )}
     </Box>
   )
 }

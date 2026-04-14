@@ -20,7 +20,8 @@
     "admin:password": "node scripts/changeAdminPassword.js",
     "admin:create": "node scripts/createAdminWithEmail.js",
     "admin:show": "node scripts/showAdmin.js",
-    "favicon": "node scripts/generate-favicon.mjs"
+    "favicon": "node scripts/generate-favicon.mjs",
+    "sync-loading-frames": "node scripts/sync-projects-loading-frames.mjs"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
