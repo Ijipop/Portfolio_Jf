@@ -1,7 +1,11 @@
+const path = require('path')
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Si le build échoue avec « ESLint must be installed » : lancer `npm install` dans ce dossier (Portfolio),
-  // ou décommenter : eslint: { ignoreDuringBuilds: true } (le lint reste disponible via `npm run lint`).
+  // Évite l’avertissement « multiple lockfiles » quand un package-lock existe au-dessus de Portfolio/.
+  turbopack: {
+    root: path.join(__dirname),
+  },
   experimental: {
     serverActions: {
       bodySizeLimit: '50mb',

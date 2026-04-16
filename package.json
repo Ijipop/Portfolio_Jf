@@ -7,7 +7,7 @@
     "build": "next build",
     "build:prod": "prisma migrate deploy && next build",
     "start": "next start",
-    "lint": "next lint",
+    "lint": "eslint .",
     "prisma:generate": "prisma generate",
     "typecheck": "tsc --noEmit",
     "check": "npm run lint && npm run typecheck && npm run test:unit",
@@ -53,7 +53,7 @@
     "@types/react": "^18.2.45",
     "@types/react-dom": "^18.2.18",
     "@vitest/coverage-v8": "^4.0.18",
-    "eslint": "^8.57.0",
+    "eslint": "9.39.4",
     "eslint-config-next": "^16.2.4",
     "jsdom": "^28.1.0",
     "prisma": "^6.13.0",
@@ -62,5 +62,8 @@
     "typescript": "^5.3.3",
     "vitest": "^4.0.18",
     "yaml": "^2.8.3"
+  },
+  "overrides": {
+    "eslint": "9.39.4"
   }
 }
