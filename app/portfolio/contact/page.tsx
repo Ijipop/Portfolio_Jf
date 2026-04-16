@@ -279,13 +279,7 @@ export default function Contact() {
           margin: '0 auto',
           mb: useCompactContact ? 4 : 6,
         }}>
-          <ThreeDCardComponent
-            floatingElements={2}
-            sx={{
-              padding: { xs: 2, sm: 3 },
-              minHeight: useCompactContact ? 520 : 600,
-            }}
-          >
+          <ThreeDCardComponent floatingElements={2} sx={{ padding: { xs: 2, sm: 3 } }}>
             <Box sx={{ textAlign: 'center', mb: useCompactContact ? 2 : 3 }}>
               <EmailIcon sx={{ fontSize: 48, color: primary, mb: 1.5 }} />
               <Typography variant="h4" gutterBottom sx={{ fontWeight: 700, color: primary }}>
@@ -352,11 +346,6 @@ export default function Contact() {
                   rows={useCompactContact ? 4 : 6}
                   textColor={textColor}
                   helperTextColor={`${textColor}B3`}
-                  sx={{
-                    '& .MuiInputBase-inputMultiline': {
-                      minHeight: useCompactContact ? 100 : 150,
-                    },
-                  }}
                 />
 
                 <ProjectWebBriefSection

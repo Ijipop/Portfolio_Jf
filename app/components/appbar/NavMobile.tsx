@@ -21,7 +21,7 @@ function renderIcon(id: NavRouteId) {
     case 'home':
       return <HomeIcon />
     case 'projects':
-      return <WorkIcon />
+      return <FolderOpenIcon />
     case 'about':
       return <PersonIcon />
     case 'contact':
