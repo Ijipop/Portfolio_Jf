@@ -3,7 +3,7 @@
 import PersonIcon from '@mui/icons-material/Person'
 import RotateRightIcon from '@mui/icons-material/RotateRight'
 import SchoolIcon from '@mui/icons-material/School'
-import FolderOpenIcon from '@mui/icons-material/FolderOpen'
+import WorkIcon from '@mui/icons-material/Work'
 import Box from '@mui/material/Box'
 import Container from '@mui/material/Container'
 import Typography from '@mui/material/Typography'
@@ -495,7 +495,7 @@ export default function About() {
                   MozBackfaceVisibility: 'hidden',
                 }}
               >
-                <FolderOpenIcon sx={{ fontSize: 48, color: primary, mb: 2 }} />
+                <WorkIcon sx={{ fontSize: 48, color: primary, mb: 2 }} />
                 <Typography 
                   variant="h5" 
                   gutterBottom 
