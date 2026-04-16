@@ -126,6 +126,7 @@ export default function FullPageTopologyWrapper({ children }: FullPageTopologyWr
           height: '100vh',
           overflowY: 'auto',
           overflowX: 'hidden',
+          overflowAnchor: 'none',
           display: 'flex',
           flexDirection: 'column',
           width: '100%',
