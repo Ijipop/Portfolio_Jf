@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { Analytics } from '@vercel/analytics/next'
 import WebVitalsReporter from './components/WebVitalsReporter'
 import ContactFab from './components/shared/ContactFab'
 import ThemeWrapper from './components/ThemeWrapper'
@@ -52,6 +53,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           </FullPageTopologyWrapper>
           <ContactFab />
         </ThemeWrapper>
+        <Analytics />
       </body>
     </html>
   )

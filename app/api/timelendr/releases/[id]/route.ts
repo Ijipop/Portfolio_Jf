@@ -8,7 +8,7 @@ import { del } from '@vercel/blob'
 // DELETE /api/timelendr/releases/[id] — supprimer une version (protégé)
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   const auth = authAdminToken(request)
   if (!auth.ok) {
@@ -16,7 +16,8 @@ export async function DELETE(
   }
 
   try {
-    const id = parseInt(params.id, 10)
+    const { id: idParam } = await params
+    const id = parseInt(idParam, 10)
     if (Number.isNaN(id) || id <= 0) {
       return NextResponse.json(
         { success: false, error: 'ID invalide' },

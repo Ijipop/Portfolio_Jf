@@ -191,12 +191,9 @@ export default function TimelendrPage() {
             <Typography
               component="h2"
               variant="h5"
-              sx={{ fontWeight: 700, mb: 1.5, mt: 2, color: textColor }}
+              sx={{ fontWeight: 700, mb: 2.5, mt: 2, color: textColor }}
             >
               {t('timelendr.downloadsTitle')}
-            </Typography>
-            <Typography sx={{ mb: 2.5, color: textColor, opacity: 0.9, lineHeight: 1.7 }}>
-              {t('timelendr.downloadsIntro')}
             </Typography>
             {releases.length === 0 ? (
               <Typography sx={{ color: textColor, opacity: 0.9, mb: 4 }}>

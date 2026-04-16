@@ -16,8 +16,10 @@ function parseDisplayOrder(input: unknown): number {
   return Math.max(0, Math.trunc(value))
 }
 
+type RouteParams = { params: Promise<{ id: string }> }
+
 // DELETE /api/projects/[id] - Supprimer un project par ID (PROTÉGÉ)
-export async function DELETE(request: NextRequest, { params }: { params: { id: string } })
+export async function DELETE(request: NextRequest, { params }: RouteParams)
 {
 	const auth = authAdminToken(request)
 	if (!auth.ok) {
@@ -26,7 +28,8 @@ export async function DELETE(request: NextRequest, { params }: { params: { id: s
 
 	try
 	{
-		const id = parseInt(params.id)
+		const { id: idParam } = await params
+		const id = parseInt(idParam)
 
 		// Validation de l'ID
 		if (isNaN(id) || id <= 0)
@@ -86,7 +89,7 @@ export async function DELETE(request: NextRequest, { params }: { params: { id: s
 }
 
 // PUT /api/projects/[id] - Modifier un project par ID (PROTÉGÉ)
-export async function PUT(request: NextRequest, { params }: { params: { id: string } })
+export async function PUT(request: NextRequest, { params }: RouteParams)
 {
 	const auth = authAdminToken(request)
 	if (!auth.ok) {
@@ -95,7 +98,8 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
 
 	try
 	{
-		const id = parseInt(params.id)
+		const { id: idParam } = await params
+		const id = parseInt(idParam)
 
 		// Validation de l'ID
 		if (isNaN(id) || id <= 0)
@@ -240,11 +244,12 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
 }
 
 // GET /api/projects/[id] - Obtenir un project par ID (bonus)
-export async function GET(request: NextRequest, { params }: { params: { id: string } })
+export async function GET(request: NextRequest, { params }: RouteParams)
 {
 	try
 	{
-		const id = parseInt(params.id)
+		const { id: idParam } = await params
+		const id = parseInt(idParam)
 
 		// Validation de l'ID
 		if (isNaN(id) || id <= 0)
