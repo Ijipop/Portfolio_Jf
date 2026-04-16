@@ -1,212 +1,159 @@
-# 🚀 Portfolio Web - Next.js
+# Portfolio Ijipop — Next.js
 
-Portfolio moderne et interactif avec Next.js 14, Material-UI, TypeScript et Prisma. Effets visuels (fond VANTA Topology), cartes interactives, pages Projets / À propos / Contact, et interface d’administration pour la gestion des projets.
+Site vitrine et portfolio (Jean-François Lefebvre / Ijipop) : Next.js, Material UI, TypeScript, Prisma. Fond animé (VANTA Topology) sur les pages portfolio, cartes 3D, pages Projets / À propos / Contact, formulaire de contact (e-mail via API), page logiciel **Timelendr**, administration des projets et des versions Timelendr.
 
-## ✨ Fonctionnalités
+## Fonctionnalités
 
-- 🎨 **Design** avec palettes de couleurs (thème default et personnalisables)
-- 🌐 **Fond animé** VANTA Topology sur les pages du portfolio
-- 🃏 **Cartes interactives** avec effet 3D et animations
-- 📱 **Responsive** et chargement perçu instantané (animations raccourcies)
-- 🔐 **Authentification JWT** pour l’admin
-- 🛠️ **Interface d’administration** : projets (CRUD), upload d’images
-- 📊 **Gestion des projets** (CRUD)
-- 🎭 **Effets visuels** et animations (ScrollReveal, FadeIn, gradientShift)
-- 🗄️ **PostgreSQL** avec Prisma (User, Project)
+- **Design** : thèmes (clair / sombre / personnalisés), design system partagé
+- **Fond animé** : VANTA Topology sur les routes portfolio / logiciel / pageweb (selon configuration)
+- **Cartes** : effet 3D, animations (Framer Motion, ScrollReveal, etc.)
+- **Internationalisation** : français / anglais (`app/i18n/translations.ts`)
+- **Authentification** : JWT pour l’admin
+- **Admin** : CRUD projets, uploads images ; versions Timelendr (liens `.zip` externes + Vercel Blob optionnel)
+- **Contact** : `POST /api/contact` (Resend selon configuration)
+- **Base de données** : PostgreSQL, Prisma (User, Project, TimelendrRelease, etc.)
 
-## ⚡ Démarrage rapide
+Les **textes affichés sur la page d’accueil** (hero, cartes, sections) ne sont pas dans ce README : ils sont éditables dans **`app/i18n/translations.ts`** (clés `home.*`, `heroTagline`, etc.).
 
-### 1. Prérequis
-- **Node.js** 18+ 
-- **Compte Neon.tech** (base de données PostgreSQL)
+## Prérequis
+
+- **Node.js** 18.18+ (recommandé : LTS 20+)
+- **PostgreSQL** (ex. Neon)
 - **Git**
 
-### 2. Installation
-```bash
-# Cloner le projet
-git clone [votre-repo]
-cd Portfolio
+## Installation
 
-# Installation des dépendances
+```bash
+git clone <votre-repo>
+cd <dossier-du-projet>   # souvent « Portfolio » si le repo contient ce sous-dossier ; sinon la racine du clone où se trouve package.json
 npm install
 ```
 
-### 3. Configuration
-Créer un fichier `.env` à la racine :
+Le script `postinstall` exécute `prisma generate`.  
+**Important** : ouvrez le dossier qui contient **`package.json`** (celui du site Next.js), pas un parent vide.
+
+Après `npm install`, pour un premier run local complet (admin, API projets, etc.) : créez un **`.env`** avec au moins **`DATABASE_URL`** et **`JWT_SECRET`**, puis `npx prisma db push` (ou migrations). Sans base, le site peut quand même afficher les pages statiques, mais l’admin et les données Prisma ne fonctionneront pas.
+
+## Configuration
+
+Créer un fichier **`.env`** à la racine du dossier `Portfolio` :
+
 ```env
-# Base de données PostgreSQL (Neon.tech)
 DATABASE_URL="postgresql://user:password@host:port/database"
+JWT_SECRET="clé-longue-et-aléatoire"
 
-# Clé secrète JWT (générez une clé forte)
-JWT_SECRET="votre-clé-secrète-jwt-très-longue-et-complexe"
-
-# Informations admin (optionnel - sera créé via script)
+# Optionnel — création admin (voir scripts)
 ADMIN_EMAIL="admin@example.com"
-ADMIN_PASSWORD="votre-mot-de-passe-sécurisé"
+ADMIN_PASSWORD="…"
 
-# Timelendr sur Vercel : uploads .zip > ~4,5 Mo (limite du corps des requêtes serverless)
-# Créez un store Blob dans le dashboard Vercel et liez BLOB_READ_WRITE_TOKEN au projet.
-# Sans cette variable, l’admin utilise l’upload classique (OK en local, risque 413 sur Vercel).
-# BLOB_READ_WRITE_TOKEN="vercel_blob_rw_..."
+# Contact (e-mails depuis le formulaire)
+# RESEND_API_KEY=…
+# CONTACT_TO_EMAIL=…
+
+# Timelendr sur Vercel : gros fichiers → Vercel Blob
+# BLOB_READ_WRITE_TOKEN="vercel_blob_rw_…"
+
+# URL publique du site (SEO, métadonnées)
+# NEXT_PUBLIC_SITE_URL="https://votre-domaine.com"
 ```
 
-### 4. Configuration de la base de données
+## Base de données
+
 ```bash
-# Générer le client Prisma
 npx prisma generate
-
-# Appliquer le schéma à la base de données
 npx prisma db push
+# ou en prod : npm run build:prod (migrate deploy + build)
 
-# Créer l'utilisateur administrateur
-node scripts/createAdminVercel.js
+# Création d’un compte admin (adapter selon le script utilisé)
+node scripts/createAdminWithEmail.js
 ```
 
-### 5. Lancement
-```bash
-# Mode développement
-npm run dev
+## Lancement
 
-# Build de production
+```bash
+npm run dev          # http://localhost:3000
 npm run build
 npm start
 ```
 
-🌐 **Application disponible sur :** `http://localhost:3000`
+## Structure (aperçu)
 
-## 📁 Structure du projet
 ```
 Portfolio/
 ├── app/
-│   ├── api/                  # API Routes
-│   │   ├── auth/             # Login, logout
-│   │   ├── projects/         # CRUD projets
-│   │   └── upload/           # Upload images (admin)
-│   ├── admin/
-│   │   └── dashboard/        # Gestion des projets (CRUD, images)
-│   ├── components/           # AppBar, Footer, LoginModal, VantaTopologyBackground, cartes, etc.
-│   ├── portfolio/            # Projets, à-propos, contact
-│   ├── design-system/        # Thèmes, constantes
-│   ├── contexts/             # Langue, thème avancé
-│   └── page.tsx              # Accueil
-├── lib/prisma.ts
-├── prisma/schema.prisma      # User, Project
-├── scripts/
-│   ├── createAdminVercel.js  # Créer l'admin
-│   ├── createAdminWithEmail.js
-│   ├── changeAdminPassword.js
-│   └── showAdmin.js
-└── public/
-    └── imgs/projets/         # Images uploadées (projets)
+│   ├── api/                 # auth, contact, projects, upload, timelendr, …
+│   ├── admin/               # login, dashboard
+│   ├── components/          # UI partagée, hero, VANTA, etc.
+│   ├── portfolio/           # accueil portfolio, projets, à-propos, contact
+│   ├── logiciel/timelendr/  # page produit Timelendr
+│   ├── i18n/translations.ts # textes FR/EN (dont page d’accueil)
+│   └── page.tsx             # accueil racine
+├── prisma/schema.prisma
+├── public/                  # assets statiques (servis à la racine)
+└── scripts/                 # admin, favicon, utilitaires
 ```
 
-## 🎯 Pages et fonctionnalités
+## Pages principales
 
-### 🏠 Page d'accueil
-- Cartes interactives (Projets, À propos, Contact)
-- Fond VANTA Topology, apparition instantanée
+| Zone            | Rôle |
+|-----------------|------|
+| `/`             | Accueil (hero, cartes vers portfolio) |
+| `/portfolio/projets` | Grille projets + filtres |
+| `/portfolio/a-propos` | À propos |
+| `/portfolio/contact` | Formulaire + coordonnées |
+| `/logiciel/timelendr` | Présentation Timelendr + téléchargements |
+| `/admin` → `/admin/dashboard` | Gestion (JWT) |
 
-### 👤 À propos
-- Cartes flip 3D, contenu personnalisable
-
-### 📁 Projets
-- Grille de projets avec filtres (technologies, statut)
-- Cartes avec image, description, technologies, lien
-
-### 📞 Contact
-- Informations et liens sociaux
-
-### 🔐 Administration
-- **Projets** : CRUD, upload d’images (JPEG/PNG/WEBP/GIF, max 5 Mo)
-- Authentification JWT ; accès via menu « Admin » ou `/admin` puis `/admin/dashboard`
-
-## 🛠️ Commandes utiles
+## Commandes utiles
 
 ```bash
-# Développement
-npm run dev              # Serveur de développement
-npm run build            # Build de production
-npm run start            # Serveur de production
+npm run dev
+npm run build
+npm run lint
+npm run typecheck
+npm run check          # lint + typecheck + tests unitaires
+npm run test:unit
+npm run test:e2e
 
-# Base de données
-npx prisma studio        # Interface graphique BDD
-npx prisma generate      # Générer le client Prisma
-npx prisma db push       # Appliquer le schéma
-npx prisma migrate dev   # Créer une migration
+npm run admin:create
+npm run admin:show
+npm run admin:password
 
-# Admin (scripts)
-npm run admin:create     # Créer un admin (createAdminWithEmail.js)
-npm run admin:show       # Afficher les comptes admin
-npm run admin:password   # Changer le mot de passe (changeAdminPassword.js)
-
-# Utilitaires
-npm run lint             # Vérifier le code
-npm run type-check       # Vérifier TypeScript
+npx prisma studio
 ```
 
-## 🚀 Déploiement
+## Déploiement (Vercel)
 
-### Vercel (Recommandé)
-1. Connecter votre repository GitHub à Vercel
-2. Configurer les variables d'environnement dans Vercel :
-   - `DATABASE_URL`
-   - `JWT_SECRET`
-3. Déployer automatiquement
+1. Lier le dépôt GitHub à Vercel ; **root directory** = dossier contenant ce `package.json` (souvent `Portfolio`).
+2. Définir les variables d’environnement (`DATABASE_URL`, `JWT_SECRET`, `NEXT_PUBLIC_SITE_URL`, etc.).
+3. Build : `npm run build` (ou `build:prod` si migrations en CI).
 
-### Variables d'environnement Vercel
-```env
-DATABASE_URL=postgresql://...
-JWT_SECRET=votre-clé-secrète
-```
+## Personnalisation rapide
 
-## 🔧 Personnalisation
+- **Textes du site (dont accueil)** : `app/i18n/translations.ts`
+- **Thème / MUI** : `app/components/ThemeWrapper.tsx`, `app/globals.css`
+- **À propos** : `app/portfolio/a-propos/` (composants sous `components/`)
+- **Projets** : données en base + admin ; images sous `public/` ou URLs distantes
 
-### Modifier les cartes "À propos"
-Éditez le fichier `app/a-propos/page.tsx` pour personnaliser :
-- Le contenu des cartes
-- Les effets visuels
-- Les animations
+## Sécurité (rappel)
 
-### Ajouter des projets
-- **Interface** : `http://localhost:3000/admin/dashboard` → formulaire + upload image.
-- **API** : `POST /api/projects` (Bearer JWT), `GET /api/projects`, `PUT/DELETE /api/projects/:id`.
+- JWT avec expiration, mots de passe hashés (bcrypt)
+- Routes API protégées pour l’admin
+- Secrets uniquement dans l’environnement, jamais commités
 
-### Modifier le design
-- **Thème** : `app/components/ThemeWrapper.tsx`
-- **Styles globaux** : `app/components/components.css`
-- **Composants** : `app/components/`
+## Technologies
 
-## 🛡️ Sécurité
+- **App** : Next.js 16, React 18, TypeScript
+- **UI** : MUI 7, Emotion
+- **Données** : Prisma 6, PostgreSQL
+- **Qualité** : ESLint 9 (flat config), Vitest, Playwright (e2e)
+- **Déploiement** : Vercel (typique), analytics optionnelle (`@vercel/analytics`)
 
-- ✅ Authentification JWT avec expiration
-- ✅ Hachage des mots de passe (bcrypt)
-- ✅ Protection des routes API
-- ✅ Validation des données
-- ✅ Variables d'environnement sécurisées
+## Licence
 
-## 📝 Technologies utilisées
-
-- **Frontend** : Next.js 14, React, TypeScript
-- **UI** : Material-UI (MUI), design system (thèmes, constantes)
-- **Effets** : VANTA Topology (p5.js), Framer Motion, ScrollReveal
-- **i18n** : français / anglais
-- **Base de données** : PostgreSQL (Neon), Prisma (User, Project)
-- **Authentification** : JWT, bcrypt
-- **Déploiement** : Vercel, Neon.tech
-- **Styling** : CSS-in-JS, animations CSS, chargement optimisé (instantané)
-
-## 🤝 Contribution
-
-1. Fork le projet
-2. Créer une branche (`git checkout -b feature/nouvelle-fonctionnalite`)
-3. Commit (`git commit -m 'Ajouter nouvelle fonctionnalité'`)
-4. Push (`git push origin feature/nouvelle-fonctionnalite`)
-5. Ouvrir une Pull Request
-
-## 📄 Licence
-
-Ce projet est sous licence MIT. Voir le fichier `LICENSE` pour plus de détails.
+Voir le fichier `LICENSE` (MIT, sauf mention contraire).
 
 ---
-Initialement créé dans le cadre d'un cours de programmation
-**Créé par Jean-François Lefebvre, Natacha Meyer & Nadia Desjardins**
+
+Initialement créé dans le cadre d’un cours de programmation (Jean-François Lefebvre, Natacha Meyer, Nadia Desjardins).  
+Développement et maintenance actuels : **Jean-François Lefebvre** — Ijipop.
