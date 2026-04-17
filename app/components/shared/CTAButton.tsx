@@ -41,6 +41,7 @@ const StyledCTAButton = styled(Button, {
   const padY = size === 'large' ? 1.5 : size === 'small' ? 0.5 : 1
   const padX = size === 'large' ? 3 : size === 'small' ? 2 : 2.5
   const fontSize = size === 'large' ? '1rem' : size === 'small' ? '0.8125rem' : '0.9375rem'
+  const minHeight = size === 'large' ? 56 : size === 'small' ? 36 : 44
   const pad = theme.spacing(padY, padX)
 
   const baseStyles: any = {
@@ -48,6 +49,8 @@ const StyledCTAButton = styled(Button, {
     fontFamily: theme.typography.fontFamily,
     fontWeight: 600,
     textTransform: 'none',
+    whiteSpace: 'nowrap',
+    minHeight,
     transition: DESIGN_TOKENS.transitions.normal,
     position: 'relative' as const,
     overflow: 'hidden',

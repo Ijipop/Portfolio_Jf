@@ -41,7 +41,7 @@ export default function HomeHeroServicesSection() {
       sx={{
         /** Sous la carte → grille : 60px desktop, légèrement moins sur mobile. */
         mb: { xs: 'clamp(40px, 8vw, 60px)', sm: '60px' },
-        maxWidth: { xs: '100%', sm: 680 },
+        maxWidth: { xs: '100%', sm: 860, md: 980, lg: 1080 },
         mx: 'auto',
         width: '100%',
         px: { xs: 0.5, sm: 0 },

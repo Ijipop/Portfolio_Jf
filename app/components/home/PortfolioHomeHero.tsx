@@ -60,12 +60,12 @@ export default function PortfolioHomeHero() {
           mx: 'auto',
         }}
       >
-        <Link href="/portfolio/projets" style={{ textDecoration: 'none', flex: 1, minWidth: 0 }}>
+        <Link href="/portfolio/projets" style={{ textDecoration: 'none', flex: 1, minWidth: 0, display: 'flex' }}>
           <CTAButton variant="primary" size="medium" fullWidth>
             {t('home.ctaRealizations')}
           </CTAButton>
         </Link>
-        <Link href="/portfolio/contact" style={{ textDecoration: 'none', flex: 1, minWidth: 0 }}>
+        <Link href="/portfolio/contact" style={{ textDecoration: 'none', flex: 1, minWidth: 0, display: 'flex' }}>
           <CTAButton variant="outline" size="medium" fullWidth>
             {t('home.contactMe')}
           </CTAButton>

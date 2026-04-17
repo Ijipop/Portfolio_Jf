@@ -39,7 +39,7 @@ export const translations = {
       intro:
         "Mon objectif : créer des outils simples, efficaces et faciles à utiliser, tout en offrant un accompagnement technique fiable.\n\nSoutien technique disponible à distance ou en personne sur l'île de Montréal.",
       seeProjects: 'Voir mes projets',
-      contactMe: 'Discutons de votre projet',
+      contactMe: 'Obtenir une estimation rapide',
       statsStage: 'Stage terminé',
       statsTech: 'Technologies maîtrisées',
       statsAvailable: 'Disponible',
@@ -146,7 +146,7 @@ export const translations = {
       adaptabilityDesc: 'Apprentissage continu',
       quality: 'Qualité',
       qualityDesc: 'Code propre et maintenable',
-      ctaTitle: 'Discutons de votre projet',
+      ctaTitle: 'Obtenir une estimation rapide',
       ctaText: "Projet web, outil sur mesure ou hébergement : décrivez-moi votre besoin, je vous propose une solution adaptée.",
       whoCardP1:
         'Je suis avant tout un passionné : de technologie, de jeux vidéo et de création.',
