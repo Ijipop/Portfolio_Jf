@@ -83,7 +83,16 @@ export default function LogicielPage() {
             }}
           >
             <CardActionArea
+              component="div"
+              role="button"
+              tabIndex={0}
               onClick={() => router.push('/logiciel/timelendr')}
+              onKeyDown={(event) => {
+                if (event.key === 'Enter' || event.key === ' ') {
+                  event.preventDefault()
+                  router.push('/logiciel/timelendr')
+                }
+              }}
               sx={{ display: 'block', textAlign: 'left' }}
             >
               <CardContent sx={{ p: 3 }}>
