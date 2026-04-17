@@ -30,16 +30,17 @@ export const translations = {
       heroRealName: 'Jean-François Lefebvre',
       heroOneLiner: 'Développeur web freelance · Montréal',
       ctaRealizations: 'Voir mes réalisations',
-      mainSectionTitle: 'Des sites web clairs, rapides et professionnels',
+      mainSectionEyebrow: 'Création de sites web sur mesure',
+      mainSectionTitle: 'Des sites web clairs, rapides et pensés pour votre entreprise',
       mainSectionP1:
-        'Sites vitrine, refonte et outils numériques sur mesure pour indépendants et PME.',
+        'Pour independants et PME : creation, refonte et petits outils sur mesure.',
       mainSectionP2:
-        'Du site web au petit logiciel adapté à vos besoins, je vous accompagne avant et après la mise en ligne.',
+        '',
       role: "Développeur spécialisé en création de sites web et d'applications sur mesure pour travailleurs autonomes et petites entreprises.",
       intro:
         "Mon objectif : créer des outils simples, efficaces et faciles à utiliser, tout en offrant un accompagnement technique fiable.\n\nSoutien technique disponible à distance ou en personne sur l'île de Montréal.",
       seeProjects: 'Voir mes projets',
-      contactMe: 'Discutons de votre projet',
+      contactMe: 'Obtenir une estimation rapide',
       statsStage: 'Stage terminé',
       statsTech: 'Technologies maîtrisées',
       statsAvailable: 'Disponible',
@@ -146,7 +147,7 @@ export const translations = {
       adaptabilityDesc: 'Apprentissage continu',
       quality: 'Qualité',
       qualityDesc: 'Code propre et maintenable',
-      ctaTitle: 'Discutons de votre projet',
+      ctaTitle: 'Obtenir une estimation rapide',
       ctaText: "Projet web, outil sur mesure ou hébergement : décrivez-moi votre besoin, je vous propose une solution adaptée.",
       whoCardP1:
         'Je suis avant tout un passionné : de technologie, de jeux vidéo et de création.',
@@ -342,11 +343,12 @@ export const translations = {
       heroRealName: 'Jean-François Lefebvre',
       heroOneLiner: 'Freelance web developer · Montreal',
       ctaRealizations: 'View my work',
-      mainSectionTitle: 'Clear, fast, professional websites',
+      mainSectionEyebrow: 'Custom website creation',
+      mainSectionTitle: 'Clear, fast websites designed for your business',
       mainSectionP1:
-        'Showcase sites, redesigns and bespoke digital tools for freelancers and small businesses.',
+        'For freelancers and small businesses: website creation, redesigns and small custom tools.',
       mainSectionP2:
-        'From your website to a small app tailored to your needs—I support you before and after launch.',
+        '',
       role: 'Developer specialized in custom websites and applications for freelancers and small businesses.',
       intro:
         'My goal: build tools that are simple, effective, and easy to use, with reliable technical support.\n\nSupport available remotely or in person on the Island of Montreal.',

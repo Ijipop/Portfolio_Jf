@@ -21,7 +21,7 @@ test('portfolio home loads and nav works', async ({ page }) => {
 
   await page.goto('/portfolio', { waitUntil: 'domcontentloaded' })
   await expect(
-    page.getByText(/discutons de votre projet|let's discuss your project/i).first()
+    page.getByText(/obtenir une estimation rapide|let's discuss your project/i).first()
   ).toBeVisible()
   await expect(page.getByTestId('graphics-background-layer')).toHaveAttribute('data-graphics-mode', 'full')
   await expect(page.getByTestId('vanta-background')).toBeVisible()

@@ -33,6 +33,51 @@ export default function HomeHeroServicesSection() {
   const isDevPresentation = presentationMode === 'dev'
   const isDark = theme.palette.mode === 'dark'
   const glassRef = useRef<HTMLDivElement>(null)
+  const mainSectionP1 = t('home.mainSectionP1')
+  const mainSectionP2 = t('home.mainSectionP2')
+  const introText = mainSectionP2 ? `${mainSectionP1}\n\n${mainSectionP2}` : mainSectionP1
+  const heroTitleBlock = (
+    <Box sx={{ mb: { xs: 2.25, sm: 2.75 } }}>
+      <Typography
+        component="p"
+        sx={{
+          display: 'inline-flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          px: { xs: 1.25, sm: 1.5 },
+          py: 0.6,
+          mt: { xs: 0.2, sm: 0.35 },
+          mb: { xs: 2.2, sm: 2.45 },
+          borderRadius: 999,
+          fontSize: { xs: '0.78rem', sm: '0.82rem' },
+          fontWeight: 800,
+          letterSpacing: '0.08em',
+          textTransform: 'uppercase',
+          color: primary,
+          backgroundColor: alpha(primary, isDark ? 0.18 : 0.1),
+          border: `1px solid ${alpha(primary, isDark ? 0.34 : 0.18)}`,
+          boxShadow: isDark ? '0 10px 24px rgba(0,0,0,0.22)' : '0 8px 20px rgba(15, 23, 42, 0.08)',
+        }}
+      >
+        {t('home.mainSectionEyebrow')}
+      </Typography>
+      <SectionDisplayTitle
+        component="h2"
+        id="home-main-section-heading"
+        sx={{
+          mb: 0,
+          maxWidth: { xs: 'min(100%, 780px)', sm: 820 },
+          fontWeight: 800,
+          fontSize: { xs: 'clamp(1.7rem, 5.8vw, 2.2rem)', sm: '2.45rem', md: '2.95rem' },
+          lineHeight: { xs: 1.12, sm: 1.14 },
+          letterSpacing: '-0.035em',
+          textShadow: isDark ? '0 10px 26px rgba(0,0,0,0.34)' : '0 10px 30px rgba(15, 23, 42, 0.08)',
+        }}
+      >
+        {t('home.mainSectionTitle')}
+      </SectionDisplayTitle>
+    </Box>
+  )
 
   return (
     <Box
@@ -41,7 +86,7 @@ export default function HomeHeroServicesSection() {
       sx={{
         /** Sous la carte → grille : 60px desktop, légèrement moins sur mobile. */
         mb: { xs: 'clamp(40px, 8vw, 60px)', sm: '60px' },
-        maxWidth: { xs: '100%', sm: 680 },
+        maxWidth: { xs: '100%', sm: 860, md: 980, lg: 1080 },
         mx: 'auto',
         width: '100%',
         px: { xs: 0.5, sm: 0 },
@@ -82,19 +127,11 @@ export default function HomeHeroServicesSection() {
           <HomeHeroDevCodeIntro
             name="Jean-François Lefebvre"
             role={t('home.role')}
-            intro={`${t('home.mainSectionP1')}\n\n${t('home.mainSectionP2')}`}
+            intro={introText}
             isTopologyRoute={isTopologyRoute}
             embedded
             walkSurfaceRef={glassRef}
-            sectionTitle={
-              <SectionDisplayTitle
-                component="h2"
-                id="home-main-section-heading"
-                sx={{ mb: { xs: 1.5, sm: 2 } }}
-              >
-                {t('home.mainSectionTitle')}
-              </SectionDisplayTitle>
-            }
+            sectionTitle={heroTitleBlock}
           />
         ) : (
           <Box
@@ -104,13 +141,7 @@ export default function HomeHeroServicesSection() {
               px: { xs: 0.5, sm: 1 },
             }}
           >
-            <SectionDisplayTitle
-              component="h2"
-              id="home-main-section-heading"
-              sx={{ mb: { xs: 2.25, sm: 2.75 } }}
-            >
-              {t('home.mainSectionTitle')}
-            </SectionDisplayTitle>
+            {heroTitleBlock}
 
             <Typography
               component="p"
@@ -129,27 +160,29 @@ export default function HomeHeroServicesSection() {
                 ...mobileProseWrapSx,
               }}
             >
-              {t('home.mainSectionP1')}
+              {mainSectionP1}
             </Typography>
 
-            <Typography
-              component="p"
-              variant="body1"
-              sx={{
-                color: textColor,
-                opacity: 0.78,
-                textAlign: 'center',
-                lineHeight: 1.75,
-                fontSize: { xs: '0.98rem', sm: '1.03rem' },
-                fontWeight: 400,
-                maxWidth: 540,
-                mx: 'auto',
-                mb: 0,
-                ...mobileProseWrapSx,
-              }}
-            >
-              {t('home.mainSectionP2')}
-            </Typography>
+            {mainSectionP2 ? (
+              <Typography
+                component="p"
+                variant="body1"
+                sx={{
+                  color: textColor,
+                  opacity: 0.78,
+                  textAlign: 'center',
+                  lineHeight: 1.75,
+                  fontSize: { xs: '0.98rem', sm: '1.03rem' },
+                  fontWeight: 400,
+                  maxWidth: 540,
+                  mx: 'auto',
+                  mb: 0,
+                  ...mobileProseWrapSx,
+                }}
+              >
+                {mainSectionP2}
+              </Typography>
+            ) : null}
           </Box>
         )}
       </GlassContainer>
