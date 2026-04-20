@@ -2,6 +2,8 @@ const siteUrl = (
   process.env.NEXT_PUBLIC_SITE_URL || 'https://ijipop.com'
 ).replace(/\/$/, '')
 
+const logoUrl = `${siteUrl}/icon.png`
+
 const jsonLd = {
   '@context': 'https://schema.org',
   '@graph': [
@@ -13,12 +15,14 @@ const jsonLd = {
       description:
         'Création et refonte de sites web pour PME et indépendants au Québec, applications et outils sur mesure — Montréal et mandats à distance.',
       inLanguage: 'fr-CA',
+      publisher: { '@id': `${siteUrl}/#service` },
     },
     {
       '@type': 'ProfessionalService',
       '@id': `${siteUrl}/#service`,
       name: 'Ijipop',
       url: siteUrl,
+      logo: { '@type': 'ImageObject', url: logoUrl },
       description:
         'Sites web vitrine, refonte et mise à jour, développement logiciel et petits outils pour travailleurs autonomes et petites entreprises.',
       areaServed: {
@@ -39,6 +43,7 @@ const jsonLd = {
       name: 'Jean-François Lefebvre',
       url: siteUrl,
       jobTitle: 'Développeur web et logiciels',
+      worksFor: { '@id': `${siteUrl}/#service` },
     },
   ],
 }

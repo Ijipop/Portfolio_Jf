@@ -19,12 +19,13 @@ export const metadata: Metadata = {
   description:
     'Ijipop — création et refonte de sites web pour PME et indépendants, mises à jour et petits outils sur mesure. Basé à Montréal.',
   icons: {
-    /** ICO + PNG = compatibilité maximale ; SVG = net sur navigateurs récents */
+    /** ICO + PNG 48 (Google) + SVG ; apple pour iOS / certains aperçus */
     icon: [
       { url: '/favicon.ico', sizes: 'any' },
-      { url: '/icon.png', type: 'image/png', sizes: '32x32' },
+      { url: '/icon.png', type: 'image/png', sizes: '48x48' },
       { url: '/icon.svg', type: 'image/svg+xml' },
     ],
+    apple: [{ url: '/apple-icon.png', sizes: '180x180', type: 'image/png' }],
   },
   openGraph: {
     type: 'website',
