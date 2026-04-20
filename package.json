@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "prebuild": "npm run favicon",
     "build": "next build",
     "build:prod": "prisma migrate deploy && next build",
     "start": "next start",
@@ -43,6 +44,8 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "resend": "^6.9.2",
+    "sharp": "^0.34.5",
+    "to-ico": "^1.1.5",
     "web-vitals": "^5.1.0"
   },
   "devDependencies": {
@@ -58,8 +61,6 @@
     "eslint-config-next": "^16.2.4",
     "jsdom": "^28.1.0",
     "prisma": "6.19.3",
-    "sharp": "^0.34.5",
-    "to-ico": "^1.0.1",
     "typescript": "^5.3.3",
     "vitest": "^4.0.18",
     "yaml": "^2.8.3"

@@ -118,6 +118,8 @@ export default function Contact() {
     email: '',
     subject: '',
     message: '',
+    /** Honeypot anti-bot : doit rester vide (champ masqué). */
+    bm_verify: '',
   })
   const [includeProjectWeb, setIncludeProjectWeb] = useState(false)
   const [projectWeb, setProjectWeb] = useState<ProjectWebBriefState>(() => emptyProjectWebBrief())
@@ -175,6 +177,8 @@ export default function Contact() {
         } else if (value.trim().length < 10) {
           error = 'Le message doit contenir au moins 10 caractères'
         }
+        break
+      case 'bm_verify':
         break
     }
     
@@ -236,7 +240,7 @@ export default function Contact() {
 
         setSnackbarMessage(data.message || t('contact.sendSuccess'))
         setSnackbarSeverity('success')
-        setFormData({ name: '', email: '', subject: '', message: '' })
+        setFormData({ name: '', email: '', subject: '', message: '', bm_verify: '' })
         setFormErrors({ name: '', email: '', subject: '', message: '' })
         setIncludeProjectWeb(false)
         setProjectWeb(emptyProjectWebBrief())
@@ -290,7 +294,23 @@ export default function Contact() {
               </Typography>
             </Box>
             
-            <Box data-testid="contact-form" component="form" onSubmit={handleSubmit} sx={{ mt: useCompactContact ? 2 : 3 }}>
+            <Box data-testid="contact-form" component="form" onSubmit={handleSubmit} sx={{ mt: useCompactContact ? 2 : 3, position: 'relative' }}>
+              <input
+                type="text"
+                name="bm_verify"
+                value={formData.bm_verify}
+                onChange={handleInputChange}
+                tabIndex={-1}
+                autoComplete="off"
+                aria-hidden="true"
+                style={{
+                  position: 'absolute',
+                  left: '-9999px',
+                  width: '1px',
+                  height: '1px',
+                  overflow: 'hidden',
+                }}
+              />
               <Box sx={{ display: 'grid', gap: useCompactContact ? 2 : 2.5, mb: useCompactContact ? 2 : 2.5 }}>
                 <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)' }, gap: 3 }}>
                   <StyledTextField

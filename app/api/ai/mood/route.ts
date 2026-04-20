@@ -1,3 +1,4 @@
+import { consumeIpRateLimitOrResponse } from '@/lib/rate-limit-ip'
 import OpenAI from 'openai'
 import { NextRequest, NextResponse } from 'next/server'
 import { THEMES, getAvailableThemes, type ThemeName } from '@/design-system/themes'
@@ -43,6 +44,22 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       )
     }
+    const MOOD_MAX = 400
+    if (mood.length > MOOD_MAX) {
+      return NextResponse.json({ success: false, error: 'Texte trop long' }, { status: 400 })
+    }
+
+    const limited = consumeIpRateLimitOrResponse(request, {
+      keyPrefix: 'ai-mood',
+      windowMs: 15 * 60 * 1000,
+      maxRequests: 45,
+      errorBody: {
+        success: false,
+        error: 'Trop de requêtes. Patientez quelques minutes avant de réessayer.',
+      },
+    })
+    if (limited) return limited
+
     const locale = body.locale === 'en' || body.locale === 'fr' ? body.locale : 'fr'
 
     const apiKey = process.env.OPENAI_API_KEY

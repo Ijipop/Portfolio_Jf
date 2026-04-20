@@ -1,20 +1,13 @@
-import { PrismaClient } from '@prisma/client';
-import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
-import { NextRequest, NextResponse } from 'next/server';
+import { getClientIp } from '@/lib/rate-limit-ip'
+import { PrismaClient } from '@prisma/client'
+import bcrypt from 'bcryptjs'
+import jwt from 'jsonwebtoken'
+import { NextRequest, NextResponse } from 'next/server'
 
-const prisma = new PrismaClient();
-const WINDOW_MS = 10 * 60 * 1000;
-const MAX_ATTEMPTS = 8;
-const attemptsByIp = new Map<string, { count: number; firstAttemptAt: number }>();
-
-function getClientIp(request: NextRequest): string {
-  const forwardedFor = request.headers.get('x-forwarded-for');
-  if (forwardedFor) {
-    return forwardedFor.split(',')[0]?.trim() || 'unknown';
-  }
-  return request.headers.get('x-real-ip')?.trim() || 'unknown';
-}
+const prisma = new PrismaClient()
+const WINDOW_MS = 10 * 60 * 1000
+const MAX_ATTEMPTS = 8
+const attemptsByIp = new Map<string, { count: number; firstAttemptAt: number }>()
 
 function checkRateLimit(ip: string): boolean {
   const now = Date.now();

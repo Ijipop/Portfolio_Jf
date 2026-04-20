@@ -1,3 +1,4 @@
+import { consumeIpRateLimitOrResponse } from '@/lib/rate-limit-ip'
 import { NextRequest, NextResponse } from 'next/server'
 import { Resend } from 'resend'
 
@@ -141,6 +142,26 @@ export async function POST(request: NextRequest) {
       )
     }
 
+    const hp =
+      typeof body.bm_verify === 'string' ? body.bm_verify.trim() : ''
+    if (hp.length > 0) {
+      return NextResponse.json({
+        success: true,
+        message: 'Message envoyé avec succès ! Je vous répondrai dans les plus brefs délais.',
+      })
+    }
+
+    const limited = consumeIpRateLimitOrResponse(request, {
+      keyPrefix: 'contact',
+      windowMs: 60 * 60 * 1000,
+      maxRequests: 8,
+      errorBody: {
+        success: false,
+        error: 'Trop de messages envoyés depuis cette adresse. Réessayez plus tard.',
+      },
+    })
+    if (limited) return limited
+
     const { name, email, subject, message, projectWeb } = body
 
     // Validation des champs
@@ -173,6 +194,16 @@ export async function POST(request: NextRequest) {
         },
         { status: 400 }
       )
+    }
+
+    const MAX_LEN = { name: 200, email: 254, subject: 300, message: 16000 }
+    if (
+      name.length > MAX_LEN.name ||
+      email.length > MAX_LEN.email ||
+      subject.length > MAX_LEN.subject ||
+      message.length > MAX_LEN.message
+    ) {
+      return NextResponse.json({ success: false, error: 'Contenu trop long' }, { status: 400 })
     }
 
     const contactEmail = process.env.CONTACT_EMAIL || 'ijipop82@gmail.com'
