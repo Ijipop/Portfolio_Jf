@@ -58,7 +58,7 @@ export const translations = {
       demosBandKicker: 'Vitrines démo',
       demosBandTitle: 'Voir le rendu avant de décider',
       demosBandLead:
-        'Quatre mini-sites (construction, restaurant, tech sombre, bien-être) pour montrer des styles très différents.',
+        'Quatre mini-sites pour montrer des styles très différents.',
       demosBandCta: 'Explorer les démos',
     },
     contact: {
@@ -376,7 +376,7 @@ export const translations = {
       demosBandKicker: 'Demo showcases',
       demosBandTitle: 'See the craft before you decide',
       demosBandLead:
-        'Four one-pagers (construction, restaurant, dark tech, wellness) to show very different creative directions.',
+        'Four one-pagers to show very different creative directions.',
       demosBandCta: 'Browse demos',
     },
     contact: {
