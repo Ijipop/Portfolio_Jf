@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import DemoSocialIconsDecorative from '../DemoSocialIconsDecorative'
 import DemoVitrineAttribution from '../DemoVitrineAttribution'
+import RestaurantDemoGallery from './RestaurantDemoGallery'
 import styles from './RestaurantDemo.module.css'
 
 export default function RestaurantDemoPage() {
@@ -58,11 +59,7 @@ export default function RestaurantDemoPage() {
           </div>
         </section>
 
-        <div className={styles.gallery} aria-label="Galerie">
-          <div className={styles.g1} role="presentation" />
-          <div className={styles.g2} role="presentation" />
-          <div className={styles.g3} role="presentation" />
-        </div>
+        <RestaurantDemoGallery />
 
         <section className={styles.storyBand} aria-labelledby="story-heading">
           <h2 id="story-heading" className={styles.storyTitle}>
