@@ -7,9 +7,20 @@ const INTRO_COOKIE_KEY = 'portfolio-intro-seen'
 /** Titre absolu : ignore le template du layout racine (ordre « nom | métier » conservé). */
 export const metadata: Metadata = {
   title: {
-    absolute: 'Jean-François Lefebvre | Web & Software',
+    absolute:
+      'Jean-François Lefebvre | Ijipop — sites web & logiciels pour PME au Québec',
   },
-  description: 'Web and software development — from idea to production. Clean code, clear UX.',
+  description:
+    'Création et refonte de sites web pour PME et indépendants : site vitrine, performance, accessibilité, maintenance. Montréal et mandats à distance.',
+  openGraph: {
+    title:
+      'Jean-François Lefebvre | Ijipop — sites web & logiciels pour PME au Québec',
+    description:
+      'Création et refonte de sites web pour PME et travailleurs autonomes au Québec. Petits logiciels et outils sur mesure — Montréal.',
+    url: '/',
+    locale: 'fr_CA',
+    siteName: 'Jean-François Lefebvre — Ijipop',
+  },
 }
 
 export default async function HomePage() {

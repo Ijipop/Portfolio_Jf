@@ -7,6 +7,7 @@ import Box from '@mui/material/Box'
 import Container from '@mui/material/Container'
 import Typography from '@mui/material/Typography'
 import Link from 'next/link'
+import { alpha } from '@mui/material/styles'
 import HomeHeroServicesSection from './components/home/HomeHeroServicesSection'
 import PortfolioHomeHero from './components/home/PortfolioHomeHero'
 import { FadeIn } from './components/SimpleAnimations'
@@ -100,6 +101,66 @@ export default function HomeClient({ initialShowIntro }: { initialShowIntro: boo
         }}
       >
         <HomeHeroServicesSection />
+
+        <FadeIn delay={0.08}>
+          <Box
+            sx={{
+              mb: { xs: DESIGN_TOKENS.spacing.xl, md: DESIGN_TOKENS.spacing.xxl },
+              px: { xs: 3, sm: 4, md: 4.5 },
+              py: { xs: 3.25, sm: 3.75, md: 4 },
+              borderRadius: DESIGN_TOKENS.borderRadius.small,
+              border: (theme) => `1px solid ${alpha(theme.palette.mode === 'dark' ? '#94a3b8' : primary, 0.22)}`,
+              background: (theme) =>
+                theme.palette.mode === 'dark'
+                  ? `linear-gradient(135deg, ${alpha(primary, 0.14)} 0%, ${alpha('#0f172a', 0.5)} 100%)`
+                  : `linear-gradient(135deg, ${alpha(primary, 0.09)} 0%, ${alpha(primary, 0.02)} 100%)`,
+              textAlign: { xs: 'center', sm: 'left' },
+              display: 'grid',
+              gap: { xs: 1.5, sm: 2 },
+              gridTemplateColumns: { xs: '1fr', sm: '1fr auto' },
+              alignItems: 'center',
+            }}
+          >
+            <Box>
+              <Typography
+                variant="overline"
+                sx={{ color: primary, fontWeight: 800, letterSpacing: '0.14em', display: 'block', mb: 0.75 }}
+              >
+                {t('home.demosBandKicker')}
+              </Typography>
+              <Typography variant="h5" sx={{ color: textColor, fontWeight: 800, mb: 0.75, lineHeight: 1.25 }}>
+                {t('home.demosBandTitle')}
+              </Typography>
+              <Typography variant="body2" sx={{ color: textColor, opacity: 0.88, lineHeight: 1.6, maxWidth: 560 }}>
+                {t('home.demosBandLead')}
+              </Typography>
+            </Box>
+            <Box sx={{ display: 'flex', justifyContent: { xs: 'center', sm: 'flex-end' } }}>
+              <Link href="/demos" style={{ textDecoration: 'none' }}>
+                <Box
+                  component="span"
+                  sx={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    px: 2.5,
+                    py: 1.25,
+                    borderRadius: DESIGN_TOKENS.borderRadius.small,
+                    fontWeight: 800,
+                    fontSize: '0.9rem',
+                    color: '#fff',
+                    background: `linear-gradient(135deg, ${primary} 0%, ${primary}dd 100%)`,
+                    boxShadow: `0 10px 28px ${alpha(primary, 0.35)}`,
+                    transition: DESIGN_TOKENS.transitions.normal,
+                    '&:hover': { filter: 'brightness(1.05)', transform: 'translateY(-1px)' },
+                  }}
+                >
+                  {t('home.demosBandCta')}
+                </Box>
+              </Link>
+            </Box>
+          </Box>
+        </FadeIn>
 
         <Box sx={{ 
           display: 'grid', 

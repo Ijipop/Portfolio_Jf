@@ -1,0 +1,120 @@
+/* Hub démos aligné sur le thème « latte » / présentation beige (tokens dans page.tsx + fallbacks ci-dessous). */
+.page {
+  min-height: 100vh;
+  /* Fallback si le style inline ne s’applique pas (SSR edge) — proche de THEMES.latte */
+  background: linear-gradient(165deg, #f7f3eb 0%, #efe8dc 48%, #f7f3eb 100%);
+  color: #292524;
+  font-family: var(--font-inter), system-ui, sans-serif;
+}
+
+.inner {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: clamp(2.5rem, 6vw, 4.5rem) clamp(1.25rem, 4vw, 2rem) 4rem;
+}
+
+.kicker {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #0091ea;
+  margin-bottom: 0.75rem;
+}
+
+.title {
+  font-size: clamp(2rem, 5vw, 2.75rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+  margin: 0 0 1rem;
+  max-width: 34ch;
+}
+
+.lead {
+  font-size: 1.0625rem;
+  line-height: 1.65;
+  color: #57534e;
+  max-width: 52ch;
+  margin: 0 0 2.5rem;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1.25rem;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  border-radius: 16px;
+  overflow: hidden;
+  text-decoration: none;
+  color: inherit;
+  background: #fffefb;
+  border: 1px solid rgba(139, 126, 114, 0.22);
+  box-shadow: 0 4px 20px rgba(148, 163, 184, 0.08), 0 0 0 1px rgba(148, 163, 184, 0.05);
+  transition: transform 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(0, 145, 234, 0.35);
+  box-shadow: 0 20px 40px rgba(59, 130, 246, 0.15), 0 0 20px rgba(147, 197, 253, 0.1),
+    0 0 0 1px rgba(0, 145, 234, 0.12);
+}
+
+.thumb {
+  height: 140px;
+  background-size: cover;
+  background-position: center;
+}
+
+.thumbConstruction {
+  background-image: linear-gradient(135deg, #78350f 0%, #b45309 40%, #451a03 100%);
+}
+
+.thumbRestaurant {
+  background-image: linear-gradient(135deg, #7c2d12 0%, #ea580c 50%, #431407 100%);
+}
+
+.thumbTech {
+  background-image: linear-gradient(135deg, #020617 0%, #1d4ed8 45%, #020617 100%);
+}
+
+.thumbWellness {
+  background-image: linear-gradient(135deg, #134e4a 0%, #5eead4 35%, #0f766e 100%);
+}
+
+.cardBody {
+  padding: 1.25rem 1.35rem 1.5rem;
+}
+
+.cardTitle {
+  font-size: 1.125rem;
+  font-weight: 700;
+  margin: 0 0 0.4rem;
+}
+
+.cardDesc {
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: #78716c;
+  margin: 0;
+}
+
+.back {
+  display: inline-block;
+  margin-top: 2.5rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #0091ea;
+  text-decoration: none;
+}
+
+.back:hover {
+  text-decoration: underline;
+  color: #0077c2;
+}
