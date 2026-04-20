@@ -33,7 +33,7 @@ export const translations = {
       mainSectionEyebrow: 'Création de sites web sur mesure',
       mainSectionTitle: 'Des sites web clairs, rapides et pensés pour votre entreprise',
       mainSectionP1:
-        'Pour independants et PME : creation, refonte et petits outils sur mesure.',
+        'Pour les indépendants et les PME : création, refonte et petits outils sur mesure.',
       mainSectionP2:
         '',
       role: "Développeur spécialisé en création de sites web et d'applications sur mesure pour travailleurs autonomes et petites entreprises.",
