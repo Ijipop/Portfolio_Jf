@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { Analytics } from '@vercel/analytics/next'
 import WebVitalsReporter from './components/WebVitalsReporter'
 import ContactFab from './components/shared/ContactFab'
+import SeoJsonLd from './components/SeoJsonLd'
 import ThemeWrapper from './components/ThemeWrapper'
 import FullPageTopologyWrapper from './components/FullPageTopologyWrapper'
 import { inter } from './fonts'
@@ -46,6 +47,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="fr" className={inter.variable}>
       <body>
+        <SeoJsonLd />
         <ThemeWrapper>
           <WebVitalsReporter />
           <FullPageTopologyWrapper>

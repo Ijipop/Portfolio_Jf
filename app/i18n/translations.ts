@@ -55,6 +55,11 @@ export const translations = {
       cardContactDesc:
         'Nouveau site, refonte, mises à jour ou petit outil\u202f: parlons de votre besoin.',
       stickyCTA: 'Discuter de votre projet',
+      demosBandKicker: 'Vitrines démo',
+      demosBandTitle: 'Voir le rendu avant de décider',
+      demosBandLead:
+        'Quatre mini-sites (construction, restaurant, tech sombre, bien-être) pour montrer des styles très différents.',
+      demosBandCta: 'Explorer les démos',
     },
     contact: {
       title: 'Contact',
@@ -368,6 +373,11 @@ export const translations = {
       cardContactDesc:
         'New site, redesign, updates, or a small tool—tell me what you need.',
       stickyCTA: 'Discuss your project',
+      demosBandKicker: 'Demo showcases',
+      demosBandTitle: 'See the craft before you decide',
+      demosBandLead:
+        'Four one-pagers (construction, restaurant, dark tech, wellness) to show very different creative directions.',
+      demosBandCta: 'Browse demos',
     },
     contact: {
       title: 'Contact',

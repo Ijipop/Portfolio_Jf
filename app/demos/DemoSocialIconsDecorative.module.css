@@ -1,0 +1,26 @@
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.1rem;
+  margin-top: 1.5rem;
+  margin-bottom: 0.25rem;
+  pointer-events: none;
+  user-select: none;
+  color: rgba(41, 37, 36, 0.55);
+}
+
+.rowDark {
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.iconWrap {
+  display: inline-flex;
+  opacity: 0.9;
+}
+
+.svg {
+  width: 22px;
+  height: 22px;
+  display: block;
+}

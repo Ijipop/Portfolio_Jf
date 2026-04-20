@@ -79,3 +79,13 @@ test('logiciel and pageweb routes are reachable', async ({ page }) => {
   await expect(page).toHaveURL(/\/pageweb/)
 })
 
+test('demos index and one demo route', async ({ page }) => {
+  await page.goto('/demos', { waitUntil: 'domcontentloaded' })
+  await expect(page).toHaveURL(/\/demos\/?$/)
+  await expect(page.locator('h1').first()).toContainText(/Quatre directions créatives/)
+
+  await page.locator('a[href="/demos/construction"]').first().click()
+  await expect(page).toHaveURL(/\/demos\/construction/)
+  await expect(page.locator('h1').filter({ hasText: /On bâtit solide/ })).toBeVisible()
+})
+

@@ -457,7 +457,7 @@ const ProjectCardWrapper = ({
                 mb: 0,
                 aspectRatio: '16 / 9',
                 flexShrink: 0,
-                borderRadius: 0,
+                borderRadius: `${DESIGN_TOKENS.borderRadius.medium}px`,
                 ...(cardImageHref
                   ? { background: 'rgba(0,0,0,0.06)' }
                   : {
@@ -475,6 +475,7 @@ const ProjectCardWrapper = ({
                   : {}),
                 '& img': {
                   objectFit: 'contain',
+                  borderRadius: `${DESIGN_TOKENS.borderRadius.medium}px`,
                   ...(isNonDefaultPalette ? { boxShadow: 'none' } : {}),
                 },
               }}
@@ -833,14 +834,14 @@ const FilterContainerComponent = ({ children }: { children: React.ReactNode }) =
 const ProjectImageContainer = styled(Box)(({ theme }) => ({
   position: 'relative',
   overflow: 'hidden',
-  borderRadius: DESIGN_TOKENS.borderRadius.small,
+  borderRadius: `${DESIGN_TOKENS.borderRadius.medium}px`,
   marginBottom: theme.spacing(0.5),
   [theme.breakpoints.up('lg')]: { marginBottom: theme.spacing(0.65) },
   '& img': {
     transition: DESIGN_TOKENS.transitions.slow,
     width: '100%',
     objectFit: 'contain',
-    borderRadius: DESIGN_TOKENS.borderRadius.small,
+    borderRadius: `${DESIGN_TOKENS.borderRadius.medium}px`,
     boxShadow: '0 4px 20px rgba(0, 0, 0, 0.1)',
   },
 }))
