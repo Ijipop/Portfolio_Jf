@@ -41,57 +41,81 @@ describe('graphicsModeRules', () => {
     })
   })
 
-  it('keeps full mode in production even with low-motion signals', () => {
+  it('starts light in production when motion or save-data signals are present', () => {
+    expect(
+      resolveInitialGraphicsDecision({
+        prefersReducedMotion: true,
+        isProduction: true,
+      })
+    ).toEqual({ mode: 'light', reason: 'prefers-reduced-motion' })
+
+    expect(
+      resolveInitialGraphicsDecision({
+        saveData: true,
+        isProduction: true,
+      })
+    ).toEqual({ mode: 'light', reason: 'save-data' })
+  })
+
+  it('starts light in production on low device memory or few CPU cores', () => {
+    expect(
+      resolveInitialGraphicsDecision({
+        deviceMemory: 4,
+        isProduction: true,
+      })
+    ).toEqual({ mode: 'light', reason: 'device-memory-low' })
+
+    expect(
+      resolveInitialGraphicsDecision({
+        hardwareConcurrency: 2,
+        isProduction: true,
+      })
+    ).toEqual({ mode: 'light', reason: 'hardware-concurrency-low' })
+  })
+
+  it('respects persisted light session in production', () => {
     const decision = resolveInitialGraphicsDecision({
-      prefersReducedMotion: true,
-      saveData: true,
-      deviceMemory: 1,
-      hardwareConcurrency: 1,
+      persistedMode: 'light',
+      persistedReason: 'slow-frames-60',
       isProduction: true,
     })
 
     expect(decision).toEqual({
-      mode: 'full',
-      reason: null,
+      mode: 'light',
+      reason: 'slow-frames-60',
     })
   })
 
-  it('ignores metric breaches for automatic downgrading', () => {
-    const firstBreach = evaluateGraphicsMetricBreach(
-      { name: 'LCP', value: 4500 },
-      0,
-      true
-    )
-    const secondBreach = evaluateGraphicsMetricBreach(
-      { name: 'LCP', value: 4500 },
-      firstBreach.nextCount,
-      true
-    )
+  it('accumulates poor web vitals in production then suggests downgrade', () => {
+    const first = evaluateGraphicsMetricBreach({ name: 'LCP', value: 5000, rating: 'poor' }, 0, true)
+    expect(first).toEqual({ nextCount: 1, shouldDowngrade: false, reason: null })
 
-    expect(firstBreach).toEqual({
-      nextCount: 0,
-      shouldDowngrade: false,
-      reason: null,
-    })
-    expect(secondBreach).toEqual({
-      nextCount: 0,
-      shouldDowngrade: false,
-      reason: null,
-    })
+    const second = evaluateGraphicsMetricBreach({ name: 'LCP', value: 5000, rating: 'poor' }, 1, true)
+    expect(second).toEqual({ nextCount: 2, shouldDowngrade: false, reason: null })
+
+    const third = evaluateGraphicsMetricBreach({ name: 'LCP', value: 5000, rating: 'poor' }, 2, true)
+    expect(third.shouldDowngrade).toBe(true)
+    expect(third.nextCount).toBe(0)
+    expect(third.reason).toBe('web-vitals-lcp-poor')
   })
 
-  it('does not downgrade from metrics or slow frames in development', () => {
+  it('does not downgrade from metrics outside production', () => {
     expect(
-      evaluateGraphicsMetricBreach({ name: 'INP', value: 500 }, 1, false)
+      evaluateGraphicsMetricBreach({ name: 'INP', value: 900, rating: 'poor' }, 0, false)
     ).toEqual({
       nextCount: 0,
       shouldDowngrade: false,
       reason: null,
     })
-    expect(shouldDowngradeFromSlowFrames(0.9, false)).toBe(false)
   })
 
-  it('does not downgrade from slow frames in production either', () => {
-    expect(shouldDowngradeFromSlowFrames(0.95, true)).toBe(false)
+  it('does not downgrade from slow frames in development', () => {
+    expect(shouldDowngradeFromSlowFrames(0.95, false)).toBe(false)
+  })
+
+  it('downgrades from slow frames in production when ratio is high', () => {
+    expect(shouldDowngradeFromSlowFrames(0.51, true)).toBe(false)
+    expect(shouldDowngradeFromSlowFrames(0.52, true)).toBe(true)
+    expect(shouldDowngradeFromSlowFrames(0.95, true)).toBe(true)
   })
 })

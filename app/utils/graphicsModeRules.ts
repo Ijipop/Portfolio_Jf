@@ -33,6 +33,12 @@ export interface MetricBreachEvaluation {
 const FULL_MODE = 'full'
 const LIGHT_MODE = 'light'
 
+/** Nombre de métriques « poor » consécutives (prod) avant passage en mode light. */
+const WEB_VITAL_POOR_BREACH_TO_DOWNGRADE = 3
+
+/** Au-dessus de ce ratio de frames lentes, demander le mode light (prod uniquement). */
+const SLOW_FRAME_DOWNGRADE_RATIO = 0.52
+
 const LIGHT_OVERRIDE_VALUES = new Set(['light', 'lite'])
 const FULL_OVERRIDE_VALUES = new Set(['full'])
 
@@ -51,9 +57,24 @@ export function resolveGraphicsModeOverride(value: string | null | undefined): G
   return null
 }
 
+/** En prod, conserver le mode light choisi automatiquement pour la durée de l’onglet. */
 export function shouldPersistGraphicsDowngrade(isProduction: boolean): boolean {
-  void isProduction
-  return false
+  return isProduction
+}
+
+function isMetricPoor(metric: GraphicsMetric): boolean {
+  if (metric.rating === 'poor') return true
+  if (metric.rating === 'good' || metric.rating === 'needs-improvement') return false
+  switch (metric.name) {
+    case 'LCP':
+      return metric.value > 4000
+    case 'INP':
+      return metric.value > 500
+    case 'CLS':
+      return metric.value > 0.25
+    default:
+      return false
+  }
 }
 
 export function resolveInitialGraphicsDecision(input: InitialGraphicsDecisionInput): InitialGraphicsDecision {
@@ -64,18 +85,37 @@ export function resolveInitialGraphicsDecision(input: InitialGraphicsDecisionInp
     }
   }
 
-  void input.persistedMode
-  void input.persistedReason
-  void input.prefersReducedMotion
-  void input.saveData
-  void input.deviceMemory
-  void input.hardwareConcurrency
-  void input.isProduction
-
-  return {
-    mode: FULL_MODE,
-    reason: null,
+  // Développement : toujours full sauf override forcé (confort dev).
+  if (!input.isProduction) {
+    return { mode: FULL_MODE, reason: null }
   }
+
+  if (input.persistedMode === LIGHT_MODE) {
+    return {
+      mode: LIGHT_MODE,
+      reason: input.persistedReason ?? 'session-persisted-light',
+    }
+  }
+
+  if (input.prefersReducedMotion) {
+    return { mode: LIGHT_MODE, reason: 'prefers-reduced-motion' }
+  }
+
+  if (input.saveData) {
+    return { mode: LIGHT_MODE, reason: 'save-data' }
+  }
+
+  const mem = input.deviceMemory
+  if (typeof mem === 'number' && Number.isFinite(mem) && mem > 0 && mem <= 4) {
+    return { mode: LIGHT_MODE, reason: 'device-memory-low' }
+  }
+
+  const cores = input.hardwareConcurrency
+  if (typeof cores === 'number' && Number.isFinite(cores) && cores > 0 && cores <= 2) {
+    return { mode: LIGHT_MODE, reason: 'hardware-concurrency-low' }
+  }
+
+  return { mode: FULL_MODE, reason: null }
 }
 
 export function evaluateGraphicsMetricBreach(
@@ -83,18 +123,28 @@ export function evaluateGraphicsMetricBreach(
   currentCount: number,
   isProduction: boolean
 ): MetricBreachEvaluation {
-  void metric
-  void currentCount
-  void isProduction
+  if (!isProduction || !isMetricPoor(metric)) {
+    return { nextCount: 0, shouldDowngrade: false, reason: null }
+  }
+
+  const nextCount = currentCount + 1
+  const shouldDowngrade = nextCount >= WEB_VITAL_POOR_BREACH_TO_DOWNGRADE
+  if (shouldDowngrade) {
+    return {
+      nextCount: 0,
+      shouldDowngrade: true,
+      reason: `web-vitals-${String(metric.name).toLowerCase()}-poor`,
+    }
+  }
+
   return {
-    nextCount: 0,
+    nextCount,
     shouldDowngrade: false,
     reason: null,
   }
 }
 
 export function shouldDowngradeFromSlowFrames(slowRatio: number, isProduction: boolean): boolean {
-  void slowRatio
-  void isProduction
-  return false
+  if (!isProduction) return false
+  return slowRatio >= SLOW_FRAME_DOWNGRADE_RATIO
 }
