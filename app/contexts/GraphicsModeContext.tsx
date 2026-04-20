@@ -52,16 +52,18 @@ export function GraphicsModeProvider({ children }: { children: React.ReactNode }
     const previousCount = Number(sessionStorage.getItem(METRIC_BREACH_KEY) ?? '0')
     const evaluation = evaluateGraphicsMetricBreach(metric, previousCount, isProduction)
 
+    if (evaluation.shouldDowngrade && evaluation.reason) {
+      requestLightMode(evaluation.reason)
+      sessionStorage.removeItem(METRIC_BREACH_KEY)
+      return
+    }
+
     if (evaluation.nextCount === 0) {
       sessionStorage.removeItem(METRIC_BREACH_KEY)
       return
     }
 
     sessionStorage.setItem(METRIC_BREACH_KEY, String(evaluation.nextCount))
-
-    if (evaluation.shouldDowngrade && evaluation.reason) {
-      requestLightMode(evaluation.reason)
-    }
   }, [isProduction, requestLightMode])
 
   useEffect(() => {

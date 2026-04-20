@@ -33,7 +33,7 @@ export const translations = {
       mainSectionEyebrow: 'Création de sites web sur mesure',
       mainSectionTitle: 'Des sites web clairs, rapides et pensés pour votre entreprise',
       mainSectionP1:
-        'Pour independants et PME : creation, refonte et petits outils sur mesure.',
+        'Pour les indépendants et les PME : création, refonte et petits outils sur mesure.',
       mainSectionP2:
         '',
       role: "Développeur spécialisé en création de sites web et d'applications sur mesure pour travailleurs autonomes et petites entreprises.",
@@ -58,7 +58,7 @@ export const translations = {
       demosBandKicker: 'Vitrines démo',
       demosBandTitle: 'Voir le rendu avant de décider',
       demosBandLead:
-        'Quatre mini-sites (construction, restaurant, tech sombre, bien-être) pour montrer des styles très différents.',
+        'Quatre mini-sites pour montrer des styles très différents.',
       demosBandCta: 'Explorer les démos',
     },
     contact: {
@@ -376,7 +376,7 @@ export const translations = {
       demosBandKicker: 'Demo showcases',
       demosBandTitle: 'See the craft before you decide',
       demosBandLead:
-        'Four one-pagers (construction, restaurant, dark tech, wellness) to show very different creative directions.',
+        'Four one-pagers to show very different creative directions.',
       demosBandCta: 'Browse demos',
     },
     contact: {

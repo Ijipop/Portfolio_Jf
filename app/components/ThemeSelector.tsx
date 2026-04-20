@@ -1,6 +1,7 @@
 'use client'
 
-import { ArrowDropDown, Palette } from '@mui/icons-material'
+import ArrowDropDown from '@mui/icons-material/ArrowDropDown'
+import Palette from '@mui/icons-material/Palette'
 import {
 	Box,
 	Chip,

@@ -19,8 +19,8 @@ export default function PortfolioHomeHero() {
       <Typography
         component="p"
         sx={{
-          fontWeight: 600,
-          fontSize: { xs: '1rem', sm: '1.0625rem' },
+          fontWeight: 700,
+          fontSize: { xs: '1.12rem', sm: '1.2rem' },
           letterSpacing: '0.01em',
           color: textColor,
           mb: 0.5,
