@@ -1,0 +1,18 @@
+Objet : Déploiement bloqué à « Deploying outputs » — besoin des logs internes
+
+Bonjour,
+
+Notre build Next.js se termine correctement (« Build Completed in /vercel/output »), puis l’étape « Deploying outputs » échoue ou reste bloquée sans message exploitable dans les logs visibles.
+
+Références :
+- Déploiement réussi (référence) : merge commit 9636af7 (PR #135) — merci de corréler avec l’ID de déploiement Vercel si possible : dpl________________
+- Déploiement en échec (exemple) : dpl________________
+
+Projet / équipe : jean-francois-lefebvres-projects (à ajuster si besoin).
+
+Le dépôt force désormais la commande de build via vercel.json : npm run build (sans prisma migrate deploy sur le build).
+
+Pourriez-vous indiquer la cause côté infrastructure (quota, edge, région, taille des artefacts, erreur interne) ?
+
+Merci,
+[Votre nom]

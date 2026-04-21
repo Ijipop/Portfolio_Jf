@@ -32,6 +32,8 @@ yarn-error.log*
 
 # vercel
 .vercel
+# Fichier résiduel si le diagnostic proxy est interrompu (voir scripts/vercel-no-proxy-branch.mjs)
+proxy.ts.vercel-disabled
 
 # typescript
 *.tsbuildinfo

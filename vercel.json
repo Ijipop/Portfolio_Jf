@@ -1,4 +1,6 @@
 {
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "buildCommand": "npm run build",
   "functions": {
     "app/api/timelendr/releases/route.ts": {
       "maxDuration": 120
