@@ -1,0 +1,6 @@
+# Fonds lourds : ne pas versionner ; utiliser une URL https ou le stockage data URL (admin) en base.
+*.png
+*.jpg
+*.jpeg
+*.webp
+*.gif
