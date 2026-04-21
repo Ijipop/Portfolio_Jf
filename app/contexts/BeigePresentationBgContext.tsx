@@ -23,7 +23,23 @@ export function BeigePresentationBgProvider({
   )
 
   useEffect(() => {
-    setState(initialBeigePresentationBgUrl?.trim() || null)
+    const synced = initialBeigePresentationBgUrl?.trim() || null
+    setState(synced)
+
+    if (typeof window === 'undefined') return undefined
+    if (!synced || !synced.startsWith('/') || synced.startsWith('//')) return undefined
+
+    const ac = new AbortController()
+    const abs = new URL(synced, window.location.origin).toString()
+    fetch(abs, { method: 'HEAD', signal: ac.signal, cache: 'no-store' })
+      .then((res) => {
+        if (res.status === 404 || res.status === 410) {
+          setState(null)
+        }
+      })
+      .catch(() => {})
+
+    return () => ac.abort()
   }, [initialBeigePresentationBgUrl])
 
   const setBeigePresentationBgUrl = useCallback((url: string | null) => {

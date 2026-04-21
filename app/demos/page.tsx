@@ -30,6 +30,18 @@ const demos = [
     desc: 'Ambiance douce et aérée — spa, yoga ou coaching.',
     thumb: styles.thumbWellness,
   },
+  {
+    href: '/demos/cabinet-pro',
+    title: 'Cabinet pro & confiance',
+    desc: 'Ton éditorial, preuves chiffrées, processus clair — comptable, conseil ou mandat réglementé.',
+    thumb: styles.thumbCabinetPro,
+  },
+  {
+    href: '/demos/boutique',
+    title: 'Commerce local premium',
+    desc: 'Histoire de marque, grille produits, horaires — épicerie, atelier ou boutique indépendante.',
+    thumb: styles.thumbBoutique,
+  },
 ] as const
 
 export default function DemosIndexPage() {
@@ -37,7 +49,7 @@ export default function DemosIndexPage() {
     <div className={styles.page} style={{ background: hubBackground }}>
       <div className={styles.inner}>
         <span className={styles.kicker}>Exemples de styles</span>
-        <h1 className={styles.title}>Quatre directions créatives pour votre prochain site</h1>
+        <h1 className={styles.title}>Six directions créatives pour votre prochain site</h1>
         <p className={styles.lead}>
           Chaque page illustre une direction graphique et une ambiance différentes. Ouvrez celles qui vous parlent.
         </p>

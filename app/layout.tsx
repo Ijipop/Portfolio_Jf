@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { unstable_noStore as noStore } from 'next/cache'
 import { Analytics } from '@vercel/analytics/next'
 import WebVitalsReporter from './components/WebVitalsReporter'
 import ContactFab from './components/shared/ContactFab'
@@ -7,7 +8,7 @@ import ThemeWrapper from './components/ThemeWrapper'
 import FullPageTopologyWrapper from './components/FullPageTopologyWrapper'
 import { inter } from './fonts'
 import './globals.css'
-import { getBeigePresentationBgUrlFromDb } from '@/lib/site-appearance'
+import { getBeigePresentationBgUrlForSsr } from '@/lib/site-appearance'
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://ijipop.com'
 
@@ -46,7 +47,8 @@ export const viewport = {
 }
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  const initialBeigePresentationBgUrl = await getBeigePresentationBgUrlFromDb()
+  noStore()
+  const initialBeigePresentationBgUrl = await getBeigePresentationBgUrlForSsr()
 
   return (
     <html lang="fr" className={inter.variable}>

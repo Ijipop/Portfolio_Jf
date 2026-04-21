@@ -132,6 +132,9 @@ const PRIORITY_TECHS = [
 ]
 const MAX_FILTER_TECHS = 10
 
+/** Rayon des coins des vignettes projet (aligné sur les cartes ~20px). */
+const PROJECT_CARD_IMAGE_RADIUS = DESIGN_TOKENS.borderRadius.large
+
 // Normaliser un nom de tech (variantes → canonique)
 function normalizeTechName(raw: string): string {
   const t = raw.trim()
@@ -459,7 +462,7 @@ const ProjectCardWrapper = ({
                 mb: 0,
                 aspectRatio: '16 / 9',
                 flexShrink: 0,
-                borderRadius: `${DESIGN_TOKENS.borderRadius.medium}px`,
+                borderRadius: `${PROJECT_CARD_IMAGE_RADIUS}px`,
                 ...(cardImageHref
                   ? { background: 'rgba(0,0,0,0.06)' }
                   : {
@@ -475,9 +478,13 @@ const ProjectCardWrapper = ({
                       boxShadow: 'none',
                     }
                   : {}),
+                '& > span': {
+                  borderRadius: `${PROJECT_CARD_IMAGE_RADIUS}px`,
+                  overflow: 'hidden',
+                },
                 '& img': {
                   objectFit: 'contain',
-                  borderRadius: `${DESIGN_TOKENS.borderRadius.medium}px`,
+                  borderRadius: `${PROJECT_CARD_IMAGE_RADIUS}px`,
                   ...(isNonDefaultPalette ? { boxShadow: 'none' } : {}),
                 },
               }}
@@ -488,7 +495,10 @@ const ProjectCardWrapper = ({
                   alt={project.name}
                   fill
                   sizes="(max-width: 600px) 100vw, (max-width: 900px) 50vw, 33vw"
-                  style={{ objectFit: 'contain' }}
+                  style={{
+                    objectFit: 'contain',
+                    borderRadius: PROJECT_CARD_IMAGE_RADIUS,
+                  }}
                 />
               ) : (
                 <Typography variant="caption" sx={{ opacity: 0.5, color: textColor }}>
@@ -836,14 +846,22 @@ const FilterContainerComponent = ({ children }: { children: React.ReactNode }) =
 const ProjectImageContainer = styled(Box)(({ theme }) => ({
   position: 'relative',
   overflow: 'hidden',
-  borderRadius: `${DESIGN_TOKENS.borderRadius.medium}px`,
+  borderRadius: `${PROJECT_CARD_IMAGE_RADIUS}px`,
   marginBottom: theme.spacing(0.5),
   [theme.breakpoints.up('lg')]: { marginBottom: theme.spacing(0.65) },
+  /** `next/image` + `fill` : wrapper `span` à arrondir pour clipper comme l’image. */
+  '& > span': {
+    borderRadius: `${PROJECT_CARD_IMAGE_RADIUS}px`,
+    overflow: 'hidden',
+    display: 'block',
+    width: '100%',
+    height: '100%',
+  },
   '& img': {
     transition: DESIGN_TOKENS.transitions.slow,
     width: '100%',
     objectFit: 'contain',
-    borderRadius: `${DESIGN_TOKENS.borderRadius.medium}px`,
+    borderRadius: `${PROJECT_CARD_IMAGE_RADIUS}px`,
     boxShadow: '0 4px 20px rgba(0, 0, 0, 0.1)',
   },
 }))

@@ -82,7 +82,7 @@ test('logiciel and pageweb routes are reachable', async ({ page }) => {
 test('demos index and one demo route', async ({ page }) => {
   await page.goto('/demos', { waitUntil: 'domcontentloaded' })
   await expect(page).toHaveURL(/\/demos\/?$/)
-  await expect(page.locator('h1').first()).toContainText(/Quatre directions créatives/)
+  await expect(page.locator('h1').first()).toContainText(/Six directions créatives/)
 
   await page.locator('a[href="/demos/construction"]').first().click()
   await expect(page).toHaveURL(/\/demos\/construction/)
