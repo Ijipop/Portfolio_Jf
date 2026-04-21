@@ -41,6 +41,9 @@ import { useRouter } from 'next/navigation';
 import { getProjectImageLetterboxGlassSx } from '@/components/shared/cardSurface';
 import { useEffect, useState, useCallback, useRef, useMemo } from 'react';
 import { navigateProjectUrl } from '@/lib/navigateProjectUrl';
+import { useAdvancedTheme } from '@/contexts/AdvancedThemeContext';
+import { useBeigePresentationBg } from '@/contexts/BeigePresentationBgContext';
+import { getBeigePresentationTopologyBackground } from '@/utils/syncPortfolioThemeToDocument';
 
 interface Project {
   id: number;
@@ -202,6 +205,14 @@ export default function AdminDashboard() {
   const [timelendrSuccessOpen, setTimelendrSuccessOpen] = useState(false);
   const [timelendrSuccessDetail, setTimelendrSuccessDetail] = useState('');
 
+  const [siteBeigeDraft, setSiteBeigeDraft] = useState('');
+  const [siteBeigeSaved, setSiteBeigeSaved] = useState<string | null>(null);
+  const [siteBeigeUploading, setSiteBeigeUploading] = useState(false);
+  const [siteBeigeSuccess, setSiteBeigeSuccess] = useState('');
+  const siteBeigeFileInputRef = useRef<HTMLInputElement>(null);
+  const { customTheme } = useAdvancedTheme();
+  const { setBeigePresentationBgUrl } = useBeigePresentationBg();
+
   // Fonction pour corriger les chemins d'images
   const getImageUrl = (imageUrl: string) => {
     if (!imageUrl) return '';
@@ -272,6 +283,21 @@ export default function AdminDashboard() {
     }
   }, []);
 
+  const fetchSiteAppearance = useCallback(async () => {
+    try {
+      const response = await fetch('/api/site-appearance', { credentials: 'include' });
+      const data = await response.json();
+      if (data.success && data.data) {
+        const url = (data.data.beigePresentationBgUrl as string | null | undefined) ?? null;
+        setSiteBeigeSaved(url);
+        setSiteBeigeDraft(url ?? '');
+        setBeigePresentationBgUrl(url);
+      }
+    } catch (e) {
+      console.error('site-appearance:', e);
+    }
+  }, [setBeigePresentationBgUrl]);
+
   const redirectToAdminLogin = useCallback(() => {
     router.push('/admin');
   }, [router]);
@@ -287,12 +313,13 @@ export default function AdminDashboard() {
         }
         fetchProjects();
         fetchTimelendrReleases();
+        void fetchSiteAppearance();
       } catch {
         redirectToAdminLogin();
       }
     };
     void verifySession();
-  }, [fetchProjects, fetchTimelendrReleases, redirectToAdminLogin]);
+  }, [fetchProjects, fetchTimelendrReleases, fetchSiteAppearance, redirectToAdminLogin]);
 
   const handleLogout = async () => {
     try {
@@ -301,6 +328,110 @@ export default function AdminDashboard() {
       console.error('Logout:', error);
     } finally {
       router.push('/');
+    }
+  };
+
+  const handleSaveSiteBeigeBg = async () => {
+    setError('');
+    setSiteBeigeSuccess('');
+    try {
+      const trimmed = siteBeigeDraft.trim();
+      const res = await fetch('/api/site-appearance', {
+        method: 'PATCH',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          beigePresentationBgUrl: trimmed === '' ? null : trimmed,
+        }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        setError(typeof data.error === 'string' ? data.error : 'Impossible d’enregistrer le fond');
+        return;
+      }
+      if (data.success && data.data) {
+        const url = (data.data.beigePresentationBgUrl as string | null | undefined) ?? null;
+        setSiteBeigeSaved(url);
+        setSiteBeigeDraft(url ?? '');
+        setBeigePresentationBgUrl(url);
+        setSiteBeigeSuccess('Fond du mode Site enregistré. Les visiteurs le verront au prochain chargement.');
+        router.refresh();
+      }
+    } catch {
+      setError('Erreur réseau lors de l’enregistrement du fond');
+    }
+  };
+
+  const handleResetSiteBeigeBg = async () => {
+    setError('');
+    setSiteBeigeSuccess('');
+    try {
+      const res = await fetch('/api/site-appearance', {
+        method: 'PATCH',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ beigePresentationBgUrl: null }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        setError(typeof data.error === 'string' ? data.error : 'Impossible de réinitialiser le fond');
+        return;
+      }
+      setSiteBeigeSaved(null);
+      setSiteBeigeDraft('');
+      setBeigePresentationBgUrl(null);
+      setSiteBeigeSuccess('Fond réinitialisé sur l’image par défaut (BGpur).');
+      router.refresh();
+    } catch {
+      setError('Erreur réseau lors de la réinitialisation');
+    }
+  };
+
+  const handleSiteBeigeFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/gif'];
+    if (!allowedTypes.includes(file.type)) {
+      setError('Type de fichier non autorisé. Utilisez JPEG, PNG, WEBP ou GIF');
+      return;
+    }
+    const maxSize = 5 * 1024 * 1024;
+    if (file.size > maxSize) {
+      setError('Le fichier est trop volumineux. Taille maximale: 5MB');
+      return;
+    }
+    setSiteBeigeUploading(true);
+    setError('');
+    try {
+      const uploadFormData = new FormData();
+      uploadFormData.append('file', file);
+      uploadFormData.append('kind', 'site-beige-bg');
+      const response = await fetch('/api/upload', {
+        method: 'POST',
+        credentials: 'include',
+        body: uploadFormData,
+      });
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) {
+        if (response.status === 401) {
+          setError('Session expirée.');
+          redirectToAdminLogin();
+        } else {
+          setError(typeof data.error === 'string' ? data.error : 'Erreur lors de l’upload');
+        }
+        return;
+      }
+      if (data.success && data.data?.url) {
+        setSiteBeigeDraft(data.data.url as string);
+        setSiteBeigeSuccess('Image uploadée : cliquez sur Enregistrer pour l’appliquer au site public.');
+      }
+    } catch {
+      setError('Erreur de connexion lors de l’upload.');
+    } finally {
+      setSiteBeigeUploading(false);
+      if (siteBeigeFileInputRef.current) {
+        siteBeigeFileInputRef.current.value = '';
+      }
     }
   };
 
@@ -707,6 +838,87 @@ export default function AdminDashboard() {
             {timelendrSuccessDetail || 'Version Timelendr enregistrée.'}
           </Alert>
         </Snackbar>
+
+        {siteBeigeSuccess && (
+          <Alert severity="success" sx={{ mb: 2 }} onClose={() => setSiteBeigeSuccess('')}>
+            {siteBeigeSuccess}
+          </Alert>
+        )}
+
+        <Card sx={{ mb: 4 }}>
+          <CardContent>
+            <Typography variant="h6" component="h2" gutterBottom>
+              Fond du mode « Site » (texture centrale, ex. BGpur)
+            </Typography>
+            <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+              Remplace l’image affichée derrière le contenu en mode présentation Site (beige). Collez une URL
+              https ou un chemin commençant par /, ou importez une image (max 5 Mo).
+            </Typography>
+            <TextField
+              fullWidth
+              label="URL ou chemin de l’image"
+              value={siteBeigeDraft}
+              onChange={(e) => setSiteBeigeDraft(e.target.value)}
+              placeholder="https://… ou /imgs/…"
+              sx={{ mb: 2 }}
+              disabled={siteBeigeUploading}
+            />
+            <input
+              ref={siteBeigeFileInputRef}
+              type="file"
+              accept="image/jpeg,image/jpg,image/png,image/webp,image/gif"
+              style={{ display: 'none' }}
+              onChange={handleSiteBeigeFileSelect}
+            />
+            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mb: 2, alignItems: 'center' }}>
+              <Button
+                variant="outlined"
+                startIcon={<CloudUploadIcon />}
+                disabled={siteBeigeUploading}
+                onClick={() => siteBeigeFileInputRef.current?.click()}
+              >
+                Importer une image
+              </Button>
+              {siteBeigeUploading && <CircularProgress size={24} />}
+              <Button
+                variant="contained"
+                onClick={() => void handleSaveSiteBeigeBg()}
+                disabled={
+                  siteBeigeUploading ||
+                  siteBeigeDraft.trim() === (siteBeigeSaved ?? '').trim()
+                }
+              >
+                Enregistrer
+              </Button>
+              <Button
+                variant="text"
+                color="warning"
+                onClick={() => void handleResetSiteBeigeBg()}
+                disabled={
+                  siteBeigeUploading ||
+                  (siteBeigeSaved === null && siteBeigeDraft.trim() === '')
+                }
+              >
+                Réinitialiser (BGpur par défaut)
+              </Button>
+            </Box>
+            <Typography variant="caption" color="text.secondary" display="block" sx={{ mb: 1 }}>
+              Aperçu (rendu approximatif avec halos du thème actuel)
+            </Typography>
+            <Box
+              sx={{
+                height: 140,
+                borderRadius: 2,
+                border: `1px solid ${theme.palette.divider}`,
+                background: getBeigePresentationTopologyBackground(
+                  customTheme,
+                  siteBeigeDraft.trim() || null
+                ),
+                backgroundAttachment: 'local',
+              }}
+            />
+          </CardContent>
+        </Card>
 
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
           <Typography variant="h4" component="h1">

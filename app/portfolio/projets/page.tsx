@@ -44,6 +44,7 @@ import AccessTimeIcon from '@mui/icons-material/AccessTime'
 import FilterListIcon from '@mui/icons-material/FilterList'
 import ClearIcon from '@mui/icons-material/Clear'
 import { useAdvancedTheme } from '../../contexts/AdvancedThemeContext'
+import { useBeigePresentationBg } from '../../contexts/BeigePresentationBgContext'
 import { usePresentationMode } from '../../contexts/PresentationModeContext'
 import { useLanguage } from '../../contexts/LanguageContext'
 import { useThemeColors } from '../../hooks/useThemeColors'
@@ -278,6 +279,7 @@ const ProjectCardWrapper = ({
   const { primary, secondary, accent } = useThemeColors()
   const textColor = useTextColor()
   const { themeName, customTheme } = useAdvancedTheme()
+  const { beigePresentationBgUrl } = useBeigePresentationBg()
   const { mode: presentationMode } = usePresentationMode()
   const isNonDefaultPalette = themeName !== 'default'
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
@@ -342,7 +344,7 @@ const ProjectCardWrapper = ({
             '&:last-child': { paddingBottom: 0 },
           },
           cursor: hasProjectAction ? 'pointer' : 'default',
-          background: `${getBeigePresentationTopologyBackground(customTheme)} !important`,
+          background: `${getBeigePresentationTopologyBackground(customTheme, beigePresentationBgUrl)} !important`,
           backgroundAttachment: 'fixed',
           backdropFilter: 'none',
           WebkitBackdropFilter: 'none',

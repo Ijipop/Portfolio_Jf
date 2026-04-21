@@ -8,6 +8,7 @@ import { usePathname } from 'next/navigation'
 import { THEMES, ThemeName, getAvailableThemes } from '@/design-system/themes'
 import { shouldShowTopology } from '@/utils/topologyRoutes'
 import { syncPortfolioThemeToDocument } from '@/utils/syncPortfolioThemeToDocument'
+import { useBeigePresentationBg } from '@/contexts/BeigePresentationBgContext'
 import { usePresentationMode } from '@/contexts/PresentationModeContext'
 import { DESIGN_TOKENS } from '@/design-system/constants'
 
@@ -33,6 +34,7 @@ export function AdvancedThemeProvider({ children }: { children: React.ReactNode 
   const pathname = usePathname()
   const isTopologyRoute = shouldShowTopology(pathname)
   const { mode: presentationMode, hydrated: presentationHydrated } = usePresentationMode()
+  const { beigePresentationBgUrl } = useBeigePresentationBg()
   const [themeName, setThemeName] = useState<ThemeName>(SSR_THEME_NAME)
   const customTheme = THEMES[themeName] // Source unique de vérité
 
@@ -59,8 +61,9 @@ export function AdvancedThemeProvider({ children }: { children: React.ReactNode 
   useEffect(() => {
     syncPortfolioThemeToDocument(themeName, {
       beigePresentation: presentationMode === 'beige',
+      beigePresentationBgUrl,
     })
-  }, [themeName, presentationMode])
+  }, [themeName, presentationMode, beigePresentationBgUrl])
 
   const setTheme = (newThemeName: ThemeName) => {
     if (!THEMES[newThemeName]) return

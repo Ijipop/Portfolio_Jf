@@ -3,27 +3,46 @@ import { THEMES, type ThemeName } from '@/design-system/themes'
 /** Image de fond réservée au mode présentation « Site / beige » (servie depuis /public). */
 export const BEIGE_PRESENTATION_BG_IMAGE = '/img/BGpur.png'
 
+function resolvedBeigePresentationImageUrl(override: string | null | undefined): string {
+  const v = override?.trim()
+  return v || BEIGE_PRESENTATION_BG_IMAGE
+}
+
+/** Pour `background` CSS : `url("…")` avec échappement des guillemets et antislashs. */
+export function cssBackgroundImageUrl(href: string): string {
+  const safe = href.replace(/\\/g, '\\\\').replace(/"/g, '\\"')
+  return `url("${safe}")`
+}
+
 /** Voile crème + image (calques : dégradé au-dessus du PNG). */
-export function getBeigePresentationPageBackground(theme: { bg: string; bg2: string }): string {
+export function getBeigePresentationPageBackground(
+  theme: { bg: string; bg2: string },
+  imageUrl?: string | null
+): string {
   const tint = `linear-gradient(165deg, ${theme.bg}9e 0%, ${theme.bg2}85 48%, ${theme.bg}9e 100%)`
-  return `${tint}, url('${BEIGE_PRESENTATION_BG_IMAGE}') center center / cover no-repeat`
+  const href = resolvedBeigePresentationImageUrl(imageUrl)
+  return `${tint}, ${cssBackgroundImageUrl(href)} center center / cover no-repeat`
 }
 
 /**
  * Fond plein écran mode beige avec halos theme (topology) — ordre CSS : halos → voile → image.
  */
-export function getBeigePresentationTopologyBackground(theme: {
-  bg: string
-  bg2: string
-  primary: string
-  accent: string
-  secondary: string
-}): string {
+export function getBeigePresentationTopologyBackground(
+  theme: {
+    bg: string
+    bg2: string
+    primary: string
+    accent: string
+    secondary: string
+  },
+  imageUrl?: string | null
+): string {
   const r1 = `radial-gradient(circle at 14% 16%, ${theme.primary}28 0%, transparent 40%)`
   const r2 = `radial-gradient(circle at 88% 22%, ${theme.accent}24 0%, transparent 34%)`
   const r3 = `radial-gradient(circle at 50% 92%, ${theme.secondary}12 0%, transparent 45%)`
   const tint = `linear-gradient(165deg, ${theme.bg}9e 0%, ${theme.bg2}85 48%, ${theme.bg}9e 100%)`
-  const img = `url('${BEIGE_PRESENTATION_BG_IMAGE}') center center / cover no-repeat`
+  const href = resolvedBeigePresentationImageUrl(imageUrl)
+  const img = `${cssBackgroundImageUrl(href)} center center / cover no-repeat`
   return `${r1}, ${r2}, ${r3}, ${tint}, ${img}`
 }
 
@@ -47,6 +66,8 @@ function getCardColorsForTheme(theme: (typeof THEMES)[ThemeName], name: ThemeNam
 export type SyncPortfolioThemeOptions = {
   /** Mode présentation « beige » : fond = BGpur.png + voile (pas seulement le dégradé latte). */
   beigePresentation?: boolean
+  /** Remplace BGpur.png (URL absolue ou chemin `/…`) si défini. */
+  beigePresentationBgUrl?: string | null
 }
 
 /** Met à jour les CSS variables et le fond body/html (client uniquement). */
@@ -76,7 +97,9 @@ export function syncPortfolioThemeToDocument(
 
   const grad = `linear-gradient(135deg, ${theme.bg} 0%, ${theme.bg2} 25%, ${theme.bg} 50%, ${theme.bg2} 75%, ${theme.bg} 100%)`
   const pageBg =
-    options?.beigePresentation === true ? getBeigePresentationPageBackground(theme) : grad
+    options?.beigePresentation === true
+      ? getBeigePresentationPageBackground(theme, options.beigePresentationBgUrl)
+      : grad
   document.body.style.setProperty('background', pageBg, 'important')
   document.documentElement.style.setProperty('background', pageBg, 'important')
 }

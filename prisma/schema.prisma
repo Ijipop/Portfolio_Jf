@@ -73,3 +73,13 @@ model TimelendrRelease {
 
   @@map("TimelendarRelease")
 }
+
+/** Singleton (id = 1) : apparence globale du site (ex. fond mode présentation « Site »). */
+model SiteAppearance {
+  id                     Int      @id @default(1)
+  beigePresentationBgUrl String?
+  createdAt              DateTime @default(now())
+  updatedAt              DateTime @updatedAt
+
+  @@map("SiteAppearance")
+}
