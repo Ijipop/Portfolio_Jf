@@ -1,11 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { authAdminToken } from '@/lib/auth-admin-request'
 import { prisma } from '@/lib/prisma'
-import {
-  getBeigePresentationBgUrlFromDb,
-  parseBeigePresentationBgUrl,
-  SITE_APPEARANCE_SINGLETON_ID,
-} from '@/lib/site-appearance'
+import { parseBeigePresentationBgUrl } from '@/lib/beige-presentation-bg-shared'
+import { getBeigePresentationBgUrlFromDb, SITE_APPEARANCE_SINGLETON_ID } from '@/lib/site-appearance'
 
 export const runtime = 'nodejs'
 

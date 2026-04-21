@@ -41,6 +41,7 @@ import { useRouter } from 'next/navigation';
 import { getProjectImageLetterboxGlassSx } from '@/components/shared/cardSurface';
 import { useEffect, useState, useCallback, useRef, useMemo } from 'react';
 import { navigateProjectUrl } from '@/lib/navigateProjectUrl';
+import { MAX_BEIGE_BG_FILE_BYTES } from '@/lib/beige-presentation-bg-shared';
 import { useAdvancedTheme } from '@/contexts/AdvancedThemeContext';
 import { useBeigePresentationBg } from '@/contexts/BeigePresentationBgContext';
 import { getBeigePresentationTopologyBackground } from '@/utils/syncPortfolioThemeToDocument';
@@ -398,9 +399,10 @@ export default function AdminDashboard() {
       setError('Type de fichier non autorisé. Utilisez JPEG, PNG, WEBP ou GIF');
       return;
     }
-    const maxBytes = 900 * 1024;
-    if (file.size > maxBytes) {
-      setError('Image trop lourde pour le fond intégré (max ~900 Ko). Réduisez la taille ou utilisez une URL https.');
+    if (file.size > MAX_BEIGE_BG_FILE_BYTES) {
+      setError(
+        `Image trop lourde pour le fond intégré (max ${Math.round(MAX_BEIGE_BG_FILE_BYTES / (1024 * 1024) * 10) / 10} Mo). Au-delà, le base64 dépasse souvent la limite Vercel (~4,5 Mo) : compressez l’image ou collez une URL https.`
+      );
       return;
     }
     setSiteBeigeUploading(true);
@@ -850,7 +852,7 @@ export default function AdminDashboard() {
             <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
               Collez une URL https, un chemin <code>/…</code> vers <code>public/</code>, ou choisissez une image sur
               votre ordinateur : elle est encodée dans la page (data URL) et enregistrée en base — pas de Vercel Blob,
-              pas de fichier persistant sur le serveur. Taille max. ~900 Ko par fichier.
+              pas de fichier persistant sur le serveur. Taille max. environ {Math.round(MAX_BEIGE_BG_FILE_BYTES / (1024 * 1024) * 10) / 10} Mo par fichier (un 4 Mo en base64 dépasse en général la limite de requête ; utilisez une URL pour les très gros fonds).
             </Typography>
             <TextField
               fullWidth
