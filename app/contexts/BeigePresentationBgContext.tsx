@@ -27,7 +27,8 @@ export function BeigePresentationBgProvider({
     setState(synced)
 
     if (typeof window === 'undefined') return undefined
-    if (!synced || !synced.startsWith('/') || synced.startsWith('//')) return undefined
+    if (!synced || synced.startsWith('data:') || !synced.startsWith('/') || synced.startsWith('//'))
+      return undefined
 
     const ac = new AbortController()
     const abs = new URL(synced, window.location.origin).toString()

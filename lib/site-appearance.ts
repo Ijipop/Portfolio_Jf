@@ -4,9 +4,19 @@ import { prisma } from '@/lib/prisma'
 
 export const SITE_APPEARANCE_SINGLETON_ID = 1
 
-const MAX_URL_LEN = 2048
+const MAX_HTTP_OR_PATH_LEN = 2048
+/** Image intégrée base64 (upload navigateur, sans stockage fichier). ~900 Ko fichier ≈ 1,2 Mio caractères. */
+export const MAX_BEIGE_BG_DATA_URL_CHARS = 1_400_000
 
-/** URL absolue http(s) ou chemin relatif `/…` pour le fond mode présentation « Site ». */
+const DATA_IMAGE_BG_RE =
+  /^data:image\/(?:png|jpeg|jpg|gif|webp);base64,[a-z0-9+/=*]+$/i
+
+export function isValidBeigeBgDataImageUrl(s: string): boolean {
+  const t = s.trim()
+  return t.length > 0 && t.length <= MAX_BEIGE_BG_DATA_URL_CHARS && DATA_IMAGE_BG_RE.test(t)
+}
+
+/** URL absolue http(s), chemin `/…`, ou data URL image (upload bureau sans Blob). */
 export function parseBeigePresentationBgUrl(input: unknown): { ok: true; value: string | null } | { ok: false; error: string } {
   if (input === null || input === undefined) {
     return { ok: true, value: null }
@@ -18,15 +28,25 @@ export function parseBeigePresentationBgUrl(input: unknown): { ok: true; value: 
   if (trimmed === '') {
     return { ok: true, value: null }
   }
-  if (trimmed.length > MAX_URL_LEN) {
-    return { ok: false, error: `URL trop longue (max ${MAX_URL_LEN} caractères)` }
-  }
   if (/[\s\r\n<>]/.test(trimmed)) {
     return { ok: false, error: 'URL invalide' }
   }
   const lower = trimmed.toLowerCase()
-  if (lower.startsWith('javascript:') || lower.startsWith('data:')) {
+  if (lower.startsWith('javascript:')) {
     return { ok: false, error: 'Schéma d’URL non autorisé' }
+  }
+  if (lower.startsWith('data:')) {
+    if (!isValidBeigeBgDataImageUrl(trimmed)) {
+      return {
+        ok: false,
+        error:
+          'Image autorisée : PNG, JPEG, GIF ou WebP en base64 (max ~900 Ko fichier avant encodage).',
+      }
+    }
+    return { ok: true, value: trimmed }
+  }
+  if (trimmed.length > MAX_HTTP_OR_PATH_LEN) {
+    return { ok: false, error: `URL trop longue (max ${MAX_HTTP_OR_PATH_LEN} caractères)` }
   }
   if (trimmed.startsWith('/')) {
     return { ok: true, value: trimmed }
@@ -34,7 +54,7 @@ export function parseBeigePresentationBgUrl(input: unknown): { ok: true; value: 
   if (/^https?:\/\//i.test(trimmed)) {
     return { ok: true, value: trimmed }
   }
-  return { ok: false, error: 'Utilisez une URL http(s) ou un chemin commençant par /' }
+  return { ok: false, error: 'Utilisez une URL http(s), un chemin /… ou une image intégrée (data URL).' }
 }
 
 /**
@@ -44,6 +64,7 @@ export function parseBeigePresentationBgUrl(input: unknown): { ok: true; value: 
 export function resolveBeigePresentationBgUrlForRender(url: string | null | undefined): string | null {
   const u = url?.trim()
   if (!u) return null
+  if (u.startsWith('data:image/') && isValidBeigeBgDataImageUrl(u)) return u
   if (/^https?:\/\//i.test(u)) return u
   if (!u.startsWith('/')) return null
   try {

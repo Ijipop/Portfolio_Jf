@@ -155,7 +155,7 @@ export async function POST(request: NextRequest) {
       })
     }
 
-    // kind === image (défaut) ou site-beige-bg (même règles, autre dossier)
+    // kind === image (défaut) — fond mode Site : data URL via admin (pas d’upload disque ici)
     const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/gif']
     const imageMime = normalizedMime(file.type)
     if (!allowedTypes.includes(imageMime)) {
@@ -179,12 +179,11 @@ export async function POST(request: NextRequest) {
 
     const bytes = await file.arrayBuffer()
     const buffer = Buffer.from(bytes)
-    const isSiteBeigeBg = kind === 'site-beige-bg'
     const imageUrl = await persistUploadedFile(
-      isSiteBeigeBg ? `portfolio/site-beige/${fileName}` : `portfolio/projets-images/${fileName}`,
+      `portfolio/projets-images/${fileName}`,
       buffer,
       imageMime || undefined,
-      isSiteBeigeBg ? ['imgs', 'site-beige'] : ['imgs', 'projets'],
+      ['imgs', 'projets'],
       fileName
     )
 
@@ -196,7 +195,7 @@ export async function POST(request: NextRequest) {
         size: file.size,
         type: file.type
       },
-      message: isSiteBeigeBg ? 'Image de fond uploadée' : 'Image uploadée avec succès'
+      message: 'Image uploadée avec succès'
     })
   } catch (error) {
     const err = error as NodeJS.ErrnoException & Error

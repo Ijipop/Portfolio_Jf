@@ -354,7 +354,9 @@ export default function AdminDashboard() {
         setSiteBeigeSaved(url);
         setSiteBeigeDraft(url ?? '');
         setBeigePresentationBgUrl(url);
-        setSiteBeigeSuccess('Fond du mode Site enregistré. Les visiteurs le verront au prochain chargement.');
+        setSiteBeigeSuccess(
+          'Fond enregistré : appliqué tout de suite ici ; les visiteurs le voient au prochain chargement (image en base de données, sans Blob).'
+        );
         router.refresh();
       }
     } catch {
@@ -387,7 +389,8 @@ export default function AdminDashboard() {
     }
   };
 
-  const handleSiteBeigeFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  /** Image depuis le bureau → data URL (pas de Blob / pas de fichier sur le serveur). */
+  const handleSiteBeigeFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
     const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/gif'];
@@ -395,44 +398,38 @@ export default function AdminDashboard() {
       setError('Type de fichier non autorisé. Utilisez JPEG, PNG, WEBP ou GIF');
       return;
     }
-    const maxSize = 5 * 1024 * 1024;
-    if (file.size > maxSize) {
-      setError('Le fichier est trop volumineux. Taille maximale: 5MB');
+    const maxBytes = 900 * 1024;
+    if (file.size > maxBytes) {
+      setError('Image trop lourde pour le fond intégré (max ~900 Ko). Réduisez la taille ou utilisez une URL https.');
       return;
     }
     setSiteBeigeUploading(true);
     setError('');
-    try {
-      const uploadFormData = new FormData();
-      uploadFormData.append('file', file);
-      uploadFormData.append('kind', 'site-beige-bg');
-      const response = await fetch('/api/upload', {
-        method: 'POST',
-        credentials: 'include',
-        body: uploadFormData,
-      });
-      const data = await response.json().catch(() => ({}));
-      if (!response.ok) {
-        if (response.status === 401) {
-          setError('Session expirée.');
-          redirectToAdminLogin();
-        } else {
-          setError(typeof data.error === 'string' ? data.error : 'Erreur lors de l’upload');
-        }
-        return;
-      }
-      if (data.success && data.data?.url) {
-        setSiteBeigeDraft(data.data.url as string);
-        setSiteBeigeSuccess('Image uploadée : cliquez sur Enregistrer pour l’appliquer au site public.');
-      }
-    } catch {
-      setError('Erreur de connexion lors de l’upload.');
-    } finally {
+    setSiteBeigeSuccess('');
+    const reader = new FileReader();
+    reader.onload = () => {
+      const dataUrl = typeof reader.result === 'string' ? reader.result : '';
       setSiteBeigeUploading(false);
       if (siteBeigeFileInputRef.current) {
         siteBeigeFileInputRef.current.value = '';
       }
-    }
+      if (!dataUrl.startsWith('data:image/')) {
+        setError('Lecture du fichier impossible.');
+        return;
+      }
+      setSiteBeigeDraft(dataUrl);
+      setSiteBeigeSuccess(
+        'Image chargée — cliquez sur Enregistrer : le fond change tout de suite sur votre écran (sans hébergement de fichier).'
+      );
+    };
+    reader.onerror = () => {
+      setSiteBeigeUploading(false);
+      setError('Lecture du fichier impossible.');
+      if (siteBeigeFileInputRef.current) {
+        siteBeigeFileInputRef.current.value = '';
+      }
+    };
+    reader.readAsDataURL(file);
   };
 
   const handleOpenDialog = (project?: Project) => {
@@ -851,15 +848,16 @@ export default function AdminDashboard() {
               Fond du mode « Site » (texture centrale, ex. BGpur)
             </Typography>
             <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-              Remplace l’image affichée derrière le contenu en mode présentation Site (beige). Collez une URL
-              https ou un chemin commençant par /, ou importez une image (max 5 Mo).
+              Collez une URL https, un chemin <code>/…</code> vers <code>public/</code>, ou choisissez une image sur
+              votre ordinateur : elle est encodée dans la page (data URL) et enregistrée en base — pas de Vercel Blob,
+              pas de fichier persistant sur le serveur. Taille max. ~900 Ko par fichier.
             </Typography>
             <TextField
               fullWidth
-              label="URL ou chemin de l’image"
+              label="URL, chemin ou image intégrée"
               value={siteBeigeDraft}
               onChange={(e) => setSiteBeigeDraft(e.target.value)}
-              placeholder="https://… ou /imgs/…"
+              placeholder="https://… ou /img/… — ou import ci-dessous"
               sx={{ mb: 2 }}
               disabled={siteBeigeUploading}
             />
@@ -877,7 +875,7 @@ export default function AdminDashboard() {
                 disabled={siteBeigeUploading}
                 onClick={() => siteBeigeFileInputRef.current?.click()}
               >
-                Importer une image
+                Choisir une image (ordinateur)
               </Button>
               {siteBeigeUploading && <CircularProgress size={24} />}
               <Button
