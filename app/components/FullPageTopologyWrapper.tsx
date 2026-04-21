@@ -4,6 +4,7 @@ import Box from '@mui/material/Box'
 import { ReactNode, useEffect, useRef } from 'react'
 import { usePathname } from 'next/navigation'
 import { useAdvancedTheme } from '@/contexts/AdvancedThemeContext'
+import { useBeigePresentationBg } from '@/contexts/BeigePresentationBgContext'
 import { useGraphicsMode } from '@/contexts/GraphicsModeContext'
 import { usePresentationMode } from '@/contexts/PresentationModeContext'
 import { shouldShowTopology } from '@/utils/topologyRoutes'
@@ -29,6 +30,7 @@ export default function FullPageTopologyWrapper({ children }: FullPageTopologyWr
   const show = shouldShowTopology(pathname)
   const scrollRef = useRef<HTMLDivElement>(null)
   const { customTheme } = useAdvancedTheme()
+  const { beigePresentationBgUrl } = useBeigePresentationBg()
   const { graphicsMode, downgradeReason } = useGraphicsMode()
   const { mode: presentationMode } = usePresentationMode()
   const useLightFallback = show && graphicsMode === 'light'
@@ -90,7 +92,7 @@ export default function FullPageTopologyWrapper({ children }: FullPageTopologyWr
               width: '100%',
               height: '100%',
               background: useStaticProBackground
-                ? getBeigePresentationTopologyBackground(customTheme)
+                ? getBeigePresentationTopologyBackground(customTheme, beigePresentationBgUrl)
                 : `radial-gradient(circle at 20% 20%, ${customTheme.primary}22 0%, transparent 35%), radial-gradient(circle at 80% 30%, ${customTheme.secondary}18 0%, transparent 30%), linear-gradient(135deg, ${customTheme.bg} 0%, ${customTheme.bg2} 100%)`,
             }}
           />

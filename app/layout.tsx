@@ -7,6 +7,7 @@ import ThemeWrapper from './components/ThemeWrapper'
 import FullPageTopologyWrapper from './components/FullPageTopologyWrapper'
 import { inter } from './fonts'
 import './globals.css'
+import { getBeigePresentationBgUrlFromDb } from '@/lib/site-appearance'
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://ijipop.com'
 
@@ -44,12 +45,14 @@ export const viewport = {
   viewportFit: 'cover',
 }
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const initialBeigePresentationBgUrl = await getBeigePresentationBgUrlFromDb()
+
   return (
     <html lang="fr" className={inter.variable}>
       <body>
         <SeoJsonLd />
-        <ThemeWrapper>
+        <ThemeWrapper initialBeigePresentationBgUrl={initialBeigePresentationBgUrl}>
           <WebVitalsReporter />
           <FullPageTopologyWrapper>
             {children}
