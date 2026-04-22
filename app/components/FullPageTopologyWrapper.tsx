@@ -1,6 +1,7 @@
 'use client'
 
 import Box from '@mui/material/Box'
+import useMediaQuery from '@mui/material/useMediaQuery'
 import { ReactNode, useEffect, useRef } from 'react'
 import { usePathname } from 'next/navigation'
 import { useAdvancedTheme } from '@/contexts/AdvancedThemeContext'
@@ -33,7 +34,10 @@ export default function FullPageTopologyWrapper({ children }: FullPageTopologyWr
   const { beigePresentationBgUrl } = useBeigePresentationBg()
   const { graphicsMode, downgradeReason } = useGraphicsMode()
   const { mode: presentationMode } = usePresentationMode()
-  const useLightFallback = show && graphicsMode === 'light'
+  const prefersReducedMotion = useMediaQuery('(prefers-reduced-motion: reduce)', { noSsr: true })
+  /** En prod le mode graphique « light » coupe Vanta ; en Créa on le réaffiche (sauf si l’OS demande moins de mouvement). */
+  const creaWantsVanta = presentationMode === 'dev' && !prefersReducedMotion
+  const useLightFallback = show && graphicsMode === 'light' && !creaWantsVanta
   const useStaticProBackground = presentationMode === 'beige'
   const useGradientOnly = useLightFallback || useStaticProBackground
 
