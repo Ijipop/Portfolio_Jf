@@ -47,7 +47,7 @@ export default function PortfolioHomeHero() {
   return (
     <HeaderSection title={<IjipopGlitchTitle text={t('home.heroTitle')} variant="hero" />} subtitle={subtitle}>
       <Stack
-        direction={{ xs: 'column', sm: 'row' }}
+        direction="column"
         spacing={1.75}
         justifyContent="center"
         alignItems="stretch"
@@ -56,17 +56,12 @@ export default function PortfolioHomeHero() {
           mb: { xs: 0, sm: 0 },
           px: { xs: 1, sm: 0 },
           width: '100%',
-          maxWidth: 480,
+          maxWidth: 400,
           mx: 'auto',
         }}
       >
-        <Link href="/portfolio/projets" style={{ textDecoration: 'none', flex: 1, minWidth: 0, display: 'flex' }}>
+        <Link href="/portfolio/contact" style={{ textDecoration: 'none', width: '100%', display: 'flex' }}>
           <CTAButton variant="primary" size="medium" fullWidth>
-            {t('home.ctaRealizations')}
-          </CTAButton>
-        </Link>
-        <Link href="/portfolio/contact" style={{ textDecoration: 'none', flex: 1, minWidth: 0, display: 'flex' }}>
-          <CTAButton variant="outline" size="medium" fullWidth>
             {t('home.contactMe')}
           </CTAButton>
         </Link>
