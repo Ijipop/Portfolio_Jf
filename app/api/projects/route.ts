@@ -2,6 +2,7 @@ import { prisma } from '@/lib/prisma'
 import { authAdminToken } from '@/lib/auth-admin-request'
 import { messageForProjectSaveError } from '@/lib/prisma-project-save-error'
 import { resolveWebAudience } from '@/lib/project-web-audience'
+import { normalizeProjectImageUrlInput } from '@/lib/stored-image-value'
 import { NextRequest, NextResponse } from 'next/server'
 
 type ProjectType = 'logiciel' | 'web'
@@ -130,6 +131,11 @@ export async function POST(request: NextRequest)
 			)
 		}
 
+		const imgNorm = normalizeProjectImageUrlInput(imageUrl)
+		if (!imgNorm.ok) {
+			return NextResponse.json({ success: false, error: imgNorm.error }, { status: 400 })
+		}
+
 		// Créer le project
 		const project = await prisma.project.create({
 			data: {
@@ -140,7 +146,7 @@ export async function POST(request: NextRequest)
 				url: url || '',
 				siteUrl: site,
 				downloadUrl: dl,
-				imageUrl: imageUrl || '',
+				imageUrl: imgNorm.value,
 				projectType: pt,
 				displayOrder: parseDisplayOrder(displayOrder),
 				webAudience: resolveWebAudience(webAudience, pt),
