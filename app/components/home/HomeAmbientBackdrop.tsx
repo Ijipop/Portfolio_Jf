@@ -5,17 +5,17 @@ import { alpha, useTheme } from '@mui/material/styles'
 import { useThemeColors } from '@/hooks/useThemeColors'
 
 /**
- * Fond d’ambiance plein écran (mode Créa uniquement, voir HomeClient) : dégradés animés
- * derrière le contenu, sans quadrillage ni interaction.
+ * Fond d’ambiance plein écran (activé depuis HomeClient) :
+ * dégradés animés + voile lumineux discret derrière le contenu.
  */
 export default function HomeAmbientBackdrop() {
   const theme = useTheme()
   const { primary, secondary, accent } = useThemeColors()
   const isDark = theme.palette.mode === 'dark'
 
-  const p = isDark ? 0.4 : 0.26
-  const s = isDark ? 0.34 : 0.22
-  const a = isDark ? 0.26 : 0.18
+  const p = isDark ? 0.42 : 0.34
+  const s = isDark ? 0.36 : 0.28
+  const a = isDark ? 0.28 : 0.22
 
   return (
     <Box
@@ -39,8 +39,12 @@ export default function HomeAmbientBackdrop() {
           '50%': { transform: 'translate3d(3%, 5%, 0) scale(1.04)' },
         },
         '@keyframes ambientShimmer': {
-          '0%': { opacity: 0.2, transform: 'translate3d(-6%, 0, 0)' },
-          '100%': { opacity: 0.42, transform: 'translate3d(6%, 0, 0)' },
+          '0%': { opacity: 0.26, transform: 'translate3d(-9%, 0, 0)' },
+          '100%': { opacity: 0.56, transform: 'translate3d(9%, 0, 0)' },
+        },
+        '@keyframes ambientBeam': {
+          '0%, 100%': { opacity: isDark ? 0.26 : 0.2, transform: 'translate3d(-5%, 0, 0) rotate(-10deg)' },
+          '50%': { opacity: isDark ? 0.5 : 0.38, transform: 'translate3d(6%, 0, 0) rotate(-7deg)' },
         },
         '@media (prefers-reduced-motion: reduce)': {
           '& .ambient-anim': {
@@ -56,8 +60,8 @@ export default function HomeAmbientBackdrop() {
           background: isDark
             ? `radial-gradient(140% 85% at 50% -15%, ${alpha(primary, 0.18)} 0%, transparent 58%),
                radial-gradient(90% 60% at 100% 100%, ${alpha(secondary, 0.12)} 0%, transparent 50%)`
-            : `radial-gradient(120% 75% at 50% -10%, ${alpha(primary, 0.14)} 0%, transparent 52%),
-               radial-gradient(85% 55% at 100% 100%, ${alpha(secondary, 0.1)} 0%, transparent 48%)`,
+            : `radial-gradient(120% 75% at 50% -10%, ${alpha(primary, 0.2)} 0%, transparent 52%),
+               radial-gradient(85% 55% at 100% 100%, ${alpha(secondary, 0.14)} 0%, transparent 48%)`,
         }}
       />
       <Box
@@ -112,18 +116,39 @@ export default function HomeAmbientBackdrop() {
         className="ambient-anim"
         sx={{
           position: 'absolute',
+          width: { xs: '140%', md: '120%' },
+          height: { xs: '65%', md: '58%' },
+          left: { xs: '-22%', md: '-8%' },
+          top: { xs: '-8%', md: '-12%' },
+          background: `linear-gradient(
+            92deg,
+            transparent 0%,
+            ${alpha('#fff', isDark ? 0.06 : 0.14)} 38%,
+            ${alpha(primary, isDark ? 0.13 : 0.1)} 50%,
+            ${alpha('#fff', isDark ? 0.06 : 0.14)} 62%,
+            transparent 100%
+          )`,
+          filter: 'blur(22px)',
+          transformOrigin: 'center',
+          animation: 'ambientBeam 12s ease-in-out infinite',
+        }}
+      />
+      <Box
+        className="ambient-anim"
+        sx={{
+          position: 'absolute',
           inset: 0,
           background: `linear-gradient(
             108deg,
             transparent 0%,
-            ${alpha(primary, isDark ? 0.05 : 0.04)} 42%,
-            ${alpha('#fff', isDark ? 0.04 : 0.08)} 50%,
-            ${alpha(primary, isDark ? 0.05 : 0.04)} 58%,
+            ${alpha(primary, isDark ? 0.07 : 0.06)} 42%,
+            ${alpha('#fff', isDark ? 0.05 : 0.11)} 50%,
+            ${alpha(primary, isDark ? 0.07 : 0.06)} 58%,
             transparent 100%
           )`,
           backgroundSize: '220% 100%',
           mixBlendMode: isDark ? 'screen' : 'multiply',
-          animation: 'ambientShimmer 14s ease-in-out infinite alternate',
+          animation: 'ambientShimmer 11s ease-in-out infinite alternate',
         }}
       />
     </Box>

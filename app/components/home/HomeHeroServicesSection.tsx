@@ -3,7 +3,7 @@
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import { alpha, useTheme } from '@mui/material/styles'
-import { usePathname } from 'next/navigation'
+import { usePathname, useSearchParams } from 'next/navigation'
 import { GlassContainer } from '@/components/GlassCard'
 import { getCardSurfaceSx } from '@/components/shared/cardSurface'
 import SectionDisplayTitle from '@/components/shared/SectionDisplayTitle'
@@ -15,7 +15,7 @@ import { useThemeColors } from '@/hooks/useThemeColors'
 import { useTextColor } from '@/hooks/useTextColor'
 import { shouldShowTopology } from '@/utils/topologyRoutes'
 import { motion, useReducedMotion } from 'framer-motion'
-import { useRef } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 
 const mobileProseWrapSx = {
   '@supports (text-wrap: pretty)': { textWrap: 'pretty' as const },
@@ -26,14 +26,19 @@ const mobileProseWrapSx = {
 export default function HomeHeroServicesSection() {
   const theme = useTheme()
   const pathname = usePathname()
+  const searchParams = useSearchParams()
   const isTopologyRoute = shouldShowTopology(pathname)
   const { primary } = useThemeColors()
   const textColor = useTextColor()
   const { t } = useLanguage()
   const { mode: presentationMode } = usePresentationMode()
   const isDevPresentation = presentationMode === 'dev'
+  /** `/?spotlight=1` : mode Créa mais carte = contenu « Site » seulement, pour tester le spotlight (sans séquence ASCII). */
+  const spotlightPreview = searchParams.get('spotlight') === '1'
   const isDark = theme.palette.mode === 'dark'
   const glassRef = useRef<HTMLDivElement>(null)
+  const spotOverlayRef = useRef<HTMLDivElement>(null)
+  const [spotlightEnabled, setSpotlightEnabled] = useState(false)
   const reducedMotionPref = useReducedMotion()
   /** `null` avant hydratation — on n’applique l’état « figé » que si l’OS demande explicitement moins de mouvement. */
   const reduceMotion = reducedMotionPref === true
@@ -49,6 +54,36 @@ export default function HomeHeroServicesSection() {
   const leadDelay = reduceMotion ? 0 : 0.16
   const sublineInit = reduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }
   const sublineDelay = reduceMotion ? 0 : 0.34
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    if (reduceMotion) return
+    const fine = window.matchMedia('(pointer: fine)').matches
+    setSpotlightEnabled(fine)
+  }, [reduceMotion])
+
+  const showDevAsciiIntro = isDevPresentation && !spotlightPreview
+
+  const handleSpotPointerMove = useCallback(
+    (e: React.PointerEvent<HTMLDivElement>) => {
+      if (!spotlightEnabled) return
+      const root = glassRef.current
+      const spot = spotOverlayRef.current
+      if (!root || !spot) return
+      const r = root.getBoundingClientRect()
+      const x = ((e.clientX - r.left) / Math.max(1, r.width)) * 100
+      const y = ((e.clientY - r.top) / Math.max(1, r.height)) * 100
+      root.style.setProperty('--spot-x', `${x}%`)
+      root.style.setProperty('--spot-y', `${y}%`)
+      spot.style.opacity = '1'
+    },
+    [spotlightEnabled]
+  )
+
+  const handleSpotPointerLeave = useCallback(() => {
+    const spot = spotOverlayRef.current
+    if (spot) spot.style.opacity = '0'
+  }, [])
 
   const heroTitleBlock = (
     <Box sx={{ mb: { xs: 2.25, sm: 2.75 } }}>
@@ -141,10 +176,14 @@ export default function HomeHeroServicesSection() {
     >
       <GlassContainer
         ref={glassRef}
+        onPointerMove={handleSpotPointerMove}
+        onPointerLeave={handleSpotPointerLeave}
         sx={{
           ...getCardSurfaceSx({ isTopologyRoute, variant: 'flat', level: 'soft', interactive: false }),
           position: 'relative',
-          overflow: isDevPresentation ? 'visible' : 'hidden',
+          overflow: showDevAsciiIntro ? 'visible' : 'hidden',
+          '--spot-x': '50%',
+          '--spot-y': '42%',
           p: { xs: 3, sm: 4, md: 4.5 },
           width: '100%',
           /** Sur mobile, 32px sur une carte quasi pleine largeur paraît trop « pilule » ; on aligne sur le rayon des cartes grille. */
@@ -170,78 +209,101 @@ export default function HomeHeroServicesSection() {
           },
         }}
       >
-        {isDevPresentation ? (
-          <HomeHeroDevCodeIntro
-            name="Jean-François Lefebvre"
-            role={t('home.role')}
-            intro={introText}
-            isTopologyRoute={isTopologyRoute}
-            embedded
-            walkSurfaceRef={glassRef}
-            sectionTitle={heroTitleBlock}
-          />
-        ) : (
+        {spotlightEnabled ? (
           <Box
+            ref={spotOverlayRef}
+            aria-hidden
             sx={{
-              textAlign: 'center',
-              pt: { xs: 0.5, sm: 0.75 },
-              px: { xs: 0.5, sm: 1 },
+              position: 'absolute',
+              inset: 0,
+              zIndex: 0,
+              pointerEvents: 'none',
+              borderRadius: 'inherit',
+              opacity: 0,
+              transition: 'opacity 0.35s ease',
+              background: `radial-gradient(
+                min(480px, 85vw) circle at var(--spot-x, 50%) var(--spot-y, 42%),
+                ${alpha(primary, isDark ? 0.26 : 0.16)} 0%,
+                transparent 50%
+              )`,
+              mixBlendMode: isDark ? 'screen' : 'multiply',
             }}
-          >
-            {heroTitleBlock}
-
-            <motion.div
-              initial={sublineInit}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{
-                duration: reduceMotion ? 0 : 0.46,
-                delay: sublineDelay,
-                ease: titleEase,
+          />
+        ) : null}
+        <Box sx={{ position: 'relative', zIndex: 1 }}>
+          {showDevAsciiIntro ? (
+            <HomeHeroDevCodeIntro
+              name="Jean-François Lefebvre"
+              role={t('home.role')}
+              intro={introText}
+              isTopologyRoute={isTopologyRoute}
+              embedded
+              walkSurfaceRef={glassRef}
+              sectionTitle={heroTitleBlock}
+            />
+          ) : (
+            <Box
+              sx={{
+                textAlign: 'center',
+                pt: { xs: 0.5, sm: 0.75 },
+                px: { xs: 0.5, sm: 1 },
               }}
             >
-              <Typography
-                component="p"
-                variant="body1"
-                sx={{
-                  color: textColor,
-                  opacity: 0.92,
-                  textAlign: 'center',
-                  lineHeight: 1.75,
-                  fontSize: { xs: '1rem', sm: '1.0625rem' },
-                  fontWeight: 400,
-                  letterSpacing: '0.01em',
-                  maxWidth: 540,
-                  mx: 'auto',
-                  mb: { xs: 1.75, sm: 2 },
-                  ...mobileProseWrapSx,
-                }}
-              >
-                {mainSectionP1}
-              </Typography>
-            </motion.div>
+              {heroTitleBlock}
 
-            {mainSectionP2 ? (
-              <Typography
-                component="p"
-                variant="body1"
-                sx={{
-                  color: textColor,
-                  opacity: 0.78,
-                  textAlign: 'center',
-                  lineHeight: 1.75,
-                  fontSize: { xs: '0.98rem', sm: '1.03rem' },
-                  fontWeight: 400,
-                  maxWidth: 540,
-                  mx: 'auto',
-                  mb: 0,
-                  ...mobileProseWrapSx,
+              <motion.div
+                initial={sublineInit}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{
+                  duration: reduceMotion ? 0 : 0.46,
+                  delay: sublineDelay,
+                  ease: titleEase,
                 }}
               >
-                {mainSectionP2}
-              </Typography>
-            ) : null}
-          </Box>
-        )}
+                <Typography
+                  component="p"
+                  variant="body1"
+                  sx={{
+                    color: textColor,
+                    opacity: 0.92,
+                    textAlign: 'center',
+                    lineHeight: 1.75,
+                    fontSize: { xs: '1rem', sm: '1.0625rem' },
+                    fontWeight: 400,
+                    letterSpacing: '0.01em',
+                    maxWidth: 540,
+                    mx: 'auto',
+                    mb: { xs: 1.75, sm: 2 },
+                    ...mobileProseWrapSx,
+                  }}
+                >
+                  {mainSectionP1}
+                </Typography>
+              </motion.div>
+
+              {mainSectionP2 ? (
+                <Typography
+                  component="p"
+                  variant="body1"
+                  sx={{
+                    color: textColor,
+                    opacity: 0.78,
+                    textAlign: 'center',
+                    lineHeight: 1.75,
+                    fontSize: { xs: '0.98rem', sm: '1.03rem' },
+                    fontWeight: 400,
+                    maxWidth: 540,
+                    mx: 'auto',
+                    mb: 0,
+                    ...mobileProseWrapSx,
+                  }}
+                >
+                  {mainSectionP2}
+                </Typography>
+              ) : null}
+            </Box>
+          )}
+        </Box>
       </GlassContainer>
     </Box>
   )
