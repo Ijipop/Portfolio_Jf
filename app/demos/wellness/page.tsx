@@ -17,7 +17,7 @@ export default function WellnessDemoPage() {
             Un espace lumineux, des soins au rythme lent et des praticiennes à l’écoute — pour souffler et retrouver un
             juste équilibre.
           </p>
-          <div>
+          <div className={styles.heroCtas}>
             <a className={styles.cta} href="#offres">
               Réserver un soin
             </a>

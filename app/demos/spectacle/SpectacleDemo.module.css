@@ -10,12 +10,14 @@
   background: radial-gradient(ellipse 120% 80% at 50% -20%, #3d1f4a 0%, var(--bg) 55%);
   color: var(--text);
   font-family: ui-sans-serif, system-ui, 'Segoe UI', sans-serif;
+  overflow-x: clip;
 }
 
 .wrap {
   max-width: 920px;
   margin: 0 auto;
   padding: 0 clamp(1rem, 4vw, 1.75rem) 4rem;
+  min-width: 0;
 }
 
 .header {
@@ -34,6 +36,15 @@
   letter-spacing: 0.35em;
   text-transform: uppercase;
   color: var(--gold);
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 420px) {
+  .venue {
+    letter-spacing: 0.16em;
+    font-size: 0.62rem;
+    line-height: 1.45;
+  }
 }
 
 .nav {
