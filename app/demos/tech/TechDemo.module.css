@@ -118,10 +118,17 @@
 .btnPrimary {
   background: linear-gradient(135deg, #0ea5e9, #6366f1);
   color: #fff;
+  transition: filter 0.2s ease, transform 0.2s ease;
 }
 
 .btnPrimary:hover {
   filter: brightness(1.06);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .btnPrimary:hover {
+    transform: translateY(-1px);
+  }
 }
 
 .btnGhost {
@@ -143,6 +150,12 @@
   overflow: hidden;
 }
 
+@media (prefers-reduced-motion: no-preference) {
+  .panel {
+    animation: techPanelFloat 12s ease-in-out infinite;
+  }
+}
+
 .panelGlow {
   position: absolute;
   width: 280px;
@@ -152,6 +165,31 @@
   top: -80px;
   right: -60px;
   pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .panelGlow {
+    animation: techGlowDrift 16s ease-in-out infinite alternate;
+  }
+}
+
+@keyframes techPanelFloat {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+@keyframes techGlowDrift {
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+  100% {
+    transform: translate(-14px, 10px) scale(1.04);
+  }
 }
 
 .panelGrid {
@@ -205,6 +243,15 @@
   border-radius: 12px;
   border: 1px solid var(--border);
   background: var(--surface);
+  transition: border-color 0.2s ease, box-shadow 0.25s ease, transform 0.25s ease;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .feature:hover {
+    border-color: rgba(56, 189, 248, 0.28);
+    box-shadow: 0 12px 32px rgba(15, 23, 42, 0.45);
+    transform: translateY(-2px);
+  }
 }
 
 .feature h3 {
@@ -234,6 +281,15 @@
   font-size: 0.75rem;
   font-weight: 700;
   color: var(--muted);
+  transition: border-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .logoPill:hover {
+    border-color: rgba(56, 189, 248, 0.35);
+    color: var(--text);
+    transform: translateY(-1px);
+  }
 }
 
 .footer {

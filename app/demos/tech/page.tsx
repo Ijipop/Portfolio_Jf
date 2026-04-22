@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import ScrollReveal from '@/components/shared/ScrollReveal'
 import DemoSocialIconsDecorative from '../DemoSocialIconsDecorative'
 import DemoVitrineAttribution from '../DemoVitrineAttribution'
 import styles from './TechDemo.module.css'
@@ -60,45 +61,57 @@ export default function TechDemoPage() {
         </section>
 
         <section id="features" className={styles.section}>
-          <h2 className={styles.h2}>Trois piliers produit</h2>
-          <p className={styles.p}>Une vision claire des bénéfices : détail en dessous.</p>
-          <div className={styles.features}>
-            <div className={styles.feature}>
-              <h3>Observabilité</h3>
-              <p>Tableaux de bord, alertes intelligentes, rétention des logs configurable.</p>
+          <ScrollReveal direction="up" distance={36}>
+            <div>
+              <h2 className={styles.h2}>Trois piliers produit</h2>
+              <p className={styles.p}>Une vision claire des bénéfices : détail en dessous.</p>
+              <div className={styles.features}>
+                <div className={styles.feature}>
+                  <h3>Observabilité</h3>
+                  <p>Tableaux de bord, alertes intelligentes, rétention des logs configurable.</p>
+                </div>
+                <div className={styles.feature}>
+                  <h3>Sécurité</h3>
+                  <p>SSO, MFA, politiques IP — contrôle fin des accès pour les équipes B2B.</p>
+                </div>
+                <div className={styles.feature}>
+                  <h3>Automatisation</h3>
+                  <p>Webhooks, playbooks, intégrations sans code pour les équipes opérationnelles.</p>
+                </div>
+              </div>
             </div>
-            <div className={styles.feature}>
-              <h3>Sécurité</h3>
-              <p>SSO, MFA, politiques IP — contrôle fin des accès pour les équipes B2B.</p>
-            </div>
-            <div className={styles.feature}>
-              <h3>Automatisation</h3>
-              <p>Webhooks, playbooks, intégrations sans code pour les équipes opérationnelles.</p>
-            </div>
-          </div>
+          </ScrollReveal>
         </section>
 
         <section id="trust" className={styles.section}>
-          <h2 className={styles.h2}>Ils nous font confiance</h2>
-          <p className={styles.p}>Des équipes techniques et directions IT qui exigent fiabilité et traçabilité.</p>
-          <div className={styles.logos}>
-            <span className={styles.logoPill}>Groupe Noville</span>
-            <span className={styles.logoPill}>Retail Nord</span>
-            <span className={styles.logoPill}>LogiTransit</span>
-            <span className={styles.logoPill}>SantéCollectif</span>
-          </div>
+          <ScrollReveal direction="up" distance={32}>
+            <div>
+              <h2 className={styles.h2}>Ils nous font confiance</h2>
+              <p className={styles.p}>Des équipes techniques et directions IT qui exigent fiabilité et traçabilité.</p>
+              <div className={styles.logos}>
+                <span className={styles.logoPill}>Groupe Noville</span>
+                <span className={styles.logoPill}>Retail Nord</span>
+                <span className={styles.logoPill}>LogiTransit</span>
+                <span className={styles.logoPill}>SantéCollectif</span>
+              </div>
+            </div>
+          </ScrollReveal>
         </section>
 
         <section id="cta" className={styles.section} aria-labelledby="cta-heading">
-          <h2 id="cta-heading" className={styles.h2}>
-            Prêt à passer en prod ?
-          </h2>
-          <p className={styles.p}>
-            Parlez à notre équipe commerciale pour planifier un appel ou une démo produit.
-          </p>
-          <a className={`${styles.btn} ${styles.btnPrimary}`} href={CONTACT_MAILTO}>
-            Contacter l’équipe NimbusOps
-          </a>
+          <ScrollReveal direction="up" distance={28}>
+            <div>
+              <h2 id="cta-heading" className={styles.h2}>
+                Prêt à passer en prod ?
+              </h2>
+              <p className={styles.p}>
+                Parlez à notre équipe commerciale pour planifier un appel ou une démo produit.
+              </p>
+              <a className={`${styles.btn} ${styles.btnPrimary}`} href={CONTACT_MAILTO}>
+                Contacter l’équipe NimbusOps
+              </a>
+            </div>
+          </ScrollReveal>
         </section>
 
         <DemoSocialIconsDecorative variant="dark" />

@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { THEMES } from '@/design-system/themes'
 import { getBeigePresentationTopologyBackground } from '@/utils/syncPortfolioThemeToDocument'
+import DemosIndexAnimatedGrid from './DemosIndexAnimatedGrid'
 import styles from './DemosIndex.module.css'
 
 const hubBackground = getBeigePresentationTopologyBackground(THEMES.latte)
@@ -30,28 +31,37 @@ const demos = [
     desc: 'Ambiance douce et aérée — spa, yoga ou coaching.',
     thumb: styles.thumbWellness,
   },
+  {
+    href: '/demos/studio',
+    title: 'Studio créatif',
+    desc: 'Éditorial fort, serif & contrastes — direction artistique et édition.',
+    thumb: styles.thumbStudio,
+  },
+  {
+    href: '/demos/spectacle',
+    title: 'Saison & spectacle',
+    desc: 'Salle culturelle, affiche et or — programmation et billetterie.',
+    thumb: styles.thumbSpectacle,
+  },
 ] as const
 
 export default function DemosIndexPage() {
+  const cards = demos.map((d) => ({
+    href: d.href,
+    title: d.title,
+    desc: d.desc,
+    thumbClass: `${styles.thumb} ${d.thumb}`,
+  }))
+
   return (
     <div className={styles.page} style={{ background: hubBackground }}>
       <div className={styles.inner}>
         <span className={styles.kicker}>Exemples de styles</span>
-        <h1 className={styles.title}>Quatre directions créatives pour votre prochain site</h1>
+        <h1 className={styles.title}>Six directions créatives pour votre prochain site</h1>
         <p className={styles.lead}>
-          Chaque page illustre une direction graphique et une ambiance différentes. Ouvrez celles qui vous parlent.
+          Chaque page illustre une direction graphique et un secteur différents. Ouvrez celles qui vous parlent.
         </p>
-        <div className={styles.grid}>
-          {demos.map((d) => (
-            <Link key={d.href} href={d.href} className={styles.card}>
-              <div className={`${styles.thumb} ${d.thumb}`} aria-hidden />
-              <div className={styles.cardBody}>
-                <h2 className={styles.cardTitle}>{d.title}</h2>
-                <p className={styles.cardDesc}>{d.desc}</p>
-              </div>
-            </Link>
-          ))}
-        </div>
+        <DemosIndexAnimatedGrid cards={cards} />
         <Link href="/" className={styles.back}>
           ← Retour à l’accueil
         </Link>
