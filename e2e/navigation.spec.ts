@@ -60,6 +60,9 @@ test('contact form renders stable fields', async ({ page }) => {
 })
 
 test('light graphics mode can be forced for fallback validation', async ({ page }) => {
+  // En mode Créa (`dev`), `FullPageTopologyWrapper` garde Vanta sauf si l’OS demande moins de mouvement
+  // (`creaWantsVanta`). Sans ça, `portfolio-force-graphics-mode: light` ne passe pas en calque gradient.
+  await page.emulateMedia({ reducedMotion: 'reduce' })
   await page.addInitScript(() => {
     window.localStorage.setItem('presentationMode', 'dev')
     window.localStorage.setItem('portfolio-force-graphics-mode', 'light')
