@@ -144,15 +144,15 @@ export const THEMES = {
     bg2: dimHex('#431407', DIM_AMOUNT),
     moodHint: 'intense, passion, braise, feu',
   },
-  /** Palette sobre (mode « Site » / beige) — crème + accent bleu électrique */
+  /** Palette sobre (mode « Site » / beige) — crème + accents bleu ardoise (moins saturé que le bleu « web ») */
   latte: {
     name: 'Latte',
-    primary: '#0091ea',
-    secondary: '#8b7e72',
-    accent: '#00b4d8',
+    primary: '#3d5266',
+    secondary: '#6f655c',
+    accent: '#5f7d8e',
     bg: '#f7f3eb',
     bg2: '#efe8dc',
-    moodHint: 'portfolio client, crème latte, accent bleu électrique et cyan',
+    moodHint: 'portfolio client, crème latte, bleu ardoise et taupe pour lier au beige',
   },
 } as const
 
