@@ -1,8 +1,13 @@
 :root {
-  /* Thèmes par défaut */
-  --primary-color: #3b82f6;
-  --secondary-color: #059669;
-  --theme-bg: #1e293b;
+  /**
+   * Premier paint (HTML statique / avant syncPortfolioThemeToDocument).
+   * Aligné sur THEMES.latte + SSR_THEME_NAME pour éviter le flash bleu/vert (#3b82f6 / #059669).
+   */
+  --primary-color: #3d5266;
+  --secondary-color: #6f655c;
+  --accent-color: #5f7d8e;
+  --theme-bg: #f7f3eb;
+  --theme-bg2: #efe8dc;
 }
 
 /* Dark mode avec orange par défaut */
@@ -70,9 +75,17 @@
 
 /* SUPPRIMÉ - On évite tous les conflits CSS */
 
-/* Application des thèmes sur les éléments */
+/* Fond crème comme le Box MUI / sync (évite flash fond #1e293b au F5) */
 body {
-  background: var(--theme-bg) !important;
+  background: linear-gradient(
+      135deg,
+      var(--theme-bg) 0%,
+      var(--theme-bg2) 25%,
+      var(--theme-bg) 50%,
+      var(--theme-bg2) 75%,
+      var(--theme-bg) 100%
+    )
+    !important;
   transition: background 0.3s ease;
 }
 
@@ -214,6 +227,14 @@ html, body {
 html {
   /* Pas de height fixe sur desktop pour permettre le scroll */
   min-height: 100vh;
+  background: linear-gradient(
+    135deg,
+    var(--theme-bg) 0%,
+    var(--theme-bg2) 25%,
+    var(--theme-bg) 50%,
+    var(--theme-bg2) 75%,
+    var(--theme-bg) 100%
+  );
 }
 
 /* Sur mobile uniquement, utiliser height fixe */

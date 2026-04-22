@@ -15,14 +15,12 @@ import ThreeDCardComponent from './components/ThreeDCard'
 import AppBarComponent from './components/appBar'
 import PageWrapper from './components/shared/PageWrapper'
 import InteractiveBackgroundSection from './components/shared/InteractiveBackgroundSection'
-import HomeAmbientBackdrop from './components/home/HomeAmbientBackdrop'
 import StickyCTA from './components/shared/StickyCTA'
 import Footer from './components/Footer'
 import { DESIGN_TOKENS } from './design-system/constants'
 import { useThemeColors } from './hooks/useThemeColors'
 import { useTextColor } from './hooks/useTextColor'
 import { useLanguage } from './contexts/LanguageContext'
-import { usePresentationMode } from './contexts/PresentationModeContext'
 import SignatureIntro from './components/SignatureIntro'
 import { useEffect, useState } from 'react'
 import useMediaQuery from '@mui/material/useMediaQuery'
@@ -60,7 +58,6 @@ export default function HomeClient({ initialShowIntro }: { initialShowIntro: boo
   const { primary } = useThemeColors()
   const textColor = useTextColor()
   const { t } = useLanguage()
-  const { mode: presentationMode, hydrated: presentationHydrated } = usePresentationMode()
   const [showIntro, setShowIntro] = useState<boolean>(initialShowIntro)
 
   // Synchroniser avec cookie/sessionStorage après montage pour éviter flash d'hydration
@@ -87,7 +84,6 @@ export default function HomeClient({ initialShowIntro }: { initialShowIntro: boo
       )}
       {!showIntro && (
       <PageWrapper backgroundVariant="default">
-      {presentationHydrated && presentationMode === 'dev' ? <HomeAmbientBackdrop /> : null}
       <Box
         sx={{
           position: 'relative',
