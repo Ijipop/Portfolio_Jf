@@ -29,7 +29,6 @@ export const translations = {
         'Sites vitrine, refonte et mise en ligne pour indépendants et PME.\n\nMises à jour, contenu et entretien : je reste disponible après la livraison pour que votre site reste à jour.\n\nPetits outils et automatisation sur mesure lorsque c’est le bon complément.',
       heroRealName: 'Jean-François Lefebvre',
       heroOneLiner: 'Développeur web freelance · Montréal',
-      ctaRealizations: 'Voir mes réalisations',
       mainSectionEyebrow: 'Création de sites web sur mesure',
       mainSectionTitle: 'Des sites web clairs, rapides et pensés pour votre entreprise',
       mainSectionP1:
@@ -347,7 +346,6 @@ export const translations = {
         'Showcase sites, redesigns and go-live support for freelancers and small businesses.\n\nUpdates, content changes and upkeep—I stay available after launch so your site stays current.\n\nCustom tools and light automation when that’s the right fit.',
       heroRealName: 'Jean-François Lefebvre',
       heroOneLiner: 'Freelance web developer · Montreal',
-      ctaRealizations: 'View my work',
       mainSectionEyebrow: 'Custom website creation',
       mainSectionTitle: 'Clear, fast websites designed for your business',
       mainSectionP1:
@@ -358,7 +356,7 @@ export const translations = {
       intro:
         'My goal: build tools that are simple, effective, and easy to use, with reliable technical support.\n\nSupport available remotely or in person on the Island of Montreal.',
       seeProjects: 'View my projects',
-      contactMe: 'Let\'s discuss your project',
+      contactMe: 'Get a quick estimate',
       statsStage: 'Internship completed',
       statsTech: 'Technologies mastered',
       statsAvailable: 'Available',
