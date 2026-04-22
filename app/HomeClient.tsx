@@ -15,6 +15,7 @@ import ThreeDCardComponent from './components/ThreeDCard'
 import AppBarComponent from './components/appBar'
 import PageWrapper from './components/shared/PageWrapper'
 import InteractiveBackgroundSection from './components/shared/InteractiveBackgroundSection'
+import HomeAmbientBackdrop from './components/home/HomeAmbientBackdrop'
 import StickyCTA from './components/shared/StickyCTA'
 import Footer from './components/Footer'
 import { DESIGN_TOKENS } from './design-system/constants'
@@ -84,6 +85,17 @@ export default function HomeClient({ initialShowIntro }: { initialShowIntro: boo
       )}
       {!showIntro && (
       <PageWrapper backgroundVariant="default">
+      <HomeAmbientBackdrop />
+      <Box
+        sx={{
+          position: 'relative',
+          zIndex: 2,
+          display: 'flex',
+          flexDirection: 'column',
+          flex: 1,
+          minHeight: '100vh',
+        }}
+      >
       <AppBarComponent />
 
       <PortfolioHomeHero />
@@ -225,6 +237,7 @@ export default function HomeClient({ initialShowIntro }: { initialShowIntro: boo
       {!isMobile && (
         <StickyCTA text={t('home.stickyCTA')} href="/portfolio/contact" />
       )}
+      </Box>
     </PageWrapper>
       )}
     </>
