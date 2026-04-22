@@ -8,7 +8,9 @@ import { usePathname } from 'next/navigation'
 import { THEMES, ThemeName, getAvailableThemes } from '@/design-system/themes'
 import { shouldShowTopology } from '@/utils/topologyRoutes'
 import { syncPortfolioThemeToDocument } from '@/utils/syncPortfolioThemeToDocument'
+import { BeigePresentationAmbientBg } from '@/components/BeigePresentationAmbientBg'
 import { useBeigePresentationBg } from '@/contexts/BeigePresentationBgContext'
+import { useGraphicsMode } from '@/contexts/GraphicsModeContext'
 import { usePresentationMode } from '@/contexts/PresentationModeContext'
 import { DESIGN_TOKENS } from '@/design-system/constants'
 
@@ -35,6 +37,7 @@ export function AdvancedThemeProvider({ children }: { children: React.ReactNode 
   const isTopologyRoute = shouldShowTopology(pathname)
   const { mode: presentationMode, hydrated: presentationHydrated } = usePresentationMode()
   const { beigePresentationBgUrl } = useBeigePresentationBg()
+  const { graphicsMode } = useGraphicsMode()
   const [themeName, setThemeName] = useState<ThemeName>(SSR_THEME_NAME)
   const customTheme = THEMES[themeName] // Source unique de vérité
 
@@ -75,6 +78,8 @@ export function AdvancedThemeProvider({ children }: { children: React.ReactNode 
   // Créer le thème MUI avec les couleurs personnalisées
   // Utiliser useMemo pour recréer le thème quand customTheme change
   const isBeigePresentation = presentationMode === 'beige'
+  const showBeigeAmbientBg =
+    isBeigePresentation && !isTopologyRoute && graphicsMode === 'full'
 
   const theme = React.useMemo(() => createTheme({
     palette: {
@@ -203,6 +208,7 @@ export function AdvancedThemeProvider({ children }: { children: React.ReactNode 
         <CssBaseline />
         <Box
           sx={{
+            position: 'relative',
             background: isTopologyRoute
               ? 'transparent'
               : `linear-gradient(135deg, ${customTheme.bg} 0%, ${customTheme.bg2} 25%, ${customTheme.bg} 50%, ${customTheme.bg2} 75%, ${customTheme.bg} 100%)`,
@@ -210,7 +216,8 @@ export function AdvancedThemeProvider({ children }: { children: React.ReactNode 
             transition: 'background 0.5s ease'
           }}
         >
-          {children}
+          <BeigePresentationAmbientBg enabled={showBeigeAmbientBg} />
+          <Box sx={{ position: 'relative', zIndex: 1, minHeight: '100vh' }}>{children}</Box>
         </Box>
       </ThemeProvider>
     </AdvancedThemeContext.Provider>

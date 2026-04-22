@@ -14,6 +14,7 @@ import { usePresentationMode } from '@/contexts/PresentationModeContext'
 import { useThemeColors } from '@/hooks/useThemeColors'
 import { useTextColor } from '@/hooks/useTextColor'
 import { shouldShowTopology } from '@/utils/topologyRoutes'
+import { motion, useReducedMotion } from 'framer-motion'
 import { useRef } from 'react'
 
 const mobileProseWrapSx = {
@@ -33,9 +34,22 @@ export default function HomeHeroServicesSection() {
   const isDevPresentation = presentationMode === 'dev'
   const isDark = theme.palette.mode === 'dark'
   const glassRef = useRef<HTMLDivElement>(null)
+  const reducedMotionPref = useReducedMotion()
+  /** `null` avant hydratation — on n’applique l’état « figé » que si l’OS demande explicitement moins de mouvement. */
+  const reduceMotion = reducedMotionPref === true
   const mainSectionP1 = t('home.mainSectionP1')
   const mainSectionP2 = t('home.mainSectionP2')
   const introText = mainSectionP2 ? `${mainSectionP1}\n\n${mainSectionP2}` : mainSectionP1
+
+  const titleEase = [0.22, 1, 0.36, 1] as const
+  const titleInit = reduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 14 }
+  const titleDur = reduceMotion ? 0 : 0.52
+  const leadInit = reduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }
+  const leadDur = reduceMotion ? 0 : 0.48
+  const leadDelay = reduceMotion ? 0 : 0.16
+  const sublineInit = reduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }
+  const sublineDelay = reduceMotion ? 0 : 0.34
+
   const heroTitleBlock = (
     <Box sx={{ mb: { xs: 2.25, sm: 2.75 } }}>
       <Typography
@@ -61,21 +75,54 @@ export default function HomeHeroServicesSection() {
       >
         {t('home.mainSectionEyebrow')}
       </Typography>
-      <SectionDisplayTitle
-        component="h2"
-        id="home-main-section-heading"
-        sx={{
-          mb: 0,
-          maxWidth: { xs: 'min(100%, 780px)', sm: 820 },
-          fontWeight: 800,
-          fontSize: { xs: 'clamp(1.7rem, 5.8vw, 2.2rem)', sm: '2.45rem', md: '2.95rem' },
-          lineHeight: { xs: 1.12, sm: 1.14 },
-          letterSpacing: '-0.035em',
-          textShadow: isDark ? '0 10px 26px rgba(0,0,0,0.34)' : '0 10px 30px rgba(15, 23, 42, 0.08)',
-        }}
+      <motion.div
+        initial={titleInit}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: titleDur, ease: titleEase }}
       >
-        {t('home.mainSectionTitle')}
-      </SectionDisplayTitle>
+        <SectionDisplayTitle
+          component="h2"
+          id="home-main-section-heading"
+          sx={{
+            mb: 0,
+            maxWidth: { xs: 'min(100%, 780px)', sm: 820 },
+            fontWeight: 800,
+            fontSize: { xs: 'clamp(1.7rem, 5.8vw, 2.2rem)', sm: '2.45rem', md: '2.95rem' },
+            lineHeight: { xs: 1.12, sm: 1.14 },
+            letterSpacing: '-0.035em',
+            textShadow: isDark ? '0 10px 26px rgba(0,0,0,0.34)' : '0 10px 30px rgba(15, 23, 42, 0.08)',
+          }}
+        >
+          {t('home.mainSectionTitle')}
+        </SectionDisplayTitle>
+      </motion.div>
+      <motion.div
+        initial={leadInit}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: leadDur, delay: leadDelay, ease: titleEase }}
+      >
+        <Typography
+          component="p"
+          variant="body1"
+          sx={{
+            mt: { xs: 1.35, sm: 1.5 },
+            mb: 0,
+            mx: 'auto',
+            maxWidth: { xs: 'min(100%, 640px)', sm: 680 },
+            px: { xs: 0.5, sm: 0 },
+            textAlign: 'center',
+            color: textColor,
+            opacity: 0.9,
+            fontSize: { xs: '1.02rem', sm: '1.08rem' },
+            fontWeight: 600,
+            lineHeight: 1.55,
+            letterSpacing: '0.01em',
+            ...mobileProseWrapSx,
+          }}
+        >
+          {t('home.mainSectionLeadMobile')}
+        </Typography>
+      </motion.div>
     </Box>
   )
 
@@ -143,25 +190,35 @@ export default function HomeHeroServicesSection() {
           >
             {heroTitleBlock}
 
-            <Typography
-              component="p"
-              variant="body1"
-              sx={{
-                color: textColor,
-                opacity: 0.92,
-                textAlign: 'center',
-                lineHeight: 1.75,
-                fontSize: { xs: '1rem', sm: '1.0625rem' },
-                fontWeight: 400,
-                letterSpacing: '0.01em',
-                maxWidth: 540,
-                mx: 'auto',
-                mb: { xs: 1.75, sm: 2 },
-                ...mobileProseWrapSx,
+            <motion.div
+              initial={sublineInit}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{
+                duration: reduceMotion ? 0 : 0.46,
+                delay: sublineDelay,
+                ease: titleEase,
               }}
             >
-              {mainSectionP1}
-            </Typography>
+              <Typography
+                component="p"
+                variant="body1"
+                sx={{
+                  color: textColor,
+                  opacity: 0.92,
+                  textAlign: 'center',
+                  lineHeight: 1.75,
+                  fontSize: { xs: '1rem', sm: '1.0625rem' },
+                  fontWeight: 400,
+                  letterSpacing: '0.01em',
+                  maxWidth: 540,
+                  mx: 'auto',
+                  mb: { xs: 1.75, sm: 2 },
+                  ...mobileProseWrapSx,
+                }}
+              >
+                {mainSectionP1}
+              </Typography>
+            </motion.div>
 
             {mainSectionP2 ? (
               <Typography

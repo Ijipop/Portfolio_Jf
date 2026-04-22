@@ -31,8 +31,8 @@ export const translations = {
       heroOneLiner: 'Développeur web freelance · Montréal',
       mainSectionEyebrow: 'Création de sites web sur mesure',
       mainSectionTitle: 'Des sites web clairs, rapides et pensés pour votre entreprise',
-      mainSectionP1:
-        'Pour les indépendants et les PME : création, refonte et petits outils sur mesure.',
+      mainSectionLeadMobile: '• Impeccables sur mobile comme sur ordinateur.',
+      mainSectionP1: 'Indépendants et PME — création, refonte et petits outils sur mesure.',
       mainSectionP2:
         '',
       role: "Développeur spécialisé en création de sites web et d'applications sur mesure pour travailleurs autonomes et petites entreprises.",
@@ -348,8 +348,8 @@ export const translations = {
       heroOneLiner: 'Freelance web developer · Montreal',
       mainSectionEyebrow: 'Custom website creation',
       mainSectionTitle: 'Clear, fast websites designed for your business',
-      mainSectionP1:
-        'For freelancers and small businesses: website creation, redesigns and small custom tools.',
+      mainSectionLeadMobile: '• Polished on mobile and desktop.',
+      mainSectionP1: 'Freelancers and SMBs — new sites, redesigns and small custom tools.',
       mainSectionP2:
         '',
       role: 'Developer specialized in custom websites and applications for freelancers and small businesses.',

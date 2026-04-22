@@ -1,0 +1,67 @@
+/**
+ * Calque décoratif mode présentation beige — uniquement transform (composite),
+ * opacité basse. Animations sous prefers-reduced-motion: no-preference.
+ */
+.wrap {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.halo {
+  position: absolute;
+  width: 118%;
+  height: 118%;
+  left: -9%;
+  top: -9%;
+  will-change: transform;
+  opacity: 0.075;
+}
+
+.haloPrimary {
+  background: radial-gradient(
+    ellipse 58% 52% at 18% 24%,
+    var(--primary-color) 0%,
+    transparent 52%
+  );
+}
+
+.haloAccent {
+  background: radial-gradient(
+    ellipse 50% 48% at 82% 78%,
+    var(--accent-color) 0%,
+    transparent 50%
+  );
+  opacity: 0.065;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes beigeAmbientDriftPrimary {
+    from {
+      transform: translate3d(-1.8%, -1.2%, 0);
+    }
+    to {
+      transform: translate3d(1.8%, 1.4%, 0);
+    }
+  }
+
+  @keyframes beigeAmbientDriftAccent {
+    from {
+      transform: translate3d(1.4%, 1%, 0);
+    }
+    to {
+      transform: translate3d(-1.6%, -1.2%, 0);
+    }
+  }
+
+  .haloPrimary {
+    animation: beigeAmbientDriftPrimary 96s ease-in-out infinite alternate;
+  }
+
+  .haloAccent {
+    animation: beigeAmbientDriftAccent 84s ease-in-out infinite alternate;
+    animation-delay: -12s;
+  }
+}
