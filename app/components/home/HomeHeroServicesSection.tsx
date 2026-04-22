@@ -156,29 +156,17 @@ export default function HomeHeroServicesSection() {
           boxShadow: isDark
             ? '0 24px 48px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.06)'
             : `${DESIGN_TOKENS.shadows.card.light}, 0 1px 0 rgba(255,255,255,0.85) inset`,
-          '@keyframes topLineBreath': {
-            '0%, 100%': {
-              transform: 'translateX(-50%) scaleX(0.74)',
-              opacity: 0.72,
-            },
-            '50%': {
-              transform: 'translateX(-50%) scaleX(1.46)',
-              opacity: 1,
-            },
-          },
           '&::before': {
             content: '""',
             position: 'absolute',
             top: 0,
             left: '50%',
             transform: 'translateX(-50%)',
-            transformOrigin: 'center top',
-            width: 'min(120px, 28%)',
+            width: 'min(165px, 36%)',
             height: 3,
             borderRadius: '0 0 8px 8px',
             background: `linear-gradient(90deg, transparent, ${alpha(primary, 0.65)}, transparent)`,
             opacity: 0.9,
-            animation: reduceMotion ? 'none' : 'topLineBreath 4.2s ease-in-out infinite',
           },
         }}
       >
