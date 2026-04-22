@@ -5,9 +5,8 @@ import { alpha, useTheme } from '@mui/material/styles'
 import { useThemeColors } from '@/hooks/useThemeColors'
 
 /**
- * Fond d’ambiance plein écran pour l’accueil : derrière tout le contenu (z-index 0),
- * sans interaction. Animations basées sur background-position pour éviter le rognage
- * avec overflow: hidden sur PageWrapper.
+ * Fond d’ambiance plein écran (mode Créa uniquement, voir HomeClient) : dégradés animés
+ * derrière le contenu, sans quadrillage ni interaction.
  */
 export default function HomeAmbientBackdrop() {
   const theme = useTheme()
@@ -49,20 +48,6 @@ export default function HomeAmbientBackdrop() {
           '@media (prefers-reduced-motion: reduce)': {
             animation: 'none',
           },
-        }}
-      />
-      <Box
-        sx={{
-          position: 'absolute',
-          inset: 0,
-          opacity: isDark ? 0.35 : 0.4,
-          backgroundImage: `
-            linear-gradient(${alpha('#fff', isDark ? 0.04 : 0.08)} 1px, transparent 1px),
-            linear-gradient(90deg, ${alpha('#fff', isDark ? 0.04 : 0.08)} 1px, transparent 1px)
-          `,
-          backgroundSize: '56px 56px',
-          maskImage: 'radial-gradient(ellipse 95% 85% at 50% 45%, black 8%, transparent 72%)',
-          WebkitMaskImage: 'radial-gradient(ellipse 95% 85% at 50% 45%, black 8%, transparent 72%)',
         }}
       />
     </Box>
