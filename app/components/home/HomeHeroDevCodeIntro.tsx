@@ -3,6 +3,7 @@
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import { useCallback, useEffect, useLayoutEffect, useRef, useState, type ReactNode } from 'react'
+import { createPortal } from 'react-dom'
 import gsap from 'gsap'
 import { GlassContainer } from '@/components/GlassCard'
 import { DESIGN_TOKENS } from '@/design-system/constants'
@@ -168,6 +169,8 @@ export default function HomeHeroDevCodeIntro({
   /** Indices → MONSTER_FIGURES : 0 = centre, 1 = droite (pas de slime gauche). */
   const [monstersAlive, setMonstersAlive] = useState<number[]>([0, 1])
   const [cardWidth, setCardWidth] = useState<number | null>(null)
+  /** Cible du portail : le `GlassContainer` pour ancrer la marche sur le bord de la carte, pas dans le bloc texte. */
+  const [walkSurfaceHost, setWalkSurfaceHost] = useState<HTMLElement | null>(null)
   /** Fin de séquence : bandeau ASCII masqué, bloc carte = intro (mode Site). */
   const [introRevealed, setIntroRevealed] = useState(false)
 
@@ -526,6 +529,15 @@ export default function HomeHeroDevCodeIntro({
     setCardWidth(card.offsetWidth)
     return () => ro.disconnect()
   }, [])
+
+  useLayoutEffect(() => {
+    if (!embedded || !walkSurfaceRef) {
+      setWalkSurfaceHost(null)
+      return
+    }
+    setWalkSurfaceHost(walkSurfaceRef.current)
+    return () => setWalkSurfaceHost(null)
+  }, [embedded, walkSurfaceRef])
 
   useEffect(() => {
     if (reduced) return
@@ -1076,7 +1088,7 @@ export default function HomeHeroDevCodeIntro({
   if (embeddedInCard) {
     return (
       <>
-        {walkerAndArena}
+        {walkSurfaceHost && walkerAndArena ? createPortal(walkerAndArena, walkSurfaceHost) : null}
         <Box
           sx={{
             position: 'absolute',
