@@ -87,7 +87,7 @@ export default function HomeClient({ initialShowIntro }: { initialShowIntro: boo
       )}
       {!showIntro && (
       <PageWrapper backgroundVariant="default">
-      {presentationHydrated && presentationMode === 'dev' ? <HomeAmbientBackdrop /> : null}
+      {presentationHydrated && presentationMode === 'beige' ? <HomeAmbientBackdrop /> : null}
       <Box
         sx={{
           position: 'relative',
