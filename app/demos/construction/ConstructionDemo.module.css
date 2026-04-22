@@ -8,12 +8,14 @@
   background: var(--c-bg);
   color: var(--c-ink);
   font-family: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  overflow-x: clip;
 }
 
 .wrap {
   max-width: 1080px;
   margin: 0 auto;
   padding: 0 clamp(1rem, 4vw, 1.75rem) 4rem;
+  min-width: 0;
 }
 
 .topbar {
@@ -22,6 +24,8 @@
   justify-content: space-between;
   padding: 1rem 0;
   border-bottom: 1px solid #d6d3d1;
+  flex-wrap: wrap;
+  gap: 0.75rem 1rem;
 }
 
 .logo {
@@ -33,9 +37,11 @@
 
 .nav {
   display: flex;
-  gap: 1.25rem;
+  flex-wrap: wrap;
+  gap: 0.65rem 1.25rem;
   font-size: 0.8125rem;
   font-weight: 600;
+  justify-content: flex-end;
 }
 
 .nav a {
@@ -141,7 +147,7 @@
 
 .stats {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 140px), 1fr));
   gap: 1rem;
   margin-top: 1.75rem;
 }

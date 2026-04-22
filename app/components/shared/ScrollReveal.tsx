@@ -97,11 +97,13 @@ export default function ScrollReveal({
   return (
     <motion.div
       ref={ref}
-      style={
-        fillHeight
+      style={{
+        minWidth: 0,
+        width: '100%',
+        ...(fillHeight
           ? { height: '100%', display: 'flex', flexDirection: 'column', minHeight: 0 }
-          : undefined
-      }
+          : {}),
+      }}
       initial={getInitialPosition()}
       animate={isVisible ? getAnimatePosition() : getInitialPosition()}
       transition={{
