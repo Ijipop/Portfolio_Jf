@@ -44,6 +44,9 @@ import { navigateProjectUrl } from '@/lib/navigateProjectUrl';
 import { useAdvancedTheme } from '@/contexts/AdvancedThemeContext';
 import { useBeigePresentationBg } from '@/contexts/BeigePresentationBgContext';
 import { getBeigePresentationTopologyBackground } from '@/utils/syncPortfolioThemeToDocument';
+import AdminDesktopImageToDataUrl from '@/admin/components/AdminDesktopImageToDataUrl';
+import { getImageUrl } from '@/lib/getImageUrl';
+import { parseBeigePresentationBgUrl } from '@/lib/stored-image-value';
 
 interface Project {
   id: number;
@@ -214,27 +217,6 @@ export default function AdminDashboard() {
   const { setBeigePresentationBgUrl } = useBeigePresentationBg();
 
   // Fonction pour corriger les chemins d'images
-  const getImageUrl = (imageUrl: string) => {
-    if (!imageUrl) return '';
-    
-    // Si c'est une URL complète (http/https), la retourner telle quelle
-    if (imageUrl.startsWith('http://') || imageUrl.startsWith('https://')) {
-      return imageUrl;
-    }
-    
-    // Si c'est un chemin relatif commençant par "public/", le corriger
-    if (imageUrl.startsWith('public/')) {
-      return imageUrl.replace('public/', '/');
-    }
-    
-    // Si c'est un chemin relatif sans "public/", ajouter "/"
-    if (!imageUrl.startsWith('/')) {
-      return `/${imageUrl}`;
-    }
-    
-    return imageUrl;
-  };
-
   const projectsWebSorted = useMemo(
     () =>
       projects
@@ -321,6 +303,19 @@ export default function AdminDashboard() {
     void verifySession();
   }, [fetchProjects, fetchTimelendrReleases, fetchSiteAppearance, redirectToAdminLogin]);
 
+  /** Aperçu du fond « Site » quasi temps réel dans l’UI (contexte partagé). */
+  useEffect(() => {
+    const trimmed = siteBeigeDraft.trim()
+    const parsed = parseBeigePresentationBgUrl(trimmed === '' ? null : trimmed)
+    if (!parsed.ok) {
+      return;
+    }
+    const id = window.setTimeout(() => {
+      setBeigePresentationBgUrl(parsed.value);
+    }, 220);
+    return () => window.clearTimeout(id);
+  }, [siteBeigeDraft, setBeigePresentationBgUrl]);
+
   const handleLogout = async () => {
     try {
       await fetch('/api/auth/logout', { method: 'POST', credentials: 'include' });
@@ -354,7 +349,7 @@ export default function AdminDashboard() {
         setSiteBeigeSaved(url);
         setSiteBeigeDraft(url ?? '');
         setBeigePresentationBgUrl(url);
-        setSiteBeigeSuccess('Fond du mode Site enregistré. Les visiteurs le verront au prochain chargement.');
+        setSiteBeigeSuccess('Fond du mode Site enregistré en base (aperçu déjà à jour dans l’admin).');
         router.refresh();
       }
     } catch {
@@ -557,7 +552,9 @@ export default function AdminDashboard() {
       const data = await response.json();
 
       if (data.success) {
-        setFormData({ ...formData, imageUrl: data.data.url });
+        const url = data.data.url as string;
+        setFormData({ ...formData, imageUrl: url });
+        setPreviewImage(getImageUrl(url));
         setError('');
       } else {
         setError(data.error || 'Erreur lors de l\'upload de l\'image');
@@ -851,8 +848,9 @@ export default function AdminDashboard() {
               Fond du mode « Site » (texture centrale, ex. BGpur)
             </Typography>
             <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-              Remplace l’image affichée derrière le contenu en mode présentation Site (beige). Collez une URL
-              https ou un chemin commençant par /, ou importez une image (max 5 Mo).
+              Remplace l’image affichée derrière le contenu en mode présentation Site (beige). URL https, chemin
+              commençant par /, image encodée en base (data URL) sans stockage fichier serveur, ou import classique
+              sous <code>public/</code> (max 5 Mo).
             </Typography>
             <TextField
               fullWidth
@@ -877,8 +875,19 @@ export default function AdminDashboard() {
                 disabled={siteBeigeUploading}
                 onClick={() => siteBeigeFileInputRef.current?.click()}
               >
-                Importer une image
+                Importer sur le serveur (public/)
               </Button>
+              <AdminDesktopImageToDataUrl
+                disabled={siteBeigeUploading}
+                buttonLabel="Depuis le bureau → data URL (sans fichier serveur)"
+                onBusy={(b) => setSiteBeigeUploading(b)}
+                onError={(msg) => setError(msg)}
+                onDataUrl={(dataUrl) => {
+                  setSiteBeigeDraft(dataUrl);
+                  setSiteBeigeSuccess('Image encodée : cliquez sur Enregistrer pour la persister en base.');
+                  setError('');
+                }}
+              />
               {siteBeigeUploading && <CircularProgress size={24} />}
               <Button
                 variant="contained"
@@ -1332,18 +1341,31 @@ export default function AdminDashboard() {
                 type="file"
                 onChange={handleFileSelect}
               />
-              <label htmlFor="image-upload">
-                <Button
-                  variant="outlined"
-                  component="span"
-                  startIcon={uploading ? <CircularProgress size={20} /> : <CloudUploadIcon />}
+              <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mb: 1 }}>
+                <label htmlFor="image-upload">
+                  <Button
+                    variant="outlined"
+                    component="span"
+                    startIcon={uploading ? <CircularProgress size={20} /> : <CloudUploadIcon />}
+                    disabled={uploading}
+                    size="small"
+                  >
+                    {uploading ? 'Upload…' : 'Serveur (public/)'}
+                  </Button>
+                </label>
+                <AdminDesktopImageToDataUrl
                   disabled={uploading}
-                  fullWidth
-                  sx={{ mb: 2 }}
-                >
-                  {uploading ? 'Upload en cours...' : 'Choisir une image'}
-                </Button>
-              </label>
+                  buttonLabel="Bureau → data URL"
+                  onBusy={(b) => setUploading(b)}
+                  onError={(msg) => setError(msg)}
+                  onDataUrl={(dataUrl) => {
+                    setFormData((prev) => ({ ...prev, imageUrl: dataUrl }));
+                    setPreviewImage(dataUrl);
+                    setError('');
+                    if (fileInputRef.current) fileInputRef.current.value = '';
+                  }}
+                />
+              </Box>
               {previewImage && (
                 <Box
                   sx={{
@@ -1378,14 +1400,12 @@ export default function AdminDashboard() {
                 variant="outlined"
                 value={formData.imageUrl}
                 onChange={(e) => {
-                  setFormData({ ...formData, imageUrl: e.target.value });
-                  if (e.target.value) {
-                    setPreviewImage(e.target.value);
-                  } else if (!fileInputRef.current?.files?.[0]) {
-                    setPreviewImage(null);
-                  }
+                  const v = e.target.value;
+                  setFormData({ ...formData, imageUrl: v });
+                  const t = v.trim();
+                  setPreviewImage(t ? getImageUrl(t) : null);
                 }}
-                helperText="Vous pouvez uploader une image ou entrer une URL directement"
+                helperText="URL https, chemin /…, data URL (bureau), ou upload sous public/"
               />
             </Box>
           </DialogContent>

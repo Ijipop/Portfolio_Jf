@@ -79,13 +79,21 @@ test('logiciel and pageweb routes are reachable', async ({ page }) => {
   await expect(page).toHaveURL(/\/pageweb/)
 })
 
-test('demos index and one demo route', async ({ page }) => {
+test('demos index and demo routes', async ({ page }) => {
   await page.goto('/demos', { waitUntil: 'domcontentloaded' })
   await expect(page).toHaveURL(/\/demos\/?$/)
-  await expect(page.locator('h1').first()).toContainText(/Quatre directions créatives/)
+  await expect(page.locator('h1').first()).toContainText(/Six directions créatives/)
+  await expect(page.locator('a[href="/demos/studio"]').first()).toBeVisible()
+  await expect(page.locator('a[href="/demos/spectacle"]').first()).toBeVisible()
 
   await page.locator('a[href="/demos/construction"]').first().click()
   await expect(page).toHaveURL(/\/demos\/construction/)
   await expect(page.locator('h1').filter({ hasText: /On bâtit solide/ })).toBeVisible()
+
+  await page.goto('/demos/studio', { waitUntil: 'domcontentloaded' })
+  await expect(page.locator('h1').filter({ hasText: /sans formule toute faite/ })).toBeVisible()
+
+  await page.goto('/demos/spectacle', { waitUntil: 'domcontentloaded' })
+  await expect(page.locator('h1').filter({ hasText: /Une scène pour les voix/ })).toBeVisible()
 })
 

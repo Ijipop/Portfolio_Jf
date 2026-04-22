@@ -24,6 +24,7 @@ import Typography from '@mui/material/Typography'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { navigateProjectUrl } from '@/lib/navigateProjectUrl'
+import { getImageUrl } from '@/lib/getImageUrl'
 import React from 'react'
 import Image from 'next/image'
 import AppBarComponent from '../../components/appBar'
@@ -487,6 +488,7 @@ const ProjectCardWrapper = ({
                   src={cardImageHref}
                   alt={project.name}
                   fill
+                  unoptimized={cardImageHref.startsWith('data:')}
                   sizes="(max-width: 600px) 100vw, (max-width: 900px) 50vw, 33vw"
                   style={{ objectFit: 'contain' }}
                 />
@@ -1029,28 +1031,6 @@ export default function Projets() {
     },
     [router]
   )
-
-  // Fonction pour corriger les chemins d'images
-  const getImageUrl = (imageUrl: string) => {
-    if (!imageUrl) return '';
-    
-    // Si c'est une URL complète (http/https), la retourner telle quelle
-    if (imageUrl.startsWith('http://') || imageUrl.startsWith('https://')) {
-      return imageUrl;
-    }
-    
-    // Si c'est un chemin relatif commençant par "public/", le corriger
-    if (imageUrl.startsWith('public/')) {
-      return imageUrl.replace('public/', '/');
-    }
-    
-    // Si c'est un chemin relatif sans "public/", ajouter "/"
-    if (!imageUrl.startsWith('/')) {
-      return `/${imageUrl}`;
-    }
-    
-    return imageUrl;
-  };
 
   const getCompletedProjects = () => projects.filter(p => 
     ['terminee', 'fini', 'terminé'].includes(p.status.toLowerCase())

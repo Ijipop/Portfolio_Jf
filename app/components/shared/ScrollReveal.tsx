@@ -43,24 +43,25 @@ export default function ScrollReveal({
   }, [distance])
 
   useEffect(() => {
+    const el = ref.current
+    if (!el) return
+
+    /** Déclencher plus tard : zone d’intersection réduite en bas + part visible plus élevée. */
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) {
+        if (entry.isIntersecting && entry.intersectionRatio >= 0.22) {
           setIsVisible(true)
         }
       },
-      { threshold: 0.1 }
+      {
+        root: null,
+        rootMargin: '0px 0px -22% 0px',
+        threshold: [0, 0.1, 0.15, 0.22, 0.3, 0.4],
+      }
     )
 
-    if (ref.current) {
-      observer.observe(ref.current)
-    }
-
-    return () => {
-      if (ref.current) {
-        observer.unobserve(ref.current)
-      }
-    }
+    observer.observe(el)
+    return () => observer.unobserve(el)
   }, [])
 
   const d = reducedMotion ? 0 : effectiveDistance
@@ -104,7 +105,7 @@ export default function ScrollReveal({
       initial={getInitialPosition()}
       animate={isVisible ? getAnimatePosition() : getInitialPosition()}
       transition={{
-        duration: reducedMotion ? 0 : 0.55,
+        duration: reducedMotion ? 0 : 0.72,
         delay: reducedMotion ? 0 : isVisible ? delay : 0,
         ease: [0.25, 0.46, 0.45, 0.94],
       }}

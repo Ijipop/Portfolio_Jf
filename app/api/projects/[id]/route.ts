@@ -2,6 +2,7 @@ import { prisma } from '@/lib/prisma'
 import { authAdminToken } from '@/lib/auth-admin-request'
 import { messageForProjectSaveError } from '@/lib/prisma-project-save-error'
 import { resolveWebAudience } from '@/lib/project-web-audience'
+import { normalizeProjectImageUrlInput } from '@/lib/stored-image-value'
 import { NextRequest, NextResponse } from 'next/server'
 
 type ProjectType = 'logiciel' | 'web'
@@ -204,6 +205,11 @@ export async function PUT(request: NextRequest, { params }: RouteParams)
 			)
 		}
 
+		const imgNorm = normalizeProjectImageUrlInput(imageUrl)
+		if (!imgNorm.ok) {
+			return NextResponse.json({ success: false, error: imgNorm.error }, { status: 400 })
+		}
+
 		// Mettre à jour le project
 		const updatedProject = await prisma.project.update({
 			where: { id },
@@ -215,7 +221,7 @@ export async function PUT(request: NextRequest, { params }: RouteParams)
 				url: url || '',
 				siteUrl: site,
 				downloadUrl: dl,
-				imageUrl: imageUrl || '',
+				imageUrl: imgNorm.value,
 				projectType: pt,
 				displayOrder: parseDisplayOrder(displayOrder),
 				webAudience: resolveWebAudience(webAudience, pt),

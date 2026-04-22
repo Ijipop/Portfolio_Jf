@@ -1,11 +1,13 @@
 import { THEMES, type ThemeName } from '@/design-system/themes'
+import { getImageUrl } from '@/lib/getImageUrl'
 
 /** Image de fond réservée au mode présentation « Site / beige » (servie depuis /public). */
 export const BEIGE_PRESENTATION_BG_IMAGE = '/img/BGpur.png'
 
 function resolvedBeigePresentationImageUrl(override: string | null | undefined): string {
   const v = override?.trim()
-  return v || BEIGE_PRESENTATION_BG_IMAGE
+  if (!v) return BEIGE_PRESENTATION_BG_IMAGE
+  return getImageUrl(v) || BEIGE_PRESENTATION_BG_IMAGE
 }
 
 /** Pour `background` CSS : `url("…")` avec échappement des guillemets et antislashs. */

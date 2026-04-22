@@ -10,7 +10,11 @@ type Slide = { x?: number; y?: number }
 
 export default function RestaurantDemoGallery() {
   const containerRef = useRef<HTMLDivElement>(null)
-  const isInView = useInView(containerRef, { once: true, amount: 0.12 })
+  const isInView = useInView(containerRef, {
+    once: true,
+    amount: 0.32,
+    margin: '0px 0px -22% 0px',
+  })
   const [reducedMotion, setReducedMotion] = useState(false)
 
   useEffect(() => {
