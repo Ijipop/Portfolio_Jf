@@ -1,0 +1,106 @@
+.mobileMenu {
+  position: relative;
+  display: none;
+  flex-shrink: 0;
+}
+
+@media (max-width: 639px) {
+  .mobileMenu {
+    display: block;
+  }
+
+  .desktopNav {
+    display: none !important;
+  }
+}
+
+@media (min-width: 640px) {
+  .mobileMenu {
+    display: none;
+  }
+}
+
+.hamburger {
+  list-style: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  margin: 0;
+  padding: 0;
+  border: 1px solid rgba(12, 12, 12, 0.15);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.65);
+  box-sizing: border-box;
+}
+
+.hamburger::-webkit-details-marker {
+  display: none;
+}
+
+.hamburgerLines {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 1.1rem;
+}
+
+.line {
+  display: block;
+  height: 2px;
+  width: 100%;
+  border-radius: 1px;
+  background: #1c1917;
+}
+
+.hamburgerDark {
+  border-color: rgba(148, 163, 184, 0.35);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.hamburgerDark .line {
+  background: #e2e8f0;
+}
+
+.hamburgerSpectacle {
+  border-color: rgba(232, 197, 71, 0.35);
+  background: rgba(37, 18, 40, 0.92);
+}
+
+.hamburgerSpectacle .line {
+  background: #e8c547;
+}
+
+.panelSurface {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 0.35rem);
+  z-index: 30;
+  min-width: min(100vw - 2rem, 220px);
+  max-width: min(100vw - 1.5rem, 280px);
+  padding: 0.65rem 0.85rem;
+  border-radius: 10px;
+  border: 1px solid rgba(12, 12, 12, 0.12);
+  background: #fffefb;
+  box-shadow: 0 16px 40px rgba(28, 25, 22, 0.14);
+  box-sizing: border-box;
+}
+
+.panelSurfaceDark {
+  border-color: rgba(148, 163, 184, 0.25);
+  background: #0f1629;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
+}
+
+.panelSurfaceSpectacle {
+  border-color: rgba(232, 197, 71, 0.35);
+  background: #251228;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
+}
+
+.desktopNav {
+  min-width: 0;
+}

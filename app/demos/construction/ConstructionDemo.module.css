@@ -33,6 +33,8 @@
   letter-spacing: 0.06em;
   font-size: 0.85rem;
   text-transform: uppercase;
+  min-width: 0;
+  flex: 1 1 auto;
 }
 
 .nav {
@@ -51,6 +53,21 @@
 
 .nav a:hover {
   color: var(--c-accent);
+}
+
+.navPanel {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.15rem;
+}
+
+.navPanel a {
+  padding: 0.45rem 0;
+  border-bottom: 1px solid #e7e5e4;
+}
+
+.navPanel a:last-child {
+  border-bottom: none;
 }
 
 .hero {

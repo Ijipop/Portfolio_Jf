@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import ScrollReveal from '@/components/shared/ScrollReveal'
+import DemoResponsiveTopNav from '../DemoResponsiveTopNav'
 import DemoSocialIconsDecorative from '../DemoSocialIconsDecorative'
 import DemoVitrineAttribution from '../DemoVitrineAttribution'
 import styles from './TechDemo.module.css'
@@ -12,12 +13,19 @@ export default function TechDemoPage() {
     <div className={styles.root}>
       <div className={styles.wrap}>
         <header className={styles.nav}>
-          <span className={styles.brand}>NimbusOps</span>
-          <nav className={styles.navLinks} aria-label="Navigation principale">
+          <DemoResponsiveTopNav
+            brand={<span className={styles.brand}>NimbusOps</span>}
+            navAriaLabel="Navigation principale"
+            menuSummaryLabel="Ouvrir le menu"
+            desktopNavClassName={styles.navLinks}
+            panelNavClassName={`${styles.navLinks} ${styles.navPanel}`}
+            panelVariant="tech"
+            summaryTone="dark"
+          >
             <a href="#features">Produit</a>
             <a href="#trust">Confiance</a>
             <a href="#cta">Contact</a>
-          </nav>
+          </DemoResponsiveTopNav>
         </header>
 
         <section className={styles.hero}>

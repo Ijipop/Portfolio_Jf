@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import DemoResponsiveTopNav from '../DemoResponsiveTopNav'
 import DemoSocialIconsDecorative from '../DemoSocialIconsDecorative'
 import DemoVitrineAttribution from '../DemoVitrineAttribution'
 import styles from './ConstructionDemo.module.css'
@@ -8,12 +9,17 @@ export default function ConstructionDemoPage() {
     <div className={styles.root}>
       <div className={styles.wrap}>
         <header className={styles.topbar}>
-          <span className={styles.logo}>Structura</span>
-          <nav className={styles.nav} aria-label="Navigation">
+          <DemoResponsiveTopNav
+            brand={<span className={styles.logo}>Structura</span>}
+            navAriaLabel="Navigation"
+            menuSummaryLabel="Ouvrir le menu"
+            desktopNavClassName={styles.nav}
+            panelNavClassName={`${styles.nav} ${styles.navPanel}`}
+          >
             <a href="#services">Services</a>
             <a href="#realisations">Réalisations</a>
             <a href="#contact">Contact</a>
-          </nav>
+          </DemoResponsiveTopNav>
         </header>
 
         <section className={styles.hero}>

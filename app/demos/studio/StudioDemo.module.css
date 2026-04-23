@@ -4,23 +4,27 @@
   --paper: #faf8f4;
   --muted: #5c5a54;
   --accent: #c45c26;
+  --wrap-inline: clamp(1rem, 4vw, 2rem);
   min-height: 100vh;
   background: var(--paper);
   color: var(--ink);
   font-family: ui-serif, 'Georgia', 'Times New Roman', serif;
-  overflow-x: clip;
 }
 
 .wrap {
   max-width: 1120px;
   margin: 0 auto;
-  padding: 0 clamp(1rem, 4vw, 2rem) 4rem;
+  padding: 0 var(--wrap-inline);
   min-width: 0;
+}
+
+.wrapWithFooter {
+  padding-bottom: 4rem;
 }
 
 .top {
   display: flex;
-  align-items: baseline;
+  align-items: center;
   justify-content: space-between;
   gap: 1rem;
   padding: 1.5rem 0 2rem;
@@ -51,6 +55,8 @@
   font-weight: 700;
   letter-spacing: 0.28em;
   text-transform: uppercase;
+  min-width: 0;
+  flex: 1 1 auto;
 }
 
 .nav {
@@ -71,6 +77,21 @@
 
 .nav a:hover {
   color: var(--accent);
+}
+
+.navPanel {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.35rem;
+}
+
+.navPanel a {
+  padding: 0.5rem 0;
+  border-bottom: 1px solid rgba(12, 12, 12, 0.08);
+}
+
+.navPanel a:last-child {
+  border-bottom: none;
 }
 
 .hero {
@@ -202,14 +223,23 @@
 }
 
 .darkBand {
+  width: 100%;
+  box-sizing: border-box;
   background: var(--ink);
   color: var(--cream);
-  margin: 0 calc(-1 * clamp(1rem, 4vw, 2rem));
-  padding: clamp(2.5rem, 6vw, 3.75rem) clamp(1rem, 4vw, 2rem);
   min-width: 0;
 }
 
-.darkBand h2 {
+.darkBandInner {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding-block: clamp(2.5rem, 6vw, 3.75rem);
+  padding-inline: max(var(--wrap-inline), env(safe-area-inset-left, 0px))
+    max(var(--wrap-inline), env(safe-area-inset-right, 0px));
+  min-width: 0;
+}
+
+.darkBandInner h2 {
   font-family: ui-sans-serif, system-ui, sans-serif;
   font-size: 0.7rem;
   font-weight: 700;

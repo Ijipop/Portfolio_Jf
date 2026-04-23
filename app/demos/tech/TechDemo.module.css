@@ -40,6 +40,7 @@
   background-clip: text;
   color: transparent;
   min-width: 0;
+  flex: 1 1 auto;
 }
 
 .navLinks {
@@ -58,6 +59,21 @@
 
 .navLinks a:hover {
   color: var(--accent);
+}
+
+.navPanel {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.15rem;
+}
+
+.navPanel a {
+  padding: 0.45rem 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.navPanel a:last-child {
+  border-bottom: none;
 }
 
 .hero {
