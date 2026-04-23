@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import ScrollReveal from '@/components/shared/ScrollReveal'
+import DemoResponsiveTopNav from '../DemoResponsiveTopNav'
 import DemoSocialIconsDecorative from '../DemoSocialIconsDecorative'
 import DemoVitrineAttribution from '../DemoVitrineAttribution'
 import styles from './SpectacleDemo.module.css'
@@ -9,12 +10,19 @@ export default function SpectacleDemoPage() {
     <div className={styles.root}>
       <div className={styles.wrap}>
         <header className={styles.header}>
-          <span className={styles.venue}>Théâtre des Hautes lumières</span>
-          <nav className={styles.nav} aria-label="Navigation">
+          <DemoResponsiveTopNav
+            brand={<span className={styles.venue}>Théâtre des Hautes lumières</span>}
+            navAriaLabel="Navigation"
+            menuSummaryLabel="Ouvrir le menu"
+            desktopNavClassName={styles.nav}
+            panelNavClassName={`${styles.nav} ${styles.navPanel}`}
+            panelVariant="spectacle"
+            summaryTone="spectacle"
+          >
             <a href="#programme">Programme</a>
             <a href="#infos">Infos</a>
             <a href="#billets">Billetterie</a>
-          </nav>
+          </DemoResponsiveTopNav>
         </header>
 
         <section className={styles.hero}>

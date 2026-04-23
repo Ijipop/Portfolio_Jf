@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import ScrollReveal from '@/components/shared/ScrollReveal'
+import DemoResponsiveTopNav from '../DemoResponsiveTopNav'
 import DemoSocialIconsDecorative from '../DemoSocialIconsDecorative'
 import DemoVitrineAttribution from '../DemoVitrineAttribution'
 import styles from './StudioDemo.module.css'
@@ -9,12 +10,17 @@ export default function StudioDemoPage() {
     <div className={styles.root}>
       <div className={styles.wrap}>
         <header className={styles.top}>
-          <span className={styles.brand}>Marge ouverte</span>
-          <nav className={styles.nav} aria-label="Navigation">
+          <DemoResponsiveTopNav
+            brand={<span className={styles.brand}>Marge ouverte</span>}
+            navAriaLabel="Navigation"
+            menuSummaryLabel="Ouvrir le menu"
+            desktopNavClassName={styles.nav}
+            panelNavClassName={`${styles.nav} ${styles.navPanel}`}
+          >
             <a href="#atelier">Atelier</a>
             <a href="#selection">Sélection</a>
             <a href="#contact">Contact</a>
-          </nav>
+          </DemoResponsiveTopNav>
         </header>
 
         <section className={styles.hero}>
@@ -42,30 +48,32 @@ export default function StudioDemoPage() {
             </div>
           </ScrollReveal>
         </section>
+      </div>
 
-        <section className={styles.darkBand} aria-labelledby="piliers-heading">
-          <ScrollReveal direction="up" distance={30}>
-            <div>
-              <h2 id="piliers-heading">Trois axes</h2>
-              <p className={styles.darkTitle}>Ce que l’on prend en charge, de la proposition à la remise des fichiers.</p>
-              <div className={styles.grid}>
-                <div className={styles.cell}>
-                  <h3>Identité & charte</h3>
-                  <p>Typographie, couleurs, rythme de page — manuel clair pour vos équipes et partenaires.</p>
-                </div>
-                <div className={styles.cell}>
-                  <h3>Campagnes</h3>
-                  <p>Affichage, réseaux, signalétique d’événement : une ligne graphique tenue sur tous les supports.</p>
-                </div>
-                <div className={styles.cell}>
-                  <h3>Édition</h3>
-                  <p>Brochures, rapports annuels, catalogues : mise en page soignée et iconographie encadrée.</p>
-                </div>
+      <section className={styles.darkBand} aria-labelledby="piliers-heading">
+        <ScrollReveal direction="up" distance={30}>
+          <div className={styles.darkBandInner}>
+            <h2 id="piliers-heading">Trois axes</h2>
+            <p className={styles.darkTitle}>Ce que l’on prend en charge, de la proposition à la remise des fichiers.</p>
+            <div className={styles.grid}>
+              <div className={styles.cell}>
+                <h3>Identité & charte</h3>
+                <p>Typographie, couleurs, rythme de page — manuel clair pour vos équipes et partenaires.</p>
+              </div>
+              <div className={styles.cell}>
+                <h3>Campagnes</h3>
+                <p>Affichage, réseaux, signalétique d’événement : une ligne graphique tenue sur tous les supports.</p>
+              </div>
+              <div className={styles.cell}>
+                <h3>Édition</h3>
+                <p>Brochures, rapports annuels, catalogues : mise en page soignée et iconographie encadrée.</p>
               </div>
             </div>
-          </ScrollReveal>
-        </section>
+          </div>
+        </ScrollReveal>
+      </section>
 
+      <div className={`${styles.wrap} ${styles.wrapWithFooter}`}>
         <section id="selection" className={styles.work} aria-labelledby="work-heading">
           <ScrollReveal direction="up" distance={34}>
             <div>
