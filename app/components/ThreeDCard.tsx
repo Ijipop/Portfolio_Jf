@@ -8,6 +8,18 @@ import { useEffect, useState } from 'react'
 import { usePathname } from 'next/navigation'
 import { shouldShowTopology } from '@/utils/topologyRoutes'
 import { getCardSurfaceSx } from '@/components/shared/cardSurface'
+import { BorderBeam } from '@/components/ui/border-beam'
+
+export type ThreeDCardBorderBeamProps = {
+  duration?: number
+  size?: number
+  colorFrom?: string
+  colorTo?: string
+  borderWidth?: number
+  delay?: number
+  reverse?: boolean
+  initialOffset?: number
+}
 
 // 3D Card avec perspective et transformations
 const ThreeDCard = styled(Card)(({ theme }) => ({
@@ -110,6 +122,8 @@ interface ThreeDCardProps {
   subtle?: boolean
   /** Styles MUI supplémentaires */
   sx?: SxProps<Theme>
+  /** Animation de liseré lumineux (Magic UI Border Beam) */
+  borderBeam?: boolean | ThreeDCardBorderBeamProps
 }
 
 export default function ThreeDCardComponent({ 
@@ -120,7 +134,8 @@ export default function ThreeDCardComponent({
   compact = false,
   fullHeight = false,
   subtle = false,
-  sx: sxProp
+  sx: sxProp,
+  borderBeam,
 }: ThreeDCardProps) {
   const theme = useTheme()
   const pathname = usePathname()
@@ -146,6 +161,13 @@ export default function ThreeDCardComponent({
     level: 'soft',
     interactive: true,
   })
+
+  const borderBeamProps: ThreeDCardBorderBeamProps | null =
+    borderBeam === undefined || borderBeam === false
+      ? null
+      : borderBeam === true
+        ? { duration: 45, size: 220 }
+        : { duration: 45, size: 220, ...borderBeam }
 
   return (
     <motion.div
@@ -243,6 +265,20 @@ export default function ThreeDCardComponent({
         >
           {children}
         </CardContent>
+        {borderBeamProps && (
+          <Box
+            sx={{
+              position: 'absolute',
+              inset: 0,
+              zIndex: 2,
+              pointerEvents: 'none',
+              borderRadius: 'inherit',
+              overflow: 'hidden',
+            }}
+          >
+            <BorderBeam {...borderBeamProps} />
+          </Box>
+        )}
       </ThreeDCard>
     </motion.div>
   )

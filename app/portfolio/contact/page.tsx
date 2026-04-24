@@ -105,7 +105,7 @@ export default function Contact() {
   const isTallViewport = useMediaQuery('(min-height: 1000px)', { noSsr: true })
   const useCompactContact = !isXlUp || !isTallViewport
   const textColor = useTextColor()
-  const { primary, secondary, accent } = useThemeColors()
+  const { primary } = useThemeColors()
   const { t } = useLanguage()
   const [snackbarOpen, setSnackbarOpen] = useState(false)
   const [snackbarMessage, setSnackbarMessage] = useState('')
@@ -283,7 +283,23 @@ export default function Contact() {
           margin: '0 auto',
           mb: useCompactContact ? 4 : 6,
         }}>
-          <ThreeDCardComponent floatingElements={2} sx={{ padding: { xs: 2, sm: 3 } }}>
+          <ThreeDCardComponent
+            floatingElements={2}
+            sx={{ padding: { xs: 2, sm: 3 } }}
+            borderBeam={{
+              duration: 45,
+              size: 220,
+              ...(theme.palette.mode === 'dark'
+                ? {
+                    colorFrom: '#ff6b35',
+                    colorTo: '#6b6b6f',
+                  }
+                : {
+                    colorFrom: '#ea580c',
+                    colorTo: '#948c82',
+                  }),
+            }}
+          >
             <Box sx={{ textAlign: 'center', mb: useCompactContact ? 2 : 3 }}>
               <EmailIcon sx={{ fontSize: 48, color: primary, mb: 1.5 }} />
               <Typography variant="h4" gutterBottom sx={{ fontWeight: 700, color: primary }}>
