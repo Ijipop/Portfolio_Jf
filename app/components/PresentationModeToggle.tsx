@@ -1,13 +1,17 @@
 'use client'
 
-import React from 'react'
+import React, { useCallback } from 'react'
+import { flushSync } from 'react-dom'
 import Box from '@mui/material/Box'
 import ToggleButton from '@mui/material/ToggleButton'
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import { useLanguage } from '@/contexts/LanguageContext'
 import { usePresentationMode } from '@/contexts/PresentationModeContext'
-import { runRootViewTransition } from '@/lib/magic-view-transition'
+import {
+  getThemeTransitionClipPaths,
+  type TransitionVariant,
+} from '@/components/ui/animated-theme-toggler'
 
 const CREA_LABEL_CLASS = 'presentation-dev-label'
 const CREA_TOGGLE_CLASS = 'presentation-mode-dev-toggle'
@@ -21,10 +25,85 @@ const IJIPOP_ORANGE_LABEL_GRADIENT =
 
 const IJIPOP_ORANGE_FALLBACK = '#ea580c'
 
+const VT_DURATION_MS = 420
+const VT_SHAPE: TransitionVariant = 'circle'
+
+function runCenteredPresentationViewTransition(
+  next: 'beige' | 'dev',
+  applyMode: () => void
+): void {
+  const viewportWidth = window.visualViewport?.width ?? window.innerWidth
+  const viewportHeight = window.visualViewport?.height ?? window.innerHeight
+  const x = viewportWidth / 2
+  const y = viewportHeight / 2
+  const maxRadius = Math.hypot(Math.max(x, viewportWidth - x), Math.max(y, viewportHeight - y))
+
+  const root = document.documentElement
+  root.dataset.presentationModeVt = 'active'
+  root.style.setProperty('--presentation-mode-vt-duration', `${VT_DURATION_MS}ms`)
+
+  const cleanup = () => {
+    delete root.dataset.presentationModeVt
+    root.style.removeProperty('--presentation-mode-vt-duration')
+  }
+
+  const apply = () => {
+    flushSync(applyMode)
+  }
+
+  if (typeof document.startViewTransition !== 'function') {
+    apply()
+    cleanup()
+    return
+  }
+
+  const transition = document.startViewTransition(apply)
+  if (typeof transition?.finished?.finally === 'function') {
+    transition.finished.finally(cleanup)
+  } else {
+    cleanup()
+  }
+
+  const ready = transition?.ready
+  if (ready && typeof ready.then === 'function') {
+    ready.then(() => {
+      const clipPath = getThemeTransitionClipPaths(
+        VT_SHAPE,
+        x,
+        y,
+        maxRadius,
+        viewportWidth,
+        viewportHeight
+      )
+      document.documentElement.animate(
+        { clipPath },
+        {
+          duration: VT_DURATION_MS,
+          easing: 'ease-in-out',
+          fill: 'forwards',
+          pseudoElement: '::view-transition-new(root)',
+        }
+      )
+    })
+  }
+}
+
 export function PresentationModeToggle() {
   const { mode, setMode } = usePresentationMode()
   const { t } = useLanguage()
   const reduceMotion = useMediaQuery('(prefers-reduced-motion: reduce)', { noSsr: true })
+
+  const handlePresentationChange = useCallback(
+    (next: 'beige' | 'dev') => {
+      if (next === mode) return
+      if (reduceMotion) {
+        setMode(next)
+        return
+      }
+      runCenteredPresentationViewTransition(next, () => setMode(next))
+    },
+    [mode, reduceMotion, setMode]
+  )
 
   return (
     <ToggleButtonGroup
@@ -32,18 +111,7 @@ export function PresentationModeToggle() {
       exclusive
       size="small"
       onChange={(_, value: 'beige' | 'dev' | null) => {
-        if (!value || value === mode) return
-        runRootViewTransition(
-          () => {
-            setMode(value)
-          },
-          {
-            duration: 450,
-            variant: 'circle',
-            fromCenter: true,
-            respectReducedMotion: true,
-          }
-        )
+        if (value) handlePresentationChange(value)
       }}
       aria-label={t('nav.presentationToggleGroup')}
       sx={{
