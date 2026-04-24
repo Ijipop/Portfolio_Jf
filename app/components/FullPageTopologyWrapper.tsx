@@ -12,7 +12,7 @@ import { shouldShowTopology } from '@/utils/topologyRoutes'
 import { getBeigePresentationTopologyBackground } from '@/utils/syncPortfolioThemeToDocument'
 import { VANTA_PRELOAD_SOURCES } from '@/utils/vantaAssets'
 import { preloadExternalScripts } from '@/utils/vantaScriptLoader'
-import VantaDotsBackground from './VantaDotsBackground'
+import VantaNetBackground from './VantaNetBackground'
 
 const contentWrapperSx = {
   minHeight: '100vh',
@@ -101,7 +101,7 @@ export default function FullPageTopologyWrapper({ children }: FullPageTopologyWr
             }}
           />
         ) : (
-          <VantaDotsBackground key="vanta-dots" fillContainer />
+          <VantaNetBackground key="vanta-net" fillContainer />
         )}
       </Box>
       <Box
