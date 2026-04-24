@@ -10,7 +10,6 @@ import {
 	ListItemText,
 	Menu,
 	MenuItem,
-	Tooltip
 } from '@mui/material'
 import { useEffect, useMemo, useState } from 'react'
 import { useAdvancedTheme } from '@/contexts/AdvancedThemeContext'
@@ -81,29 +80,27 @@ export function ThemeSelector() {
 
   return (
     <>
-      <Tooltip title={`Thème: ${currentTheme.name}`} arrow placement="left">
-        <IconButton
-          onClick={handleClick}
-          aria-label="Changer le thème"
-          sx={{
-            width: 40,
-            height: 40,
-            borderRadius: '10px',
-            transition: 'transform 0.2s ease',
-            '&:hover': { transform: 'scale(1.05)' },
-            '@keyframes paletteGlow': {
-              '0%, 100%': { color: currentTheme.primary },
-              '33%': { color: currentTheme.secondary },
-              '66%': { color: currentTheme.accent },
-            },
-            animation: 'paletteGlow 2.5s ease-in-out infinite',
-          }}
-        >
-          <Palette sx={{ fontSize: 20 }} />
-          <ArrowDropDown sx={{ ml: 0.25, fontSize: 18, opacity: 0.9 }} />
-        </IconButton>
-      </Tooltip>
-      
+      <IconButton
+        onClick={handleClick}
+        aria-label={`Changer le thème — ${currentTheme.name}`}
+        sx={{
+          width: 40,
+          height: 40,
+          borderRadius: '10px',
+          transition: 'transform 0.2s ease',
+          '&:hover': { transform: 'scale(1.05)' },
+          '@keyframes paletteGlow': {
+            '0%, 100%': { color: currentTheme.primary },
+            '33%': { color: currentTheme.secondary },
+            '66%': { color: currentTheme.accent },
+          },
+          animation: 'paletteGlow 2.5s ease-in-out infinite',
+        }}
+      >
+        <Palette sx={{ fontSize: 20 }} />
+        <ArrowDropDown sx={{ ml: 0.25, fontSize: 18, opacity: 0.9 }} />
+      </IconButton>
+
       <Menu
         anchorEl={anchorEl}
         open={open}
