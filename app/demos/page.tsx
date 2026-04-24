@@ -62,6 +62,11 @@ export default function DemosIndexPage() {
           Chaque page illustre une direction graphique et un secteur différents. Ouvrez celles qui vous parlent.
         </p>
         <DemosIndexAnimatedGrid cards={cards} />
+        <p className={styles.labLinkWrap}>
+          <Link href="/demos/gsap-lab" className={styles.labLink}>
+            Lab GSAP (animations, expérimental)
+          </Link>
+        </p>
         <Link href="/" className={styles.back}>
           ← Retour à l’accueil
         </Link>

@@ -24,7 +24,13 @@ test('portfolio home loads and nav works', async ({ page }) => {
     page.getByText(/obtenir une estimation rapide|let's discuss your project/i).first()
   ).toBeVisible()
   await expect(page.getByTestId('graphics-background-layer')).toHaveAttribute('data-graphics-mode', 'full')
-  await expect(page.getByTestId('vanta-background')).toBeVisible()
+  // Créa : constellations Three (`crea-constellation-background`) ou repli mesh ; hors Créa : Vanta dots.
+  await expect(
+    page
+      .getByTestId('crea-constellation-background')
+      .or(page.getByTestId('crea-mesh-background'))
+      .or(page.getByTestId('vanta-background'))
+  ).toBeVisible()
 
   await expect(page.locator('a[href="/portfolio/projets"]').first()).toBeVisible()
   await expect(page.locator('a[href="/portfolio/contact"]').first()).toBeVisible()
@@ -60,8 +66,7 @@ test('contact form renders stable fields', async ({ page }) => {
 })
 
 test('light graphics mode can be forced for fallback validation', async ({ page }) => {
-  // En mode Créa (`dev`), `FullPageTopologyWrapper` garde Vanta sauf si l’OS demande moins de mouvement
-  // (`creaWantsVanta`). Sans ça, `portfolio-force-graphics-mode: light` ne passe pas en calque gradient.
+  // Reduced-motion + graphismes forcés « light » : pas de Vanta (dots/birds), calque gradient (data-graphics-mode light).
   await page.emulateMedia({ reducedMotion: 'reduce' })
   await page.addInitScript(() => {
     window.localStorage.setItem('presentationMode', 'dev')
