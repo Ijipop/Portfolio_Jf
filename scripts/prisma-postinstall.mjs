@@ -1,16 +1,28 @@
 /**
  * Postinstall Prisma avec retries : sous Windows, `rename` du query engine peut
  * échouer en EPERM si `next dev`, un autre `node`, ou l'antivirus verrouille le fichier.
+ *
+ * Ne pas utiliser `npx prisma` : sans binaire local résolu, npx installe Prisma 7+,
+ * incompatible avec un schéma Prisma 6 (`datasource url` dans schema.prisma).
  */
 
 import { spawn } from 'node:child_process'
+import { existsSync } from 'node:fs'
+import path from 'node:path'
 import { setTimeout as delay } from 'node:timers/promises'
 
 function runPrismaGenerate() {
   return new Promise((resolve) => {
-    const child = spawn('npx', ['prisma', 'generate'], {
+    const cli = path.join(process.cwd(), 'node_modules', 'prisma', 'build', 'index.js')
+    if (!existsSync(cli)) {
+      console.error(
+        `[postinstall] Prisma CLI introuvable : ${cli}\n` +
+          '  → Vérifie que `prisma` est installé (même version que @prisma/client, ex. 6.x).'
+      )
+      return resolve(1)
+    }
+    const child = spawn(process.execPath, [cli, 'generate'], {
       stdio: 'inherit',
-      shell: true,
       cwd: process.cwd(),
     })
     child.on('close', (code) => resolve(code ?? 1))
