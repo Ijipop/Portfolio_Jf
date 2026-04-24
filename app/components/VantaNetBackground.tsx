@@ -4,22 +4,22 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { useAdvancedTheme } from '../contexts/AdvancedThemeContext'
 import { THEMES, type ThemeName } from '../design-system/themes'
 import { useVantaPerformance } from '@/hooks/useVantaPerformance'
-import { THREE_CDN, VANTA_DOTS_CDN } from '@/utils/vantaAssets'
+import { THREE_CDN, VANTA_NET_CDN } from '@/utils/vantaAssets'
 import { loadExternalScript } from '@/utils/vantaScriptLoader'
 
 function hexToNumber(hex: string): number {
   return parseInt(hex.slice(1), 16)
 }
 
-function getDotsOptions(themeName: ThemeName): Record<string, unknown> {
+function getNetOptions(themeName: ThemeName): Record<string, unknown> {
   const theme = THEMES[themeName]
   return {
     color: hexToNumber(theme.primary),
-    color2: hexToNumber(theme.accent),
     backgroundColor: hexToNumber(theme.bg),
-    size: 3,
-    spacing: 35,
-    showLines: true,
+    points: 12,
+    maxDistance: 22,
+    spacing: 18,
+    showDots: true,
   }
 }
 
@@ -27,17 +27,19 @@ function getFallbackBgColor(themeName: ThemeName): string {
   return THEMES[themeName]?.bg ?? '#f8fafc'
 }
 
-interface VantaDotsBackgroundProps {
+interface VantaNetBackgroundProps {
   fillContainer?: boolean
   colorHex?: string
   backgroundHex?: string
 }
 
-export default function VantaDotsBackground(props?: VantaDotsBackgroundProps) {
+type VantaNetInstance = { destroy: () => void; resize?: () => void }
+
+export default function VantaNetBackground(props?: VantaNetBackgroundProps) {
   const { fillContainer = false, colorHex, backgroundHex } = props ?? {}
   const [containerEl, setContainerEl] = useState<HTMLDivElement | null>(null)
   const elRef = useRef<HTMLDivElement | null>(null)
-  const effectRef = useRef<{ destroy: () => void; resize?: () => void } | null>(null)
+  const effectRef = useRef<VantaNetInstance | null>(null)
   const [vantaReady, setVantaReady] = useState(false)
   const { themeName } = useAdvancedTheme()
   const { isActive, targetFps } = useVantaPerformance(elRef)
@@ -76,7 +78,8 @@ export default function VantaDotsBackground(props?: VantaDotsBackgroundProps) {
 
     const init = async () => {
       try {
-        const prefersReducedMotion = typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches
+        const prefersReducedMotion =
+          typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches
         if (prefersReducedMotion) {
           setVantaReady(true)
           return
@@ -91,25 +94,26 @@ export default function VantaDotsBackground(props?: VantaDotsBackgroundProps) {
           if (safetyTimer) clearTimeout(safetyTimer)
           return
         }
-        await loadExternalScript(VANTA_DOTS_CDN)
+        await loadExternalScript(VANTA_NET_CDN)
         if (!mounted || !el) {
           if (safetyTimer) clearTimeout(safetyTimer)
           return
         }
 
-        const VANTA = (window as unknown as { VANTA: { DOTS: (opts: Record<string, unknown>) => { destroy: () => void; resize?: () => void } } }).VANTA
-        if (!VANTA?.DOTS) {
+        const VANTA = (
+          window as unknown as { VANTA: { NET: (opts: Record<string, unknown>) => VantaNetInstance } }
+        ).VANTA
+        if (!VANTA?.NET) {
           if (safetyTimer) clearTimeout(safetyTimer)
           if (mounted) setVantaReady(true)
           return
         }
 
-        const options = getDotsOptions(themeName as ThemeName)
+        const options = getNetOptions(themeName as ThemeName)
         const resolvedColor = colorHex ? hexToNumber(colorHex) : (options.color as number)
-        const resolvedColor2 = colorHex ? hexToNumber(colorHex) : (options.color2 as number)
         const resolvedBackground = backgroundHex ? hexToNumber(backgroundHex) : (options.backgroundColor as number)
 
-        const effect = VANTA.DOTS({
+        const effect = VANTA.NET({
           el,
           mouseControls: true,
           touchControls: true,
@@ -119,11 +123,11 @@ export default function VantaDotsBackground(props?: VantaDotsBackgroundProps) {
           scale: 1,
           scaleMobile: 1,
           color: resolvedColor,
-          color2: resolvedColor2,
           backgroundColor: resolvedBackground,
-          size: options.size,
+          points: options.points,
+          maxDistance: options.maxDistance,
           spacing: options.spacing,
-          showLines: options.showLines,
+          showDots: options.showDots,
         })
         effectRef.current = effect
 
@@ -147,7 +151,7 @@ export default function VantaDotsBackground(props?: VantaDotsBackgroundProps) {
           }
         })
       } catch (err) {
-        console.warn('[VantaDotsBackground] Vanta DOTS failed to load', err)
+        console.warn('[VantaNetBackground] Vanta NET failed to load', err)
         if (safetyTimer) clearTimeout(safetyTimer)
         if (mounted) setVantaReady(true)
       }
@@ -175,7 +179,7 @@ export default function VantaDotsBackground(props?: VantaDotsBackgroundProps) {
     <div
       ref={setContainerRef}
       data-testid="vanta-background"
-      data-vanta-kind="dots"
+      data-vanta-kind="net"
       style={{
         position: 'absolute',
         top: 0,
