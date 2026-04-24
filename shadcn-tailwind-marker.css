@@ -1,0 +1,5 @@
+/**
+ * Repère pour `npx shadcn@latest` : le CLI cherche `@import "tailwindcss"`.
+ * Les styles Tailwind + shadcn actifs sont dans app/globals.css.
+ */
+@import "tailwindcss";

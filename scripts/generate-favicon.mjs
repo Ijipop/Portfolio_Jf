@@ -5,8 +5,8 @@
  * Usage : npm run favicon
  */
 import sharp from 'sharp'
-import toIco from 'to-ico'
 import { writeFileSync } from 'fs'
+import { buildIcoFromPngBuffers } from './ico-from-png-buffers.mjs'
 import { fileURLToPath } from 'url'
 import { dirname, join } from 'path'
 
@@ -21,7 +21,7 @@ writeFileSync(join(root, 'app', 'icon.png'), png48)
 const apple = await sharp(svgPath).resize(180, 180).png().toBuffer()
 writeFileSync(join(root, 'app', 'apple-icon.png'), apple)
 
-const ico = await toIco([png16, png32, png48])
+const ico = buildIcoFromPngBuffers([png16, png32, png48], [16, 32, 48])
 writeFileSync(join(root, 'public', 'favicon.ico'), ico)
 
 console.log('OK: app/icon.png (48), app/apple-icon.png (180), public/favicon.ico')

@@ -1,8 +1,7 @@
 'use client'
 
 /**
- * LAB Vanta BIRDS — hors fond global. Débrancher : retirer ce fichier,
- * le dossier app/test/vanta-birds/, et VANTA_BIRDS_CDN dans vantaAssets si inutilisé.
+ * LAB Vanta BIRDS — démo isolée. Le fond Créa global utilise `CreaMeshMotionBackground` (mesh CSS).
  * Route : désactiver NEXT_PUBLIC_VANTA_BIRDS_TEST (≠ '1').
  */
 

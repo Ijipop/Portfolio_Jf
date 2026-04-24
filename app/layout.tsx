@@ -5,9 +5,9 @@ import ContactFab from './components/shared/ContactFab'
 import SeoJsonLd from './components/SeoJsonLd'
 import ThemeWrapper from './components/ThemeWrapper'
 import FullPageTopologyWrapper from './components/FullPageTopologyWrapper'
-import { inter } from './fonts'
 import './globals.css'
 import { getBeigePresentationBgUrlFromDb } from '@/lib/site-appearance'
+import { inter } from './fonts'
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://ijipop.com'
 
