@@ -396,21 +396,21 @@ body {
     -webkit-text-size-adjust: 100%;
     -webkit-tap-highlight-color: transparent;
   }
-  
+
   @supports (height: 100dvh) {
     html, body {
       min-height: 100dvh;
       height: 100dvh;
     }
   }
-  
+
   /* Fix spécifique pour mode paysage */
   @media screen and (orientation: landscape) {
     html, body {
       height: 100vh; /* Fallback */
       min-height: 100vh; /* Fallback */
     }
-    
+
     @supports (height: 100dvh) {
       html, body {
         height: 100dvh;
@@ -472,4 +472,8 @@ body {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
+}
+::view-transition-old(root), ::view-transition-new(root) {
+    animation: none;
+    mix-blend-mode: normal;
 }
