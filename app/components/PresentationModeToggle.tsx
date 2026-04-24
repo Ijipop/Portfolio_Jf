@@ -7,6 +7,7 @@ import ToggleButtonGroup from '@mui/material/ToggleButtonGroup'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import { useLanguage } from '@/contexts/LanguageContext'
 import { usePresentationMode } from '@/contexts/PresentationModeContext'
+import { runRootViewTransition } from '@/lib/magic-view-transition'
 
 const CREA_LABEL_CLASS = 'presentation-dev-label'
 const CREA_TOGGLE_CLASS = 'presentation-mode-dev-toggle'
@@ -31,7 +32,18 @@ export function PresentationModeToggle() {
       exclusive
       size="small"
       onChange={(_, value: 'beige' | 'dev' | null) => {
-        if (value) setMode(value)
+        if (!value || value === mode) return
+        runRootViewTransition(
+          () => {
+            setMode(value)
+          },
+          {
+            duration: 450,
+            variant: 'circle',
+            fromCenter: true,
+            respectReducedMotion: true,
+          }
+        )
       }}
       aria-label={t('nav.presentationToggleGroup')}
       sx={{

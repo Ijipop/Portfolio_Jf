@@ -12,6 +12,7 @@ import HomeHeroServicesSection from './components/home/HomeHeroServicesSection'
 import PortfolioHomeHero from './components/home/PortfolioHomeHero'
 import { FadeIn } from './components/SimpleAnimations'
 import ThreeDCardComponent from './components/ThreeDCard'
+import { CardSpotlight } from '@/components/ui/card-spotlight'
 import AppBarComponent from './components/appBar'
 import PageWrapper from './components/shared/PageWrapper'
 import InteractiveBackgroundSection from './components/shared/InteractiveBackgroundSection'
@@ -21,10 +22,14 @@ import { DESIGN_TOKENS } from './design-system/constants'
 import { useThemeColors } from './hooks/useThemeColors'
 import { useTextColor } from './hooks/useTextColor'
 import { useLanguage } from './contexts/LanguageContext'
+import { usePresentationMode } from './contexts/PresentationModeContext'
 import SignatureIntro from './components/SignatureIntro'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, type ReactNode } from 'react'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import { useTheme } from '@mui/material/styles'
+import { usePathname } from 'next/navigation'
+import { shouldShowTopology } from '@/utils/topologyRoutes'
+import { getCardSurfaceSx } from '@/components/shared/cardSurface'
 
 const INTRO_SESSION_KEY = 'portfolio-intro-seen'
 
@@ -52,12 +57,133 @@ function setIntroSeenCookie() {
   document.cookie = `${INTRO_SESSION_KEY}=1; path=/`
 }
 
+type HomeNavCardProps = {
+  href: string
+  /** Mode Créa (présentation dev) : effet Aceternity CardSpotlight à la place de la 3D card. */
+  useCreaSpotlight: boolean
+  floatingElements?: number
+  children: ReactNode
+}
+
+function HomeNavCard({
+  href,
+  useCreaSpotlight,
+  floatingElements = 2,
+  children,
+}: HomeNavCardProps) {
+  const theme = useTheme()
+  const pathname = usePathname()
+  const isTopologyRoute = shouldShowTopology(pathname)
+  const { primary, secondary, accent } = useThemeColors()
+  const textColor = useTextColor()
+  const surfaceSx = getCardSurfaceSx({
+    isTopologyRoute,
+    variant: 'flat',
+    level: 'soft',
+    interactive: true,
+  })
+  const hasGlassSurface = Object.keys(surfaceSx).length > 0
+
+  const linkStyle = {
+    textDecoration: 'none' as const,
+    display: 'flex',
+    width: '100%',
+    height: '100%',
+    minHeight: 0,
+  }
+
+  if (useCreaSpotlight) {
+    const glow = {
+      primary: alpha(primary, 0.44),
+      secondary: alpha(secondary, 0.36),
+      accent: alpha(accent, 0.34),
+    }
+    const maskTint = alpha(primary, theme.palette.mode === 'dark' ? 0.3 : 0.12)
+
+    return (
+      <Box sx={{ display: 'flex', minHeight: 0, height: '100%' }}>
+        <Link
+          href={href}
+          style={{
+            ...linkStyle,
+            flex: 1,
+            alignSelf: 'stretch',
+            minHeight: 240,
+          }}
+        >
+          <Box
+            sx={{
+              flex: 1,
+              display: 'flex',
+              flexDirection: 'column',
+              width: '100%',
+              cursor: 'pointer',
+              borderRadius: `${DESIGN_TOKENS.borderRadius.large}px`,
+              overflow: 'hidden',
+              transition: 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s ease',
+              '&:hover': { transform: 'translateY(-8px)' },
+              ...surfaceSx,
+              ...(!hasGlassSurface && {
+                background: 'var(--card-background)',
+                border: `1px solid ${alpha(primary, theme.palette.mode === 'dark' ? 0.24 : 0.14)}`,
+                boxShadow:
+                  theme.palette.mode === 'dark'
+                    ? '0 20px 50px rgba(0,0,0,0.42), 0 0 0 1px rgba(255,255,255,0.05)'
+                    : '0 20px 50px rgba(15,23,42,0.1), 0 0 0 1px rgba(15,23,42,0.06)',
+              }),
+              /** Padding uniquement sur le contenu : CardSpotlight occupe tout le panneau pour que le halo couvre toute la carte. */
+              height: '100%',
+              minHeight: 240,
+            }}
+          >
+            <CardSpotlight
+              radius={320}
+              color={maskTint}
+              glow={glow}
+              className="flex h-full min-h-[240px] w-full min-w-0 flex-1 flex-col !rounded-none !border-0 !bg-transparent !p-0 !shadow-none"
+            >
+              <Box
+                sx={{
+                  position: 'relative',
+                  zIndex: 20,
+                  flex: 1,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  minHeight: 0,
+                  height: '100%',
+                  p: HOME_GRID_CARD_SX.p,
+                  color: textColor,
+                  '& .MuiSvgIcon-root': { color: primary },
+                }}
+              >
+                {children}
+              </Box>
+            </CardSpotlight>
+          </Box>
+        </Link>
+      </Box>
+    )
+  }
+
+  return (
+    <Box sx={{ display: 'flex', minHeight: 0, height: '100%' }}>
+      <Link href={href} style={linkStyle}>
+        <ThreeDCardComponent fullHeight floatingElements={floatingElements} sx={HOME_GRID_CARD_SX}>
+          {children}
+        </ThreeDCardComponent>
+      </Link>
+    </Box>
+  )
+}
+
 export default function HomeClient({ initialShowIntro }: { initialShowIntro: boolean }) {
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
   const { primary } = useThemeColors()
   const textColor = useTextColor()
   const { t } = useLanguage()
+  const { mode: presentationMode } = usePresentationMode()
+  const useCreaSpotlightCards = presentationMode === 'dev'
   const [showIntro, setShowIntro] = useState<boolean>(initialShowIntro)
 
   // Synchroniser avec cookie/sessionStorage après montage pour éviter flash d'hydration
@@ -181,51 +307,39 @@ export default function HomeClient({ initialShowIntro }: { initialShowIntro: boo
           alignItems: 'stretch',
         }}>
           <FadeIn delay={0}>
-            <Box sx={{ display: 'flex', minHeight: 0, height: '100%' }}>
-              <Link href="/portfolio/projets" style={{ textDecoration: 'none', display: 'flex', width: '100%', height: '100%' }}>
-                <ThreeDCardComponent fullHeight floatingElements={2} sx={HOME_GRID_CARD_SX}>
-                  <CodeIcon sx={{ fontSize: 48, color: primary, mb: 2 }} />
-                  <Typography variant="h5" gutterBottom sx={{ color: textColor }}>
-                    {t('home.cardProjects')}
-                  </Typography>
-                  <Typography variant="body1" sx={{ color: textColor, ...HOME_CARD_DESC_TYPO_SX }}>
-                    {t('home.cardProjectsDesc')}
-                  </Typography>
-                </ThreeDCardComponent>
-              </Link>
-            </Box>
+            <HomeNavCard href="/portfolio/projets" useCreaSpotlight={useCreaSpotlightCards} floatingElements={2}>
+              <CodeIcon sx={{ fontSize: 48, color: primary, mb: 2 }} />
+              <Typography variant="h5" gutterBottom sx={{ color: textColor }}>
+                {t('home.cardProjects')}
+              </Typography>
+              <Typography variant="body1" sx={{ color: textColor, ...HOME_CARD_DESC_TYPO_SX }}>
+                {t('home.cardProjectsDesc')}
+              </Typography>
+            </HomeNavCard>
           </FadeIn>
 
           <FadeIn delay={0}>
-            <Box sx={{ display: 'flex', minHeight: 0, height: '100%' }}>
-              <Link href="/portfolio/a-propos" style={{ textDecoration: 'none', display: 'flex', width: '100%', height: '100%' }}>
-                <ThreeDCardComponent fullHeight floatingElements={3} sx={HOME_GRID_CARD_SX}>
-                  <PersonIcon sx={{ fontSize: 48, color: primary, mb: 2 }} />
-                  <Typography variant="h5" gutterBottom sx={{ color: textColor }}>
-                    {t('home.cardAbout')}
-                  </Typography>
-                  <Typography variant="body1" sx={{ color: textColor, ...HOME_CARD_DESC_TYPO_SX }}>
-                    {t('home.cardAboutDesc')}
-                  </Typography>
-                </ThreeDCardComponent>
-              </Link>
-            </Box>
+            <HomeNavCard href="/portfolio/a-propos" useCreaSpotlight={useCreaSpotlightCards} floatingElements={3}>
+              <PersonIcon sx={{ fontSize: 48, color: primary, mb: 2 }} />
+              <Typography variant="h5" gutterBottom sx={{ color: textColor }}>
+                {t('home.cardAbout')}
+              </Typography>
+              <Typography variant="body1" sx={{ color: textColor, ...HOME_CARD_DESC_TYPO_SX }}>
+                {t('home.cardAboutDesc')}
+              </Typography>
+            </HomeNavCard>
           </FadeIn>
 
           <FadeIn delay={0}>
-            <Box sx={{ display: 'flex', minHeight: 0, height: '100%' }}>
-              <Link href="/portfolio/contact" style={{ textDecoration: 'none', display: 'flex', width: '100%', height: '100%' }}>
-                <ThreeDCardComponent fullHeight floatingElements={2} sx={HOME_GRID_CARD_SX}>
-                  <ContactSupportIcon sx={{ fontSize: 48, color: primary, mb: 2 }} />
-                  <Typography variant="h5" gutterBottom sx={{ color: textColor }}>
-                    {t('home.cardContact')}
-                  </Typography>
-                  <Typography variant="body1" sx={{ color: textColor, ...HOME_CARD_DESC_TYPO_SX }}>
-                    {t('home.cardContactDesc')}
-                  </Typography>
-                </ThreeDCardComponent>
-              </Link>
-            </Box>
+            <HomeNavCard href="/portfolio/contact" useCreaSpotlight={useCreaSpotlightCards} floatingElements={2}>
+              <ContactSupportIcon sx={{ fontSize: 48, color: primary, mb: 2 }} />
+              <Typography variant="h5" gutterBottom sx={{ color: textColor }}>
+                {t('home.cardContact')}
+              </Typography>
+              <Typography variant="body1" sx={{ color: textColor, ...HOME_CARD_DESC_TYPO_SX }}>
+                {t('home.cardContactDesc')}
+              </Typography>
+            </HomeNavCard>
           </FadeIn>
         </Box>
       </Container>

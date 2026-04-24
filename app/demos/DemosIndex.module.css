@@ -125,6 +125,22 @@
   margin: 0;
 }
 
+.labLinkWrap {
+  margin: 1.75rem 0 0;
+}
+
+.labLink {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #57534e;
+  text-decoration: none;
+}
+
+.labLink:hover {
+  color: #3d5266;
+  text-decoration: underline;
+}
+
 .back {
   display: inline-block;
   margin-top: 2.5rem;

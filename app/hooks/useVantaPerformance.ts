@@ -21,7 +21,7 @@ interface VantaPerformanceState {
  *   ça peut laisser isActive à false (Safari, iframe, DevTools) + bloquer les clics.
  * - mode/targetFps : stockés en ref pour éviter de re-monter Vanta (deps useEffect) en boucle.
  * - Aligné sur `FullPageTopologyWrapper` : en présentation Créa (`dev`) sans prefers-reduced-motion,
- *   le fond peut rester Vanta même si `graphicsMode === 'light'` (session / device / Web Vitals).
+ *   le fond constellations (Three) ou mesh de repli reste actif même si `graphicsMode === 'light'` ; hors Créa, Vanta DOTS.
  */
 export function useVantaPerformance(_elRef: RefObject<HTMLElement>): VantaPerformanceState {
   const [isVisibleTab, setIsVisibleTab] = useState(
@@ -37,8 +37,8 @@ export function useVantaPerformance(_elRef: RefObject<HTMLElement>): VantaPerfor
   const lightModeRequestedRef = useRef(false)
   const [, bump] = useState(0)
 
-  const creaWantsVanta = presentationMode === 'dev' && !prefersReducedMotion
-  const allowVantaDespiteLightGraphics = creaWantsVanta && graphicsMode === 'light'
+  const creaWantsMotionBackground = presentationMode === 'dev' && !prefersReducedMotion
+  const allowVantaDespiteLightGraphics = creaWantsMotionBackground && graphicsMode === 'light'
   const isActive =
     isVisibleTab && (graphicsMode === 'full' || allowVantaDespiteLightGraphics)
 

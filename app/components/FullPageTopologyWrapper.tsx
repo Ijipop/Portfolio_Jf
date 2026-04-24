@@ -12,6 +12,7 @@ import { shouldShowTopology } from '@/utils/topologyRoutes'
 import { getBeigePresentationTopologyBackground } from '@/utils/syncPortfolioThemeToDocument'
 import { VANTA_PRELOAD_SOURCES } from '@/utils/vantaAssets'
 import { preloadExternalScripts } from '@/utils/vantaScriptLoader'
+import CreaConstellationBackground from './CreaConstellationBackground'
 import VantaDotsBackground from './VantaDotsBackground'
 
 const contentWrapperSx = {
@@ -35,9 +36,11 @@ export default function FullPageTopologyWrapper({ children }: FullPageTopologyWr
   const { graphicsMode, downgradeReason } = useGraphicsMode()
   const { mode: presentationMode } = usePresentationMode()
   const prefersReducedMotion = useMediaQuery('(prefers-reduced-motion: reduce)', { noSsr: true })
-  /** En prod le mode graphique « light » coupe Vanta ; en Créa on le réaffiche (sauf si l’OS demande moins de mouvement). */
-  const creaWantsVanta = presentationMode === 'dev' && !prefersReducedMotion
-  const useLightFallback = show && graphicsMode === 'light' && !creaWantsVanta
+  /** En prod le mode graphique « light » coupe Vanta ; en Créa on garde un fond animé (constellations Three ou mesh de repli). */
+  const creaWantsMotionBackground = presentationMode === 'dev' && !prefersReducedMotion
+  /** Mode Créa : constellations vivantes (R3F) ; repli mesh si WebGL / reduced-motion. */
+  const creaUseConstellationBackground = creaWantsMotionBackground
+  const useLightFallback = show && graphicsMode === 'light' && !creaWantsMotionBackground
   const useStaticProBackground = presentationMode === 'beige'
   const useGradientOnly = useLightFallback || useStaticProBackground
 
@@ -100,6 +103,8 @@ export default function FullPageTopologyWrapper({ children }: FullPageTopologyWr
                 : `radial-gradient(circle at 20% 20%, ${customTheme.primary}22 0%, transparent 35%), radial-gradient(circle at 80% 30%, ${customTheme.secondary}18 0%, transparent 30%), linear-gradient(135deg, ${customTheme.bg} 0%, ${customTheme.bg2} 100%)`,
             }}
           />
+        ) : creaUseConstellationBackground ? (
+          <CreaConstellationBackground key="crea-constellation" />
         ) : (
           <VantaDotsBackground key="vanta-dots" fillContainer />
         )}
