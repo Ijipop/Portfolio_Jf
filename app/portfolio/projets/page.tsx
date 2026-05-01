@@ -22,7 +22,7 @@ import type { SxProps, Theme } from '@mui/material/styles'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import Typography from '@mui/material/Typography'
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import { navigateProjectUrl } from '@/lib/navigateProjectUrl'
 import { getImageUrl } from '@/lib/getImageUrl'
 import React from 'react'
@@ -882,7 +882,6 @@ const ProjectImageContainer = styled(Box)(({ theme }) => ({
 
 export default function Projets() {
   const router = useRouter()
-  const searchParams = useSearchParams()
   const { primary, secondary, accent } = useThemeColors()
   const textColor = useTextColor()
   const { t } = useLanguage()
@@ -890,9 +889,7 @@ export default function Projets() {
   const [projects, setProjects] = useState<Project[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [selectedProjectType, setSelectedProjectType] = useState<'logiciel' | 'web'>(() =>
-    searchParams.get('type') === 'logiciel' ? 'logiciel' : 'web'
-  )
+  const [selectedProjectType, setSelectedProjectType] = useState<'logiciel' | 'web'>('web')
   const [timelendrWindowsUrl, setTimelendrWindowsUrl] = useState<string | null>(null)
   const [timelendrMacosUrl, setTimelendrMacosUrl] = useState<string | null>(null)
 
@@ -960,11 +957,11 @@ export default function Projets() {
   }, [])
 
   useEffect(() => {
-    const type = searchParams.get('type')
+    const type = new URLSearchParams(window.location.search).get('type')
     if (type === 'logiciel' || type === 'web') {
       setSelectedProjectType(type)
     }
-  }, [searchParams])
+  }, [])
 
   const fetchProjects = async () => {
     try {
