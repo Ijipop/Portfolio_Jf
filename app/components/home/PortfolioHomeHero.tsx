@@ -63,52 +63,50 @@ export default function PortfolioHomeHero() {
         }}
       >
         <Box
-          component="span"
+          component="div"
           sx={{
-            display: 'flex',
-            flexWrap: 'wrap',
-            justifyContent: 'center',
-            alignItems: 'baseline',
-            columnGap: { xs: 0.85, sm: 1.15 },
-            rowGap: 0.15,
+            display: 'block',
+            textAlign: 'center',
           }}
         >
-          <Box component="span">{t('home.heroEditorialPrefix')}</Box>
-          <Box
-            component="span"
-            sx={{
-              display: 'inline-block',
-              width: { xs: 'min(48vw, 220px)', sm: 220, md: 270, lg: 305, xl: 340 },
-              minHeight: '1.12em',
-            }}
-          >
-            <ScramblingText
-              text={rotatingWords[wordIndex] ?? rotatingWords[0]}
-              enabled={!reducedMotion}
-              phase={reducedMotion ? 'settled' : scramblePhase}
-              variant="inherit"
-              component="span"
-              letterSx={{
-                backgroundImage: BRAND_GLITCH_GRADIENT,
-                WebkitBackgroundClip: 'text',
-                backgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                color: 'transparent',
-              }}
-              sx={{
-                display: 'block',
-                width: '100%',
-                textAlign: 'left',
-                backgroundImage: BRAND_GLITCH_GRADIENT,
-                WebkitBackgroundClip: 'text',
-                backgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                color: 'transparent',
-              }}
-            />
-          </Box>
+          {t('home.heroEditorialPrefix')}
         </Box>
-        <Box component="span">{t('home.heroEditorialSuffix')}</Box>
+        <Box
+          component="div"
+          sx={{
+            display: 'block',
+            width: { xs: 'min(78vw, 300px)', sm: 330, md: 390, lg: 430, xl: 480 },
+            minHeight: '1.12em',
+            mx: 'auto',
+            textAlign: 'center',
+          }}
+        >
+          <ScramblingText
+            text={rotatingWords[wordIndex] ?? rotatingWords[0]}
+            enabled={!reducedMotion}
+            phase={reducedMotion ? 'settled' : scramblePhase}
+            variant="inherit"
+            component="span"
+            letterSx={{
+              backgroundImage: BRAND_GLITCH_GRADIENT,
+              WebkitBackgroundClip: 'text',
+              backgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              color: 'transparent',
+            }}
+            sx={{
+              display: 'block',
+              width: '100%',
+              textAlign: 'center',
+              backgroundImage: BRAND_GLITCH_GRADIENT,
+              WebkitBackgroundClip: 'text',
+              backgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              color: 'transparent',
+            }}
+          />
+        </Box>
+        <Box component="div">{t('home.heroEditorialSuffix')}</Box>
       </Typography>
       <Typography
         component="p"
