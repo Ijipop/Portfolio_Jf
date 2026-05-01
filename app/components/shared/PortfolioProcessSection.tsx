@@ -3,8 +3,9 @@
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import { motion, useReducedMotion } from 'framer-motion'
-import { BRAND_GLITCH_GRADIENT } from './IjipopGlitchTitle'
 import ScrollReveal from './ScrollReveal'
+import { BRAND_GLITCH_GRADIENT } from './IjipopGlitchTitle'
+import { useAdvancedTheme } from '@/contexts/AdvancedThemeContext'
 import { useLanguage } from '@/contexts/LanguageContext'
 import { useTextColor } from '@/hooks/useTextColor'
 import { useThemeColors } from '@/hooks/useThemeColors'
@@ -16,11 +17,32 @@ const STEPS = [
   { number: '04', titleKey: 'home.processLaunchTitle', textKey: 'home.processLaunchText', deliverableKey: 'home.processLaunchDeliverable' },
 ]
 
+const hexToRgba = (hex: string, alpha: number) => {
+  const normalized = hex.replace('#', '')
+  const r = parseInt(normalized.slice(0, 2), 16)
+  const g = parseInt(normalized.slice(2, 4), 16)
+  const b = parseInt(normalized.slice(4, 6), 16)
+  return `rgba(${r}, ${g}, ${b}, ${alpha})`
+}
+
 export default function PortfolioProcessSection() {
   const { t } = useLanguage()
+  const { themeName, customTheme } = useAdvancedTheme()
   const textColor = useTextColor()
-  const { primary } = useThemeColors()
+  const { primary, secondary, accent } = useThemeColors()
   const reducedMotion = useReducedMotion()
+  const isLatteTheme = themeName === 'latte'
+  const processAccent = isLatteTheme ? '#ea580c' : primary
+  const processGradient = isLatteTheme
+    ? BRAND_GLITCH_GRADIENT
+    : `linear-gradient(135deg, ${primary} 0%, ${secondary} 50%, ${accent} 100%)`
+  const cardBackground = isLatteTheme
+    ? `linear-gradient(145deg, ${hexToRgba(customTheme.bg, 0.94)}, ${hexToRgba(customTheme.bg2, 0.88)})`
+    : `linear-gradient(145deg, ${hexToRgba(customTheme.bg, 0.92)}, ${hexToRgba(customTheme.bg2, 0.86)})`
+  const cardBorder = isLatteTheme ? `${primary}2e` : `${primary}46`
+  const cardShadow = isLatteTheme
+    ? `0 16px 40px rgba(92, 77, 60, 0.12), inset 0 1px 0 ${hexToRgba('#ffffff', 0.38)}`
+    : `0 18px 46px rgba(0, 0, 0, 0.28), 0 0 28px ${hexToRgba(primary, 0.1)}, inset 0 1px 0 ${hexToRgba('#ffffff', 0.08)}`
 
   return (
     <Box sx={{ mb: { xs: 5, md: 8 } }}>
@@ -64,7 +86,7 @@ export default function PortfolioProcessSection() {
             top: { xs: 0, md: 42 },
             width: { xs: 2, md: '100%' },
             height: { xs: '100%', md: 2 },
-            background: `${primary}1e`,
+            background: `${processAccent}1e`,
             zIndex: 0,
             overflow: 'hidden',
           }}
@@ -79,7 +101,7 @@ export default function PortfolioProcessSection() {
               width: '100%',
               height: '100%',
               transformOrigin: { xs: 'top', md: 'left' },
-              background: BRAND_GLITCH_GRADIENT,
+              background: processGradient,
             }}
           />
         </Box>
@@ -103,11 +125,9 @@ export default function PortfolioProcessSection() {
                   p: { xs: 2.5, md: 2.75 },
                   pl: { xs: 6, md: 2.75 },
                   borderRadius: '14px',
-                  border: `1px solid ${primary}20`,
-                  background: (theme) =>
-                    theme.palette.mode === 'dark'
-                      ? 'linear-gradient(145deg, rgba(15,23,42,0.94), rgba(15,23,42,0.86))'
-                      : 'linear-gradient(145deg, rgba(248,244,235,0.96), rgba(248,244,235,0.9))',
+                  border: `1px solid ${cardBorder}`,
+                  background: cardBackground,
+                  boxShadow: cardShadow,
                   backdropFilter: 'blur(14px)',
                   WebkitBackdropFilter: 'blur(14px)',
                   overflow: 'hidden',
@@ -139,8 +159,8 @@ export default function PortfolioProcessSection() {
                     width: 16,
                     height: 16,
                     borderRadius: '50%',
-                    background: BRAND_GLITCH_GRADIENT,
-                    boxShadow: `0 0 0 7px ${primary}18`,
+                    background: processGradient,
+                    boxShadow: `0 0 0 7px ${processAccent}18`,
                   }}
                 />
                 <Typography

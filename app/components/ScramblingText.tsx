@@ -10,9 +10,9 @@ const SCRAMBLE_CHARSET =
   "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZàâäéèêëïîôùûüçÀÂÄÉÈÊËÏÎÔÙÛÜÇ0123456789.,;:!?'-"
 
 /** Délai minimum entre deux changements pour un même glyphe (ms). */
-const MIN_FLIP_MS = 160
+const MIN_FLIP_MS = 90
 /** Délai maximum entre deux changements pour un même glyphe (ms). */
-const MAX_FLIP_MS = 520
+const MAX_FLIP_MS = 280
 
 function randomGlyph(): string {
   return SCRAMBLE_CHARSET[Math.floor(Math.random() * SCRAMBLE_CHARSET.length)]!

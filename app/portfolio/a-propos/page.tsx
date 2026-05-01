@@ -17,9 +17,6 @@ import AppBarComponent from '../../components/appBar'
 import PageWrapper from '../../components/shared/PageWrapper'
 import InteractiveBackgroundSection from '../../components/shared/InteractiveBackgroundSection'
 import Footer from '../../components/Footer'
-import PortfolioStatsBand from '../../components/shared/PortfolioStatsBand'
-import PortfolioServicesSection from '../../components/shared/PortfolioServicesSection'
-import PortfolioProcessSection from '../../components/shared/PortfolioProcessSection'
 import { useAdvancedTheme } from '../../contexts/AdvancedThemeContext'
 import { GRADIENTS, DESIGN_TOKENS } from '../../design-system/constants'
 import { useThemeColors } from '../../hooks/useThemeColors'
@@ -260,8 +257,6 @@ export default function About() {
 
       <InteractiveBackgroundSection>
       <Container maxWidth="lg" sx={{ py: 6, position: 'relative', zIndex: 2 }}>
-        <PortfolioStatsBand />
-
         <ScrollReveal direction="up" delay={0.05}>
         <Box sx={{ 
           display: 'grid', 
@@ -592,8 +587,6 @@ export default function About() {
         <AboutPersonalStorySection t={t} primary={primary} textColor={textColor} />
         </ScrollReveal>
 
-        <PortfolioServicesSection />
-
         <ScrollReveal direction="up" delay={0.15}>
         <Box sx={{ 
           ...getCardSurfaceSx({ isTopologyRoute, variant: 'flat', level: 'soft', interactive: false }),
@@ -678,8 +671,6 @@ export default function About() {
         <ScrollReveal direction="up" delay={0.2}>
         <SoftSkillsSection primary={primary} textColor={textColor} t={t} />
         </ScrollReveal>
-
-        <PortfolioProcessSection />
 
         <ScrollReveal direction="up" delay={0.25}>
         <AboutCtaSection
