@@ -28,6 +28,7 @@ import SignatureIntro from './components/SignatureIntro'
 import { useEffect, useState } from 'react'
 
 const INTRO_SESSION_KEY = 'portfolio-intro-seen'
+const SHOW_HOME_NAVIGATION_CARDS = false
 
 /** Grille accueil : un peu plus de large utile pour le texte sur mobile ; hauteur libre. */
 const HOME_GRID_CARD_SX = {
@@ -176,6 +177,7 @@ export default function HomeClient({ initialShowIntro }: { initialShowIntro: boo
           </Box>
         </ScrollReveal>
 
+        {SHOW_HOME_NAVIGATION_CARDS && (
         <Box sx={{ 
           display: 'grid', 
           gridTemplateColumns: { xs: '1fr', md: 'repeat(3, 1fr)' },
@@ -232,6 +234,7 @@ export default function HomeClient({ initialShowIntro }: { initialShowIntro: boo
             </Box>
           </ScrollReveal>
         </Box>
+        )}
         <PortfolioProcessSection />
       </Container>
       </InteractiveBackgroundSection>
