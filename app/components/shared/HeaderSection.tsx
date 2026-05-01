@@ -96,7 +96,7 @@ export default function HeaderSection({ title, subtitle, tagline, children, full
         position: 'relative',
         overflow: 'hidden',
         ...(fullViewport && {
-          minHeight: { xs: 'calc(100dvh - 64px)', md: 'calc(100dvh - 72px)' },
+          minHeight: { xs: 'auto', sm: 'calc(100dvh - 64px)', md: 'calc(100dvh - 72px)' },
           display: 'block',
           boxSizing: 'border-box',
         }),
