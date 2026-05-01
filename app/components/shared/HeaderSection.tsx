@@ -84,7 +84,13 @@ export default function HeaderSection({ title, subtitle, tagline, children, full
         boxShadow: '0 6px 18px rgba(2, 6, 23, 0.14), inset 0 1px 0 rgba(255, 255, 255, 0.2)',
         color: textColor,
         padding: fullViewport
-          ? { xs: theme.spacing(8, 0, 4), sm: theme.spacing(14, 0, 5), md: '225px 0 48px' }
+          ? {
+              xs: theme.spacing(5.5, 0, 4),
+              sm: theme.spacing(8, 0, 5),
+              md: '110px 0 48px',
+              lg: '140px 0 56px',
+              xl: '180px 0 64px',
+            }
           : theme.spacing(3.5, 0, 2.5),
         textAlign: 'center',
         position: 'relative',
@@ -95,8 +101,16 @@ export default function HeaderSection({ title, subtitle, tagline, children, full
           boxSizing: 'border-box',
         }),
         [theme.breakpoints.down('sm')]: {
-          padding: fullViewport ? theme.spacing(6, 1, 4) : theme.spacing(2.5, 1, 2),
+          padding: fullViewport ? theme.spacing(5.5, 1, 4) : theme.spacing(2.5, 1, 2),
         },
+        ...(fullViewport && {
+          '@media (min-width: 900px) and (max-height: 820px)': {
+            padding: '72px 0 40px',
+          },
+          '@media (min-width: 900px) and (max-height: 680px)': {
+            padding: '48px 0 32px',
+          },
+        }),
         '&::before': {
           content: '""',
           position: 'absolute',
@@ -124,7 +138,17 @@ export default function HeaderSection({ title, subtitle, tagline, children, full
           variant="h1" 
           component="h1" 
           sx={{ 
-            mb: fullViewport ? { xs: 7, sm: 12, md: '225px' } : 1,
+            mb: fullViewport
+              ? { xs: 4.5, sm: 7, md: '110px', lg: '128px', xl: '160px' }
+              : 1,
+            ...(fullViewport && {
+              '@media (min-width: 900px) and (max-height: 820px)': {
+                mb: '64px',
+              },
+              '@media (min-width: 900px) and (max-height: 680px)': {
+                mb: '42px',
+              },
+            }),
             fontWeight: 900,
             fontSize: titleIsGlitch ? 'inherit' : { xs: '1.75rem', sm: '2.75rem', md: '3.75rem' },
             textShadow: titleIsGlitch ? 'none' : `0 0 20px ${hexToRgba(primary, 0.8)}, 0 4px 8px rgba(0,0,0,0.3)`,
