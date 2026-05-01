@@ -20,9 +20,9 @@ export default function StickyCTA({
     <Box
       sx={{
         position: 'fixed',
-        bottom: 0,
-        left: 0,
-        right: 0,
+        bottom: { xs: 0, md: 24 },
+        left: { xs: 0, md: 'auto' },
+        right: { xs: 0, md: 24 },
         zIndex: DESIGN_TOKENS.zIndex.stickyBar,
         background: (theme) => theme.palette.mode === 'dark'
           ? 'linear-gradient(to top, rgba(26, 26, 26, 0.95) 0%, rgba(26, 26, 26, 0.9) 100%)'
@@ -31,9 +31,14 @@ export default function StickyCTA({
         borderTop: (theme) => theme.palette.mode === 'dark'
           ? '1px solid rgba(255, 255, 255, 0.1)'
           : '1px solid rgba(0, 0, 0, 0.1)',
+        borderRadius: { xs: 0, md: DESIGN_TOKENS.borderRadius.large },
+        border: { xs: 'none', md: (theme) => theme.palette.mode === 'dark'
+          ? '1px solid rgba(255, 255, 255, 0.12)'
+          : '1px solid rgba(0, 0, 0, 0.1)' },
         padding: DESIGN_TOKENS.spacing.md,
         boxShadow: '0 -4px 20px rgba(0,0,0,0.1)',
-        display: { xs: 'block', md: 'none' },
+        display: 'block',
+        width: { xs: 'auto', md: 320 },
       }}
     >
       {onClick ? (

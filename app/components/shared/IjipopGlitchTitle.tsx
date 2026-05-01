@@ -9,7 +9,7 @@ import { useThemeColors } from '@/hooks/useThemeColors'
 import { dimHex, hexToRgb } from '@/utils/colorUtils'
 
 /** Dégradé « marque » : mode Site (beige) — ambre → orange (#ea580c) → rouge brique. */
-const BRAND_GLITCH_GRADIENT =
+export const BRAND_GLITCH_GRADIENT =
   'linear-gradient(165deg, #ffedd5 0%, #fdba74 14%, #fb923c 38%, #ea580c 62%, #b91c1c 86%, #7f1d1d 100%)'
 const BRAND_GLITCH_LAYER = '#9a3412'
 const GLITCH_BEFORE_OPACITY = 0.42
@@ -61,7 +61,7 @@ export default function IjipopGlitchTitle({ text, variant = 'page' }: IjipopGlit
 
   const fontSize =
     variant === 'hero'
-      ? { xs: '3.5rem', sm: '5rem', md: '6.6rem' }
+      ? { xs: '4.25rem', sm: '6.25rem', md: '8.4rem' }
       : { xs: '1.75rem', sm: '2.75rem', md: '3.75rem' }
 
   const letterSpacing = variant === 'hero' ? { xs: '0.03em', sm: '0.05em' } : { xs: '0.05em', sm: '0.1em' }

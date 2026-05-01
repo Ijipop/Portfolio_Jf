@@ -6,6 +6,9 @@ import LinkedInIcon from '@mui/icons-material/LinkedIn'
 import LocationOnIcon from '@mui/icons-material/LocationOn'
 import SendIcon from '@mui/icons-material/Send'
 import CheckCircleIcon from '@mui/icons-material/CheckCircle'
+import AccessTimeIcon from '@mui/icons-material/AccessTime'
+import HandshakeIcon from '@mui/icons-material/Handshake'
+import RequestQuoteIcon from '@mui/icons-material/RequestQuote'
 import { Alert, Snackbar, TextField, CircularProgress } from '@mui/material'
 import Box from '@mui/material/Box'
 import Container from '@mui/material/Container'
@@ -130,6 +133,11 @@ export default function Contact() {
     message: '',
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const contactPromises = [
+    { icon: AccessTimeIcon, label: t('contact.promiseResponse') },
+    { icon: HandshakeIcon, label: t('contact.promiseCall') },
+    { icon: RequestQuoteIcon, label: t('contact.promiseEstimate') },
+  ]
 
   const handleGitHubClick = () => {
     window.open('https://github.com/Ijipop', '_blank')
@@ -277,6 +285,40 @@ export default function Contact() {
 
       <InteractiveBackgroundSection>
       <Container maxWidth="lg" sx={{ py: useCompactContact ? 4 : 8, position: 'relative', zIndex: 2 }}>
+        <Box
+          sx={{
+            display: 'flex',
+            flexWrap: 'wrap',
+            justifyContent: 'center',
+            gap: 1.25,
+            mb: useCompactContact ? 3 : 4,
+          }}
+        >
+          {contactPromises.map(({ icon: Icon, label }) => (
+            <Box
+              key={label}
+              sx={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: 0.85,
+                px: { xs: 1.4, sm: 1.75 },
+                py: 1,
+                borderRadius: 999,
+                border: `1px solid ${primary}42`,
+                color: textColor,
+                background: `${primary}10`,
+                backdropFilter: 'blur(12px)',
+                WebkitBackdropFilter: 'blur(12px)',
+                fontSize: { xs: '0.78rem', sm: '0.86rem' },
+                fontWeight: 800,
+                letterSpacing: '0.02em',
+              }}
+            >
+              <Icon sx={{ fontSize: 18, color: primary }} />
+              {label}
+            </Box>
+          ))}
+        </Box>
         {/* Formulaire de contact */}
         <Box sx={{ 
           maxWidth: '800px',

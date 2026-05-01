@@ -39,6 +39,7 @@ export default function HomeHeroServicesSection() {
   const glassRef = useRef<HTMLDivElement>(null)
   const spotOverlayRef = useRef<HTMLDivElement>(null)
   const [spotlightEnabled, setSpotlightEnabled] = useState(false)
+  const [asciiStarted, setAsciiStarted] = useState(false)
   const reducedMotionPref = useReducedMotion()
   /** `null` avant hydratation — on n’applique l’état « figé » que si l’OS demande explicitement moins de mouvement. */
   const reduceMotion = reducedMotionPref === true
@@ -63,6 +64,32 @@ export default function HomeHeroServicesSection() {
   }, [reduceMotion])
 
   const showDevAsciiIntro = isDevPresentation && !spotlightPreview
+
+  useEffect(() => {
+    if (!showDevAsciiIntro) {
+      setAsciiStarted(false)
+      return
+    }
+
+    const el = glassRef.current
+    if (!el) return
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry?.isIntersecting) return
+        setAsciiStarted(true)
+        observer.disconnect()
+      },
+      {
+        root: null,
+        rootMargin: '0px 0px -18% 0px',
+        threshold: [0.12, 0.24],
+      }
+    )
+
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [showDevAsciiIntro])
 
   const handleSpotPointerMove = useCallback(
     (e: React.PointerEvent<HTMLDivElement>) => {
@@ -240,6 +267,7 @@ export default function HomeHeroServicesSection() {
               embedded
               walkSurfaceRef={glassRef}
               sectionTitle={heroTitleBlock}
+              start={asciiStarted}
             />
           ) : (
             <Box

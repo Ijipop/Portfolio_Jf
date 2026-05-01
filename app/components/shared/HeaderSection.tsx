@@ -24,9 +24,10 @@ interface HeaderSectionProps {
   subtitle?: string | ReactNode
   tagline?: string | ReactNode
   children?: ReactNode
+  fullViewport?: boolean
 }
 
-export default function HeaderSection({ title, subtitle, tagline, children }: HeaderSectionProps) {
+export default function HeaderSection({ title, subtitle, tagline, children, fullViewport = false }: HeaderSectionProps) {
   const titleIsGlitch = isValidElement(title)
   const subtitleIsElement = isValidElement(subtitle)
   const { primary } = useThemeColors()
@@ -82,12 +83,19 @@ export default function HeaderSection({ title, subtitle, tagline, children }: He
         borderBottom: '1px solid rgba(148, 163, 184, 0.22)',
         boxShadow: '0 6px 18px rgba(2, 6, 23, 0.14), inset 0 1px 0 rgba(255, 255, 255, 0.2)',
         color: textColor,
-        padding: theme.spacing(3.5, 0, 2.5),
+        padding: fullViewport
+          ? { xs: theme.spacing(8, 0, 4), sm: theme.spacing(14, 0, 5), md: '225px 0 48px' }
+          : theme.spacing(3.5, 0, 2.5),
         textAlign: 'center',
         position: 'relative',
         overflow: 'hidden',
+        ...(fullViewport && {
+          minHeight: { xs: 'calc(100dvh - 64px)', md: 'calc(100dvh - 72px)' },
+          display: 'block',
+          boxSizing: 'border-box',
+        }),
         [theme.breakpoints.down('sm')]: {
-          padding: theme.spacing(2.5, 1, 2),
+          padding: fullViewport ? theme.spacing(6, 1, 4) : theme.spacing(2.5, 1, 2),
         },
         '&::before': {
           content: '""',
@@ -101,12 +109,22 @@ export default function HeaderSection({ title, subtitle, tagline, children }: He
         },
       }}
     >
-      <Container maxWidth="lg">
+      <Container
+        maxWidth="lg"
+        sx={
+          fullViewport
+            ? {
+                position: 'relative',
+                zIndex: 1,
+              }
+            : undefined
+        }
+      >
         <Typography 
           variant="h1" 
           component="h1" 
           sx={{ 
-            mb: 1,
+            mb: fullViewport ? { xs: 7, sm: 12, md: '225px' } : 1,
             fontWeight: 900,
             fontSize: titleIsGlitch ? 'inherit' : { xs: '1.75rem', sm: '2.75rem', md: '3.75rem' },
             textShadow: titleIsGlitch ? 'none' : `0 0 20px ${hexToRgba(primary, 0.8)}, 0 4px 8px rgba(0,0,0,0.3)`,

@@ -34,7 +34,7 @@ import ProjectsLoadingFrameSection from './ProjectsLoadingFrameSection'
 import ScrollReveal from '../../components/shared/ScrollReveal'
 import SkillTag from '../../components/shared/SkillTag'
 import HeaderSection from '../../components/shared/HeaderSection'
-import IjipopGlitchTitle from '../../components/shared/IjipopGlitchTitle'
+import IjipopGlitchTitle, { BRAND_GLITCH_GRADIENT } from '../../components/shared/IjipopGlitchTitle'
 import PageWrapper from '../../components/shared/PageWrapper'
 import InteractiveBackgroundSection from '../../components/shared/InteractiveBackgroundSection'
 import CTAButton from '../../components/shared/CTAButton'
@@ -42,16 +42,12 @@ import Footer from '../../components/Footer'
 import { DESIGN_TOKENS, ANIMATIONS, GRADIENTS } from '../../design-system/constants'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import AccessTimeIcon from '@mui/icons-material/AccessTime'
-import FilterListIcon from '@mui/icons-material/FilterList'
-import ClearIcon from '@mui/icons-material/Clear'
 import { useAdvancedTheme } from '../../contexts/AdvancedThemeContext'
 import { useBeigePresentationBg } from '../../contexts/BeigePresentationBgContext'
 import { usePresentationMode } from '../../contexts/PresentationModeContext'
 import { useLanguage } from '../../contexts/LanguageContext'
 import { useThemeColors } from '../../hooks/useThemeColors'
 import { useTextColor } from '../../hooks/useTextColor'
-import FilterContainerLabel from './components/FilterContainerLabel'
-import FilterChipComponent from './components/FilterChipComponent'
 import { getBeigePresentationTopologyBackground } from '@/utils/syncPortfolioThemeToDocument'
 
 interface Project {
@@ -96,6 +92,15 @@ function getWebViewSiteButtonHref(project: Project): string | null {
   return null
 }
 
+function getProjectMonogram(name: string): string {
+  const words = name
+    .replace(/[^a-zA-ZÀ-ÿ0-9 ]/g, ' ')
+    .split(/\s+/)
+    .filter(Boolean)
+  const initials = words.slice(0, 2).map((word) => word[0]).join('')
+  return (initials || name.slice(0, 2) || 'IJ').toUpperCase()
+}
+
 type TimelendrPlatform = 'windows' | 'macos' | 'both'
 
 interface TimelendrRelease {
@@ -124,36 +129,6 @@ const TechStack = styled(Box)(({ theme }) => ({
   gap: theme.spacing(0.5),
   marginTop: theme.spacing(0.75),
 }))
-
-// Technologies prioritaires pour le filtre (ordre d'affichage, max ~12)
-const PRIORITY_TECHS = [
-  'React', 'Next.js', 'TypeScript', 'JavaScript', 'Node.js',
-  'Tailwind CSS', 'Material-UI', 'PostgreSQL', 'Prisma', 'Vite',
-  'Supabase', 'Stripe', 'Clerk', 'HTML', 'CSS', 'Python',
-]
-const MAX_FILTER_TECHS = 10
-
-// Normaliser un nom de tech (variantes → canonique)
-function normalizeTechName(raw: string): string {
-  const t = raw.trim()
-  const map: Record<string, string> = {
-    'typescript': 'TypeScript', 'type script': 'TypeScript',
-    'nextjs': 'Next.js', 'next.js': 'Next.js',
-    'material-ui': 'Material-UI', 'material ui': 'Material-UI', 'mui': 'Material-UI',
-    'tailwind': 'Tailwind CSS', 'tailwind css': 'Tailwind CSS',
-    'postgresql': 'PostgreSQL', 'postgres': 'PostgreSQL',
-    'javascript': 'JavaScript', 'js': 'JavaScript',
-    'nodejs': 'Node.js', 'node.js': 'Node.js',
-    'html5': 'HTML', 'html': 'HTML',
-    'css3': 'CSS', 'css': 'CSS',
-    'python': 'Python',     'react': 'React', 'vite': 'Vite',
-    'prisma': 'Prisma', 'supabase': 'Supabase', 'stripe': 'Stripe',
-    'clerk': 'Clerk',
-  }
-  return map[t.toLowerCase()] ?? t
-}
-
-
 
 const AnimatedBox = styled(Box)({
   animation: 'fadeIn 0.6s ease-out',
@@ -279,6 +254,7 @@ const ProjectCardWrapper = ({
   const theme = useTheme()
   const { primary, secondary, accent } = useThemeColors()
   const textColor = useTextColor()
+  const { t } = useLanguage()
   const { themeName, customTheme } = useAdvancedTheme()
   const { beigePresentationBgUrl } = useBeigePresentationBg()
   const { mode: presentationMode } = usePresentationMode()
@@ -316,6 +292,13 @@ const ProjectCardWrapper = ({
 
   const cardImageRaw = resolveProjectCardImage(project) ?? project.imageUrl
   const cardImageHref = cardImageRaw ? getImageUrl(cardImageRaw) : ''
+  const projectTechs = project.technologies.split(',').map((tech) => tech.trim()).filter(Boolean)
+  const featuredTechs = projectTechs.slice(0, 3)
+  const projectRoleLabel = cardVariant === 'web' ? t('projects.metaRoleWeb') : t('projects.metaRoleSoftware')
+  const projectDurationLabel = project.createdAt
+    ? `${t('projects.metaYear')} ${new Date(project.createdAt).getFullYear()}`
+    : t('projects.metaDuration')
+  const projectStackLabel = featuredTechs[0] ?? t('projects.metaStack')
 
   const linkIconButtonSx = {
     flexShrink: 0,
@@ -351,6 +334,9 @@ const ProjectCardWrapper = ({
           WebkitBackdropFilter: 'none',
           border: `1px solid ${primary}28`,
           boxShadow: '0 8px 24px rgba(92, 77, 60, 0.1), 0 0 0 1px rgba(139, 126, 114, 0.08)',
+          '&:hover .project-card-image img': {
+            transform: 'scale(1.06)',
+          },
         }
       : {
           padding: 0,
@@ -373,6 +359,9 @@ const ProjectCardWrapper = ({
             theme.palette.mode === 'dark'
               ? '0 12px 32px rgba(0,0,0,0.35)'
               : '0 8px 28px rgba(15,23,42,0.08), 0 0 0 1px rgba(15,23,42,0.05)',
+          '&:hover .project-card-image img': {
+            transform: 'scale(1.06)',
+          },
         }
 
   let primaryHref: string | null = null
@@ -432,6 +421,7 @@ const ProjectCardWrapper = ({
           subtle
           fullHeight
           floatingElements={0}
+          borderBeam={{ duration: 58, size: 180, delay: (index % 4) * 4 }}
           onClick={() => {
             if (project.url?.trim()) handleProjectClick(project.url)
             else if (project.siteUrl?.trim()) handleProjectClick(project.siteUrl)
@@ -453,6 +443,7 @@ const ProjectCardWrapper = ({
             }}
           >
             <ProjectImageContainer
+              className="project-card-image"
               sx={{
                 width: '100%',
                 maxWidth: 'none',
@@ -464,7 +455,7 @@ const ProjectCardWrapper = ({
                 ...(cardImageHref
                   ? { background: 'rgba(0,0,0,0.06)' }
                   : {
-                      background: 'rgba(0,0,0,0.12)',
+                      background: BRAND_GLITCH_GRADIENT,
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
@@ -477,8 +468,9 @@ const ProjectCardWrapper = ({
                     }
                   : {}),
                 '& img': {
-                  objectFit: 'contain',
+                  objectFit: 'cover',
                   borderRadius: `${DESIGN_TOKENS.borderRadius.medium}px`,
+                  transform: 'scale(1.01)',
                   ...(isNonDefaultPalette ? { boxShadow: 'none' } : {}),
                 },
               }}
@@ -490,13 +482,67 @@ const ProjectCardWrapper = ({
                   fill
                   unoptimized={cardImageHref.startsWith('data:')}
                   sizes="(max-width: 600px) 100vw, (max-width: 900px) 50vw, 33vw"
-                  style={{ objectFit: 'contain' }}
+                  style={{ objectFit: 'cover' }}
                 />
               ) : (
-                <Typography variant="caption" sx={{ opacity: 0.5, color: textColor }}>
-                  —
+                <Typography
+                  variant="h2"
+                  sx={{
+                    color: 'white',
+                    fontWeight: 900,
+                    letterSpacing: '-0.08em',
+                    textShadow: '0 16px 50px rgba(0,0,0,0.35)',
+                  }}
+                >
+                  {getProjectMonogram(project.name)}
                 </Typography>
               )}
+              <Box
+                sx={{
+                  position: 'absolute',
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  p: { xs: 1.25, md: 1.5 },
+                  color: 'white',
+                  background: 'linear-gradient(to top, rgba(2,6,23,0.78), rgba(2,6,23,0.1), transparent)',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: 0.75,
+                }}
+              >
+                <Typography
+                  variant="subtitle2"
+                  sx={{
+                    fontWeight: 900,
+                    lineHeight: 1.1,
+                    textShadow: '0 2px 10px rgba(0,0,0,0.45)',
+                  }}
+                >
+                  {project.name}
+                </Typography>
+                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                  {featuredTechs.slice(0, 2).map((tech) => (
+                    <Box
+                      key={tech}
+                      component="span"
+                      sx={{
+                        px: 0.75,
+                        py: 0.25,
+                        borderRadius: 999,
+                        background: 'rgba(255,255,255,0.18)',
+                        border: '1px solid rgba(255,255,255,0.25)',
+                        fontSize: '0.62rem',
+                        fontWeight: 800,
+                        letterSpacing: '0.08em',
+                        textTransform: 'uppercase',
+                      }}
+                    >
+                      {tech}
+                    </Box>
+                  ))}
+                </Box>
+              </Box>
             </ProjectImageContainer>
 
             <Box
@@ -579,12 +625,37 @@ const ProjectCardWrapper = ({
                   mb: { xs: 0.5, md: 0.65 },
                 }}
               >
-                {project.technologies.split(',').map((tech, techIndex) => (
+                {projectTechs.map((tech, techIndex) => (
                   <SkillTag key={techIndex} size="small" reflectionColor={reflectionColor}>
-                    {tech.trim()}
+                    {tech}
                   </SkillTag>
                 ))}
               </TechStack>
+
+              <Box
+                sx={{
+                  display: 'flex',
+                  flexWrap: 'wrap',
+                  alignItems: 'center',
+                  gap: 0.65,
+                  mb: 0.9,
+                  color: textColor,
+                  opacity: 0.78,
+                  fontSize: '0.64rem',
+                  fontWeight: 900,
+                  letterSpacing: '0.11em',
+                  textTransform: 'uppercase',
+                }}
+              >
+                {[projectRoleLabel, projectDurationLabel, projectStackLabel].map((item, metaIndex) => (
+                  <React.Fragment key={`${project.id}-meta-${item}`}>
+                    {metaIndex > 0 && (
+                      <Box component="span" sx={{ width: 3, height: 3, borderRadius: '50%', background: primary, opacity: 0.8 }} />
+                    )}
+                    <Box component="span">{item}</Box>
+                  </React.Fragment>
+                ))}
+              </Box>
 
               <Box
                 sx={{
@@ -794,47 +865,6 @@ function useCardBackgroundFromThemeVars(fallback: string) {
   return filterBackground
 }
 
-// FilterContainer comme composant fonctionnel pour réagir aux changements de thème
-const FilterContainerComponent = ({ children }: { children: React.ReactNode }) => {
-  const theme = useTheme()
-  const { primary } = useThemeColors()
-  const textColor = useTextColor()
-  const filterBackground = useCardBackgroundFromThemeVars(GRADIENTS.cards.light)
-
-  return (
-    <Box
-      sx={{
-        display: 'flex',
-        flexWrap: 'wrap',
-        gap: theme.spacing(1.5),
-        alignItems: 'center',
-        marginBottom: theme.spacing(3),
-        padding: theme.spacing(2, 2.5),
-        [theme.breakpoints.up('md')]: {
-          marginBottom: theme.spacing(4),
-          padding: theme.spacing(2.5, 3),
-        },
-        background: `${filterBackground} !important`,
-        border: `1px solid ${primary}20 !important`,
-        borderRadius: DESIGN_TOKENS.borderRadius.small,
-        boxShadow: `0 2px 12px ${primary}08`,
-        backdropFilter: 'blur(8px)',
-        WebkitBackdropFilter: 'blur(8px)',
-        transition: DESIGN_TOKENS.transitions.normal,
-        color: `${textColor} !important`,
-        '& *': {
-          color: 'inherit !important',
-        },
-        '&:hover': {
-          border: `1px solid ${primary}35 !important`,
-        },
-      }}
-    >
-      {children}
-    </Box>
-  )
-}
-
 const ProjectImageContainer = styled(Box)(({ theme }) => ({
   position: 'relative',
   overflow: 'hidden',
@@ -859,7 +889,6 @@ export default function Projets() {
   const [projects, setProjects] = useState<Project[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [selectedTech, setSelectedTech] = useState<string | null>(null)
   const [selectedProjectType, setSelectedProjectType] = useState<'logiciel' | 'web'>('web')
   const [timelendrWindowsUrl, setTimelendrWindowsUrl] = useState<string | null>(null)
   const [timelendrMacosUrl, setTimelendrMacosUrl] = useState<string | null>(null)
@@ -926,10 +955,6 @@ export default function Projets() {
     fetchProjects()
     fetchTimelendrReleases()
   }, [])
-
-  useEffect(() => {
-    setSelectedTech(null)
-  }, [selectedProjectType])
 
   const fetchProjects = async () => {
     try {
@@ -1040,22 +1065,6 @@ export default function Projets() {
     ['wip', 'en cours', 'en cours de développement'].includes(p.status.toLowerCase())
   ).length
 
-  // Technologies prioritaires présentes dans les projets (normalisées, limitées)
-  const getDisplayTechnologies = () => {
-    const rawSet = new Set<string>()
-    projects.forEach(project => {
-      project.technologies.split(',').forEach(tech => rawSet.add(tech.trim()))
-    })
-    const normalizedToCanonical = new Map<string, string>()
-    rawSet.forEach(raw => {
-      const canon = normalizeTechName(raw)
-      if (PRIORITY_TECHS.includes(canon)) normalizedToCanonical.set(canon, canon)
-    })
-    const ordered = PRIORITY_TECHS.filter(t => normalizedToCanonical.has(t))
-    return ordered.slice(0, MAX_FILTER_TECHS)
-  }
-
-  // Filtrer les projets par technologie (comparaison normalisée)
   const projectsByType = projects.filter((project) => (project.projectType ?? 'web') === selectedProjectType)
 
   const orderedProjects = [...projectsByType].sort((a, b) => {
@@ -1065,18 +1074,8 @@ export default function Projets() {
     return a.id - b.id
   })
 
-  const filteredProjects = selectedTech
-    ? orderedProjects.filter(project =>
-        project.technologies.split(',').some(tech => normalizeTechName(tech.trim()) === selectedTech)
-      )
-    : orderedProjects
-
-  const webPersonalProjects = filteredProjects.filter((p) => p.webAudience === 'personal')
-  const webProfessionalProjects = filteredProjects.filter((p) => p.webAudience !== 'personal')
-
-  const handleTechFilter = (tech: string) => {
-    setSelectedTech(selectedTech === tech ? null : tech)
-  }
+  const webPersonalProjects = orderedProjects.filter((p) => p.webAudience === 'personal')
+  const webProfessionalProjects = orderedProjects.filter((p) => p.webAudience !== 'personal')
 
   if (loading) {
     return (
@@ -1127,72 +1126,47 @@ export default function Projets() {
           </AnimatedBox>
         )}
 
-        {/* Stats Section et Filtres par technologie désactivés pour l'instant */}
-        {false && (
-          <>
-            <ScrollReveal direction="up" delay={0.05}>
-              <StatsGrid>
-                <ScrollReveal direction="up" delay={0.1}>
-                  <ThreeDCardComponent floatingElements={2} compact>
-                    <Box sx={{ position: 'relative', zIndex: 2, textAlign: 'center' }}>
-                      <Typography variant="h3" sx={{ fontWeight: 700, color: primary, mb: 0.5, fontSize: { xs: '1.75rem', md: '2rem' } }}>
-                        <AnimatedCounter value={projects.length} />
-                      </Typography>
-                      <Typography variant="body2" sx={{ fontWeight: 600, color: textColor, opacity: 0.9, textTransform: 'uppercase', letterSpacing: '0.5px' }}>
-                        {t('projects.totalProjects')}
-                      </Typography>
-                    </Box>
-                  </ThreeDCardComponent>
-                </ScrollReveal>
-                <ScrollReveal direction="up" delay={0.15}>
-                  <ThreeDCardComponent floatingElements={2} compact>
-                    <Box sx={{ position: 'relative', zIndex: 2, textAlign: 'center' }}>
-                      <Typography variant="h3" sx={{ fontWeight: 700, color: primary, mb: 0.5, fontSize: { xs: '1.75rem', md: '2rem' } }}>
-                        <AnimatedCounter value={getCompletedProjects()} />
-                      </Typography>
-                      <Typography variant="body2" sx={{ fontWeight: 600, color: textColor, opacity: 0.9, textTransform: 'uppercase', letterSpacing: '0.5px' }}>
-                        {t('projects.completed')}
-                      </Typography>
-                    </Box>
-                  </ThreeDCardComponent>
-                </ScrollReveal>
-                <ScrollReveal direction="up" delay={0.2}>
-                  <ThreeDCardComponent floatingElements={2} compact>
-                    <Box sx={{ position: 'relative', zIndex: 2, textAlign: 'center' }}>
-                      <Typography variant="h3" sx={{ fontWeight: 700, color: primary, mb: 0.5, fontSize: { xs: '1.75rem', md: '2rem' } }}>
-                        <AnimatedCounter value={getInProgressProjects()} />
-                      </Typography>
-                      <Typography variant="body2" sx={{ fontWeight: 600, color: textColor, opacity: 0.9, textTransform: 'uppercase', letterSpacing: '0.5px' }}>
-                        En Cours
-                      </Typography>
-                    </Box>
-                  </ThreeDCardComponent>
-                </ScrollReveal>
-              </StatsGrid>
+        {/* Stats Section */}
+        <ScrollReveal direction="up" delay={0.05}>
+          <StatsGrid>
+            <ScrollReveal direction="up" delay={0.1}>
+              <ThreeDCardComponent floatingElements={2} compact>
+                <Box sx={{ position: 'relative', zIndex: 2, textAlign: 'center' }}>
+                  <Typography variant="h3" sx={{ fontWeight: 700, color: primary, mb: 0.5, fontSize: { xs: '1.75rem', md: '2rem' } }}>
+                    <AnimatedCounter value={projects.length} />
+                  </Typography>
+                  <Typography variant="body2" sx={{ fontWeight: 600, color: textColor, opacity: 0.9, textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                    {t('projects.totalProjects')}
+                  </Typography>
+                </Box>
+              </ThreeDCardComponent>
             </ScrollReveal>
-            {projects.length > 0 && (
-              <ScrollReveal direction="up" delay={0.25}>
-                <FilterContainerComponent>
-                  <FilterContainerLabel label={t('projects.filterLabel')} />
-                  <FilterChipComponent
-                    label={t('projects.filterAll')}
-                    onClick={() => setSelectedTech(null)}
-                    selected={selectedTech === null}
-                    icon={selectedTech === null ? undefined : <ClearIcon />}
-                  />
-                  {getDisplayTechnologies().map((tech) => (
-                    <FilterChipComponent
-                      key={tech}
-                      label={tech}
-                      onClick={() => handleTechFilter(tech)}
-                      selected={selectedTech === tech}
-                    />
-                  ))}
-                </FilterContainerComponent>
-              </ScrollReveal>
-            )}
-          </>
-        )}
+            <ScrollReveal direction="up" delay={0.15}>
+              <ThreeDCardComponent floatingElements={2} compact>
+                <Box sx={{ position: 'relative', zIndex: 2, textAlign: 'center' }}>
+                  <Typography variant="h3" sx={{ fontWeight: 700, color: primary, mb: 0.5, fontSize: { xs: '1.75rem', md: '2rem' } }}>
+                    <AnimatedCounter value={getCompletedProjects()} />
+                  </Typography>
+                  <Typography variant="body2" sx={{ fontWeight: 600, color: textColor, opacity: 0.9, textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                    {t('projects.completed')}
+                  </Typography>
+                </Box>
+              </ThreeDCardComponent>
+            </ScrollReveal>
+            <ScrollReveal direction="up" delay={0.2}>
+              <ThreeDCardComponent floatingElements={2} compact>
+                <Box sx={{ position: 'relative', zIndex: 2, textAlign: 'center' }}>
+                  <Typography variant="h3" sx={{ fontWeight: 700, color: primary, mb: 0.5, fontSize: { xs: '1.75rem', md: '2rem' } }}>
+                    <AnimatedCounter value={getInProgressProjects()} />
+                  </Typography>
+                  <Typography variant="body2" sx={{ fontWeight: 600, color: textColor, opacity: 0.9, textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                    {t('projects.inProgress')}
+                  </Typography>
+                </Box>
+              </ThreeDCardComponent>
+            </ScrollReveal>
+          </StatsGrid>
+        </ScrollReveal>
 
         {/* Projects Grid */}
         <Box sx={{ display: 'flex', justifyContent: 'center', gap: 1.5, mb: 3, flexWrap: 'wrap' }}>
@@ -1305,7 +1279,7 @@ export default function Projets() {
           </Box>
         ) : (
           <ProjectsGrid>
-            {filteredProjects.map((project, index) => (
+            {orderedProjects.map((project, index) => (
               <ProjectCardWrapper
                 key={project.id}
                 project={project}
@@ -1326,33 +1300,6 @@ export default function Projets() {
           </ProjectsGrid>
         )}
         
-        {filteredProjects.length === 0 && projectsByType.length > 0 && (
-          <AnimatedBox>
-            <Box sx={{ 
-              textAlign: 'center', 
-              py: 8,
-              background: 'linear-gradient(145deg, rgba(255, 255, 255, 0.8) 0%, rgba(248, 250, 252, 0.8) 100%)',
-              borderRadius: DESIGN_TOKENS.borderRadius.large,
-              boxShadow: DESIGN_TOKENS.shadows.elevated.light,
-            }}>
-              <FilterListIcon sx={{ fontSize: 64, color: 'primary.main', mb: 2 }} />
-              <Typography variant="h5" color="text.secondary" gutterBottom>
-                {t('projects.noProjects')}
-              </Typography>
-              <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
-                {t('projects.noProjectsHint')}
-              </Typography>
-              <CTAButton
-                variant="secondary"
-                onClick={() => setSelectedTech(null)}
-                startIcon={<ClearIcon />}
-              >
-                {t('projects.resetFilter')}
-              </CTAButton>
-            </Box>
-          </AnimatedBox>
-        )}
-
         {projectsByType.length === 0 && !error && (
           <AnimatedBox>
             <Box sx={{ 

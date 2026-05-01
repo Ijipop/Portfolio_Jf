@@ -11,13 +11,15 @@ import { styled } from '@mui/material/styles'
 import { useRouter, usePathname } from 'next/navigation'
 import { useState, useEffect } from 'react'
 import { shouldShowTopology } from '@/utils/topologyRoutes'
-import SkillTag from '../../components/shared/SkillTag'
 import HeaderSection from '../../components/shared/HeaderSection'
 import IjipopGlitchTitle from '../../components/shared/IjipopGlitchTitle'
 import AppBarComponent from '../../components/appBar'
 import PageWrapper from '../../components/shared/PageWrapper'
 import InteractiveBackgroundSection from '../../components/shared/InteractiveBackgroundSection'
 import Footer from '../../components/Footer'
+import PortfolioStatsBand from '../../components/shared/PortfolioStatsBand'
+import PortfolioServicesSection from '../../components/shared/PortfolioServicesSection'
+import PortfolioProcessSection from '../../components/shared/PortfolioProcessSection'
 import { useAdvancedTheme } from '../../contexts/AdvancedThemeContext'
 import { GRADIENTS, DESIGN_TOKENS } from '../../design-system/constants'
 import { useThemeColors } from '../../hooks/useThemeColors'
@@ -30,6 +32,8 @@ import ScrollReveal from '../../components/shared/ScrollReveal'
 import SoftSkillsSection from './components/SoftSkillsSection'
 import AboutCtaSection from './components/AboutCtaSection'
 import AboutPersonalStorySection from './components/AboutPersonalStorySection'
+
+const TECH_SKILLS = ['Python', 'Java', 'React', 'Next.js', 'TypeScript', 'JavaScript', 'SQL', 'CSS3', 'HTML5', 'Git']
 
 // FlipCard components spécifiques à cette page (logique complexe)
 const FlipCard = styled(Box)(({ theme }) => ({
@@ -256,6 +260,7 @@ export default function About() {
 
       <InteractiveBackgroundSection>
       <Container maxWidth="lg" sx={{ py: 6, position: 'relative', zIndex: 2 }}>
+        <PortfolioStatsBand />
 
         <ScrollReveal direction="up" delay={0.05}>
         <Box sx={{ 
@@ -587,6 +592,8 @@ export default function About() {
         <AboutPersonalStorySection t={t} primary={primary} textColor={textColor} />
         </ScrollReveal>
 
+        <PortfolioServicesSection />
+
         <ScrollReveal direction="up" delay={0.15}>
         <Box sx={{ 
           ...getCardSurfaceSx({ isTopologyRoute, variant: 'flat', level: 'soft', interactive: false }),
@@ -624,9 +631,9 @@ export default function About() {
           >
             {t('about.skills')}
           </Typography>
-          <Box sx={{ 
-            display: 'flex', 
-            flexWrap: 'wrap', 
+          <Box sx={{
+            display: 'flex',
+            flexWrap: 'wrap',
             justifyContent: 'center',
             gap: 1,
             visibility: 'visible !important',
@@ -634,17 +641,36 @@ export default function About() {
             zIndex: DESIGN_TOKENS.zIndex.elevated,
             position: 'relative'
           }}>
-          <SkillTag>Python</SkillTag>
-          <SkillTag>Java</SkillTag>
-          <SkillTag>React</SkillTag>
-          <SkillTag>Next.js</SkillTag>
-          <SkillTag>TypeScript</SkillTag>
-          <SkillTag>JavaScript</SkillTag>
-          <SkillTag>SQL</SkillTag>
-          <SkillTag>CSS3</SkillTag>
-          <SkillTag>HTML5</SkillTag>
-          <SkillTag>Git</SkillTag>
-
+          {TECH_SKILLS.map((skill) => (
+            <Box
+              key={skill}
+              component="span"
+              sx={{
+                minWidth: 92,
+                height: 36,
+                px: 1.5,
+                borderRadius: DESIGN_TOKENS.borderRadius.small,
+                border: `1px solid ${primary}45`,
+                color: textColor,
+                background: `${primary}0d`,
+                display: 'inline-flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: '0.82rem',
+                fontWeight: 800,
+                letterSpacing: '0.04em',
+                textTransform: 'uppercase',
+                transition: DESIGN_TOKENS.transitions.normal,
+                '&:hover': {
+                  transform: 'translateY(-2px)',
+                  borderColor: primary,
+                  background: `${primary}18`,
+                },
+              }}
+            >
+              {skill}
+            </Box>
+          ))}
           </Box>
         </Box>
         </ScrollReveal>
@@ -652,6 +678,8 @@ export default function About() {
         <ScrollReveal direction="up" delay={0.2}>
         <SoftSkillsSection primary={primary} textColor={textColor} t={t} />
         </ScrollReveal>
+
+        <PortfolioProcessSection />
 
         <ScrollReveal direction="up" delay={0.25}>
         <AboutCtaSection

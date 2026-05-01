@@ -77,6 +77,8 @@ export type HomeHeroDevCodeIntroProps = {
   /** Réf. du `GlassContainer` : la marche ASCII se fait sur tout le conteneur (pas dans le bloc titre/code). */
   walkSurfaceRef?: React.RefObject<HTMLDivElement | null>
   sectionTitle?: ReactNode
+  /** Déclenche la séquence ASCII. Permet d'attendre que la section soit visible au scroll. */
+  start?: boolean
 }
 
 function centerTrackOnCard(
@@ -156,6 +158,7 @@ export default function HomeHeroDevCodeIntro({
   embedded = false,
   walkSurfaceRef,
   sectionTitle,
+  start = true,
 }: HomeHeroDevCodeIntroProps) {
   const { primary, secondary } = useThemeColors()
   const textColor = useTextColor()
@@ -187,7 +190,9 @@ export default function HomeHeroDevCodeIntro({
     'typingExplode',
   ]
   const typewriterMode =
-    phase === 'clearCode'
+    !start
+      ? 'off'
+      : phase === 'clearCode'
       ? 'backward'
       : forwardPhases.includes(phase)
         ? 'forward'
@@ -328,13 +333,14 @@ export default function HomeHeroDevCodeIntro({
 
   useLayoutEffect(() => {
     if (typeof window === 'undefined') return
+    if (!start) return
     if (!prefersReducedMotion()) return
     setHoldingSword(true)
     setIntroRevealed(true)
     combatDoneRef.current = true
     setPhase('interactiveWalk')
     cinematicLockRef.current = false
-  }, [])
+  }, [start])
 
   useLayoutEffect(() => {
     if (reduced) return
