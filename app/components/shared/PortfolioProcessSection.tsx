@@ -5,7 +5,6 @@ import Typography from '@mui/material/Typography'
 import { motion, useReducedMotion } from 'framer-motion'
 import { BRAND_GLITCH_GRADIENT } from './IjipopGlitchTitle'
 import ScrollReveal from './ScrollReveal'
-import { DESIGN_TOKENS } from '@/design-system/constants'
 import { useLanguage } from '@/contexts/LanguageContext'
 import { useTextColor } from '@/hooks/useTextColor'
 import { useThemeColors } from '@/hooks/useThemeColors'
@@ -100,11 +99,15 @@ export default function PortfolioProcessSection() {
                 sx={{
                   position: 'relative',
                   minHeight: { xs: 190, md: 280 },
+                  zIndex: 1,
                   p: { xs: 2.5, md: 2.75 },
                   pl: { xs: 6, md: 2.75 },
-                  borderRadius: DESIGN_TOKENS.borderRadius.medium,
+                  borderRadius: '14px',
                   border: `1px solid ${primary}20`,
-                  background: 'linear-gradient(145deg, rgba(255,255,255,0.12), rgba(255,255,255,0.06))',
+                  background: (theme) =>
+                    theme.palette.mode === 'dark'
+                      ? 'linear-gradient(145deg, rgba(15,23,42,0.94), rgba(15,23,42,0.86))'
+                      : 'linear-gradient(145deg, rgba(248,244,235,0.96), rgba(248,244,235,0.9))',
                   backdropFilter: 'blur(14px)',
                   WebkitBackdropFilter: 'blur(14px)',
                   overflow: 'hidden',
@@ -132,7 +135,7 @@ export default function PortfolioProcessSection() {
                   sx={{
                     position: 'absolute',
                     left: { xs: 15, md: 18 },
-                    top: { xs: 24, md: 28 },
+                    top: { xs: 24, md: 22 },
                     width: 16,
                     height: 16,
                     borderRadius: '50%',
