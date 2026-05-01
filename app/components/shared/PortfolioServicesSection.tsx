@@ -6,10 +6,12 @@ import TerminalOutlinedIcon from '@mui/icons-material/TerminalOutlined'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import Link from 'next/link'
+import { useMemo } from 'react'
 import ThreeDCardComponent from '@/components/ThreeDCard'
-import { BRAND_GLITCH_GRADIENT } from './IjipopGlitchTitle'
+import { BRAND_GLITCH_GRADIENT, buildPaletteGlitchGradient } from './IjipopGlitchTitle'
 import ScrollReveal from './ScrollReveal'
 import { DESIGN_TOKENS } from '@/design-system/constants'
+import { usePresentationMode } from '@/contexts/PresentationModeContext'
 import { useLanguage } from '@/contexts/LanguageContext'
 import { useTextColor } from '@/hooks/useTextColor'
 import { useThemeColors } from '@/hooks/useThemeColors'
@@ -40,8 +42,16 @@ const SERVICES = [
 
 export default function PortfolioServicesSection() {
   const { t } = useLanguage()
+  const { mode: presentationMode } = usePresentationMode()
   const textColor = useTextColor()
-  const { primary } = useThemeColors()
+  const { primary, secondary, accent } = useThemeColors()
+  const serviceGradient = useMemo(
+    () =>
+      presentationMode === 'beige'
+        ? BRAND_GLITCH_GRADIENT
+        : buildPaletteGlitchGradient(primary, secondary, accent),
+    [presentationMode, primary, secondary, accent]
+  )
 
   return (
     <Box sx={{ mb: { xs: 5, md: 8 } }}>
@@ -89,7 +99,13 @@ export default function PortfolioServicesSection() {
             <ScrollReveal key={service.titleKey} direction="up" delay={0.06 * index} fillHeight>
               <ThreeDCardComponent
                 fullHeight
-                borderBeam={{ duration: 52, size: 180, delay: index * 4 }}
+                borderBeam={{
+                  duration: 52,
+                  size: 180,
+                  delay: index * 4,
+                  colorFrom: primary,
+                  colorTo: accent,
+                }}
                 floatingElements={1}
                 sx={{
                   minHeight: 330,
@@ -108,7 +124,7 @@ export default function PortfolioServicesSection() {
                       display: 'grid',
                       placeItems: 'center',
                       mb: 2,
-                      background: BRAND_GLITCH_GRADIENT,
+                      background: serviceGradient,
                       boxShadow: `0 18px 38px ${primary}2f`,
                     }}
                   >

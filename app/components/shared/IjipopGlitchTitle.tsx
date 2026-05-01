@@ -26,7 +26,7 @@ function mixWithWhite(hex: string, ratio: number): string {
 }
 
 /** Dégradé ijipop aligné sur la palette active (sous-pages). */
-function buildPaletteGlitchGradient(primary: string, secondary: string, accent: string): string {
+export function buildPaletteGlitchGradient(primary: string, secondary: string, accent: string): string {
   return `linear-gradient(165deg, ${mixWithWhite(primary, 0.88)} 0%, ${mixWithWhite(primary, 0.45)} 14%, ${primary} 38%, ${secondary} 62%, ${dimHex(secondary, 0.28)} 86%, ${dimHex(accent, 0.42)} 100%)`
 }
 
@@ -61,7 +61,13 @@ export default function IjipopGlitchTitle({ text, variant = 'page' }: IjipopGlit
 
   const fontSize =
     variant === 'hero'
-      ? { xs: '4.25rem', sm: '6.25rem', md: '8.4rem' }
+      ? {
+          xs: 'clamp(4.35rem, 18vw, 5.25rem)',
+          sm: 'clamp(6.7rem, 15vw, 9.2rem)',
+          md: 'clamp(9.25rem, 13vw, 12.25rem)',
+          lg: 'clamp(10.5rem, 13vw, 14.25rem)',
+          xl: 'clamp(12rem, 12vw, 15.75rem)',
+        }
       : { xs: '1.75rem', sm: '2.75rem', md: '3.75rem' }
 
   const letterSpacing = variant === 'hero' ? { xs: '0.03em', sm: '0.05em' } : { xs: '0.05em', sm: '0.1em' }
@@ -75,11 +81,14 @@ export default function IjipopGlitchTitle({ text, variant = 'page' }: IjipopGlit
         display: 'inline-block',
         fontSize,
         ...(variant === 'hero' && {
+          '@media (max-width: 599.95px) and (max-height: 760px)': {
+            fontSize: 'clamp(4rem, 16vw, 4.8rem)',
+          },
           '@media (min-width: 900px) and (max-height: 820px)': {
-            fontSize: '7rem',
+            fontSize: 'clamp(8.8rem, 12vw, 11rem)',
           },
           '@media (min-width: 900px) and (max-height: 680px)': {
-            fontSize: '6.2rem',
+            fontSize: 'clamp(7.8rem, 10.5vw, 9.4rem)',
           },
         }),
         fontWeight: 900,

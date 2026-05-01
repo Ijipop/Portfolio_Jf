@@ -87,9 +87,9 @@ export default function HeaderSection({ title, subtitle, tagline, children, full
           ? {
               xs: theme.spacing(5.5, 0, 4),
               sm: theme.spacing(8, 0, 5),
-              md: '110px 0 48px',
-              lg: '140px 0 56px',
-              xl: '180px 0 64px',
+            md: '86px 0 44px',
+            lg: '108px 0 52px',
+            xl: '132px 0 60px',
             }
           : theme.spacing(3.5, 0, 2.5),
         textAlign: 'center',
@@ -101,14 +101,17 @@ export default function HeaderSection({ title, subtitle, tagline, children, full
           boxSizing: 'border-box',
         }),
         [theme.breakpoints.down('sm')]: {
-          padding: fullViewport ? theme.spacing(5.5, 1, 4) : theme.spacing(2.5, 1, 2),
+          padding: fullViewport ? theme.spacing(4.25, 1, 4) : theme.spacing(2.5, 1, 2),
         },
         ...(fullViewport && {
+          '@media (max-width: 599.95px) and (max-height: 760px)': {
+            padding: theme.spacing(3.25, 1, 3.5),
+          },
           '@media (min-width: 900px) and (max-height: 820px)': {
-            padding: '72px 0 40px',
+            padding: '48px 0 38px',
           },
           '@media (min-width: 900px) and (max-height: 680px)': {
-            padding: '48px 0 32px',
+            padding: '34px 0 28px',
           },
         }),
         '&::before': {
@@ -139,14 +142,17 @@ export default function HeaderSection({ title, subtitle, tagline, children, full
           component="h1" 
           sx={{ 
             mb: fullViewport
-              ? { xs: 4.5, sm: 7, md: '110px', lg: '128px', xl: '160px' }
+              ? { xs: 3.35, sm: 7, md: '78px', lg: '92px', xl: '112px' }
               : 1,
             ...(fullViewport && {
+              '@media (max-width: 599.95px) and (max-height: 760px)': {
+                mb: 2.5,
+              },
               '@media (min-width: 900px) and (max-height: 820px)': {
-                mb: '64px',
+                mb: '42px',
               },
               '@media (min-width: 900px) and (max-height: 680px)': {
-                mb: '42px',
+                mb: '26px',
               },
             }),
             fontWeight: 900,

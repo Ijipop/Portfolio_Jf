@@ -3,10 +3,12 @@
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import { usePathname } from 'next/navigation'
+import { useMemo } from 'react'
 import AnimatedCounter from './AnimatedCounter'
-import { BRAND_GLITCH_GRADIENT } from './IjipopGlitchTitle'
+import { BRAND_GLITCH_GRADIENT, buildPaletteGlitchGradient } from './IjipopGlitchTitle'
 import ScrollReveal from './ScrollReveal'
 import { getCardSurfaceSx } from './cardSurface'
+import { usePresentationMode } from '@/contexts/PresentationModeContext'
 import { DESIGN_TOKENS } from '@/design-system/constants'
 import { useLanguage } from '@/contexts/LanguageContext'
 import { useTextColor } from '@/hooks/useTextColor'
@@ -22,8 +24,16 @@ export default function PortfolioStatsBand() {
   const pathname = usePathname()
   const isTopologyRoute = shouldShowTopology(pathname)
   const { t } = useLanguage()
+  const { mode: presentationMode } = usePresentationMode()
   const textColor = useTextColor()
-  const { primary } = useThemeColors()
+  const { primary, secondary, accent } = useThemeColors()
+  const statsGradient = useMemo(
+    () =>
+      presentationMode === 'beige'
+        ? BRAND_GLITCH_GRADIENT
+        : buildPaletteGlitchGradient(primary, secondary, accent),
+    [presentationMode, primary, secondary, accent]
+  )
 
   return (
     <Box
@@ -56,7 +66,7 @@ export default function PortfolioStatsBand() {
                 fontWeight: 900,
                 lineHeight: 0.95,
                 letterSpacing: '-0.08em',
-                backgroundImage: BRAND_GLITCH_GRADIENT,
+                backgroundImage: statsGradient,
                 WebkitBackgroundClip: 'text',
                 backgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',

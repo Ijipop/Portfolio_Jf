@@ -5,24 +5,36 @@ import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import Link from 'next/link'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import ScramblingText from '@/components/ScramblingText'
 import CTAButton from '@/components/shared/CTAButton'
 import HeaderSection from '@/components/shared/HeaderSection'
-import IjipopGlitchTitle, { BRAND_GLITCH_GRADIENT } from '@/components/shared/IjipopGlitchTitle'
+import IjipopGlitchTitle, { BRAND_GLITCH_GRADIENT, buildPaletteGlitchGradient } from '@/components/shared/IjipopGlitchTitle'
 import { useLanguage } from '@/contexts/LanguageContext'
+import { usePresentationMode } from '@/contexts/PresentationModeContext'
 import { useTextColor } from '@/hooks/useTextColor'
+import { useThemeColors } from '@/hooks/useThemeColors'
 
 export default function PortfolioHomeHero() {
   const { t } = useLanguage()
+  const { mode: presentationMode } = usePresentationMode()
+  const { primary, secondary, accent } = useThemeColors()
   const textColor = useTextColor()
   const reducedMotion = useMediaQuery('(prefers-reduced-motion: reduce)', { noSsr: true })
   const [wordIndex, setWordIndex] = useState(0)
   const [scramblePhase, setScramblePhase] = useState<'chaos' | 'settled'>('settled')
+  const rotatingWordGradient = useMemo(
+    () =>
+      presentationMode === 'beige'
+        ? BRAND_GLITCH_GRADIENT
+        : buildPaletteGlitchGradient(primary, secondary, accent),
+    [presentationMode, primary, secondary, accent]
+  )
 
   const rotatingWords = [
     t('home.heroRotatingSites'),
     t('home.heroRotatingTools'),
+    t('home.heroRotatingSoftware'),
     t('home.heroRotatingInterfaces'),
   ]
 
@@ -34,8 +46,8 @@ export default function PortfolioHomeHero() {
       window.setTimeout(() => {
         setWordIndex((current) => (current + 1) % rotatingWords.length)
         setScramblePhase('settled')
-      }, 360)
-    }, 2600)
+      }, 560)
+    }, 3000)
 
     return () => window.clearInterval(interval)
   }, [reducedMotion, rotatingWords.length])
@@ -47,19 +59,24 @@ export default function PortfolioHomeHero() {
         sx={{
           display: 'grid',
           justifyItems: 'center',
-          gap: { xs: 0.35, sm: 0.45 },
-          fontWeight: 900,
+          gap: { xs: 0.22, sm: 0.45 },
+          fontWeight: 850,
           fontSize: {
-            xs: 'clamp(1.45rem, 8vw, 2.45rem)',
-            sm: '2.7rem',
-            md: '3.35rem',
-            lg: '3.75rem',
-            xl: '4.15rem',
+            xs: 'clamp(1.34rem, 6.75vw, 2.08rem)',
+            sm: 'clamp(2.15rem, 6vw, 2.7rem)',
+            md: 'clamp(2.45rem, 4.2vw, 3rem)',
+            lg: 'clamp(2.85rem, 3.4vw, 3.35rem)',
+            xl: 'clamp(3.1rem, 2.8vw, 3.6rem)',
           },
-          lineHeight: 1.08,
-          letterSpacing: '-0.045em',
+          lineHeight: 1.1,
+          letterSpacing: '-0.04em',
           color: textColor,
-          mb: { xs: 1.6, sm: 2 },
+          mb: { xs: 1.15, sm: 2 },
+          '@media (max-width: 599.95px) and (max-height: 760px)': {
+            fontSize: 'clamp(1.26rem, 6.25vw, 1.92rem)',
+            gap: 0.12,
+            mb: 0.9,
+          },
         }}
       >
         <Box
@@ -88,7 +105,7 @@ export default function PortfolioHomeHero() {
             variant="inherit"
             component="span"
             letterSx={{
-              backgroundImage: BRAND_GLITCH_GRADIENT,
+              backgroundImage: rotatingWordGradient,
               WebkitBackgroundClip: 'text',
               backgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
@@ -98,7 +115,7 @@ export default function PortfolioHomeHero() {
               display: 'block',
               width: '100%',
               textAlign: 'center',
-              backgroundImage: BRAND_GLITCH_GRADIENT,
+              backgroundImage: rotatingWordGradient,
               WebkitBackgroundClip: 'text',
               backgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
@@ -112,10 +129,10 @@ export default function PortfolioHomeHero() {
         component="p"
         sx={{
           fontWeight: 700,
-          fontSize: { xs: '1.12rem', sm: '1.2rem' },
+          fontSize: { xs: '1.03rem', sm: '1.2rem' },
           letterSpacing: '0.01em',
           color: textColor,
-          mb: 0.5,
+          mb: 0.35,
         }}
       >
         {t('home.heroRealName')}
@@ -125,7 +142,7 @@ export default function PortfolioHomeHero() {
         variant="body2"
         sx={{
           fontWeight: 400,
-          fontSize: { xs: '0.9rem', sm: '0.9375rem' },
+          fontSize: { xs: '0.84rem', sm: '0.9375rem' },
           color: textColor,
           opacity: 0.82,
           letterSpacing: '0.02em',
@@ -144,12 +161,18 @@ export default function PortfolioHomeHero() {
         justifyContent="center"
         alignItems="stretch"
         sx={{
-          mt: { xs: 2.25, sm: 2.75 },
+          mt: { xs: 1.35, sm: 2.75 },
           mb: { xs: 0, sm: 0 },
           px: { xs: 1, sm: 0 },
           width: '100%',
           maxWidth: { xs: 400, lg: 460, xl: 520 },
           mx: 'auto',
+          '@media (min-width: 900px) and (max-height: 820px)': {
+            mt: 2,
+          },
+          '@media (min-width: 900px) and (max-height: 680px)': {
+            mt: 1.25,
+          },
         }}
       >
         <Link href="/portfolio/contact" style={{ textDecoration: 'none', width: '100%', display: 'flex' }}>
