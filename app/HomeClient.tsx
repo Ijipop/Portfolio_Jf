@@ -9,13 +9,16 @@ import Typography from '@mui/material/Typography'
 import Link from 'next/link'
 import { alpha } from '@mui/material/styles'
 import HomeHeroServicesSection from './components/home/HomeHeroServicesSection'
+import HomeAmbientBackdrop from './components/home/HomeAmbientBackdrop'
 import PortfolioHomeHero from './components/home/PortfolioHomeHero'
-import { FadeIn } from './components/SimpleAnimations'
 import ThreeDCardComponent from './components/ThreeDCard'
 import AppBarComponent from './components/appBar'
 import PageWrapper from './components/shared/PageWrapper'
 import InteractiveBackgroundSection from './components/shared/InteractiveBackgroundSection'
-import StickyCTA from './components/shared/StickyCTA'
+import PortfolioStatsBand from './components/shared/PortfolioStatsBand'
+import PortfolioServicesSection from './components/shared/PortfolioServicesSection'
+import PortfolioProcessSection from './components/shared/PortfolioProcessSection'
+import ScrollReveal from './components/shared/ScrollReveal'
 import Footer from './components/Footer'
 import { DESIGN_TOKENS } from './design-system/constants'
 import { useThemeColors } from './hooks/useThemeColors'
@@ -23,8 +26,6 @@ import { useTextColor } from './hooks/useTextColor'
 import { useLanguage } from './contexts/LanguageContext'
 import SignatureIntro from './components/SignatureIntro'
 import { useEffect, useState } from 'react'
-import useMediaQuery from '@mui/material/useMediaQuery'
-import { useTheme } from '@mui/material/styles'
 
 const INTRO_SESSION_KEY = 'portfolio-intro-seen'
 
@@ -53,8 +54,6 @@ function setIntroSeenCookie() {
 }
 
 export default function HomeClient({ initialShowIntro }: { initialShowIntro: boolean }) {
-  const theme = useTheme()
-  const isMobile = useMediaQuery(theme.breakpoints.down('md'))
   const { primary } = useThemeColors()
   const textColor = useTextColor()
   const { t } = useLanguage()
@@ -84,6 +83,9 @@ export default function HomeClient({ initialShowIntro }: { initialShowIntro: boo
       )}
       {!showIntro && (
       <PageWrapper backgroundVariant="default">
+      <Box sx={{ opacity: 0.35 }}>
+        <HomeAmbientBackdrop />
+      </Box>
       <Box
         sx={{
           position: 'relative',
@@ -110,9 +112,11 @@ export default function HomeClient({ initialShowIntro }: { initialShowIntro: boo
           zIndex: 2,
         }}
       >
+        <PortfolioStatsBand />
+        <PortfolioServicesSection />
         <HomeHeroServicesSection />
 
-        <FadeIn delay={0.08}>
+        <ScrollReveal direction="up" delay={0.08}>
           <Box
             sx={{
               mb: { xs: DESIGN_TOKENS.spacing.xl, md: DESIGN_TOKENS.spacing.xxl },
@@ -170,7 +174,7 @@ export default function HomeClient({ initialShowIntro }: { initialShowIntro: boo
               </Link>
             </Box>
           </Box>
-        </FadeIn>
+        </ScrollReveal>
 
         <Box sx={{ 
           display: 'grid', 
@@ -180,7 +184,7 @@ export default function HomeClient({ initialShowIntro }: { initialShowIntro: boo
           px: { xs: 1, sm: 0 },
           alignItems: 'stretch',
         }}>
-          <FadeIn delay={0}>
+          <ScrollReveal direction="up" delay={0} fillHeight>
             <Box sx={{ display: 'flex', minHeight: 0, height: '100%' }}>
               <Link href="/portfolio/projets" style={{ textDecoration: 'none', display: 'flex', width: '100%', height: '100%' }}>
                 <ThreeDCardComponent fullHeight floatingElements={2} sx={HOME_GRID_CARD_SX}>
@@ -194,9 +198,9 @@ export default function HomeClient({ initialShowIntro }: { initialShowIntro: boo
                 </ThreeDCardComponent>
               </Link>
             </Box>
-          </FadeIn>
+          </ScrollReveal>
 
-          <FadeIn delay={0}>
+          <ScrollReveal direction="up" delay={0.05} fillHeight>
             <Box sx={{ display: 'flex', minHeight: 0, height: '100%' }}>
               <Link href="/portfolio/a-propos" style={{ textDecoration: 'none', display: 'flex', width: '100%', height: '100%' }}>
                 <ThreeDCardComponent fullHeight floatingElements={3} sx={HOME_GRID_CARD_SX}>
@@ -210,9 +214,9 @@ export default function HomeClient({ initialShowIntro }: { initialShowIntro: boo
                 </ThreeDCardComponent>
               </Link>
             </Box>
-          </FadeIn>
+          </ScrollReveal>
 
-          <FadeIn delay={0}>
+          <ScrollReveal direction="up" delay={0.1} fillHeight>
             <Box sx={{ display: 'flex', minHeight: 0, height: '100%' }}>
               <Link href="/portfolio/contact" style={{ textDecoration: 'none', display: 'flex', width: '100%', height: '100%' }}>
                 <ThreeDCardComponent fullHeight floatingElements={2} sx={HOME_GRID_CARD_SX}>
@@ -226,15 +230,13 @@ export default function HomeClient({ initialShowIntro }: { initialShowIntro: boo
                 </ThreeDCardComponent>
               </Link>
             </Box>
-          </FadeIn>
+          </ScrollReveal>
         </Box>
+        <PortfolioProcessSection />
       </Container>
       </InteractiveBackgroundSection>
       
       <Footer />
-      {!isMobile && (
-        <StickyCTA text={t('home.stickyCTA')} href="/portfolio/contact" />
-      )}
       </Box>
     </PageWrapper>
       )}

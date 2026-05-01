@@ -35,7 +35,7 @@ export default function FullPageTopologyWrapper({ children }: FullPageTopologyWr
   const { graphicsMode, downgradeReason } = useGraphicsMode()
   const { mode: presentationMode } = usePresentationMode()
   const prefersReducedMotion = useMediaQuery('(prefers-reduced-motion: reduce)', { noSsr: true })
-  /** En prod le mode graphique « light » coupe Vanta ; en Créa on le réaffiche (sauf si l’OS demande moins de mouvement). */
+  /** En « light » on coupe Vanta ; en mode présentation Créa (dev) on garde Vanta NET sauf si reduced-motion. */
   const creaWantsVanta = presentationMode === 'dev' && !prefersReducedMotion
   const useLightFallback = show && graphicsMode === 'light' && !creaWantsVanta
   const useStaticProBackground = presentationMode === 'beige'
@@ -117,7 +117,7 @@ export default function FullPageTopologyWrapper({ children }: FullPageTopologyWr
             ? 'rgba(247, 243, 235, 0.1)'
             : useLightFallback
               ? 'rgba(0, 0, 0, 0.08)'
-              : 'rgba(0, 0, 0, 0.18)',
+              : 'rgba(0, 0, 0, 0.10)',
           pointerEvents: 'none',
         }}
         aria-hidden
