@@ -31,9 +31,13 @@ export default function AppBarComponent() {
 	return (
 		<>
 			<AppBar 
-				position="static" 
+				position="sticky" 
 				sx={{
+					top: 0,
+					zIndex: (theme) => theme.zIndex.appBar,
 					background: `linear-gradient(135deg, ${primary} 0%, ${secondary} 100%) !important`,
+					backdropFilter: 'blur(14px) saturate(1.05)',
+					WebkitBackdropFilter: 'blur(14px) saturate(1.05)',
 					boxShadow: `0 4px 20px ${primary}40 !important`,
 					borderBottom: `1px solid ${primary}30 !important`,
 				}}

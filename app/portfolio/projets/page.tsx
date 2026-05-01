@@ -956,6 +956,13 @@ export default function Projets() {
     fetchTimelendrReleases()
   }, [])
 
+  useEffect(() => {
+    const type = new URLSearchParams(window.location.search).get('type')
+    if (type === 'logiciel' || type === 'web') {
+      setSelectedProjectType(type)
+    }
+  }, [])
+
   const fetchProjects = async () => {
     try {
       const response = await fetch('/api/projects')

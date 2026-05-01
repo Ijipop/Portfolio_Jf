@@ -20,18 +20,21 @@ const SERVICES = [
     titleKey: 'home.servicesWebTitle',
     leadKey: 'home.servicesWebLead',
     bullets: ['home.servicesWebBullet1', 'home.servicesWebBullet2', 'home.servicesWebBullet3'],
+    href: '/portfolio/projets?type=web',
   },
   {
     icon: TerminalOutlinedIcon,
     titleKey: 'home.servicesToolsTitle',
     leadKey: 'home.servicesToolsLead',
     bullets: ['home.servicesToolsBullet1', 'home.servicesToolsBullet2', 'home.servicesToolsBullet3'],
+    href: '/portfolio/projets?type=logiciel',
   },
   {
     icon: AutoAwesomeOutlinedIcon,
     titleKey: 'home.servicesDirectionTitle',
     leadKey: 'home.servicesDirectionLead',
     bullets: ['home.servicesDirectionBullet1', 'home.servicesDirectionBullet2', 'home.servicesDirectionBullet3'],
+    href: '/portfolio/projets',
   },
 ]
 
@@ -144,7 +147,7 @@ export default function PortfolioServicesSection() {
                     ))}
                   </Box>
                   <Box sx={{ mt: 'auto', pt: 2.5 }}>
-                    <Link href="/portfolio/projets" style={{ textDecoration: 'none' }}>
+                    <Link href={service.href} style={{ textDecoration: 'none' }}>
                       <Typography
                         component="span"
                         sx={{
