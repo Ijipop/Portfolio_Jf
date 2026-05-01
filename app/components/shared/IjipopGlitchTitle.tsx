@@ -74,6 +74,14 @@ export default function IjipopGlitchTitle({ text, variant = 'page' }: IjipopGlit
       sx={{
         display: 'inline-block',
         fontSize,
+        ...(variant === 'hero' && {
+          '@media (min-width: 900px) and (max-height: 820px)': {
+            fontSize: '7rem',
+          },
+          '@media (min-width: 900px) and (max-height: 680px)': {
+            fontSize: '6.2rem',
+          },
+        }),
         fontWeight: 900,
         letterSpacing,
         textTransform: 'none',

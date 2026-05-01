@@ -49,7 +49,13 @@ export default function PortfolioHomeHero() {
           justifyItems: 'center',
           gap: { xs: 0.35, sm: 0.45 },
           fontWeight: 900,
-          fontSize: { xs: 'clamp(1.45rem, 8vw, 2.45rem)', sm: '2.7rem', md: '3.35rem' },
+          fontSize: {
+            xs: 'clamp(1.45rem, 8vw, 2.45rem)',
+            sm: '2.7rem',
+            md: '3.35rem',
+            lg: '3.75rem',
+            xl: '4.15rem',
+          },
           lineHeight: 1.08,
           letterSpacing: '-0.045em',
           color: textColor,
@@ -72,7 +78,7 @@ export default function PortfolioHomeHero() {
             component="span"
             sx={{
               display: 'inline-block',
-              width: { xs: 'min(48vw, 220px)', sm: 220, md: 270 },
+              width: { xs: 'min(48vw, 220px)', sm: 220, md: 270, lg: 305, xl: 340 },
               minHeight: '1.12em',
             }}
           >
@@ -144,7 +150,7 @@ export default function PortfolioHomeHero() {
           mb: { xs: 0, sm: 0 },
           px: { xs: 1, sm: 0 },
           width: '100%',
-          maxWidth: 400,
+          maxWidth: { xs: 400, lg: 460, xl: 520 },
           mx: 'auto',
         }}
       >
