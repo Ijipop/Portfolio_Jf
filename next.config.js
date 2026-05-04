@@ -31,13 +31,29 @@ const outputFileTracingExcludesSharp = [
   'node_modules/@img/sharp-win32-x64/**/*',
 ]
 
+/** Évite d’embarquer des outils dev / E2E dans le traçage serverless si npm les a présents localement. */
+const outputFileTracingExcludesTooling = [
+  'node_modules/@playwright/test/**/*',
+  'node_modules/playwright/**/*',
+  'node_modules/playwright-core/**/*',
+  'node_modules/vitest/**/*',
+  'node_modules/@vitest/**/*',
+  'node_modules/jsdom/**/*',
+  'node_modules/typescript/**/*',
+]
+
+const outputFileTracingExcludesServer = [
+  ...outputFileTracingExcludesSharp,
+  ...outputFileTracingExcludesTooling,
+]
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  serverExternalPackages: ['@prisma/client', 'prisma', 'sharp', 'bcryptjs'],
+  serverExternalPackages: ['@prisma/client', 'prisma', 'sharp', 'bcryptjs', 'openai'],
   outputFileTracingExcludes: {
     // Picomatch « contains » : couvre les routes App Router normalisées (/, /api/…, etc.)
-    '**': outputFileTracingExcludesSharp,
-    '/': outputFileTracingExcludesSharp,
+    '**': outputFileTracingExcludesServer,
+    '/': outputFileTracingExcludesServer,
   },
 
   // Évite l’avertissement « multiple lockfiles » quand un package-lock existe au-dessus de Portfolio/.
@@ -48,6 +64,8 @@ const nextConfig = {
     serverActions: {
       bodySizeLimit: '50mb',
     },
+    // Moins de code MUI / icônes importé par barrel (serveur + client).
+    optimizePackageImports: ['@mui/material', '@mui/icons-material', '@mui/material-nextjs', 'lucide-react'],
   },
 
   // Image optimization
