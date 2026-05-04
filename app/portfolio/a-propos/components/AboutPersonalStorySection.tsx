@@ -3,24 +3,46 @@
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import Image from 'next/image'
+import { useTheme } from '@mui/material/styles'
 import { usePathname } from 'next/navigation'
 import { DESIGN_TOKENS } from '@/design-system/constants'
 import { getCardSurfaceSx } from '@/components/shared/cardSurface'
 import { shouldShowTopology } from '@/utils/topologyRoutes'
+import { usePresentationMode } from '@/contexts/PresentationModeContext'
+import { useAdvancedTheme } from '@/contexts/AdvancedThemeContext'
+import { useThemeColors } from '@/hooks/useThemeColors'
+import {
+  polaroidImageFillAnchorSx,
+  polaroidInnerPhotoHoleSx,
+  polaroidOuterFrameSx,
+  type PolaroidFramePalette,
+} from '@/portfolio/projets/utils/polaroidFrameSx'
 
 type TFn = (key: string) => string
 
 type AboutPersonalStorySectionProps = {
   t: TFn
-  primary: string
   textColor: string
 }
 
-export default function AboutPersonalStorySection({ t, primary, textColor }: AboutPersonalStorySectionProps) {
+export default function AboutPersonalStorySection({ t, textColor }: AboutPersonalStorySectionProps) {
   const pathname = usePathname()
   const isTopologyRoute = shouldShowTopology(pathname)
+  const theme = useTheme()
+  const { primary, secondary, accent } = useThemeColors()
+  const { mode: presentationMode } = usePresentationMode()
+  const { themeName } = useAdvancedTheme()
+  const isNonDefaultPalette = themeName !== 'default'
 
-  const sizePx = { xs: 180, sm: 220 }
+  const polaroidPalette: PolaroidFramePalette = {
+    presentationMode,
+    primary,
+    secondary,
+    accent,
+    isNonDefaultPalette,
+  }
+
+  const portraitSizes = '(max-width: 600px) 200px, 240px'
 
   return (
     <Box
@@ -54,28 +76,34 @@ export default function AboutPersonalStorySection({ t, primary, textColor }: Abo
         sx={{
           position: 'relative',
           zIndex: 1,
-          width: sizePx,
-          height: sizePx,
+          maxWidth: { xs: 216, sm: 256 },
+          width: '100%',
           mx: 'auto',
           mb: { xs: 2.5, sm: 3 },
-          borderRadius: '50%',
-          overflow: 'hidden',
-          border: `3px solid ${primary}40`,
-          boxShadow: `0 4px 24px ${primary}25`,
-          flexShrink: 0,
         }}
       >
-        <Image
-          src="/img/moi8bit.png"
-          alt={t('about.photoPortraitAlt')}
-          fill
-          sizes="(max-width: 600px) 180px, 220px"
-          priority={false}
-          style={{
-            objectFit: 'cover',
-            objectPosition: 'center 38%',
-          }}
-        />
+        <Box sx={(muiTheme) => polaroidOuterFrameSx(muiTheme, polaroidPalette)}>
+          <Box
+            sx={(muiTheme) => ({
+              aspectRatio: '1 / 1',
+              ...polaroidInnerPhotoHoleSx(muiTheme, polaroidPalette),
+            })}
+          >
+            <Box sx={polaroidImageFillAnchorSx}>
+              <Image
+                src="/img/moi8bit.png"
+                alt={t('about.photoPortraitAlt')}
+                fill
+                sizes={portraitSizes}
+                priority={false}
+                style={{
+                  objectFit: 'contain',
+                  objectPosition: 'center',
+                }}
+              />
+            </Box>
+          </Box>
+        </Box>
       </Box>
 
       <Box sx={{ position: 'relative', zIndex: 1, maxWidth: 720, mx: 'auto' }}>

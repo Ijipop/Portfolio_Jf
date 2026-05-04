@@ -7,12 +7,12 @@ import LaunchIcon from '@mui/icons-material/Launch'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Chip from '@mui/material/Chip'
-import { styled, useTheme } from '@mui/material/styles'
+import { alpha, styled, useTheme } from '@mui/material/styles'
 import type { SxProps, Theme } from '@mui/material/styles'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import Typography from '@mui/material/Typography'
 import Image from 'next/image'
-import React, { useState } from 'react'
+import React from 'react'
 import ThreeDCardComponent from '@/components/ThreeDCard'
 import ScrollReveal from '@/components/shared/ScrollReveal'
 import SkillTag from '@/components/shared/SkillTag'
@@ -27,8 +27,12 @@ import { useThemeColors } from '@/hooks/useThemeColors'
 import { useTextColor } from '@/hooks/useTextColor'
 import { getBeigePresentationTopologyBackground } from '@/utils/syncPortfolioThemeToDocument'
 import type { Project } from '../projectTypes'
-
-const DESCRIPTION_EXPAND_THRESHOLD = 100
+import {
+  polaroidImageFillAnchorSx,
+  polaroidInnerPhotoHoleSx,
+  polaroidOuterFrameSx,
+  type PolaroidFramePalette,
+} from '../utils/polaroidFrameSx'
 
 const StatusChip = styled(Chip)(({ theme, color }: { theme: any; color?: any }) => ({
   borderRadius: DESIGN_TOKENS.borderRadius.medium,
@@ -50,16 +54,15 @@ const TechStack = styled(Box)(({ theme }) => ({
 
 const ProjectImageContainer = styled(Box)(({ theme }) => ({
   position: 'relative',
-  overflow: 'hidden',
+  overflow: 'visible',
   borderRadius: `${DESIGN_TOKENS.borderRadius.medium}px`,
   marginBottom: theme.spacing(0.5),
   [theme.breakpoints.up('lg')]: { marginBottom: theme.spacing(0.65) },
+  /** Pas de largeur forcée : avec `fill` / `contain`, interfère avec la taille absolue et peut créer une frange sous l’image. */
   '& img': {
     transition: DESIGN_TOKENS.transitions.slow,
-    width: '100%',
-    objectFit: 'contain',
-    borderRadius: `${DESIGN_TOKENS.borderRadius.medium}px`,
-    boxShadow: '0 4px 20px rgba(0, 0, 0, 0.1)',
+    borderRadius: 0,
+    boxShadow: 'none',
   },
 }))
 
@@ -145,9 +148,18 @@ export default function ProjectCard({
   const { mode: presentationMode } = usePresentationMode()
   const isNonDefaultPalette = themeName !== 'default'
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
-  const [descriptionExpanded, setDescriptionExpanded] = useState(false)
-
-  const reflectionColors = [primary, secondary, accent, primary, secondary, accent, primary, secondary, accent, primary]
+  const reflectionColors = [
+    primary,
+    secondary,
+    accent,
+    primary,
+    secondary,
+    accent,
+    primary,
+    secondary,
+    accent,
+    primary,
+  ]
   const reflectionColor = reflectionColors[index % reflectionColors.length]
 
   const lowerName = project.name.toLowerCase()
@@ -164,6 +176,14 @@ export default function ProjectCard({
     (!isTimelendrProject && project.downloadUrl?.trim()) ||
     (isTimelendrProject && (timelendrWindowsUrl || timelendrMacosUrl))
 
+  const polaroidPalette: PolaroidFramePalette = {
+    presentationMode,
+    primary,
+    secondary,
+    accent,
+    isNonDefaultPalette,
+  }
+
   const cardImageRaw = resolveProjectCardImage(project) ?? project.imageUrl
   const cardImageHref = cardImageRaw ? resolveImageUrl(cardImageRaw) : ''
   const projectTechs = project.technologies.split(',').map((tech) => tech.trim()).filter(Boolean)
@@ -172,12 +192,12 @@ export default function ProjectCard({
     ? `${t('projects.metaYear')} ${new Date(project.createdAt).getFullYear()}`
     : null
   const stackFallback = projectTechs[0] ?? t('projects.metaStack')
-  /** Année seulement si connue ; pas de « Livraison ciblée ». Pas de pastille stack si les badges listent déjà les technos. */
+  /** Pas de pastille « Site web » sous les techno ; année (et rôle logiciel) seulement. */
+  const projectMetaRoles = cardVariant === 'web' ? [] : [projectRoleLabel]
   const projectMetaLineItems: string[] =
     projectTechs.length > 0
-      ? [projectRoleLabel, yearSegment].filter((item): item is string => Boolean(item))
-      : [projectRoleLabel, yearSegment, stackFallback].filter((item): item is string => Boolean(item))
-  const showDescriptionToggle = project.description.length > DESCRIPTION_EXPAND_THRESHOLD
+      ? [...projectMetaRoles, yearSegment].filter((item): item is string => Boolean(item))
+      : [...projectMetaRoles, yearSegment, stackFallback].filter((item): item is string => Boolean(item))
 
   const linkIconButtonSx = {
     flexShrink: 0,
@@ -324,84 +344,65 @@ export default function ProjectCard({
           >
             <ProjectImageContainer
               className="project-card-image"
-              sx={{
+              sx={(muiTheme) => ({
                 width: '100%',
                 maxWidth: 'none',
                 mx: 0,
-                mb: 0,
-                aspectRatio: '16 / 9',
+                mb: { xs: 0.85, md: 1 },
                 flexShrink: 0,
-                borderRadius: `${DESIGN_TOKENS.borderRadius.medium}px`,
-                ...(cardImageHref
-                  ? { background: 'rgba(0,0,0,0.06)' }
-                  : {
-                      background: BRAND_GLITCH_GRADIENT,
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                    }),
-                ...(isNonDefaultPalette
-                  ? {
-                      border: 'none',
-                      borderBottom: `1px solid ${primary}35`,
-                      boxShadow: 'none',
-                    }
-                  : {}),
-                '& img': {
-                  objectFit: 'cover',
-                  borderRadius: `${DESIGN_TOKENS.borderRadius.medium}px`,
-                  transform: 'scale(1.01)',
-                  ...(isNonDefaultPalette ? { boxShadow: 'none' } : {}),
-                },
-              }}
+                ...polaroidOuterFrameSx(muiTheme, polaroidPalette),
+              })}
             >
-              {cardImageHref ? (
-                <Image
-                  src={cardImageHref}
-                  alt={project.name}
-                  fill
-                  unoptimized={cardImageHref.startsWith('data:')}
-                  sizes="(max-width: 600px) 100vw, (max-width: 900px) 50vw, 33vw"
-                  style={{ objectFit: 'cover' }}
-                />
-              ) : (
-                <Typography
-                  variant="h2"
-                  sx={{
-                    color: 'white',
-                    fontWeight: 900,
-                    letterSpacing: '-0.08em',
-                    textShadow: '0 16px 50px rgba(0,0,0,0.35)',
-                  }}
-                >
-                  {getProjectMonogram(project.name)}
-                </Typography>
-              )}
               <Box
-                sx={{
-                  position: 'absolute',
-                  left: 0,
-                  right: 0,
-                  bottom: 0,
-                  p: { xs: 1.25, md: 1.5 },
-                  color: 'white',
-                  background: 'linear-gradient(to top, rgba(2,6,23,0.78), rgba(2,6,23,0.1), transparent)',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: 0.75,
-                }}
+                sx={(muiTheme) =>
+                  cardImageHref
+                    ? ({
+                        aspectRatio: '16 / 9',
+                        ...polaroidInnerPhotoHoleSx(muiTheme, polaroidPalette),
+                      } as Record<string, unknown>)
+                    : {
+                        position: 'relative',
+                        width: '100%',
+                        aspectRatio: '16 / 9',
+                        overflow: 'hidden',
+                        borderRadius: `${Math.max(8, DESIGN_TOKENS.borderRadius.medium - 4)}px`,
+                        background: BRAND_GLITCH_GRADIENT,
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                      }
+                }
               >
-                <Typography
-                  variant="subtitle2"
-                  component="h2"
-                  sx={{
-                    fontWeight: 900,
-                    lineHeight: 1.1,
-                    textShadow: '0 2px 10px rgba(0,0,0,0.45)',
-                  }}
-                >
-                  {project.name}
-                </Typography>
+                {cardImageHref ? (
+                  <Box sx={polaroidImageFillAnchorSx}>
+                    <Image
+                      src={cardImageHref}
+                      alt={project.name}
+                      fill
+                      unoptimized={cardImageHref.startsWith('data:')}
+                      sizes="(max-width: 600px) 100vw, (max-width: 900px) 50vw, 33vw"
+                      style={{
+                        /** Toutes les vignettes projet : même cadre polaroid/dégradé ; voir tout le screenshot sans rogner */
+                        objectFit: 'contain',
+                        objectPosition: 'center',
+                      }}
+                    />
+                  </Box>
+                ) : (
+                  <Typography
+                    variant="h2"
+                    sx={{
+                      position: 'relative',
+                      zIndex: 1,
+                      color: 'white',
+                      fontWeight: 900,
+                      letterSpacing: '-0.08em',
+                      textShadow: '0 16px 50px rgba(0,0,0,0.35)',
+                    }}
+                  >
+                    {getProjectMonogram(project.name)}
+                  </Typography>
+                )}
               </Box>
             </ProjectImageContainer>
 
@@ -416,28 +417,70 @@ export default function ProjectCard({
                 minHeight: 0,
               }}
             >
-              <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 1, mb: 0.35, flexShrink: 0 }}>
-                <StatusChip
-                  icon={getStatusIcon(project.status)}
-                  label={project.status}
-                  color={getStatusColor(project.status)}
-                  size="small"
-                />
-                {project.url && project.url.includes('github') && isOwnPortfolioSite && (
-                  <Box sx={{ ...linkIconButtonSx, zIndex: DESIGN_TOKENS.zIndex.overlay }} aria-hidden>
-                    <LanguageOutlinedIcon sx={{ fontSize: 18, color: '#000000', filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.1))' }} />
-                  </Box>
-                )}
-                {project.url && project.url.includes('github') && !isOwnPortfolioSite && (
-                  <Box sx={{ ...linkIconButtonSx, zIndex: DESIGN_TOKENS.zIndex.overlay }} aria-hidden>
-                    <GitHubIcon sx={{ fontSize: 18, color: '#000000', filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.1))' }} />
-                  </Box>
-                )}
-                {project.url && !project.url.includes('github') && (
-                  <Box sx={{ ...linkIconButtonSx, zIndex: DESIGN_TOKENS.zIndex.overlay }} aria-hidden>
-                    <LaunchIcon sx={{ fontSize: 18, color: '#000000', filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.1))' }} />
-                  </Box>
-                )}
+              <Box
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  gap: 1,
+                  mb: 0.35,
+                  flexShrink: 0,
+                  flexWrap: { xs: 'wrap', md: 'nowrap' },
+                  rowGap: 0.75,
+                }}
+              >
+                <Box
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: { xs: 1, sm: 1.25 },
+                    flex: '1 1 auto',
+                    minWidth: 0,
+                  }}
+                >
+                  <StatusChip
+                    icon={getStatusIcon(project.status)}
+                    label={project.status}
+                    color={getStatusColor(project.status)}
+                    size="small"
+                    sx={{ flexShrink: 0 }}
+                  />
+                  <Typography
+                    variant="subtitle1"
+                    component="h2"
+                    sx={{
+                      fontWeight: 900,
+                      lineHeight: 1.18,
+                      letterSpacing: '-0.035em',
+                      color: textColor,
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                      display: '-webkit-box',
+                      WebkitLineClamp: 2,
+                      WebkitBoxOrient: 'vertical',
+                      wordBreak: 'break-word',
+                    }}
+                  >
+                    {project.name}
+                  </Typography>
+                </Box>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, flexShrink: 0, ml: { xs: 0, md: 'auto' } }}>
+                  {project.url && project.url.includes('github') && isOwnPortfolioSite && (
+                    <Box sx={{ ...linkIconButtonSx, zIndex: DESIGN_TOKENS.zIndex.overlay }} aria-hidden>
+                      <LanguageOutlinedIcon sx={{ fontSize: 18, color: '#000000', filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.1))' }} />
+                    </Box>
+                  )}
+                  {project.url && project.url.includes('github') && !isOwnPortfolioSite && (
+                    <Box sx={{ ...linkIconButtonSx, zIndex: DESIGN_TOKENS.zIndex.overlay }} aria-hidden>
+                      <GitHubIcon sx={{ fontSize: 18, color: '#000000', filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.1))' }} />
+                    </Box>
+                  )}
+                  {project.url && !project.url.includes('github') && (
+                    <Box sx={{ ...linkIconButtonSx, zIndex: DESIGN_TOKENS.zIndex.overlay }} aria-hidden>
+                      <LaunchIcon sx={{ fontSize: 18, color: '#000000', filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.1))' }} />
+                    </Box>
+                  )}
+                </Box>
               </Box>
 
               <Box sx={{ mb: 0.5 }}>
@@ -463,43 +506,15 @@ export default function ProjectCard({
                   sx={{
                     textAlign: 'left',
                     lineHeight: 1.35,
-                    mb: showDescriptionToggle ? 0.25 : { xs: 0.5, md: 0.65 },
+                    mb: { xs: 0.5, md: 0.65 },
                     fontSize: { xs: '0.72rem', sm: '0.75rem', md: '0.78rem' },
-                    ...(descriptionExpanded
-                      ? { overflow: 'visible', display: 'block' }
-                      : {
-                          display: '-webkit-box',
-                          WebkitLineClamp: 3,
-                          WebkitBoxOrient: 'vertical',
-                          overflow: 'hidden',
-                        }),
+                    overflow: 'visible',
+                    display: 'block',
                     ...(isNonDefaultPalette ? { color: `${primary}ee` } : { color: 'rgba(255,255,255,0.92)' }),
                   }}
                 >
                   {project.description}
                 </Typography>
-                {showDescriptionToggle && (
-                  <Button
-                    type="button"
-                    size="small"
-                    variant="text"
-                    onClick={(e) => {
-                      e.stopPropagation()
-                      setDescriptionExpanded((v) => !v)
-                    }}
-                    sx={{
-                      mt: 0,
-                      p: 0,
-                      minWidth: 0,
-                      fontSize: '0.72rem',
-                      fontWeight: 700,
-                      textTransform: 'none',
-                      color: primary,
-                    }}
-                  >
-                    {descriptionExpanded ? t('projects.viewLess') : t('projects.viewMore')}
-                  </Button>
-                )}
               </Box>
 
               <TechStack
@@ -519,6 +534,7 @@ export default function ProjectCard({
                 ))}
               </TechStack>
 
+              {projectMetaLineItems.length > 0 ? (
               <Box
                 sx={{
                   display: 'flex',
@@ -543,6 +559,7 @@ export default function ProjectCard({
                   </React.Fragment>
                 ))}
               </Box>
+              ) : null}
 
               <Box
                 sx={{

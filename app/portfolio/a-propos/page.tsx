@@ -584,7 +584,7 @@ export default function About() {
         </ScrollReveal>
 
         <ScrollReveal direction="up" delay={0.1}>
-        <AboutPersonalStorySection t={t} primary={primary} textColor={textColor} />
+        <AboutPersonalStorySection t={t} textColor={textColor} />
         </ScrollReveal>
 
         <ScrollReveal direction="up" delay={0.15}>
