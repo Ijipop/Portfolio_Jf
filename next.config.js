@@ -56,6 +56,14 @@ const outputFileTracingExcludesServer = [
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  /**
+   * Dev : ouverture du site via l’IP LAN (ex. http://192.168.x.x:3000) sans cette liste,
+   * Next bloque les WebSockets `/_next/webpack-hmr` (sécurité cross-origin) → hot reload cassé.
+   * Motifs type image remote : segments séparés par des points.
+   * @see https://nextjs.org/docs/app/api-reference/config/next-config-js/allowedDevOrigins
+   */
+  allowedDevOrigins: ['192.168.*.*', '10.*.*.*'],
+
   serverExternalPackages: ['@prisma/client', 'prisma', 'sharp', 'bcryptjs', 'openai'],
   outputFileTracingExcludes: {
     // Picomatch « contains » : couvre les routes App Router normalisées (/, /api/…, etc.)

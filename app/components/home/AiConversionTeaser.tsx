@@ -17,10 +17,26 @@ import { useTextColor } from '@/hooks/useTextColor'
 import { useThemeColors } from '@/hooks/useThemeColors'
 
 const METRICS = [
-  { icon: MarkEmailReadOutlinedIcon, labelKey: 'home.aiImpactMetricLeads' },
-  { icon: ManageSearchOutlinedIcon, labelKey: 'home.aiImpactMetricQualified' },
-  { icon: AutoAwesomeOutlinedIcon, labelKey: 'home.aiImpactMetricDiagnostics' },
-  { icon: QueryStatsOutlinedIcon, labelKey: 'home.aiImpactMetricConversion' },
+  {
+    icon: MarkEmailReadOutlinedIcon,
+    labelKey: 'home.aiImpactMetricLeads',
+    hintKey: 'home.aiImpactMetricLeadsHint',
+  },
+  {
+    icon: ManageSearchOutlinedIcon,
+    labelKey: 'home.aiImpactMetricQualified',
+    hintKey: 'home.aiImpactMetricQualifiedHint',
+  },
+  {
+    icon: AutoAwesomeOutlinedIcon,
+    labelKey: 'home.aiImpactMetricDiagnostics',
+    hintKey: 'home.aiImpactMetricDiagnosticsHint',
+  },
+  {
+    icon: QueryStatsOutlinedIcon,
+    labelKey: 'home.aiImpactMetricConversion',
+    hintKey: 'home.aiImpactMetricConversionHint',
+  },
 ]
 
 export default function AiConversionTeaser() {
@@ -176,7 +192,7 @@ export default function AiConversionTeaser() {
               />
             </Box>
 
-            {METRICS.map(({ icon: Icon, labelKey }) => (
+            {METRICS.map(({ icon: Icon, labelKey, hintKey }) => (
               <Box
                 key={labelKey}
                 sx={{
@@ -186,11 +202,9 @@ export default function AiConversionTeaser() {
                   background: (theme) =>
                     theme.palette.mode === 'dark' ? alpha('#ffffff', 0.045) : alpha('#ffffff', 0.62),
                   color: textColor,
-                  minHeight: { xs: 118, sm: 122 },
                   display: 'flex',
                   flexDirection: 'column',
-                  justifyContent: 'space-between',
-                  gap: 1.1,
+                  gap: 0.85,
                 }}
               >
                 <Icon sx={{ color: primary, fontSize: 30, flexShrink: 0 }} />
@@ -204,9 +218,22 @@ export default function AiConversionTeaser() {
                       hyphens: 'auto',
                       overflowWrap: 'break-word',
                       wordBreak: 'break-word',
+                      mb: 0.35,
                     }}
                   >
                     {t(labelKey)}
+                  </Typography>
+                  <Typography
+                    sx={{
+                      fontWeight: 600,
+                      lineHeight: 1.4,
+                      fontSize: { xs: '0.72rem', sm: '0.76rem' },
+                      opacity: 0.86,
+                      overflowWrap: 'break-word',
+                      wordBreak: 'break-word',
+                    }}
+                  >
+                    {t(hintKey)}
                   </Typography>
                 </Box>
               </Box>
