@@ -33,10 +33,14 @@ const nextConfig = {
     return [
       { source: '/logiciel/timelendar', destination: '/logiciel/timelendr', permanent: true },
       { source: '/api/timelendar/:path*', destination: '/api/timelendr/:path*', permanent: true },
+      { source: '/pageweb', destination: '/portfolio/pageweb', permanent: true },
     ]
   },
 
   // Headers de sécurité et performance
+  // Note : pas de `X-Content-Type-Options: nosniff` sur le catch-all — en dev (Turbopack), certains
+  // chunks `.css` sous `/_next/static` peuvent recevoir `text/plain` ; avec nosniff le navigateur refuse
+  // d’appliquer la feuille de style (MIME strict).
   async headers() {
     return [
       {
@@ -53,10 +57,6 @@ const nextConfig = {
           {
             key: 'X-Frame-Options',
             value: 'SAMEORIGIN'
-          },
-          {
-            key: 'X-Content-Type-Options',
-            value: 'nosniff'
           },
           {
             key: 'Referrer-Policy',

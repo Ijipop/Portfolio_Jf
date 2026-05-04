@@ -13,12 +13,12 @@ describe('shouldShowTopology', () => {
   it('returns true for allowed roots', () => {
     expect(shouldShowTopology('/portfolio')).toBe(true)
     expect(shouldShowTopology('/logiciel')).toBe(true)
-    expect(shouldShowTopology('/pageweb')).toBe(true)
   })
 
   it('returns true for allowed nested routes', () => {
     expect(shouldShowTopology('/portfolio/projets')).toBe(true)
     expect(shouldShowTopology('/portfolio/contact')).toBe(true)
+    expect(shouldShowTopology('/portfolio/pageweb')).toBe(true)
     expect(shouldShowTopology('/logiciel/timelendr')).toBe(true)
   })
 

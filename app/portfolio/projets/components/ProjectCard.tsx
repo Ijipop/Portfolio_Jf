@@ -2,6 +2,7 @@
 
 import DownloadIcon from '@mui/icons-material/Download'
 import GitHubIcon from '@mui/icons-material/GitHub'
+import LanguageOutlinedIcon from '@mui/icons-material/LanguageOutlined'
 import LaunchIcon from '@mui/icons-material/Launch'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
@@ -77,7 +78,15 @@ function resolveProjectCardImage(project: Project): string | undefined {
   return undefined
 }
 
+/** Projet « vitrine portfolio » : URL GitHub du repo du site — on ne renvoie pas vers GitHub, mais vers ce site. */
+function isPortfolioOwnSiteProject(project: Project): boolean {
+  const u = (project.url ?? '').toLowerCase()
+  if (!u.includes('github.com')) return false
+  return u.includes('portfolio') || u.includes('port-folio') || u.includes('portefolio')
+}
+
 function getWebViewSiteButtonHref(project: Project): string | null {
+  if (isPortfolioOwnSiteProject(project)) return '/portfolio'
   const site = project.siteUrl?.trim()
   if (site) return site
   const u = project.url?.trim()
@@ -148,6 +157,7 @@ export default function ProjectCard({
     lowerName.includes('timelendar') ||
     lowerUrl.includes('/logiciel/timelendr') ||
     lowerUrl.includes('/logiciel/timelendar')
+  const isOwnPortfolioSite = isPortfolioOwnSiteProject(project)
   const hasProjectAction =
     project.url?.trim() ||
     project.siteUrl?.trim() ||
@@ -235,7 +245,10 @@ export default function ProjectCard({
 
   let primaryHref: string | null = null
   let primaryLabel = viewProjectLabel
-  if (project.url?.trim()) {
+  if (isOwnPortfolioSite) {
+    primaryHref = '/portfolio'
+    primaryLabel = viewSiteLabel
+  } else if (project.url?.trim()) {
     primaryHref = project.url.trim()
     primaryLabel = viewProjectLabel
   } else if (project.siteUrl?.trim()) {
@@ -289,7 +302,8 @@ export default function ProjectCard({
           floatingElements={0}
           borderBeam={{ duration: 58, size: 180, delay: (index % 4) * 4 }}
           onClick={() => {
-            if (project.url?.trim()) handleProjectClick(project.url)
+            if (isOwnPortfolioSite) handleProjectClick('/portfolio')
+            else if (project.url?.trim()) handleProjectClick(project.url)
             else if (project.siteUrl?.trim()) handleProjectClick(project.siteUrl)
             else if (!isTimelendrProject && project.downloadUrl?.trim()) handleProjectClick(project.downloadUrl)
             else if (isTimelendrProject && timelendrWindowsUrl) handleProjectClick(timelendrWindowsUrl)
@@ -409,7 +423,12 @@ export default function ProjectCard({
                   color={getStatusColor(project.status)}
                   size="small"
                 />
-                {project.url && project.url.includes('github') && (
+                {project.url && project.url.includes('github') && isOwnPortfolioSite && (
+                  <Box sx={{ ...linkIconButtonSx, zIndex: DESIGN_TOKENS.zIndex.overlay }} aria-hidden>
+                    <LanguageOutlinedIcon sx={{ fontSize: 18, color: '#000000', filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.1))' }} />
+                  </Box>
+                )}
+                {project.url && project.url.includes('github') && !isOwnPortfolioSite && (
                   <Box sx={{ ...linkIconButtonSx, zIndex: DESIGN_TOKENS.zIndex.overlay }} aria-hidden>
                     <GitHubIcon sx={{ fontSize: 18, color: '#000000', filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.1))' }} />
                   </Box>
@@ -422,6 +441,23 @@ export default function ProjectCard({
               </Box>
 
               <Box sx={{ mb: 0.5 }}>
+                {isOwnPortfolioSite && (
+                  <Typography
+                    variant="caption"
+                    component="p"
+                    sx={{
+                      display: 'block',
+                      mb: 0.85,
+                      lineHeight: 1.45,
+                      fontWeight: 600,
+                      fontStyle: 'italic',
+                      opacity: 0.88,
+                      ...(isNonDefaultPalette ? { color: `${primary}ee` } : { color: 'rgba(255,255,255,0.88)' }),
+                    }}
+                  >
+                    {t('projects.portfolioSelfNotice')}
+                  </Typography>
+                )}
                 <Typography
                   variant="body2"
                   sx={{

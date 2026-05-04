@@ -13,7 +13,7 @@ const paths: { path: string; priority: number; changeFrequency: MetadataRoute.Si
     { path: '/portfolio/projets', priority: 0.85, changeFrequency: 'monthly' },
     { path: '/portfolio/contact', priority: 0.85, changeFrequency: 'monthly' },
     { path: '/portfolio/a-propos', priority: 0.8, changeFrequency: 'monthly' },
-    { path: '/pageweb', priority: 0.85, changeFrequency: 'monthly' },
+    { path: '/portfolio/pageweb', priority: 0.85, changeFrequency: 'monthly' },
     { path: '/logiciel', priority: 0.85, changeFrequency: 'monthly' },
     { path: '/logiciel/timelendr', priority: 0.7, changeFrequency: 'monthly' },
   ]

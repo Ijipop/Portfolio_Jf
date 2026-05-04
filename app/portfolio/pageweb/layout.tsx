@@ -8,11 +8,11 @@ export const metadata: Metadata = {
     title: 'Création et refonte de sites web | Jean-François Lefebvre',
     description:
       'Sites web pour PME et travailleurs autonomes : présence en ligne claire, rapide et entretenable.',
-    url: '/pageweb',
+    url: '/portfolio/pageweb',
   },
 }
 
-export default function PagewebLayout({
+export default function PortfolioPagewebLayout({
   children,
 }: {
   children: React.ReactNode

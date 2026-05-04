@@ -256,6 +256,8 @@ export const translations = {
       completed: 'Projets Terminés',
       inProgress: 'En Cours',
       viewProject: 'Voir le projet',
+      portfolioSelfNotice:
+        'Ce projet, c’est le site portfolio que vous parcourez — le lien public pointe ici.',
       viewSite: 'Voir le site',
       downloadProject: 'Télécharger le projet',
       downloadTimelendrPc: 'Télécharger Timelendr PC',
@@ -673,6 +675,8 @@ export const translations = {
       completed: 'Completed',
       inProgress: 'In Progress',
       viewProject: 'View project',
+      portfolioSelfNotice:
+        'This project is the portfolio site you’re on — the public link goes here.',
       viewSite: 'View site',
       downloadProject: 'Download project',
       downloadTimelendrPc: 'Download Timelendr PC',
