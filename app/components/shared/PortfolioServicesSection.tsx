@@ -22,7 +22,8 @@ const SERVICES = [
     titleKey: 'home.servicesWebTitle',
     leadKey: 'home.servicesWebLead',
     bullets: ['home.servicesWebBullet1', 'home.servicesWebBullet2', 'home.servicesWebBullet3'],
-    href: '/portfolio/projets?type=web',
+    href: '/portfolio/contact#diagnostic-ia',
+    linkKey: 'home.servicesAiLink',
   },
   {
     icon: TerminalOutlinedIcon,
@@ -54,7 +55,7 @@ export default function PortfolioServicesSection() {
   )
 
   return (
-    <Box sx={{ mb: { xs: 5, md: 8 } }}>
+    <Box id="services" sx={{ mb: { xs: 5, md: 8 }, scrollMarginTop: 96 }}>
       <ScrollReveal direction="up" delay={0.05}>
         <Box sx={{ textAlign: 'center', maxWidth: 820, mx: 'auto', mb: { xs: 3, md: 4 } }}>
           <Typography
@@ -178,7 +179,7 @@ export default function PortfolioServicesSection() {
                           '&:hover': { backgroundSize: '100% 2px' },
                         }}
                       >
-                        {t('home.servicesLink')}
+                        {t(service.linkKey ?? 'home.servicesLink')}
                       </Typography>
                     </Link>
                   </Box>

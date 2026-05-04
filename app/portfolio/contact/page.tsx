@@ -454,15 +454,17 @@ export default function Contact() {
                   compact={useCompactContact}
                 />
 
-                <AiLeadDiagnosis
-                  formData={formData}
-                  projectWeb={projectWeb}
-                  includeProjectWeb={includeProjectWeb}
-                  value={aiDiagnosis}
-                  onChange={setAiDiagnosis}
-                  textColor={textColor}
-                  compact={useCompactContact}
-                />
+                <Box id="diagnostic-ia" sx={{ scrollMarginTop: 96 }}>
+                  <AiLeadDiagnosis
+                    formData={formData}
+                    projectWeb={projectWeb}
+                    includeProjectWeb={includeProjectWeb}
+                    value={aiDiagnosis}
+                    onChange={setAiDiagnosis}
+                    textColor={textColor}
+                    compact={useCompactContact}
+                  />
+                </Box>
               </Box>
               
               <CTAButton
