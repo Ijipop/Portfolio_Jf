@@ -11,6 +11,10 @@ import { dimHex, hexToRgb } from '@/utils/colorUtils'
 /** Dégradé « marque » : mode Site (beige) — ambre → orange (#ea580c) → rouge brique. */
 export const BRAND_GLITCH_GRADIENT =
   'linear-gradient(165deg, #ffedd5 0%, #fdba74 14%, #fb923c 38%, #ea580c 62%, #b91c1c 86%, #7f1d1d 100%)'
+
+/** Extrêmes pour border-beam / lueur de contour — même famille que BRAND_GLITCH_GRADIENT (mode beige uniquement). */
+export const BRAND_BORDER_BEAM_COLOR_FROM = '#fdba74'
+export const BRAND_BORDER_BEAM_COLOR_TO = '#ea580c'
 const BRAND_GLITCH_LAYER = '#9a3412'
 const GLITCH_BEFORE_OPACITY = 0.42
 const GLITCH_AFTER_OPACITY = 0.38

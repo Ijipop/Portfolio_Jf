@@ -49,7 +49,8 @@ export const translations = {
       cardProjectsDesc:
         'Réalisations web et petits outils\u202f: sites livrés, refontes et mandats pour indépendants et PME.',
       cardAbout: 'À Propos',
-      cardAboutDesc: 'Mon parcours et comment je peux vous aider avec un site ou un outil sur mesure.',
+      cardAboutDesc:
+        'Mon parcours et comment je peux vous aider avec un site, un outil sur mesure ou une meilleure prise en charge des demandes (conversion, IA utile).',
       cardContact: 'Contact',
       cardContactDesc:
         'Nouveau site, refonte, mises à jour ou petit outil\u202f: parlons de votre besoin.',
@@ -116,7 +117,7 @@ export const translations = {
     contact: {
       title: 'Contact',
       subtitle:
-        'Nouveau site, refonte ou site existant à mettre à jour ? Écrivez-moi — réponse rapide.',
+        'Nouveau site, refonte ou site existant à mettre à jour ? Écrivez-moi — réponse rapide. Après quelques lignes dans le message (et le brief web si vous l’utilisez), vous pouvez lancer le diagnostic IA express pour un premier avis structuré.',
       email: 'Email',
       phone: 'Téléphone',
       phoneOnRequest: 'Sur demande !',
@@ -125,7 +126,8 @@ export const translations = {
       openEmail: 'Ouvrir Email',
       copy: 'Copier',
       sendMessage: 'Envoyez-moi un message',
-      sendMessageDesc: 'Remplissez le formulaire ci-dessous et je vous répondrai dans les plus brefs délais',
+      sendMessageDesc:
+        'Remplissez le formulaire ci-dessous et je vous répondrai dans les plus brefs délais. Le diagnostic IA est gratuit dans cette démo : réponse indicative pour vous aider à cadrer le besoin, pas un devis automatique.',
       formName: 'Nom complet',
       formEmail: 'Email',
       formSubject: 'Sujet',
@@ -212,7 +214,8 @@ export const translations = {
       title: 'À propos',
       subtitle: 'Qui suis-je ?',
       experience: 'Expérience',
-      experienceText: "J'ai terminé une formation en développement logiciel et j'ai réalisé un stage en entreprise. Mon axe : projets web et outils sur mesure, avec une approche simple et orientée besoins. Objectif : proposer des solutions claires et accessibles aux indépendants et aux petites structures.",
+      experienceText:
+        "Formation en développement logiciel et stage en entreprise. Je conçois des sites et petits outils sur mesure pour indépendants et PME : simple, clair, orienté contact et demandes.",
       formation: 'Formation',
       skills: 'Mes Compétences Techniques',
       softSkills: 'Soft Skills',
@@ -229,7 +232,8 @@ export const translations = {
       quality: 'Qualité',
       qualityDesc: 'Code propre et maintenable',
       ctaTitle: 'Obtenir une estimation rapide',
-      ctaText: "Projet web, outil sur mesure ou hébergement : décrivez-moi votre besoin, je vous propose une solution adaptée.",
+      ctaText:
+        "Projet web, outil sur mesure ou hébergement : décrivez-moi votre besoin. Je vous propose une solution adaptée — site, petit outil, ou accompagnement pour mieux traiter les demandes et la conversion.",
       whoCardP1:
         'Je suis avant tout un passionné : de technologie, de jeux vidéo et de création.',
       whoCardP2:
@@ -262,9 +266,11 @@ export const translations = {
       noProjectsAvailable: 'Aucun projet disponible',
       comingSoon: 'Mes projets apparaîtront ici bientôt !',
       webSectionPersonalTitle: 'Projets personnels',
-      webSectionPersonalSubtitle: 'Expérimentations, side projects et apprentissage.',
+      webSectionPersonalSubtitle:
+        'Expérimentations et apprentissage côté web : idées, prototypes et vitrines pour tester structure et parcours visiteur.',
       webSectionProfessionalTitle: 'Réalisations professionnelles',
-      webSectionProfessionalSubtitle: 'Sites et outils livrés pour des clients ou en contexte professionnel.',
+      webSectionProfessionalSubtitle:
+        'Sites et outils livrés pour des clients — présentation crédible, demandes mieux cadrées et mise en ligne soignée.',
       webSectionEmpty: 'Aucun projet dans cette catégorie pour le moment.',
       metaRoleWeb: 'Site web',
       metaRoleSoftware: 'Outil sur mesure',
@@ -274,7 +280,8 @@ export const translations = {
     },
     footer: {
       landmarkLabel: 'Pied de page du site',
-      tagline: 'Création et mise à jour de sites web pour PME. Petits outils sur mesure. Hébergement inclus.',
+      tagline:
+        'Sites web et petites briques d’IA utiles (formulaires, qualification des demandes) pour PME. Petits outils sur mesure. Création, mises à jour et hébergement.',
       contactPrompt: 'Un projet site web ou un petit outil ? Discutons-en !',
       contactButton: 'Me contacter',
       rights: 'Tous droits réservés.',
@@ -301,9 +308,13 @@ export const translations = {
       learnMore: 'En savoir plus',
     },
     pageweb: {
-      title: 'Sites web',
-      intro: 'Réalisations web et projets sur mesure.',
-      ctaProjects: 'Voir mes projets',
+      title: 'Sites web + IA',
+      intro:
+        'Je conçois des sites clairs et crédibles pour les PME et les indépendants, avec un parcours visiteur pensé pour la prise de contact. On peut y ajouter un formulaire intelligent, une meilleure lecture des demandes et un suivi simple des conversions — sans jargon inutile.',
+      bullet1: 'Formulaire et brief web pour recevoir des demandes structurées plutôt que des messages flous.',
+      bullet2: 'Pistes pour qualifier les bonnes opportunités et répondre plus vite aux bons contacts.',
+      bullet3: 'Indicateurs simples (demandes, relances) pour comprendre ce qui se passe après la mise en ligne.',
+      ctaProjects: 'Voir mes réalisations',
     },
     timelendr: {
       title: 'Timelendr',
@@ -448,7 +459,8 @@ export const translations = {
       cardProjectsDesc:
         'Web work and small tools: shipped sites, redesigns, and projects for freelancers and SMBs.',
       cardAbout: 'About',
-      cardAboutDesc: 'My background and how I can help you with a site or a custom tool.',
+      cardAboutDesc:
+        'My background and how I can help with a site, a custom tool, or handling leads better (conversion, useful AI).',
       cardContact: 'Contact',
       cardContactDesc:
         'New site, redesign, updates, or a small tool—tell me what you need.',
@@ -515,7 +527,7 @@ export const translations = {
     contact: {
       title: 'Contact',
       subtitle:
-        'New site, redesign, or updates to an existing site? Message me—I reply quickly.',
+        'New site, redesign, or updates to an existing site? Message me—I reply quickly. After a short note (and the web brief if you use it), you can run the quick AI diagnosis for a structured first read.',
       email: 'Email',
       phone: 'Phone',
       phoneOnRequest: 'On request!',
@@ -524,7 +536,8 @@ export const translations = {
       openEmail: 'Open Email',
       copy: 'Copy',
       sendMessage: 'Send me a message',
-      sendMessageDesc: 'Fill out the form below and I will get back to you as soon as possible',
+      sendMessageDesc:
+        'Fill out the form below and I will get back to you as soon as possible. The AI diagnosis is free in this demo: indicative guidance to help frame your need, not an automatic quote.',
       formName: 'Full name',
       formEmail: 'Email',
       formSubject: 'Subject',
@@ -611,7 +624,8 @@ export const translations = {
       title: 'About',
       subtitle: 'Who am I?',
       experience: 'Experience',
-      experienceText: 'I have completed a software development program and an internship in a company. My focus: web projects and custom tools, with a simple, need-oriented approach. Goal: to offer clear, accessible solutions for independents and small teams.',
+      experienceText:
+        'Software development training and a company internship. I build custom websites and small tools for freelancers and SMBs—simple, clear, focused on contact and inquiries.',
       formation: 'Education',
       skills: 'My Technical Skills',
       softSkills: 'Soft Skills',
@@ -628,11 +642,12 @@ export const translations = {
       quality: 'Quality',
       qualityDesc: 'Clean and maintainable code',
       ctaTitle: 'Discuss your project',
-      ctaText: 'Web project, custom tool, or hosting? Describe your need and I will propose a solution that fits.',
+      ctaText:
+        'Web project, custom tool, or hosting? Describe your need. I will propose a fit—website, small tool, or support to handle requests and conversion better.',
       whoCardP1:
         "Above all, I'm passionate about technology, video games, and creation.",
       whoCardP2:
-        'Today I channel that passion into web and software projects—with heart, listening, and attention to detail.',
+        'Today I channel that passion into web and software projects—with heart, listening, and attention to detail. Often beyond a simple brochure: clarify the offer, make contact easy, and structure incoming requests better.',
       photoPortraitAlt: 'Portrait of Jean-François Lefebvre',
       personalStoryP1:
         'A stroke survivor at age 38 and father of two, I had to reinvent my career path to build a future that lets me work from home, close to the people who matter most.',
@@ -644,7 +659,8 @@ export const translations = {
     projects: {
       title: 'Projects',
       loading: 'Loading projects...',
-      subtitle: 'My work',
+      subtitle:
+        'Websites, software, and experiments—a snapshot of shipped or ongoing work, with extra care for clear, action-oriented sites for small businesses.',
       filterLabel: 'Filter by technology:',
       filterAll: 'All',
       totalProjects: 'Total Projects',
@@ -661,9 +677,11 @@ export const translations = {
       noProjectsAvailable: 'No projects available',
       comingSoon: 'My projects will appear here soon!',
       webSectionPersonalTitle: 'Personal projects',
-      webSectionPersonalSubtitle: 'Experiments, side projects, and learning.',
+      webSectionPersonalSubtitle:
+        'Web experiments and learning: ideas, prototypes, and showcase pages to test structure and visitor flow.',
       webSectionProfessionalTitle: 'Professional work',
-      webSectionProfessionalSubtitle: 'Sites and tools delivered for clients or in a professional context.',
+      webSectionProfessionalSubtitle:
+        'Sites and tools delivered for clients—credible presentation, clearer inquiries, and careful go-live.',
       webSectionEmpty: 'No projects in this category yet.',
       metaRoleWeb: 'Website',
       metaRoleSoftware: 'Custom tool',
@@ -673,7 +691,8 @@ export const translations = {
     },
     footer: {
       landmarkLabel: 'Site footer',
-      tagline: 'Website builds and ongoing updates for small businesses. Custom tools. Hosting included.',
+      tagline:
+        'Websites plus small, useful AI pieces (forms, qualifying inquiries) for small businesses. Custom tools. Builds, updates, and hosting.',
       contactPrompt: 'A website or small tool in mind? Let\'s talk!',
       contactButton: 'Contact me',
       rights: 'All rights reserved.',
@@ -700,9 +719,13 @@ export const translations = {
       learnMore: 'Learn more',
     },
     pageweb: {
-      title: 'Websites',
-      intro: 'Web projects and custom builds.',
-      ctaProjects: 'View my projects',
+      title: 'Websites + AI',
+      intro:
+        'I build clear, credible websites for small businesses and independents, with a visitor journey built around contact. We can add a smarter form, a better read on incoming requests, and simple conversion signals—without unnecessary jargon.',
+      bullet1: 'Form plus web brief so you get structured inquiries instead of vague messages.',
+      bullet2: 'Ways to spot the right opportunities and reply faster to the right contacts.',
+      bullet3: 'Simple indicators (requests, follow-ups) to see what happens after launch.',
+      ctaProjects: 'View my work',
     },
     timelendr: {
       title: 'Timelendr',

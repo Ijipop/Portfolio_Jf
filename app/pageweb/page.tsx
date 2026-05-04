@@ -3,6 +3,7 @@
 import Box from '@mui/material/Box'
 import Container from '@mui/material/Container'
 import Typography from '@mui/material/Typography'
+import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import AppBarComponent from '../components/appBar'
 import PageWrapper from '../components/shared/PageWrapper'
@@ -12,6 +13,8 @@ import SectionDisplayTitle from '../components/shared/SectionDisplayTitle'
 import Footer from '../components/Footer'
 import { useLanguage } from '../contexts/LanguageContext'
 import { useTextColor } from '../hooks/useTextColor'
+
+const PAGE_WEB_BULLET_KEYS = ['pageweb.bullet1', 'pageweb.bullet2', 'pageweb.bullet3'] as const
 
 export default function PagewebPage() {
   const router = useRouter()
@@ -39,8 +42,8 @@ export default function PagewebPage() {
           <Typography
             sx={{
               textAlign: 'center',
-              mb: 4,
-              maxWidth: 560,
+              mb: 3,
+              maxWidth: 640,
               mx: 'auto',
               lineHeight: 1.7,
               color: textColor,
@@ -49,9 +52,40 @@ export default function PagewebPage() {
           >
             {t('pageweb.intro')}
           </Typography>
-          <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+          <Box
+            component="ul"
+            sx={{
+              maxWidth: 640,
+              mx: 'auto',
+              mb: 4,
+              pl: { xs: 2.5, sm: 3 },
+              color: textColor,
+              opacity: 0.9,
+              '& li': { mb: 1.25, lineHeight: 1.65 },
+            }}
+          >
+            {PAGE_WEB_BULLET_KEYS.map((key) => (
+              <Typography key={key} component="li" variant="body1">
+                {t(key)}
+              </Typography>
+            ))}
+          </Box>
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: { xs: 'column', sm: 'row' },
+              justifyContent: 'center',
+              alignItems: 'center',
+              gap: 2,
+            }}
+          >
+            <Link href="/portfolio/contact#diagnostic-ia" style={{ textDecoration: 'none' }}>
+              <CTAButton variant="primary" size="large">
+                {t('home.aiImpactPrimaryCta')}
+              </CTAButton>
+            </Link>
             <CTAButton
-              variant="primary"
+              variant="outline"
               size="large"
               onClick={() => router.push('/portfolio/projets')}
             >

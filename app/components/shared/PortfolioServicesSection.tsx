@@ -8,7 +8,12 @@ import Typography from '@mui/material/Typography'
 import Link from 'next/link'
 import { useMemo } from 'react'
 import ThreeDCardComponent from '@/components/ThreeDCard'
-import { BRAND_GLITCH_GRADIENT, buildPaletteGlitchGradient } from './IjipopGlitchTitle'
+import {
+  BRAND_BORDER_BEAM_COLOR_FROM,
+  BRAND_BORDER_BEAM_COLOR_TO,
+  BRAND_GLITCH_GRADIENT,
+  buildPaletteGlitchGradient,
+} from './IjipopGlitchTitle'
 import ScrollReveal from './ScrollReveal'
 import { DESIGN_TOKENS } from '@/design-system/constants'
 import { usePresentationMode } from '@/contexts/PresentationModeContext'
@@ -52,6 +57,14 @@ export default function PortfolioServicesSection() {
         ? BRAND_GLITCH_GRADIENT
         : buildPaletteGlitchGradient(primary, secondary, accent),
     [presentationMode, primary, secondary, accent]
+  )
+
+  const borderBeamColors = useMemo(
+    () =>
+      presentationMode === 'beige'
+        ? { colorFrom: BRAND_BORDER_BEAM_COLOR_FROM, colorTo: BRAND_BORDER_BEAM_COLOR_TO }
+        : { colorFrom: primary, colorTo: accent },
+    [presentationMode, primary, accent]
   )
 
   return (
@@ -104,8 +117,8 @@ export default function PortfolioServicesSection() {
                   duration: 52,
                   size: 180,
                   delay: index * 4,
-                  colorFrom: primary,
-                  colorTo: accent,
+                  colorFrom: borderBeamColors.colorFrom,
+                  colorTo: borderBeamColors.colorTo,
                 }}
                 floatingElements={1}
                 sx={{
