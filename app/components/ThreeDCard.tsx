@@ -249,7 +249,8 @@ export default function ThreeDCardComponent({
         <CardContent
           sx={{
             position: 'relative',
-            zIndex: 2,
+            /** Au-dessus du BorderBeam : sinon le masque du liseré peut laisser un filet clair au bord inférieur des médias arrondis. */
+            zIndex: 3,
             backgroundColor: 'transparent',
             ...(fullHeight && {
               flex: 1,
@@ -270,7 +271,7 @@ export default function ThreeDCardComponent({
             sx={{
               position: 'absolute',
               inset: 0,
-              zIndex: 2,
+              zIndex: 1,
               pointerEvents: 'none',
               borderRadius: 'inherit',
               overflow: 'hidden',

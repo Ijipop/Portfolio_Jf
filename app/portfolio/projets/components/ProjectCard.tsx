@@ -27,6 +27,12 @@ import { useThemeColors } from '@/hooks/useThemeColors'
 import { useTextColor } from '@/hooks/useTextColor'
 import { getBeigePresentationTopologyBackground } from '@/utils/syncPortfolioThemeToDocument'
 import type { Project } from '../projectTypes'
+import {
+  polaroidImageFillAnchorSx,
+  polaroidInnerPhotoHoleSx,
+  polaroidOuterFrameSx,
+  type PolaroidFramePalette,
+} from '../utils/polaroidFrameSx'
 
 const StatusChip = styled(Chip)(({ theme, color }: { theme: any; color?: any }) => ({
   borderRadius: DESIGN_TOKENS.borderRadius.medium,
@@ -52,10 +58,9 @@ const ProjectImageContainer = styled(Box)(({ theme }) => ({
   borderRadius: `${DESIGN_TOKENS.borderRadius.medium}px`,
   marginBottom: theme.spacing(0.5),
   [theme.breakpoints.up('lg')]: { marginBottom: theme.spacing(0.65) },
+  /** Pas de largeur forcée : avec `fill` / `contain`, interfère avec la taille absolue et peut créer une frange sous l’image. */
   '& img': {
     transition: DESIGN_TOKENS.transitions.slow,
-    width: '100%',
-    objectFit: 'contain',
     borderRadius: 0,
     boxShadow: 'none',
   },
@@ -170,6 +175,14 @@ export default function ProjectCard({
     project.siteUrl?.trim() ||
     (!isTimelendrProject && project.downloadUrl?.trim()) ||
     (isTimelendrProject && (timelendrWindowsUrl || timelendrMacosUrl))
+
+  const polaroidPalette: PolaroidFramePalette = {
+    presentationMode,
+    primary,
+    secondary,
+    accent,
+    isNonDefaultPalette,
+  }
 
   const cardImageRaw = resolveProjectCardImage(project) ?? project.imageUrl
   const cardImageHref = cardImageRaw ? resolveImageUrl(cardImageRaw) : ''
@@ -337,76 +350,44 @@ export default function ProjectCard({
                 mx: 0,
                 mb: { xs: 0.85, md: 1 },
                 flexShrink: 0,
-                borderRadius: `${DESIGN_TOKENS.borderRadius.medium}px`,
-                /** Cadre extérieur : quasi blanc, accent Ijipop = fine bordure + halo léger (évite doubles dégradés « boueux »). */
-                px: { xs: 1.25, sm: 1.5 },
-                py: { xs: 1.25, sm: 1.5 },
-                background:
-                  muiTheme.palette.mode === 'dark'
-                    ? alpha('#151920', 0.94)
-                    : isNonDefaultPalette
-                      ? '#fffaf7'
-                      : '#fffcfb',
-                border:
-                  muiTheme.palette.mode === 'dark'
-                    ? `1px solid ${alpha(primary, 0.42)}`
-                    : `1px solid ${alpha(primary, 0.26)}`,
-                boxShadow:
-                  muiTheme.palette.mode === 'dark'
-                    ? `0 10px 28px rgba(0,0,0,0.45), 0 0 20px ${alpha(primary, 0.14)}`
-                    : `0 4px 14px rgba(15,23,42,0.07), 0 0 24px ${alpha(primary, 0.11)}`,
-                ...(isNonDefaultPalette &&
-                muiTheme.palette.mode === 'light'
-                  ? {
-                      boxShadow: `0 4px 14px rgba(92,77,60,0.06), 0 0 22px ${alpha(primary, 0.12)}`,
-                    }
-                  : {}),
+                ...polaroidOuterFrameSx(muiTheme, polaroidPalette),
               })}
             >
               <Box
-                sx={(muiTheme) => ({
-                  position: 'relative',
-                  width: '100%',
-                  aspectRatio: '16 / 9',
-                  overflow: 'hidden',
-                  borderRadius: `${Math.max(8, DESIGN_TOKENS.borderRadius.medium - 4)}px`,
-                  ...(cardImageHref
-                    ? {
-                        /** Fonds autour du screenshot (contain) : lisère chaude liée au thème, pas gris neutre */
-                        background:
-                          muiTheme.palette.mode === 'dark'
-                            ? `linear-gradient(165deg, ${alpha('#252b3d', 0.98)} 0%, ${alpha(primary, 0.16)} 45%, ${alpha('#0f141f', 1)} 100%)`
-                            : `linear-gradient(180deg, #fbf8f3 0%, ${alpha(primary, 0.09)} 55%, ${alpha(secondary, isNonDefaultPalette ? 0.12 : 0.07)} 100%)`,
-                        boxShadow:
-                          muiTheme.palette.mode === 'dark'
-                            ? `inset 0 1px 0 ${alpha('#fff', 0.04)}`
-                            : `inset 0 1px 2px ${alpha(primary, 0.06)}`,
-                        border:
-                          muiTheme.palette.mode === 'dark'
-                            ? `1px solid ${alpha('#fff', 0.05)}`
-                            : `1px solid ${alpha(primary, 0.12)}`,
-                      }
+                sx={(muiTheme) =>
+                  cardImageHref
+                    ? ({
+                        aspectRatio: '16 / 9',
+                        ...polaroidInnerPhotoHoleSx(muiTheme, polaroidPalette),
+                      } as Record<string, unknown>)
                     : {
+                        position: 'relative',
+                        width: '100%',
+                        aspectRatio: '16 / 9',
+                        overflow: 'hidden',
+                        borderRadius: `${Math.max(8, DESIGN_TOKENS.borderRadius.medium - 4)}px`,
                         background: BRAND_GLITCH_GRADIENT,
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
-                      }),
-                })}
+                      }
+                }
               >
                 {cardImageHref ? (
-                  <Image
-                    src={cardImageHref}
-                    alt={project.name}
-                    fill
-                    unoptimized={cardImageHref.startsWith('data:')}
-                    sizes="(max-width: 600px) 100vw, (max-width: 900px) 50vw, 33vw"
-                    style={{
-                      /** Toutes les vignettes projet : même cadre polaroid/dégradé ; voir tout le screenshot sans rogner */
-                      objectFit: 'contain',
-                      objectPosition: 'center',
-                    }}
-                  />
+                  <Box sx={polaroidImageFillAnchorSx}>
+                    <Image
+                      src={cardImageHref}
+                      alt={project.name}
+                      fill
+                      unoptimized={cardImageHref.startsWith('data:')}
+                      sizes="(max-width: 600px) 100vw, (max-width: 900px) 50vw, 33vw"
+                      style={{
+                        /** Toutes les vignettes projet : même cadre polaroid/dégradé ; voir tout le screenshot sans rogner */
+                        objectFit: 'contain',
+                        objectPosition: 'center',
+                      }}
+                    />
+                  </Box>
                 ) : (
                   <Typography
                     variant="h2"
