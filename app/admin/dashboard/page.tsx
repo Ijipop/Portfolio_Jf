@@ -375,7 +375,7 @@ export default function AdminDashboard() {
       setSiteBeigeSaved(null);
       setSiteBeigeDraft('');
       setBeigePresentationBgUrl(null);
-      setSiteBeigeSuccess('Fond réinitialisé sur l’image par défaut (BGpur).');
+      setSiteBeigeSuccess('Fond réinitialisé sur l’image par défaut (OrangeBG).');
       router.refresh();
     } catch {
       setError('Erreur réseau lors de la réinitialisation');
@@ -845,7 +845,7 @@ export default function AdminDashboard() {
         <Card sx={{ mb: 4 }}>
           <CardContent>
             <Typography variant="h6" component="h2" gutterBottom>
-              Fond du mode « Site » (texture centrale, ex. BGpur)
+              Fond du mode « Site » (texture centrale, OrangeBG par défaut)
             </Typography>
             <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
               Remplace l’image affichée derrière le contenu en mode présentation Site (beige). URL https, chemin
@@ -908,7 +908,7 @@ export default function AdminDashboard() {
                   (siteBeigeSaved === null && siteBeigeDraft.trim() === '')
                 }
               >
-                Réinitialiser (BGpur par défaut)
+                Réinitialiser (OrangeBG par défaut)
               </Button>
             </Box>
             <Typography variant="caption" color="text.secondary" display="block" sx={{ mb: 1 }}>

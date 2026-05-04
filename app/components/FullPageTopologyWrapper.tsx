@@ -75,9 +75,7 @@ export default function FullPageTopologyWrapper({ children }: FullPageTopologyWr
       <Box
         component="div"
         data-testid="graphics-background-layer"
-        data-graphics-mode={
-          useStaticProBackground ? 'beige' : useLightFallback ? 'light' : 'full'
-        }
+        data-graphics-mode={useStaticProBackground ? 'beige' : useLightFallback ? 'light' : 'full'}
         data-graphics-reason={useStaticProBackground ? 'presentation-beige' : downgradeReason ?? 'none'}
         sx={{
           position: 'fixed',

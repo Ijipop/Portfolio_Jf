@@ -12,11 +12,10 @@ interface PageWrapperProps {
   children: ReactNode
   /**
    * Variant du background à utiliser
-   * - 'default': utilise GRADIENTS.backgrounds.light/dark selon le thème
+   * - 'default': utilise les variables du thème / gradient
    * - 'alternate': utilise GRADIENTS.backgrounds.lightAlternate
-   * - 'projects': utilise GRADIENTS.backgrounds.lightProjects
    */
-  backgroundVariant?: 'default' | 'alternate' | 'projects'
+  backgroundVariant?: 'default' | 'alternate'
   /**
    * Afficher l'overlay radial (::before)
    */
@@ -45,54 +44,46 @@ export default function PageWrapper({
   const pathname = usePathname()
   const isTopologyRoute = shouldShowTopology(pathname)
   const { customTheme } = useAdvancedTheme()
-  
-  // Fonction pour obtenir le background initial (plus de dépendance au dark mode)
+
   const getInitialBackground = () => {
     switch (backgroundVariant) {
       case 'alternate':
         return GRADIENTS.backgrounds.lightAlternate
-      case 'projects':
-        return GRADIENTS.backgrounds.lightProjects
       default:
         return GRADIENTS.backgrounds.light
     }
   }
-  
+
   const [background, setBackground] = useState<string>(getInitialBackground())
-  
-  // Mettre à jour le background quand le thème change
+
   useEffect(() => {
     const updateBackground = () => {
       if (typeof window === 'undefined') return
-      
-      // Lire les CSS variables définies par ThemeSelector
+
       const bg = getComputedStyle(document.documentElement).getPropertyValue('--theme-bg')?.trim()
       const bg2 = getComputedStyle(document.documentElement).getPropertyValue('--theme-bg2')?.trim()
-      
+
       if (bg && bg2) {
         setBackground(`linear-gradient(135deg, ${bg} 0%, ${bg2} 25%, ${bg} 50%, ${bg2} 75%, ${bg} 100%)`)
         return
       }
-      
-      // Fallback sur customTheme
+
       if (customTheme?.bg && customTheme?.bg2) {
         setBackground(`linear-gradient(135deg, ${customTheme.bg} 0%, ${customTheme.bg2} 25%, ${customTheme.bg} 50%, ${customTheme.bg2} 75%, ${customTheme.bg} 100%)`)
         return
       }
-      
-      // Fallback sur les gradients statiques
+
       setBackground(getInitialBackground())
     }
-    
+
     updateBackground()
-    
-    // Observer les changements de CSS variables
+
     const observer = new MutationObserver(updateBackground)
     observer.observe(document.documentElement, {
       attributes: true,
       attributeFilter: ['style'],
     })
-    
+
     return () => {
       observer.disconnect()
     }
@@ -100,11 +91,8 @@ export default function PageWrapper({
 
   const getOverlay = () => {
     if (!showRadialOverlay) return 'none'
-    
-    // Utiliser overlayVariant pour déterminer l'overlay (plus de dépendance au dark mode)
-    return overlayVariant === 'dark' 
-      ? GRADIENTS.overlays.darkRadial 
-      : GRADIENTS.overlays.lightRadial
+
+    return overlayVariant === 'dark' ? GRADIENTS.overlays.darkRadial : GRADIENTS.overlays.lightRadial
   }
 
   return (
@@ -138,4 +126,3 @@ export default function PageWrapper({
     </Box>
   )
 }
-

@@ -157,12 +157,16 @@ export default function ProjectCard({
   const cardImageRaw = resolveProjectCardImage(project) ?? project.imageUrl
   const cardImageHref = cardImageRaw ? resolveImageUrl(cardImageRaw) : ''
   const projectTechs = project.technologies.split(',').map((tech) => tech.trim()).filter(Boolean)
-  const featuredTechs = projectTechs.slice(0, 3)
   const projectRoleLabel = cardVariant === 'web' ? t('projects.metaRoleWeb') : t('projects.metaRoleSoftware')
-  const projectDurationLabel = project.createdAt
+  const yearSegment = project.createdAt
     ? `${t('projects.metaYear')} ${new Date(project.createdAt).getFullYear()}`
-    : t('projects.metaDuration')
-  const projectStackLabel = featuredTechs[0] ?? t('projects.metaStack')
+    : null
+  const stackFallback = projectTechs[0] ?? t('projects.metaStack')
+  /** Année seulement si connue ; pas de « Livraison ciblée ». Pas de pastille stack si les badges listent déjà les technos. */
+  const projectMetaLineItems: string[] =
+    projectTechs.length > 0
+      ? [projectRoleLabel, yearSegment].filter((item): item is string => Boolean(item))
+      : [projectRoleLabel, yearSegment, stackFallback].filter((item): item is string => Boolean(item))
   const showDescriptionToggle = project.description.length > DESCRIPTION_EXPAND_THRESHOLD
 
   const linkIconButtonSx = {
@@ -384,27 +388,6 @@ export default function ProjectCard({
                 >
                   {project.name}
                 </Typography>
-                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                  {featuredTechs.slice(0, 2).map((tech) => (
-                    <Box
-                      key={tech}
-                      component="span"
-                      sx={{
-                        px: 0.75,
-                        py: 0.25,
-                        borderRadius: 999,
-                        background: 'rgba(255,255,255,0.18)',
-                        border: '1px solid rgba(255,255,255,0.25)',
-                        fontSize: '0.62rem',
-                        fontWeight: 800,
-                        letterSpacing: '0.08em',
-                        textTransform: 'uppercase',
-                      }}
-                    >
-                      {tech}
-                    </Box>
-                  ))}
-                </Box>
               </Box>
             </ProjectImageContainer>
 
@@ -515,8 +498,8 @@ export default function ProjectCard({
                   textTransform: 'uppercase',
                 }}
               >
-                {[projectRoleLabel, projectDurationLabel, projectStackLabel].map((item, metaIndex) => (
-                  <React.Fragment key={`${project.id}-meta-${item}`}>
+                {projectMetaLineItems.map((item, metaIndex) => (
+                  <React.Fragment key={`${project.id}-meta-${metaIndex}-${item}`}>
                     {metaIndex > 0 && (
                       <Box component="span" sx={{ width: 3, height: 3, borderRadius: '50%', background: primary, opacity: 0.8 }} />
                     )}

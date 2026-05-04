@@ -94,6 +94,8 @@ export default function Projets() {
   const textColor = useTextColor()
   const { t } = useLanguage()
   const { mode: presentationMode } = usePresentationMode()
+  /** Couleurs de section alignées sur la palette / thème courant (Créa et Site). */
+  const projetsSectionText = textColor
   const [projects, setProjects] = useState<Project[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -302,7 +304,7 @@ export default function Projets() {
   }
 
   return (
-    <PageWrapper backgroundVariant="projects" overlayVariant="light" overflowX="hidden" overflowY="auto">
+    <PageWrapper backgroundVariant="default" overlayVariant="light" overflowX="hidden" overflowY="auto">
       <AppBarComponent />
 
       <HeaderSection title={<IjipopGlitchTitle text={t('projects.title')} />} subtitle={t('projects.subtitle')} />
@@ -324,7 +326,7 @@ export default function Projets() {
               inProgress={getInProgressProjects()}
               t={t}
               containerSx={webSectionSurfaceSx}
-              textColor={textColor}
+              textColor={projetsSectionText}
               primary={primary}
             />
           </ScrollReveal>
@@ -343,7 +345,7 @@ export default function Projets() {
                   fontWeight: 700,
                   textTransform: 'none',
                   borderColor: `${alpha(primary, 0.35)} !important`,
-                  color: textColor,
+                  color: projetsSectionText,
                   '&.Mui-selected': {
                     bgcolor: alpha(primary, 0.18),
                     color: primary,
@@ -365,8 +367,20 @@ export default function Projets() {
                 sx={{
                   minHeight: 44,
                   mb: 1.5,
-                  '& .MuiTab-root': { textTransform: 'none', fontWeight: 800, fontSize: '0.85rem' },
-                  '& .MuiTabs-indicator': { height: 3, borderRadius: 1 },
+                  '& .MuiTab-root': {
+                    textTransform: 'none',
+                    fontWeight: 800,
+                    fontSize: '0.85rem',
+                    color: alpha(projetsSectionText, 0.72),
+                    '&.Mui-selected': {
+                      color: projetsSectionText,
+                    },
+                  },
+                  '& .MuiTabs-indicator': {
+                    height: 3,
+                    borderRadius: 1,
+                    bgcolor: primary,
+                  },
                 }}
               >
                 <Tab label={t('projects.webSectionPersonalTitle')} />
@@ -375,11 +389,22 @@ export default function Projets() {
 
               {webAudienceTab === 0 && (
                 <Box>
-                  <Typography variant="body2" sx={{ mb: 2, color: textColor, opacity: 0.82, px: 0.5 }}>
+                  <Typography
+                    variant="body2"
+                    sx={{
+                      mb: 2,
+                      px: 0.5,
+                      color: projetsSectionText,
+                      opacity: 0.82,
+                    }}
+                  >
                     {t('projects.webSectionPersonalSubtitle')}
                   </Typography>
                   {webPersonalProjects.length === 0 ? (
-                    <Typography variant="body2" sx={{ color: textColor, opacity: 0.75, px: 0.5 }}>
+                    <Typography
+                      variant="body2"
+                      sx={{ px: 0.5, color: projetsSectionText, opacity: 0.75 }}
+                    >
                       {t('projects.webSectionEmpty')}
                     </Typography>
                   ) : (
@@ -410,11 +435,22 @@ export default function Projets() {
 
               {webAudienceTab === 1 && (
                 <Box>
-                  <Typography variant="body2" sx={{ mb: 2, color: textColor, opacity: 0.82, px: 0.5 }}>
+                  <Typography
+                    variant="body2"
+                    sx={{
+                      mb: 2,
+                      px: 0.5,
+                      color: projetsSectionText,
+                      opacity: 0.82,
+                    }}
+                  >
                     {t('projects.webSectionProfessionalSubtitle')}
                   </Typography>
                   {webProfessionalProjects.length === 0 ? (
-                    <Typography variant="body2" sx={{ color: textColor, opacity: 0.75, px: 0.5 }}>
+                    <Typography
+                      variant="body2"
+                      sx={{ px: 0.5, color: projetsSectionText, opacity: 0.75 }}
+                    >
                       {t('projects.webSectionEmpty')}
                     </Typography>
                   ) : (
