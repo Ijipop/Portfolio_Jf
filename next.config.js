@@ -42,9 +42,16 @@ const outputFileTracingExcludesTooling = [
   'node_modules/typescript/**/*',
 ]
 
+/**
+ * Le traçage suit `path.join(process.cwd(), 'public', …)` utilisé dans /api/upload : sans exclusion,
+ * tout `public/` (centaines de Mo en assets) peut être copié dans chaque fonction — dépassement 250 Mo Vercel.
+ */
+const outputFileTracingExcludesPublic = ['public/**/*']
+
 const outputFileTracingExcludesServer = [
   ...outputFileTracingExcludesSharp,
   ...outputFileTracingExcludesTooling,
+  ...outputFileTracingExcludesPublic,
 ]
 
 /** @type {import('next').NextConfig} */
