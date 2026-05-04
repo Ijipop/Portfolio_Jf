@@ -1,7 +1,45 @@
 const path = require('path')
 
+/**
+ * Réduit le traçage des fichiers serverless (limite Vercel : 250 Mo décompressés par fonction).
+ * Sur la build Linux, npm n’installe qu’un sous-ensemble de sharp ; en cas de traçage trop large,
+ * on exclut explicitement les variantes non pertinentes pour Vercel (glibc x64).
+ * @see https://vercel.com/guides/troubleshooting-function-250mb-limit
+ */
+const outputFileTracingExcludesSharp = [
+  'node_modules/@img/sharp-darwin-arm64/**/*',
+  'node_modules/@img/sharp-darwin-x64/**/*',
+  'node_modules/@img/sharp-libvips-darwin-arm64/**/*',
+  'node_modules/@img/sharp-libvips-darwin-x64/**/*',
+  'node_modules/@img/sharp-linux-arm/**/*',
+  'node_modules/@img/sharp-linux-arm64/**/*',
+  'node_modules/@img/sharp-linux-ppc64/**/*',
+  'node_modules/@img/sharp-linux-riscv64/**/*',
+  'node_modules/@img/sharp-linux-s390x/**/*',
+  'node_modules/@img/sharp-linuxmusl-arm64/**/*',
+  'node_modules/@img/sharp-linuxmusl-x64/**/*',
+  'node_modules/@img/sharp-libvips-linux-arm/**/*',
+  'node_modules/@img/sharp-libvips-linux-arm64/**/*',
+  'node_modules/@img/sharp-libvips-linux-ppc64/**/*',
+  'node_modules/@img/sharp-libvips-linux-riscv64/**/*',
+  'node_modules/@img/sharp-libvips-linux-s390x/**/*',
+  'node_modules/@img/sharp-libvips-linuxmusl-arm64/**/*',
+  'node_modules/@img/sharp-libvips-linuxmusl-x64/**/*',
+  'node_modules/@img/sharp-wasm32/**/*',
+  'node_modules/@img/sharp-win32-arm64/**/*',
+  'node_modules/@img/sharp-win32-ia32/**/*',
+  'node_modules/@img/sharp-win32-x64/**/*',
+]
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  serverExternalPackages: ['@prisma/client', 'prisma', 'sharp', 'bcryptjs'],
+  outputFileTracingExcludes: {
+    // Picomatch « contains » : couvre les routes App Router normalisées (/, /api/…, etc.)
+    '**': outputFileTracingExcludesSharp,
+    '/': outputFileTracingExcludesSharp,
+  },
+
   // Évite l’avertissement « multiple lockfiles » quand un package-lock existe au-dessus de Portfolio/.
   turbopack: {
     root: path.join(__dirname),
