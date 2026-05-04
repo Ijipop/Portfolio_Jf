@@ -7,6 +7,39 @@ import { NextRequest, NextResponse } from 'next/server'
 
 type ProjectType = 'logiciel' | 'web'
 
+const PUBLIC_CACHE_HEADERS = {
+	'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=86400',
+}
+
+const PRIVATE_CACHE_HEADERS = {
+	'Cache-Control': 'no-store',
+}
+
+const publicProjectSelect = {
+	id: true,
+	name: true,
+	description: true,
+	technologies: true,
+	status: true,
+	projectType: true,
+	webAudience: true,
+	displayOrder: true,
+	url: true,
+	siteUrl: true,
+	downloadUrl: true,
+	imageUrl: true,
+} as const
+
+const adminProjectSelect = {
+	...publicProjectSelect,
+	createdAt: true,
+	updatedAt: true,
+} as const
+
+function cacheHeadersForRequest(request: NextRequest) {
+	return request.cookies.has('adminToken') ? PRIVATE_CACHE_HEADERS : PUBLIC_CACHE_HEADERS
+}
+
 function parseProjectType(input: unknown): ProjectType {
   return input === 'logiciel' ? 'logiciel' : 'web'
 }
@@ -18,21 +51,25 @@ function parseDisplayOrder(input: unknown): number {
 }
 
 // GET /api/projects - Obtenir tous les projects
-export async function GET()
+export async function GET(request: NextRequest)
 {
 	try
 	{
+		const isAdminRequest = request.cookies.has('adminToken')
 		const projects = await prisma.project.findMany({
 			orderBy: [
         { displayOrder: 'asc' },
         { id: 'asc' },
-      ] as any
+      ] as any,
+			select: isAdminRequest ? adminProjectSelect : publicProjectSelect,
 		})
 		
 		return NextResponse.json({
 			success: true,
 			data: projects,
 			message: `${projects.length} project(s) trouvé(s)`
+		}, {
+			headers: cacheHeadersForRequest(request),
 		})
 	}
 	catch (error)

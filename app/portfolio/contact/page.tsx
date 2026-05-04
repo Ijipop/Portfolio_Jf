@@ -29,6 +29,9 @@ import ProjectWebBriefSection, {
   emptyProjectWebBrief,
   type ProjectWebBriefState,
 } from '../../components/contact/ProjectWebBriefSection'
+import AiLeadDiagnosis, {
+  type AiLeadDiagnosisResult,
+} from '../../components/contact/AiLeadDiagnosis'
 import { DESIGN_TOKENS } from '../../design-system/constants'
 import { useTextColor } from '../../hooks/useTextColor'
 import { useThemeColors } from '../../hooks/useThemeColors'
@@ -126,6 +129,7 @@ export default function Contact() {
   })
   const [includeProjectWeb, setIncludeProjectWeb] = useState(false)
   const [projectWeb, setProjectWeb] = useState<ProjectWebBriefState>(() => emptyProjectWebBrief())
+  const [aiDiagnosis, setAiDiagnosis] = useState<AiLeadDiagnosisResult | null>(null)
   const [formErrors, setFormErrors] = useState({
     name: '',
     email: '',
@@ -196,10 +200,23 @@ export default function Contact() {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
     setFormData(prev => ({ ...prev, [name]: value }))
+    if (name !== 'bm_verify') {
+      setAiDiagnosis(null)
+    }
     
     // Validation en temps réel
     const error = validateField(name, value)
     setFormErrors(prev => ({ ...prev, [name]: error }))
+  }
+
+  const handleIncludeProjectWebChange = (next: boolean) => {
+    setIncludeProjectWeb(next)
+    setAiDiagnosis(null)
+  }
+
+  const handleProjectWebChange = (next: ProjectWebBriefState) => {
+    setProjectWeb(next)
+    setAiDiagnosis(null)
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -234,6 +251,7 @@ export default function Contact() {
         body: JSON.stringify({
           ...formData,
           ...(includeProjectWeb ? { projectWeb } : {}),
+          ...(aiDiagnosis ? { aiDiagnosis } : {}),
         }),
       })
       
@@ -252,6 +270,7 @@ export default function Contact() {
         setFormErrors({ name: '', email: '', subject: '', message: '' })
         setIncludeProjectWeb(false)
         setProjectWeb(emptyProjectWebBrief())
+        setAiDiagnosis(null)
 
         const restoreScroll = () => {
           const el = document.querySelector('.topology-scroll-container') as HTMLElement | null
@@ -428,9 +447,19 @@ export default function Contact() {
 
                 <ProjectWebBriefSection
                   include={includeProjectWeb}
-                  onIncludeChange={setIncludeProjectWeb}
+                  onIncludeChange={handleIncludeProjectWebChange}
                   value={projectWeb}
-                  onChange={setProjectWeb}
+                  onChange={handleProjectWebChange}
+                  textColor={textColor}
+                  compact={useCompactContact}
+                />
+
+                <AiLeadDiagnosis
+                  formData={formData}
+                  projectWeb={projectWeb}
+                  includeProjectWeb={includeProjectWeb}
+                  value={aiDiagnosis}
+                  onChange={setAiDiagnosis}
                   textColor={textColor}
                   compact={useCompactContact}
                 />

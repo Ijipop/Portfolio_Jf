@@ -5,6 +5,32 @@ import { TimelendrPlatform } from '@prisma/client'
 
 const MAX_CHANGELOG = 20_000
 
+const PUBLIC_CACHE_HEADERS = {
+  'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=86400',
+}
+
+const PRIVATE_CACHE_HEADERS = {
+  'Cache-Control': 'no-store',
+}
+
+const publicReleaseSelect = {
+  id: true,
+  filePath: true,
+  changelog: true,
+  version: true,
+  platform: true,
+  createdAt: true,
+} as const
+
+const adminReleaseSelect = {
+  ...publicReleaseSelect,
+  updatedAt: true,
+} as const
+
+function cacheHeadersForRequest(request: NextRequest) {
+  return request.cookies.has('adminToken') ? PRIVATE_CACHE_HEADERS : PUBLIC_CACHE_HEADERS
+}
+
 function isValidZipUrl(urlString: string): boolean {
   try {
     const u = new URL(urlString)
@@ -22,12 +48,44 @@ function parsePlatform(raw: unknown): TimelendrPlatform | null {
 }
 
 // GET /api/timelendr/releases — liste publique des versions
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
+    const mode = request.nextUrl.searchParams.get('mode')
+    if (mode === 'latest') {
+      const [latestWindows, latestMacos] = await Promise.all([
+        prisma.timelendrRelease.findFirst({
+          where: { platform: { in: [TimelendrPlatform.windows, TimelendrPlatform.both] } },
+          orderBy: { createdAt: 'desc' },
+          select: { filePath: true },
+        }),
+        prisma.timelendrRelease.findFirst({
+          where: { platform: { in: [TimelendrPlatform.macos, TimelendrPlatform.both] } },
+          orderBy: { createdAt: 'desc' },
+          select: { filePath: true },
+        }),
+      ])
+
+      return NextResponse.json(
+        {
+          success: true,
+          data: {
+            windowsUrl: latestWindows?.filePath ?? null,
+            macosUrl: latestMacos?.filePath ?? null,
+          },
+        },
+        { headers: cacheHeadersForRequest(request) }
+      )
+    }
+
+    const isAdminRequest = request.cookies.has('adminToken')
     const releases = await prisma.timelendrRelease.findMany({
       orderBy: { createdAt: 'desc' },
+      select: isAdminRequest ? adminReleaseSelect : publicReleaseSelect,
     })
-    return NextResponse.json({ success: true, data: releases })
+    return NextResponse.json(
+      { success: true, data: releases },
+      { headers: cacheHeadersForRequest(request) }
+    )
   } catch (error) {
     console.error('GET timelendr releases:', error)
     return NextResponse.json(

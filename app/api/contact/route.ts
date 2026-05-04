@@ -50,6 +50,22 @@ const BUDGET_LABELS: Record<string, string> = {
   discuss: 'À discuter',
 }
 
+type AiPriority = 'high' | 'medium' | 'low'
+
+interface SafeAiDiagnosis {
+  priority: AiPriority
+  summary: string
+  recommendedSolution: string
+  conversionOpportunities: string[]
+  nextQuestions: string[]
+}
+
+const AI_PRIORITY_LABELS: Record<AiPriority, string> = {
+  high: 'Priorité élevée',
+  medium: 'Priorité moyenne',
+  low: 'Priorité basse',
+}
+
 function formatProjectWebHtml(pw: Record<string, unknown>): string | null {
   const rows: string[] = []
 
@@ -121,6 +137,70 @@ function formatProjectWebHtml(pw: Record<string, unknown>): string | null {
   `
 }
 
+function toLimitedString(value: unknown, maxLength: number): string | null {
+  if (typeof value !== 'string') return null
+  const trimmed = value.trim()
+  if (!trimmed || trimmed.length > maxLength) return null
+  return trimmed
+}
+
+function toLimitedStringArray(value: unknown, maxItems: number, maxItemLength: number): string[] | null {
+  if (!Array.isArray(value)) return null
+  const clean = value
+    .map((item) => toLimitedString(item, maxItemLength))
+    .filter((item): item is string => Boolean(item))
+    .slice(0, maxItems)
+  return clean.length > 0 ? clean : null
+}
+
+function parseAiDiagnosis(input: unknown): SafeAiDiagnosis | null {
+  if (!input || typeof input !== 'object' || Array.isArray(input)) return null
+  const data = input as Record<string, unknown>
+  const priority =
+    data.priority === 'high' || data.priority === 'medium' || data.priority === 'low'
+      ? data.priority
+      : null
+  const summary = toLimitedString(data.summary, 450)
+  const recommendedSolution = toLimitedString(data.recommendedSolution, 450)
+  const conversionOpportunities = toLimitedStringArray(data.conversionOpportunities, 4, 160)
+  const nextQuestions = toLimitedStringArray(data.nextQuestions, 4, 180)
+
+  if (!priority || !summary || !recommendedSolution || !conversionOpportunities || !nextQuestions) {
+    return null
+  }
+
+  return {
+    priority,
+    summary,
+    recommendedSolution,
+    conversionOpportunities,
+    nextQuestions,
+  }
+}
+
+function listRow(label: string, values: string[]): string {
+  return emailRow(label, values.map((value) => `• ${value}`).join('\n'))
+}
+
+function formatAiDiagnosisHtml(input: unknown): string {
+  const diagnosis = parseAiDiagnosis(input)
+  if (!diagnosis) return ''
+
+  const rows = [
+    emailRow('Priorité IA', AI_PRIORITY_LABELS[diagnosis.priority]),
+    emailRow('Résumé IA', diagnosis.summary),
+    emailRow('Solution recommandée', diagnosis.recommendedSolution),
+    listRow('Opportunités de conversion', diagnosis.conversionOpportunities),
+    listRow('Questions à poser', diagnosis.nextQuestions),
+  ].join('')
+
+  return `
+    <hr style="border:none;border-top:1px solid #dee2e6;margin:24px 0;" />
+    <h3 style="font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;font-size:16px;color:#212529;margin:0 0 12px 0;">Diagnostic IA de qualification</h3>
+    ${wrapTable(rows)}
+  `
+}
+
 function resendErrorToMessage(error: unknown): string {
   if (error && typeof error === 'object' && 'message' in error) {
     const m = (error as { message: unknown }).message
@@ -162,7 +242,7 @@ export async function POST(request: NextRequest) {
     })
     if (limited) return limited
 
-    const { name, email, subject, message, projectWeb } = body
+    const { name, email, subject, message, projectWeb, aiDiagnosis } = body
 
     // Validation des champs
     if (
@@ -228,6 +308,7 @@ export async function POST(request: NextRequest) {
         projectSection = formatted
       }
     }
+    const aiDiagnosisSection = formatAiDiagnosisHtml(aiDiagnosis)
 
     // Expéditeur : domaine vérifié dans Resend (ex. contact@votredomaine.com). Voir RESEND_FROM sur Vercel.
     const fromAddress =
@@ -250,6 +331,7 @@ export async function POST(request: NextRequest) {
       <div style="font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:#212529;">
         <p style="margin:0 0 12px 0;font-size:15px;font-weight:600;">Nouveau message — Portfolio</p>
         ${wrapTable(mainRows)}
+        ${aiDiagnosisSection}
         ${projectSection}
       </div>
     `
