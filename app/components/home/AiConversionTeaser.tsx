@@ -186,16 +186,26 @@ export default function AiConversionTeaser() {
                   background: (theme) =>
                     theme.palette.mode === 'dark' ? alpha('#ffffff', 0.045) : alpha('#ffffff', 0.62),
                   color: textColor,
-                  minHeight: 112,
+                  minHeight: { xs: 118, sm: 122 },
                   display: 'flex',
                   flexDirection: 'column',
                   justifyContent: 'space-between',
-                  gap: 1.25,
+                  gap: 1.1,
                 }}
               >
-                <Icon sx={{ color: primary, fontSize: 30 }} />
-                <Box>
-                  <Typography sx={{ fontWeight: 900, lineHeight: 1.2 }}>
+                <Icon sx={{ color: primary, fontSize: 30, flexShrink: 0 }} />
+                <Box sx={{ minWidth: 0 }}>
+                  <Typography
+                    sx={{
+                      fontWeight: 900,
+                      lineHeight: 1.28,
+                      fontSize: { xs: '0.78rem', sm: '0.82rem' },
+                      letterSpacing: '0.01em',
+                      hyphens: 'auto',
+                      overflowWrap: 'break-word',
+                      wordBreak: 'break-word',
+                    }}
+                  >
                     {t(labelKey)}
                   </Typography>
                 </Box>

@@ -1,5 +1,4 @@
 import { consumeIpRateLimitOrResponse } from '@/lib/rate-limit-ip'
-import OpenAI from 'openai'
 import { NextRequest, NextResponse } from 'next/server'
 
 type Priority = 'high' | 'medium' | 'low'
@@ -244,6 +243,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ success: false, error: 'Configuration API manquante' }, { status: 500 })
     }
 
+    const { default: OpenAI } = await import('openai')
     const openai = new OpenAI({ apiKey, timeout: 12_000 })
     const completion = await openai.chat.completions.create({
       model: 'gpt-4o-mini',

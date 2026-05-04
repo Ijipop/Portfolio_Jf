@@ -1,5 +1,4 @@
 import { consumeIpRateLimitOrResponse } from '@/lib/rate-limit-ip'
-import OpenAI from 'openai'
 import { NextRequest, NextResponse } from 'next/server'
 import { THEMES, getAvailableThemes, type ThemeName } from '@/design-system/themes'
 
@@ -71,6 +70,7 @@ export async function POST(request: NextRequest) {
       )
     }
 
+    const { default: OpenAI } = await import('openai')
     const openai = new OpenAI({ apiKey })
     const prompt = buildMoodPrompt(mood, locale)
 

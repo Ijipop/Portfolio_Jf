@@ -1,4 +1,4 @@
-const TOPOLOGY_PATH_PREFIXES = ['/portfolio', '/logiciel', '/pageweb'] as const
+const TOPOLOGY_PATH_PREFIXES = ['/portfolio', '/logiciel'] as const
 
 type TopologyScope = 'targeted' | 'global'
 

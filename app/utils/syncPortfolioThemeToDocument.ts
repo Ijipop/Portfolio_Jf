@@ -1,8 +1,8 @@
 import { THEMES, type ThemeName } from '@/design-system/themes'
 import { getImageUrl } from '@/lib/getImageUrl'
 
-/** Image de fond réservée au mode présentation « Site / beige » (servie depuis /public). */
-export const BEIGE_PRESENTATION_BG_IMAGE = '/img/BGpur.png'
+/** Image de fond par défaut du mode présentation « Site » (`beige`, servie depuis /public). */
+export const BEIGE_PRESENTATION_BG_IMAGE = '/img/OrangeBG.png'
 
 function resolvedBeigePresentationImageUrl(override: string | null | undefined): string {
   const v = override?.trim()
@@ -66,9 +66,9 @@ function getCardColorsForTheme(theme: (typeof THEMES)[ThemeName], name: ThemeNam
 }
 
 export type SyncPortfolioThemeOptions = {
-  /** Mode présentation « beige » : fond = BGpur.png + voile (pas seulement le dégradé latte). */
+  /** Mode présentation « Site » (beige) : fond image + voile thème. */
   beigePresentation?: boolean
-  /** Remplace BGpur.png (URL absolue ou chemin `/…`) si défini. */
+  /** Remplace l’image par défaut du mode Site (URL absolue ou chemin `/…`) si défini. */
   beigePresentationBgUrl?: string | null
 }
 

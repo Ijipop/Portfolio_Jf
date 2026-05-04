@@ -78,8 +78,8 @@ test('logiciel and pageweb routes are reachable', async ({ page }) => {
   await page.goto('/logiciel', { waitUntil: 'domcontentloaded' })
   await expect(page).toHaveURL(/\/logiciel/)
 
-  await page.goto('/pageweb', { waitUntil: 'domcontentloaded' })
-  await expect(page).toHaveURL(/\/pageweb/)
+  await page.goto('/portfolio/pageweb', { waitUntil: 'domcontentloaded' })
+  await expect(page).toHaveURL(/\/portfolio\/pageweb/)
 })
 
 test('demos index and demo routes', async ({ page }) => {

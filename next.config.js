@@ -1,7 +1,68 @@
 const path = require('path')
 
+/**
+ * Réduit le traçage des fichiers serverless (limite Vercel : 250 Mo décompressés par fonction).
+ * Sur la build Linux, npm n’installe qu’un sous-ensemble de sharp ; en cas de traçage trop large,
+ * on exclut explicitement les variantes non pertinentes pour Vercel (glibc x64).
+ * @see https://vercel.com/guides/troubleshooting-function-250mb-limit
+ */
+const outputFileTracingExcludesSharp = [
+  'node_modules/@img/sharp-darwin-arm64/**/*',
+  'node_modules/@img/sharp-darwin-x64/**/*',
+  'node_modules/@img/sharp-libvips-darwin-arm64/**/*',
+  'node_modules/@img/sharp-libvips-darwin-x64/**/*',
+  'node_modules/@img/sharp-linux-arm/**/*',
+  'node_modules/@img/sharp-linux-arm64/**/*',
+  'node_modules/@img/sharp-linux-ppc64/**/*',
+  'node_modules/@img/sharp-linux-riscv64/**/*',
+  'node_modules/@img/sharp-linux-s390x/**/*',
+  'node_modules/@img/sharp-linuxmusl-arm64/**/*',
+  'node_modules/@img/sharp-linuxmusl-x64/**/*',
+  'node_modules/@img/sharp-libvips-linux-arm/**/*',
+  'node_modules/@img/sharp-libvips-linux-arm64/**/*',
+  'node_modules/@img/sharp-libvips-linux-ppc64/**/*',
+  'node_modules/@img/sharp-libvips-linux-riscv64/**/*',
+  'node_modules/@img/sharp-libvips-linux-s390x/**/*',
+  'node_modules/@img/sharp-libvips-linuxmusl-arm64/**/*',
+  'node_modules/@img/sharp-libvips-linuxmusl-x64/**/*',
+  'node_modules/@img/sharp-wasm32/**/*',
+  'node_modules/@img/sharp-win32-arm64/**/*',
+  'node_modules/@img/sharp-win32-ia32/**/*',
+  'node_modules/@img/sharp-win32-x64/**/*',
+]
+
+/** Évite d’embarquer des outils dev / E2E dans le traçage serverless si npm les a présents localement. */
+const outputFileTracingExcludesTooling = [
+  'node_modules/@playwright/test/**/*',
+  'node_modules/playwright/**/*',
+  'node_modules/playwright-core/**/*',
+  'node_modules/vitest/**/*',
+  'node_modules/@vitest/**/*',
+  'node_modules/jsdom/**/*',
+  'node_modules/typescript/**/*',
+]
+
+/**
+ * Le traçage suit `path.join(process.cwd(), 'public', …)` utilisé dans /api/upload : sans exclusion,
+ * tout `public/` (centaines de Mo en assets) peut être copié dans chaque fonction — dépassement 250 Mo Vercel.
+ */
+const outputFileTracingExcludesPublic = ['public/**/*']
+
+const outputFileTracingExcludesServer = [
+  ...outputFileTracingExcludesSharp,
+  ...outputFileTracingExcludesTooling,
+  ...outputFileTracingExcludesPublic,
+]
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  serverExternalPackages: ['@prisma/client', 'prisma', 'sharp', 'bcryptjs', 'openai'],
+  outputFileTracingExcludes: {
+    // Picomatch « contains » : couvre les routes App Router normalisées (/, /api/…, etc.)
+    '**': outputFileTracingExcludesServer,
+    '/': outputFileTracingExcludesServer,
+  },
+
   // Évite l’avertissement « multiple lockfiles » quand un package-lock existe au-dessus de Portfolio/.
   turbopack: {
     root: path.join(__dirname),
@@ -10,6 +71,8 @@ const nextConfig = {
     serverActions: {
       bodySizeLimit: '50mb',
     },
+    // Moins de code MUI / icônes importé par barrel (serveur + client).
+    optimizePackageImports: ['@mui/material', '@mui/icons-material', '@mui/material-nextjs', 'lucide-react'],
   },
 
   // Image optimization
@@ -33,10 +96,14 @@ const nextConfig = {
     return [
       { source: '/logiciel/timelendar', destination: '/logiciel/timelendr', permanent: true },
       { source: '/api/timelendar/:path*', destination: '/api/timelendr/:path*', permanent: true },
+      { source: '/pageweb', destination: '/portfolio/pageweb', permanent: true },
     ]
   },
 
   // Headers de sécurité et performance
+  // Note : pas de `X-Content-Type-Options: nosniff` sur le catch-all — en dev (Turbopack), certains
+  // chunks `.css` sous `/_next/static` peuvent recevoir `text/plain` ; avec nosniff le navigateur refuse
+  // d’appliquer la feuille de style (MIME strict).
   async headers() {
     return [
       {
@@ -53,10 +120,6 @@ const nextConfig = {
           {
             key: 'X-Frame-Options',
             value: 'SAMEORIGIN'
-          },
-          {
-            key: 'X-Content-Type-Options',
-            value: 'nosniff'
           },
           {
             key: 'Referrer-Policy',

@@ -179,7 +179,7 @@ export default function LandingPage() {
                     {t('nav.software')}
                   </Button>
                 </Link>
-                <Link href="/pageweb" style={{ textDecoration: 'none' }}>
+                <Link href="/portfolio/pageweb" style={{ textDecoration: 'none' }}>
                   <Button fullWidth size="medium" sx={accordionButtonSecondary}>
                     {t('nav.webSites')}
                   </Button>
@@ -224,7 +224,7 @@ export default function LandingPage() {
           {t('nav.software')}
         </Link>
         <Typography component="span" sx={{ mx: 1, color: 'rgba(255,255,255,0.35)' }}>·</Typography>
-        <Link href="/pageweb" style={{ fontSize: '0.875rem', color: 'rgba(255,255,255,0.8)', textDecoration: 'none' }} className="landing-footer-link">
+        <Link href="/portfolio/pageweb" style={{ fontSize: '0.875rem', color: 'rgba(255,255,255,0.8)', textDecoration: 'none' }} className="landing-footer-link">
           {t('nav.webSites')}
         </Link>
         <Typography component="span" sx={{ mx: 1, color: 'rgba(255,255,255,0.35)' }}>·</Typography>

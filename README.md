@@ -5,7 +5,7 @@ Site vitrine et portfolio (Jean-François Lefebvre / Ijipop) : Next.js, Material
 ## Fonctionnalités
 
 - **Design** : thèmes (clair / sombre / personnalisés), design system partagé
-- **Fond animé** : VANTA Topology sur les routes portfolio / logiciel / pageweb (selon configuration)
+- **Fond animé** : VANTA Topology sur les routes portfolio / logiciel (selon configuration)
 - **Cartes** : effet 3D, animations (Framer Motion, ScrollReveal, etc.)
 - **Internationalisation** : français / anglais (`app/i18n/translations.ts`)
 - **Authentification** : JWT pour l’admin

@@ -181,6 +181,20 @@ export default function Footer() {
                   {t('home.cardContact')}
                 </Typography>
               </Link>
+              <Link href="/portfolio/contact#diagnostic-ia" style={{ textDecoration: 'none' }}>
+                <Typography
+                  variant="body2"
+                  sx={{
+                    opacity: 0.8,
+                    cursor: 'pointer',
+                    transition: DESIGN_TOKENS.transitions.normal,
+                    color: textColor,
+                    '&:hover': { opacity: 1, transform: 'translateX(4px)' }
+                  }}
+                >
+                  {t('home.servicesAiLink')}
+                </Typography>
+              </Link>
             </Box>
           </Box>
 
