@@ -10,6 +10,7 @@ import Link from 'next/link'
 import { alpha } from '@mui/material/styles'
 import HomeHeroServicesSection from './components/home/HomeHeroServicesSection'
 import HomeAmbientBackdrop from './components/home/HomeAmbientBackdrop'
+import AiConversionTeaser from './components/home/AiConversionTeaser'
 import PortfolioHomeHero from './components/home/PortfolioHomeHero'
 import ThreeDCardComponent from './components/ThreeDCard'
 import AppBarComponent from './components/appBar'
@@ -28,6 +29,9 @@ import SignatureIntro from './components/SignatureIntro'
 import { useEffect, useState } from 'react'
 
 const INTRO_SESSION_KEY = 'portfolio-intro-seen'
+const SHOW_HOME_STATS_BAND = false
+const SHOW_HOME_SITE_INTRO = false
+const SHOW_HOME_DEMOS_BAND = false
 const SHOW_HOME_NAVIGATION_CARDS = false
 
 /** Grille accueil : un peu plus de large utile pour le texte sur mobile ; hauteur libre. */
@@ -84,7 +88,7 @@ export default function HomeClient({ initialShowIntro }: { initialShowIntro: boo
       )}
       {!showIntro && (
       <PageWrapper backgroundVariant="default">
-      <Box sx={{ opacity: 0.35 }}>
+      <Box sx={{ opacity: 0.78 }}>
         <HomeAmbientBackdrop />
       </Box>
       <Box
@@ -113,10 +117,12 @@ export default function HomeClient({ initialShowIntro }: { initialShowIntro: boo
           zIndex: 2,
         }}
       >
-        <PortfolioStatsBand />
+        <AiConversionTeaser />
+        {SHOW_HOME_STATS_BAND && <PortfolioStatsBand />}
         <PortfolioServicesSection />
-        <HomeHeroServicesSection />
+        {SHOW_HOME_SITE_INTRO && <HomeHeroServicesSection />}
 
+        {SHOW_HOME_DEMOS_BAND && (
         <ScrollReveal direction="up" delay={0.08}>
           <Box
             sx={{
@@ -176,6 +182,7 @@ export default function HomeClient({ initialShowIntro }: { initialShowIntro: boo
             </Box>
           </Box>
         </ScrollReveal>
+        )}
 
         {SHOW_HOME_NAVIGATION_CARDS && (
         <Box sx={{ 

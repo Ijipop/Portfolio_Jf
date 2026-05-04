@@ -1,7 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { authAdminToken } from '@/lib/auth-admin-request'
 import { prisma } from '@/lib/prisma'
-import { getBeigePresentationBgUrlFromDb, SITE_APPEARANCE_SINGLETON_ID } from '@/lib/site-appearance'
+import {
+  clearSiteAppearanceMemoryCache,
+  getBeigePresentationBgUrlFromDb,
+  SITE_APPEARANCE_SINGLETON_ID,
+} from '@/lib/site-appearance'
 import { parseBeigePresentationBgUrl } from '@/lib/stored-image-value'
 
 export const runtime = 'nodejs'
@@ -55,6 +59,7 @@ export async function PATCH(request: NextRequest) {
         beigePresentationBgUrl: parsed.value,
       },
     })
+    clearSiteAppearanceMemoryCache()
 
     return NextResponse.json({
       success: true,

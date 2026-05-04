@@ -101,11 +101,9 @@ function getProjectMonogram(name: string): string {
   return (initials || name.slice(0, 2) || 'IJ').toUpperCase()
 }
 
-type TimelendrPlatform = 'windows' | 'macos' | 'both'
-
-interface TimelendrRelease {
-  filePath: string
-  platform?: TimelendrPlatform
+interface TimelendrLatestLinks {
+  windowsUrl: string | null
+  macosUrl: string | null
 }
 
 // Composants stylisés
@@ -982,27 +980,13 @@ export default function Projets() {
 
   const fetchTimelendrReleases = async () => {
     try {
-      const response = await fetch('/api/timelendr/releases')
+      const response = await fetch('/api/timelendr/releases?mode=latest')
       const data = await response.json()
-      if (!data?.success || !Array.isArray(data.data)) return
-      const releases: TimelendrRelease[] = data.data
+      if (!data?.success || !data.data) return
+      const latestLinks = data.data as TimelendrLatestLinks
 
-      let latestWindows: string | null = null
-      let latestMacos: string | null = null
-
-      for (const release of releases) {
-        const platform = release.platform ?? 'both'
-        if (!latestWindows && (platform === 'windows' || platform === 'both')) {
-          latestWindows = release.filePath
-        }
-        if (!latestMacos && (platform === 'macos' || platform === 'both')) {
-          latestMacos = release.filePath
-        }
-        if (latestWindows && latestMacos) break
-      }
-
-      setTimelendrWindowsUrl(latestWindows)
-      setTimelendrMacosUrl(latestMacos)
+      setTimelendrWindowsUrl(latestLinks.windowsUrl)
+      setTimelendrMacosUrl(latestLinks.macosUrl)
     } catch {
       // Ignore silently: la page reste utilisable sans releases Timelendr.
     }

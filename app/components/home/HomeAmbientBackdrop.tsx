@@ -13,9 +13,9 @@ export default function HomeAmbientBackdrop() {
   const { primary, secondary, accent } = useThemeColors()
   const isDark = theme.palette.mode === 'dark'
 
-  const p = isDark ? 0.42 : 0.34
-  const s = isDark ? 0.36 : 0.28
-  const a = isDark ? 0.28 : 0.22
+  const p = isDark ? 0.58 : 0.44
+  const s = isDark ? 0.48 : 0.36
+  const a = isDark ? 0.36 : 0.28
 
   return (
     <Box
@@ -58,10 +58,12 @@ export default function HomeAmbientBackdrop() {
           position: 'absolute',
           inset: 0,
           background: isDark
-            ? `radial-gradient(140% 85% at 50% -15%, ${alpha(primary, 0.18)} 0%, transparent 58%),
-               radial-gradient(90% 60% at 100% 100%, ${alpha(secondary, 0.12)} 0%, transparent 50%)`
-            : `radial-gradient(120% 75% at 50% -10%, ${alpha(primary, 0.2)} 0%, transparent 52%),
-               radial-gradient(85% 55% at 100% 100%, ${alpha(secondary, 0.14)} 0%, transparent 48%)`,
+            ? `radial-gradient(140% 85% at 50% -15%, ${alpha(primary, 0.28)} 0%, transparent 58%),
+               radial-gradient(90% 60% at 100% 100%, ${alpha(secondary, 0.2)} 0%, transparent 50%),
+               radial-gradient(72% 50% at 0% 62%, ${alpha(accent, 0.16)} 0%, transparent 48%)`
+            : `radial-gradient(120% 75% at 50% -10%, ${alpha(primary, 0.28)} 0%, transparent 52%),
+               radial-gradient(85% 55% at 100% 100%, ${alpha(secondary, 0.2)} 0%, transparent 48%),
+               radial-gradient(70% 48% at 0% 62%, ${alpha(accent, 0.12)} 0%, transparent 46%)`,
         }}
       />
       <Box
@@ -74,8 +76,8 @@ export default function HomeAmbientBackdrop() {
           top: { xs: '-12%', md: '-6%' },
           borderRadius: '50%',
           background: `radial-gradient(circle at 38% 38%, ${alpha(primary, p)} 0%, transparent 64%)`,
-          filter: 'blur(52px)',
-          opacity: isDark ? 0.9 : 0.95,
+          filter: 'blur(44px)',
+          opacity: isDark ? 1 : 0.98,
           animation: 'ambientDriftA 16s ease-in-out infinite',
           willChange: 'transform',
         }}
@@ -90,8 +92,8 @@ export default function HomeAmbientBackdrop() {
           top: { xs: '16%', md: '8%' },
           borderRadius: '50%',
           background: `radial-gradient(circle at 58% 42%, ${alpha(secondary, s)} 0%, transparent 62%)`,
-          filter: 'blur(48px)',
-          opacity: isDark ? 0.82 : 0.9,
+          filter: 'blur(42px)',
+          opacity: isDark ? 0.95 : 0.94,
           animation: 'ambientDriftB 20s ease-in-out infinite',
           willChange: 'transform',
         }}
@@ -106,8 +108,8 @@ export default function HomeAmbientBackdrop() {
           bottom: { xs: '-14%', md: '-8%' },
           borderRadius: '50%',
           background: `radial-gradient(circle at 50% 50%, ${alpha(accent, a)} 0%, transparent 58%)`,
-          filter: 'blur(54px)',
-          opacity: isDark ? 0.7 : 0.8,
+          filter: 'blur(48px)',
+          opacity: isDark ? 0.82 : 0.86,
           animation: 'ambientDriftC 24s ease-in-out infinite',
           willChange: 'transform',
         }}
