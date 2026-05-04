@@ -9,7 +9,7 @@ import { THEMES } from '../../design-system/themes'
 import { useAdvancedTheme } from '../../contexts/AdvancedThemeContext'
 import { useThemeColors } from '../../hooks/useThemeColors'
 import { useTextColor } from '../../hooks/useTextColor'
-import { useTheme } from '@mui/material/styles'
+import { alpha, useTheme } from '@mui/material/styles'
 
 // Fonction utilitaire pour convertir hex en rgba
 const hexToRgba = (hex: string, alpha: number) => {
@@ -30,7 +30,7 @@ interface HeaderSectionProps {
 export default function HeaderSection({ title, subtitle, tagline, children, fullViewport = false }: HeaderSectionProps) {
   const titleIsGlitch = isValidElement(title)
   const subtitleIsElement = isValidElement(subtitle)
-  const { primary } = useThemeColors()
+  const { primary, secondary, accent } = useThemeColors()
   const textColor = useTextColor()
   const theme = useTheme()
   const { customTheme } = useAdvancedTheme()
@@ -76,12 +76,18 @@ export default function HeaderSection({ title, subtitle, tagline, children, full
   return (
     <Box
       sx={{
-        background:
-          'linear-gradient(145deg, rgba(255, 255, 255, 0.13) 0%, rgba(241, 245, 249, 0.1) 50%, rgba(255, 255, 255, 0.12) 100%)',
-        backdropFilter: 'blur(14px) saturate(1.05)',
-        WebkitBackdropFilter: 'blur(14px) saturate(1.05)',
-        borderBottom: '1px solid rgba(148, 163, 184, 0.22)',
-        boxShadow: '0 6px 18px rgba(2, 6, 23, 0.14), inset 0 1px 0 rgba(255, 255, 255, 0.2)',
+        background: fullViewport
+          ? `radial-gradient(90% 70% at 50% -12%, ${alpha(primary, theme.palette.mode === 'dark' ? 0.28 : 0.2)} 0%, transparent 58%),
+             radial-gradient(64% 56% at 12% 24%, ${alpha(accent, theme.palette.mode === 'dark' ? 0.2 : 0.14)} 0%, transparent 52%),
+             radial-gradient(58% 52% at 88% 30%, ${alpha(secondary, theme.palette.mode === 'dark' ? 0.22 : 0.16)} 0%, transparent 54%),
+             linear-gradient(145deg, ${alpha('#ffffff', theme.palette.mode === 'dark' ? 0.09 : 0.22)} 0%, ${alpha('#f8fafc', theme.palette.mode === 'dark' ? 0.04 : 0.12)} 52%, ${alpha('#ffffff', theme.palette.mode === 'dark' ? 0.08 : 0.18)} 100%)`
+          : 'linear-gradient(145deg, rgba(255, 255, 255, 0.13) 0%, rgba(241, 245, 249, 0.1) 50%, rgba(255, 255, 255, 0.12) 100%)',
+        backdropFilter: 'blur(18px) saturate(1.18)',
+        WebkitBackdropFilter: 'blur(18px) saturate(1.18)',
+        borderBottom: `1px solid ${alpha(primary, fullViewport ? 0.26 : 0.18)}`,
+        boxShadow: fullViewport
+          ? `0 18px 70px ${alpha(primary, 0.18)}, inset 0 1px 0 ${alpha('#ffffff', 0.26)}`
+          : '0 6px 18px rgba(2, 6, 23, 0.14), inset 0 1px 0 rgba(255, 255, 255, 0.2)',
         color: textColor,
         padding: fullViewport
           ? {
@@ -121,8 +127,14 @@ export default function HeaderSection({ title, subtitle, tagline, children, full
           left: 0,
           right: 0,
           bottom: 0,
-          background: 'url("data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%23ffffff" fill-opacity="0.08"%3E%3Ccircle cx="30" cy="30" r="1.5"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")',
-          opacity: 1,
+          background: fullViewport
+            ? `linear-gradient(${alpha(primary, 0.08)} 1px, transparent 1px),
+               linear-gradient(90deg, ${alpha(primary, 0.08)} 1px, transparent 1px),
+               url("data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%23ffffff" fill-opacity="0.1"%3E%3Ccircle cx="30" cy="30" r="1.5"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`
+            : 'url("data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%23ffffff" fill-opacity="0.08"%3E%3Ccircle cx="30" cy="30" r="1.5"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")',
+          backgroundSize: fullViewport ? '52px 52px, 52px 52px, 60px 60px' : undefined,
+          opacity: fullViewport ? 0.52 : 1,
+          maskImage: fullViewport ? 'linear-gradient(to bottom, black 0%, transparent 78%)' : undefined,
         },
       }}
     >

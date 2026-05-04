@@ -88,7 +88,7 @@ export default function HomeClient({ initialShowIntro }: { initialShowIntro: boo
       )}
       {!showIntro && (
       <PageWrapper backgroundVariant="default">
-      <Box sx={{ opacity: 0.35 }}>
+      <Box sx={{ opacity: 0.78 }}>
         <HomeAmbientBackdrop />
       </Box>
       <Box

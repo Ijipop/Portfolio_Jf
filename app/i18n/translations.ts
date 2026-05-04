@@ -64,12 +64,10 @@ export const translations = {
       aiImpactLead:
         'Ajoutez une IA utile à votre site : réponses aux questions, qualification des prospects et suivi simple des demandes reçues.',
       aiImpactPrimaryCta: 'Tester le diagnostic IA',
-      aiImpactSecondaryCta: 'Voir les services',
       aiImpactMetricLeads: 'Demandes reçues',
       aiImpactMetricQualified: 'Prospects qualifiés',
       aiImpactMetricDiagnostics: 'Diagnostics IA générés',
       aiImpactMetricConversion: 'Taux de conversion du formulaire',
-      aiImpactMetricHint: 'Mesurable dans le système',
       aiImpactDisclosure:
         'Exemple des indicateurs que votre site peut suivre pour mieux comprendre vos demandes.',
       heroEditorialPrefix: 'Je conçois des',
@@ -465,12 +463,10 @@ export const translations = {
       aiImpactLead:
         'Add useful AI to your site: answer questions, qualify prospects, and track incoming requests.',
       aiImpactPrimaryCta: 'Try the AI diagnosis',
-      aiImpactSecondaryCta: 'View services',
       aiImpactMetricLeads: 'Requests received',
       aiImpactMetricQualified: 'Qualified prospects',
       aiImpactMetricDiagnostics: 'AI diagnoses generated',
       aiImpactMetricConversion: 'Form conversion rate',
-      aiImpactMetricHint: 'Measurable in the system',
       aiImpactDisclosure:
         'An example of the indicators your site can track to better understand incoming requests.',
       heroEditorialPrefix: 'I design',

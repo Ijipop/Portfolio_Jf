@@ -124,11 +124,6 @@ export default function AiConversionTeaser() {
                   {t('home.aiImpactPrimaryCta')}
                 </CTAButton>
               </Link>
-              <Link href="#services" style={{ textDecoration: 'none' }}>
-                <CTAButton variant="outline" size="medium">
-                  {t('home.aiImpactSecondaryCta')}
-                </CTAButton>
-              </Link>
             </Box>
           </Box>
 
@@ -186,7 +181,7 @@ export default function AiConversionTeaser() {
                 key={labelKey}
                 sx={{
                   p: 1.65,
-                  borderRadius: DESIGN_TOKENS.borderRadius.small,
+                  borderRadius: 3,
                   border: `1px solid ${alpha(primary, 0.22)}`,
                   background: (theme) =>
                     theme.palette.mode === 'dark' ? alpha('#ffffff', 0.045) : alpha('#ffffff', 0.62),
@@ -202,9 +197,6 @@ export default function AiConversionTeaser() {
                 <Box>
                   <Typography sx={{ fontWeight: 900, lineHeight: 1.2 }}>
                     {t(labelKey)}
-                  </Typography>
-                  <Typography variant="caption" sx={{ display: 'block', opacity: 0.72, mt: 0.35 }}>
-                    {t('home.aiImpactMetricHint')}
                   </Typography>
                 </Box>
               </Box>
