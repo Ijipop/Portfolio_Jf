@@ -20,6 +20,7 @@ describe('shouldShowTopology', () => {
     expect(shouldShowTopology('/portfolio/contact')).toBe(true)
     expect(shouldShowTopology('/portfolio/pageweb')).toBe(true)
     expect(shouldShowTopology('/logiciel/timelendr')).toBe(true)
+    expect(shouldShowTopology('/logiciel/timelendr/merci')).toBe(true)
   })
 
   it('returns false for non-target routes', () => {

@@ -102,6 +102,7 @@ Portfolio/
 | `/portfolio/a-propos` | À propos |
 | `/portfolio/contact` | Formulaire + coordonnées |
 | `/logiciel/timelendr` | Présentation Timelendr + téléchargements |
+| `/logiciel/timelendr/merci` | Page de remerciement après paiement (Stripe) — `noindex`, non listée dans le menu ; URL de succès checkout à configurer côté Stripe / Render vers cette adresse (alias `/logiciel/timelendar/merci` → même page) |
 | `/admin` → `/admin/dashboard` | Gestion (JWT) |
 
 ## Commandes utiles

@@ -110,6 +110,7 @@ export const translations = {
       servicesEcosystemBonus5: 'Diagnostic',
       servicesEcosystemDemo2Caption:
         'Autre exemple du genre de bonus possible : à intégrer selon vos priorités et votre budget.',
+      servicesEcosystemDemo2Hover: 'Ajouter une vidéo personnalisée à votre site !',
       // Banque : 5 offres détaillées — réutilisable pour une page « Services » détaillée ou contenu plus technique.
       servicesKicker: 'Offres',
       servicesTitle: 'Des mandats concrets, du premier site au suivi après mise en ligne',
@@ -416,6 +417,9 @@ export const translations = {
       platformWindows: 'Windows',
       platformMacos: 'macOS',
       platformBoth: 'Windows et macOS',
+      merciTitle: 'Merci !',
+      merciBody:
+        'Merci beaucoup pour votre soutien, profitez bien de votre abonnement !\n\nVous pouvez retourner à l’application et fermer cette fenêtre.',
     },
     promo: {
       onePager: {
@@ -577,6 +581,7 @@ export const translations = {
       servicesEcosystemBonus5: 'Diagnostics',
       servicesEcosystemDemo2Caption:
         'Another example of a possible add-on, scoped to your priorities and budget.',
+      servicesEcosystemDemo2Hover: 'Add a custom video to your site!',
       // Bank: five detailed offer lines — reuse on a future detailed Services page or technical copy.
       servicesKicker: 'Offers',
       servicesTitle: 'Concrete engagements—from first site to follow-up after launch',
@@ -884,6 +889,9 @@ export const translations = {
       platformWindows: 'Windows',
       platformMacos: 'macOS',
       platformBoth: 'Windows & macOS',
+      merciTitle: 'Thank you!',
+      merciBody:
+        'Thank you so much for your support — enjoy your subscription!\n\nYou can return to the application and close this window.',
     },
     promo: {
       onePager: {

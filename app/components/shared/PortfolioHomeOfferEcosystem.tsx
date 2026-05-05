@@ -5,7 +5,7 @@ import Chip from '@mui/material/Chip'
 import Typography from '@mui/material/Typography'
 import { alpha } from '@mui/material/styles'
 import useMediaQuery from '@mui/material/useMediaQuery'
-import { useEffect, useRef, type Ref } from 'react'
+import { useEffect, useRef, useState, type Ref } from 'react'
 import ScrollReveal from './ScrollReveal'
 import { DESIGN_TOKENS } from '@/design-system/constants'
 import { useLanguage } from '@/contexts/LanguageContext'
@@ -31,6 +31,9 @@ export default function PortfolioHomeOfferEcosystem() {
   const videoRef = useRef<HTMLVideoElement>(null)
 
   const caption = t('home.servicesEcosystemDemo2Caption')
+  const hoverPrompt = t('home.servicesEcosystemDemo2Hover')
+  const [demoHovered, setDemoHovered] = useState(false)
+  const displayCaption = demoHovered ? hoverPrompt : caption
 
   useEffect(() => {
     const video = videoRef.current
@@ -100,19 +103,22 @@ export default function PortfolioHomeOfferEcosystem() {
         </Box>
 
         <Box
-          ref={containerRef}
           sx={{
             width: '100%',
             textAlign: 'left',
           }}
+          onMouseEnter={() => setDemoHovered(true)}
+          onMouseLeave={() => setDemoHovered(false)}
         >
           <Box
+            ref={containerRef}
             sx={{
               width: '100%',
               aspectRatio: '16 / 9',
               borderRadius: DESIGN_TOKENS.borderRadius.medium,
               overflow: 'hidden',
               bgcolor: (theme) => (theme.palette.mode === 'dark' ? '#0a0a0a' : '#0f0f0f'),
+              cursor: 'default',
             }}
           >
             <Box
@@ -125,8 +131,8 @@ export default function PortfolioHomeOfferEcosystem() {
               preload="metadata"
               controls
               autoPlay={!reducedMotion}
-              title={caption}
-              aria-label={caption}
+              title={displayCaption}
+              aria-label={displayCaption}
               sx={{
                 display: 'block',
                 width: '100%',
@@ -142,13 +148,14 @@ export default function PortfolioHomeOfferEcosystem() {
               mt: 1.5,
               mb: 0,
               color: textColor,
-              opacity: 0.72,
+              opacity: demoHovered ? 0.92 : 0.72,
               fontSize: { xs: '0.78rem', sm: '0.8rem' },
               lineHeight: 1.45,
               textAlign: 'left',
+              transition: 'opacity 0.2s ease',
             }}
           >
-            {caption}
+            {displayCaption}
           </Typography>
         </Box>
       </Box>
