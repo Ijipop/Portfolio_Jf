@@ -20,6 +20,7 @@ export default function AboutPersonalStorySection({ t, textColor }: AboutPersona
   const isTopologyRoute = shouldShowTopology(pathname)
 
   const portraitSizes = '(max-width: 600px) min(100vw, 300px), 340px'
+  const portraitRadiusPx = `${DESIGN_TOKENS.borderRadius.small}px`
 
   return (
     <Box
@@ -51,26 +52,32 @@ export default function AboutPersonalStorySection({ t, textColor }: AboutPersona
     >
       <Box
         sx={{
+          display: 'flex',
+          justifyContent: 'center',
+          mb: { xs: 2.5, sm: 3 },
           position: 'relative',
           zIndex: 1,
-          maxWidth: { xs: 'min(100%, 300px)', sm: 320, md: 340 },
-          width: '100%',
-          mx: 'auto',
-          mb: { xs: 2.5, sm: 3 },
-          borderRadius: DESIGN_TOKENS.borderRadius.small,
-          overflow: 'hidden',
-          aspectRatio: '3 / 4',
         }}
       >
+        {/**
+         * Pas de boîte `aspect-ratio` + `fill` : uniquement la photo, dimensions intrinsèques (ratio 3/4 indicatif pour Next),
+         * `maxWidth` pour le responsive et coins arrondis sur le média — plus de « cadre » visible sous l’image.
+         */}
         <Image
           src="/img/moi8bit.png"
           alt={t('about.photoPortraitAlt')}
-          fill
+          width={480}
+          height={640}
           sizes={portraitSizes}
           priority={false}
+          unoptimized
           style={{
-            objectFit: 'contain',
-            objectPosition: 'center',
+            maxWidth: 'min(100%, 340px)',
+            width: '100%',
+            height: 'auto',
+            borderRadius: portraitRadiusPx,
+            imageRendering: 'pixelated',
+            display: 'block',
           }}
         />
       </Box>
