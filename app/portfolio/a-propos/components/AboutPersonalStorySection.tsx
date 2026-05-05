@@ -7,15 +7,6 @@ import { usePathname } from 'next/navigation'
 import { DESIGN_TOKENS } from '@/design-system/constants'
 import { getCardSurfaceSx } from '@/components/shared/cardSurface'
 import { shouldShowTopology } from '@/utils/topologyRoutes'
-import { usePresentationMode } from '@/contexts/PresentationModeContext'
-import { useAdvancedTheme } from '@/contexts/AdvancedThemeContext'
-import { useThemeColors } from '@/hooks/useThemeColors'
-import {
-  polaroidImageFillAnchorSx,
-  polaroidInnerPhotoHoleSx,
-  polaroidOuterFrameSx,
-  type PolaroidFramePalette,
-} from '@/portfolio/projets/utils/polaroidFrameSx'
 
 type TFn = (key: string) => string
 
@@ -27,18 +18,6 @@ type AboutPersonalStorySectionProps = {
 export default function AboutPersonalStorySection({ t, textColor }: AboutPersonalStorySectionProps) {
   const pathname = usePathname()
   const isTopologyRoute = shouldShowTopology(pathname)
-  const { primary, secondary, accent } = useThemeColors()
-  const { mode: presentationMode } = usePresentationMode()
-  const { themeName } = useAdvancedTheme()
-  const isNonDefaultPalette = themeName !== 'default'
-
-  const polaroidPalette: PolaroidFramePalette = {
-    presentationMode,
-    primary,
-    secondary,
-    accent,
-    isNonDefaultPalette,
-  }
 
   const portraitSizes = '(max-width: 600px) min(100vw, 300px), 340px'
 
@@ -78,37 +57,22 @@ export default function AboutPersonalStorySection({ t, textColor }: AboutPersona
           width: '100%',
           mx: 'auto',
           mb: { xs: 2.5, sm: 3 },
+          borderRadius: DESIGN_TOKENS.borderRadius.small,
+          overflow: 'hidden',
+          aspectRatio: '3 / 4',
         }}
       >
-        <Box
-          sx={(muiTheme) => ({
-            ...polaroidOuterFrameSx(muiTheme, polaroidPalette),
-            px: { xs: 0.75, sm: 0.875 },
-            py: { xs: 0.75, sm: 0.875 },
-          })}
-        >
-          <Box
-            sx={(muiTheme) => ({
-              aspectRatio: '3 / 4',
-              width: '100%',
-              ...polaroidInnerPhotoHoleSx(muiTheme, polaroidPalette),
-            })}
-          >
-            <Box sx={polaroidImageFillAnchorSx}>
-              <Image
-                src="/img/moi8bit.png"
-                alt={t('about.photoPortraitAlt')}
-                fill
-                sizes={portraitSizes}
-                priority={false}
-                style={{
-                  objectFit: 'contain',
-                  objectPosition: 'center',
-                }}
-              />
-            </Box>
-          </Box>
-        </Box>
+        <Image
+          src="/img/moi8bit.png"
+          alt={t('about.photoPortraitAlt')}
+          fill
+          sizes={portraitSizes}
+          priority={false}
+          style={{
+            objectFit: 'contain',
+            objectPosition: 'center',
+          }}
+        />
       </Box>
 
       <Box sx={{ position: 'relative', zIndex: 1, maxWidth: 720, mx: 'auto' }}>
