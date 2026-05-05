@@ -19,4 +19,3 @@ describe('NAV_ROUTES', () => {
     expect(contact?.isActive('/portfolio/contact')).toBe(true)
   })
 })
-

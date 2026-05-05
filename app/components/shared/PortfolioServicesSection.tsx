@@ -1,8 +1,8 @@
 'use client'
 
-import AutoAwesomeOutlinedIcon from '@mui/icons-material/AutoAwesomeOutlined'
+import AutorenewOutlinedIcon from '@mui/icons-material/AutorenewOutlined'
+import HandymanOutlinedIcon from '@mui/icons-material/HandymanOutlined'
 import LanguageOutlinedIcon from '@mui/icons-material/LanguageOutlined'
-import TerminalOutlinedIcon from '@mui/icons-material/TerminalOutlined'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import Link from 'next/link'
@@ -20,29 +20,33 @@ import { usePresentationMode } from '@/contexts/PresentationModeContext'
 import { useLanguage } from '@/contexts/LanguageContext'
 import { useTextColor } from '@/hooks/useTextColor'
 import { useThemeColors } from '@/hooks/useThemeColors'
+import type { SvgIconComponent } from '@mui/icons-material'
 
-const SERVICES = [
+const CONTACT_PATH = '/portfolio/contact'
+
+const SERVICES: {
+  icon: SvgIconComponent
+  titleKey: string
+  leadKey: string
+  linkKey: string
+}[] = [
   {
     icon: LanguageOutlinedIcon,
-    titleKey: 'home.servicesWebTitle',
-    leadKey: 'home.servicesWebLead',
-    bullets: ['home.servicesWebBullet1', 'home.servicesWebBullet2', 'home.servicesWebBullet3'],
-    href: '/portfolio/contact#diagnostic-ia',
-    linkKey: 'home.servicesAiLink',
+    titleKey: 'home.servicesHomeNewTitle',
+    leadKey: 'home.servicesHomeNewLead',
+    linkKey: 'home.servicesHomeNewCta',
   },
   {
-    icon: TerminalOutlinedIcon,
-    titleKey: 'home.servicesToolsTitle',
-    leadKey: 'home.servicesToolsLead',
-    bullets: ['home.servicesToolsBullet1', 'home.servicesToolsBullet2', 'home.servicesToolsBullet3'],
-    href: '/portfolio/projets?type=logiciel',
+    icon: AutorenewOutlinedIcon,
+    titleKey: 'home.servicesHomeImproveTitle',
+    leadKey: 'home.servicesHomeImproveLead',
+    linkKey: 'home.servicesHomeImproveCta',
   },
   {
-    icon: AutoAwesomeOutlinedIcon,
-    titleKey: 'home.servicesDirectionTitle',
-    leadKey: 'home.servicesDirectionLead',
-    bullets: ['home.servicesDirectionBullet1', 'home.servicesDirectionBullet2', 'home.servicesDirectionBullet3'],
-    href: '/portfolio/projets',
+    icon: HandymanOutlinedIcon,
+    titleKey: 'home.servicesHomeToolsTitle',
+    leadKey: 'home.servicesHomeToolsLead',
+    linkKey: 'home.servicesHomeToolsCta',
   },
 ]
 
@@ -70,7 +74,7 @@ export default function PortfolioServicesSection() {
   return (
     <Box id="services" sx={{ mb: { xs: 5, md: 8 }, scrollMarginTop: 96 }}>
       <ScrollReveal direction="up" delay={0.05}>
-        <Box sx={{ textAlign: 'center', maxWidth: 820, mx: 'auto', mb: { xs: 3, md: 4 } }}>
+        <Box sx={{ textAlign: 'center', maxWidth: 860, mx: 'auto', mb: { xs: 3, md: 4 } }}>
           <Typography
             component="p"
             sx={{
@@ -82,7 +86,7 @@ export default function PortfolioServicesSection() {
               mb: 1,
             }}
           >
-            {t('home.servicesKicker')}
+            {t('home.servicesHomeKicker')}
           </Typography>
           <Typography
             variant="h3"
@@ -92,9 +96,24 @@ export default function PortfolioServicesSection() {
               letterSpacing: '-0.05em',
               fontSize: { xs: '2rem', md: '3.1rem' },
               lineHeight: 1.05,
+              mb: 2,
             }}
           >
-            {t('home.servicesTitle')}
+            {t('home.servicesHomeTitle')}
+          </Typography>
+          <Typography
+            component="p"
+            sx={{
+              color: textColor,
+              opacity: 0.82,
+              fontSize: { xs: '1rem', sm: '1.0625rem' },
+              lineHeight: 1.55,
+              maxWidth: 720,
+              mx: 'auto',
+              px: { xs: 0.5, sm: 0 },
+            }}
+          >
+            {t('home.servicesHomeSubtitle')}
           </Typography>
         </Box>
       </ScrollReveal>
@@ -102,9 +121,16 @@ export default function PortfolioServicesSection() {
       <Box
         sx={{
           display: 'grid',
-          gridTemplateColumns: { xs: '1fr', md: 'repeat(3, 1fr)' },
+          gridTemplateColumns: {
+            xs: '1fr',
+            sm: 'repeat(2, 1fr)',
+            lg: 'repeat(3, 1fr)',
+          },
           gap: { xs: 2, md: 2.5 },
           alignItems: 'stretch',
+          '& > *:nth-of-type(3)': {
+            gridColumn: { sm: '1 / -1', lg: 'auto' },
+          },
         }}
       >
         {SERVICES.map((service, index) => {
@@ -122,7 +148,7 @@ export default function PortfolioServicesSection() {
                 }}
                 floatingElements={1}
                 sx={{
-                  minHeight: 330,
+                  minHeight: 260,
                   p: { xs: 2.25, md: 2.75 },
                   '& .MuiCardContent-root': {
                     pb: '24px !important',
@@ -147,37 +173,19 @@ export default function PortfolioServicesSection() {
                   <Typography variant="h5" sx={{ color: textColor, fontWeight: 900, mb: 1, lineHeight: 1.15 }}>
                     {t(service.titleKey)}
                   </Typography>
-                  <Typography sx={{ color: textColor, opacity: 0.84, lineHeight: 1.6, mb: 2 }}>
+                  <Typography
+                    sx={{
+                      color: textColor,
+                      opacity: 0.84,
+                      lineHeight: 1.6,
+                      mb: 0,
+                      flex: 1,
+                    }}
+                  >
                     {t(service.leadKey)}
                   </Typography>
-                  <Box component="ul" sx={{ m: 0, p: 0, listStyle: 'none', display: 'grid', gap: 0.85 }}>
-                    {service.bullets.map((bullet) => (
-                      <Typography
-                        key={bullet}
-                        component="li"
-                        sx={{
-                          color: textColor,
-                          opacity: 0.86,
-                          fontSize: '0.92rem',
-                          display: 'flex',
-                          gap: 1,
-                          '&::before': {
-                            content: '""',
-                            width: 6,
-                            height: 6,
-                            mt: '0.55em',
-                            flexShrink: 0,
-                            borderRadius: '50%',
-                            background: primary,
-                          },
-                        }}
-                      >
-                        {t(bullet)}
-                      </Typography>
-                    ))}
-                  </Box>
                   <Box sx={{ mt: 'auto', pt: 2.5 }}>
-                    <Link href={service.href} style={{ textDecoration: 'none' }}>
+                    <Link href={CONTACT_PATH} style={{ textDecoration: 'none' }}>
                       <Typography
                         component="span"
                         sx={{
@@ -192,7 +200,7 @@ export default function PortfolioServicesSection() {
                           '&:hover': { backgroundSize: '100% 2px' },
                         }}
                       >
-                        {t(service.linkKey ?? 'home.servicesLink')}
+                        {t(service.linkKey)}
                       </Typography>
                     </Link>
                   </Box>
@@ -202,6 +210,25 @@ export default function PortfolioServicesSection() {
           )
         })}
       </Box>
+
+      <ScrollReveal direction="up" delay={0.08}>
+        <Typography
+          component="p"
+          sx={{
+            textAlign: 'center',
+            maxWidth: 640,
+            mx: 'auto',
+            mt: { xs: 3, md: 4 },
+            color: textColor,
+            opacity: 0.78,
+            fontSize: { xs: '0.92rem', sm: '0.97rem' },
+            lineHeight: 1.55,
+            px: { xs: 1, sm: 0 },
+          }}
+        >
+          {t('home.servicesHomeFootnote')}
+        </Typography>
+      </ScrollReveal>
     </Box>
   )
 }

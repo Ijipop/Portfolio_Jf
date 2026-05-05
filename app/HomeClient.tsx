@@ -73,6 +73,20 @@ export default function HomeClient({ initialShowIntro }: { initialShowIntro: boo
     if (seen) setShowIntro(false)
   }, [])
 
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    const scrollToHash = () => {
+      const raw = window.location.hash.replace(/^#/, '')
+      if (!raw) return
+      window.requestAnimationFrame(() => {
+        document.getElementById(raw)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      })
+    }
+    scrollToHash()
+    window.addEventListener('hashchange', scrollToHash)
+    return () => window.removeEventListener('hashchange', scrollToHash)
+  }, [])
+
   const handleIntroComplete = () => {
     if (typeof window !== 'undefined') {
       sessionStorage.setItem(INTRO_SESSION_KEY, '1')

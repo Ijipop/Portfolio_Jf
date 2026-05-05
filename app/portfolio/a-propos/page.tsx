@@ -575,7 +575,7 @@ export default function About() {
                     textShadow: `0 1px 2px ${primary}40`
                   }}
                 >
-                  Merci de me donner une chance de travailler avec vous !
+                  {t('about.thanksMessage')}
                 </Typography>
               </FlipCardBack>
             </FlipCardInner>

@@ -3,7 +3,6 @@
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import Image from 'next/image'
-import { useTheme } from '@mui/material/styles'
 import { usePathname } from 'next/navigation'
 import { DESIGN_TOKENS } from '@/design-system/constants'
 import { getCardSurfaceSx } from '@/components/shared/cardSurface'
@@ -28,7 +27,6 @@ type AboutPersonalStorySectionProps = {
 export default function AboutPersonalStorySection({ t, textColor }: AboutPersonalStorySectionProps) {
   const pathname = usePathname()
   const isTopologyRoute = shouldShowTopology(pathname)
-  const theme = useTheme()
   const { primary, secondary, accent } = useThemeColors()
   const { mode: presentationMode } = usePresentationMode()
   const { themeName } = useAdvancedTheme()
@@ -42,7 +40,7 @@ export default function AboutPersonalStorySection({ t, textColor }: AboutPersona
     isNonDefaultPalette,
   }
 
-  const portraitSizes = '(max-width: 600px) 200px, 240px'
+  const portraitSizes = '(max-width: 600px) min(100vw, 300px), 340px'
 
   return (
     <Box
@@ -76,16 +74,23 @@ export default function AboutPersonalStorySection({ t, textColor }: AboutPersona
         sx={{
           position: 'relative',
           zIndex: 1,
-          maxWidth: { xs: 216, sm: 256 },
+          maxWidth: { xs: 'min(100%, 300px)', sm: 320, md: 340 },
           width: '100%',
           mx: 'auto',
           mb: { xs: 2.5, sm: 3 },
         }}
       >
-        <Box sx={(muiTheme) => polaroidOuterFrameSx(muiTheme, polaroidPalette)}>
+        <Box
+          sx={(muiTheme) => ({
+            ...polaroidOuterFrameSx(muiTheme, polaroidPalette),
+            px: { xs: 0.75, sm: 0.875 },
+            py: { xs: 0.75, sm: 0.875 },
+          })}
+        >
           <Box
             sx={(muiTheme) => ({
-              aspectRatio: '1 / 1',
+              aspectRatio: '3 / 4',
+              width: '100%',
               ...polaroidInnerPhotoHoleSx(muiTheme, polaroidPalette),
             })}
           >
