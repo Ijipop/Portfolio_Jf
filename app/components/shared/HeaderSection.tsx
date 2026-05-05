@@ -93,13 +93,14 @@ const HeaderSection = forwardRef<HTMLDivElement, HeaderSectionProps>(function He
           ? `0 18px 70px ${alpha(primary, 0.18)}, inset 0 1px 0 ${alpha('#ffffff', 0.26)}`
           : '0 6px 18px rgba(2, 6, 23, 0.14), inset 0 1px 0 rgba(255, 255, 255, 0.2)',
         color: textColor,
+        /* fullViewport : la navbar est déjà dans le flux (sticky) — éviter un gros padding-top qui laisse une bande vide. */
         padding: fullViewport
           ? {
-              xs: theme.spacing(5.5, 0, 4),
-              sm: theme.spacing(8, 0, 5),
-            md: '86px 0 44px',
-            lg: '108px 0 52px',
-            xl: '132px 0 60px',
+              xs: theme.spacing(2.75, 0, 4),
+              sm: theme.spacing(3, 0, 4.5),
+              md: theme.spacing(2.5, 0, 4.5),
+              lg: theme.spacing(2.5, 0, 4.75),
+              xl: theme.spacing(2.5, 0, 5),
             }
           : theme.spacing(3.5, 0, 2.5),
         textAlign: 'center',
@@ -111,17 +112,17 @@ const HeaderSection = forwardRef<HTMLDivElement, HeaderSectionProps>(function He
           boxSizing: 'border-box',
         }),
         [theme.breakpoints.down('sm')]: {
-          padding: fullViewport ? theme.spacing(4.25, 1, 4) : theme.spacing(2.5, 1, 2),
+          padding: fullViewport ? theme.spacing(2.5, 1, 4) : theme.spacing(2.5, 1, 2),
         },
         ...(fullViewport && {
           '@media (max-width: 599.95px) and (max-height: 760px)': {
-            padding: theme.spacing(3.25, 1, 3.5),
+            padding: theme.spacing(2.25, 1, 3.5),
           },
           '@media (min-width: 900px) and (max-height: 820px)': {
-            padding: '48px 0 38px',
+            padding: theme.spacing(2.25, 0, 4.75),
           },
           '@media (min-width: 900px) and (max-height: 680px)': {
-            padding: '34px 0 28px',
+            padding: theme.spacing(2, 0, 3.5),
           },
         }),
         '&::before': {
@@ -158,7 +159,7 @@ const HeaderSection = forwardRef<HTMLDivElement, HeaderSectionProps>(function He
           component="h1" 
           sx={{ 
             mb: fullViewport
-              ? { xs: 3.35, sm: 7, md: '78px', lg: '92px', xl: '112px' }
+              ? { xs: 3.35, sm: 5.5, md: '44px', lg: '48px', xl: '52px' }
               : 1,
             ...(fullViewport && {
               '@media (max-width: 599.95px) and (max-height: 760px)': {
@@ -172,7 +173,9 @@ const HeaderSection = forwardRef<HTMLDivElement, HeaderSectionProps>(function He
               },
             }),
             fontWeight: 900,
-            fontSize: titleIsGlitch ? 'inherit' : { xs: '1.75rem', sm: '2.75rem', md: '3.75rem' },
+            fontSize: titleIsGlitch
+              ? 'inherit'
+              : { xs: '1.75rem', sm: '2.35rem', md: '2.65rem', lg: '2.45rem', xl: '2.25rem' },
             textShadow: titleIsGlitch ? 'none' : `0 0 20px ${hexToRgba(primary, 0.8)}, 0 4px 8px rgba(0,0,0,0.3)`,
             letterSpacing: titleIsGlitch ? 'inherit' : { xs: '0.05em', sm: '0.1em' },
             textTransform: titleIsGlitch ? 'none' : 'uppercase',

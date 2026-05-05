@@ -126,7 +126,7 @@ export default function HomeClient({ initialShowIntro }: { initialShowIntro: boo
           /** Espace au-dessus du bloc présentation (60px desktop, un peu moins sur très petit écran). */
           pt: { xs: 'clamp(36px, 10vw, 60px)', sm: '60px' },
           pb: { xs: 3, sm: 4, md: 8 },
-          px: { xs: 1.5, sm: 3, md: 4 },
+          px: { xs: 2.5, sm: 3, md: 4 },
           position: 'relative',
           zIndex: 2,
         }}

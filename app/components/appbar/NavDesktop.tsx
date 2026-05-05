@@ -22,13 +22,13 @@ interface NavDesktopProps {
 function renderIcon(id: NavRouteId) {
   switch (id) {
     case 'home':
-      return <HomeIcon sx={{ mr: { xs: 0, sm: 1 }, fontSize: { xs: 20, sm: 24 } }} />
+      return <HomeIcon sx={{ mr: { xs: 0, sm: 1 }, fontSize: { xs: 20, sm: 22, lg: 21 } }} />
     case 'projects':
-      return <WorkIcon sx={{ mr: { xs: 0, sm: 1 }, fontSize: { xs: 20, sm: 24 } }} />
+      return <WorkIcon sx={{ mr: { xs: 0, sm: 1 }, fontSize: { xs: 20, sm: 22, lg: 21 } }} />
     case 'about':
-      return <PersonIcon sx={{ mr: { xs: 0, sm: 1 }, fontSize: { xs: 20, sm: 24 } }} />
+      return <PersonIcon sx={{ mr: { xs: 0, sm: 1 }, fontSize: { xs: 20, sm: 22, lg: 21 } }} />
     case 'contact':
-      return <ContactMailIcon sx={{ mr: { xs: 0, sm: 1 }, fontSize: { xs: 20, sm: 24 } }} />
+      return <ContactMailIcon sx={{ mr: { xs: 0, sm: 1 }, fontSize: { xs: 20, sm: 22, lg: 21 } }} />
   }
 }
 
@@ -54,8 +54,8 @@ export default function NavDesktop({ routes, pathname, onNavigate, t }: NavDeskt
               color: active ? 'white' : 'rgba(255, 255, 255, 0.8)',
               backgroundColor: active ? 'rgba(255, 255, 255, 0.15)' : 'transparent',
               borderRadius: DESIGN_TOKENS.borderRadius.small,
-              px: { xs: 1, sm: 2 },
-              py: 1,
+              px: { xs: 1, sm: 1.75, lg: 1.5 },
+              py: { xs: 1, sm: 0.85, lg: 0.65 },
               position: 'relative',
               transition: DESIGN_TOKENS.transitions.normal,
               ...(active && {
@@ -81,7 +81,11 @@ export default function NavDesktop({ routes, pathname, onNavigate, t }: NavDeskt
               {renderIcon(route.id)}
               <Typography
                 variant="body2"
-                sx={{ display: { xs: 'none', sm: 'block' }, fontWeight: active ? 600 : 400 }}
+                sx={{
+                  display: { xs: 'none', sm: 'block' },
+                  fontWeight: active ? 600 : 400,
+                  fontSize: { sm: '0.8125rem', lg: '0.78rem' },
+                }}
               >
                 {t(route.labelKey)}
               </Typography>

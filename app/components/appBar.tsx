@@ -45,9 +45,9 @@ export default function AppBarComponent() {
 				<Toolbar sx={{ 
 					display: 'flex', 
 					alignItems: 'center',
-					padding: { xs: '8px 4px', sm: 1, md: 2 },
-					gap: { xs: 0.5, sm: 1, md: 2 },
-					minHeight: { xs: '56px', sm: '64px' },
+					padding: { xs: '8px 4px', sm: 1, md: 1.75, lg: 1.5, xl: 1.25 },
+					gap: { xs: 0.5, sm: 1, md: 1.5, lg: 1.25 },
+					minHeight: { xs: '56px', sm: '60px', md: '58px', lg: '56px' },
 					minWidth: 0,
 				}}>
 					{/* Marque : lien vers l'accueil (prefetch activé) */}
