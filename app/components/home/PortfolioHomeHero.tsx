@@ -94,10 +94,10 @@ export default function PortfolioHomeHero() {
           fontWeight: 850,
           fontSize: {
             xs: 'clamp(1.34rem, 6.75vw, 2.08rem)',
-            sm: 'clamp(2.15rem, 6vw, 2.7rem)',
-            md: 'clamp(2.45rem, 4.2vw, 3rem)',
-            lg: 'clamp(2.85rem, 3.4vw, 3.35rem)',
-            xl: 'clamp(3.1rem, 2.8vw, 3.6rem)',
+            sm: 'clamp(2.05rem, 5.5vw, 2.55rem)',
+            md: 'clamp(2.15rem, 3.6vw, 2.65rem)',
+            lg: 'clamp(2.1rem, 3vw, 2.55rem)',
+            xl: 'clamp(2.05rem, 2.5vw, 2.45rem)',
           },
           lineHeight: 1.1,
           letterSpacing: '-0.04em',
@@ -123,7 +123,7 @@ export default function PortfolioHomeHero() {
           component="div"
           sx={{
             display: 'block',
-            width: { xs: 'min(78vw, 300px)', sm: 330, md: 390, lg: 430, xl: 480 },
+            width: { xs: 'min(78vw, 300px)', sm: 320, md: 360, lg: 380, xl: 400 },
             minHeight: '1.12em',
             mx: 'auto',
             textAlign: 'center',
@@ -196,7 +196,7 @@ export default function PortfolioHomeHero() {
           mb: { xs: 0, sm: 0 },
           px: { xs: 1, sm: 0 },
           width: '100%',
-          maxWidth: { xs: 400, lg: 460, xl: 520 },
+          maxWidth: { xs: 400, md: 440, lg: 460, xl: 480 },
           mx: 'auto',
           '@media (min-width: 900px) and (max-height: 820px)': {
             mt: 2,

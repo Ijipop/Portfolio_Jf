@@ -68,7 +68,7 @@ export default function PortfolioHomeOfferEcosystem() {
           sx={{
             color: textColor,
             opacity: 0.78,
-            fontSize: { xs: '0.88rem', sm: '0.9rem' },
+            fontSize: { xs: '0.88rem', sm: '0.9rem', lg: '0.86rem' },
             lineHeight: 1.5,
             mb: 1.5,
             maxWidth: 600,
@@ -81,9 +81,9 @@ export default function PortfolioHomeOfferEcosystem() {
           sx={{
             display: 'flex',
             flexWrap: 'wrap',
-            gap: 1,
+            gap: { xs: 1, lg: 0.75 },
             justifyContent: 'center',
-            mb: 2.5,
+            mb: { xs: 2.5, lg: 2 },
           }}
         >
           {BONUS_KEYS.map((key) => (
@@ -93,10 +93,15 @@ export default function PortfolioHomeOfferEcosystem() {
               size="small"
               variant="outlined"
               sx={{
-                borderColor: alpha(primary, 0.45),
+                borderColor: { xs: 'transparent', sm: alpha(primary, 0.45) },
+                bgcolor: { xs: alpha(primary, 0.07), sm: 'transparent' },
                 color: textColor,
                 fontWeight: 600,
-                fontSize: '0.78rem',
+                fontSize: { xs: '0.78rem', sm: '0.78rem', lg: '0.72rem', xl: '0.7rem' },
+                '&:hover': {
+                  bgcolor: { xs: alpha(primary, 0.11), sm: alpha(primary, 0.04) },
+                  borderColor: { xs: 'transparent', sm: alpha(primary, 0.55) },
+                },
               }}
             />
           ))}
@@ -114,8 +119,17 @@ export default function PortfolioHomeOfferEcosystem() {
             ref={containerRef}
             sx={{
               width: '100%',
-              aspectRatio: '16 / 9',
-              borderRadius: DESIGN_TOKENS.borderRadius.medium,
+              /* Mobile : 16:9 naturel. À partir de md : pleine largeur + hauteur en clamp (un peu plus haut
+                 pour mieux voir la vidéo, plafond maîtrisé pour ne pas dominer un laptop 768px de haut). */
+              aspectRatio: { xs: '16 / 9', md: 'unset' },
+              height: {
+                xs: 'auto',
+                md: 'clamp(264px, 35vw, 448px)',
+                lg: 'clamp(272px, 32vw, 468px)',
+                xl: 'clamp(276px, 29vw, 460px)',
+              },
+              position: 'relative',
+              borderRadius: { xs: '28px', sm: `${DESIGN_TOKENS.borderRadius.medium}px` },
               overflow: 'hidden',
               bgcolor: (theme) => (theme.palette.mode === 'dark' ? '#0a0a0a' : '#0f0f0f'),
               cursor: 'default',
@@ -134,10 +148,13 @@ export default function PortfolioHomeOfferEcosystem() {
               title={displayCaption}
               aria-label={displayCaption}
               sx={{
+                position: 'absolute',
+                inset: 0,
                 display: 'block',
                 width: '100%',
                 height: '100%',
-                objectFit: 'contain',
+                objectFit: 'cover',
+                objectPosition: 'center',
               }}
             />
           </Box>

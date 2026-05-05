@@ -7,7 +7,8 @@ import WorkIcon from '@mui/icons-material/Work'
 import Box from '@mui/material/Box'
 import Container from '@mui/material/Container'
 import Typography from '@mui/material/Typography'
-import { styled } from '@mui/material/styles'
+import { styled, alpha, useTheme } from '@mui/material/styles'
+import useMediaQuery from '@mui/material/useMediaQuery'
 import { useRouter, usePathname } from 'next/navigation'
 import { useState, useEffect } from 'react'
 import { shouldShowTopology } from '@/utils/topologyRoutes'
@@ -22,13 +23,13 @@ import { GRADIENTS, DESIGN_TOKENS } from '../../design-system/constants'
 import { useThemeColors } from '../../hooks/useThemeColors'
 import { useTextColor } from '../../hooks/useTextColor'
 import { useLanguage } from '../../contexts/LanguageContext'
-import { useTheme } from '@mui/material/styles'
 import { getTextColorForBackground } from '../../utils/colorUtils'
 import { getCardSurfaceSx } from '@/components/shared/cardSurface'
 import ScrollReveal from '../../components/shared/ScrollReveal'
 import SoftSkillsSection from './components/SoftSkillsSection'
 import AboutCtaSection from './components/AboutCtaSection'
 import AboutPersonalStorySection from './components/AboutPersonalStorySection'
+import AboutProfileAccordionMobile from './components/AboutProfileAccordionMobile'
 
 const TECH_SKILLS = ['Python', 'Java', 'React', 'Next.js', 'TypeScript', 'JavaScript', 'SQL', 'CSS3', 'HTML5', 'Git']
 
@@ -38,6 +39,8 @@ const FlipCard = styled(Box)(({ theme }) => ({
   width: '100%',
   height: 400,
   minHeight: 280,
+  [theme.breakpoints.up('lg')]: { height: 340, minHeight: 260 },
+  [theme.breakpoints.up('xl')]: { height: 320, minHeight: 248 },
   [theme.breakpoints.down('md')]: { height: 380 },
   [theme.breakpoints.down('sm')]: { height: 420, minHeight: 360 },
   perspective: '1000px',
@@ -144,6 +147,12 @@ const FlipCardFront = ({ children, sx }: { children: React.ReactNode; sx?: any }
         justifyContent: 'center',
         alignItems: 'center',
         overflow: 'hidden',
+        [theme.breakpoints.up('lg')]: {
+          padding: theme.spacing(3),
+        },
+        [theme.breakpoints.up('xl')]: {
+          padding: theme.spacing(2.75),
+        },
         ...sx
       }}
     >
@@ -212,6 +221,12 @@ const FlipCardBack = ({ children, sx }: { children: React.ReactNode; sx?: any })
         alignItems: 'center',
         overflow: 'hidden',
         color: backTextColor,
+        [theme.breakpoints.up('lg')]: {
+          padding: theme.spacing(3),
+        },
+        [theme.breakpoints.up('xl')]: {
+          padding: theme.spacing(2.75),
+        },
         ...sx
       }}
     >
@@ -225,6 +240,7 @@ const FlipCardBack = ({ children, sx }: { children: React.ReactNode; sx?: any })
 
 
 export default function About() {
+  const theme = useTheme()
   const router = useRouter()
   const pathname = usePathname()
   const isTopologyRoute = shouldShowTopology(pathname)
@@ -232,6 +248,7 @@ export default function About() {
   const { primary, secondary } = useThemeColors()
   const textColor = useTextColor()
   const { t } = useLanguage()
+  const mobileProfile = useMediaQuery(theme.breakpoints.down('sm'), { noSsr: true })
   const [flippedCards, setFlippedCards] = useState<{ [key: string]: boolean }>({
     who: false,
     formation: false,
@@ -256,13 +273,19 @@ export default function About() {
       />
 
       <InteractiveBackgroundSection>
-      <Container maxWidth="lg" sx={{ py: 6, position: 'relative', zIndex: 2 }}>
+      <Container
+        maxWidth="lg"
+        sx={{ py: { xs: 5, md: 5.5, lg: 4.5, xl: 4 }, px: { xs: 2.5, sm: 3, md: 4 }, position: 'relative', zIndex: 2 }}
+      >
         <ScrollReveal direction="up" delay={0.05}>
+        {mobileProfile ? (
+          <AboutProfileAccordionMobile t={t} primary={primary} textColor={textColor} />
+        ) : (
         <Box sx={{ 
           display: 'grid', 
           gridTemplateColumns: { xs: '1fr', md: 'repeat(3, 1fr)' },
-          gap: 4,
-          mb: 8
+          gap: { xs: 3, md: 3, lg: 2.5, xl: 2.25 },
+          mb: { xs: 6, md: 7, lg: 6, xl: 5 }
         }}>
           {/* Carte Qui suis-je */}
           <FlipCard data-testid="about-flip-card-who" onClick={() => handleCardFlip('who')}>
@@ -280,12 +303,13 @@ export default function About() {
                   MozBackfaceVisibility: 'hidden',
                 }}
               >
-                <PersonIcon sx={{ fontSize: 48, color: primary, mb: 2 }} />
+                <PersonIcon sx={{ fontSize: { xs: 48, md: 40, lg: 36 }, color: primary, mb: 2 }} />
                 <Typography 
                   variant="h5" 
                   gutterBottom 
                   sx={{ 
                     fontWeight: 600,
+                    fontSize: { md: '1.18rem', lg: '1.06rem', xl: '1rem' },
                     color: primary,
                     textShadow: `0 2px 4px ${primary}40`
                   }}
@@ -343,6 +367,7 @@ export default function About() {
                   variant="h5" 
                   sx={{ 
                     color: textColor,
+                    fontSize: { md: '1.18rem', lg: '1.06rem', xl: '1rem' },
                     marginBottom: '16px', 
                     fontWeight: 600,
                     textShadow: `0 2px 4px ${primary}40`
@@ -387,12 +412,13 @@ export default function About() {
                   MozBackfaceVisibility: 'hidden',
                 }}
               >
-                <SchoolIcon sx={{ fontSize: 48, color: primary, mb: 2 }} />
+                <SchoolIcon sx={{ fontSize: { xs: 48, md: 40, lg: 36 }, color: primary, mb: 2 }} />
                 <Typography 
                   variant="h5" 
                   gutterBottom 
                   sx={{ 
                     fontWeight: 600,
+                    fontSize: { md: '1.18rem', lg: '1.06rem', xl: '1rem' },
                     color: primary,
                     textShadow: `0 2px 4px ${primary}40`
                   }}
@@ -450,6 +476,7 @@ export default function About() {
                   variant="h5" 
                   sx={{ 
                     color: textColor,
+                    fontSize: { md: '1.18rem', lg: '1.06rem', xl: '1rem' },
                     marginBottom: '16px', 
                     fontWeight: 600,
                     textShadow: `0 2px 4px ${primary}40`
@@ -495,12 +522,13 @@ export default function About() {
                   MozBackfaceVisibility: 'hidden',
                 }}
               >
-                <WorkIcon sx={{ fontSize: 48, color: primary, mb: 2 }} />
+                <WorkIcon sx={{ fontSize: { xs: 48, md: 40, lg: 36 }, color: primary, mb: 2 }} />
                 <Typography 
                   variant="h5" 
                   gutterBottom 
                   sx={{ 
                     fontWeight: 600,
+                    fontSize: { md: '1.18rem', lg: '1.06rem', xl: '1rem' },
                     color: primary,
                     textShadow: `0 2px 4px ${primary}40`
                   }}
@@ -558,6 +586,7 @@ export default function About() {
                   variant="h5" 
                   sx={{ 
                     color: textColor,
+                    fontSize: { md: '1.18rem', lg: '1.06rem', xl: '1rem' },
                     marginBottom: '16px', 
                     fontWeight: 600,
                     textShadow: `0 2px 4px ${primary}40`
@@ -581,6 +610,7 @@ export default function About() {
             </FlipCardInner>
           </FlipCard>
         </Box>
+        )}
         </ScrollReveal>
 
         <ScrollReveal direction="up" delay={0.1}>
@@ -591,9 +621,9 @@ export default function About() {
         <Box sx={{ 
           ...getCardSurfaceSx({ isTopologyRoute, variant: 'flat', level: 'soft', interactive: false }),
           borderRadius: DESIGN_TOKENS.borderRadius.large,
-          padding: 4,
+          padding: { xs: 3, sm: 3.5, md: 4, lg: 3, xl: 2.75 },
           textAlign: 'center',
-          mb: 8,
+          mb: { xs: 6, md: 7, lg: 6, xl: 5 },
           position: 'relative',
           overflow: 'hidden',
           ...(!isTopologyRoute && {
@@ -611,6 +641,13 @@ export default function About() {
               opacity: 'var(--card-overlay-opacity, 0.3)',
             },
           }),
+          [theme.breakpoints.down('sm')]: {
+            background: 'transparent',
+            border: 'none',
+            boxShadow: 'none',
+            p: 0,
+            '&::before': { display: 'none', content: 'none' },
+          },
         }}>
           <Typography 
             variant="h4" 
@@ -619,7 +656,8 @@ export default function About() {
               marginBottom: '24px',
               fontWeight: 700,
               color: primary,
-              textShadow: `0 2px 4px ${primary}40`
+              textShadow: `0 2px 4px ${primary}40`,
+              fontSize: { xs: '1.35rem', sm: '1.5rem', md: '1.55rem', lg: '1.42rem', xl: '1.32rem' },
             }}
           >
             {t('about.skills')}
@@ -639,17 +677,17 @@ export default function About() {
               key={skill}
               component="span"
               sx={{
-                minWidth: 92,
-                height: 36,
-                px: 1.5,
+                minWidth: { xs: 88, sm: 92, lg: 80, xl: 76 },
+                height: { xs: 34, sm: 36, lg: 34, xl: 32 },
+                px: { xs: 1.25, sm: 1.5, lg: 1.25 },
                 borderRadius: DESIGN_TOKENS.borderRadius.small,
-                border: `1px solid ${primary}45`,
+                border: { xs: 'none', sm: `1px solid ${primary}45` },
                 color: textColor,
-                background: `${primary}0d`,
+                background: { xs: alpha(primary, 0.08), sm: `${primary}0d` },
                 display: 'inline-flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                fontSize: '0.82rem',
+                fontSize: { xs: '0.78rem', sm: '0.82rem', lg: '0.78rem', xl: '0.74rem' },
                 fontWeight: 800,
                 letterSpacing: '0.04em',
                 textTransform: 'uppercase',

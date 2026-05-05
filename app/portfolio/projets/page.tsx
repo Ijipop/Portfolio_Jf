@@ -292,7 +292,7 @@ export default function Projets() {
               justifyContent: 'center',
               alignItems: 'center',
               minHeight: { xs: 'min(55dvh, 520px)', sm: '58vh' },
-              px: { xs: 1.5, sm: 2 },
+              px: { xs: 2.5, sm: 2 },
               width: '100%',
             }}
           >
@@ -310,7 +310,10 @@ export default function Projets() {
       <HeaderSection title={<IjipopGlitchTitle text={t('projects.title')} />} subtitle={t('projects.subtitle')} />
 
       <InteractiveBackgroundSection>
-        <Container maxWidth="lg" sx={{ py: { xs: 3, sm: 4, md: 4, xl: 5 }, position: 'relative', zIndex: 2 }}>
+        <Container
+          maxWidth="lg"
+          sx={{ py: { xs: 3, sm: 4, md: 4, xl: 5 }, px: { xs: 2.5, sm: 3, md: 4 }, position: 'relative', zIndex: 2 }}
+        >
           {error && (
             <AnimatedBox>
               <Alert severity="error" sx={{ mb: 4, borderRadius: DESIGN_TOKENS.borderRadius.small }}>

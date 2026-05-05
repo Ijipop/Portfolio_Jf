@@ -67,12 +67,12 @@ export default function IjipopGlitchTitle({ text, variant = 'page' }: IjipopGlit
     variant === 'hero'
       ? {
           xs: 'clamp(4.35rem, 18vw, 5.25rem)',
-          sm: 'clamp(6.7rem, 15vw, 9.2rem)',
-          md: 'clamp(9.25rem, 13vw, 12.25rem)',
-          lg: 'clamp(10.5rem, 13vw, 14.25rem)',
-          xl: 'clamp(12rem, 12vw, 15.75rem)',
+          sm: 'clamp(5.2rem, 11vw, 6.85rem)',
+          md: 'clamp(5.65rem, 9.5vw, 7.35rem)',
+          lg: 'clamp(5.55rem, 8.25vw, 7.1rem)',
+          xl: 'clamp(5.35rem, 7vw, 6.75rem)',
         }
-      : { xs: '1.75rem', sm: '2.75rem', md: '3.75rem' }
+      : { xs: '1.65rem', sm: '2.1rem', md: '2.35rem', lg: '2.15rem', xl: '2rem' }
 
   const letterSpacing = variant === 'hero' ? { xs: '0.03em', sm: '0.05em' } : { xs: '0.05em', sm: '0.1em' }
 
@@ -89,10 +89,10 @@ export default function IjipopGlitchTitle({ text, variant = 'page' }: IjipopGlit
             fontSize: 'clamp(4rem, 16vw, 4.8rem)',
           },
           '@media (min-width: 900px) and (max-height: 820px)': {
-            fontSize: 'clamp(8.8rem, 12vw, 11rem)',
+            fontSize: 'clamp(5rem, 9vw, 6.5rem)',
           },
           '@media (min-width: 900px) and (max-height: 680px)': {
-            fontSize: 'clamp(7.8rem, 10.5vw, 9.4rem)',
+            fontSize: 'clamp(4.5rem, 8vw, 5.85rem)',
           },
         }),
         fontWeight: 900,

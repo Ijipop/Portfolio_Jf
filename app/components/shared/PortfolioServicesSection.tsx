@@ -4,7 +4,11 @@ import AutorenewOutlinedIcon from '@mui/icons-material/AutorenewOutlined'
 import HandymanOutlinedIcon from '@mui/icons-material/HandymanOutlined'
 import LanguageOutlinedIcon from '@mui/icons-material/LanguageOutlined'
 import Box from '@mui/material/Box'
+import Divider from '@mui/material/Divider'
+import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
+import { alpha, useTheme } from '@mui/material/styles'
+import useMediaQuery from '@mui/material/useMediaQuery'
 import Link from 'next/link'
 import { useMemo } from 'react'
 import ThreeDCardComponent from '@/components/ThreeDCard'
@@ -16,7 +20,7 @@ import {
 } from './IjipopGlitchTitle'
 import ScrollReveal from './ScrollReveal'
 import PortfolioHomeOfferEcosystem from './PortfolioHomeOfferEcosystem'
-import { DESIGN_TOKENS } from '@/design-system/constants'
+import { DESIGN_TOKENS, SECTION_H3_DENSE_SX } from '@/design-system/constants'
 import { usePresentationMode } from '@/contexts/PresentationModeContext'
 import { useLanguage } from '@/contexts/LanguageContext'
 import { useTextColor } from '@/hooks/useTextColor'
@@ -52,10 +56,12 @@ const SERVICES: {
 ]
 
 export default function PortfolioServicesSection() {
+  const theme = useTheme()
   const { t } = useLanguage()
   const { mode: presentationMode } = usePresentationMode()
   const textColor = useTextColor()
   const { primary, secondary, accent } = useThemeColors()
+  const mobileFlatList = useMediaQuery(theme.breakpoints.down('sm'), { noSsr: true })
   const serviceGradient = useMemo(
     () =>
       presentationMode === 'beige'
@@ -95,8 +101,7 @@ export default function PortfolioServicesSection() {
               color: textColor,
               fontWeight: 900,
               letterSpacing: '-0.05em',
-              fontSize: { xs: '2rem', md: '3.1rem' },
-              lineHeight: 1.05,
+              ...SECTION_H3_DENSE_SX,
               mb: 2,
             }}
           >
@@ -107,7 +112,7 @@ export default function PortfolioServicesSection() {
             sx={{
               color: textColor,
               opacity: 0.82,
-              fontSize: { xs: '1rem', sm: '1.0625rem' },
+              fontSize: { xs: '1rem', sm: '1.0625rem', lg: '1rem', xl: '0.98rem' },
               lineHeight: 1.55,
               maxWidth: 720,
               mx: 'auto',
@@ -119,44 +124,21 @@ export default function PortfolioServicesSection() {
         </Box>
       </ScrollReveal>
 
-      <Box
-        sx={{
-          display: 'grid',
-          gridTemplateColumns: {
-            xs: '1fr',
-            sm: 'repeat(2, 1fr)',
-            lg: 'repeat(3, 1fr)',
-          },
-          gap: { xs: 2, md: 2.5 },
-          alignItems: 'stretch',
-          '& > *:nth-of-type(3)': {
-            gridColumn: { sm: '1 / -1', lg: 'auto' },
-          },
-        }}
-      >
-        {SERVICES.map((service, index) => {
-          const Icon = service.icon
-          return (
-            <ScrollReveal key={service.titleKey} direction="up" delay={0.06 * index} fillHeight>
-              <ThreeDCardComponent
-                fullHeight
-                borderBeam={{
-                  duration: 52,
-                  size: 180,
-                  delay: index * 4,
-                  colorFrom: borderBeamColors.colorFrom,
-                  colorTo: borderBeamColors.colorTo,
-                }}
-                floatingElements={1}
-                sx={{
-                  minHeight: 260,
-                  p: { xs: 2.25, md: 2.75 },
-                  '& .MuiCardContent-root': {
-                    pb: '24px !important',
-                  },
-                }}
-              >
-                <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%', minHeight: 0 }}>
+      {mobileFlatList ? (
+        <Stack
+          divider={
+            <Divider
+              flexItem
+              sx={{ borderColor: alpha(primary, theme.palette.mode === 'dark' ? 0.18 : 0.12) }}
+            />
+          }
+          sx={{ gap: 0 }}
+        >
+          {SERVICES.map((service, index) => {
+            const Icon = service.icon
+            return (
+              <ScrollReveal key={service.titleKey} direction="up" delay={0.06 * index}>
+                <Box sx={{ display: 'flex', flexDirection: 'column', py: 3 }}>
                   <Box
                     sx={{
                       width: 58,
@@ -166,12 +148,21 @@ export default function PortfolioServicesSection() {
                       placeItems: 'center',
                       mb: 2,
                       background: serviceGradient,
-                      boxShadow: `0 18px 38px ${primary}2f`,
+                      boxShadow: `0 12px 28px ${primary}28`,
                     }}
                   >
                     <Icon sx={{ color: 'white', fontSize: 30 }} />
                   </Box>
-                  <Typography variant="h5" sx={{ color: textColor, fontWeight: 900, mb: 1, lineHeight: 1.15 }}>
+                  <Typography
+                    variant="h5"
+                    sx={{
+                      color: textColor,
+                      fontWeight: 900,
+                      mb: 1,
+                      lineHeight: 1.15,
+                      fontSize: { xs: '1.15rem', md: '1.18rem', lg: '1.08rem', xl: '1.04rem' },
+                    }}
+                  >
                     {t(service.titleKey)}
                   </Typography>
                   <Typography
@@ -180,12 +171,11 @@ export default function PortfolioServicesSection() {
                       opacity: 0.84,
                       lineHeight: 1.6,
                       mb: 0,
-                      flex: 1,
                     }}
                   >
                     {t(service.leadKey)}
                   </Typography>
-                  <Box sx={{ mt: 'auto', pt: 2.5 }}>
+                  <Box sx={{ mt: 2 }}>
                     <Link href={CONTACT_PATH} style={{ textDecoration: 'none' }}>
                       <Typography
                         component="span"
@@ -206,11 +196,113 @@ export default function PortfolioServicesSection() {
                     </Link>
                   </Box>
                 </Box>
-              </ThreeDCardComponent>
-            </ScrollReveal>
-          )
-        })}
-      </Box>
+              </ScrollReveal>
+            )
+          })}
+        </Stack>
+      ) : (
+        <Box
+          sx={{
+            display: 'grid',
+            gridTemplateColumns: {
+              xs: '1fr',
+              sm: 'repeat(2, 1fr)',
+              lg: 'repeat(3, 1fr)',
+            },
+            gap: { xs: 2, md: 2.5 },
+            alignItems: 'stretch',
+            '& > *:nth-of-type(3)': {
+              gridColumn: { sm: '1 / -1', lg: 'auto' },
+            },
+          }}
+        >
+          {SERVICES.map((service, index) => {
+            const Icon = service.icon
+            return (
+              <ScrollReveal key={service.titleKey} direction="up" delay={0.06 * index} fillHeight>
+                <ThreeDCardComponent
+                  fullHeight
+                  borderBeam={{
+                    duration: 52,
+                    size: 180,
+                    delay: index * 4,
+                    colorFrom: borderBeamColors.colorFrom,
+                    colorTo: borderBeamColors.colorTo,
+                  }}
+                  floatingElements={1}
+                  sx={{
+                    minHeight: 260,
+                    p: { xs: 2.25, md: 2.75 },
+                    '& .MuiCardContent-root': {
+                      pb: '24px !important',
+                    },
+                  }}
+                >
+                  <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%', minHeight: 0 }}>
+                    <Box
+                      sx={{
+                        width: 58,
+                        height: 58,
+                        borderRadius: DESIGN_TOKENS.borderRadius.medium,
+                        display: 'grid',
+                        placeItems: 'center',
+                        mb: 2,
+                        background: serviceGradient,
+                        boxShadow: `0 18px 38px ${primary}2f`,
+                      }}
+                    >
+                      <Icon sx={{ color: 'white', fontSize: 30 }} />
+                    </Box>
+                    <Typography
+                    variant="h5"
+                    sx={{
+                      color: textColor,
+                      fontWeight: 900,
+                      mb: 1,
+                      lineHeight: 1.15,
+                      fontSize: { xs: '1.15rem', md: '1.18rem', lg: '1.08rem', xl: '1.04rem' },
+                    }}
+                  >
+                      {t(service.titleKey)}
+                    </Typography>
+                    <Typography
+                      sx={{
+                        color: textColor,
+                        opacity: 0.84,
+                        lineHeight: 1.6,
+                        mb: 0,
+                        flex: 1,
+                      }}
+                    >
+                      {t(service.leadKey)}
+                    </Typography>
+                    <Box sx={{ mt: 'auto', pt: 2.5 }}>
+                      <Link href={CONTACT_PATH} style={{ textDecoration: 'none' }}>
+                        <Typography
+                          component="span"
+                          sx={{
+                            color: primary,
+                            fontWeight: 900,
+                            letterSpacing: '0.02em',
+                            backgroundImage: `linear-gradient(${primary}, ${primary})`,
+                            backgroundRepeat: 'no-repeat',
+                            backgroundPosition: '0 100%',
+                            backgroundSize: '0% 2px',
+                            transition: DESIGN_TOKENS.transitions.normal,
+                            '&:hover': { backgroundSize: '100% 2px' },
+                          }}
+                        >
+                          {t(service.linkKey)}
+                        </Typography>
+                      </Link>
+                    </Box>
+                  </Box>
+                </ThreeDCardComponent>
+              </ScrollReveal>
+            )
+          })}
+        </Box>
+      )}
 
       <ScrollReveal direction="up" delay={0.08}>
         <Typography
@@ -224,7 +316,7 @@ export default function PortfolioServicesSection() {
             opacity: 0.78,
             fontSize: { xs: '0.92rem', sm: '0.97rem' },
             lineHeight: 1.55,
-            px: { xs: 1, sm: 0 },
+            px: 0,
           }}
         >
           {t('home.servicesHomeFootnote')}

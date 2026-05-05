@@ -19,6 +19,16 @@ export type LoadingLoopVideoProps = {
  * Deux sources : WebM en priorité, MP4 en repli (notamment Safari).
  * `muted` + `playsInline` requis pour l’autoplay mobile.
  */
+/** Réduit le tamponnage et l’UI « grisée » avant la première image ; l’autoplay relance la lecture. */
+const WEBKIT_VIDEO_HIDE_CONTROLS_SX = {
+  // Safari / Chrome mobile : masquer le gros bouton lecture et la barre tant qu’on n’expose pas `controls`
+  '&::-webkit-media-controls': { display: 'none !important' },
+  '&::-webkit-media-controls-enclosure': { display: 'none !important' },
+  '&::-webkit-media-controls-start-playback-button': { display: 'none !important' },
+  '&::-webkit-media-controls-overlay-play-button': { display: 'none !important' },
+  '&::-webkit-media-controls-panel': { display: 'none !important' },
+} as const
+
 export default function LoadingLoopVideo({ webmSrc, mp4Src, sx, onMediaError }: LoadingLoopVideoProps) {
   const ref = useRef<HTMLVideoElement>(null)
   const onFailRef = useRef(onMediaError)
@@ -43,7 +53,7 @@ export default function LoadingLoopVideo({ webmSrc, mp4Src, sx, onMediaError }: 
       loop
       muted
       playsInline
-      preload="auto"
+      preload="metadata"
       aria-hidden
       onError={() => onMediaError?.()}
       sx={{
@@ -56,6 +66,7 @@ export default function LoadingLoopVideo({ webmSrc, mp4Src, sx, onMediaError }: 
         objectFit: 'contain',
         objectPosition: 'center',
         bgcolor: 'transparent',
+        ...WEBKIT_VIDEO_HIDE_CONTROLS_SX,
         ...sx,
       }}
     >
