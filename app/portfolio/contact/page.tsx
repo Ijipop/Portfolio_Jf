@@ -16,7 +16,6 @@ import Typography from '@mui/material/Typography'
 import { styled, useTheme } from '@mui/material/styles'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import { useState } from 'react'
-import Image from 'next/image'
 import ThreeDCardComponent from '../../components/ThreeDCard'
 import HeaderSection from '../../components/shared/HeaderSection'
 import IjipopGlitchTitle from '../../components/shared/IjipopGlitchTitle'
@@ -32,6 +31,7 @@ import ProjectWebBriefSection, {
 import AiLeadDiagnosis, {
   type AiLeadDiagnosisResult,
 } from '../../components/contact/AiLeadDiagnosis'
+import ContactCoffeeVideo from '../../components/contact/ContactCoffeeVideo'
 import { DESIGN_TOKENS } from '../../design-system/constants'
 import { useTextColor } from '../../hooks/useTextColor'
 import { useThemeColors } from '../../hooks/useThemeColors'
@@ -116,8 +116,7 @@ export default function Contact() {
   const [snackbarOpen, setSnackbarOpen] = useState(false)
   const [snackbarMessage, setSnackbarMessage] = useState('')
   const [snackbarSeverity, setSnackbarSeverity] = useState<'success' | 'error'>('success')
-  const [montrealImgError, setMontrealImgError] = useState(false)
-  
+
   // Formulaire de contact
   const [formData, setFormData] = useState({
     name: '',
@@ -480,60 +479,21 @@ export default function Contact() {
           </ThreeDCardComponent>
         </Box>
 
-        <Box sx={{ maxWidth: 420, mx: 'auto', mb: useCompactContact ? 4 : 6 }}>
-          <ThreeDCardComponent floatingElements={2} sx={{ minHeight: { xs: 230, sm: 260 }, padding: { xs: 2, sm: 2.5, md: 3 } }}>
-            <Box sx={{ textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', height: '100%', justifyContent: 'flex-start' }}>
+        <Box sx={{ maxWidth: 800, mx: 'auto', mb: useCompactContact ? 4 : 6 }}>
+          <ThreeDCardComponent floatingElements={2} sx={{ padding: { xs: 2, sm: 2.5, md: 3 } }}>
+            <Box sx={{ textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
               <LocationOnIcon sx={{ fontSize: 40, color: primary, mb: 1.5 }} />
               <Typography variant="h6" gutterBottom sx={{ color: primary }}>
                 {t('contact.location')}
               </Typography>
-              <Typography variant="body2" sx={{ mb: 1.5, color: textColor, opacity: 0.8 }}>
+              <Typography variant="body2" sx={{ color: textColor, opacity: 0.85, lineHeight: 1.6 }}>
                 {t('contact.locationCity')}
               </Typography>
-              {!montrealImgError ? (
-                <Box
-                  sx={{
-                    position: 'relative',
-                    width: { xs: 150, sm: 180 },
-                    aspectRatio: '1 / 1',
-                    borderRadius: 1,
-                    overflow: 'hidden',
-                    display: 'block',
-                    mx: 'auto',
-                  }}
-                >
-                  <Image
-                    src="/imgs/images/montreal.png"
-                    alt="Montréal"
-                    fill
-                    sizes="100vw"
-                    style={{ objectFit: 'cover' }}
-                    onError={() => setMontrealImgError(true)}
-                  />
-                </Box>
-              ) : (
-                <Box
-                  sx={{
-                    width: { xs: 150, sm: 180 },
-                    aspectRatio: '1 / 1',
-                    borderRadius: 1,
-                    bgcolor: 'action.hover',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    fontSize: '0.75rem',
-                    color: 'text.secondary',
-                    mx: 'auto',
-                  }}
-                >
-                  Montréal
-                </Box>
-              )}
             </Box>
           </ThreeDCardComponent>
         </Box>
 
-        <Box sx={{ mt: useCompactContact ? 4 : 8 }}>
+        <Box sx={{ mt: useCompactContact ? 4 : 8, mb: useCompactContact ? 4 : 6 }}>
           <Typography variant="h4" gutterBottom sx={{ mb: 4, textAlign: 'center', fontWeight: 700, color: primary }}>
             {t('contact.followMe')}
           </Typography>
@@ -541,7 +501,7 @@ export default function Contact() {
             display: 'grid', 
             gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)' },
             gap: 4,
-            maxWidth: '600px',
+            maxWidth: 800,
             mx: 'auto',
             alignItems: 'stretch',
           }}>
@@ -584,6 +544,8 @@ export default function Contact() {
             </ThreeDCardComponent>
           </Box>
         </Box>
+
+        <ContactCoffeeVideo compact={useCompactContact} />
       </Container>
       </InteractiveBackgroundSection>
 

@@ -20,9 +20,9 @@ vi.mock('../../contexts/LanguageContext', () => ({
     setLocale: vi.fn(),
     t: (key: string) =>
       ({
-        'nav.portfolio': 'Portfolio',
+        'nav.portfolio': 'ijipop',
         'nav.home': 'Accueil',
-        'nav.projects': 'Projets',
+        'nav.projects': 'Réalisations',
         'nav.about': 'À propos',
         'nav.contact': 'Contact',
         'nav.admin': 'Admin',
@@ -58,8 +58,9 @@ describe('AppBarComponent', () => {
 
   it('renders core navigation labels', () => {
     render(<AppBarComponent />)
+    expect(screen.getByText('ijipop')).toBeInTheDocument()
     expect(screen.getByText('Accueil')).toBeInTheDocument()
-    expect(screen.getByText('Projets')).toBeInTheDocument()
+    expect(screen.getByText('Réalisations')).toBeInTheDocument()
     expect(screen.getByText('À propos')).toBeInTheDocument()
     expect(screen.getByText('Contact')).toBeInTheDocument()
   })
@@ -70,4 +71,3 @@ describe('AppBarComponent', () => {
     expect(homeLink).toHaveAttribute('href', '/portfolio')
   })
 })
-

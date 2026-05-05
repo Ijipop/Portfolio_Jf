@@ -50,7 +50,7 @@ export default function AppBarComponent() {
 					minHeight: { xs: '56px', sm: '64px' },
 					minWidth: 0,
 				}}>
-					{/* Titre Portfolio : lien vers l'accueil (prefetch activé) */}
+					{/* Marque : lien vers l'accueil (prefetch activé) */}
 					<Link href="/" style={{ textDecoration: 'none', color: 'inherit' }}>
 						<Typography
 							variant="h6"

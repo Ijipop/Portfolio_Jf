@@ -6,6 +6,7 @@ import { BeigePresentationBgProvider } from '../contexts/BeigePresentationBgCont
 import { GraphicsModeProvider } from '../contexts/GraphicsModeContext'
 import { LanguageProvider } from '../contexts/LanguageContext'
 import { PresentationModeProvider } from '../contexts/PresentationModeContext'
+import SmoothScrollProvider from './SmoothScrollProvider'
 
 export default function ThemeWrapper({
   children,
@@ -20,7 +21,9 @@ export default function ThemeWrapper({
         <GraphicsModeProvider>
           <PresentationModeProvider>
             <BeigePresentationBgProvider initialBeigePresentationBgUrl={initialBeigePresentationBgUrl}>
-              <AdvancedThemeProvider>{children}</AdvancedThemeProvider>
+              <AdvancedThemeProvider>
+                <SmoothScrollProvider>{children}</SmoothScrollProvider>
+              </AdvancedThemeProvider>
             </BeigePresentationBgProvider>
           </PresentationModeProvider>
         </GraphicsModeProvider>

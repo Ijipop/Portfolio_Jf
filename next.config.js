@@ -103,6 +103,11 @@ const nextConfig = {
   async redirects() {
     return [
       { source: '/logiciel/timelendar', destination: '/logiciel/timelendr', permanent: true },
+      {
+        source: '/logiciel/timelendar/merci',
+        destination: '/logiciel/timelendr/merci',
+        permanent: true,
+      },
       { source: '/api/timelendar/:path*', destination: '/api/timelendr/:path*', permanent: true },
       { source: '/pageweb', destination: '/portfolio/pageweb', permanent: true },
     ]

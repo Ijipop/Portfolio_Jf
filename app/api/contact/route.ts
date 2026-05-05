@@ -36,7 +36,7 @@ function wrapTable(rows: string): string {
 
 const SITE_TYPE_LABELS: Record<string, string> = {
   vitrine: 'Site vitrine / présentation d’entreprise',
-  portfolio: 'Portfolio',
+  portfolio: 'Site créatif / galerie de projets',
   boutique: 'Boutique en ligne',
   rdv: 'Prise de rendez-vous / réservation',
   app: 'Application web / espace client',
@@ -312,7 +312,7 @@ export async function POST(request: NextRequest) {
 
     // Expéditeur : domaine vérifié dans Resend (ex. contact@votredomaine.com). Voir RESEND_FROM sur Vercel.
     const fromAddress =
-      process.env.RESEND_FROM?.trim() || 'Portfolio Contact <onboarding@resend.dev>'
+      process.env.RESEND_FROM?.trim() || 'Ijipop Contact <onboarding@resend.dev>'
 
     if (fromAddress.includes('onboarding@resend.dev')) {
       console.warn(
@@ -329,7 +329,7 @@ export async function POST(request: NextRequest) {
 
     const htmlBody = `
       <div style="font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:#212529;">
-        <p style="margin:0 0 12px 0;font-size:15px;font-weight:600;">Nouveau message — Portfolio</p>
+        <p style="margin:0 0 12px 0;font-size:15px;font-weight:600;">Nouveau message — Ijipop</p>
         ${wrapTable(mainRows)}
         ${aiDiagnosisSection}
         ${projectSection}
@@ -340,7 +340,7 @@ export async function POST(request: NextRequest) {
       from: fromAddress,
       to: contactEmail,
       replyTo: email,
-      subject: `[Portfolio] ${subject}`,
+      subject: `[Ijipop] ${subject}`,
       html: htmlBody,
     })
 

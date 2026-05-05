@@ -3,7 +3,7 @@
 import Box from '@mui/material/Box'
 import Container from '@mui/material/Container'
 import Typography from '@mui/material/Typography'
-import { ReactNode, isValidElement, useEffect, useState } from 'react'
+import { ReactNode, forwardRef, isValidElement, useEffect, useState } from 'react'
 import { DESIGN_TOKENS } from '../../design-system/constants'
 import { THEMES } from '../../design-system/themes'
 import { useAdvancedTheme } from '../../contexts/AdvancedThemeContext'
@@ -27,7 +27,10 @@ interface HeaderSectionProps {
   fullViewport?: boolean
 }
 
-export default function HeaderSection({ title, subtitle, tagline, children, fullViewport = false }: HeaderSectionProps) {
+const HeaderSection = forwardRef<HTMLDivElement, HeaderSectionProps>(function HeaderSection(
+  { title, subtitle, tagline, children, fullViewport = false },
+  ref,
+) {
   const titleIsGlitch = isValidElement(title)
   const subtitleIsElement = isValidElement(subtitle)
   const { primary, secondary, accent } = useThemeColors()
@@ -75,6 +78,7 @@ export default function HeaderSection({ title, subtitle, tagline, children, full
   
   return (
     <Box
+      ref={ref}
       sx={{
         background: fullViewport
           ? `radial-gradient(90% 70% at 50% -12%, ${alpha(primary, theme.palette.mode === 'dark' ? 0.28 : 0.2)} 0%, transparent 58%),
@@ -257,5 +261,6 @@ export default function HeaderSection({ title, subtitle, tagline, children, full
       </Container>
     </Box>
   )
-}
+})
 
+export default HeaderSection

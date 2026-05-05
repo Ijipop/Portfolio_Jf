@@ -192,7 +192,7 @@ export default function Footer() {
                     '&:hover': { opacity: 1, transform: 'translateX(4px)' }
                   }}
                 >
-                  {t('home.servicesAiLink')}
+                  {t('home.servicesCtaAi')}
                 </Typography>
               </Link>
             </Box>
