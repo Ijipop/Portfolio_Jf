@@ -5,7 +5,9 @@ import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import Link from 'next/link'
-import { useEffect, useMemo, useState } from 'react'
+import { useLayoutEffect, useEffect, useMemo, useRef, useState } from 'react'
+import gsap from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import ScramblingText from '@/components/ScramblingText'
 import CTAButton from '@/components/shared/CTAButton'
 import HeaderSection from '@/components/shared/HeaderSection'
@@ -15,12 +17,15 @@ import { usePresentationMode } from '@/contexts/PresentationModeContext'
 import { useTextColor } from '@/hooks/useTextColor'
 import { useThemeColors } from '@/hooks/useThemeColors'
 
+gsap.registerPlugin(ScrollTrigger)
+
 export default function PortfolioHomeHero() {
   const { t } = useLanguage()
   const { mode: presentationMode } = usePresentationMode()
   const { primary, secondary, accent } = useThemeColors()
   const textColor = useTextColor()
   const reducedMotion = useMediaQuery('(prefers-reduced-motion: reduce)', { noSsr: true })
+  const heroSectionRef = useRef<HTMLDivElement>(null)
   const [wordIndex, setWordIndex] = useState(0)
   const [scramblePhase, setScramblePhase] = useState<'chaos' | 'settled'>('settled')
   const rotatingWordGradient = useMemo(
@@ -37,6 +42,32 @@ export default function PortfolioHomeHero() {
     t('home.heroRotatingSoftware'),
     t('home.heroRotatingInterfaces'),
   ]
+
+  useLayoutEffect(() => {
+    if (reducedMotion) return
+    const el = heroSectionRef.current
+    if (!el) return
+
+    const ctx = gsap.context(() => {
+      gsap.fromTo(
+        el,
+        { y: 0, opacity: 1 },
+        {
+          y: 48,
+          opacity: 0.8,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: el,
+            start: 'top 80px',
+            end: '+=420',
+            scrub: 0.5,
+          },
+        },
+      )
+    }, el)
+
+    return () => ctx.revert()
+  }, [reducedMotion])
 
   useEffect(() => {
     if (reducedMotion) return
@@ -154,7 +185,7 @@ export default function PortfolioHomeHero() {
   )
 
   return (
-    <HeaderSection fullViewport title={<IjipopGlitchTitle text={t('home.heroTitle')} variant="hero" />} subtitle={subtitle}>
+    <HeaderSection ref={heroSectionRef} fullViewport title={<IjipopGlitchTitle text={t('home.heroTitle')} variant="hero" />} subtitle={subtitle}>
       <Stack
         direction="column"
         spacing={1.5}

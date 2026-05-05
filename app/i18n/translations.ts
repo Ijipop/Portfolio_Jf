@@ -102,6 +102,14 @@ export const translations = {
       servicesHomeToolsCta: 'Voir ce qui est possible →',
       servicesHomeFootnote:
         'Besoin d’un formulaire plus clair, d’un outil interne ou d’un accompagnement après la mise en ligne? On peut l’ajouter au mandat selon vos besoins.',
+      servicesEcosystemBonusLabel: 'Modules bonus selon vos besoins (à ajouter au fil du projet)',
+      servicesEcosystemBonus1: 'Animation IA',
+      servicesEcosystemBonus2: 'Mini automatisation',
+      servicesEcosystemBonus3: 'Contenu',
+      servicesEcosystemBonus4: 'Maintenance',
+      servicesEcosystemBonus5: 'Diagnostic',
+      servicesEcosystemDemo2Caption:
+        'Autre exemple du genre de bonus possible : à intégrer selon vos priorités et votre budget.',
       // Banque : 5 offres détaillées — réutilisable pour une page « Services » détaillée ou contenu plus technique.
       servicesKicker: 'Offres',
       servicesTitle: 'Des mandats concrets, du premier site au suivi après mise en ligne',
@@ -186,6 +194,7 @@ export const translations = {
       promiseResponse: 'Réponse < 24 h',
       promiseCall: 'Premier appel offert',
       promiseEstimate: 'Devis sous 48 h',
+      coffeeInvite: 'Prenons un café ensemble et discutons ?',
       ai: {
         title: 'Diagnostic IA express',
         description:
@@ -560,6 +569,14 @@ export const translations = {
       servicesHomeToolsCta: 'See what’s possible →',
       servicesHomeFootnote:
         'Need a clearer form, a small internal tool, or help after launch? We can fold that into the project based on what you need.',
+      servicesEcosystemBonusLabel: 'Optional add-ons we can fold in as needed',
+      servicesEcosystemBonus1: 'AI motion',
+      servicesEcosystemBonus2: 'Light automation',
+      servicesEcosystemBonus3: 'Content',
+      servicesEcosystemBonus4: 'Maintenance',
+      servicesEcosystemBonus5: 'Diagnostics',
+      servicesEcosystemDemo2Caption:
+        'Another example of a possible add-on, scoped to your priorities and budget.',
       // Bank: five detailed offer lines — reuse on a future detailed Services page or technical copy.
       servicesKicker: 'Offers',
       servicesTitle: 'Concrete engagements—from first site to follow-up after launch',
@@ -644,6 +661,7 @@ export const translations = {
       promiseResponse: 'Reply < 24h',
       promiseCall: 'First call included',
       promiseEstimate: 'Estimate within 48h',
+      coffeeInvite: 'Let’s grab a coffee and talk?',
       ai: {
         title: 'Quick AI diagnosis',
         description:

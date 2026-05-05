@@ -15,6 +15,7 @@ import {
   buildPaletteGlitchGradient,
 } from './IjipopGlitchTitle'
 import ScrollReveal from './ScrollReveal'
+import PortfolioHomeOfferEcosystem from './PortfolioHomeOfferEcosystem'
 import { DESIGN_TOKENS } from '@/design-system/constants'
 import { usePresentationMode } from '@/contexts/PresentationModeContext'
 import { useLanguage } from '@/contexts/LanguageContext'
@@ -229,6 +230,7 @@ export default function PortfolioServicesSection() {
           {t('home.servicesHomeFootnote')}
         </Typography>
       </ScrollReveal>
+      <PortfolioHomeOfferEcosystem />
     </Box>
   )
 }

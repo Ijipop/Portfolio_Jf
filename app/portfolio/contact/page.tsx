@@ -32,6 +32,7 @@ import ProjectWebBriefSection, {
 import AiLeadDiagnosis, {
   type AiLeadDiagnosisResult,
 } from '../../components/contact/AiLeadDiagnosis'
+import ContactCoffeeVideo from '../../components/contact/ContactCoffeeVideo'
 import { DESIGN_TOKENS } from '../../design-system/constants'
 import { useTextColor } from '../../hooks/useTextColor'
 import { useThemeColors } from '../../hooks/useThemeColors'
@@ -479,6 +480,8 @@ export default function Contact() {
             </Box>
           </ThreeDCardComponent>
         </Box>
+
+        <ContactCoffeeVideo compact={useCompactContact} />
 
         <Box sx={{ maxWidth: 420, mx: 'auto', mb: useCompactContact ? 4 : 6 }}>
           <ThreeDCardComponent floatingElements={2} sx={{ minHeight: { xs: 230, sm: 260 }, padding: { xs: 2, sm: 2.5, md: 3 } }}>
