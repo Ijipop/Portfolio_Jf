@@ -481,9 +481,7 @@ export default function Contact() {
           </ThreeDCardComponent>
         </Box>
 
-        <ContactCoffeeVideo compact={useCompactContact} />
-
-        <Box sx={{ maxWidth: 420, mx: 'auto', mb: useCompactContact ? 4 : 6 }}>
+        <Box sx={{ maxWidth: 800, mx: 'auto', mb: useCompactContact ? 4 : 6 }}>
           <ThreeDCardComponent floatingElements={2} sx={{ minHeight: { xs: 230, sm: 260 }, padding: { xs: 2, sm: 2.5, md: 3 } }}>
             <Box sx={{ textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', height: '100%', justifyContent: 'flex-start' }}>
               <LocationOnIcon sx={{ fontSize: 40, color: primary, mb: 1.5 }} />
@@ -536,7 +534,7 @@ export default function Contact() {
           </ThreeDCardComponent>
         </Box>
 
-        <Box sx={{ mt: useCompactContact ? 4 : 8 }}>
+        <Box sx={{ mt: useCompactContact ? 4 : 8, mb: useCompactContact ? 4 : 6 }}>
           <Typography variant="h4" gutterBottom sx={{ mb: 4, textAlign: 'center', fontWeight: 700, color: primary }}>
             {t('contact.followMe')}
           </Typography>
@@ -544,7 +542,7 @@ export default function Contact() {
             display: 'grid', 
             gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)' },
             gap: 4,
-            maxWidth: '600px',
+            maxWidth: 800,
             mx: 'auto',
             alignItems: 'stretch',
           }}>
@@ -587,6 +585,8 @@ export default function Contact() {
             </ThreeDCardComponent>
           </Box>
         </Box>
+
+        <ContactCoffeeVideo compact={useCompactContact} />
       </Container>
       </InteractiveBackgroundSection>
 
