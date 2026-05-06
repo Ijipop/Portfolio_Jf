@@ -148,6 +148,7 @@ export default function ProjectCard({
   const { mode: presentationMode } = usePresentationMode()
   const isNonDefaultPalette = themeName !== 'default'
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
+  const isSmDown = useMediaQuery(theme.breakpoints.down('sm'), { noSsr: true })
   const reflectionColors = [
     primary,
     secondary,
@@ -320,7 +321,11 @@ export default function ProjectCard({
           subtle
           fullHeight
           floatingElements={0}
-          borderBeam={{ duration: 58, size: 180, delay: (index % 4) * 4 }}
+          borderBeam={
+            isSmDown
+              ? false
+              : { duration: 58, size: 180, delay: (index % 4) * 4 }
+          }
           onClick={() => {
             if (isOwnPortfolioSite) handleProjectClick('/portfolio')
             else if (project.url?.trim()) handleProjectClick(project.url)

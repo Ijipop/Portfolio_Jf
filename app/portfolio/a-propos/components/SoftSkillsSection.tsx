@@ -6,8 +6,9 @@ import LightbulbIcon from '@mui/icons-material/Lightbulb'
 import TimelineIcon from '@mui/icons-material/Timeline'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
+import { useTheme } from '@mui/material/styles'
 import { usePathname } from 'next/navigation'
-import { DESIGN_TOKENS } from '@/design-system/constants'
+import { DESIGN_TOKENS, SECTION_H3_DENSE_SX } from '@/design-system/constants'
 import { shouldShowTopology } from '@/utils/topologyRoutes'
 import { getCardSurfaceSx } from '@/components/shared/cardSurface'
 
@@ -18,6 +19,7 @@ interface SoftSkillsSectionProps {
 }
 
 export default function SoftSkillsSection({ primary, textColor, t }: SoftSkillsSectionProps) {
+  const theme = useTheme()
   const pathname = usePathname()
   const isTopologyRoute = shouldShowTopology(pathname)
   const surfaceSx = getCardSurfaceSx({ isTopologyRoute, variant: 'flat', level: 'soft', interactive: false })
@@ -27,9 +29,9 @@ export default function SoftSkillsSection({ primary, textColor, t }: SoftSkillsS
       sx={{
         ...surfaceSx,
         borderRadius: DESIGN_TOKENS.borderRadius.large,
-        padding: DESIGN_TOKENS.spacing.xl,
+        padding: { xs: DESIGN_TOKENS.spacing.lg, sm: DESIGN_TOKENS.spacing.xl, lg: theme.spacing(3), xl: theme.spacing(2.75) },
         textAlign: 'center',
-        mb: DESIGN_TOKENS.spacing.xxl,
+        mb: { xs: DESIGN_TOKENS.spacing.xl, lg: DESIGN_TOKENS.spacing.lg, xl: theme.spacing(5) },
         position: 'relative',
         overflow: 'hidden',
         ...(!isTopologyRoute && {
@@ -38,12 +40,21 @@ export default function SoftSkillsSection({ primary, textColor, t }: SoftSkillsS
           border: '1px solid var(--card-primary, rgba(0,0,0,0.08))',
           boxShadow: '0 8px 32px var(--card-primary, rgba(0,0,0,0.1))',
         }),
+        [theme.breakpoints.down('sm')]: {
+          background: 'transparent',
+          border: 'none',
+          boxShadow: 'none',
+          padding: 0,
+          borderRadius: 0,
+        },
       }}
     >
       <Typography
         variant="h3"
         gutterBottom
         sx={{
+          ...SECTION_H3_DENSE_SX,
+          lineHeight: 1.12,
           marginBottom: DESIGN_TOKENS.spacing.md,
           fontWeight: 700,
           color: primary,
@@ -56,13 +67,13 @@ export default function SoftSkillsSection({ primary, textColor, t }: SoftSkillsS
         sx={{
           display: 'grid',
           gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)', md: 'repeat(4, 1fr)' },
-          gap: DESIGN_TOKENS.spacing.md,
-          mt: DESIGN_TOKENS.spacing.lg,
+          gap: { xs: DESIGN_TOKENS.spacing.sm, sm: DESIGN_TOKENS.spacing.md, lg: DESIGN_TOKENS.spacing.sm },
+          mt: { xs: DESIGN_TOKENS.spacing.md, lg: DESIGN_TOKENS.spacing.sm },
         }}
       >
         <Box sx={{ textAlign: 'center' }}>
-          <LightbulbIcon sx={{ fontSize: 48, color: primary, mb: 1 }} />
-          <Typography variant="h6" sx={{ mb: 0.5, fontWeight: 600, color: textColor }}>
+          <LightbulbIcon sx={{ fontSize: { xs: 44, sm: 48, lg: 38, xl: 36 }, color: primary, mb: 1 }} />
+          <Typography variant="h6" sx={{ mb: 0.5, fontWeight: 600, color: textColor, fontSize: { lg: '1rem', xl: '0.95rem' } }}>
             {t('about.creativity')}
           </Typography>
           <Typography variant="body2" sx={{ color: textColor, opacity: 0.8 }}>
@@ -70,8 +81,8 @@ export default function SoftSkillsSection({ primary, textColor, t }: SoftSkillsS
           </Typography>
         </Box>
         <Box sx={{ textAlign: 'center' }}>
-          <GroupWorkIcon sx={{ fontSize: 48, color: primary, mb: 1 }} />
-          <Typography variant="h6" sx={{ mb: 0.5, fontWeight: 600, color: textColor }}>
+          <GroupWorkIcon sx={{ fontSize: { xs: 44, sm: 48, lg: 38, xl: 36 }, color: primary, mb: 1 }} />
+          <Typography variant="h6" sx={{ mb: 0.5, fontWeight: 600, color: textColor, fontSize: { lg: '1rem', xl: '0.95rem' } }}>
             {t('about.collaboration')}
           </Typography>
           <Typography variant="body2" sx={{ color: textColor, opacity: 0.8 }}>
@@ -79,8 +90,8 @@ export default function SoftSkillsSection({ primary, textColor, t }: SoftSkillsS
           </Typography>
         </Box>
         <Box sx={{ textAlign: 'center' }}>
-          <TimelineIcon sx={{ fontSize: 48, color: primary, mb: 1 }} />
-          <Typography variant="h6" sx={{ mb: 0.5, fontWeight: 600, color: textColor }}>
+          <TimelineIcon sx={{ fontSize: { xs: 44, sm: 48, lg: 38, xl: 36 }, color: primary, mb: 1 }} />
+          <Typography variant="h6" sx={{ mb: 0.5, fontWeight: 600, color: textColor, fontSize: { lg: '1rem', xl: '0.95rem' } }}>
             {t('about.adaptability')}
           </Typography>
           <Typography variant="body2" sx={{ color: textColor, opacity: 0.8 }}>
@@ -88,8 +99,8 @@ export default function SoftSkillsSection({ primary, textColor, t }: SoftSkillsS
           </Typography>
         </Box>
         <Box sx={{ textAlign: 'center' }}>
-          <AutoAwesomeIcon sx={{ fontSize: 48, color: primary, mb: 1 }} />
-          <Typography variant="h6" sx={{ mb: 0.5, fontWeight: 600, color: textColor }}>
+          <AutoAwesomeIcon sx={{ fontSize: { xs: 44, sm: 48, lg: 38, xl: 36 }, color: primary, mb: 1 }} />
+          <Typography variant="h6" sx={{ mb: 0.5, fontWeight: 600, color: textColor, fontSize: { lg: '1rem', xl: '0.95rem' } }}>
             {t('about.quality')}
           </Typography>
           <Typography variant="body2" sx={{ color: textColor, opacity: 0.8 }}>

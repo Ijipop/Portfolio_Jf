@@ -44,7 +44,7 @@ export default function ContactCoffeeVideo({ compact = false }: Props) {
       </Typography>
       <Box
         sx={{
-          borderRadius: DESIGN_TOKENS.borderRadius.medium,
+          borderRadius: { xs: '28px', sm: `${DESIGN_TOKENS.borderRadius.medium}px` },
           overflow: 'hidden',
           aspectRatio: '16 / 9',
           bgcolor: theme.palette.mode === 'dark' ? '#0a0a0a' : '#0f0f0f',

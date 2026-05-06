@@ -39,7 +39,7 @@ export default function PagewebPage() {
             zIndex: 1,
             flex: 1,
             py: { xs: 4, sm: 6, md: 8 },
-            px: { xs: 1.5, sm: 2, md: 3 },
+            px: { xs: 2.5, sm: 2, md: 3 },
           }}
         >
           <Container maxWidth="md">
@@ -62,22 +62,25 @@ export default function PagewebPage() {
 
             <ScrollReveal direction="up" delay={0.06}>
               <Box
-                sx={{
+                sx={(theme) => ({
                   my: { xs: 3, sm: 4 },
                   mx: 'auto',
                   maxWidth: 720,
                   position: 'relative',
-                  borderRadius: `${DESIGN_TOKENS.borderRadius.large}px`,
+                  borderRadius: { xs: '28px', sm: `${DESIGN_TOKENS.borderRadius.large}px` },
                   overflow: 'hidden',
                   border: `1px solid ${alpha(primary, 0.28)}`,
-                  boxShadow: (theme) =>
+                  boxShadow:
                     theme.palette.mode === 'dark'
                       ? `0 20px 56px ${alpha(primary, 0.2)}, 0 0 0 1px ${alpha('#fff', 0.06)} inset`
                       : `0 22px 50px ${alpha(primary, 0.14)}, 0 0 0 1px ${alpha('#fff', 0.55)} inset`,
+                  [theme.breakpoints.down('sm')]: {
+                    border: `1px solid ${alpha(primary, theme.palette.mode === 'dark' ? 0.14 : 0.12)}`,
+                    boxShadow: `0 10px 32px ${alpha(primary, 0.08)}`,
+                  },
                   aspectRatio: '16 / 9',
-                  background: (theme) =>
-                    theme.palette.mode === 'dark' ? alpha('#020617', 0.75) : alpha('#ffffff', 0.5),
-                }}
+                  background: theme.palette.mode === 'dark' ? alpha('#020617', 0.75) : alpha('#ffffff', 0.5),
+                })}
               >
                 <Box
                   component="video"

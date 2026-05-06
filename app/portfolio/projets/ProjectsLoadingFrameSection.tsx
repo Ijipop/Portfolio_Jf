@@ -104,22 +104,36 @@ function ProjectsLoadingPngFallback({ message }: { message: string }) {
   )
 }
 
+/** Aligné sur le breakpoint `sm` MUI (~600px) : sous cette largeur, pas de `<video>` de chargement (chrome natif grisé + bouton lecture). */
+const MOBILE_LOADING_MAX_CSS = '(max-width: 599.95px)'
+
 export default function ProjectsLoadingFrameSection({ message = '' }: ProjectsLoadingFrameSectionProps) {
   const [usePngFallback, setUsePngFallback] = useState(false)
-  /** Safari iOS : MP4 sans alpha → bandes noires ; WebKit dimensionne mal les vidéos → PNG (même pipeline que le repli erreur). */
-  const [iosUsePng, setIosUsePng] = useState(false)
+  /** iOS / petit écran : éviter les vidéos inline (aperçu gris, gros bouton lecture avant autoplay). */
+  const [preferFrameSequence, setPreferFrameSequence] = useState(false)
   const reducedMotion = useMediaQuery('(prefers-reduced-motion: reduce)', { noSsr: true })
   const onVideoFail = useCallback(() => setUsePngFallback(true), [])
 
   useLayoutEffect(() => {
-    if (isIOSTouchDevice()) setIosUsePng(true)
+    if (typeof window === 'undefined') return
+    if (isIOSTouchDevice()) {
+      setPreferFrameSequence(true)
+      return
+    }
+    try {
+      if (window.matchMedia(MOBILE_LOADING_MAX_CSS).matches) {
+        setPreferFrameSequence(true)
+      }
+    } catch {
+      /* matchMedia indisponible (très rare) */
+    }
   }, [])
 
   if (reducedMotion) {
     return <LoadingSpinner message={message} />
   }
 
-  if (usePngFallback || iosUsePng) {
+  if (usePngFallback || preferFrameSequence) {
     return <ProjectsLoadingPngFallback message={message} />
   }
 

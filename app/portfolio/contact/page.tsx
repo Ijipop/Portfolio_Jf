@@ -12,8 +12,10 @@ import RequestQuoteIcon from '@mui/icons-material/RequestQuote'
 import { Alert, Snackbar, TextField, CircularProgress } from '@mui/material'
 import Box from '@mui/material/Box'
 import Container from '@mui/material/Container'
+import Divider from '@mui/material/Divider'
+import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
-import { styled, useTheme } from '@mui/material/styles'
+import { alpha, styled, useTheme } from '@mui/material/styles'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import { useState } from 'react'
 import ThreeDCardComponent from '../../components/ThreeDCard'
@@ -107,6 +109,7 @@ const StyledTextField = styled(TextField, {
 
 export default function Contact() {
   const theme = useTheme()
+  const isSmDown = useMediaQuery(theme.breakpoints.down('sm'), { noSsr: true })
   const isXlUp = useMediaQuery(theme.breakpoints.up('xl'))
   const isTallViewport = useMediaQuery('(min-height: 1000px)', { noSsr: true })
   const useCompactContact = !isXlUp || !isTallViewport
@@ -302,7 +305,10 @@ export default function Contact() {
       />
 
       <InteractiveBackgroundSection>
-      <Container maxWidth="lg" sx={{ py: useCompactContact ? 4 : 8, position: 'relative', zIndex: 2 }}>
+      <Container
+        maxWidth="lg"
+        sx={{ py: useCompactContact ? 4 : 8, px: { xs: 2.5, sm: 3, md: 4 }, position: 'relative', zIndex: 2 }}
+      >
         <Box
           sx={{
             display: 'flex',
@@ -322,9 +328,9 @@ export default function Contact() {
                 px: { xs: 1.4, sm: 1.75 },
                 py: 1,
                 borderRadius: 999,
-                border: `1px solid ${primary}42`,
+                border: { xs: 'none', sm: `1px solid ${primary}42` },
                 color: textColor,
-                background: `${primary}10`,
+                background: { xs: alpha(primary, 0.08), sm: `${primary}10` },
                 backdropFilter: 'blur(12px)',
                 WebkitBackdropFilter: 'blur(12px)',
                 fontSize: { xs: '0.78rem', sm: '0.86rem' },
@@ -344,25 +350,47 @@ export default function Contact() {
           mb: useCompactContact ? 4 : 6,
         }}>
           <ThreeDCardComponent
-            floatingElements={2}
-            sx={{ padding: { xs: 2, sm: 3 } }}
-            borderBeam={{
-              duration: 45,
-              size: 220,
-              ...(theme.palette.mode === 'dark'
-                ? {
-                    colorFrom: '#ff6b35',
-                    colorTo: '#6b6b6f',
-                  }
-                : {
-                    colorFrom: '#ea580c',
-                    colorTo: '#948c82',
-                  }),
+            subtle={isSmDown}
+            floatingElements={isSmDown ? 0 : 2}
+            sx={{
+              padding: { xs: 2, sm: 3 },
+              ...(isSmDown && {
+                borderRadius: '28px',
+                boxShadow: (muiTheme) =>
+                  muiTheme.palette.mode === 'dark'
+                    ? `0 12px 36px rgba(0,0,0,0.28)`
+                    : `0 12px 36px ${alpha(primary, 0.1)}`,
+              }),
             }}
+            borderBeam={
+              isSmDown
+                ? false
+                : {
+                    duration: 45,
+                    size: 220,
+                    ...(theme.palette.mode === 'dark'
+                      ? {
+                          colorFrom: '#ff6b35',
+                          colorTo: '#6b6b6f',
+                        }
+                      : {
+                          colorFrom: '#ea580c',
+                          colorTo: '#948c82',
+                        }),
+                  }
+            }
           >
             <Box sx={{ textAlign: 'center', mb: useCompactContact ? 2 : 3 }}>
               <EmailIcon sx={{ fontSize: 48, color: primary, mb: 1.5 }} />
-              <Typography variant="h4" gutterBottom sx={{ fontWeight: 700, color: primary }}>
+              <Typography
+                variant="h4"
+                gutterBottom
+                sx={{
+                  fontWeight: 700,
+                  color: primary,
+                  fontSize: { xs: '1.5rem', sm: '1.65rem', md: '1.75rem', lg: '1.55rem', xl: '1.42rem' },
+                }}
+              >
                 {t('contact.sendMessage')}
               </Typography>
               <Typography variant="body1" sx={{ color: textColor, opacity: 0.9 }}>
@@ -480,8 +508,8 @@ export default function Contact() {
         </Box>
 
         <Box sx={{ maxWidth: 800, mx: 'auto', mb: useCompactContact ? 4 : 6 }}>
-          <ThreeDCardComponent floatingElements={2} sx={{ padding: { xs: 2, sm: 2.5, md: 3 } }}>
-            <Box sx={{ textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+          {isSmDown ? (
+            <Box sx={{ textAlign: 'center', py: 1 }}>
               <LocationOnIcon sx={{ fontSize: 40, color: primary, mb: 1.5 }} />
               <Typography variant="h6" gutterBottom sx={{ color: primary }}>
                 {t('contact.location')}
@@ -490,59 +518,156 @@ export default function Contact() {
                 {t('contact.locationCity')}
               </Typography>
             </Box>
-          </ThreeDCardComponent>
+          ) : (
+            <ThreeDCardComponent floatingElements={2} sx={{ padding: { xs: 2, sm: 2.5, md: 3 } }}>
+              <Box sx={{ textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                <LocationOnIcon sx={{ fontSize: 40, color: primary, mb: 1.5 }} />
+                <Typography variant="h6" gutterBottom sx={{ color: primary }}>
+                  {t('contact.location')}
+                </Typography>
+                <Typography variant="body2" sx={{ color: textColor, opacity: 0.85, lineHeight: 1.6 }}>
+                  {t('contact.locationCity')}
+                </Typography>
+              </Box>
+            </ThreeDCardComponent>
+          )}
         </Box>
 
         <Box sx={{ mt: useCompactContact ? 4 : 8, mb: useCompactContact ? 4 : 6 }}>
-          <Typography variant="h4" gutterBottom sx={{ mb: 4, textAlign: 'center', fontWeight: 700, color: primary }}>
+          <Typography
+            variant="h4"
+            gutterBottom
+            sx={{
+              mb: 4,
+              textAlign: 'center',
+              fontWeight: 700,
+              color: primary,
+              fontSize: { xs: '1.45rem', sm: '1.55rem', md: '1.65rem', lg: '1.48rem', xl: '1.38rem' },
+            }}
+          >
             {t('contact.followMe')}
           </Typography>
-          <Box sx={{ 
-            display: 'grid', 
-            gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)' },
-            gap: 4,
-            maxWidth: 800,
-            mx: 'auto',
-            alignItems: 'stretch',
-          }}>
-            <ThreeDCardComponent onClick={handleLinkedInClick} floatingElements={2} sx={{ height: '100%', minHeight: { xs: 220, sm: 240 }, padding: { xs: 2, sm: 2.5 }, display: 'flex', flexDirection: 'column', '& .MuiCardContent-root': { flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0 } }}>
-              <SocialCardContent>
-                <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}>
-                  <SocialIconWrapper>
-                    <LinkedInIcon sx={{ fontSize: 40 }} />
-                  </SocialIconWrapper>
-                  <Typography variant="h6" gutterBottom sx={{ fontWeight: 600, color: primary }}>
-                    LinkedIn
-                  </Typography>
-                  <Typography variant="body2" sx={{ mb: 2, color: textColor, opacity: 0.8 }}>
-                    {t('contact.linkedInDesc')}
-                  </Typography>
-                </Box>
-                <CTAButton variant="outline" size="small" fullWidth>
-                  {t('contact.viewProfile')}
-                </CTAButton>
-              </SocialCardContent>
-            </ThreeDCardComponent>
+          {isSmDown ? (
+            <Stack
+              maxWidth={800}
+              mx="auto"
+              divider={
+                <Divider flexItem sx={{ borderColor: alpha(primary, theme.palette.mode === 'dark' ? 0.2 : 0.12) }} />
+              }
+            >
+              <Box sx={{ py: 2.5, textAlign: 'center' }}>
+                <SocialCardContent>
+                  <Box
+                    sx={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}
+                  >
+                    <SocialIconWrapper onClick={handleLinkedInClick}>
+                      <LinkedInIcon sx={{ fontSize: 40 }} />
+                    </SocialIconWrapper>
+                    <Typography variant="h6" gutterBottom sx={{ fontWeight: 600, color: primary }}>
+                      LinkedIn
+                    </Typography>
+                    <Typography variant="body2" sx={{ mb: 2, color: textColor, opacity: 0.8 }}>
+                      {t('contact.linkedInDesc')}
+                    </Typography>
+                  </Box>
+                  <CTAButton variant="outline" size="small" fullWidth onClick={handleLinkedInClick}>
+                    {t('contact.viewProfile')}
+                  </CTAButton>
+                </SocialCardContent>
+              </Box>
+              <Box sx={{ py: 2.5, textAlign: 'center' }}>
+                <SocialCardContent>
+                  <Box
+                    sx={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}
+                  >
+                    <SocialIconWrapper onClick={handleGitHubClick}>
+                      <GitHubIcon sx={{ fontSize: 40 }} />
+                    </SocialIconWrapper>
+                    <Typography variant="h6" gutterBottom sx={{ fontWeight: 600, color: primary }}>
+                      GitHub
+                    </Typography>
+                    <Typography variant="body2" sx={{ mb: 2, color: textColor, opacity: 0.8 }}>
+                      {t('contact.githubDesc')}
+                    </Typography>
+                  </Box>
+                  <CTAButton variant="outline" size="small" fullWidth onClick={handleGitHubClick}>
+                    {t('contact.viewRepos')}
+                  </CTAButton>
+                </SocialCardContent>
+              </Box>
+            </Stack>
+          ) : (
+            <Box
+              sx={{
+                display: 'grid',
+                gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)' },
+                gap: 4,
+                maxWidth: 800,
+                mx: 'auto',
+                alignItems: 'stretch',
+              }}
+            >
+              <ThreeDCardComponent
+                onClick={handleLinkedInClick}
+                floatingElements={2}
+                sx={{
+                  height: '100%',
+                  minHeight: { xs: 220, sm: 240 },
+                  padding: { xs: 2, sm: 2.5 },
+                  display: 'flex',
+                  flexDirection: 'column',
+                  '& .MuiCardContent-root': { flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0 },
+                }}
+              >
+                <SocialCardContent>
+                  <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}>
+                    <SocialIconWrapper>
+                      <LinkedInIcon sx={{ fontSize: 40 }} />
+                    </SocialIconWrapper>
+                    <Typography variant="h6" gutterBottom sx={{ fontWeight: 600, color: primary }}>
+                      LinkedIn
+                    </Typography>
+                    <Typography variant="body2" sx={{ mb: 2, color: textColor, opacity: 0.8 }}>
+                      {t('contact.linkedInDesc')}
+                    </Typography>
+                  </Box>
+                  <CTAButton variant="outline" size="small" fullWidth>
+                    {t('contact.viewProfile')}
+                  </CTAButton>
+                </SocialCardContent>
+              </ThreeDCardComponent>
 
-            <ThreeDCardComponent onClick={handleGitHubClick} floatingElements={2} sx={{ height: '100%', minHeight: { xs: 220, sm: 240 }, padding: { xs: 2, sm: 2.5 }, display: 'flex', flexDirection: 'column', '& .MuiCardContent-root': { flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0 } }}>
-              <SocialCardContent>
-                <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}>
-                  <SocialIconWrapper>
-                    <GitHubIcon sx={{ fontSize: 40 }} />
-                  </SocialIconWrapper>
-                  <Typography variant="h6" gutterBottom sx={{ fontWeight: 600, color: primary }}>
-                    GitHub
-                  </Typography>
-                  <Typography variant="body2" sx={{ mb: 2, color: textColor, opacity: 0.8 }}>
-                    {t('contact.githubDesc')}
-                  </Typography>
-                </Box>
-                <CTAButton variant="outline" size="small" fullWidth>
-                  {t('contact.viewRepos')}
-                </CTAButton>
-              </SocialCardContent>
-            </ThreeDCardComponent>
-          </Box>
+              <ThreeDCardComponent
+                onClick={handleGitHubClick}
+                floatingElements={2}
+                sx={{
+                  height: '100%',
+                  minHeight: { xs: 220, sm: 240 },
+                  padding: { xs: 2, sm: 2.5 },
+                  display: 'flex',
+                  flexDirection: 'column',
+                  '& .MuiCardContent-root': { flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0 },
+                }}
+              >
+                <SocialCardContent>
+                  <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}>
+                    <SocialIconWrapper>
+                      <GitHubIcon sx={{ fontSize: 40 }} />
+                    </SocialIconWrapper>
+                    <Typography variant="h6" gutterBottom sx={{ fontWeight: 600, color: primary }}>
+                      GitHub
+                    </Typography>
+                    <Typography variant="body2" sx={{ mb: 2, color: textColor, opacity: 0.8 }}>
+                      {t('contact.githubDesc')}
+                    </Typography>
+                  </Box>
+                  <CTAButton variant="outline" size="small" fullWidth>
+                    {t('contact.viewRepos')}
+                  </CTAButton>
+                </SocialCardContent>
+              </ThreeDCardComponent>
+            </Box>
+          )}
         </Box>
 
         <ContactCoffeeVideo compact={useCompactContact} />

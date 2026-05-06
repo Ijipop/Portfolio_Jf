@@ -4,6 +4,7 @@ import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import { motion, useReducedMotion } from 'framer-motion'
 import ScrollReveal from './ScrollReveal'
+import { SECTION_H3_DENSE_SX } from '@/design-system/constants'
 import { BRAND_GLITCH_GRADIENT } from './IjipopGlitchTitle'
 import { useAdvancedTheme } from '@/contexts/AdvancedThemeContext'
 import { useLanguage } from '@/contexts/LanguageContext'
@@ -67,8 +68,7 @@ export default function PortfolioProcessSection() {
               color: textColor,
               fontWeight: 900,
               letterSpacing: '-0.05em',
-              fontSize: { xs: '2rem', md: '3.1rem' },
-              lineHeight: 1.05,
+              ...SECTION_H3_DENSE_SX,
             }}
           >
             {t('home.processTitle')}
@@ -120,9 +120,9 @@ export default function PortfolioProcessSection() {
               <Box
                 sx={{
                   position: 'relative',
-                  minHeight: { xs: 190, md: 280 },
+                  minHeight: { xs: 190, md: 260, lg: 240, xl: 228 },
                   zIndex: 1,
-                  p: { xs: 2.5, md: 2.75 },
+                  p: { xs: 2.5, md: 2.5, lg: 2.35 },
                   pl: { xs: 6, md: 2.75 },
                   borderRadius: '14px',
                   border: `1px solid ${cardBorder}`,
@@ -140,7 +140,7 @@ export default function PortfolioProcessSection() {
                     position: 'absolute',
                     right: { xs: 24, md: 28 },
                     top: { xs: 18, md: 24 },
-                    fontSize: { xs: '4.25rem', md: '4.85rem' },
+                    fontSize: { xs: '4.25rem', md: '4.2rem', lg: '3.85rem', xl: '3.6rem' },
                     fontWeight: 900,
                     lineHeight: 1,
                     letterSpacing: '-0.12em',
@@ -171,6 +171,7 @@ export default function PortfolioProcessSection() {
                     mb: 1.25,
                     pl: { xs: 0, md: 3 },
                     pr: 3,
+                    fontSize: { xs: '1.08rem', md: '1.14rem', lg: '1.06rem', xl: '1.02rem' },
                   }}
                 >
                   {t(step.titleKey)}

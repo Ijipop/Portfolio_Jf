@@ -2,9 +2,10 @@
 
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
+import { useTheme } from '@mui/material/styles'
 import Image from 'next/image'
 import { usePathname } from 'next/navigation'
-import { DESIGN_TOKENS } from '@/design-system/constants'
+import { BODY_PROSE_DENSE_SX, DESIGN_TOKENS } from '@/design-system/constants'
 import { getCardSurfaceSx } from '@/components/shared/cardSurface'
 import { shouldShowTopology } from '@/utils/topologyRoutes'
 
@@ -16,10 +17,11 @@ type AboutPersonalStorySectionProps = {
 }
 
 export default function AboutPersonalStorySection({ t, textColor }: AboutPersonalStorySectionProps) {
+  const theme = useTheme()
   const pathname = usePathname()
   const isTopologyRoute = shouldShowTopology(pathname)
 
-  const portraitSizes = '(max-width: 600px) min(100vw, 300px), 340px'
+  const portraitSizes = '(max-width: 600px) min(100vw, 260px), (max-width: 1199px) 220px, 200px'
   const portraitRadiusPx = `${DESIGN_TOKENS.borderRadius.small}px`
 
   return (
@@ -27,7 +29,7 @@ export default function AboutPersonalStorySection({ t, textColor }: AboutPersona
       sx={{
         ...getCardSurfaceSx({ isTopologyRoute, variant: 'flat', level: 'soft', interactive: false }),
         borderRadius: DESIGN_TOKENS.borderRadius.large,
-        padding: { xs: 3, sm: 4 },
+        padding: { xs: 3, sm: 4, md: 3.25, lg: 2.75, xl: 2.5 },
         textAlign: 'center',
         mb: 8,
         position: 'relative',
@@ -48,15 +50,26 @@ export default function AboutPersonalStorySection({ t, textColor }: AboutPersona
             pointerEvents: 'none',
           },
         }),
+        [theme.breakpoints.down('sm')]: {
+          background: 'transparent',
+          border: 'none',
+          boxShadow: 'none',
+          p: 0,
+          borderRadius: 0,
+          '&::before': { display: 'none', content: 'none' },
+        },
       }}
     >
       <Box
         sx={{
           display: 'flex',
           justifyContent: 'center',
-          mb: { xs: 2.5, sm: 3 },
+          mb: { xs: 2.5, sm: 2.75, md: 2.25, lg: 2 },
           position: 'relative',
           zIndex: 1,
+          width: '100%',
+          maxWidth: { xs: 'min(100%, 300px)', sm: 260, md: 220, lg: 200, xl: 180 },
+          mx: 'auto',
         }}
       >
         {/**
@@ -72,7 +85,7 @@ export default function AboutPersonalStorySection({ t, textColor }: AboutPersona
           priority={false}
           unoptimized
           style={{
-            maxWidth: 'min(100%, 340px)',
+            maxWidth: '100%',
             width: '100%',
             height: 'auto',
             borderRadius: portraitRadiusPx,
@@ -82,14 +95,21 @@ export default function AboutPersonalStorySection({ t, textColor }: AboutPersona
         />
       </Box>
 
-      <Box sx={{ position: 'relative', zIndex: 1, maxWidth: 720, mx: 'auto' }}>
+      <Box
+        sx={{
+          position: 'relative',
+          zIndex: 1,
+          maxWidth: { xs: 680, sm: 640, md: 560, lg: 500, xl: 460 },
+          mx: 'auto',
+        }}
+      >
         <Typography
           variant="body1"
           sx={{
             ...DESIGN_TOKENS.typography.body1,
+            ...BODY_PROSE_DENSE_SX,
             color: textColor,
             opacity: 0.95,
-            lineHeight: 1.65,
             mb: 2.5,
             textAlign: 'center',
             whiteSpace: 'pre-line',
@@ -101,9 +121,9 @@ export default function AboutPersonalStorySection({ t, textColor }: AboutPersona
           variant="body1"
           sx={{
             ...DESIGN_TOKENS.typography.body1,
+            ...BODY_PROSE_DENSE_SX,
             color: textColor,
             opacity: 0.95,
-            lineHeight: 1.65,
             mb: 2.5,
             textAlign: 'center',
             whiteSpace: 'pre-line',
@@ -115,9 +135,9 @@ export default function AboutPersonalStorySection({ t, textColor }: AboutPersona
           variant="body1"
           sx={{
             ...DESIGN_TOKENS.typography.body1,
+            ...BODY_PROSE_DENSE_SX,
             color: textColor,
             opacity: 0.95,
-            lineHeight: 1.65,
             textAlign: 'center',
             whiteSpace: 'pre-line',
           }}

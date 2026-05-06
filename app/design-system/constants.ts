@@ -172,3 +172,18 @@ export const ANIMATIONS = {
   },
 } as const
 
+/**
+ * Titres de section (style h3) : sur lg/xl le md seul faisait « trop gros » sur laptops 15–17".
+ * Utiliser en spread dans `sx` des `Typography` concernés.
+ */
+export const SECTION_H3_DENSE_SX = {
+  fontSize: { xs: '1.85rem', sm: '1.95rem', md: '2.12rem', lg: '1.98rem', xl: '1.85rem' },
+  lineHeight: 1.06,
+} as const
+
+/** Corps de texte « colonne étroite » (histoire, longues phrases) sur laptops larges. */
+export const BODY_PROSE_DENSE_SX = {
+  fontSize: { xs: '1rem', sm: '0.98rem', md: '0.94rem', lg: '0.9rem', xl: '0.875rem' },
+  lineHeight: 1.62,
+} as const
+
