@@ -131,7 +131,6 @@ export default function HomeClient({ initialShowIntro }: { initialShowIntro: boo
           zIndex: 2,
         }}
       >
-        <AiConversionTeaser />
         {SHOW_HOME_STATS_BAND && <PortfolioStatsBand />}
         <PortfolioServicesSection />
         {SHOW_HOME_SITE_INTRO && <HomeHeroServicesSection />}
@@ -257,6 +256,7 @@ export default function HomeClient({ initialShowIntro }: { initialShowIntro: boo
         </Box>
         )}
         <PortfolioProcessSection />
+        <AiConversionTeaser />
       </Container>
       </InteractiveBackgroundSection>
       

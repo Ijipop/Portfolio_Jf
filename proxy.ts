@@ -18,7 +18,7 @@ function isProtectedApi(pathname: string, method: string): boolean {
   )
 }
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl
   const isAdminPage = pathname.startsWith('/admin')
   const requiresAdminPageAuth = isAdminPage && pathname !== '/admin'

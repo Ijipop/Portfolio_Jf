@@ -76,7 +76,7 @@ export const translations = {
       aiImpactDisclosure:
         'Exemple des indicateurs que votre site peut suivre pour mieux comprendre vos demandes.',
       heroEditorialPrefix: 'Je conçois des',
-      heroEditorialSuffix: 'crédibles et efficaces.',
+      heroEditorialSuffix: 'professionnels et efficaces.',
       heroRotatingSites: 'sites web',
       heroRotatingTools: 'outils',
       heroRotatingSoftware: 'logiciels',
@@ -109,7 +109,7 @@ export const translations = {
       servicesEcosystemBonus4: 'Maintenance',
       servicesEcosystemBonus5: 'Diagnostic',
       servicesEcosystemDemo2Caption:
-        'Autre exemple du genre de bonus possible : à intégrer selon vos priorités et votre budget.',
+        '',
       servicesEcosystemDemo2Hover: 'Ajouter une vidéo personnalisée à votre site !',
       // Banque : 5 offres détaillées — réutilisable pour une page « Services » détaillée ou contenu plus technique.
       servicesKicker: 'Offres',
@@ -580,7 +580,7 @@ export const translations = {
       servicesEcosystemBonus4: 'Maintenance',
       servicesEcosystemBonus5: 'Diagnostics',
       servicesEcosystemDemo2Caption:
-        'Another example of a possible add-on, scoped to your priorities and budget.',
+        '',
       servicesEcosystemDemo2Hover: 'Add a custom video to your site!',
       // Bank: five detailed offer lines — reuse on a future detailed Services page or technical copy.
       servicesKicker: 'Offers',

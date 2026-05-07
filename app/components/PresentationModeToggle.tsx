@@ -3,8 +3,7 @@
 import React, { useCallback } from 'react'
 import { flushSync } from 'react-dom'
 import Box from '@mui/material/Box'
-import ToggleButton from '@mui/material/ToggleButton'
-import ToggleButtonGroup from '@mui/material/ToggleButtonGroup'
+import Button from '@mui/material/Button'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import { useLanguage } from '@/contexts/LanguageContext'
 import { usePresentationMode } from '@/contexts/PresentationModeContext'
@@ -12,18 +11,6 @@ import {
   getThemeTransitionClipPaths,
   type TransitionVariant,
 } from '@/components/ui/animated-theme-toggler'
-
-const CREA_LABEL_CLASS = 'presentation-dev-label'
-const CREA_TOGGLE_CLASS = 'presentation-mode-dev-toggle'
-
-/**
- * Mêmes teintes que le dégradé marque Ijipop (`IjipopGlitchTitle` — ambre → orange #ea580c → brique),
- * en bande horizontale + boucle pour l’animation du libellé Créa.
- */
-const IJIPOP_ORANGE_LABEL_GRADIENT =
-  'linear-gradient(90deg, #ffedd5, #fdba74, #fb923c, #ea580c, #b91c1c, #7f1d1d, #b91c1c, #ea580c, #fb923c, #fdba74, #ffedd5)'
-
-const IJIPOP_ORANGE_FALLBACK = '#ea580c'
 
 const VT_DURATION_MS = 420
 const VT_SHAPE: TransitionVariant = 'circle'
@@ -90,88 +77,53 @@ function runCenteredPresentationViewTransition(
 
 export function PresentationModeToggle() {
   const { mode, setMode } = usePresentationMode()
-  const { t } = useLanguage()
+  const { t, locale } = useLanguage()
   const reduceMotion = useMediaQuery('(prefers-reduced-motion: reduce)', { noSsr: true })
 
-  const handlePresentationChange = useCallback(
-    (next: 'beige' | 'dev') => {
-      if (next === mode) return
-      if (reduceMotion) {
-        setMode(next)
-        return
-      }
-      runCenteredPresentationViewTransition(next, () => setMode(next))
-    },
-    [mode, reduceMotion, setMode]
-  )
+  const handleToggle = useCallback(() => {
+    const next = mode === 'dev' ? 'beige' : 'dev'
+    if (next === mode) return
+    if (reduceMotion) {
+      setMode(next)
+      return
+    }
+    runCenteredPresentationViewTransition(next, () => setMode(next))
+  }, [mode, reduceMotion, setMode])
+
+  const label = locale === 'fr' ? (mode === 'dev' ? 'Funky On' : 'Funky Off') : mode === 'dev' ? 'Funky On' : 'Funky Off'
 
   return (
-    <ToggleButtonGroup
-      value={mode}
-      exclusive
+    <Button
       size="small"
-      onChange={(_, value: 'beige' | 'dev' | null) => {
-        if (value) handlePresentationChange(value)
-      }}
+      onClick={handleToggle}
       aria-label={t('nav.presentationToggleGroup')}
       sx={{
-        '@keyframes creaPaletteShift': {
-          '0%': { backgroundPosition: '0% 50%' },
-          '100%': { backgroundPosition: '100% 50%' },
-        },
-        '& .MuiToggleButton-root': {
-          px: { xs: 0.75, sm: 1.25 },
-          py: 0.5,
-          fontSize: { xs: '0.65rem', sm: '0.75rem' },
-          fontWeight: 700,
-          color: 'white',
-          border: '1px solid rgba(255,255,255,0.55) !important',
-          textTransform: 'none',
-          '&.Mui-selected': {
-            bgcolor: 'rgba(255,255,255,0.22) !important',
-            color: 'white',
-          },
-          '&:not(.Mui-selected)': {
-            bgcolor: 'transparent',
-          },
-        },
-        [`& .${CREA_TOGGLE_CLASS}:not(.Mui-selected) .${CREA_LABEL_CLASS}`]: reduceMotion
-          ? {
-              display: 'inline-block',
-              color: IJIPOP_ORANGE_FALLBACK,
-              textShadow: '0 0 12px rgba(0,0,0,0.35)',
-            }
-          : {
-              display: 'inline-block',
-              background: IJIPOP_ORANGE_LABEL_GRADIENT,
-              backgroundSize: '240% 100%',
-              backgroundPosition: '0% 50%',
-              WebkitBackgroundClip: 'text',
-              backgroundClip: 'text',
-              color: 'transparent',
-              WebkitTextFillColor: 'transparent',
-              textShadow: 'none',
-              animation: 'creaPaletteShift 16s ease-in-out infinite',
-            },
-        [`& .${CREA_TOGGLE_CLASS}.Mui-selected .${CREA_LABEL_CLASS}`]: {
-          display: 'inline-block',
-          background: 'none',
-          WebkitBackgroundClip: 'unset',
-          backgroundClip: 'unset',
-          color: 'inherit',
-          WebkitTextFillColor: 'currentcolor',
-          animation: 'none',
+        px: { xs: 1.15, sm: 1.35 },
+        py: 0.5,
+        minWidth: { xs: 92, sm: 104 },
+        borderRadius: 999,
+        fontSize: { xs: '0.66rem', sm: '0.75rem' },
+        fontWeight: 800,
+        letterSpacing: '0.01em',
+        textTransform: 'none',
+        color: 'white',
+        border: '1px solid rgba(255,255,255,0.6)',
+        background:
+          mode === 'dev'
+            ? 'linear-gradient(90deg, rgba(251,146,60,0.72), rgba(234,88,12,0.75), rgba(185,28,28,0.68))'
+            : 'rgba(255,255,255,0.10)',
+        boxShadow: mode === 'dev' ? '0 10px 22px rgba(234,88,12,0.3)' : 'none',
+        transition: 'all 0.22s ease',
+        '&:hover': {
+          borderColor: 'rgba(255,255,255,0.82)',
+          background:
+            mode === 'dev'
+              ? 'linear-gradient(90deg, rgba(251,146,60,0.8), rgba(234,88,12,0.84), rgba(185,28,28,0.76))'
+              : 'rgba(255,255,255,0.18)',
         },
       }}
     >
-      <ToggleButton value="beige" aria-label={t('nav.presentationBeige')}>
-        {t('nav.presentationBeige')}
-      </ToggleButton>
-      <ToggleButton value="dev" className={CREA_TOGGLE_CLASS} aria-label={t('nav.presentationDev')}>
-        <Box component="span" className={CREA_LABEL_CLASS}>
-          {t('nav.presentationDev')}
-        </Box>
-      </ToggleButton>
-    </ToggleButtonGroup>
+      <Box component="span">{label}</Box>
+    </Button>
   )
 }
