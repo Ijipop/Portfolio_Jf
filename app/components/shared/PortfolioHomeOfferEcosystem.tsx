@@ -56,8 +56,9 @@ export default function PortfolioHomeOfferEcosystem() {
               variant="outlined"
               sx={{
                 borderColor: alpha(primary, 0.45),
+                backgroundColor: alpha(primary, 0.07),
                 color: textColor,
-                fontWeight: 600,
+                fontWeight: 700,
                 fontSize: '0.78rem',
               }}
             />

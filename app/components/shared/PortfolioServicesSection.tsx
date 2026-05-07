@@ -218,43 +218,51 @@ export default function PortfolioServicesSection() {
         <Box
           sx={{
             mt: { xs: 3.5, md: 4.5 },
-            px: { xs: 2, sm: 2.5, md: 3 },
-            py: { xs: 2.5, md: 3 },
+            px: { xs: 2, sm: 2.75, md: 3.25 },
+            py: { xs: 2.75, md: 3.25 },
             borderRadius: DESIGN_TOKENS.borderRadius.medium,
             border: (theme) =>
-              `1px solid ${alpha(theme.palette.mode === 'dark' ? '#cbd5e1' : primary, 0.22)}`,
+              `1px solid ${alpha(theme.palette.mode === 'dark' ? '#e2e8f0' : primary, 0.32)}`,
             background: (theme) =>
               theme.palette.mode === 'dark'
-                ? `linear-gradient(140deg, ${alpha('#0f172a', 0.68)} 0%, ${alpha(primary, 0.12)} 100%)`
-                : `linear-gradient(140deg, ${alpha(primary, 0.08)} 0%, ${alpha('#ffffff', 0.82)} 100%)`,
-            boxShadow: `0 12px 30px ${alpha(primary, 0.12)}`,
+                ? `linear-gradient(140deg, ${alpha('#0f172a', 0.74)} 0%, ${alpha(primary, 0.16)} 100%)`
+                : `linear-gradient(140deg, ${alpha(primary, 0.1)} 0%, ${alpha('#ffffff', 0.9)} 100%)`,
+            boxShadow: `0 14px 34px ${alpha(primary, 0.15)}`,
           }}
         >
           <Box
             sx={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: 0.8,
-              mb: 1.2,
-              px: 1.2,
-              py: 0.5,
-              borderRadius: 999,
-              border: `1px solid ${alpha(primary, 0.32)}`,
-              backgroundColor: alpha(primary, 0.08),
+              display: 'flex',
+              justifyContent: 'center',
+              mb: 1.35,
             }}
           >
-            <AutoAwesomeOutlinedIcon sx={{ fontSize: 17, color: primary }} />
-            <Typography
-              component="p"
+            <Box
               sx={{
-                color: primary,
-                fontWeight: 800,
-                letterSpacing: '0.01em',
-                fontSize: '0.82rem',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: 0.75,
+                px: 1.05,
+                py: 0.45,
+                borderRadius: 999,
+                border: `1px solid ${alpha(primary, 0.42)}`,
+                backgroundColor: alpha(primary, 0.1),
               }}
             >
-              {t('home.servicesEcosystemBonusLabel')}
-            </Typography>
+              <AutoAwesomeOutlinedIcon sx={{ fontSize: 16, color: primary }} />
+              <Typography
+                component="p"
+                sx={{
+                  color: primary,
+                  fontWeight: 900,
+                  letterSpacing: '0.01em',
+                  fontSize: { xs: '0.77rem', sm: '0.8rem' },
+                  textAlign: 'center',
+                }}
+              >
+                {t('home.servicesEcosystemBonusLabel')}
+              </Typography>
+            </Box>
           </Box>
           <Typography
             component="p"
