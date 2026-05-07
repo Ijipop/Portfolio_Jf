@@ -36,24 +36,9 @@ export default function PortfolioHomeOfferEcosystem() {
       <Box
         sx={{
           width: '100%',
-          mt: { xs: 3, md: 4 },
           textAlign: 'center',
         }}
       >
-        <Typography
-          component="p"
-          sx={{
-            color: textColor,
-            opacity: 0.78,
-            fontSize: { xs: '0.88rem', sm: '0.9rem' },
-            lineHeight: 1.5,
-            mb: 1.5,
-            maxWidth: 600,
-            mx: 'auto',
-          }}
-        >
-          {t('home.servicesEcosystemBonusLabel')}
-        </Typography>
         <Box
           sx={{
             display: 'flex',

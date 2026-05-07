@@ -76,7 +76,7 @@ export const translations = {
       aiImpactDisclosure:
         'Exemple des indicateurs que votre site peut suivre pour mieux comprendre vos demandes.',
       heroEditorialPrefix: 'Je conçois des',
-      heroEditorialSuffix: 'crédibles et efficaces.',
+      heroEditorialSuffix: 'professionnels et efficaces.',
       heroRotatingSites: 'sites web',
       heroRotatingTools: 'outils',
       heroRotatingSoftware: 'logiciels',

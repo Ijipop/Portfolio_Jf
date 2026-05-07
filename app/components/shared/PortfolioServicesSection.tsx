@@ -1,10 +1,12 @@
 'use client'
 
 import AutorenewOutlinedIcon from '@mui/icons-material/AutorenewOutlined'
+import AutoAwesomeOutlinedIcon from '@mui/icons-material/AutoAwesomeOutlined'
 import HandymanOutlinedIcon from '@mui/icons-material/HandymanOutlined'
 import LanguageOutlinedIcon from '@mui/icons-material/LanguageOutlined'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
+import { alpha } from '@mui/material/styles'
 import Link from 'next/link'
 import { useMemo } from 'react'
 import ThreeDCardComponent from '@/components/ThreeDCard'
@@ -213,24 +215,66 @@ export default function PortfolioServicesSection() {
       </Box>
 
       <ScrollReveal direction="up" delay={0.08}>
-        <Typography
-          component="p"
+        <Box
           sx={{
-            textAlign: 'center',
-            maxWidth: 640,
-            mx: 'auto',
-            mt: { xs: 3, md: 4 },
-            color: textColor,
-            opacity: 0.78,
-            fontSize: { xs: '0.92rem', sm: '0.97rem' },
-            lineHeight: 1.55,
-            px: { xs: 1, sm: 0 },
+            mt: { xs: 3.5, md: 4.5 },
+            px: { xs: 2, sm: 2.5, md: 3 },
+            py: { xs: 2.5, md: 3 },
+            borderRadius: DESIGN_TOKENS.borderRadius.medium,
+            border: (theme) =>
+              `1px solid ${alpha(theme.palette.mode === 'dark' ? '#cbd5e1' : primary, 0.22)}`,
+            background: (theme) =>
+              theme.palette.mode === 'dark'
+                ? `linear-gradient(140deg, ${alpha('#0f172a', 0.68)} 0%, ${alpha(primary, 0.12)} 100%)`
+                : `linear-gradient(140deg, ${alpha(primary, 0.08)} 0%, ${alpha('#ffffff', 0.82)} 100%)`,
+            boxShadow: `0 12px 30px ${alpha(primary, 0.12)}`,
           }}
         >
-          {t('home.servicesHomeFootnote')}
-        </Typography>
+          <Box
+            sx={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: 0.8,
+              mb: 1.2,
+              px: 1.2,
+              py: 0.5,
+              borderRadius: 999,
+              border: `1px solid ${alpha(primary, 0.32)}`,
+              backgroundColor: alpha(primary, 0.08),
+            }}
+          >
+            <AutoAwesomeOutlinedIcon sx={{ fontSize: 17, color: primary }} />
+            <Typography
+              component="p"
+              sx={{
+                color: primary,
+                fontWeight: 800,
+                letterSpacing: '0.01em',
+                fontSize: '0.82rem',
+              }}
+            >
+              {t('home.servicesEcosystemBonusLabel')}
+            </Typography>
+          </Box>
+          <Typography
+            component="p"
+            sx={{
+              textAlign: 'center',
+              maxWidth: 670,
+              mx: 'auto',
+              color: textColor,
+              opacity: 0.88,
+              fontSize: { xs: '0.96rem', sm: '1rem' },
+              lineHeight: 1.6,
+              mb: { xs: 2, md: 2.4 },
+              px: { xs: 0.6, sm: 0 },
+            }}
+          >
+            {t('home.servicesHomeFootnote')}
+          </Typography>
+          <PortfolioHomeOfferEcosystem />
+        </Box>
       </ScrollReveal>
-      <PortfolioHomeOfferEcosystem />
     </Box>
   )
 }
