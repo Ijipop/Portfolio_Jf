@@ -161,6 +161,10 @@
   .g1 {
     grid-column: span 2;
   }
+
+  .g4 {
+    grid-column: span 2;
+  }
 }
 
 @media (max-width: 600px) {
@@ -169,6 +173,10 @@
   }
 
   .g1 {
+    grid-column: span 1;
+  }
+
+  .g4 {
     grid-column: span 1;
   }
 }
@@ -184,6 +192,14 @@
   min-height: 140px;
   border-radius: 14px;
   background: linear-gradient(120deg, #431407 0%, #9a3412 100%);
+  min-width: 0;
+}
+
+.g4 {
+  grid-column: span 2;
+  min-height: 140px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #fef3c7 0%, #fdba74 45%, #7f1d1d 100%);
   min-width: 0;
 }
 

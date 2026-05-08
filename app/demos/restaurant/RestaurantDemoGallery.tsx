@@ -36,6 +36,7 @@ export default function RestaurantDemoGallery() {
     { className: styles.g1, hidden: hiddenFor({ x: -52 }), delay: 0 },
     { className: styles.g2, hidden: hiddenFor({ y: 44 }), delay: 0.1 },
     { className: styles.g3, hidden: hiddenFor({ x: 52 }), delay: 0.18 },
+    { className: styles.g4, hidden: hiddenFor({ y: 36 }), delay: 0.26 },
   ]
 
   return (
