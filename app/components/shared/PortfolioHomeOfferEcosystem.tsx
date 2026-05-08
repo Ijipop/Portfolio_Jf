@@ -6,7 +6,6 @@ import Typography from '@mui/material/Typography'
 import { alpha } from '@mui/material/styles'
 import { useState } from 'react'
 import ScrollReveal from './ScrollReveal'
-import { DESIGN_TOKENS } from '@/design-system/constants'
 import { useLanguage } from '@/contexts/LanguageContext'
 import { useTextColor } from '@/hooks/useTextColor'
 import { useThemeColors } from '@/hooks/useThemeColors'
@@ -77,7 +76,7 @@ export default function PortfolioHomeOfferEcosystem() {
             sx={{
               width: '100%',
               aspectRatio: '16 / 9',
-              borderRadius: DESIGN_TOKENS.borderRadius.medium,
+              borderRadius: 6,
               overflow: 'hidden',
               bgcolor: (theme) => (theme.palette.mode === 'dark' ? '#0a0a0a' : '#0f0f0f'),
               cursor: 'default',

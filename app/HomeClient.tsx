@@ -31,7 +31,7 @@ import { useEffect, useState } from 'react'
 const INTRO_SESSION_KEY = 'portfolio-intro-seen'
 const SHOW_HOME_STATS_BAND = false
 const SHOW_HOME_SITE_INTRO = false
-const SHOW_HOME_DEMOS_BAND = false
+const SHOW_HOME_DEMOS_BAND = true
 const SHOW_HOME_NAVIGATION_CARDS = false
 
 /** Grille accueil : un peu plus de large utile pour le texte sur mobile ; hauteur libre. */

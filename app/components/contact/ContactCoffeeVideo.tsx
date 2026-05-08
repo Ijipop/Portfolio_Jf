@@ -5,7 +5,6 @@ import Typography from '@mui/material/Typography'
 import { useTheme } from '@mui/material/styles'
 import { useLanguage } from '@/contexts/LanguageContext'
 import { useTextColor } from '@/hooks/useTextColor'
-import { DESIGN_TOKENS } from '@/design-system/constants'
 import AutoplayLoopVideo from '@/components/shared/AutoplayLoopVideo'
 
 const DEMO_SRC = '/img/demo1.mp4'
@@ -44,7 +43,7 @@ export default function ContactCoffeeVideo({ compact = false }: Props) {
       </Typography>
       <Box
         sx={{
-          borderRadius: DESIGN_TOKENS.borderRadius.medium,
+          borderRadius: 6,
           overflow: 'hidden',
           aspectRatio: '16 / 9',
           bgcolor: theme.palette.mode === 'dark' ? '#0a0a0a' : '#0f0f0f',
