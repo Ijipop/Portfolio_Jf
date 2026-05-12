@@ -87,14 +87,14 @@ export const translations = {
       servicesHomeKicker: 'OFFRES',
       servicesHomeTitle: 'Un site web clair, sans casse-tête',
       servicesHomeSubtitle:
-        'Des solutions adaptées à votre réalité : nouveau site, refonte, formulaire de contact ou accompagnement après la mise en ligne.',
+        'Des solutions adaptées à votre réalité : nouveau site, refonte, SEO (bases techniques) si besoin, formulaire de contact ou accompagnement après la mise en ligne.',
       servicesHomeNewTitle: 'Nouveau site web',
       servicesHomeNewLead:
         'Un site moderne, facile à consulter sur ordinateur comme sur mobile, pour présenter vos services et faciliter les prises de contact.',
       servicesHomeNewCta: 'Discuter de votre site →',
       servicesHomeImproveTitle: 'Refonte ou amélioration',
       servicesHomeImproveLead:
-        'On garde ce qui fonctionne, on clarifie le reste et on remet votre site au goût du jour.',
+        'On garde ce qui fonctionne, on clarifie le reste et on remet votre site au goût du jour. Sur demande : SEO de base — métadonnées, structure, performance — sans promesse de classement.',
       servicesHomeImproveCta: 'Améliorer votre site →',
       servicesHomeToolsTitle: 'Outils et accompagnement',
       servicesHomeToolsLead:
@@ -179,6 +179,7 @@ export const translations = {
       formName: 'Nom complet',
       formEmail: 'Email',
       formSubject: 'Sujet',
+      formPhoneOptional: 'N° de téléphone (optionnel)',
       formMessage: 'Message',
       sendButton: 'Envoyer le message',
       sending: 'Envoi en cours...',
@@ -558,14 +559,14 @@ export const translations = {
       servicesHomeKicker: 'OFFERS',
       servicesHomeTitle: 'A clear website, without the headache',
       servicesHomeSubtitle:
-        'Options that fit how you work: new site, redesign, contact flows, or support after launch.',
+        'Options that fit how you work: new site, redesign, basic SEO when helpful, contact flows, or support after launch.',
       servicesHomeNewTitle: 'New website',
       servicesHomeNewLead:
         'A modern site, easy to view on desktop and mobile, to present your services and make it easier for people to get in touch.',
       servicesHomeNewCta: 'Talk about your site →',
       servicesHomeImproveTitle: 'Redesign or refresh',
       servicesHomeImproveLead:
-        'We keep what works, clarify the rest, and bring your site up to date.',
+        'We keep what works, clarify the rest, and bring your site up to date. On request: basic SEO—metadata, structure, performance—with no ranking guarantees.',
       servicesHomeImproveCta: 'Improve your site →',
       servicesHomeToolsTitle: 'Helpful tools & support',
       servicesHomeToolsLead:
@@ -650,6 +651,7 @@ export const translations = {
       formName: 'Full name',
       formEmail: 'Email',
       formSubject: 'Subject',
+      formPhoneOptional: 'Phone number (optional)',
       formMessage: 'Message',
       sendButton: 'Send message',
       sending: 'Sending...',

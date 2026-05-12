@@ -121,6 +121,7 @@ export default function Contact() {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
+    phone: '',
     subject: '',
     message: '',
     /** Honeypot anti-bot : doit rester vide (champ masqué). */
@@ -132,6 +133,7 @@ export default function Contact() {
   const [formErrors, setFormErrors] = useState({
     name: '',
     email: '',
+    phone: '',
     subject: '',
     message: '',
   })
@@ -175,6 +177,18 @@ export default function Contact() {
           }
         }
         break
+      case 'phone': {
+        const v = value.trim()
+        if (!v) break
+        if (v.length < 6) {
+          error = 'Le numéro semble trop court'
+        } else if (v.length > 50) {
+          error = 'Le numéro est trop long'
+        } else if (!/\d/.test(v)) {
+          error = 'Indiquez au moins un chiffre'
+        }
+        break
+      }
       case 'subject':
         if (!value.trim()) {
           error = 'Le sujet est requis'
@@ -225,6 +239,7 @@ export default function Contact() {
     const errors = {
       name: validateField('name', formData.name),
       email: validateField('email', formData.email),
+      phone: validateField('phone', formData.phone),
       subject: validateField('subject', formData.subject),
       message: validateField('message', formData.message),
     }
@@ -265,8 +280,8 @@ export default function Contact() {
 
         setSnackbarMessage(data.message || t('contact.sendSuccess'))
         setSnackbarSeverity('success')
-        setFormData({ name: '', email: '', subject: '', message: '', bm_verify: '' })
-        setFormErrors({ name: '', email: '', subject: '', message: '' })
+        setFormData({ name: '', email: '', phone: '', subject: '', message: '', bm_verify: '' })
+        setFormErrors({ name: '', email: '', phone: '', subject: '', message: '' })
         setIncludeProjectWeb(false)
         setProjectWeb(emptyProjectWebBrief())
         setAiDiagnosis(null)
@@ -415,6 +430,20 @@ export default function Contact() {
                     helperTextColor={`${textColor}B3`}
                   />
                 </Box>
+
+                <StyledTextField
+                  name="phone"
+                  label={t('contact.formPhoneOptional')}
+                  type="tel"
+                  value={formData.phone}
+                  onChange={handleInputChange}
+                  error={!!formErrors.phone}
+                  helperText={formErrors.phone}
+                  fullWidth
+                  textColor={textColor}
+                  helperTextColor={`${textColor}B3`}
+                  inputProps={{ autoComplete: 'tel', maxLength: 50 }}
+                />
                 
                 <StyledTextField
                   name="subject"

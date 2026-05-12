@@ -264,6 +264,18 @@ export async function POST(request: NextRequest) {
       )
     }
 
+    const phoneRaw = body.phone
+    let phone = ''
+    if (phoneRaw !== undefined && phoneRaw !== null) {
+      if (typeof phoneRaw !== 'string') {
+        return NextResponse.json(
+          { success: false, error: 'Le champ téléphone est invalide' },
+          { status: 400 }
+        )
+      }
+      phone = phoneRaw.trim()
+    }
+
     // Validation de l'email
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
     if (!emailRegex.test(email)) {
@@ -276,14 +288,22 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const MAX_LEN = { name: 200, email: 254, subject: 300, message: 16000 }
+    const MAX_LEN = { name: 200, email: 254, subject: 300, message: 16000, phone: 50 }
     if (
       name.length > MAX_LEN.name ||
       email.length > MAX_LEN.email ||
       subject.length > MAX_LEN.subject ||
-      message.length > MAX_LEN.message
+      message.length > MAX_LEN.message ||
+      phone.length > MAX_LEN.phone
     ) {
       return NextResponse.json({ success: false, error: 'Contenu trop long' }, { status: 400 })
+    }
+
+    if (phone.length > 0 && (phone.length < 6 || !/\d/.test(phone))) {
+      return NextResponse.json(
+        { success: false, error: 'Numéro de téléphone invalide' },
+        { status: 400 }
+      )
     }
 
     const contactEmail = process.env.CONTACT_EMAIL || 'ijipop82@gmail.com'
@@ -323,6 +343,7 @@ export async function POST(request: NextRequest) {
     const mainRows = [
       emailRow('Nom', String(name)),
       emailRow('E-mail (répondre)', String(email)),
+      ...(phone ? [emailRow('Téléphone', phone)] : []),
       emailRow('Sujet', String(subject)),
       emailRow('Message', String(message)),
     ].join('')

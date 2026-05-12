@@ -35,6 +35,21 @@ export const metadata: Metadata = {
     siteName: 'Jean-François Lefebvre — Ijipop',
     description:
       'Sites web vitrine et refonte, maintenance et petits outils pour PME et travailleurs autonomes au Québec.',
+    images: [
+      {
+        url: '/og-default.png',
+        width: 1200,
+        height: 630,
+        alt: 'Jean-François Lefebvre — Ijipop, sites web et logiciels au Québec',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Jean-François Lefebvre — Ijipop',
+    description:
+      'Sites web vitrine et refonte, maintenance et petits outils pour PME et travailleurs autonomes au Québec.',
+    images: ['/og-default.png'],
   },
 }
 
