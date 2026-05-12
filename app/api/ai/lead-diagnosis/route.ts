@@ -14,6 +14,7 @@ interface LeadDiagnosis {
 const MAX_FIELD_LENGTHS = {
   name: 120,
   email: 254,
+  phone: 50,
   subject: 180,
   message: 2500,
   briefField: 900,
@@ -155,11 +156,16 @@ function buildPrompt(input: {
   locale: 'fr' | 'en'
   name: string
   email: string
+  phone: string
   subject: string
   message: string
   projectWeb: Record<string, string | boolean> | null
 }): string {
   const language = input.locale === 'en' ? 'English' : 'French'
+  const phoneLine =
+    input.phone.trim().length > 0
+      ? `- Phone (optional field): ${input.phone.trim()}`
+      : '- Phone (optional field): not provided'
   return `You are an AI lead qualification assistant for a small web studio.
 
 Goal: analyze a potential SMB web project and return a concise conversion-focused diagnosis.
@@ -183,6 +189,7 @@ Return exactly:
 Lead:
 - Name: ${input.name}
 - Email is valid: ${isValidEmail(input.email) ? 'yes' : 'no'}
+${phoneLine}
 - Subject: ${input.subject}
 - Message: ${input.message}
 - Web project brief JSON: ${JSON.stringify(input.projectWeb ?? {})}`
@@ -218,6 +225,31 @@ export async function POST(request: NextRequest) {
     const projectWeb = sanitizeProjectWeb(body.projectWeb)
     const locale = body.locale === 'en' ? 'en' : 'fr'
 
+    const phoneField = body.phone
+    let phone = ''
+    if (phoneField !== undefined && phoneField !== null) {
+      if (typeof phoneField !== 'string') {
+        return NextResponse.json(
+          { success: false, error: 'Le champ téléphone est invalide.' },
+          { status: 400 }
+        )
+      }
+      const p = readString(phoneField, MAX_FIELD_LENGTHS.phone)
+      if (p === null) {
+        return NextResponse.json(
+          { success: false, error: 'Le numéro de téléphone est trop long.' },
+          { status: 400 }
+        )
+      }
+      phone = p
+    }
+    if (phone.length > 0 && (phone.length < 6 || !/\d/.test(phone))) {
+      return NextResponse.json(
+        { success: false, error: 'Numéro de téléphone invalide.' },
+        { status: 400 }
+      )
+    }
+
     if (!name || name.length < 2 || !email || !isValidEmail(email)) {
       return NextResponse.json(
         { success: false, error: 'Nom et email valide requis avant le diagnostic.' },
@@ -252,7 +284,10 @@ export async function POST(request: NextRequest) {
           role: 'system',
           content: 'You return only valid JSON and never include markdown.',
         },
-        { role: 'user', content: buildPrompt({ locale, name, email, subject, message, projectWeb }) },
+        {
+          role: 'user',
+          content: buildPrompt({ locale, name, email, phone, subject, message, projectWeb }),
+        },
       ],
       response_format: { type: 'json_object' },
       temperature: 0.35,

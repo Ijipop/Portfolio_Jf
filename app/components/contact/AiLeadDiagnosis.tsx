@@ -25,6 +25,7 @@ export interface AiLeadDiagnosisResult {
 interface ContactFormSnapshot {
   name: string
   email: string
+  phone: string
   subject: string
   message: string
   bm_verify: string
