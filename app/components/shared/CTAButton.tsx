@@ -7,6 +7,7 @@
 
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
 import Button from '@mui/material/Button'
+import type { SxProps, Theme } from '@mui/material/styles'
 import { styled } from '@mui/material/styles'
 import { motion } from 'framer-motion'
 import { DESIGN_TOKENS } from '../../design-system/constants'
@@ -23,6 +24,7 @@ interface CTAButtonProps {
   endIcon?: React.ReactNode
   type?: 'button' | 'submit' | 'reset'
   disabled?: boolean
+  sx?: SxProps<Theme>
 }
 
 // Fonction utilitaire pour convertir hex en rgba
@@ -97,7 +99,6 @@ const StyledCTAButton = styled(Button, {
       boxShadow: `0 4px 20px ${hexToRgba(primaryColor, 0.3)}`,
       '&&:hover': {
         background: `linear-gradient(135deg, ${primaryColor} 0%, ${secondaryColor} 100%)`,
-        borderRadius: DESIGN_TOKENS.borderRadius.medium,
         boxShadow: `0 12px 40px ${hexToRgba(primaryColor, 0.6)}, 0 0 20px ${hexToRgba(primaryColor, 0.2)}`,
       },
     }
@@ -113,7 +114,6 @@ const StyledCTAButton = styled(Button, {
       boxShadow: `0 4px 20px ${hexToRgba(primaryColor, 0.3)}`,
       '&&:hover': {
         background: `linear-gradient(135deg, ${primaryColor} 0%, ${secondaryColor} 100%)`,
-        borderRadius: DESIGN_TOKENS.borderRadius.medium,
         boxShadow: `0 12px 40px ${hexToRgba(primaryColor, 0.6)}, 0 0 20px ${hexToRgba(primaryColor, 0.2)}`,
       },
     }
@@ -130,7 +130,6 @@ const StyledCTAButton = styled(Button, {
     '&&:hover': {
       background: hexToRgba(primaryColor, 0.15),
       border: `2px solid ${primaryColor}`,
-      borderRadius: DESIGN_TOKENS.borderRadius.medium,
       boxShadow: `0 8px 25px ${hexToRgba(primaryColor, 0.2)}, 0 0 15px ${hexToRgba(primaryColor, 0.15)}`,
     },
   }
@@ -149,6 +148,7 @@ export default function CTAButton({
   endIcon,
   type,
   disabled,
+  sx,
 }: CTAButtonProps) {
   const { primary, secondary } = useThemeColors()
   
@@ -160,6 +160,7 @@ export default function CTAButton({
     size,
     type,
     disabled,
+    sx,
     startIcon: startIcon || (variant === 'primary' ? null : null),
     endIcon: endIcon || (variant === 'primary' ? <ArrowForwardIcon /> : null),
   }

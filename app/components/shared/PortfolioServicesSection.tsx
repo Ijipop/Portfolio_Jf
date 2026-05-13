@@ -19,6 +19,7 @@ import {
 import ScrollReveal from './ScrollReveal'
 import PortfolioHomeOfferEcosystem from './PortfolioHomeOfferEcosystem'
 import { DESIGN_TOKENS } from '@/design-system/constants'
+import { useAdvancedTheme } from '@/contexts/AdvancedThemeContext'
 import { usePresentationMode } from '@/contexts/PresentationModeContext'
 import { useLanguage } from '@/contexts/LanguageContext'
 import { useTextColor } from '@/hooks/useTextColor'
@@ -56,8 +57,24 @@ const SERVICES: {
 export default function PortfolioServicesSection() {
   const { t } = useLanguage()
   const { mode: presentationMode } = usePresentationMode()
+  const { customTheme } = useAdvancedTheme()
   const textColor = useTextColor()
   const { primary, secondary, accent } = useThemeColors()
+  const bonusBlockBackground = useMemo(
+    () =>
+      presentationMode === 'beige'
+        ? `linear-gradient(140deg, ${alpha(customTheme.bg, 0.92)} 0%, ${alpha(customTheme.bg2, 0.88)} 52%, ${alpha(primary, 0.08)} 100%)`
+        : `linear-gradient(140deg, ${alpha(customTheme.bg, 0.96)} 0%, ${alpha(customTheme.bg2, 0.92)} 42%, ${alpha(primary, 0.2)} 100%)`,
+    [presentationMode, customTheme.bg, customTheme.bg2, primary],
+  )
+  const bonusBlockBorder = useMemo(
+    () => alpha(primary, presentationMode === 'beige' ? 0.3 : 0.4),
+    [presentationMode, primary],
+  )
+  const bonusBadgeBg = useMemo(
+    () => alpha(primary, presentationMode === 'beige' ? 0.1 : 0.14),
+    [presentationMode, primary],
+  )
   const serviceGradient = useMemo(
     () =>
       presentationMode === 'beige'
@@ -221,12 +238,8 @@ export default function PortfolioServicesSection() {
             px: { xs: 2, sm: 2.75, md: 3.25 },
             py: { xs: 2.75, md: 3.25 },
             borderRadius: DESIGN_TOKENS.borderRadius.banner,
-            border: (theme) =>
-              `1px solid ${alpha(theme.palette.mode === 'dark' ? '#e2e8f0' : primary, 0.32)}`,
-            background: (theme) =>
-              theme.palette.mode === 'dark'
-                ? `linear-gradient(140deg, ${alpha('#0f172a', 0.74)} 0%, ${alpha(primary, 0.16)} 100%)`
-                : `linear-gradient(140deg, ${alpha(primary, 0.1)} 0%, ${alpha('#ffffff', 0.9)} 100%)`,
+            border: `1px solid ${bonusBlockBorder}`,
+            background: bonusBlockBackground,
             boxShadow: `0 14px 34px ${alpha(primary, 0.15)}`,
           }}
         >
@@ -245,8 +258,8 @@ export default function PortfolioServicesSection() {
                 px: 1.05,
                 py: 0.45,
                 borderRadius: 999,
-                border: `1px solid ${alpha(primary, 0.42)}`,
-                backgroundColor: alpha(primary, 0.1),
+                border: `1px solid ${alpha(primary, presentationMode === 'beige' ? 0.42 : 0.5)}`,
+                backgroundColor: bonusBadgeBg,
               }}
             >
               <AutoAwesomeOutlinedIcon sx={{ fontSize: 16, color: primary }} />

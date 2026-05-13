@@ -4,9 +4,11 @@ import Box from '@mui/material/Box'
 import Chip from '@mui/material/Chip'
 import Typography from '@mui/material/Typography'
 import { alpha } from '@mui/material/styles'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import ScrollReveal from './ScrollReveal'
+import { useAdvancedTheme } from '@/contexts/AdvancedThemeContext'
 import { useLanguage } from '@/contexts/LanguageContext'
+import { usePresentationMode } from '@/contexts/PresentationModeContext'
 import { useTextColor } from '@/hooks/useTextColor'
 import { useThemeColors } from '@/hooks/useThemeColors'
 import AutoplayLoopVideo from '@/components/shared/AutoplayLoopVideo'
@@ -24,8 +26,24 @@ const BONUS_KEYS = [
 
 export default function PortfolioHomeOfferEcosystem() {
   const { t } = useLanguage()
+  const { mode: presentationMode } = usePresentationMode()
+  const { customTheme } = useAdvancedTheme()
   const textColor = useTextColor()
   const { primary } = useThemeColors()
+  const videoMatteBg = useMemo(
+    () =>
+      presentationMode === 'beige'
+        ? '#0f0f0f'
+        : alpha(customTheme.bg2, 0.94),
+    [presentationMode, customTheme.bg2],
+  )
+  const chipSurface = useMemo(
+    () =>
+      presentationMode === 'beige'
+        ? alpha(primary, 0.07)
+        : `linear-gradient(135deg, ${alpha(customTheme.bg, 0.55)} 0%, ${alpha(primary, 0.12)} 100%)`,
+    [presentationMode, customTheme.bg, primary],
+  )
   const caption = t('home.servicesEcosystemDemo2Caption')
   const hoverPrompt = t('home.servicesEcosystemDemo2Hover')
   const [demoHovered, setDemoHovered] = useState(false)
@@ -55,8 +73,8 @@ export default function PortfolioHomeOfferEcosystem() {
               size="small"
               variant="outlined"
               sx={{
-                borderColor: alpha(primary, 0.45),
-                backgroundColor: alpha(primary, 0.07),
+                borderColor: alpha(primary, presentationMode === 'beige' ? 0.45 : 0.52),
+                background: chipSurface,
                 color: textColor,
                 fontWeight: 700,
                 fontSize: '0.78rem',
@@ -79,7 +97,8 @@ export default function PortfolioHomeOfferEcosystem() {
               aspectRatio: '16 / 9',
               borderRadius: DESIGN_TOKENS.borderRadius.bannerInner,
               overflow: 'hidden',
-              bgcolor: (theme) => (theme.palette.mode === 'dark' ? '#0a0a0a' : '#0f0f0f'),
+              bgcolor: videoMatteBg,
+              boxShadow: `inset 0 0 0 1px ${alpha(primary, presentationMode === 'beige' ? 0.12 : 0.22)}`,
               cursor: 'default',
             }}
           >

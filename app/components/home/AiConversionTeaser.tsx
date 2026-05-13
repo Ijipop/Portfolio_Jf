@@ -85,7 +85,7 @@ export default function AiConversionTeaser() {
           mb: { xs: 4.5, md: 7 },
           px: { xs: 2.25, sm: 3, md: 4 },
           py: { xs: 3, sm: 3.5, md: 4.25 },
-          borderRadius: DESIGN_TOKENS.borderRadius.medium,
+          borderRadius: DESIGN_TOKENS.borderRadius.banner,
           border: `1px solid ${alpha(primary, 0.32)}`,
           background: outerBackground,
           boxShadow: `0 24px 70px ${alpha(primary, 0.18)}`,
@@ -167,7 +167,11 @@ export default function AiConversionTeaser() {
               }}
             >
               <Link href="/portfolio/contact#diagnostic-ia" style={{ textDecoration: 'none' }}>
-                <CTAButton variant="primary" size="medium">
+                <CTAButton
+                  variant="primary"
+                  size="medium"
+                  sx={{ borderRadius: DESIGN_TOKENS.borderRadius.banner }}
+                >
                   {t('home.aiImpactPrimaryCta')}
                 </CTAButton>
               </Link>
@@ -186,7 +190,7 @@ export default function AiConversionTeaser() {
                 gridColumn: { xs: 'auto', sm: '1 / -1' },
                 position: 'relative',
                 overflow: 'hidden',
-                borderRadius: DESIGN_TOKENS.borderRadius.medium,
+                borderRadius: DESIGN_TOKENS.borderRadius.banner,
                 border: `1px solid ${alpha(primary, 0.28)}`,
                 minHeight: { xs: 190, sm: 230, md: 260 },
                 background: videoFrameBackground,
@@ -210,6 +214,7 @@ export default function AiConversionTeaser() {
                   objectFit: 'cover',
                   objectPosition: 'center',
                   opacity: 0.88,
+                  borderRadius: DESIGN_TOKENS.borderRadius.banner,
                 }}
               />
               <Box
@@ -227,7 +232,7 @@ export default function AiConversionTeaser() {
                 key={labelKey}
                 sx={{
                   p: 1.65,
-                  borderRadius: DESIGN_TOKENS.borderRadius.small,
+                  borderRadius: DESIGN_TOKENS.borderRadius.bannerInner,
                   border: `1px solid ${metricBorder}`,
                   background: metricCardBackground,
                   backdropFilter: presentationMode === 'beige' ? 'blur(10px)' : 'blur(12px)',
