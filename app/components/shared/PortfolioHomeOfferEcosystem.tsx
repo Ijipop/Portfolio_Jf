@@ -10,6 +10,7 @@ import { useLanguage } from '@/contexts/LanguageContext'
 import { useTextColor } from '@/hooks/useTextColor'
 import { useThemeColors } from '@/hooks/useThemeColors'
 import AutoplayLoopVideo from '@/components/shared/AutoplayLoopVideo'
+import { DESIGN_TOKENS } from '@/design-system/constants'
 
 const DEMO2_SRC = '/img/demo2.mp4'
 
@@ -76,7 +77,7 @@ export default function PortfolioHomeOfferEcosystem() {
             sx={{
               width: '100%',
               aspectRatio: '16 / 9',
-              borderRadius: 6,
+              borderRadius: DESIGN_TOKENS.borderRadius.bannerInner,
               overflow: 'hidden',
               bgcolor: (theme) => (theme.palette.mode === 'dark' ? '#0a0a0a' : '#0f0f0f'),
               cursor: 'default',

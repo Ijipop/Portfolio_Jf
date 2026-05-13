@@ -220,7 +220,7 @@ export default function PortfolioServicesSection() {
             mt: { xs: 3.5, md: 4.5 },
             px: { xs: 2, sm: 2.75, md: 3.25 },
             py: { xs: 2.75, md: 3.25 },
-            borderRadius: DESIGN_TOKENS.borderRadius.medium,
+            borderRadius: DESIGN_TOKENS.borderRadius.banner,
             border: (theme) =>
               `1px solid ${alpha(theme.palette.mode === 'dark' ? '#e2e8f0' : primary, 0.32)}`,
             background: (theme) =>

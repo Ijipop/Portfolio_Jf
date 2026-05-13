@@ -6,12 +6,16 @@
  */
 
 export const DESIGN_TOKENS = {
-  // Border Radius
+  // Border Radius — `large` = cartes ThreeDCard ; `banner` = bandeaux larges accueil (coins plus secs)
   borderRadius: {
     small: 12,
     medium: 16,
     large: 24,
     xlarge: 32,
+    /** Bandeaux larges accueil (démos, bloc bonus/vidéo) — moins « pilule » que les cartes 3D */
+    banner: 8,
+    /** Vidéo / média à l’intérieur d’un encart `banner` */
+    bannerInner: 6,
   },
 
   // Transitions

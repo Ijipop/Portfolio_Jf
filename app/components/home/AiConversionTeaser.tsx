@@ -1,5 +1,6 @@
 'use client'
 
+import { useMemo } from 'react'
 import AutoAwesomeOutlinedIcon from '@mui/icons-material/AutoAwesomeOutlined'
 import FactCheckOutlinedIcon from '@mui/icons-material/FactCheckOutlined'
 import MarkEmailReadOutlinedIcon from '@mui/icons-material/MarkEmailReadOutlined'
@@ -11,7 +12,9 @@ import { alpha } from '@mui/material/styles'
 import Link from 'next/link'
 import CTAButton from '@/components/shared/CTAButton'
 import ScrollReveal from '@/components/shared/ScrollReveal'
+import { useAdvancedTheme } from '@/contexts/AdvancedThemeContext'
 import { useLanguage } from '@/contexts/LanguageContext'
+import { usePresentationMode } from '@/contexts/PresentationModeContext'
 import { DESIGN_TOKENS } from '@/design-system/constants'
 import { useTextColor } from '@/hooks/useTextColor'
 import { useThemeColors } from '@/hooks/useThemeColors'
@@ -43,6 +46,37 @@ export default function AiConversionTeaser() {
   const { t } = useLanguage()
   const textColor = useTextColor()
   const { primary, secondary, accent } = useThemeColors()
+  const { customTheme } = useAdvancedTheme()
+  const { mode: presentationMode } = usePresentationMode()
+
+  const outerBackground = useMemo(
+    () =>
+      presentationMode === 'beige'
+        ? `linear-gradient(135deg, ${alpha(customTheme.bg, 0.88)} 0%, ${alpha(customTheme.bg2, 0.82)} 48%, ${alpha(primary, 0.1)} 100%)`
+        : `linear-gradient(135deg, ${alpha(customTheme.bg, 0.96)} 0%, ${alpha(customTheme.bg2, 0.92)} 45%, ${alpha(primary, 0.22)} 100%)`,
+    [presentationMode, customTheme.bg, customTheme.bg2, primary],
+  )
+
+  const videoFrameBackground = useMemo(
+    () =>
+      presentationMode === 'beige'
+        ? alpha(customTheme.bg, 0.72)
+        : alpha(customTheme.bg2, 0.9),
+    [presentationMode, customTheme.bg, customTheme.bg2],
+  )
+
+  const metricCardBackground = useMemo(
+    () =>
+      presentationMode === 'beige'
+        ? `linear-gradient(145deg, ${alpha(customTheme.bg, 0.78)} 0%, ${alpha(customTheme.bg2, 0.72)} 55%, ${alpha(primary, 0.06)} 100%)`
+        : `linear-gradient(145deg, ${alpha(customTheme.bg, 0.92)} 0%, ${alpha(customTheme.bg2, 0.9)} 50%, ${alpha(primary, 0.16)} 100%)`,
+    [presentationMode, customTheme.bg, customTheme.bg2, primary],
+  )
+
+  const metricBorder = useMemo(
+    () => alpha(primary, presentationMode === 'beige' ? 0.2 : 0.32),
+    [presentationMode, primary],
+  )
 
   return (
     <ScrollReveal direction="up" delay={0.04}>
@@ -53,10 +87,7 @@ export default function AiConversionTeaser() {
           py: { xs: 3, sm: 3.5, md: 4.25 },
           borderRadius: DESIGN_TOKENS.borderRadius.medium,
           border: `1px solid ${alpha(primary, 0.32)}`,
-          background: (theme) =>
-            theme.palette.mode === 'dark'
-              ? `linear-gradient(135deg, ${alpha(primary, 0.18)} 0%, ${alpha('#020617', 0.64)} 48%, ${alpha(secondary, 0.16)} 100%)`
-              : `linear-gradient(135deg, ${alpha(primary, 0.1)} 0%, ${alpha('#ffffff', 0.72)} 48%, ${alpha(secondary, 0.08)} 100%)`,
+          background: outerBackground,
           boxShadow: `0 24px 70px ${alpha(primary, 0.18)}`,
           overflow: 'hidden',
           position: 'relative',
@@ -158,8 +189,7 @@ export default function AiConversionTeaser() {
                 borderRadius: DESIGN_TOKENS.borderRadius.medium,
                 border: `1px solid ${alpha(primary, 0.28)}`,
                 minHeight: { xs: 190, sm: 230, md: 260 },
-                background: (theme) =>
-                  theme.palette.mode === 'dark' ? alpha('#020617', 0.72) : alpha('#ffffff', 0.58),
+                background: videoFrameBackground,
                 boxShadow: `0 18px 46px ${alpha(primary, 0.16)}`,
               }}
             >
@@ -197,10 +227,11 @@ export default function AiConversionTeaser() {
                 key={labelKey}
                 sx={{
                   p: 1.65,
-                  borderRadius: 3,
-                  border: `1px solid ${alpha(primary, 0.22)}`,
-                  background: (theme) =>
-                    theme.palette.mode === 'dark' ? alpha('#ffffff', 0.045) : alpha('#ffffff', 0.62),
+                  borderRadius: DESIGN_TOKENS.borderRadius.small,
+                  border: `1px solid ${metricBorder}`,
+                  background: metricCardBackground,
+                  backdropFilter: presentationMode === 'beige' ? 'blur(10px)' : 'blur(12px)',
+                  WebkitBackdropFilter: presentationMode === 'beige' ? 'blur(10px)' : 'blur(12px)',
                   color: textColor,
                   display: 'flex',
                   flexDirection: 'column',
