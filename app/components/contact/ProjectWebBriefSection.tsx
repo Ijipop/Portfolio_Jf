@@ -89,6 +89,12 @@ const DenseTextField = styled(TextField, {
     color: textColor || '#fff',
     '&.Mui-focused': { color: theme.palette.mode === 'dark' ? '#60a5fa' : '#1e3a8a' },
   },
+  /** Outlined multiline : sur tablette/mobile, un peu d’air sous le label rétracté évite le chevauchement avec le contour. */
+  '& .MuiOutlinedInput-root.MuiInputBase-multiline': {
+    [theme.breakpoints.down('md')]: {
+      paddingTop: theme.spacing(1.75),
+    },
+  },
   '& .MuiFormHelperText-root': {
     fontSize: '0.75rem',
     color: helperTextColor || 'rgba(255,255,255,0.65)',
@@ -216,6 +222,7 @@ export default function ProjectWebBriefSection({
             onChange={(e) => patch({ mainGoal: e.target.value })}
             multiline
             minRows={2}
+            InputLabelProps={{ shrink: true }}
             textColor={textColor}
             helperTextColor={helper}
           />
@@ -392,6 +399,7 @@ export default function ProjectWebBriefSection({
             onChange={(e) => patch({ exampleLinks: e.target.value })}
             multiline
             minRows={2}
+            InputLabelProps={{ shrink: true }}
             textColor={textColor}
             helperTextColor={helper}
           />
@@ -405,6 +413,7 @@ export default function ProjectWebBriefSection({
             onChange={(e) => patch({ features: e.target.value })}
             multiline
             minRows={2}
+            InputLabelProps={{ shrink: true }}
             textColor={textColor}
             helperTextColor={helper}
           />
