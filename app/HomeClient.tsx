@@ -142,7 +142,7 @@ export default function HomeClient({ initialShowIntro }: { initialShowIntro: boo
               mb: { xs: DESIGN_TOKENS.spacing.xl, md: DESIGN_TOKENS.spacing.xxl },
               px: { xs: 3, sm: 4, md: 4.5 },
               py: { xs: 3.25, sm: 3.75, md: 4 },
-              borderRadius: DESIGN_TOKENS.borderRadius.small,
+              borderRadius: DESIGN_TOKENS.borderRadius.banner,
               border: (theme) => `1px solid ${alpha(theme.palette.mode === 'dark' ? '#94a3b8' : primary, 0.22)}`,
               background: (theme) =>
                 theme.palette.mode === 'dark'
