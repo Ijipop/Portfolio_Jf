@@ -152,7 +152,7 @@ export default function TimelendrPage() {
                   key={key}
                   sx={{
                     ...cardSx,
-                    borderRadius: DESIGN_TOKENS.borderRadius.medium,
+                    borderRadius: DESIGN_TOKENS.borderRadius.small,
                     p: { xs: 2, sm: 2.25 },
                     display: 'flex',
                     gap: 1.75,
@@ -206,7 +206,7 @@ export default function TimelendrPage() {
                     key={r.id}
                     sx={{
                       p: 2.5,
-                      borderRadius: DESIGN_TOKENS.borderRadius.medium,
+                      borderRadius: DESIGN_TOKENS.borderRadius.small,
                       border: `1px solid ${primary}28`,
                       backgroundColor: `${primary}08`,
                       color: textColor,
@@ -229,6 +229,7 @@ export default function TimelendrPage() {
                         }
                         sx={{
                           fontWeight: 600,
+                          borderRadius: DESIGN_TOKENS.borderRadius.small,
                           borderColor: `${primary}55`,
                           color: textColor,
                           bgcolor: `${primary}14`,
@@ -247,7 +248,11 @@ export default function TimelendrPage() {
                       href={r.filePath}
                       target="_blank"
                       rel="noopener noreferrer"
-                      sx={{ alignSelf: 'flex-start', fontWeight: 600 }}
+                      sx={{
+                        alignSelf: 'flex-start',
+                        fontWeight: 600,
+                        borderRadius: DESIGN_TOKENS.borderRadius.small,
+                      }}
                     >
                       {t('timelendr.downloadButton')}
                     </Button>
@@ -259,7 +264,7 @@ export default function TimelendrPage() {
             <Box
               sx={{
                 ...cardSx,
-                borderRadius: DESIGN_TOKENS.borderRadius.large,
+                borderRadius: DESIGN_TOKENS.borderRadius.medium,
                 p: { xs: 2.5, sm: 3.5 },
                 mb: 3,
                 borderLeft: `4px solid ${primary}`,

@@ -88,7 +88,7 @@ export default function TimelendrCarousel({ title, emptyMessage }: Props) {
       <Box
         sx={{
           ...surface,
-          borderRadius: DESIGN_TOKENS.borderRadius.large,
+          borderRadius: DESIGN_TOKENS.borderRadius.medium,
           p: { xs: 3, sm: 4 },
           mb: 4,
           textAlign: 'center',
@@ -108,7 +108,7 @@ export default function TimelendrCarousel({ title, emptyMessage }: Props) {
     <Box
       sx={{
         ...surface,
-        borderRadius: DESIGN_TOKENS.borderRadius.large,
+        borderRadius: DESIGN_TOKENS.borderRadius.medium,
         p: { xs: 2, sm: 2.5 },
         mb: 4,
         overflow: 'hidden',
@@ -121,7 +121,7 @@ export default function TimelendrCarousel({ title, emptyMessage }: Props) {
         onClick={() => failedSrc !== slides[index] && setLightboxOpen(true)}
         sx={{
           position: 'relative',
-          borderRadius: DESIGN_TOKENS.borderRadius.medium,
+          borderRadius: DESIGN_TOKENS.borderRadius.small,
           overflow: 'hidden',
           ...getProjectImageLetterboxGlassSx(theme.palette.mode),
           border: `1px solid ${primary}35`,
@@ -172,6 +172,7 @@ export default function TimelendrCarousel({ title, emptyMessage }: Props) {
             left: 8,
             top: '50%',
             transform: 'translateY(-50%)',
+            borderRadius: DESIGN_TOKENS.borderRadius.small,
             bgcolor: 'rgba(0,0,0,0.45)',
             color: 'white',
             '&:hover': { bgcolor: 'rgba(0,0,0,0.65)' },
@@ -190,6 +191,7 @@ export default function TimelendrCarousel({ title, emptyMessage }: Props) {
             right: 8,
             top: '50%',
             transform: 'translateY(-50%)',
+            borderRadius: DESIGN_TOKENS.borderRadius.small,
             bgcolor: 'rgba(0,0,0,0.45)',
             color: 'white',
             '&:hover': { bgcolor: 'rgba(0,0,0,0.65)' },
@@ -230,7 +232,7 @@ export default function TimelendrCarousel({ title, emptyMessage }: Props) {
             sx={{
               width: i === index ? 28 : 8,
               height: 8,
-              borderRadius: 4,
+              borderRadius: '2px',
               bgcolor: i === index ? primary : `${primary}40`,
               cursor: 'pointer',
               transition: 'all 0.25s ease',
@@ -270,6 +272,7 @@ export default function TimelendrCarousel({ title, emptyMessage }: Props) {
             top: 12,
             right: 12,
             zIndex: 2,
+            borderRadius: DESIGN_TOKENS.borderRadius.small,
             color: 'white',
             bgcolor: 'rgba(0,0,0,0.5)',
             '&:hover': { bgcolor: 'rgba(0,0,0,0.7)' },
@@ -300,7 +303,7 @@ export default function TimelendrCarousel({ title, emptyMessage }: Props) {
               width: 'auto',
               height: 'auto',
               objectFit: 'contain',
-              borderRadius: 8,
+              borderRadius: DESIGN_TOKENS.borderRadius.bannerInner,
               boxShadow: '0 8px 48px rgba(0,0,0,0.5)',
             }}
           />

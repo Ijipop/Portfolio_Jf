@@ -253,7 +253,7 @@ export default function AdminDashboard() {
 
   const fetchTimelendrReleases = useCallback(async () => {
     try {
-      const response = await fetch('/api/timelendr/releases', { credentials: 'include' });
+      const response = await fetch('/api/timelendr/releases', { credentials: 'include', cache: 'no-store' });
       const data = await response.json();
       if (data.success) {
         setTimelendrReleases(data.data);
@@ -774,20 +774,32 @@ export default function AdminDashboard() {
 
   const handleDeleteTimelendrRelease = async (id: number) => {
     if (!confirm('Supprimer cette version Timelendr ?')) return;
+    setError('');
     try {
-      const response = await fetch(`/api/timelendr/releases/${id}`, {
+      const response = await fetch(`/api/timelendr/releases/${encodeURIComponent(id)}`, {
         method: 'DELETE',
         credentials: 'include',
+        cache: 'no-store',
       });
-      const data = await response.json();
-      if (data.success) {
+      const ct = response.headers.get('content-type') || '';
+      let data: { success?: boolean; error?: string } = {};
+      if (ct.includes('application/json')) {
+        data = await response.json();
+      } else {
+        const text = await response.text();
+        setError(text.slice(0, 280) || `Erreur HTTP ${response.status}`);
+        return;
+      }
+      // 404 = déjà supprimée (double clic / onglet) : on rafraîchit quand même la liste
+      if (data.success || response.status === 404) {
         await fetchTimelendrReleases();
+        setError('');
       } else {
         setError(data.error || 'Erreur lors de la suppression');
       }
     } catch (err) {
       console.error(err);
-      setError('Erreur lors de la suppression');
+      setError('Erreur réseau ou réponse invalide.');
     }
   };
 
@@ -1154,7 +1166,17 @@ export default function AdminDashboard() {
                       </Button>
                     </TableCell>
                     <TableCell>
-                      <IconButton size="small" onClick={() => handleDeleteTimelendrRelease(r.id)} color="error">
+                      <IconButton
+                        type="button"
+                        size="small"
+                        color="error"
+                        aria-label="Supprimer cette version Timelendr"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          void handleDeleteTimelendrRelease(Number(r.id));
+                        }}
+                      >
                         <DeleteIcon />
                       </IconButton>
                     </TableCell>
