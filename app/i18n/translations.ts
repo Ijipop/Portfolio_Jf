@@ -392,7 +392,7 @@ export const translations = {
       title: 'Logiciel',
       intro: 'Mes applications et logiciels pour équipes et familles.',
       timelendrCardTitle: 'Timelendr',
-      timelendrCardDesc: 'Chronologie coopérative pour famille ou petite équipe — planifiez et consultez vos projets sur une timeline avec calendrier synchronisé.',
+      timelendrCardDesc: 'App desktop pour petites équipes et PME — calendrier, timelines collaboratives et tâches, Windows & macOS.',
       learnMore: 'En savoir plus',
     },
     pageweb: {
@@ -406,8 +406,18 @@ export const translations = {
     },
     timelendr: {
       title: 'Timelendr',
-      subtitle: 'Chronologie coopérative pour famille ou petite équipe',
-      intro: 'Calendrier, timeline et tâches réunis dans une application desktop pensée pour la clarté et le travail en équipe.',
+      subtitle: 'Planification visuelle pour petites équipes et PME',
+      intro:
+        'Calendrier, timelines et tâches dans une app desktop native — conçue pour voir clairement qui fait quoi, quand, et en équipe.',
+      heroKicker: 'Application desktop',
+      heroCtaDownload: 'Télécharger',
+      heroCtaFeatures: 'Voir les fonctionnalités',
+      trustDesktop: 'Windows & macOS',
+      trustCollab: 'Collaboration temps réel',
+      trustOffline: 'Mode hors ligne',
+      trustIntegrations: 'CalDAV · iCloud · Outlook',
+      downloadsLead: 'Installez la dernière version sur votre poste. Aucun abonnement web — une app dédiée, vos données.',
+      downloadNote: 'Premier lancement : un avertissement de sécurité peut s’afficher (app non signée). Voir la note ci-dessous.',
       timeline: '',
       calendar: '',
       galleryTitle: 'Aperçu de l’application',
@@ -422,7 +432,23 @@ export const translations = {
       galleryCap8: 'Plusieurs vues : jour, semaine, mois et année.',
       lightboxClose: 'Fermer',
       lightboxHint: 'Cliquez en dehors de l’image ou sur ✕ pour fermer.',
-      featuresTitle: 'Fonctionnalités',
+      featuresTitle: 'L’essentiel',
+      pillar1Title: 'Calendrier complet',
+      pillar1Desc:
+        'Mois, semaine, année, récurrence et édition rapide. Un clic pour basculer entre calendrier et timeline.',
+      pillar2Title: 'Timeline visuelle',
+      pillar2Desc:
+        'Planifiez par semaine, plusieurs timelines par workspace, drag & redimensionnement. Échéances visibles sur la timeline et dans les événements.',
+      pillar3Title: 'Collaboration en direct',
+      pillar3Desc:
+        'Voyez ce que les autres déplacent en temps réel sur la timeline — présence et fantômes de déplacement.',
+      pillar4Title: 'Intégrations & hors ligne',
+      pillar4Desc:
+        'CalDAV, iCloud et Outlook. Travaillez déconnecté ; resynchronisation automatique au retour en ligne.',
+      pillar5Title: 'Tâches & données',
+      pillar5Desc: 'Todo intégrée. Export et import par workspace (JSON).',
+      featuresSecondary:
+        'Personnalisation · palettes et thème clair/sombre · FR / EN · Windows & macOS',
       featureCalendar: 'Calendrier : vues mois, semaine et année ; création et édition d’événements.',
       featureTimeline: 'Timeline : blocs et lignes par semaine, onglets multiples, glisser-déposer, redimensionnement.',
       featureEvents: 'Événements : récurrence (quotidien à annuel), édition rapide, synchronisation calendrier et timeline.',
@@ -894,7 +920,7 @@ export const translations = {
       title: 'Software',
       intro: 'My applications and software for teams and families.',
       timelendrCardTitle: 'Timelendr',
-      timelendrCardDesc: 'Cooperative timeline for family or small team — plan and view projects on a timeline with synced calendar.',
+      timelendrCardDesc: 'Desktop app for small teams and SMBs — calendar, collaborative timelines and tasks, Windows & macOS.',
       learnMore: 'Learn more',
     },
     pageweb: {
@@ -908,8 +934,18 @@ export const translations = {
     },
     timelendr: {
       title: 'Timelendr',
-      subtitle: 'Cooperative timeline for family or small team',
-      intro: 'Calendar, timeline and tasks in one desktop app built for clarity and teamwork.',
+      subtitle: 'Visual planning for small teams and SMBs',
+      intro:
+        'Calendar, timelines and tasks in a native desktop app — built to show clearly who does what, when, and together.',
+      heroKicker: 'Desktop application',
+      heroCtaDownload: 'Download',
+      heroCtaFeatures: 'See features',
+      trustDesktop: 'Windows & macOS',
+      trustCollab: 'Real-time collaboration',
+      trustOffline: 'Offline mode',
+      trustIntegrations: 'CalDAV · iCloud · Outlook',
+      downloadsLead: 'Install the latest build on your machine. No web subscription — a dedicated app, your data.',
+      downloadNote: 'First launch: a security warning may appear (unsigned app). See the note below.',
       timeline: '',
       calendar: '',
       galleryTitle: 'Application preview',
@@ -924,7 +960,23 @@ export const translations = {
       galleryCap8: 'Multiple views: day, week, month, and year.',
       lightboxClose: 'Close',
       lightboxHint: 'Click outside the image or ✕ to close.',
-      featuresTitle: 'Features',
+      featuresTitle: 'Essentials',
+      pillar1Title: 'Full calendar',
+      pillar1Desc:
+        'Month, week, year, recurrence and quick edit. One click to switch between calendar and timeline.',
+      pillar2Title: 'Visual timeline',
+      pillar2Desc:
+        'Plan by week, multiple timelines per workspace, drag & resize. Deadlines visible on the timeline and in events.',
+      pillar3Title: 'Live collaboration',
+      pillar3Desc:
+        'See others move items in real time on the timeline — presence and ghost previews.',
+      pillar4Title: 'Integrations & offline',
+      pillar4Desc:
+        'CalDAV, iCloud and Outlook. Work offline; automatic resync when you’re back online.',
+      pillar5Title: 'Tasks & data',
+      pillar5Desc: 'Built-in to-do list. Export and import per workspace (JSON).',
+      featuresSecondary:
+        'Customization · palettes and light/dark theme · FR / EN · Windows & macOS',
       featureCalendar: 'Calendar: month, week and year views; create and edit events.',
       featureTimeline: 'Timeline: weekly blocks and rows, multiple tabs, drag-and-drop, resize.',
       featureEvents: 'Events: recurrence (daily to yearly), quick edit, sync between calendar and timeline.',
