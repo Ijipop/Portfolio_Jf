@@ -33,9 +33,11 @@ const GALLERY_CAP_KEYS = [
 type Props = {
   title: string
   emptyMessage: string
+  variant?: 'default' | 'hero'
+  hideTitle?: boolean
 }
 
-export default function TimelendrCarousel({ title, emptyMessage }: Props) {
+export default function TimelendrCarousel({ title, emptyMessage, variant = 'default', hideTitle = false }: Props) {
   const { t } = useLanguage()
   const pathname = usePathname()
   const isTopologyRoute = shouldShowTopology(pathname)
@@ -83,7 +85,29 @@ export default function TimelendrCarousel({ title, emptyMessage }: Props) {
     interactive: false,
   })
 
+  const isHero = variant === 'hero'
+
   if (slides.length === 0) {
+    if (isHero) {
+      return (
+        <Box
+          sx={{
+            borderRadius: '14px',
+            border: '1px solid rgba(255,255,255,0.12)',
+            bgcolor: 'rgba(15,23,42,0.5)',
+            p: 3,
+            minHeight: 280,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          <Typography sx={{ color: textColor, opacity: 0.75, lineHeight: 1.65, textAlign: 'center', maxWidth: 420 }}>
+            {emptyMessage}
+          </Typography>
+        </Box>
+      )
+    }
     return (
       <Box
         sx={{
@@ -104,31 +128,30 @@ export default function TimelendrCarousel({ title, emptyMessage }: Props) {
     )
   }
 
-  return (
-    <Box
-      sx={{
-        ...surface,
-        borderRadius: DESIGN_TOKENS.borderRadius.medium,
-        p: { xs: 2, sm: 2.5 },
-        mb: 4,
-        overflow: 'hidden',
-      }}
-    >
-      <Typography variant="h5" sx={{ fontWeight: 700, color: textColor, mb: 2, textAlign: 'center' }}>
-        {title}
-      </Typography>
+  const carouselBody = (
+    <>
+      {!hideTitle && (
+        <Typography variant="h5" sx={{ fontWeight: 700, color: textColor, mb: 2, textAlign: 'center' }}>
+          {title}
+        </Typography>
+      )}
       <Box
         onClick={() => failedSrc !== slides[index] && setLightboxOpen(true)}
         sx={{
           position: 'relative',
-          borderRadius: DESIGN_TOKENS.borderRadius.small,
+          borderRadius: isHero ? '0 0 10px 10px' : DESIGN_TOKENS.borderRadius.small,
           overflow: 'hidden',
-          ...getProjectImageLetterboxGlassSx(theme.palette.mode),
-          border: `1px solid ${primary}35`,
-          aspectRatio: { xs: '4/3', sm: '16/10' },
-          maxHeight: { sm: 520 },
+          ...(isHero
+            ? { bgcolor: '#0f172a', border: 'none' }
+            : {
+                ...getProjectImageLetterboxGlassSx(theme.palette.mode),
+                border: `1px solid ${primary}35`,
+              }),
+          aspectRatio: isHero ? { xs: '16/10', md: '16/9' } : { xs: '4/3', sm: '16/10' },
+          maxHeight: isHero ? { md: 480 } : { sm: 520 },
           mx: 'auto',
           cursor: failedSrc !== slides[index] ? 'zoom-in' : 'default',
+          boxShadow: isHero ? 'none' : undefined,
         }}
       >
         <AnimatePresence mode="wait" initial={false}>
@@ -206,14 +229,14 @@ export default function TimelendrCarousel({ title, emptyMessage }: Props) {
             component="p"
             sx={{
               textAlign: 'center',
-              color: textColor,
-              opacity: 0.92,
+              color: isHero ? 'rgba(255,255,255,0.82)' : textColor,
+              opacity: isHero ? 1 : 0.92,
               lineHeight: 1.6,
               px: { xs: 1, sm: 2 },
               pt: 2,
               pb: 0.5,
               minHeight: { xs: '3.2em', sm: '2.8em' },
-              fontSize: { xs: '0.98rem', sm: '1.03rem' },
+              fontSize: { xs: '0.9rem', sm: '0.95rem' },
               fontWeight: 500,
             }}
           >
@@ -233,14 +256,77 @@ export default function TimelendrCarousel({ title, emptyMessage }: Props) {
               width: i === index ? 28 : 8,
               height: 8,
               borderRadius: '2px',
-              bgcolor: i === index ? primary : `${primary}40`,
+              bgcolor: i === index ? (isHero ? '#0d9488' : primary) : isHero ? 'rgba(13,148,136,0.35)' : `${primary}40`,
               cursor: 'pointer',
               transition: 'all 0.25s ease',
-              '&:hover': { bgcolor: i === index ? primary : `${primary}70` },
+              '&:hover': { bgcolor: i === index ? (isHero ? '#0d9488' : primary) : isHero ? 'rgba(13,148,136,0.55)' : `${primary}70` },
             }}
           />
         ))}
       </Box>
+    </>
+  )
+
+  return (
+    <>
+      {isHero ? (
+        <Box
+          sx={{
+            position: 'relative',
+            borderRadius: '14px',
+            overflow: 'hidden',
+            border: '1px solid rgba(255,255,255,0.14)',
+            boxShadow: '0 32px 80px rgba(0,0,0,0.45), 0 0 0 1px rgba(13,148,136,0.15)',
+            '&::before': {
+              content: '""',
+              position: 'absolute',
+              inset: '-40%',
+              background: 'radial-gradient(circle, rgba(13,148,136,0.25) 0%, transparent 55%)',
+              pointerEvents: 'none',
+              zIndex: 0,
+            },
+          }}
+        >
+          <Box
+            sx={{
+              position: 'relative',
+              zIndex: 1,
+              display: 'flex',
+              alignItems: 'center',
+              gap: 1,
+              px: 1.5,
+              py: 1,
+              bgcolor: 'rgba(15,23,42,0.95)',
+              borderBottom: '1px solid rgba(255,255,255,0.08)',
+            }}
+          >
+            <Box sx={{ display: 'flex', gap: 0.6 }}>
+              {['#ff5f57', '#febc2e', '#28c840'].map((c) => (
+                <Box key={c} sx={{ width: 10, height: 10, borderRadius: '50%', bgcolor: c, opacity: 0.9 }} />
+              ))}
+            </Box>
+            <Typography sx={{ flex: 1, textAlign: 'center', fontSize: '0.75rem', fontWeight: 600, color: 'rgba(255,255,255,0.55)', letterSpacing: '0.04em' }}>
+              Timelendr
+            </Typography>
+            <Box sx={{ width: 52 }} aria-hidden />
+          </Box>
+          <Box sx={{ position: 'relative', zIndex: 1, p: { xs: 0, sm: 0 }, bgcolor: 'rgba(15,23,42,0.6)' }}>
+            {carouselBody}
+          </Box>
+        </Box>
+      ) : (
+        <Box
+          sx={{
+            ...surface,
+            borderRadius: DESIGN_TOKENS.borderRadius.medium,
+            p: { xs: 2, sm: 2.5 },
+            mb: 4,
+            overflow: 'hidden',
+          }}
+        >
+          {carouselBody}
+        </Box>
+      )}
 
       <Dialog
         open={lightboxOpen}
@@ -326,6 +412,6 @@ export default function TimelendrCarousel({ title, emptyMessage }: Props) {
           </Typography>
         </Box>
       </Dialog>
-    </Box>
+    </>
   )
 }

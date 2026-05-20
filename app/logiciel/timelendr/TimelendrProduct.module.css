@@ -1,0 +1,246 @@
+/* Identité produit Timelendr — indépendante du thème portfolio */
+.page {
+  --tl-brand: #0d9488;
+  --tl-brand-deep: #0f766e;
+  --tl-accent: #8b5cf6;
+  --tl-accent-soft: #a78bfa;
+  --tl-glow: rgba(13, 148, 136, 0.35);
+  --tl-surface: rgba(255, 255, 255, 0.06);
+  --tl-border: rgba(255, 255, 255, 0.12);
+  --tl-text-muted: rgba(255, 255, 255, 0.72);
+}
+
+.productShell {
+  position: relative;
+  overflow: hidden;
+  border-radius: 20px;
+  margin-bottom: 2.5rem;
+  background:
+    radial-gradient(ellipse 80% 50% at 5% 0%, rgba(139, 92, 246, 0.2) 0%, transparent 55%),
+    radial-gradient(ellipse 70% 45% at 95% 15%, rgba(13, 148, 136, 0.24) 0%, transparent 50%),
+    linear-gradient(165deg, rgba(15, 23, 42, 0.97) 0%, rgba(15, 23, 42, 0.92) 50%, rgba(15, 23, 42, 0.96) 100%);
+  border: 1px solid var(--tl-border);
+  box-shadow:
+    0 24px 80px rgba(0, 0, 0, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.hero {
+  position: relative;
+  padding: clamp(1.75rem, 4vw, 3rem);
+  padding-bottom: clamp(1.5rem, 3vw, 2rem);
+}
+
+.heroGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(1.75rem, 4vw, 2.75rem);
+  align-items: center;
+  position: relative;
+  z-index: 1;
+}
+
+@media (min-width: 960px) {
+  .heroGrid {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+    gap: clamp(2rem, 4vw, 3.5rem);
+  }
+}
+
+.heroKicker {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--tl-brand);
+  margin-bottom: 0.85rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: 999px;
+  border: 1px solid rgba(13, 148, 136, 0.45);
+  background: rgba(13, 148, 136, 0.12);
+}
+
+.heroTitle {
+  margin: 0 0 0.75rem;
+  font-size: clamp(2.35rem, 6vw, 3.5rem);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1.05;
+  background: linear-gradient(135deg, #f8fafc 0%, #99f6e4 42%, #c4b5fd 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.heroSubtitle {
+  margin: 0 0 1rem;
+  font-size: clamp(1.05rem, 2.2vw, 1.25rem);
+  font-weight: 600;
+  color: #f1f5f9;
+  line-height: 1.4;
+  letter-spacing: -0.02em;
+}
+
+.heroIntro {
+  margin: 0 0 1.75rem;
+  font-size: clamp(0.9375rem, 1.8vw, 1.02rem);
+  line-height: 1.65;
+  color: var(--tl-text-muted);
+  max-width: 42ch;
+}
+
+.heroActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.trustRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+  padding-top: 0.25rem;
+}
+
+.trustItem {
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  color: rgba(255, 255, 255, 0.55);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.trustItem::before {
+  content: '';
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--tl-brand);
+  opacity: 0.9;
+}
+
+.bento {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+@media (min-width: 720px) {
+  .bento {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .bentoWide {
+    grid-column: 1 / -1;
+  }
+}
+
+.bentoCard {
+  padding: 1.35rem 1.4rem 1.45rem;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid var(--tl-border);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transition: border-color 0.22s ease, transform 0.22s ease, box-shadow 0.22s ease;
+}
+
+.bentoCard:hover {
+  border-color: rgba(255, 255, 255, 0.22);
+  transform: translateY(-2px);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.2);
+}
+
+.bentoCardAccentTeal {
+  border-left: 3px solid var(--tl-brand);
+}
+
+.bentoCardAccentViolet {
+  border-left: 3px solid var(--tl-accent);
+}
+
+.bentoCardAccentMixed {
+  border-left: 3px solid var(--tl-accent-soft);
+}
+
+.bentoIndex {
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: var(--tl-brand);
+  opacity: 0.9;
+  margin-bottom: 0.5rem;
+}
+
+.bentoTitle {
+  margin: 0 0 0.45rem;
+  font-size: 1.02rem;
+  font-weight: 700;
+  color: #f8fafc;
+  letter-spacing: -0.02em;
+}
+
+.bentoDesc {
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.58;
+  color: var(--tl-text-muted);
+}
+
+.sectionTitle {
+  margin: 0 0 1.25rem;
+  font-size: clamp(1.2rem, 2.5vw, 1.45rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: inherit;
+}
+
+.sectionTitleLight {
+  color: #f8fafc;
+}
+
+.productSection {
+  padding: 0 clamp(1.75rem, 4vw, 3rem) clamp(1.75rem, 4vw, 2.5rem);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.downloadsPanel {
+  border-radius: 0;
+  padding: clamp(1.5rem, 3vw, 2rem) clamp(1.75rem, 4vw, 3rem) clamp(1.75rem, 4vw, 3rem);
+  margin-bottom: 0;
+  background:
+    linear-gradient(180deg, rgba(13, 148, 136, 0.1) 0%, rgba(139, 92, 246, 0.06) 100%);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  scroll-margin-top: 96px;
+}
+
+.downloadCard {
+  padding: 1.35rem 1.4rem;
+  border-radius: 12px;
+  background: rgba(15, 23, 42, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.downloadCard + .downloadCard {
+  margin-top: 0.85rem;
+}
+
+.secondaryNote {
+  margin-top: 1.25rem;
+  font-size: 0.8125rem;
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.featuresSecondary {
+  margin-top: 1rem;
+  font-size: 0.8125rem;
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.48);
+  text-align: center;
+}
