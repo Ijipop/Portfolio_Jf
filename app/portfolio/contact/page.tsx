@@ -15,7 +15,8 @@ import Container from '@mui/material/Container'
 import Typography from '@mui/material/Typography'
 import { styled, useTheme } from '@mui/material/styles'
 import useMediaQuery from '@mui/material/useMediaQuery'
-import { useState } from 'react'
+import { useSearchParams } from 'next/navigation'
+import { useEffect, useRef, useState } from 'react'
 import ThreeDCardComponent from '../../components/ThreeDCard'
 import HeaderSection from '../../components/shared/HeaderSection'
 import IjipopGlitchTitle from '../../components/shared/IjipopGlitchTitle'
@@ -113,6 +114,8 @@ export default function Contact() {
   const textColor = useTextColor()
   const { primary } = useThemeColors()
   const { t } = useLanguage()
+  const searchParams = useSearchParams()
+  const subjectPrefilled = useRef(false)
   const [snackbarOpen, setSnackbarOpen] = useState(false)
   const [snackbarMessage, setSnackbarMessage] = useState('')
   const [snackbarSeverity, setSnackbarSeverity] = useState<'success' | 'error'>('success')
@@ -143,6 +146,14 @@ export default function Contact() {
     { icon: HandshakeIcon, label: t('contact.promiseCall') },
     { icon: RequestQuoteIcon, label: t('contact.promiseEstimate') },
   ]
+
+  useEffect(() => {
+    if (subjectPrefilled.current) return
+    const fromQuery = searchParams.get('subject')?.trim()
+    if (!fromQuery) return
+    subjectPrefilled.current = true
+    setFormData((prev) => (prev.subject.trim() ? prev : { ...prev, subject: fromQuery }))
+  }, [searchParams])
 
   const handleGitHubClick = () => {
     window.open('https://github.com/Ijipop', '_blank')

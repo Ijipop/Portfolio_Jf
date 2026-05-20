@@ -1,100 +1,430 @@
 'use client'
 
-import AutorenewOutlinedIcon from '@mui/icons-material/AutorenewOutlined'
 import AutoAwesomeOutlinedIcon from '@mui/icons-material/AutoAwesomeOutlined'
-import HandymanOutlinedIcon from '@mui/icons-material/HandymanOutlined'
+import BuildOutlinedIcon from '@mui/icons-material/BuildOutlined'
+import CheckRoundedIcon from '@mui/icons-material/CheckRounded'
 import LanguageOutlinedIcon from '@mui/icons-material/LanguageOutlined'
+import ManageSearchOutlinedIcon from '@mui/icons-material/ManageSearchOutlined'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
-import { alpha } from '@mui/material/styles'
-import Link from 'next/link'
+import { alpha, useTheme } from '@mui/material/styles'
+import { usePathname } from 'next/navigation'
 import { useMemo } from 'react'
-import ThreeDCardComponent from '@/components/ThreeDCard'
+import CTAButton from '@/components/shared/CTAButton'
 import {
-  BRAND_BORDER_BEAM_COLOR_FROM,
-  BRAND_BORDER_BEAM_COLOR_TO,
   BRAND_GLITCH_GRADIENT,
   buildPaletteGlitchGradient,
 } from './IjipopGlitchTitle'
 import ScrollReveal from './ScrollReveal'
-import PortfolioHomeOfferEcosystem from './PortfolioHomeOfferEcosystem'
+import { getCardSurfaceSx } from '@/components/shared/cardSurface'
 import { DESIGN_TOKENS } from '@/design-system/constants'
-import { useAdvancedTheme } from '@/contexts/AdvancedThemeContext'
 import { usePresentationMode } from '@/contexts/PresentationModeContext'
 import { useLanguage } from '@/contexts/LanguageContext'
 import { useTextColor } from '@/hooks/useTextColor'
 import { useThemeColors } from '@/hooks/useThemeColors'
+import { shouldShowTopology } from '@/utils/topologyRoutes'
 import type { SvgIconComponent } from '@mui/icons-material'
 
 const CONTACT_PATH = '/portfolio/contact'
+/** Nombre de lignes « puce » — identique sur les 3 cartes pour l’alignement visuel. */
+const PACK_BULLET_SLOTS = 4
+const PACK_BULLET_ROW_MIN = 48
 
-const SERVICES: {
+type PackOffer = {
+  id: string
   icon: SvgIconComponent
   titleKey: string
-  leadKey: string
-  linkKey: string
-}[] = [
+  priceKey: string
+  pricePrefixKey?: string
+  priceNoteKey?: string
+  forKey: string
+  bulletKeys: readonly string[]
+  ctaKey: string
+  subjectKey: string
+  featured?: boolean
+  badgeKey?: string
+}
+
+const PACK_OFFERS: PackOffer[] = [
   {
+    id: 'audit',
+    icon: ManageSearchOutlinedIcon,
+    titleKey: 'home.servicesPackAuditTitle',
+    priceKey: 'home.servicesPackAuditPrice',
+    forKey: 'home.servicesPackAuditFor',
+    bulletKeys: ['home.servicesPackAuditB1', 'home.servicesPackAuditB2', 'home.servicesPackAuditB3'],
+    ctaKey: 'home.servicesPackAuditCta',
+    subjectKey: 'home.servicesPackAuditSubject',
+  },
+  {
+    id: 'page',
     icon: LanguageOutlinedIcon,
-    titleKey: 'home.servicesHomeNewTitle',
-    leadKey: 'home.servicesHomeNewLead',
-    linkKey: 'home.servicesHomeNewCta',
+    titleKey: 'home.servicesPackPageTitle',
+    pricePrefixKey: 'home.servicesPackPriceFrom',
+    priceKey: 'home.servicesPackPagePrice',
+    priceNoteKey: 'home.servicesPackPagePriceNote',
+    forKey: 'home.servicesPackPageFor',
+    bulletKeys: [
+      'home.servicesPackPageB1',
+      'home.servicesPackPageB2',
+      'home.servicesPackPageB3',
+      'home.servicesPackPageB4',
+    ],
+    ctaKey: 'home.servicesPackPageCta',
+    subjectKey: 'home.servicesPackPageSubject',
+    featured: true,
+    badgeKey: 'home.servicesPackPageBadge',
   },
   {
-    icon: AutorenewOutlinedIcon,
-    titleKey: 'home.servicesHomeImproveTitle',
-    leadKey: 'home.servicesHomeImproveLead',
-    linkKey: 'home.servicesHomeImproveCta',
-  },
-  {
-    icon: HandymanOutlinedIcon,
-    titleKey: 'home.servicesHomeToolsTitle',
-    leadKey: 'home.servicesHomeToolsLead',
-    linkKey: 'home.servicesHomeToolsCta',
+    id: 'maintain',
+    icon: BuildOutlinedIcon,
+    titleKey: 'home.servicesPackMaintainTitle',
+    priceKey: 'home.servicesPackMaintainPrice',
+    forKey: 'home.servicesPackMaintainFor',
+    bulletKeys: [
+      'home.servicesPackMaintainB1',
+      'home.servicesPackMaintainB2',
+      'home.servicesPackMaintainB3',
+    ],
+    ctaKey: 'home.servicesPackMaintainCta',
+    subjectKey: 'home.servicesPackMaintainSubject',
   },
 ]
 
+function contactHref(subject: string) {
+  return `${CONTACT_PATH}?subject=${encodeURIComponent(subject)}`
+}
+
+type OfferPackCardProps = {
+  offer: PackOffer
+  href: string
+  serviceGradient: string
+  textColor: string
+  primary: string
+  secondary: string
+  isTopologyRoute: boolean
+}
+
+function OfferPackCard({
+  offer,
+  href,
+  serviceGradient,
+  textColor,
+  primary,
+  secondary,
+  isTopologyRoute,
+}: OfferPackCardProps) {
+  const { t } = useLanguage()
+  const theme = useTheme()
+  const Icon = offer.icon
+  const isDark = theme.palette.mode === 'dark'
+  const featured = offer.featured === true
+
+  const surfaceSx = getCardSurfaceSx({
+    isTopologyRoute,
+    variant: featured ? 'elevated' : 'glass',
+    level: featured ? 'balanced' : 'soft',
+    interactive: false,
+  })
+
+  const cardBg = featured
+    ? isDark
+      ? `linear-gradient(165deg, ${alpha(primary, 0.22)} 0%, ${alpha('#0f172a', 0.92)} 38%, ${alpha(secondary, 0.12)} 100%)`
+      : `linear-gradient(165deg, ${alpha(primary, 0.12)} 0%, ${alpha('#fff', 0.98)} 42%, ${alpha(secondary, 0.08)} 100%)`
+    : isDark
+      ? `linear-gradient(160deg, ${alpha('#1e293b', 0.85)} 0%, ${alpha('#0f172a', 0.75)} 100%)`
+      : `linear-gradient(160deg, ${alpha('#fff', 0.96)} 0%, ${alpha(primary, 0.04)} 100%)`
+
+  const cardRadius = DESIGN_TOKENS.borderRadius.banner
+  const innerRadius = DESIGN_TOKENS.borderRadius.bannerInner
+
+  return (
+    <Box
+      sx={{
+        position: 'relative',
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        borderRadius: cardRadius,
+        overflow: 'hidden',
+        background: cardBg,
+        border: `1px solid ${alpha(primary, featured ? 0.4 : isDark ? 0.28 : 0.18)}`,
+        boxShadow: featured
+          ? `0 20px 44px ${alpha(primary, 0.18)}, 0 0 0 1px ${alpha(primary, 0.1)}`
+          : `0 12px 32px ${alpha(isDark ? '#000' : primary, isDark ? 0.3 : 0.08)}`,
+        transition: DESIGN_TOKENS.transitions.slow,
+        '&:hover': {
+          transform: 'translateY(-4px)',
+          boxShadow: featured
+            ? `0 24px 48px ${alpha(primary, 0.22)}`
+            : `0 16px 36px ${alpha(primary, 0.12)}`,
+        },
+        ...surfaceSx,
+      }}
+    >
+      {/* Bandeau dégradé — hauteur fixe pour aligner les 3 cartes */}
+      <Box
+        sx={{
+          position: 'relative',
+          flexShrink: 0,
+          minHeight: { xs: 148, md: 158 },
+          px: { xs: 2, md: 2.25 },
+          pt: { xs: 2, md: 2.25 },
+          pb: 1.75,
+          background: serviceGradient,
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'flex-end',
+          '&::after': {
+            content: '""',
+            position: 'absolute',
+            inset: 0,
+            background: 'linear-gradient(180deg, rgba(255,255,255,0.1) 0%, transparent 55%)',
+            pointerEvents: 'none',
+          },
+        }}
+      >
+        <Box
+          sx={{
+            position: 'relative',
+            zIndex: 1,
+            display: 'flex',
+            alignItems: 'flex-start',
+            justifyContent: 'space-between',
+            gap: 1,
+            mb: 1.5,
+            minHeight: 44,
+          }}
+        >
+          <Box
+            sx={{
+              width: 44,
+              height: 44,
+              borderRadius: innerRadius,
+              display: 'grid',
+              placeItems: 'center',
+              bgcolor: alpha('#fff', 0.2),
+              border: `1px solid ${alpha('#fff', 0.32)}`,
+              backdropFilter: 'blur(8px)',
+            }}
+          >
+            <Icon sx={{ color: '#fff', fontSize: 24 }} />
+          </Box>
+          {offer.badgeKey ? (
+            <Box
+              sx={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                justifyContent: 'flex-end',
+                gap: 0.45,
+                px: 1.1,
+                py: 0.5,
+                borderRadius: 999,
+                maxWidth: '54%',
+                background: `linear-gradient(135deg, #fffef7 0%, #fde68a 42%, #fbbf24 100%)`,
+                color: '#78350f',
+                fontWeight: 800,
+                fontSize: '0.62rem',
+                letterSpacing: '0.08em',
+                textTransform: 'uppercase',
+                lineHeight: 1.15,
+                textAlign: 'right',
+                boxShadow: `0 4px 16px ${alpha('#000', 0.22)}, inset 0 1px 0 ${alpha('#fff', 0.75)}`,
+                border: `1px solid ${alpha('#fff', 0.65)}`,
+                '@keyframes offerBadgeSparkle': {
+                  '0%, 100%': { transform: 'scale(1) rotate(0deg)', opacity: 1 },
+                  '50%': { transform: 'scale(1.12) rotate(-8deg)', opacity: 0.92 },
+                },
+              }}
+            >
+              <AutoAwesomeOutlinedIcon
+                sx={{
+                  fontSize: 13,
+                  color: '#b45309',
+                  flexShrink: 0,
+                  '@media (prefers-reduced-motion: no-preference)': {
+                    animation: 'offerBadgeSparkle 2.6s ease-in-out infinite',
+                  },
+                }}
+                aria-hidden
+              />
+              <Box component="span">{t(offer.badgeKey)}</Box>
+            </Box>
+          ) : (
+            <Box sx={{ flex: 1, minWidth: 8 }} aria-hidden />
+          )}
+        </Box>
+
+        <Box sx={{ position: 'relative', zIndex: 1 }}>
+          {offer.pricePrefixKey ? (
+            <Typography
+              component="p"
+              sx={{
+                color: alpha('#fff', 0.88),
+                fontSize: '0.72rem',
+                fontWeight: 700,
+                textTransform: 'uppercase',
+                letterSpacing: '0.1em',
+                mb: 0.35,
+              }}
+            >
+              {t(offer.pricePrefixKey)}
+            </Typography>
+          ) : null}
+          <Typography
+            component="p"
+            sx={{
+              color: '#fff',
+              fontWeight: 900,
+              fontSize: { xs: '1.5rem', md: '1.65rem' },
+              lineHeight: 1.05,
+              letterSpacing: '-0.03em',
+              textShadow: `0 2px 10px ${alpha('#000', 0.18)}`,
+            }}
+          >
+            {t(offer.priceKey)}
+          </Typography>
+        </Box>
+        <Box sx={{ position: 'relative', zIndex: 1, minHeight: '3.1em', mt: 0.35 }}>
+          {offer.priceNoteKey ? (
+            <Typography
+              sx={{
+                color: alpha('#fff', 0.88),
+                fontSize: '0.75rem',
+                lineHeight: 1.35,
+                fontWeight: 500,
+              }}
+            >
+              {t(offer.priceNoteKey)}
+            </Typography>
+          ) : null}
+        </Box>
+      </Box>
+
+      {/* Corps */}
+      <Box
+        sx={{
+          flex: 1,
+          display: 'flex',
+          flexDirection: 'column',
+          px: { xs: 2.25, md: 2.5 },
+          py: { xs: 2, md: 2.25 },
+          gap: 1.5,
+        }}
+      >
+        <Box sx={{ minHeight: { xs: 96, md: 100 } }}>
+          <Typography
+            variant="h6"
+            sx={{
+              color: textColor,
+              fontWeight: 900,
+              lineHeight: 1.2,
+              fontSize: '1.15rem',
+              letterSpacing: '-0.02em',
+              mb: 0.75,
+              minHeight: '1.35em',
+            }}
+          >
+            {t(offer.titleKey)}
+          </Typography>
+          <Typography
+            sx={{
+              color: textColor,
+              opacity: 0.78,
+              fontSize: '0.875rem',
+              lineHeight: 1.5,
+              fontStyle: 'italic',
+              minHeight: '3em',
+            }}
+          >
+            {t(offer.forKey)}
+          </Typography>
+        </Box>
+
+        <Box
+          sx={{
+            display: 'grid',
+            gridTemplateRows: `repeat(${PACK_BULLET_SLOTS}, minmax(${PACK_BULLET_ROW_MIN}px, auto))`,
+            gap: 0.75,
+            flex: 1,
+          }}
+        >
+          {Array.from({ length: PACK_BULLET_SLOTS }, (_, i) => {
+            const key = offer.bulletKeys[i]
+            if (!key) {
+              return <Box key={`bullet-pad-${offer.id}-${i}`} aria-hidden />
+            }
+            return (
+            <Box
+              key={key}
+              sx={{
+                display: 'flex',
+                alignItems: 'flex-start',
+                gap: 1,
+                py: 0.75,
+                px: 1,
+                minHeight: PACK_BULLET_ROW_MIN,
+                borderRadius: innerRadius,
+                bgcolor: alpha(primary, isDark ? 0.12 : 0.06),
+                border: `1px solid ${alpha(primary, isDark ? 0.2 : 0.1)}`,
+              }}
+            >
+              <CheckRoundedIcon
+                sx={{ fontSize: 18, color: primary, mt: '1px', flexShrink: 0 }}
+                aria-hidden
+              />
+              <Typography
+                sx={{
+                  color: textColor,
+                  opacity: 0.92,
+                  fontSize: '0.84rem',
+                  lineHeight: 1.45,
+                  fontWeight: 500,
+                }}
+              >
+                {t(key)}
+              </Typography>
+            </Box>
+            )
+          })}
+        </Box>
+
+        <Box sx={{ mt: 'auto', pt: 0.5, minHeight: 48 }}>
+          <CTAButton
+            fullWidth
+            size="medium"
+            variant={featured ? 'primary' : 'outline'}
+            href={href}
+          >
+            {t(offer.ctaKey)}
+          </CTAButton>
+        </Box>
+      </Box>
+    </Box>
+  )
+}
+
 export default function PortfolioServicesSection() {
   const { t } = useLanguage()
+  const pathname = usePathname()
+  const isTopologyRoute = shouldShowTopology(pathname)
   const { mode: presentationMode } = usePresentationMode()
-  const { customTheme } = useAdvancedTheme()
   const textColor = useTextColor()
   const { primary, secondary, accent } = useThemeColors()
-  const bonusBlockBackground = useMemo(
-    () =>
-      presentationMode === 'beige'
-        ? `linear-gradient(140deg, ${alpha(customTheme.bg, 0.92)} 0%, ${alpha(customTheme.bg2, 0.88)} 52%, ${alpha(primary, 0.08)} 100%)`
-        : `linear-gradient(140deg, ${alpha(customTheme.bg, 0.96)} 0%, ${alpha(customTheme.bg2, 0.92)} 42%, ${alpha(primary, 0.2)} 100%)`,
-    [presentationMode, customTheme.bg, customTheme.bg2, primary],
-  )
-  const bonusBlockBorder = useMemo(
-    () => alpha(primary, presentationMode === 'beige' ? 0.3 : 0.4),
-    [presentationMode, primary],
-  )
-  const bonusBadgeBg = useMemo(
-    () => alpha(primary, presentationMode === 'beige' ? 0.1 : 0.14),
-    [presentationMode, primary],
-  )
+  const subtitle = t('home.servicesHomeSubtitle')
+
   const serviceGradient = useMemo(
     () =>
       presentationMode === 'beige'
         ? BRAND_GLITCH_GRADIENT
         : buildPaletteGlitchGradient(primary, secondary, accent),
-    [presentationMode, primary, secondary, accent]
-  )
-
-  const borderBeamColors = useMemo(
-    () =>
-      presentationMode === 'beige'
-        ? { colorFrom: BRAND_BORDER_BEAM_COLOR_FROM, colorTo: BRAND_BORDER_BEAM_COLOR_TO }
-        : { colorFrom: primary, colorTo: accent },
-    [presentationMode, primary, accent]
+    [presentationMode, primary, secondary, accent],
   )
 
   return (
     <Box id="services" sx={{ mb: { xs: 5, md: 8 }, scrollMarginTop: 96 }}>
       <ScrollReveal direction="up" delay={0.05}>
-        <Box sx={{ textAlign: 'center', maxWidth: 860, mx: 'auto', mb: { xs: 3, md: 4 } }}>
+        <Box sx={{ textAlign: 'center', maxWidth: 720, mx: 'auto', mb: { xs: 3, md: 4 } }}>
           <Typography
             component="p"
             sx={{
@@ -114,187 +444,74 @@ export default function PortfolioServicesSection() {
               color: textColor,
               fontWeight: 900,
               letterSpacing: '-0.05em',
-              fontSize: { xs: '2rem', md: '3.1rem' },
-              lineHeight: 1.05,
-              mb: 2,
+              fontSize: { xs: '1.85rem', md: '2.75rem' },
+              lineHeight: 1.08,
+              mb: subtitle ? 1.25 : 0,
             }}
           >
             {t('home.servicesHomeTitle')}
           </Typography>
-          <Typography
-            component="p"
-            sx={{
-              color: textColor,
-              opacity: 0.82,
-              fontSize: { xs: '1rem', sm: '1.0625rem' },
-              lineHeight: 1.55,
-              maxWidth: 720,
-              mx: 'auto',
-              px: { xs: 0.5, sm: 0 },
-            }}
-          >
-            {t('home.servicesHomeSubtitle')}
-          </Typography>
+          {subtitle ? (
+            <Typography
+              component="p"
+              sx={{
+                color: textColor,
+                opacity: 0.8,
+                fontSize: { xs: '0.95rem', sm: '1rem' },
+                lineHeight: 1.5,
+              }}
+            >
+              {subtitle}
+            </Typography>
+          ) : null}
         </Box>
       </ScrollReveal>
 
       <Box
         sx={{
           display: 'grid',
-          gridTemplateColumns: {
-            xs: '1fr',
-            sm: 'repeat(2, 1fr)',
-            lg: 'repeat(3, 1fr)',
-          },
+          gridTemplateColumns: { xs: '1fr', md: 'repeat(3, 1fr)' },
           gap: { xs: 2, md: 2.5 },
           alignItems: 'stretch',
-          '& > *:nth-of-type(3)': {
-            gridColumn: { sm: '1 / -1', lg: 'auto' },
-          },
         }}
       >
-        {SERVICES.map((service, index) => {
-          const Icon = service.icon
+        {PACK_OFFERS.map((offer, index) => {
+          const subject = t(offer.subjectKey)
+          const href = contactHref(subject)
+
           return (
-            <ScrollReveal key={service.titleKey} direction="up" delay={0.06 * index} fillHeight>
-              <ThreeDCardComponent
-                fullHeight
-                borderBeam={{
-                  duration: 52,
-                  size: 180,
-                  delay: index * 4,
-                  colorFrom: borderBeamColors.colorFrom,
-                  colorTo: borderBeamColors.colorTo,
-                }}
-                floatingElements={1}
-                sx={{
-                  minHeight: 260,
-                  p: { xs: 2.25, md: 2.75 },
-                  '& .MuiCardContent-root': {
-                    pb: '24px !important',
-                  },
-                }}
-              >
-                <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%', minHeight: 0 }}>
-                  <Box
-                    sx={{
-                      width: 58,
-                      height: 58,
-                      borderRadius: DESIGN_TOKENS.borderRadius.medium,
-                      display: 'grid',
-                      placeItems: 'center',
-                      mb: 2,
-                      background: serviceGradient,
-                      boxShadow: `0 18px 38px ${primary}2f`,
-                    }}
-                  >
-                    <Icon sx={{ color: 'white', fontSize: 30 }} />
-                  </Box>
-                  <Typography variant="h5" sx={{ color: textColor, fontWeight: 900, mb: 1, lineHeight: 1.15 }}>
-                    {t(service.titleKey)}
-                  </Typography>
-                  <Typography
-                    sx={{
-                      color: textColor,
-                      opacity: 0.84,
-                      lineHeight: 1.6,
-                      mb: 0,
-                      flex: 1,
-                    }}
-                  >
-                    {t(service.leadKey)}
-                  </Typography>
-                  <Box sx={{ mt: 'auto', pt: 2.5 }}>
-                    <Link href={CONTACT_PATH} style={{ textDecoration: 'none' }}>
-                      <Typography
-                        component="span"
-                        sx={{
-                          color: primary,
-                          fontWeight: 900,
-                          letterSpacing: '0.02em',
-                          backgroundImage: `linear-gradient(${primary}, ${primary})`,
-                          backgroundRepeat: 'no-repeat',
-                          backgroundPosition: '0 100%',
-                          backgroundSize: '0% 2px',
-                          transition: DESIGN_TOKENS.transitions.normal,
-                          '&:hover': { backgroundSize: '100% 2px' },
-                        }}
-                      >
-                        {t(service.linkKey)}
-                      </Typography>
-                    </Link>
-                  </Box>
-                </Box>
-              </ThreeDCardComponent>
+            <ScrollReveal key={offer.id} direction="up" delay={0.06 * index} fillHeight>
+              <OfferPackCard
+                offer={offer}
+                href={href}
+                serviceGradient={serviceGradient}
+                textColor={textColor}
+                primary={primary}
+                secondary={secondary}
+                isTopologyRoute={isTopologyRoute}
+              />
             </ScrollReveal>
           )
         })}
       </Box>
 
-      <ScrollReveal direction="up" delay={0.08}>
-        <Box
+      <ScrollReveal direction="up" delay={0.1}>
+        <Typography
+          component="p"
           sx={{
-            mt: { xs: 3.5, md: 4.5 },
-            px: { xs: 2, sm: 2.75, md: 3.25 },
-            py: { xs: 2.75, md: 3.25 },
-            borderRadius: DESIGN_TOKENS.borderRadius.banner,
-            border: `1px solid ${bonusBlockBorder}`,
-            background: bonusBlockBackground,
-            boxShadow: `0 14px 34px ${alpha(primary, 0.15)}`,
+            textAlign: 'center',
+            maxWidth: 520,
+            mx: 'auto',
+            mt: { xs: 3, md: 3.5 },
+            color: textColor,
+            opacity: 0.78,
+            fontSize: { xs: '0.9rem', sm: '0.95rem' },
+            lineHeight: 1.6,
+            px: { xs: 0.5, sm: 0 },
           }}
         >
-          <Box
-            sx={{
-              display: 'flex',
-              justifyContent: 'center',
-              mb: 1.35,
-            }}
-          >
-            <Box
-              sx={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: 0.75,
-                px: 1.05,
-                py: 0.45,
-                borderRadius: 999,
-                border: `1px solid ${alpha(primary, presentationMode === 'beige' ? 0.42 : 0.5)}`,
-                backgroundColor: bonusBadgeBg,
-              }}
-            >
-              <AutoAwesomeOutlinedIcon sx={{ fontSize: 16, color: primary }} />
-              <Typography
-                component="p"
-                sx={{
-                  color: primary,
-                  fontWeight: 900,
-                  letterSpacing: '0.01em',
-                  fontSize: { xs: '0.77rem', sm: '0.8rem' },
-                  textAlign: 'center',
-                }}
-              >
-                {t('home.servicesEcosystemBonusLabel')}
-              </Typography>
-            </Box>
-          </Box>
-          <Typography
-            component="p"
-            sx={{
-              textAlign: 'center',
-              maxWidth: 670,
-              mx: 'auto',
-              color: textColor,
-              opacity: 0.88,
-              fontSize: { xs: '0.96rem', sm: '1rem' },
-              lineHeight: 1.6,
-              mb: { xs: 2, md: 2.4 },
-              px: { xs: 0.6, sm: 0 },
-            }}
-          >
-            {t('home.servicesHomeFootnote')}
-          </Typography>
-          <PortfolioHomeOfferEcosystem />
-        </Box>
+          {t('home.servicesHomeFootnote')}
+        </Typography>
       </ScrollReveal>
     </Box>
   )

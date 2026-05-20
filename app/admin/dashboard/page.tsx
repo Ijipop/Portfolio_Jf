@@ -47,6 +47,11 @@ import { getBeigePresentationTopologyBackground } from '@/utils/syncPortfolioThe
 import AdminDesktopImageToDataUrl from '@/admin/components/AdminDesktopImageToDataUrl';
 import { getImageUrl } from '@/lib/getImageUrl';
 import { parseBeigePresentationBgUrl } from '@/lib/stored-image-value';
+import {
+  isValidTimelendrReleaseUrl,
+  TIMELENDR_RELEASE_URL_ERROR,
+  TIMELENDR_RELEASE_URL_HINT,
+} from '@/lib/timelendr-release-url';
 
 interface Project {
   id: number;
@@ -698,22 +703,16 @@ export default function AdminDashboard() {
   const handleTimelendrSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const url = timelendrFileUrl.trim();
+    const showTimelendrError = (message: string) => {
+      setError(message);
+      document.getElementById('timelendr-admin-section')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    };
     if (!url) {
-      setError('Indiquez une URL vers un fichier .zip (http ou https).');
+      showTimelendrError('Indiquez une URL de téléchargement (http ou https).');
       return;
     }
-    try {
-      const u = new URL(url);
-      if (u.protocol !== 'http:' && u.protocol !== 'https:') {
-        setError('L’URL doit commencer par http:// ou https://');
-        return;
-      }
-      if (!`${u.pathname}${u.search}`.toLowerCase().includes('.zip')) {
-        setError('Le lien doit pointer vers un fichier .zip (l’URL doit contenir « .zip »).');
-        return;
-      }
-    } catch {
-      setError('URL invalide.');
+    if (!isValidTimelendrReleaseUrl(url)) {
+      showTimelendrError(TIMELENDR_RELEASE_URL_ERROR);
       return;
     }
     setTimelendrUploading(true);
@@ -744,12 +743,12 @@ export default function AdminDashboard() {
         data = await response.json();
       } else {
         const text = await response.text();
-        setError(text.slice(0, 280) || `Erreur HTTP ${response.status}`);
+        showTimelendrError(text.slice(0, 280) || `Erreur HTTP ${response.status}`);
         return;
       }
 
       if (!response.ok) {
-        setError(data.error || `Erreur ${response.status}`);
+        showTimelendrError(data.error || `Erreur ${response.status}`);
         return;
       }
 
@@ -762,11 +761,11 @@ export default function AdminDashboard() {
         setTimelendrFileUrl('');
         await fetchTimelendrReleases();
       } else {
-        setError(data.error || 'Erreur lors de l\'ajout de la version');
+        showTimelendrError(data.error || 'Erreur lors de l\'ajout de la version');
       }
     } catch (err) {
       console.error(err);
-      setError('Erreur réseau ou réponse invalide.');
+      showTimelendrError('Erreur réseau ou réponse invalide.');
     } finally {
       setTimelendrUploading(false);
     }
@@ -1030,25 +1029,25 @@ export default function AdminDashboard() {
         )}
 
         {/* Timelendr – URL .zip externe + plateforme */}
-        <Typography variant="h5" component="h2" sx={{ mt: 5, mb: 2, color: '#ffffff' }}>
+        <Typography id="timelendr-admin-section" variant="h5" component="h2" sx={{ mt: 5, mb: 2, color: '#ffffff', scrollMarginTop: 88 }}>
           Timelendr – Versions
         </Typography>
         <Card sx={{ mb: 2, bgcolor: 'grey.900', color: '#ffffff' }}>
           <CardContent sx={{ color: '#ffffff' }}>
             <Typography variant="subtitle2" sx={{ mb: 2, color: 'rgba(255,255,255,0.9)' }}>
-              Indiquez une URL publique vers un fichier .zip (hébergé ailleurs : GitHub Releases, site, etc.). Pour macOS, utilisez un .zip qui contient votre fichier .dmg. Choisissez la plateforme cible (Windows, macOS ou les deux). La liste s’affiche sur la page Timelendr.
+              URL publique directe vers le fichier (GitHub Releases, site, etc.). Pour macOS, un .zip contenant le .dmg ou un .dmg direct. Choisissez la plateforme cible.
             </Typography>
             <form onSubmit={handleTimelendrSubmit}>
               <TextField
                 margin="dense"
-                label="URL du fichier .zip *"
+                label="URL de téléchargement *"
                 fullWidth
                 variant="outlined"
                 value={timelendrFileUrl}
                 onChange={(e) => setTimelendrFileUrl(e.target.value)}
                 required
-                placeholder="https://exemple.com/chemin/vers/fichier.zip"
-                helperText="L’URL doit contenir « .zip » (pour macOS: archive .zip contenant le .dmg)."
+                placeholder="https://github.com/…/releases/download/…/Timelendr-1.0.zip"
+                helperText={TIMELENDR_RELEASE_URL_HINT}
                 sx={{
                   mb: 2,
                   '& .MuiInputLabel-root': { color: 'rgba(255,255,255,0.8)' },
@@ -1139,7 +1138,7 @@ export default function AdminDashboard() {
                   <TableCell sx={{ color: '#fff' }}>Version</TableCell>
                   <TableCell sx={{ color: '#fff' }}>Plateforme</TableCell>
                   <TableCell sx={{ color: '#fff' }}>Changelog</TableCell>
-                  <TableCell sx={{ color: '#fff' }}>Lien .zip</TableCell>
+                  <TableCell sx={{ color: '#fff' }}>Lien</TableCell>
                   <TableCell sx={{ color: '#fff' }}>Actions</TableCell>
                 </TableRow>
               </TableHead>
