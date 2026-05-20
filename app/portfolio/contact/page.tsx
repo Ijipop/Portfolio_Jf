@@ -15,7 +15,8 @@ import Container from '@mui/material/Container'
 import Typography from '@mui/material/Typography'
 import { styled, useTheme } from '@mui/material/styles'
 import useMediaQuery from '@mui/material/useMediaQuery'
-import { useState } from 'react'
+import { useSearchParams } from 'next/navigation'
+import { Suspense, useEffect, useRef, useState } from 'react'
 import ThreeDCardComponent from '../../components/ThreeDCard'
 import HeaderSection from '../../components/shared/HeaderSection'
 import IjipopGlitchTitle from '../../components/shared/IjipopGlitchTitle'
@@ -104,6 +105,34 @@ const StyledTextField = styled(TextField, {
     color: helperTextColor || 'rgba(255, 255, 255, 0.7)',
   },
 }))
+
+type ContactFormData = {
+  name: string
+  email: string
+  phone: string
+  subject: string
+  message: string
+  bm_verify: string
+}
+
+function ContactSubjectFromQuery({
+  setFormData,
+}: {
+  setFormData: React.Dispatch<React.SetStateAction<ContactFormData>>
+}) {
+  const searchParams = useSearchParams()
+  const subjectPrefilled = useRef(false)
+
+  useEffect(() => {
+    if (subjectPrefilled.current) return
+    const fromQuery = searchParams.get('subject')?.trim()
+    if (!fromQuery) return
+    subjectPrefilled.current = true
+    setFormData((prev) => (prev.subject.trim() ? prev : { ...prev, subject: fromQuery }))
+  }, [searchParams, setFormData])
+
+  return null
+}
 
 export default function Contact() {
   const theme = useTheme()
@@ -309,6 +338,9 @@ export default function Contact() {
 
   return (
     <PageWrapper backgroundVariant="alternate">
+      <Suspense fallback={null}>
+        <ContactSubjectFromQuery setFormData={setFormData} />
+      </Suspense>
       <AppBarComponent />
       
       <HeaderSection 

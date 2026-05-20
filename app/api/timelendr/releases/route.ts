@@ -1,5 +1,9 @@
 import { prisma } from '@/lib/prisma'
 import { authAdminToken } from '@/lib/auth-admin-request'
+import {
+  isValidTimelendrReleaseUrl,
+  TIMELENDR_RELEASE_URL_ERROR,
+} from '@/lib/timelendr-release-url'
 import { NextRequest, NextResponse } from 'next/server'
 import { TimelendrPlatform } from '@prisma/client'
 
@@ -29,17 +33,6 @@ const adminReleaseSelect = {
 
 function cacheHeadersForRequest(request: NextRequest) {
   return request.cookies.has('adminToken') ? PRIVATE_CACHE_HEADERS : PUBLIC_CACHE_HEADERS
-}
-
-function isValidZipUrl(urlString: string): boolean {
-  try {
-    const u = new URL(urlString)
-    if (u.protocol !== 'https:' && u.protocol !== 'http:') return false
-    const full = `${u.pathname}${u.search}`.toLowerCase()
-    return full.includes('.zip')
-  } catch {
-    return false
-  }
 }
 
 function parsePlatform(raw: unknown): TimelendrPlatform | null {
@@ -111,12 +104,11 @@ export async function POST(request: NextRequest) {
     }
 
     const fileUrl = typeof json.fileUrl === 'string' ? json.fileUrl.trim() : ''
-    if (!fileUrl || !isValidZipUrl(fileUrl)) {
+    if (!fileUrl || !isValidTimelendrReleaseUrl(fileUrl)) {
       return NextResponse.json(
         {
           success: false,
-          error:
-            'URL invalide : fournissez une adresse http(s) menant à un fichier .zip (le lien doit contenir « .zip »).',
+          error: TIMELENDR_RELEASE_URL_ERROR,
         },
         { status: 400 }
       )

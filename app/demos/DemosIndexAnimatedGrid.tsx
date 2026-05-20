@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { motion, useReducedMotion } from 'framer-motion'
+import { useEffect, useState } from 'react'
 import styles from './DemosIndex.module.css'
 
 export type DemosIndexCard = {
@@ -11,53 +11,30 @@ export type DemosIndexCard = {
   thumbClass: string
 }
 
-const ease = [0.25, 0.46, 0.45, 0.94] as const
-
 type Props = {
   cards: readonly DemosIndexCard[]
 }
 
 export default function DemosIndexAnimatedGrid({ cards }: Props) {
-  const reduced = useReducedMotion()
-
-  const container = {
-    hidden: { opacity: 1 },
-    show: {
-      opacity: 1,
-      transition: {
-        delayChildren: reduced ? 0 : 0.28,
-        staggerChildren: reduced ? 0 : 0.17,
-      },
-    },
-  }
-
-  const item = {
-    hidden: reduced ? { opacity: 1, y: 0 } : { opacity: 0, y: 22 },
-    show: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: reduced ? 0 : 0.62, ease },
-    },
-  }
+  const [mounted, setMounted] = useState(false)
+  useEffect(() => setMounted(true), [])
 
   return (
-    <motion.div
-      className={styles.grid}
-      variants={container}
-      initial="hidden"
-      animate="show"
-    >
+    <div className={styles.grid} data-testid={mounted ? 'demos-grid-ready' : undefined}>
       {cards.map((c) => (
-        <motion.div key={c.href} variants={item} className={styles.cardMotion}>
-          <Link href={c.href} className={styles.card}>
-            <div className={c.thumbClass} aria-hidden />
-            <div className={styles.cardBody}>
-              <h2 className={styles.cardTitle}>{c.title}</h2>
-              <p className={styles.cardDesc}>{c.desc}</p>
-            </div>
-          </Link>
-        </motion.div>
+        <Link
+          key={c.href}
+          href={c.href}
+          className={styles.card}
+          data-testid={`demo-link-${c.href.replace('/demos/', '')}`}
+        >
+          <div className={c.thumbClass} aria-hidden />
+          <div className={styles.cardBody}>
+            <h2 className={styles.cardTitle}>{c.title}</h2>
+            <p className={styles.cardDesc}>{c.desc}</p>
+          </div>
+        </Link>
       ))}
-    </motion.div>
+    </div>
   )
 }

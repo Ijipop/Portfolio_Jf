@@ -5,10 +5,21 @@ import { unlink } from 'fs/promises'
 import path from 'path'
 import { del } from '@vercel/blob'
 
+export const dynamic = 'force-dynamic'
+
+function parseRouteId(raw: unknown): number | null {
+  if (raw === undefined || raw === null) return null
+  const first = Array.isArray(raw) ? raw[0] : raw
+  if (first === undefined || first === null) return null
+  const id = parseInt(String(first), 10)
+  if (Number.isNaN(id) || id <= 0) return null
+  return id
+}
+
 // DELETE /api/timelendr/releases/[id] — supprimer une version (protégé)
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  ctx: { params?: Promise<Record<string, string | string[] | undefined>> }
 ) {
   const auth = authAdminToken(request)
   if (!auth.ok) {
@@ -16,9 +27,9 @@ export async function DELETE(
   }
 
   try {
-    const { id: idParam } = await params
-    const id = parseInt(idParam, 10)
-    if (Number.isNaN(id) || id <= 0) {
+    const resolved = ctx.params != null ? await ctx.params : undefined
+    const id = parseRouteId(resolved?.id)
+    if (id === null) {
       return NextResponse.json(
         { success: false, error: 'ID invalide' },
         { status: 400 }

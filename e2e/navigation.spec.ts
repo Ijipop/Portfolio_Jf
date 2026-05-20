@@ -88,9 +88,14 @@ test('demos index and demo routes', async ({ page }) => {
   await expect(page.locator('h1').first()).toContainText(/Six directions créatives/)
   await expect(page.locator('a[href="/demos/studio"]').first()).toBeVisible()
   await expect(page.locator('a[href="/demos/spectacle"]').first()).toBeVisible()
+  await expect(page.getByTestId('demos-grid-ready')).toBeVisible()
 
-  await page.locator('a[href="/demos/construction"]').first().click()
-  await expect(page).toHaveURL(/\/demos\/construction/)
+  const constructionLink = page.getByTestId('demo-link-construction')
+  await constructionLink.scrollIntoViewIfNeeded()
+  await Promise.all([
+    page.waitForURL(/\/demos\/construction/),
+    constructionLink.click(),
+  ])
   await expect(page.locator('h1').filter({ hasText: /On bâtit solide/ })).toBeVisible()
 
   await page.goto('/demos/studio', { waitUntil: 'domcontentloaded' })

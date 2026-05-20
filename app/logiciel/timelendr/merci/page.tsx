@@ -91,7 +91,7 @@ export default function TimelendrMerciPage() {
               transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
               sx={{
                 ...cardSx,
-                borderRadius: DESIGN_TOKENS.borderRadius.large,
+                borderRadius: DESIGN_TOKENS.borderRadius.medium,
                 p: { xs: 3.2, sm: 4.2 },
                 textAlign: 'center',
                 border: `1px solid ${primary}33`,

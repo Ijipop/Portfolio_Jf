@@ -42,20 +42,97 @@
   margin: 0 0 2.5rem;
 }
 
+.aiSection {
+  margin-bottom: 2.75rem;
+  padding: clamp(1.35rem, 3vw, 1.85rem);
+  border-radius: 16px;
+  background: linear-gradient(145deg, #fffefb 0%, #f5f0e8 52%, #fffefb 100%);
+  border: 1px solid rgba(61, 82, 102, 0.16);
+  box-shadow:
+    0 4px 24px rgba(61, 82, 102, 0.07),
+    inset 0 1px 0 rgba(255, 255, 255, 0.85);
+}
+
+.aiSectionGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+@media (min-width: 900px) {
+  .aiSectionGrid {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+    gap: 2rem;
+  }
+}
+
+.aiSectionCopy {
+  min-width: 0;
+}
+
+.aiKicker {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #3d5266;
+  margin-bottom: 0.65rem;
+}
+
+.aiTitle {
+  font-size: clamp(1.35rem, 2.8vw, 1.65rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.2;
+  margin: 0 0 0.85rem;
+  color: #292524;
+  max-width: 28ch;
+}
+
+.aiLead {
+  margin: 0 0 1rem;
+  font-size: 0.98rem;
+  line-height: 1.65;
+  color: #57534e;
+  max-width: 46ch;
+}
+
+.aiLead strong {
+  color: #44403c;
+  font-weight: 700;
+}
+
+.aiCaption {
+  margin: 0;
+  font-size: 0.8125rem;
+  line-height: 1.55;
+  color: #78716c;
+  max-width: 46ch;
+  transition: color 0.22s ease, opacity 0.22s ease;
+}
+
+.aiCaptionActive {
+  color: #3d5266;
+  opacity: 0.95;
+}
+
+.aiVideoFrame {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #0f0f0f;
+  box-shadow:
+    0 16px 40px rgba(41, 37, 36, 0.14),
+    inset 0 0 0 1px rgba(61, 82, 102, 0.2);
+}
+
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr));
   gap: 1.25rem;
-}
-
-.cardMotion {
-  display: flex;
-  min-height: 0;
-}
-
-.cardMotion .card {
-  flex: 1;
-  width: 100%;
 }
 
 .card {

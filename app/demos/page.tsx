@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { THEMES } from '@/design-system/themes'
 import { getBeigePresentationTopologyBackground } from '@/utils/syncPortfolioThemeToDocument'
+import DemosAiVideoShowcase from './DemosAiVideoShowcase'
 import DemosIndexAnimatedGrid from './DemosIndexAnimatedGrid'
 import styles from './DemosIndex.module.css'
 
@@ -61,6 +62,7 @@ export default function DemosIndexPage() {
         <p className={styles.lead}>
           Chaque page illustre une direction graphique et un secteur différents. Ouvrez celles qui vous parlent.
         </p>
+        <DemosAiVideoShowcase />
         <DemosIndexAnimatedGrid cards={cards} />
         <Link href="/" className={styles.back}>
           ← Retour à l’accueil
