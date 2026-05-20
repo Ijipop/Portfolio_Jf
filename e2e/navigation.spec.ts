@@ -89,7 +89,7 @@ test('demos index and demo routes', async ({ page }) => {
   await expect(page.locator('a[href="/demos/studio"]').first()).toBeVisible()
   await expect(page.locator('a[href="/demos/spectacle"]').first()).toBeVisible()
 
-  await page.locator('a[href="/demos/construction"]').first().click()
+  await page.getByTestId('demo-link-construction').click()
   await expect(page).toHaveURL(/\/demos\/construction/)
   await expect(page.locator('h1').filter({ hasText: /On bâtit solide/ })).toBeVisible()
 

@@ -3,6 +3,7 @@
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import { motion, useReducedMotion } from 'framer-motion'
+import { useEffect, useState } from 'react'
 import ScrollReveal from './ScrollReveal'
 import { BRAND_GLITCH_GRADIENT } from './IjipopGlitchTitle'
 import { useAdvancedTheme } from '@/contexts/AdvancedThemeContext'
@@ -31,6 +32,8 @@ export default function PortfolioProcessSection() {
   const textColor = useTextColor()
   const { primary, secondary, accent } = useThemeColors()
   const reducedMotion = useReducedMotion()
+  const [processLineReady, setProcessLineReady] = useState(false)
+  useEffect(() => setProcessLineReady(true), [])
   const isLatteTheme = themeName === 'latte'
   const processAccent = isLatteTheme ? '#ea580c' : primary
   const processGradient = isLatteTheme
@@ -91,19 +94,30 @@ export default function PortfolioProcessSection() {
             overflow: 'hidden',
           }}
         >
-          <Box
-            component={motion.div}
-            initial={reducedMotion ? { scaleX: 1, scaleY: 1 } : { scaleX: 0, scaleY: 0 }}
-            whileInView={{ scaleX: 1, scaleY: 1 }}
-            viewport={{ once: true, margin: '-15% 0px -20% 0px' }}
-            transition={{ duration: reducedMotion ? 0 : 1.15, ease: [0.25, 0.46, 0.45, 0.94] }}
-            sx={{
-              width: '100%',
-              height: '100%',
-              transformOrigin: { xs: 'top', md: 'left' },
-              background: processGradient,
-            }}
-          />
+          {processLineReady && !reducedMotion ? (
+            <Box
+              component={motion.div}
+              initial={{ scaleX: 0, scaleY: 0 }}
+              whileInView={{ scaleX: 1, scaleY: 1 }}
+              viewport={{ once: true, margin: '-15% 0px -20% 0px' }}
+              transition={{ duration: 1.15, ease: [0.25, 0.46, 0.45, 0.94] }}
+              sx={{
+                width: '100%',
+                height: '100%',
+                transformOrigin: { xs: 'top', md: 'left' },
+                background: processGradient,
+              }}
+            />
+          ) : (
+            <Box
+              sx={{
+                width: '100%',
+                height: '100%',
+                transformOrigin: { xs: 'top', md: 'left' },
+                background: processGradient,
+              }}
+            />
+          )}
         </Box>
 
         <Box

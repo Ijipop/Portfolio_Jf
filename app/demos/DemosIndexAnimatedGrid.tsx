@@ -32,7 +32,7 @@ export default function DemosIndexAnimatedGrid({ cards }: Props) {
   }
 
   const item = {
-    hidden: reduced ? { opacity: 1, y: 0 } : { opacity: 0, y: 22 },
+    hidden: reduced ? { opacity: 1, y: 0 } : { opacity: 1, y: 18 },
     show: {
       opacity: 1,
       y: 0,
@@ -49,7 +49,11 @@ export default function DemosIndexAnimatedGrid({ cards }: Props) {
     >
       {cards.map((c) => (
         <motion.div key={c.href} variants={item} className={styles.cardMotion}>
-          <Link href={c.href} className={styles.card}>
+          <Link
+            href={c.href}
+            className={styles.card}
+            data-testid={`demo-link-${c.href.replace('/demos/', '')}`}
+          >
             <div className={c.thumbClass} aria-hidden />
             <div className={styles.cardBody}>
               <h2 className={styles.cardTitle}>{c.title}</h2>
