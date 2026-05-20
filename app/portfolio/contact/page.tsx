@@ -16,7 +16,7 @@ import Typography from '@mui/material/Typography'
 import { styled, useTheme } from '@mui/material/styles'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import { useSearchParams } from 'next/navigation'
-import { useEffect, useRef, useState } from 'react'
+import { Suspense, useEffect, useRef, useState } from 'react'
 import ThreeDCardComponent from '../../components/ThreeDCard'
 import HeaderSection from '../../components/shared/HeaderSection'
 import IjipopGlitchTitle from '../../components/shared/IjipopGlitchTitle'
@@ -106,6 +106,34 @@ const StyledTextField = styled(TextField, {
   },
 }))
 
+type ContactFormData = {
+  name: string
+  email: string
+  phone: string
+  subject: string
+  message: string
+  bm_verify: string
+}
+
+function ContactSubjectFromQuery({
+  setFormData,
+}: {
+  setFormData: React.Dispatch<React.SetStateAction<ContactFormData>>
+}) {
+  const searchParams = useSearchParams()
+  const subjectPrefilled = useRef(false)
+
+  useEffect(() => {
+    if (subjectPrefilled.current) return
+    const fromQuery = searchParams.get('subject')?.trim()
+    if (!fromQuery) return
+    subjectPrefilled.current = true
+    setFormData((prev) => (prev.subject.trim() ? prev : { ...prev, subject: fromQuery }))
+  }, [searchParams, setFormData])
+
+  return null
+}
+
 export default function Contact() {
   const theme = useTheme()
   const isXlUp = useMediaQuery(theme.breakpoints.up('xl'))
@@ -114,8 +142,6 @@ export default function Contact() {
   const textColor = useTextColor()
   const { primary } = useThemeColors()
   const { t } = useLanguage()
-  const searchParams = useSearchParams()
-  const subjectPrefilled = useRef(false)
   const [snackbarOpen, setSnackbarOpen] = useState(false)
   const [snackbarMessage, setSnackbarMessage] = useState('')
   const [snackbarSeverity, setSnackbarSeverity] = useState<'success' | 'error'>('success')
@@ -146,14 +172,6 @@ export default function Contact() {
     { icon: HandshakeIcon, label: t('contact.promiseCall') },
     { icon: RequestQuoteIcon, label: t('contact.promiseEstimate') },
   ]
-
-  useEffect(() => {
-    if (subjectPrefilled.current) return
-    const fromQuery = searchParams.get('subject')?.trim()
-    if (!fromQuery) return
-    subjectPrefilled.current = true
-    setFormData((prev) => (prev.subject.trim() ? prev : { ...prev, subject: fromQuery }))
-  }, [searchParams])
 
   const handleGitHubClick = () => {
     window.open('https://github.com/Ijipop', '_blank')
@@ -320,6 +338,9 @@ export default function Contact() {
 
   return (
     <PageWrapper backgroundVariant="alternate">
+      <Suspense fallback={null}>
+        <ContactSubjectFromQuery setFormData={setFormData} />
+      </Suspense>
       <AppBarComponent />
       
       <HeaderSection 
