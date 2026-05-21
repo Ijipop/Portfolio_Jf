@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion'
 import { ReactNode, useEffect, useRef, useState } from 'react'
+import { observeScrollReveal } from '@/utils/scrollRevealObserver'
 
 interface ScrollRevealProps {
   children: ReactNode
@@ -46,22 +47,11 @@ export default function ScrollReveal({
     const el = ref.current
     if (!el) return
 
-    /** Déclenche tôt pour que les cartes entrent naturellement pendant le scroll. */
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting && entry.intersectionRatio >= 0.08) {
-          setIsVisible(true)
-        }
-      },
-      {
-        root: null,
-        rootMargin: '0px 0px -8% 0px',
-        threshold: [0, 0.04, 0.08, 0.12, 0.2],
+    return observeScrollReveal(el, (entry) => {
+      if (entry.isIntersecting && entry.intersectionRatio >= 0.08) {
+        setIsVisible(true)
       }
-    )
-
-    observer.observe(el)
-    return () => observer.unobserve(el)
+    })
   }, [])
 
   const d = reducedMotion ? 0 : effectiveDistance
@@ -100,6 +90,8 @@ export default function ScrollReveal({
       style={{
         minWidth: 0,
         width: '100%',
+        contentVisibility: isVisible ? 'visible' : 'auto',
+        containIntrinsicSize: fillHeight ? 'auto 320px' : 'auto 200px',
         ...(fillHeight
           ? { height: '100%', display: 'flex', flexDirection: 'column', minHeight: 0 }
           : {}),

@@ -3,6 +3,7 @@
 import AutoAwesomeOutlinedIcon from '@mui/icons-material/AutoAwesomeOutlined'
 import BuildOutlinedIcon from '@mui/icons-material/BuildOutlined'
 import CheckRoundedIcon from '@mui/icons-material/CheckRounded'
+import CodeOutlinedIcon from '@mui/icons-material/CodeOutlined'
 import LanguageOutlinedIcon from '@mui/icons-material/LanguageOutlined'
 import ManageSearchOutlinedIcon from '@mui/icons-material/ManageSearchOutlined'
 import Box from '@mui/material/Box'
@@ -26,7 +27,8 @@ import { shouldShowTopology } from '@/utils/topologyRoutes'
 import type { SvgIconComponent } from '@mui/icons-material'
 
 const CONTACT_PATH = '/portfolio/contact'
-/** Nombre de lignes « puce » — identique sur les 3 cartes pour l’alignement visuel. */
+const TIMELENDR_PATH = '/logiciel/timelendr'
+/** Nombre de lignes « puce » — identique sur les 4 cartes pour l’alignement visuel. */
 const PACK_BULLET_SLOTS = 4
 const PACK_BULLET_ROW_MIN = 48
 
@@ -41,6 +43,8 @@ type PackOffer = {
   bulletKeys: readonly string[]
   ctaKey: string
   subjectKey: string
+  secondaryCtaKey?: string
+  secondaryHref?: string
   featured?: boolean
   badgeKey?: string
 }
@@ -88,6 +92,25 @@ const PACK_OFFERS: PackOffer[] = [
     ],
     ctaKey: 'home.servicesPackMaintainCta',
     subjectKey: 'home.servicesPackMaintainSubject',
+  },
+  {
+    id: 'software',
+    icon: CodeOutlinedIcon,
+    titleKey: 'home.servicesPackSoftwareTitle',
+    pricePrefixKey: 'home.servicesPackPriceFrom',
+    priceKey: 'home.servicesPackSoftwarePrice',
+    priceNoteKey: 'home.servicesPackSoftwarePriceNote',
+    forKey: 'home.servicesPackSoftwareFor',
+    bulletKeys: [
+      'home.servicesPackSoftwareB1',
+      'home.servicesPackSoftwareB2',
+      'home.servicesPackSoftwareB3',
+      'home.servicesPackSoftwareB4',
+    ],
+    ctaKey: 'home.servicesPackSoftwareCta',
+    subjectKey: 'home.servicesPackSoftwareSubject',
+    secondaryCtaKey: 'home.servicesPackSoftwareDemoCta',
+    secondaryHref: TIMELENDR_PATH,
   },
 ]
 
@@ -162,7 +185,7 @@ function OfferPackCard({
         ...surfaceSx,
       }}
     >
-      {/* Bandeau dégradé — hauteur fixe pour aligner les 3 cartes */}
+      {/* Bandeau dégradé — hauteur fixe pour aligner les cartes */}
       <Box
         sx={{
           position: 'relative',
@@ -389,7 +412,7 @@ function OfferPackCard({
           })}
         </Box>
 
-        <Box sx={{ mt: 'auto', pt: 0.5, minHeight: 48 }}>
+        <Box sx={{ mt: 'auto', pt: 0.5, display: 'flex', flexDirection: 'column', gap: 1 }}>
           <CTAButton
             fullWidth
             size="medium"
@@ -398,6 +421,11 @@ function OfferPackCard({
           >
             {t(offer.ctaKey)}
           </CTAButton>
+          {offer.secondaryCtaKey && offer.secondaryHref ? (
+            <CTAButton fullWidth size="small" variant="outline" href={offer.secondaryHref}>
+              {t(offer.secondaryCtaKey)}
+            </CTAButton>
+          ) : null}
         </Box>
       </Box>
     </Box>
@@ -470,7 +498,7 @@ export default function PortfolioServicesSection() {
       <Box
         sx={{
           display: 'grid',
-          gridTemplateColumns: { xs: '1fr', md: 'repeat(3, 1fr)' },
+          gridTemplateColumns: { xs: '1fr', md: 'repeat(2, 1fr)', xl: 'repeat(4, 1fr)' },
           gap: { xs: 2, md: 2.5 },
           alignItems: 'stretch',
         }}

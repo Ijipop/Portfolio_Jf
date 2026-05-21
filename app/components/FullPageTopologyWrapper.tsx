@@ -1,5 +1,6 @@
 'use client'
 
+import dynamic from 'next/dynamic'
 import Box from '@mui/material/Box'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import { ReactNode, useEffect, useRef } from 'react'
@@ -12,7 +13,9 @@ import { shouldShowTopology } from '@/utils/topologyRoutes'
 import { getBeigePresentationTopologyBackground } from '@/utils/syncPortfolioThemeToDocument'
 import { VANTA_PRELOAD_SOURCES } from '@/utils/vantaAssets'
 import { preloadExternalScripts } from '@/utils/vantaScriptLoader'
-import VantaNetBackground from './VantaNetBackground'
+import { deferUntilIdle } from '@/utils/deferUntilIdle'
+
+const VantaNetBackground = dynamic(() => import('./VantaNetBackground'), { ssr: false })
 
 const contentWrapperSx = {
   minHeight: '100vh',
@@ -53,17 +56,7 @@ export default function FullPageTopologyWrapper({ children }: FullPageTopologyWr
 
     const preload = () => preloadExternalScripts([...VANTA_PRELOAD_SOURCES])
 
-    if (typeof window !== 'undefined' && 'requestIdleCallback' in window) {
-      const id = (window as unknown as { requestIdleCallback: (cb: () => void) => number }).requestIdleCallback(
-        preload
-      )
-      return () => {
-        ;(window as unknown as { cancelIdleCallback?: (idleId: number) => void }).cancelIdleCallback?.(id)
-      }
-    }
-
-    const timer = globalThis.setTimeout(preload, 0)
-    return () => globalThis.clearTimeout(timer)
+    return deferUntilIdle(preload, 2000)
   }, [show, useGradientOnly])
 
   if (!show) {

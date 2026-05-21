@@ -16,6 +16,7 @@ import { useLanguage } from '@/contexts/LanguageContext'
 import { usePresentationMode } from '@/contexts/PresentationModeContext'
 import { useTextColor } from '@/hooks/useTextColor'
 import { useThemeColors } from '@/hooks/useThemeColors'
+import { deferUntilIdle } from '@/utils/deferUntilIdle'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -48,25 +49,38 @@ export default function PortfolioHomeHero() {
     const el = heroSectionRef.current
     if (!el) return
 
-    const ctx = gsap.context(() => {
-      gsap.fromTo(
-        el,
-        { y: 0, opacity: 1 },
-        {
-          y: 48,
-          opacity: 0.8,
-          ease: 'none',
-          scrollTrigger: {
-            trigger: el,
-            start: 'top 80px',
-            end: '+=420',
-            scrub: 0.5,
-          },
-        },
-      )
-    }, el)
+    let cancelled = false
+    let revert: (() => void) | undefined
 
-    return () => ctx.revert()
+    const cancelDefer = deferUntilIdle(() => {
+      if (cancelled) return
+
+      const ctx = gsap.context(() => {
+        gsap.fromTo(
+          el,
+          { y: 0, opacity: 1 },
+          {
+            y: 48,
+            opacity: 0.8,
+            ease: 'none',
+            scrollTrigger: {
+              trigger: el,
+              start: 'top 80px',
+              end: '+=420',
+              scrub: 0.5,
+            },
+          },
+        )
+      }, el)
+
+      revert = () => ctx.revert()
+    }, 900)
+
+    return () => {
+      cancelled = true
+      cancelDefer()
+      revert?.()
+    }
   }, [reducedMotion])
 
   useEffect(() => {
