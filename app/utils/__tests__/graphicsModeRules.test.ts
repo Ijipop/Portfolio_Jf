@@ -90,13 +90,13 @@ describe('graphicsModeRules', () => {
     const first = evaluateGraphicsMetricBreach({ name: 'LCP', value: 5000, rating: 'poor' }, 0, true)
     expect(first).toEqual({ nextCount: 1, shouldDowngrade: false, reason: null })
 
-    const second = evaluateGraphicsMetricBreach({ name: 'LCP', value: 5000, rating: 'poor' }, 1, true)
-    expect(second).toEqual({ nextCount: 2, shouldDowngrade: false, reason: null })
+    const fifth = evaluateGraphicsMetricBreach({ name: 'LCP', value: 5000, rating: 'poor' }, 4, true)
+    expect(fifth).toEqual({ nextCount: 5, shouldDowngrade: false, reason: null })
 
-    const third = evaluateGraphicsMetricBreach({ name: 'LCP', value: 5000, rating: 'poor' }, 2, true)
-    expect(third.shouldDowngrade).toBe(true)
-    expect(third.nextCount).toBe(0)
-    expect(third.reason).toBe('web-vitals-lcp-poor')
+    const sixth = evaluateGraphicsMetricBreach({ name: 'LCP', value: 5000, rating: 'poor' }, 5, true)
+    expect(sixth.shouldDowngrade).toBe(true)
+    expect(sixth.nextCount).toBe(0)
+    expect(sixth.reason).toBe('web-vitals-lcp-poor')
   })
 
   it('does not downgrade from metrics outside production', () => {

@@ -1,41 +1,44 @@
 'use client'
 
 import useMediaQuery from '@mui/material/useMediaQuery'
-import { RefObject, useEffect, useRef, useState } from 'react'
+import { RefObject, useEffect, useMemo, useState } from 'react'
 import { useGraphicsMode } from '@/contexts/GraphicsModeContext'
 import { usePresentationMode } from '@/contexts/PresentationModeContext'
-import { shouldDowngradeFromSlowFrames } from '@/utils/graphicsModeRules'
-
-type VantaMode = 'normal' | 'degraded'
+import {
+  downgradeVantaQuality,
+  resolveInitialVantaQuality,
+  vantaTargetFps,
+  type VantaQuality,
+} from '@/utils/deviceHints'
 
 interface VantaPerformanceState {
   isActive: boolean
-  mode: VantaMode
+  quality: VantaQuality
   targetFps: number
 }
 
 /**
- * Runtime perf state for heavy canvas effects.
- * - On ne met en pause que lorsque l’onglet est caché (économie batterie).
- * - Ne pas utiliser hasFocus / IntersectionObserver sur un fond fixed plein écran :
- *   ça peut laisser isActive à false (Safari, iframe, DevTools) + bloquer les clics.
- * - mode/targetFps : stockés en ref pour éviter de re-monter Vanta (deps useEffect) en boucle.
- * - Aligné sur `FullPageTopologyWrapper` : en présentation Créa (`dev`) sans prefers-reduced-motion,
- *   le fond peut rester Vanta même si `graphicsMode === 'light'` (session / device / Web Vitals).
+ * Runtime perf pour Vanta : garde l’effet visible, adapte la densité / FPS cible.
+ * Ne bascule plus vers graphicsMode « light » sur frames lentes (light = retire Vanta).
  */
 export function useVantaPerformance(_elRef: RefObject<HTMLElement>): VantaPerformanceState {
   const [isVisibleTab, setIsVisibleTab] = useState(
     typeof document !== 'undefined' ? document.visibilityState === 'visible' : true
   )
-  const { graphicsMode, requestLightMode } = useGraphicsMode()
+  const { graphicsMode } = useGraphicsMode()
   const { mode: presentationMode } = usePresentationMode()
   const prefersReducedMotion = useMediaQuery('(prefers-reduced-motion: reduce)', { noSsr: true })
-  const isProduction = process.env.NODE_ENV === 'production'
 
-  const modeRef = useRef<VantaMode>('normal')
-  const targetFpsRef = useRef(60)
-  const lightModeRequestedRef = useRef(false)
-  const [, bump] = useState(0)
+  const initialQuality = useMemo(() => {
+    if (typeof navigator === 'undefined') return 'normal' as VantaQuality
+    const nav = navigator as Navigator & { deviceMemory?: number }
+    return resolveInitialVantaQuality({
+      deviceMemory: nav.deviceMemory,
+      hardwareConcurrency: navigator.hardwareConcurrency,
+    })
+  }, [])
+
+  const [quality, setQuality] = useState<VantaQuality>(initialQuality)
 
   const creaWantsVanta = presentationMode === 'dev' && !prefersReducedMotion
   const allowVantaDespiteLightGraphics = creaWantsVanta && graphicsMode === 'light'
@@ -43,7 +46,7 @@ export function useVantaPerformance(_elRef: RefObject<HTMLElement>): VantaPerfor
     isVisibleTab && (graphicsMode === 'full' || allowVantaDespiteLightGraphics)
 
   useEffect(() => {
-    if (typeof window === 'undefined') return
+    if (typeof document === 'undefined') return
 
     const onVisibility = () => setIsVisibleTab(document.visibilityState === 'visible')
     document.addEventListener('visibilitychange', onVisibility)
@@ -69,23 +72,15 @@ export function useVantaPerformance(_elRef: RefObject<HTMLElement>): VantaPerfor
       last = now
 
       frameCount += 1
-      if (delta > 28) slowFrames += 1
+      if (delta > 32) slowFrames += 1
 
-      if (frameCount >= 45) {
+      if (frameCount >= 60) {
         const slowRatio = slowFrames / frameCount
-        const nextMode: VantaMode = slowRatio > 0.45 ? 'degraded' : 'normal'
-        const nextFps = nextMode === 'degraded' ? 30 : 60
 
-        if (shouldDowngradeFromSlowFrames(slowRatio, isProduction) && !lightModeRequestedRef.current) {
-          lightModeRequestedRef.current = true
-          requestLightMode(`slow-frames-${Math.round(slowRatio * 100)}`)
+        if (slowRatio > 0.38) {
+          setQuality((current) => downgradeVantaQuality(current))
         }
 
-        if (modeRef.current !== nextMode || targetFpsRef.current !== nextFps) {
-          modeRef.current = nextMode
-          targetFpsRef.current = nextFps
-          bump((n) => n + 1)
-        }
         frameCount = 0
         slowFrames = 0
       }
@@ -98,11 +93,14 @@ export function useVantaPerformance(_elRef: RefObject<HTMLElement>): VantaPerfor
       running = false
       cancelAnimationFrame(raf)
     }
-  }, [isActive, isProduction, requestLightMode])
+  }, [isActive])
 
   return {
     isActive,
-    mode: modeRef.current,
-    targetFps: targetFpsRef.current,
+    quality,
+    targetFps: vantaTargetFps(quality),
   }
 }
+
+/** @deprecated Alias interne — préférer `quality`. */
+export type VantaMode = VantaQuality

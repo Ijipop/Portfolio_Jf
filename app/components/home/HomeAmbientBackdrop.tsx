@@ -2,6 +2,7 @@
 
 import Box from '@mui/material/Box'
 import { alpha, useTheme } from '@mui/material/styles'
+import { useEffect, useState } from 'react'
 import { useThemeColors } from '@/hooks/useThemeColors'
 
 /**
@@ -12,6 +13,20 @@ export default function HomeAmbientBackdrop() {
   const theme = useTheme()
   const { primary, secondary, accent } = useThemeColors()
   const isDark = theme.palette.mode === 'dark'
+  const [animationsPaused, setAnimationsPaused] = useState(false)
+
+  useEffect(() => {
+    if (typeof document === 'undefined') return
+
+    const sync = () => setAnimationsPaused(document.visibilityState !== 'visible')
+    sync()
+    document.addEventListener('visibilitychange', sync)
+    return () => document.removeEventListener('visibilitychange', sync)
+  }, [])
+
+  const animSx = animationsPaused
+    ? { animationPlayState: 'paused' as const }
+    : undefined
 
   const p = isDark ? 0.58 : 0.44
   const s = isDark ? 0.48 : 0.36
@@ -80,6 +95,7 @@ export default function HomeAmbientBackdrop() {
           opacity: isDark ? 1 : 0.98,
           animation: 'ambientDriftA 16s ease-in-out infinite',
           willChange: 'transform',
+          ...animSx,
         }}
       />
       <Box
@@ -96,6 +112,7 @@ export default function HomeAmbientBackdrop() {
           opacity: isDark ? 0.95 : 0.94,
           animation: 'ambientDriftB 20s ease-in-out infinite',
           willChange: 'transform',
+          ...animSx,
         }}
       />
       <Box
@@ -112,6 +129,7 @@ export default function HomeAmbientBackdrop() {
           opacity: isDark ? 0.82 : 0.86,
           animation: 'ambientDriftC 24s ease-in-out infinite',
           willChange: 'transform',
+          ...animSx,
         }}
       />
       <Box
@@ -133,6 +151,7 @@ export default function HomeAmbientBackdrop() {
           filter: 'blur(22px)',
           transformOrigin: 'center',
           animation: 'ambientBeam 12s ease-in-out infinite',
+          ...animSx,
         }}
       />
       <Box
@@ -151,6 +170,7 @@ export default function HomeAmbientBackdrop() {
           backgroundSize: '220% 100%',
           mixBlendMode: isDark ? 'screen' : 'multiply',
           animation: 'ambientShimmer 11s ease-in-out infinite alternate',
+          ...animSx,
         }}
       />
     </Box>

@@ -34,7 +34,7 @@ const FULL_MODE = 'full'
 const LIGHT_MODE = 'light'
 
 /** Nombre de métriques « poor » consécutives (prod) avant passage en mode light. */
-const WEB_VITAL_POOR_BREACH_TO_DOWNGRADE = 3
+const WEB_VITAL_POOR_BREACH_TO_DOWNGRADE = 6
 
 /** Au-dessus de ce ratio de frames lentes, demander le mode light (prod uniquement). */
 const SLOW_FRAME_DOWNGRADE_RATIO = 0.52
