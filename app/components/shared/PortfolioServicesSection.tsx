@@ -31,6 +31,11 @@ const TIMELENDR_PATH = '/logiciel/timelendr'
 /** Nombre de lignes « puce » — identique sur les 4 cartes pour l’alignement visuel. */
 const PACK_BULLET_SLOTS = 4
 const PACK_BULLET_ROW_MIN = 48
+/** Bandeau orange : hauteur identique sur les 4 cartes (notes longues incluses). */
+const PACK_HEADER_HEIGHT = { xs: 236, md: 248 }
+const PACK_HEADER_TITLE_ROW_MIN = 52
+const PACK_HEADER_PREFIX_ROW_MIN = 22
+const PACK_HEADER_NOTE_MIN = { xs: 92, md: 96 }
 
 type PackOffer = {
   id: string
@@ -185,19 +190,18 @@ function OfferPackCard({
         ...surfaceSx,
       }}
     >
-      {/* Bandeau dégradé — hauteur fixe pour aligner les cartes */}
+      {/* Bandeau dégradé — hauteur fixe identique sur les 4 cartes */}
       <Box
         sx={{
           position: 'relative',
           flexShrink: 0,
-          minHeight: { xs: 152, md: 162 },
+          height: PACK_HEADER_HEIGHT,
           px: { xs: 2, md: 2.25 },
           pt: { xs: 2, md: 2.25 },
           pb: 1.75,
           background: serviceGradient,
           display: 'flex',
           flexDirection: 'column',
-          justifyContent: 'flex-end',
           '&::after': {
             content: '""',
             position: 'absolute',
@@ -215,8 +219,8 @@ function OfferPackCard({
             alignItems: 'flex-start',
             justifyContent: 'space-between',
             gap: 1,
-            mb: 1.5,
-            minHeight: 44,
+            flexShrink: 0,
+            minHeight: PACK_HEADER_TITLE_ROW_MIN,
           }}
         >
           <Box
@@ -304,49 +308,80 @@ function OfferPackCard({
           ) : null}
         </Box>
 
-        <Box sx={{ position: 'relative', zIndex: 1 }}>
-          {offer.pricePrefixKey ? (
-            <Typography
-              component="p"
-              sx={{
-                color: alpha('#fff', 0.88),
-                fontSize: '0.72rem',
-                fontWeight: 700,
-                textTransform: 'uppercase',
-                letterSpacing: '0.1em',
-                mb: 0.35,
-              }}
-            >
-              {t(offer.pricePrefixKey)}
-            </Typography>
-          ) : null}
+        <Box
+          sx={{
+            position: 'relative',
+            zIndex: 1,
+            flex: 1,
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'flex-end',
+            minHeight: 0,
+          }}
+        >
+          <Box
+            sx={{
+              flexShrink: 0,
+              minHeight: PACK_HEADER_PREFIX_ROW_MIN,
+              display: 'flex',
+              alignItems: 'flex-end',
+              mb: 0.35,
+            }}
+          >
+            {offer.pricePrefixKey ? (
+              <Typography
+                component="p"
+                sx={{
+                  color: alpha('#fff', 0.88),
+                  fontSize: '0.72rem',
+                  fontWeight: 700,
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.1em',
+                  m: 0,
+                }}
+              >
+                {t(offer.pricePrefixKey)}
+              </Typography>
+            ) : null}
+          </Box>
           <Typography
             component="p"
             sx={{
+              flexShrink: 0,
               color: '#fff',
               fontWeight: 900,
               fontSize: { xs: '1.5rem', md: '1.65rem' },
               lineHeight: 1.05,
               letterSpacing: '-0.03em',
               textShadow: `0 2px 10px ${alpha('#000', 0.18)}`,
+              m: 0,
             }}
           >
             {t(offer.priceKey)}
           </Typography>
-        </Box>
-        <Box sx={{ position: 'relative', zIndex: 1, minHeight: '3.1em', mt: 0.35 }}>
-          {offer.priceNoteKey ? (
-            <Typography
-              sx={{
-                color: alpha('#fff', 0.88),
-                fontSize: '0.75rem',
-                lineHeight: 1.35,
-                fontWeight: 500,
-              }}
-            >
-              {t(offer.priceNoteKey)}
-            </Typography>
-          ) : null}
+          <Box
+            sx={{
+              flexShrink: 0,
+              minHeight: PACK_HEADER_NOTE_MIN,
+              mt: 0.5,
+              display: 'flex',
+              alignItems: 'flex-start',
+            }}
+          >
+            {offer.priceNoteKey ? (
+              <Typography
+                sx={{
+                  color: alpha('#fff', 0.88),
+                  fontSize: '0.72rem',
+                  lineHeight: 1.4,
+                  fontWeight: 500,
+                  m: 0,
+                }}
+              >
+                {t(offer.priceNoteKey)}
+              </Typography>
+            ) : null}
+          </Box>
         </Box>
       </Box>
 
