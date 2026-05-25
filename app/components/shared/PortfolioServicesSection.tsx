@@ -31,7 +31,8 @@ const TIMELENDR_PATH = '/logiciel/timelendr'
 /** Nombre de lignes « puce » — identique sur les 4 cartes pour l’alignement visuel. */
 const PACK_BULLET_SLOTS = 4
 const PACK_BULLET_ROW_MIN = 48
-
+/** Hauteur commune des bandeaux orange (titre + notes sur 2 cartes). */
+const PACK_HEADER_HEIGHT = { xs: 300, md: 312 }
 type PackOffer = {
   id: string
   icon: SvgIconComponent
@@ -165,9 +166,14 @@ function OfferPackCard({
     <Box
       sx={{
         position: 'relative',
+        width: '100%',
+        maxWidth: '100%',
+        minWidth: 0,
         height: '100%',
-        display: 'flex',
-        flexDirection: 'column',
+        gridRow: 'span 2',
+        display: 'grid',
+        gridTemplateRows: 'subgrid',
+        justifySelf: 'stretch',
         borderRadius: cardRadius,
         overflow: 'hidden',
         background: cardBg,
@@ -185,19 +191,24 @@ function OfferPackCard({
         ...surfaceSx,
       }}
     >
-      {/* Bandeau dégradé — hauteur fixe pour aligner les cartes */}
+      {/* Bandeau orange : icône (+ badge) → titre → prix / notes — hauteur fixe alignée */}
       <Box
         sx={{
           position: 'relative',
+          width: '100%',
+          minWidth: 0,
+          alignSelf: 'stretch',
           flexShrink: 0,
-          minHeight: { xs: 148, md: 158 },
+          height: PACK_HEADER_HEIGHT,
+          boxSizing: 'border-box',
           px: { xs: 2, md: 2.25 },
           pt: { xs: 2, md: 2.25 },
           pb: 1.75,
           background: serviceGradient,
           display: 'flex',
           flexDirection: 'column',
-          justifyContent: 'flex-end',
+          gap: 1.25,
+          overflow: 'hidden',
           '&::after': {
             content: '""',
             position: 'absolute',
@@ -212,10 +223,10 @@ function OfferPackCard({
             position: 'relative',
             zIndex: 1,
             display: 'flex',
-            alignItems: 'flex-start',
+            alignItems: 'center',
             justifyContent: 'space-between',
             gap: 1,
-            mb: 1.5,
+            flexShrink: 0,
             minHeight: 44,
           }}
         >
@@ -223,6 +234,7 @@ function OfferPackCard({
             sx={{
               width: 44,
               height: 44,
+              flexShrink: 0,
               borderRadius: innerRadius,
               display: 'grid',
               placeItems: 'center',
@@ -238,12 +250,11 @@ function OfferPackCard({
               sx={{
                 display: 'inline-flex',
                 alignItems: 'center',
-                justifyContent: 'flex-end',
                 gap: 0.45,
+                flexShrink: 0,
                 px: 1.1,
                 py: 0.5,
                 borderRadius: 999,
-                maxWidth: '54%',
                 background: `linear-gradient(135deg, #fffef7 0%, #fde68a 42%, #fbbf24 100%)`,
                 color: '#78350f',
                 fontWeight: 800,
@@ -251,7 +262,6 @@ function OfferPackCard({
                 letterSpacing: '0.08em',
                 textTransform: 'uppercase',
                 lineHeight: 1.15,
-                textAlign: 'right',
                 boxShadow: `0 4px 16px ${alpha('#000', 0.22)}, inset 0 1px 0 ${alpha('#fff', 0.75)}`,
                 border: `1px solid ${alpha('#fff', 0.65)}`,
                 '@keyframes offerBadgeSparkle': {
@@ -274,21 +284,50 @@ function OfferPackCard({
               <Box component="span">{t(offer.badgeKey)}</Box>
             </Box>
           ) : (
-            <Box sx={{ flex: 1, minWidth: 8 }} aria-hidden />
+            <Box sx={{ flex: 1 }} aria-hidden />
           )}
         </Box>
 
-        <Box sx={{ position: 'relative', zIndex: 1 }}>
+        <Typography
+          variant="h6"
+          component="h3"
+          sx={{
+            position: 'relative',
+            zIndex: 1,
+            color: '#fff',
+            fontWeight: 900,
+            fontSize: { xs: '1.3rem', md: '1.45rem' },
+            lineHeight: 1.25,
+            letterSpacing: '-0.02em',
+            textShadow: `0 2px 10px ${alpha('#000', 0.18)}`,
+            m: 0,
+            flexShrink: 0,
+          }}
+        >
+          {t(offer.titleKey)}
+        </Typography>
+
+        <Box
+          sx={{
+            position: 'relative',
+            zIndex: 1,
+            flexShrink: 0,
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 0.5,
+          }}
+        >
           {offer.pricePrefixKey ? (
             <Typography
               component="p"
               sx={{
                 color: alpha('#fff', 0.88),
-                fontSize: '0.72rem',
+                fontSize: { xs: '0.8rem', md: '0.85rem' },
                 fontWeight: 700,
                 textTransform: 'uppercase',
                 letterSpacing: '0.1em',
-                mb: 0.35,
+                m: 0,
+                lineHeight: 1.25,
               }}
             >
               {t(offer.pricePrefixKey)}
@@ -300,22 +339,23 @@ function OfferPackCard({
               color: '#fff',
               fontWeight: 900,
               fontSize: { xs: '1.5rem', md: '1.65rem' },
-              lineHeight: 1.05,
+              lineHeight: 1.1,
               letterSpacing: '-0.03em',
               textShadow: `0 2px 10px ${alpha('#000', 0.18)}`,
+              m: 0,
             }}
           >
             {t(offer.priceKey)}
           </Typography>
-        </Box>
-        <Box sx={{ position: 'relative', zIndex: 1, minHeight: '3.1em', mt: 0.35 }}>
           {offer.priceNoteKey ? (
             <Typography
               sx={{
                 color: alpha('#fff', 0.88),
-                fontSize: '0.75rem',
-                lineHeight: 1.35,
+                fontSize: { xs: '0.82rem', md: '0.88rem' },
+                lineHeight: 1.45,
                 fontWeight: 500,
+                m: 0,
+                pt: 0.25,
               }}
             >
               {t(offer.priceNoteKey)}
@@ -328,28 +368,20 @@ function OfferPackCard({
       <Box
         sx={{
           flex: 1,
+          width: '100%',
+          minWidth: 0,
+          alignSelf: 'stretch',
           display: 'flex',
           flexDirection: 'column',
+          alignItems: 'stretch',
+          minHeight: 0,
+          boxSizing: 'border-box',
           px: { xs: 2.25, md: 2.5 },
           py: { xs: 2, md: 2.25 },
           gap: 1.5,
         }}
       >
-        <Box sx={{ minHeight: { xs: 96, md: 100 } }}>
-          <Typography
-            variant="h6"
-            sx={{
-              color: textColor,
-              fontWeight: 900,
-              lineHeight: 1.2,
-              fontSize: '1.15rem',
-              letterSpacing: '-0.02em',
-              mb: 0.75,
-              minHeight: '1.35em',
-            }}
-          >
-            {t(offer.titleKey)}
-          </Typography>
+        <Box sx={{ width: '100%', minHeight: { xs: 72, md: 76 } }}>
           <Typography
             sx={{
               color: textColor,
@@ -358,6 +390,7 @@ function OfferPackCard({
               lineHeight: 1.5,
               fontStyle: 'italic',
               minHeight: '3em',
+              textAlign: 'center',
             }}
           >
             {t(offer.forKey)}
@@ -366,26 +399,37 @@ function OfferPackCard({
 
         <Box
           sx={{
+            width: '100%',
             display: 'grid',
             gridTemplateRows: `repeat(${PACK_BULLET_SLOTS}, minmax(${PACK_BULLET_ROW_MIN}px, auto))`,
             gap: 0.75,
             flex: 1,
+            justifyItems: 'stretch',
           }}
         >
           {Array.from({ length: PACK_BULLET_SLOTS }, (_, i) => {
             const key = offer.bulletKeys[i]
             if (!key) {
-              return <Box key={`bullet-pad-${offer.id}-${i}`} aria-hidden />
+              return (
+                <Box
+                  key={`bullet-pad-${offer.id}-${i}`}
+                  aria-hidden
+                  sx={{ width: '100%', minHeight: PACK_BULLET_ROW_MIN }}
+                />
+              )
             }
             return (
             <Box
               key={key}
               sx={{
+                width: '100%',
+                boxSizing: 'border-box',
                 display: 'flex',
-                alignItems: 'flex-start',
+                alignItems: 'center',
+                justifyContent: 'center',
                 gap: 1,
                 py: 0.75,
-                px: 1,
+                px: 1.25,
                 minHeight: PACK_BULLET_ROW_MIN,
                 borderRadius: innerRadius,
                 bgcolor: alpha(primary, isDark ? 0.12 : 0.06),
@@ -393,16 +437,19 @@ function OfferPackCard({
               }}
             >
               <CheckRoundedIcon
-                sx={{ fontSize: 18, color: primary, mt: '1px', flexShrink: 0 }}
+                sx={{ fontSize: 18, color: primary, flexShrink: 0 }}
                 aria-hidden
               />
               <Typography
                 sx={{
+                  flex: 1,
+                  minWidth: 0,
                   color: textColor,
                   opacity: 0.92,
                   fontSize: '0.84rem',
                   lineHeight: 1.45,
                   fontWeight: 500,
+                  textAlign: 'center',
                 }}
               >
                 {t(key)}
@@ -412,17 +459,50 @@ function OfferPackCard({
           })}
         </Box>
 
-        <Box sx={{ mt: 'auto', pt: 0.5, display: 'flex', flexDirection: 'column', gap: 1 }}>
+        <Box
+          sx={{
+            mt: 'auto',
+            pt: 0.5,
+            width: '100%',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'stretch',
+            gap: 1,
+          }}
+        >
           <CTAButton
             fullWidth
             size="medium"
             variant={featured ? 'primary' : 'outline'}
             href={href}
+            sx={{
+              width: '100%',
+              maxWidth: '100%',
+              alignSelf: 'stretch',
+              whiteSpace: 'normal',
+              textAlign: 'center',
+              lineHeight: 1.35,
+              '& .MuiButton-label': { whiteSpace: 'normal' },
+            }}
           >
             {t(offer.ctaKey)}
           </CTAButton>
           {offer.secondaryCtaKey && offer.secondaryHref ? (
-            <CTAButton fullWidth size="small" variant="outline" href={offer.secondaryHref}>
+            <CTAButton
+              fullWidth
+              size="small"
+              variant="outline"
+              href={offer.secondaryHref}
+              sx={{
+                width: '100%',
+                maxWidth: '100%',
+                alignSelf: 'stretch',
+                whiteSpace: 'normal',
+                textAlign: 'center',
+                lineHeight: 1.35,
+                '& .MuiButton-label': { whiteSpace: 'normal' },
+              }}
+            >
               {t(offer.secondaryCtaKey)}
             </CTAButton>
           ) : null}
@@ -499,8 +579,11 @@ export default function PortfolioServicesSection() {
         sx={{
           display: 'grid',
           gridTemplateColumns: { xs: '1fr', md: 'repeat(2, 1fr)', xl: 'repeat(4, 1fr)' },
+          gridTemplateRows: 'auto 1fr',
           gap: { xs: 2, md: 2.5 },
           alignItems: 'stretch',
+          justifyItems: 'stretch',
+          '& > *': { minWidth: 0, width: '100%' },
         }}
       >
         {PACK_OFFERS.map((offer, index) => {

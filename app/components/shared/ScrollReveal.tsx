@@ -93,7 +93,14 @@ export default function ScrollReveal({
         contentVisibility: isVisible ? 'visible' : 'auto',
         containIntrinsicSize: fillHeight ? 'auto 320px' : 'auto 200px',
         ...(fillHeight
-          ? { height: '100%', display: 'flex', flexDirection: 'column', minHeight: 0 }
+          ? {
+              height: '100%',
+              width: '100%',
+              display: 'grid',
+              gridRow: 'span 2',
+              gridTemplateRows: 'subgrid',
+              minHeight: 0,
+            }
           : {}),
       }}
       initial={getInitialPosition()}

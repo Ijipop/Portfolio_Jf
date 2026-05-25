@@ -102,12 +102,14 @@ export const translations = {
       servicesPackPageTitle: 'Page pro en ~7 jours',
       servicesPackPagePrice: '1 200 $',
       servicesPackPagePriceNote:
-        'Dès 900 $ si textes et images prêts · devis sur mesure si le projet est plus large',
-      servicesPackPageFor: 'Travailleur autonome qui veut une vitrine claire, vite.',
-      servicesPackPageB1: 'Une page : services, contact, mobile',
+        'Landing express dès 499 $ (contenu prêt) · page pro 1 200 $ · dès 900 $ si textes et images prêts · devis au-delà',
+      servicesPackPageFor:
+        'De la landing rapide à la page pro soignée — selon votre budget et votre délai.',
+      servicesPackPageB1: 'Landing express : 1 page épurée, contact, mise en ligne',
       servicesPackPageB2: 'Formulaire qui arrive dans votre courriel',
       servicesPackPageB3: 'Mise en ligne incluse',
-      servicesPackPageB4: 'Bases SEO : titres, descriptions, structure claire',
+      servicesPackPageB4:
+        'Page pro : SEO de base, structure claire, livraison en ~7 jours',
       servicesPackPageCta: 'Partager votre vision',
       servicesPackPageSubject: 'Offre : page pro en 7 jours',
       servicesPackPageBadge: 'Le plus demandé',
@@ -122,10 +124,11 @@ export const translations = {
       servicesPackSoftwareTitle: 'Outil ou logiciel sur mesure',
       servicesPackSoftwarePrice: '4 500 $',
       servicesPackSoftwarePriceNote:
-        'Fourchette indicative : 4 500 – 15 000 $ · devis au-delà (sync, multi-utilisateurs)',
+        'Petit outil ou automate dès 990 $ (périmètre fixe) · logiciel complet dès 4 500 $ (jusqu’à ~15 000 $) · devis au-delà',
       servicesPackSoftwareFor:
-        'Petite équipe ou commerce qui veut un outil aligné sur son métier.',
-      servicesPackSoftwareB1: 'Brief + proposition claire avant de commencer',
+        'Du petit automate au logiciel métier — selon la complexité et votre équipe.',
+      servicesPackSoftwareB1:
+        'Brief + proposition claire · petit outil ou automate (périmètre défini)',
       servicesPackSoftwareB2: 'Petit logiciel interne (Windows, macOS ou web)',
       servicesPackSoftwareB3: 'Une version utilisable dès la livraison par votre équipe',
       servicesPackSoftwareB4: 'Évolution et entretien possibles ensuite',
@@ -642,12 +645,13 @@ export const translations = {
       servicesPackPageTitle: 'Pro page in ~7 days',
       servicesPackPagePrice: '$1,200',
       servicesPackPagePriceNote:
-        'from $900 if copy and images are ready · custom quote for larger projects',
-      servicesPackPageFor: 'Self-employed pro who needs a clear showcase, fast.',
-      servicesPackPageB1: 'One page: services, contact, mobile-friendly',
+        'Express landing from $499 (content ready) · pro page $1,200 · from $900 if copy and images are ready · custom quote beyond',
+      servicesPackPageFor:
+        'From a quick landing to a polished pro page — based on your budget and timeline.',
+      servicesPackPageB1: 'Express landing: one lean page, contact, launch included',
       servicesPackPageB2: 'Contact form that reaches your inbox',
       servicesPackPageB3: 'Launch included',
-      servicesPackPageB4: 'Basic SEO: titles, descriptions, clear structure',
+      servicesPackPageB4: 'Pro page: basic SEO, clear structure, delivery in ~7 days',
       servicesPackPageCta: 'Share your vision',
       servicesPackPageSubject: 'Offer: pro page in 7 days',
       servicesPackPageBadge: 'Most popular',
@@ -662,10 +666,11 @@ export const translations = {
       servicesPackSoftwareTitle: 'Custom tool or software',
       servicesPackSoftwarePrice: '$4,500',
       servicesPackSoftwarePriceNote:
-        'Indicative range: $4,500 – $15,000 · custom quote beyond (sync, multi-user)',
+        'Small tool or automation from $990 (fixed scope) · full software from $4,500 (up to ~$15,000) · quote beyond',
       servicesPackSoftwareFor:
-        'Small team or business that wants software shaped to how they work.',
-      servicesPackSoftwareB1: 'Brief + clear proposal before we start',
+        'From a small automation to full business software — depending on scope and your team.',
+      servicesPackSoftwareB1:
+        'Clear brief + proposal · small tool or automation (defined scope)',
       servicesPackSoftwareB2: 'Small internal app (Windows, macOS, or web)',
       servicesPackSoftwareB3: 'A version your team can actually use on delivery day',
       servicesPackSoftwareB4: 'Evolution and maintenance available afterward',
