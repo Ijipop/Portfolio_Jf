@@ -190,7 +190,7 @@ function OfferPackCard({
         sx={{
           position: 'relative',
           flexShrink: 0,
-          minHeight: { xs: 148, md: 158 },
+          minHeight: { xs: 152, md: 162 },
           px: { xs: 2, md: 2.25 },
           pt: { xs: 2, md: 2.25 },
           pb: 1.75,
@@ -221,17 +221,44 @@ function OfferPackCard({
         >
           <Box
             sx={{
-              width: 44,
-              height: 44,
-              borderRadius: innerRadius,
-              display: 'grid',
-              placeItems: 'center',
-              bgcolor: alpha('#fff', 0.2),
-              border: `1px solid ${alpha('#fff', 0.32)}`,
-              backdropFilter: 'blur(8px)',
+              display: 'flex',
+              alignItems: 'center',
+              gap: 1.25,
+              flex: 1,
+              minWidth: 0,
             }}
           >
-            <Icon sx={{ color: '#fff', fontSize: 24 }} />
+            <Box
+              sx={{
+                width: 44,
+                height: 44,
+                flexShrink: 0,
+                borderRadius: innerRadius,
+                display: 'grid',
+                placeItems: 'center',
+                bgcolor: alpha('#fff', 0.2),
+                border: `1px solid ${alpha('#fff', 0.32)}`,
+                backdropFilter: 'blur(8px)',
+              }}
+            >
+              <Icon sx={{ color: '#fff', fontSize: 24 }} />
+            </Box>
+            <Typography
+              variant="h6"
+              component="h3"
+              sx={{
+                color: '#fff',
+                fontWeight: 900,
+                fontSize: { xs: '1.35rem', md: '1.5rem' },
+                lineHeight: 1.2,
+                letterSpacing: '-0.02em',
+                textShadow: `0 2px 10px ${alpha('#000', 0.18)}`,
+                flex: 1,
+                minWidth: 0,
+              }}
+            >
+              {t(offer.titleKey)}
+            </Typography>
           </Box>
           {offer.badgeKey ? (
             <Box
@@ -240,10 +267,11 @@ function OfferPackCard({
                 alignItems: 'center',
                 justifyContent: 'flex-end',
                 gap: 0.45,
+                flexShrink: 0,
                 px: 1.1,
                 py: 0.5,
                 borderRadius: 999,
-                maxWidth: '54%',
+                maxWidth: '42%',
                 background: `linear-gradient(135deg, #fffef7 0%, #fde68a 42%, #fbbf24 100%)`,
                 color: '#78350f',
                 fontWeight: 800,
@@ -273,9 +301,7 @@ function OfferPackCard({
               />
               <Box component="span">{t(offer.badgeKey)}</Box>
             </Box>
-          ) : (
-            <Box sx={{ flex: 1, minWidth: 8 }} aria-hidden />
-          )}
+          ) : null}
         </Box>
 
         <Box sx={{ position: 'relative', zIndex: 1 }}>
@@ -335,21 +361,7 @@ function OfferPackCard({
           gap: 1.5,
         }}
       >
-        <Box sx={{ minHeight: { xs: 96, md: 100 } }}>
-          <Typography
-            variant="h6"
-            sx={{
-              color: textColor,
-              fontWeight: 900,
-              lineHeight: 1.2,
-              fontSize: '1.15rem',
-              letterSpacing: '-0.02em',
-              mb: 0.75,
-              minHeight: '1.35em',
-            }}
-          >
-            {t(offer.titleKey)}
-          </Typography>
+        <Box sx={{ minHeight: { xs: 72, md: 76 } }}>
           <Typography
             sx={{
               color: textColor,
