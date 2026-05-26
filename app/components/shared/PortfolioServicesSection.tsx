@@ -1,7 +1,6 @@
 'use client'
 
 import AutoAwesomeOutlinedIcon from '@mui/icons-material/AutoAwesomeOutlined'
-import BuildOutlinedIcon from '@mui/icons-material/BuildOutlined'
 import CheckRoundedIcon from '@mui/icons-material/CheckRounded'
 import CodeOutlinedIcon from '@mui/icons-material/CodeOutlined'
 import LanguageOutlinedIcon from '@mui/icons-material/LanguageOutlined'
@@ -28,11 +27,11 @@ import type { SvgIconComponent } from '@mui/icons-material'
 
 const CONTACT_PATH = '/portfolio/contact'
 const TIMELENDR_PATH = '/logiciel/timelendr'
-/** Nombre de lignes « puce » — identique sur les 4 cartes pour l’alignement visuel. */
+/** Nombre de lignes « puce » — identique sur les 3 cartes pour l’alignement visuel. */
 const PACK_BULLET_SLOTS = 4
 const PACK_BULLET_ROW_MIN = 48
-/** Hauteur commune des bandeaux orange (titre + notes sur 2 cartes). */
-const PACK_HEADER_HEIGHT = { xs: 300, md: 312 }
+/** Hauteur commune des bandeaux orange (notes courtes). */
+const PACK_HEADER_HEIGHT = { xs: 268, md: 280 }
 type PackOffer = {
   id: string
   icon: SvgIconComponent
@@ -58,6 +57,7 @@ const PACK_OFFERS: PackOffer[] = [
     priceKey: 'home.servicesPackAuditPrice',
     forKey: 'home.servicesPackAuditFor',
     bulletKeys: ['home.servicesPackAuditB1', 'home.servicesPackAuditB2', 'home.servicesPackAuditB3'],
+    priceNoteKey: 'home.servicesPackAuditPriceNote',
     ctaKey: 'home.servicesPackAuditCta',
     subjectKey: 'home.servicesPackAuditSubject',
   },
@@ -81,24 +81,10 @@ const PACK_OFFERS: PackOffer[] = [
     badgeKey: 'home.servicesPackPageBadge',
   },
   {
-    id: 'maintain',
-    icon: BuildOutlinedIcon,
-    titleKey: 'home.servicesPackMaintainTitle',
-    priceKey: 'home.servicesPackMaintainPrice',
-    forKey: 'home.servicesPackMaintainFor',
-    bulletKeys: [
-      'home.servicesPackMaintainB1',
-      'home.servicesPackMaintainB2',
-      'home.servicesPackMaintainB3',
-    ],
-    ctaKey: 'home.servicesPackMaintainCta',
-    subjectKey: 'home.servicesPackMaintainSubject',
-  },
-  {
     id: 'software',
     icon: CodeOutlinedIcon,
     titleKey: 'home.servicesPackSoftwareTitle',
-    pricePrefixKey: 'home.servicesPackPriceFrom',
+    pricePrefixKey: 'home.servicesPackPriceFromDes',
     priceKey: 'home.servicesPackSoftwarePrice',
     priceNoteKey: 'home.servicesPackSoftwarePriceNote',
     forKey: 'home.servicesPackSoftwareFor',
@@ -425,7 +411,7 @@ function OfferPackCard({
                 width: '100%',
                 boxSizing: 'border-box',
                 display: 'flex',
-                alignItems: 'center',
+                alignItems: 'flex-start',
                 justifyContent: 'center',
                 gap: 1,
                 py: 0.75,
@@ -437,19 +423,18 @@ function OfferPackCard({
               }}
             >
               <CheckRoundedIcon
-                sx={{ fontSize: 18, color: primary, flexShrink: 0 }}
+                sx={{ fontSize: 18, color: primary, mt: '2px', flexShrink: 0 }}
                 aria-hidden
               />
               <Typography
                 sx={{
-                  flex: 1,
-                  minWidth: 0,
                   color: textColor,
                   opacity: 0.92,
                   fontSize: '0.84rem',
                   lineHeight: 1.45,
                   fontWeight: 500,
                   textAlign: 'center',
+                  maxWidth: '100%',
                 }}
               >
                 {t(key)}
@@ -578,7 +563,7 @@ export default function PortfolioServicesSection() {
       <Box
         sx={{
           display: 'grid',
-          gridTemplateColumns: { xs: '1fr', md: 'repeat(2, 1fr)', xl: 'repeat(4, 1fr)' },
+          gridTemplateColumns: { xs: '1fr', md: 'repeat(2, 1fr)', lg: 'repeat(3, 1fr)' },
           gridTemplateRows: 'auto 1fr',
           gap: { xs: 2, md: 2.5 },
           alignItems: 'stretch',
