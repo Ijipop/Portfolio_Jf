@@ -7,6 +7,11 @@ import { NextRequest, NextResponse } from 'next/server'
 
 type ProjectType = 'logiciel' | 'web'
 
+const PRIVATE_CACHE_HEADERS = {
+	'Cache-Control': 'no-store, no-cache, must-revalidate',
+	Pragma: 'no-cache',
+}
+
 function parseProjectType(input: unknown): ProjectType {
   return input === 'logiciel' ? 'logiciel' : 'web'
 }
@@ -228,11 +233,14 @@ export async function PUT(request: NextRequest, { params }: RouteParams)
 			},
 		})
 
-		return NextResponse.json({
-			success: true,
-			data: updatedProject,
-			message: 'Project modifié avec succès'
-		})
+		return NextResponse.json(
+			{
+				success: true,
+				data: updatedProject,
+				message: 'Project modifié avec succès',
+			},
+			{ headers: PRIVATE_CACHE_HEADERS },
+		)
 	}
 	catch (error)
 	{

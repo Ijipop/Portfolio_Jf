@@ -172,6 +172,9 @@ export default function AdminDashboard() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [formError, setFormError] = useState('');
+  const [savingProject, setSavingProject] = useState(false);
+  const [projectSaveSuccessOpen, setProjectSaveSuccessOpen] = useState(false);
   const [openDialog, setOpenDialog] = useState(false);
   const [editingProject, setEditingProject] = useState<Project | null>(null);
   const [formData, setFormData] = useState({
@@ -240,13 +243,20 @@ export default function AdminDashboard() {
 
   const fetchProjects = useCallback(async () => {
     try {
-      const response = await fetch('/api/projects', { credentials: 'include' });
-      const data = await response.json();
-      
-      if (data.success) {
+      const response = await fetch('/api/projects', {
+        credentials: 'include',
+        cache: 'no-store',
+      });
+      const data = await response.json().catch(() => ({}));
+
+      if (response.ok && data.success) {
         setProjects(data.data);
       } else {
-        setError('Erreur lors du chargement des projets');
+        setError(
+          typeof data.error === 'string'
+            ? data.error
+            : 'Erreur lors du chargement des projets',
+        );
       }
     } catch (error) {
       console.error('Erreur:', error);
@@ -436,6 +446,7 @@ export default function AdminDashboard() {
   };
 
   const handleOpenDialog = (project?: Project) => {
+    setFormError('');
     if (project) {
       setEditingProject(project);
       setFormData({
@@ -474,6 +485,8 @@ export default function AdminDashboard() {
 
   const handleCloseDialog = () => {
     setOpenDialog(false);
+    setFormError('');
+    setSavingProject(false);
     setEditingProject(null);
     setFormData({
       name: '',
@@ -558,7 +571,7 @@ export default function AdminDashboard() {
 
       if (data.success) {
         const url = data.data.url as string;
-        setFormData({ ...formData, imageUrl: url });
+        setFormData((prev) => ({ ...prev, imageUrl: url }));
         setPreviewImage(getImageUrl(url));
         setError('');
       } else {
@@ -637,11 +650,14 @@ export default function AdminDashboard() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+    setFormError('');
+
     if (!formData.name || !formData.description || !formData.technologies || !formData.status) {
-      setError('Tous les champs obligatoires doivent être remplis');
+      setFormError('Tous les champs obligatoires doivent être remplis.');
       return;
     }
+
+    setSavingProject(true);
 
     try {
       const url = editingProject ? `/api/projects/${editingProject.id}` : '/api/projects';
@@ -654,24 +670,38 @@ export default function AdminDashboard() {
       const response = await fetch(url, {
         method,
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
         },
         credentials: 'include',
-        body: JSON.stringify(payload)
+        cache: 'no-store',
+        body: JSON.stringify(payload),
       });
 
-      const data = await response.json();
+      const data = await response.json().catch(() => ({}));
 
-      if (data.success) {
-        await fetchProjects();
-        handleCloseDialog();
-        setError('');
-      } else {
-        setError(data.error || 'Erreur lors de la sauvegarde');
+      if (!response.ok || !data.success) {
+        if (response.status === 401) {
+          setFormError('Session expirée. Reconnectez-vous.');
+          redirectToAdminLogin();
+          return;
+        }
+        setFormError(
+          typeof data.error === 'string'
+            ? data.error
+            : `Erreur lors de la sauvegarde (${response.status})`,
+        );
+        return;
       }
+
+      await fetchProjects();
+      handleCloseDialog();
+      setError('');
+      setProjectSaveSuccessOpen(true);
     } catch (error) {
       console.error('Erreur:', error);
-      setError('Erreur lors de la sauvegarde');
+      setFormError('Erreur réseau lors de la sauvegarde. Réessayez.');
+    } finally {
+      setSavingProject(false);
     }
   };
 
@@ -684,6 +714,7 @@ export default function AdminDashboard() {
       const response = await fetch(`/api/projects/${id}`, {
         method: 'DELETE',
         credentials: 'include',
+        cache: 'no-store',
       });
 
       const data = await response.json();
@@ -829,6 +860,17 @@ export default function AdminDashboard() {
             {error}
           </Alert>
         )}
+
+        <Snackbar
+          open={projectSaveSuccessOpen}
+          autoHideDuration={5000}
+          onClose={() => setProjectSaveSuccessOpen(false)}
+          anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+        >
+          <Alert severity="success" onClose={() => setProjectSaveSuccessOpen(false)} sx={{ width: '100%' }}>
+            Projet enregistré dans la base de données.
+          </Alert>
+        </Snackbar>
 
         <Snackbar
           open={timelendrSuccessOpen}
@@ -1198,6 +1240,11 @@ export default function AdminDashboard() {
         </DialogTitle>
         <form onSubmit={handleSubmit}>
           <DialogContent>
+            {formError ? (
+              <Alert severity="error" sx={{ mb: 2 }} onClose={() => setFormError('')}>
+                {formError}
+              </Alert>
+            ) : null}
             <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
               Par défaut, les fichiers vont dans <code>public/</code> sur la machine qui exécute Node — comme avant
               (développement local, VPS, etc.). Le stockage <strong>Vercel Blob</strong> reste{' '}
@@ -1422,7 +1469,7 @@ export default function AdminDashboard() {
                 value={formData.imageUrl}
                 onChange={(e) => {
                   const v = e.target.value;
-                  setFormData({ ...formData, imageUrl: v });
+                  setFormData((prev) => ({ ...prev, imageUrl: v }));
                   const t = v.trim();
                   setPreviewImage(t ? getImageUrl(t) : null);
                 }}
@@ -1431,9 +1478,11 @@ export default function AdminDashboard() {
             </Box>
           </DialogContent>
           <DialogActions>
-            <Button onClick={handleCloseDialog}>Annuler</Button>
-            <Button type="submit" variant="contained">
-              {editingProject ? 'Modifier' : 'Ajouter'}
+            <Button onClick={handleCloseDialog} disabled={savingProject}>
+              Annuler
+            </Button>
+            <Button type="submit" variant="contained" disabled={savingProject}>
+              {savingProject ? 'Enregistrement…' : editingProject ? 'Modifier' : 'Ajouter'}
             </Button>
           </DialogActions>
         </form>

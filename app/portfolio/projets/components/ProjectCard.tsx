@@ -67,6 +67,9 @@ const ProjectImageContainer = styled(Box)(({ theme }) => ({
 }))
 
 function resolveProjectCardImage(project: Project): string | undefined {
+  const uploaded = project.imageUrl?.trim()
+  if (uploaded) return uploaded
+
   const n = project.name.toLowerCase()
   const u = (project.url ?? '').toLowerCase()
   if (n.includes('thermo') && n.includes('trappeur')) return 'imgs/images/Thermo.png'
@@ -184,7 +187,7 @@ export default function ProjectCard({
     isNonDefaultPalette,
   }
 
-  const cardImageRaw = resolveProjectCardImage(project) ?? project.imageUrl
+  const cardImageRaw = resolveProjectCardImage(project)
   const cardImageHref = cardImageRaw ? resolveImageUrl(cardImageRaw) : ''
   const projectTechs = project.technologies.split(',').map((tech) => tech.trim()).filter(Boolean)
   const projectRoleLabel = cardVariant === 'web' ? t('projects.metaRoleWeb') : t('projects.metaRoleSoftware')
@@ -301,7 +304,6 @@ export default function ProjectCard({
   return (
     <ScrollReveal
       key={project.id}
-      fillHeight
       direction="up"
       distance={isMobile ? 30 : 50}
       delay={isMobile ? 0.08 * (index % 4) : 0.05 * (index % 4)}
@@ -309,8 +311,8 @@ export default function ProjectCard({
       <Box
         sx={{
           width: '100%',
-          flex: 1,
-          minHeight: 0,
+          height: '100%',
+          minHeight: { xs: 280, sm: 300 },
           display: 'flex',
           flexDirection: 'column',
         }}
