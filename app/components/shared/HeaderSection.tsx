@@ -106,8 +106,14 @@ const HeaderSection = forwardRef<HTMLDivElement, HeaderSectionProps>(function He
         position: 'relative',
         overflow: 'hidden',
         ...(fullViewport && {
-          minHeight: { xs: 'auto', sm: 'calc(100dvh - 64px)', md: 'calc(100dvh - 72px)' },
-          display: 'block',
+          /** Mobile : occuper tout l’écran sous l’AppBar pour que les offres restent sous la ligne de flottaison. */
+          minHeight: {
+            xs: 'calc(100svh - 56px)',
+            sm: 'calc(100dvh - 64px)',
+            md: 'calc(100dvh - 72px)',
+          },
+          display: { xs: 'flex', sm: 'block' },
+          flexDirection: { xs: 'column', sm: 'unset' },
           boxSizing: 'border-box',
         }),
         [theme.breakpoints.down('sm')]: {
@@ -149,6 +155,12 @@ const HeaderSection = forwardRef<HTMLDivElement, HeaderSectionProps>(function He
             ? {
                 position: 'relative',
                 zIndex: 1,
+                flex: { xs: 1, sm: 'unset' },
+                display: { xs: 'flex', sm: 'block' },
+                flexDirection: { xs: 'column', sm: 'unset' },
+                justifyContent: { xs: 'space-between', sm: 'unset' },
+                minHeight: { xs: 0, sm: 'unset' },
+                width: '100%',
               }
             : undefined
         }

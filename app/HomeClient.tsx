@@ -123,8 +123,8 @@ export default function HomeClient({ initialShowIntro }: { initialShowIntro: boo
       <Container
         maxWidth="lg"
         sx={{
-          /** Espace au-dessus du bloc présentation (60px desktop, un peu moins sur très petit écran). */
-          pt: { xs: 'clamp(36px, 10vw, 60px)', sm: '60px' },
+          /** Espace au-dessus des offres — réduit sur mobile (le hero remplit déjà le viewport). */
+          pt: { xs: 'clamp(20px, 5vw, 32px)', sm: '60px' },
           pb: { xs: 3, sm: 4, md: 8 },
           px: { xs: 1.5, sm: 3, md: 4 },
           position: 'relative',
