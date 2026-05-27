@@ -170,7 +170,7 @@ export default function Projets() {
 
   const fetchProjects = async () => {
     try {
-      const response = await fetch('/api/projects')
+      const response = await fetch('/api/projects', { cache: 'no-store' })
       const data = await response.json()
 
       if (data.success) {
