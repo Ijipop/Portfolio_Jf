@@ -7,9 +7,14 @@ import { NextRequest, NextResponse } from 'next/server'
 
 type ProjectType = 'logiciel' | 'web'
 
+/**
+ * Liste éditable en admin : pas de cache « edge » long (s-maxage), sinon une suppression
+ * reste visible sur le site public jusqu’à expiration du cache CDN/navigateur.
+ */
 const PUBLIC_CACHE_HEADERS = {
-	'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=86400',
-	/** Évite qu’un GET public mis en cache soit réutilisé après connexion admin (même URL). */
+	'Cache-Control': 'private, max-age=0, must-revalidate',
+	Pragma: 'no-cache',
+	/** Distinct admin vs anonyme (sélection Prisma + headers). */
 	Vary: 'Cookie',
 }
 
