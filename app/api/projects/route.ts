@@ -9,10 +9,13 @@ type ProjectType = 'logiciel' | 'web'
 
 const PUBLIC_CACHE_HEADERS = {
 	'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=86400',
+	/** Évite qu’un GET public mis en cache soit réutilisé après connexion admin (même URL). */
+	Vary: 'Cookie',
 }
 
 const PRIVATE_CACHE_HEADERS = {
-	'Cache-Control': 'no-store',
+	'Cache-Control': 'no-store, no-cache, must-revalidate',
+	Pragma: 'no-cache',
 }
 
 const publicProjectSelect = {
@@ -197,7 +200,8 @@ export async function POST(request: NextRequest)
 				message: 'Project créé avec succès'
 			},
 			{
-				status: 201
+				status: 201,
+				headers: PRIVATE_CACHE_HEADERS,
 			}
 		)
 	}

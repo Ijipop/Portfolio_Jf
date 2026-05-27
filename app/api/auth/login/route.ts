@@ -1,10 +1,8 @@
 import { getClientIp } from '@/lib/rate-limit-ip'
-import { PrismaClient } from '@prisma/client'
+import { prisma } from '@/lib/prisma'
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 import { NextRequest, NextResponse } from 'next/server'
-
-const prisma = new PrismaClient()
 const WINDOW_MS = 10 * 60 * 1000
 const MAX_ATTEMPTS = 8
 const attemptsByIp = new Map<string, { count: number; firstAttemptAt: number }>()
