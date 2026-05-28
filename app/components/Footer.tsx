@@ -195,6 +195,20 @@ export default function Footer() {
                   {t('home.servicesCtaAi')}
                 </Typography>
               </Link>
+              <Link href="/creation-site-web-montreal" style={{ textDecoration: 'none' }}>
+                <Typography
+                  variant="body2"
+                  sx={{
+                    opacity: 0.8,
+                    cursor: 'pointer',
+                    transition: DESIGN_TOKENS.transitions.normal,
+                    color: textColor,
+                    '&:hover': { opacity: 1, transform: 'translateX(4px)' }
+                  }}
+                >
+                  {t('seo.footerLink')}
+                </Typography>
+              </Link>
             </Box>
           </Box>
 

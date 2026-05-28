@@ -8,6 +8,7 @@ import ManageSearchOutlinedIcon from '@mui/icons-material/ManageSearchOutlined'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import { alpha, useTheme } from '@mui/material/styles'
+import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useMemo } from 'react'
 import CTAButton from '@/components/shared/CTAButton'
@@ -27,6 +28,7 @@ import type { SvgIconComponent } from '@mui/icons-material'
 
 const CONTACT_PATH = '/portfolio/contact'
 const TIMELENDR_PATH = '/logiciel/timelendr'
+const SEO_LANDING_PATH = '/creation-site-web-montreal'
 /** Nombre de lignes « puce » — identique sur les 3 cartes pour l’alignement visuel. */
 const PACK_BULLET_SLOTS = 4
 const PACK_BULLET_ROW_MIN = 48
@@ -490,6 +492,26 @@ function OfferPackCard({
             >
               {t(offer.secondaryCtaKey)}
             </CTAButton>
+          ) : null}
+          {offer.id === 'page' ? (
+            <Link href={SEO_LANDING_PATH} style={{ textDecoration: 'none', width: '100%' }}>
+              <Typography
+                component="span"
+                sx={{
+                  display: 'block',
+                  textAlign: 'center',
+                  color: primary,
+                  fontSize: '0.82rem',
+                  fontWeight: 600,
+                  lineHeight: 1.45,
+                  mt: 0.5,
+                  opacity: 0.9,
+                  '&:hover': { opacity: 1, textDecoration: 'underline' },
+                }}
+              >
+                {t('seo.servicesPackLink')}
+              </Typography>
+            </Link>
           ) : null}
         </Box>
       </Box>

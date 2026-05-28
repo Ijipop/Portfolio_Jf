@@ -18,6 +18,7 @@ import { getCardSurfaceSx } from '@/components/shared/cardSurface'
 import { shouldShowTopology } from '@/utils/topologyRoutes'
 import { usePathname } from 'next/navigation'
 import TimelendrCarousel from './TimelendrCarousel'
+import SeoInternalLinkCta from '../../components/seo/SeoInternalLinkCta'
 import styles from './TimelendrProduct.module.css'
 
 const FEATURE_PILLARS = [
@@ -273,6 +274,14 @@ export default function TimelendrPage() {
             >
               {t('timelendr.privateProject')}
             </Typography>
+
+            <SeoInternalLinkCta
+              title={t('seo.timelendrTitle')}
+              body={t('seo.timelendrBody')}
+              href="/creation-site-web-montreal"
+              linkLabel={t('seo.timelendrLink')}
+              variant="compact"
+            />
           </Container>
         </Box>
       </InteractiveBackgroundSection>

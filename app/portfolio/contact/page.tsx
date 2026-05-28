@@ -33,6 +33,7 @@ import AiLeadDiagnosis, {
   type AiLeadDiagnosisResult,
 } from '../../components/contact/AiLeadDiagnosis'
 import ContactCoffeeVideo from '../../components/contact/ContactCoffeeVideo'
+import SeoInternalLinkCta from '../../components/seo/SeoInternalLinkCta'
 import { DESIGN_TOKENS } from '../../design-system/constants'
 import { useTextColor } from '../../hooks/useTextColor'
 import { useThemeColors } from '../../hooks/useThemeColors'
@@ -607,6 +608,14 @@ export default function Contact() {
         </Box>
 
         <ContactCoffeeVideo compact={useCompactContact} />
+
+        <SeoInternalLinkCta
+          title={t('seo.contactTitle')}
+          body={t('seo.contactBody')}
+          href="/creation-site-web-montreal"
+          linkLabel={t('seo.contactLink')}
+          variant="compact"
+        />
       </Container>
       </InteractiveBackgroundSection>
 

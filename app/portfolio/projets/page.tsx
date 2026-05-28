@@ -36,6 +36,7 @@ import type { Project, TimelendrLatestLinks } from './projectTypes'
 import { ProjectsGrid } from './components/projectsGrid'
 import ProjectsStatsStrip from './components/ProjectsStatsStrip'
 import ProjectCard from './components/ProjectCard'
+import SeoInternalLinkCta from '../../components/seo/SeoInternalLinkCta'
 
 const AnimatedBox = styled(Box)({
   animation: 'fadeIn 0.6s ease-out',
@@ -523,6 +524,15 @@ export default function Projets() {
               </Box>
             </AnimatedBox>
           )}
+        </Container>
+
+        <Container maxWidth="lg">
+          <SeoInternalLinkCta
+            title={t('seo.projetsTitle')}
+            body={t('seo.projetsBody')}
+            href="/creation-site-web-montreal"
+            linkLabel={t('seo.projetsLink')}
+          />
         </Container>
       </InteractiveBackgroundSection>
 
