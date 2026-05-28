@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { Analytics } from '@vercel/analytics/next'
+import Script from 'next/script'
 import WebVitalsReporter from './components/WebVitalsReporter'
 import ContactFab from './components/shared/ContactFab'
 import SeoJsonLd from './components/SeoJsonLd'
@@ -74,6 +75,18 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           </FullPageTopologyWrapper>
           <ContactFab />
         </ThemeWrapper>
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=AW-18192980748"
+          strategy="afterInteractive"
+        />
+        <Script id="google-ads-aw" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'AW-18192980748');
+          `}
+        </Script>
         <Analytics />
       </body>
     </html>
