@@ -3,6 +3,7 @@ import { THEMES } from '@/design-system/themes'
 import { getBeigePresentationTopologyBackground } from '@/utils/syncPortfolioThemeToDocument'
 import DemosAiVideoShowcase from './DemosAiVideoShowcase'
 import DemosIndexAnimatedGrid from './DemosIndexAnimatedGrid'
+import DemosSeoCta from './DemosSeoCta'
 import styles from './DemosIndex.module.css'
 
 const hubBackground = getBeigePresentationTopologyBackground(THEMES.latte)
@@ -64,6 +65,7 @@ export default function DemosIndexPage() {
         </p>
         <DemosAiVideoShowcase />
         <DemosIndexAnimatedGrid cards={cards} />
+        <DemosSeoCta />
         <Link href="/" className={styles.back}>
           ← Retour à l’accueil
         </Link>

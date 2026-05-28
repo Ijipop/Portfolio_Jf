@@ -382,6 +382,26 @@ export const translations = {
       emptyWeb: 'Aucun site web pour le moment',
       emptyLogiciel: 'Aucun logiciel pour le moment',
     },
+    seo: {
+      footerLink: 'Création de site web Montréal et Québec',
+      servicesPackLink: 'En savoir plus : création de site web à Montréal et au Québec',
+      contactTitle: 'Besoin d’un site web sur mesure ?',
+      contactBody:
+        'Découvrez mon offre de création de sites vitrines et refontes pour le Québec — basé à Montréal, mandats partout au Québec.',
+      contactLink: 'Création de site web Montréal et Québec',
+      projetsTitle: 'Besoin d’un site comme ceux-ci ?',
+      projetsBody:
+        'Je crée des sites vitrines et portfolios pour travailleurs autonomes et PME à Montréal et partout au Québec.',
+      projetsLink: 'Voir l’offre site web',
+      timelendrTitle: 'Un site vitrine pour votre activité ?',
+      timelendrBody:
+        'En plus des outils logiciels, je conçois des sites web clairs pour présenter votre offre au Québec.',
+      timelendrLink: 'Création de site web',
+      demosTitle: 'Faire créer un site sur mesure',
+      demosBody:
+        'Ces démos illustrent des directions graphiques — je peux créer un site adapté à votre secteur, à Montréal et partout au Québec.',
+      demosLink: 'Création de site web Montréal et Québec',
+    },
     footer: {
       landmarkLabel: 'Pied de page du site',
       tagline:
@@ -924,6 +944,26 @@ export const translations = {
       viewLess: 'Show less',
       emptyWeb: 'No web projects yet',
       emptyLogiciel: 'No software projects yet',
+    },
+    seo: {
+      footerLink: 'Website creation Montreal and Quebec',
+      servicesPackLink: 'Learn more: website creation in Montreal and across Quebec',
+      contactTitle: 'Need a custom website?',
+      contactBody:
+        'Explore my website creation and redesign offer for Quebec — based in Montreal, projects across the province.',
+      contactLink: 'Website creation Montreal and Quebec',
+      projetsTitle: 'Need a site like these?',
+      projetsBody:
+        'I build brochure sites and portfolios for freelancers and SMBs in Montreal and across Quebec.',
+      projetsLink: 'See the website offer',
+      timelendrTitle: 'A brochure site for your business?',
+      timelendrBody:
+        'Beyond software tools, I design clear websites to present your offer in Quebec.',
+      timelendrLink: 'Website creation',
+      demosTitle: 'Get a custom site built',
+      demosBody:
+        'These demos show creative directions — I can build a site for your sector in Montreal and across Quebec.',
+      demosLink: 'Website creation Montreal and Quebec',
     },
     footer: {
       landmarkLabel: 'Site footer',

@@ -109,7 +109,12 @@ const nextConfig = {
         permanent: true,
       },
       { source: '/api/timelendar/:path*', destination: '/api/timelendr/:path*', permanent: true },
-      { source: '/pageweb', destination: '/portfolio/pageweb', permanent: true },
+      { source: '/pageweb', destination: '/creation-site-web-montreal', permanent: true },
+      {
+        source: '/portfolio/pageweb',
+        destination: '/creation-site-web-montreal',
+        permanent: true,
+      },
     ]
   },
 
