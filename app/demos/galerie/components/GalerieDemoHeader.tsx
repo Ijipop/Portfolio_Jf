@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import DemoResponsiveTopNav from '../../DemoResponsiveTopNav'
-import { SITE } from '../galerieDemoContent'
+import { FOOTER, SITE } from '../galerieDemoContent'
 import styles from '../GalerieDemo.module.css'
 
 export default function GalerieDemoHeader() {
@@ -19,6 +19,9 @@ export default function GalerieDemoHeader() {
       >
         <a href="#projets">{SITE.navProjects}</a>
         <a href="#info">{SITE.navInfo}</a>
+        <Link href="/demos" className={styles.navDemosLink}>
+          {FOOTER.backLabel}
+        </Link>
       </DemoResponsiveTopNav>
     </header>
   )

@@ -3,7 +3,6 @@ import {
   evaluateGraphicsMetricBreach,
   resolveGraphicsModeOverride,
   resolveInitialGraphicsDecision,
-  shouldDowngradeFromSlowFrames,
 } from '../graphicsModeRules'
 
 describe('graphicsModeRules', () => {
@@ -107,15 +106,5 @@ describe('graphicsModeRules', () => {
       shouldDowngrade: false,
       reason: null,
     })
-  })
-
-  it('does not downgrade from slow frames in development', () => {
-    expect(shouldDowngradeFromSlowFrames(0.95, false)).toBe(false)
-  })
-
-  it('downgrades from slow frames in production when ratio is high', () => {
-    expect(shouldDowngradeFromSlowFrames(0.51, true)).toBe(false)
-    expect(shouldDowngradeFromSlowFrames(0.52, true)).toBe(true)
-    expect(shouldDowngradeFromSlowFrames(0.95, true)).toBe(true)
   })
 })

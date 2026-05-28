@@ -396,7 +396,7 @@ export const translations = {
       emptyWeb: 'Aucun site web pour le moment',
       emptyLogiciel: 'Aucun logiciel pour le moment',
       heroCommercialLead:
-        'Besoin d’un site comme ceux-ci ? Sites vitrines à partir de 1 200 $ — Montréal et Québec.',
+        'Un site vitrine pour votre activité ? À partir de 499 $ — Montréal et Québec.',
       heroCommercialCta: 'Obtenir une estimation',
       heroCommercialSecondary: 'Voir l’offre site web',
       heroCommercialSubject: 'Demande : site web professionnel',
@@ -978,7 +978,7 @@ export const translations = {
       emptyWeb: 'No web projects yet',
       emptyLogiciel: 'No software projects yet',
       heroCommercialLead:
-        'Need a site like these? Showcase sites from $1,200 — Montreal and Quebec.',
+        'Need a showcase site for your business? From $499 — Montreal and Quebec.',
       heroCommercialCta: 'Get an estimate',
       heroCommercialSecondary: 'See the website offer',
       heroCommercialSubject: 'Offer: professional website',

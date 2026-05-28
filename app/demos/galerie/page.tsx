@@ -14,13 +14,16 @@ export default function GalerieDemoPage() {
         <GalerieDemoGrid />
         <GalerieDemoInfo />
 
+        <p className={styles.demosBack}>
+          <Link href="/demos">{FOOTER.backLabel}</Link>
+        </p>
+
         <div className={styles.attributionWrap}>
           <DemoVitrineAttribution />
         </div>
 
         <footer className={styles.footer}>
           <span>{FOOTER.copyright}</span>
-          <Link href="/demos">{FOOTER.backLabel}</Link>
         </footer>
       </div>
     </div>
