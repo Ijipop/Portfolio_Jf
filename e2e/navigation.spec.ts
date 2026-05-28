@@ -90,7 +90,7 @@ test('logiciel and SEO landing routes are reachable', async ({ page }) => {
 test('demos index and demo routes', async ({ page }) => {
   await page.goto('/demos', { waitUntil: 'domcontentloaded' })
   await expect(page).toHaveURL(/\/demos\/?$/)
-  await expect(page.locator('h1').first()).toContainText(/Six directions créatives/)
+  await expect(page.locator('h1').first()).toContainText(/Huit directions créatives/)
   await expect(page.locator('a[href="/demos/studio"]').first()).toBeVisible()
   await expect(page.locator('a[href="/demos/spectacle"]').first()).toBeVisible()
   await expect(page.getByTestId('demos-grid-ready')).toBeVisible()
@@ -108,5 +108,13 @@ test('demos index and demo routes', async ({ page }) => {
 
   await page.goto('/demos/spectacle', { waitUntil: 'domcontentloaded' })
   await expect(page.locator('h1').filter({ hasText: /Une scène pour les voix/ })).toBeVisible()
+
+  await page.goto('/demos/portfolio', { waitUntil: 'domcontentloaded' })
+  await expect(page.locator('h1').filter({ hasText: /pensés pour convertir/ })).toBeVisible()
+  await expect(page.getByText('Jean-François Lefebvre')).toBeVisible()
+
+  await page.goto('/demos/galerie', { waitUntil: 'domcontentloaded' })
+  await expect(page.getByRole('link', { name: 'Ligne claire' })).toBeVisible()
+  await expect(page.getByRole('link', { name: /Maison Nord/ })).toBeVisible()
 })
 

@@ -45,6 +45,18 @@ const demos = [
     desc: 'Salle culturelle, affiche et or — programmation et billetterie.',
     thumb: styles.thumbSpectacle,
   },
+  {
+    href: '/demos/portfolio',
+    title: 'Portfolio créateur',
+    desc: 'Sobre, premium, bento — vitrine développeur web à Montréal.',
+    thumb: styles.thumbPortfolio,
+  },
+  {
+    href: '/demos/galerie',
+    title: 'Galerie minimaliste',
+    desc: 'Créatif punchy — grille serrée, overlay sombre, projets cliquables.',
+    thumb: styles.thumbGalerie,
+  },
 ] as const
 
 export default function DemosIndexPage() {
@@ -59,7 +71,7 @@ export default function DemosIndexPage() {
     <div className={styles.page} style={{ background: hubBackground }}>
       <div className={styles.inner}>
         <span className={styles.kicker}>Exemples de styles</span>
-        <h1 className={styles.title}>Six directions créatives pour votre prochain site</h1>
+        <h1 className={styles.title}>Huit directions créatives pour votre prochain site</h1>
         <p className={styles.lead}>
           Chaque page illustre une direction graphique et un secteur différents. Ouvrez celles qui vous parlent.
         </p>
