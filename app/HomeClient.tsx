@@ -19,6 +19,9 @@ import InteractiveBackgroundSection from './components/shared/InteractiveBackgro
 import PortfolioStatsBand from './components/shared/PortfolioStatsBand'
 import PortfolioServicesSection from './components/shared/PortfolioServicesSection'
 import PortfolioProcessSection from './components/shared/PortfolioProcessSection'
+import ClientProofSection from './components/shared/ClientProofSection'
+import ScrollTriggeredStickyCTA from './components/shared/ScrollTriggeredStickyCTA'
+import CTAButton from './components/shared/CTAButton'
 import ScrollReveal from './components/shared/ScrollReveal'
 import Footer from './components/Footer'
 import { DESIGN_TOKENS } from './design-system/constants'
@@ -125,7 +128,7 @@ export default function HomeClient({ initialShowIntro }: { initialShowIntro: boo
         sx={{
           /** Espace au-dessus des offres — réduit sur mobile (le hero remplit déjà le viewport). */
           pt: { xs: 'clamp(20px, 5vw, 32px)', sm: '60px' },
-          pb: { xs: 3, sm: 4, md: 8 },
+          pb: { xs: 10, sm: 4, md: 8 },
           px: { xs: 1.5, sm: 3, md: 4 },
           position: 'relative',
           zIndex: 2,
@@ -133,6 +136,16 @@ export default function HomeClient({ initialShowIntro }: { initialShowIntro: boo
       >
         {SHOW_HOME_STATS_BAND && <PortfolioStatsBand />}
         <PortfolioServicesSection />
+
+        <ClientProofSection
+          kicker={t('proof.thermoKicker')}
+          title={t('proof.thermoTitle')}
+          body={t('proof.thermoBody')}
+          projectLabel={t('proof.thermoProjectLink')}
+          projectHref="/portfolio/projets"
+          proofOnly
+        />
+
         {SHOW_HOME_SITE_INTRO && <HomeHeroServicesSection />}
 
         {SHOW_HOME_DEMOS_BAND && (
@@ -171,26 +184,9 @@ export default function HomeClient({ initialShowIntro }: { initialShowIntro: boo
             </Box>
             <Box sx={{ display: 'flex', justifyContent: { xs: 'center', sm: 'flex-end' } }}>
               <Link href="/demos" style={{ textDecoration: 'none' }}>
-                <Box
-                  component="span"
-                  sx={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    px: 2.5,
-                    py: 1.25,
-                    borderRadius: DESIGN_TOKENS.borderRadius.small,
-                    fontWeight: 800,
-                    fontSize: '0.9rem',
-                    color: '#fff',
-                    background: `linear-gradient(135deg, ${primary} 0%, ${primary}dd 100%)`,
-                    boxShadow: `0 10px 28px ${alpha(primary, 0.35)}`,
-                    transition: DESIGN_TOKENS.transitions.normal,
-                    '&:hover': { filter: 'brightness(1.05)', transform: 'translateY(-1px)' },
-                  }}
-                >
+                <CTAButton variant="primary" size="medium">
                   {t('home.demosBandCta')}
-                </Box>
+                </CTAButton>
               </Link>
             </Box>
           </Box>
@@ -261,6 +257,7 @@ export default function HomeClient({ initialShowIntro }: { initialShowIntro: boo
       </InteractiveBackgroundSection>
       
       <Footer />
+      <ScrollTriggeredStickyCTA text={t('home.stickyCTA')} />
       </Box>
     </PageWrapper>
       )}

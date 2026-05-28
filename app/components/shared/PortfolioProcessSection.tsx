@@ -2,9 +2,11 @@
 
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
+import Link from 'next/link'
 import { motion, useReducedMotion } from 'framer-motion'
 import { useEffect, useState } from 'react'
 import ScrollReveal from './ScrollReveal'
+import CTAButton from './CTAButton'
 import { BRAND_GLITCH_GRADIENT } from './IjipopGlitchTitle'
 import { useAdvancedTheme } from '@/contexts/AdvancedThemeContext'
 import { useLanguage } from '@/contexts/LanguageContext'
@@ -209,6 +211,16 @@ export default function PortfolioProcessSection() {
           ))}
         </Box>
       </Box>
+
+      <ScrollReveal direction="up" delay={0.1}>
+        <Box sx={{ textAlign: 'center', mt: { xs: 3.5, md: 4.5 } }}>
+          <Link href="/portfolio/contact" style={{ textDecoration: 'none' }}>
+            <CTAButton variant="primary" size="large">
+              {t('home.processCta')}
+            </CTAButton>
+          </Link>
+        </Box>
+      </ScrollReveal>
     </Box>
   )
 }

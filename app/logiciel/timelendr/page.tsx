@@ -279,7 +279,7 @@ export default function TimelendrPage() {
               title={t('seo.timelendrTitle')}
               body={t('seo.timelendrBody')}
               href="/creation-site-web-montreal"
-              linkLabel={t('seo.timelendrLink')}
+              linkLabel={t('common.getEstimate')}
               variant="compact"
             />
           </Container>

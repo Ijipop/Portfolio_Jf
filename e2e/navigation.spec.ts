@@ -58,6 +58,7 @@ test('contact form renders stable fields', async ({ page }) => {
   await expect(form.locator('input[name="email"]')).toBeVisible()
   await expect(form.locator('input[name="subject"]')).toBeVisible()
   await expect(form.locator('textarea[name="message"]')).toBeVisible()
+  await expect(form.locator('button[type="submit"]')).toContainText(/Obtenir une estimation|Get an estimate/i)
 })
 
 test('light graphics mode can be forced for fallback validation', async ({ page }) => {

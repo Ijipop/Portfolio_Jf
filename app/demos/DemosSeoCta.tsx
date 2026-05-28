@@ -13,7 +13,7 @@ export default function DemosSeoCta() {
         title={t('seo.demosTitle')}
         body={t('seo.demosBody')}
         href="/creation-site-web-montreal"
-        linkLabel={t('seo.demosLink')}
+        linkLabel={t('common.getEstimate')}
         variant="compact"
       />
     </div>

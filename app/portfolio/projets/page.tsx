@@ -36,7 +36,8 @@ import type { Project, TimelendrLatestLinks } from './projectTypes'
 import { ProjectsGrid } from './components/projectsGrid'
 import ProjectsStatsStrip from './components/ProjectsStatsStrip'
 import ProjectCard from './components/ProjectCard'
-import SeoInternalLinkCta from '../../components/seo/SeoInternalLinkCta'
+import CTAButton from '../../components/shared/CTAButton'
+import Link from 'next/link'
 
 const AnimatedBox = styled(Box)({
   animation: 'fadeIn 0.6s ease-out',
@@ -311,6 +312,39 @@ export default function Projets() {
       <HeaderSection title={<IjipopGlitchTitle text={t('projects.title')} />} subtitle={t('projects.subtitle')} />
 
       <InteractiveBackgroundSection>
+        <Container maxWidth="lg" sx={{ pt: { xs: 2, sm: 3 }, pb: 0, px: { xs: 1.5, sm: 3 } }}>
+          <ScrollReveal direction="up" delay={0.04}>
+            <Box sx={{ textAlign: 'center', maxWidth: 720, mx: 'auto', mb: { xs: 3, md: 4 } }}>
+              <Typography
+                sx={{
+                  color: textColor,
+                  opacity: 0.9,
+                  lineHeight: 1.65,
+                  mb: 2.5,
+                  fontSize: { xs: '0.98rem', sm: '1.05rem' },
+                }}
+              >
+                {t('projects.heroCommercialLead')}
+              </Typography>
+              <Box sx={{ display: 'flex', gap: 2, justifyContent: 'center', flexWrap: 'wrap' }}>
+                <Link
+                  href={`/portfolio/contact?subject=${encodeURIComponent(t('projects.heroCommercialSubject'))}`}
+                  style={{ textDecoration: 'none' }}
+                >
+                  <CTAButton variant="primary" size="large">
+                    {t('projects.heroCommercialCta')}
+                  </CTAButton>
+                </Link>
+                <Link href="/creation-site-web-montreal" style={{ textDecoration: 'none' }}>
+                  <CTAButton variant="outline" size="large">
+                    {t('projects.heroCommercialSecondary')}
+                  </CTAButton>
+                </Link>
+              </Box>
+            </Box>
+          </ScrollReveal>
+        </Container>
+
         <Container maxWidth="lg" sx={{ py: { xs: 3, sm: 4, md: 4, xl: 5 }, position: 'relative', zIndex: 2 }}>
           {error && (
             <AnimatedBox>
@@ -524,15 +558,6 @@ export default function Projets() {
               </Box>
             </AnimatedBox>
           )}
-        </Container>
-
-        <Container maxWidth="lg">
-          <SeoInternalLinkCta
-            title={t('seo.projetsTitle')}
-            body={t('seo.projetsBody')}
-            href="/creation-site-web-montreal"
-            linkLabel={t('seo.projetsLink')}
-          />
         </Container>
       </InteractiveBackgroundSection>
 

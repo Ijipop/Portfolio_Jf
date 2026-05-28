@@ -9,7 +9,8 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle'
 import AccessTimeIcon from '@mui/icons-material/AccessTime'
 import HandshakeIcon from '@mui/icons-material/Handshake'
 import RequestQuoteIcon from '@mui/icons-material/RequestQuote'
-import { Alert, Snackbar, TextField, CircularProgress } from '@mui/material'
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
+import { Alert, Snackbar, TextField, CircularProgress, Collapse, Button } from '@mui/material'
 import Box from '@mui/material/Box'
 import Container from '@mui/material/Container'
 import Typography from '@mui/material/Typography'
@@ -33,7 +34,6 @@ import AiLeadDiagnosis, {
   type AiLeadDiagnosisResult,
 } from '../../components/contact/AiLeadDiagnosis'
 import ContactCoffeeVideo from '../../components/contact/ContactCoffeeVideo'
-import SeoInternalLinkCta from '../../components/seo/SeoInternalLinkCta'
 import { DESIGN_TOKENS } from '../../design-system/constants'
 import { useTextColor } from '../../hooks/useTextColor'
 import { useThemeColors } from '../../hooks/useThemeColors'
@@ -168,6 +168,7 @@ export default function Contact() {
     message: '',
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [showOptionalSections, setShowOptionalSections] = useState(false)
   const contactPromises = [
     { icon: AccessTimeIcon, label: t('contact.promiseResponse') },
     { icon: HandshakeIcon, label: t('contact.promiseCall') },
@@ -413,8 +414,21 @@ export default function Contact() {
               <Typography variant="h4" gutterBottom sx={{ fontWeight: 700, color: primary }}>
                 {t('contact.sendMessage')}
               </Typography>
-              <Typography variant="body1" sx={{ color: textColor, opacity: 0.9 }}>
+              <Typography variant="body1" sx={{ color: textColor, opacity: 0.9, mb: 1.5 }}>
                 {t('contact.sendMessageDesc')}
+              </Typography>
+              <Typography
+                variant="body2"
+                sx={{
+                  color: textColor,
+                  opacity: 0.85,
+                  lineHeight: 1.6,
+                  fontWeight: 600,
+                  maxWidth: 520,
+                  mx: 'auto',
+                }}
+              >
+                {t('contact.pricingAnchor')}
               </Typography>
             </Box>
             
@@ -505,29 +519,8 @@ export default function Contact() {
                   textColor={textColor}
                   helperTextColor={`${textColor}B3`}
                 />
-
-                <ProjectWebBriefSection
-                  include={includeProjectWeb}
-                  onIncludeChange={handleIncludeProjectWebChange}
-                  value={projectWeb}
-                  onChange={handleProjectWebChange}
-                  textColor={textColor}
-                  compact={useCompactContact}
-                />
-
-                <Box id="diagnostic-ia" sx={{ scrollMarginTop: 96 }}>
-                  <AiLeadDiagnosis
-                    formData={formData}
-                    projectWeb={projectWeb}
-                    includeProjectWeb={includeProjectWeb}
-                    value={aiDiagnosis}
-                    onChange={setAiDiagnosis}
-                    textColor={textColor}
-                    compact={useCompactContact}
-                  />
-                </Box>
               </Box>
-              
+
               <CTAButton
                 variant="primary"
                 type="submit"
@@ -537,6 +530,55 @@ export default function Contact() {
               >
                 {isSubmitting ? t('contact.sending') : t('contact.sendButton')}
               </CTAButton>
+
+              <Box sx={{ mt: 2 }}>
+                <Button
+                  type="button"
+                  onClick={() => setShowOptionalSections((open) => !open)}
+                  endIcon={
+                    <ExpandMoreIcon
+                      sx={{
+                        transform: showOptionalSections ? 'rotate(180deg)' : 'none',
+                        transition: 'transform 0.2s ease',
+                      }}
+                    />
+                  }
+                  sx={{
+                    color: textColor,
+                    opacity: 0.85,
+                    textTransform: 'none',
+                    fontWeight: 700,
+                    px: 0,
+                    '&:hover': { bgcolor: 'transparent', opacity: 1 },
+                  }}
+                >
+                  {t('contact.optionalSectionsToggle')}
+                </Button>
+                <Collapse in={showOptionalSections}>
+                  <Box sx={{ display: 'grid', gap: useCompactContact ? 2 : 2.5, mt: 1.5 }}>
+                    <ProjectWebBriefSection
+                      include={includeProjectWeb}
+                      onIncludeChange={handleIncludeProjectWebChange}
+                      value={projectWeb}
+                      onChange={handleProjectWebChange}
+                      textColor={textColor}
+                      compact={useCompactContact}
+                    />
+
+                    <Box id="diagnostic-ia" sx={{ scrollMarginTop: 96 }}>
+                      <AiLeadDiagnosis
+                        formData={formData}
+                        projectWeb={projectWeb}
+                        includeProjectWeb={includeProjectWeb}
+                        value={aiDiagnosis}
+                        onChange={setAiDiagnosis}
+                        textColor={textColor}
+                        compact={useCompactContact}
+                      />
+                    </Box>
+                  </Box>
+                </Collapse>
+              </Box>
             </Box>
           </ThreeDCardComponent>
         </Box>
@@ -608,14 +650,6 @@ export default function Contact() {
         </Box>
 
         <ContactCoffeeVideo compact={useCompactContact} />
-
-        <SeoInternalLinkCta
-          title={t('seo.contactTitle')}
-          body={t('seo.contactBody')}
-          href="/creation-site-web-montreal"
-          linkLabel={t('seo.contactLink')}
-          variant="compact"
-        />
       </Container>
       </InteractiveBackgroundSection>
 
