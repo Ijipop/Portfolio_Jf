@@ -37,8 +37,6 @@ const LIGHT_MODE = 'light'
 const WEB_VITAL_POOR_BREACH_TO_DOWNGRADE = 6
 
 /** Au-dessus de ce ratio de frames lentes, demander le mode light (prod uniquement). */
-const SLOW_FRAME_DOWNGRADE_RATIO = 0.52
-
 const LIGHT_OVERRIDE_VALUES = new Set(['light', 'lite'])
 const FULL_OVERRIDE_VALUES = new Set(['full'])
 
@@ -142,9 +140,4 @@ export function evaluateGraphicsMetricBreach(
     shouldDowngrade: false,
     reason: null,
   }
-}
-
-export function shouldDowngradeFromSlowFrames(slowRatio: number, isProduction: boolean): boolean {
-  if (!isProduction) return false
-  return slowRatio >= SLOW_FRAME_DOWNGRADE_RATIO
 }

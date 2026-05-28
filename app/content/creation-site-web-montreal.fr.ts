@@ -5,12 +5,12 @@ export const seoLandingContent = {
   intro:
     'Basé à Montréal, ijipop accompagne les travailleurs autonomes, petites entreprises et professionnels partout au Québec pour créer des sites web modernes, clairs et adaptés à leurs besoins.',
   contactSubject: 'Demande : création de site web (Montréal / Québec)',
-  ctaPrimary: 'Demander un devis pour mon site web',
+  ctaPrimary: 'Obtenir une estimation',
   ctaSecondary: 'Voir mes réalisations au Québec',
   ctaFinalTitle: 'Prêt à lancer votre site web ?',
   ctaFinalBody:
     'Que vous soyez à Montréal, en région ou en télétravail au Québec, discutons de votre projet — premier appel offert, devis sous 48 h.',
-  ctaFinalContact: 'Demander un devis site web',
+  ctaFinalContact: 'Obtenir une estimation',
   ctaFinalProjects: 'Voir le portfolio',
   faqKicker: 'Questions fréquentes',
   faqTitle: 'Création de site web à Montréal et au Québec',

@@ -17,8 +17,11 @@ import PageWrapper from '@/components/shared/PageWrapper'
 import ScrollReveal from '@/components/shared/ScrollReveal'
 import SectionDisplayTitle from '@/components/shared/SectionDisplayTitle'
 import ServiceFaqSection from '@/components/seo/ServiceFaqSection'
+import ClientProofSection from '@/components/shared/ClientProofSection'
+import ScrollTriggeredStickyCTA from '@/components/shared/ScrollTriggeredStickyCTA'
 import { seoLandingContent } from '@/content/creation-site-web-montreal.fr'
 import { DESIGN_TOKENS } from '@/design-system/constants'
+import { useLanguage } from '@/contexts/LanguageContext'
 import { useTextColor } from '@/hooks/useTextColor'
 import { useThemeColors } from '@/hooks/useThemeColors'
 
@@ -26,6 +29,7 @@ const PAGE_WEB_AMBIENT_VIDEO = '/img/acceuillooping.mp4'
 
 export default function CreationSiteWebMontrealPage() {
   const router = useRouter()
+  const { t } = useLanguage()
   const textColor = useTextColor()
   const { primary, secondary } = useThemeColors()
   const contactHref = `/portfolio/contact?subject=${encodeURIComponent(seoLandingContent.contactSubject)}`
@@ -41,6 +45,7 @@ export default function CreationSiteWebMontrealPage() {
             zIndex: 1,
             flex: 1,
             py: { xs: 4, sm: 6, md: 8 },
+            pb: { xs: 12, sm: 8, md: 8 },
             px: { xs: 1.5, sm: 2, md: 3 },
           }}
         >
@@ -165,6 +170,15 @@ export default function CreationSiteWebMontrealPage() {
               </Box>
             </Box>
 
+            <ClientProofSection
+              kicker={t('proof.thermoKicker')}
+              title={t('proof.thermoTitle')}
+              body={t('proof.thermoBody')}
+              projectLabel={t('proof.thermoProjectLink')}
+              projectHref="/portfolio/projets"
+              proofOnly
+            />
+
             <PortfolioServicesSection />
             <PortfolioProcessSection />
             <ServiceFaqSection
@@ -219,6 +233,7 @@ export default function CreationSiteWebMontrealPage() {
         </Box>
       </InteractiveBackgroundSection>
       <Footer />
+      <ScrollTriggeredStickyCTA text={t('home.stickyCTA')} href={contactHref} />
     </PageWrapper>
   )
 }

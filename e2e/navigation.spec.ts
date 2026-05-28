@@ -21,7 +21,7 @@ test('portfolio home loads and nav works', async ({ page }) => {
 
   await page.goto('/portfolio', { waitUntil: 'domcontentloaded' })
   await expect(
-    page.getByText(/obtenir une estimation rapide|let's discuss your project/i).first()
+    page.getByText(/obtenir une estimation|get an estimate/i).first()
   ).toBeVisible()
   await expect(page.getByTestId('graphics-background-layer')).toHaveAttribute('data-graphics-mode', 'full')
   // Créa + graphismes complets : Vanta NET (`vanta-background`).
@@ -58,6 +58,7 @@ test('contact form renders stable fields', async ({ page }) => {
   await expect(form.locator('input[name="email"]')).toBeVisible()
   await expect(form.locator('input[name="subject"]')).toBeVisible()
   await expect(form.locator('textarea[name="message"]')).toBeVisible()
+  await expect(form.locator('button[type="submit"]')).toContainText(/Obtenir une estimation|Get an estimate/i)
 })
 
 test('light graphics mode can be forced for fallback validation', async ({ page }) => {
@@ -89,7 +90,7 @@ test('logiciel and SEO landing routes are reachable', async ({ page }) => {
 test('demos index and demo routes', async ({ page }) => {
   await page.goto('/demos', { waitUntil: 'domcontentloaded' })
   await expect(page).toHaveURL(/\/demos\/?$/)
-  await expect(page.locator('h1').first()).toContainText(/Six directions créatives/)
+  await expect(page.locator('h1').first()).toContainText(/Huit directions créatives/)
   await expect(page.locator('a[href="/demos/studio"]').first()).toBeVisible()
   await expect(page.locator('a[href="/demos/spectacle"]').first()).toBeVisible()
   await expect(page.getByTestId('demos-grid-ready')).toBeVisible()
@@ -107,5 +108,13 @@ test('demos index and demo routes', async ({ page }) => {
 
   await page.goto('/demos/spectacle', { waitUntil: 'domcontentloaded' })
   await expect(page.locator('h1').filter({ hasText: /Une scène pour les voix/ })).toBeVisible()
+
+  await page.goto('/demos/portfolio', { waitUntil: 'domcontentloaded' })
+  await expect(page.locator('h1').filter({ hasText: /pensés pour convertir/ })).toBeVisible()
+  await expect(page.getByText('Jean-François Lefebvre')).toBeVisible()
+
+  await page.goto('/demos/galerie', { waitUntil: 'domcontentloaded' })
+  await expect(page.getByRole('link', { name: 'Ligne claire' })).toBeVisible()
+  await expect(page.getByRole('link', { name: /Maison Nord/ })).toBeVisible()
 })
 

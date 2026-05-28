@@ -39,7 +39,7 @@ export const translations = {
       intro:
         "Mon objectif : créer des outils simples, efficaces et faciles à utiliser, tout en offrant un accompagnement technique fiable.\n\nSoutien technique disponible à distance ou en personne sur l'île de Montréal.",
       seeProjects: 'Voir mes projets',
-      contactMe: 'Obtenir une estimation rapide',
+      contactMe: 'Obtenir une estimation',
       statsStage: 'Stage terminé',
       statsTech: 'Technologies maîtrisées',
       statsAvailable: 'Disponible',
@@ -54,7 +54,7 @@ export const translations = {
       cardContact: 'Contact',
       cardContactDesc:
         'Nouveau site, refonte, mises à jour ou petit outil\u202f: parlons de votre besoin.',
-      stickyCTA: 'Discuter de votre projet',
+      stickyCTA: 'Obtenir une estimation',
       demosBandKicker: 'Vitrines démo',
       demosBandTitle: 'Voir le rendu avant de décider',
       demosBandLead:
@@ -206,6 +206,17 @@ export const translations = {
       processLaunchTitle: 'Livraison & suivi',
       processLaunchText: 'Mise en ligne, ajustements et accompagnement pour la suite.',
       processLaunchDeliverable: 'Support',
+      processCta: 'Obtenir une estimation',
+    },
+    common: {
+      getEstimate: 'Obtenir une estimation',
+    },
+    proof: {
+      thermoKicker: 'Projet livré',
+      thermoTitle: 'Thermo-Trappeur — site web pour une PME québécoise',
+      thermoBody:
+        'Site vitrine pour une entreprise de services en thermopompe au Québec : présentation claire des services, formulaire de contact et structure pensée pour rassurer les visiteurs et faciliter les demandes.',
+      thermoProjectLink: 'Voir le projet',
     },
     contact: {
       title: 'Contact',
@@ -218,15 +229,18 @@ export const translations = {
       locationCity: 'Montréal, Québec, Canada',
       openEmail: 'Ouvrir Email',
       copy: 'Copier',
-      sendMessage: 'Envoyez-moi un message',
+      sendMessage: 'Obtenir une estimation',
       sendMessageDesc:
-        'Remplissez le formulaire ci-dessous et je vous répondrai dans les plus brefs délais. Le diagnostic IA est gratuit dans cette démo : réponse indicative pour vous aider à cadrer le besoin, pas un devis automatique.',
+        'Décrivez votre projet en quelques lignes — je vous réponds sous 24 h avec une estimation personnalisée. Premier appel offert.',
+      pricingAnchor:
+        'Site vitrine à partir de 1 200 $ · Audit 450 $ · Devis sous 48 h · Premier appel offert',
+      optionalSectionsToggle: 'Options avancées (facultatif)',
       formName: 'Nom complet',
       formEmail: 'Email',
       formSubject: 'Sujet',
       formPhoneOptional: 'N° de téléphone (optionnel)',
       formMessage: 'Message',
-      sendButton: 'Envoyer le message',
+      sendButton: 'Obtenir une estimation',
       sending: 'Envoi en cours...',
       followMe: 'Suivez-moi',
       linkedInDesc: 'Connectons-nous et échangeons sur nos expériences professionnelles',
@@ -318,7 +332,7 @@ export const translations = {
       creativityDesc: 'Résolution de problèmes innovante',
       collaboration: 'Collaboration',
       collaborationDesc: 'Travail d\'équipe et communication',
-      contactCTA: 'Me contacter',
+      contactCTA: 'Obtenir une estimation',
       thanksMessage:
         'Ce sera un plaisir d’échanger avec vous sur votre mandat et de vous proposer une suite d’étapes claire.',
       formationDesc: "Formation en développement d'applications avec focus sur les technologies modernes.",
@@ -327,7 +341,7 @@ export const translations = {
       adaptabilityDesc: 'Apprentissage continu',
       quality: 'Qualité',
       qualityDesc: 'Code propre et maintenable',
-      ctaTitle: 'Obtenir une estimation rapide',
+      ctaTitle: 'Obtenir une estimation',
       ctaText:
         "Projet web, outil sur mesure ou hébergement : décrivez-moi votre besoin. Je vous propose une solution adaptée — site, petit outil, ou accompagnement pour mieux traiter les demandes et la conversion.",
       whoCardP1:
@@ -381,6 +395,11 @@ export const translations = {
       viewLess: 'Voir moins',
       emptyWeb: 'Aucun site web pour le moment',
       emptyLogiciel: 'Aucun logiciel pour le moment',
+      heroCommercialLead:
+        'Un site vitrine pour votre activité ? À partir de 499 $ — Montréal et Québec.',
+      heroCommercialCta: 'Obtenir une estimation',
+      heroCommercialSecondary: 'Voir l’offre site web',
+      heroCommercialSubject: 'Demande : site web professionnel',
     },
     seo: {
       footerLink: 'Création de site web Montréal et Québec',
@@ -388,26 +407,26 @@ export const translations = {
       contactTitle: 'Besoin d’un site web sur mesure ?',
       contactBody:
         'Découvrez mon offre de création de sites vitrines et refontes pour le Québec — basé à Montréal, mandats partout au Québec.',
-      contactLink: 'Création de site web Montréal et Québec',
+      contactLink: 'Obtenir une estimation',
       projetsTitle: 'Besoin d’un site comme ceux-ci ?',
       projetsBody:
         'Je crée des sites vitrines et portfolios pour travailleurs autonomes et PME à Montréal et partout au Québec.',
-      projetsLink: 'Voir l’offre site web',
+      projetsLink: 'Obtenir une estimation',
       timelendrTitle: 'Un site vitrine pour votre activité ?',
       timelendrBody:
         'En plus des outils logiciels, je conçois des sites web clairs pour présenter votre offre au Québec.',
-      timelendrLink: 'Création de site web',
+      timelendrLink: 'Obtenir une estimation',
       demosTitle: 'Faire créer un site sur mesure',
       demosBody:
         'Ces démos illustrent des directions graphiques — je peux créer un site adapté à votre secteur, à Montréal et partout au Québec.',
-      demosLink: 'Création de site web Montréal et Québec',
+      demosLink: 'Obtenir une estimation',
     },
     footer: {
       landmarkLabel: 'Pied de page du site',
       tagline:
         'Sites web et petites briques d’IA utiles (formulaires, qualification des demandes) pour PME. Petits outils sur mesure. Création, mises à jour et hébergement.',
       contactPrompt: 'Un projet site web ou un petit outil ? Discutons-en !',
-      contactButton: 'Me contacter',
+      contactButton: 'Obtenir une estimation',
       rights: 'Tous droits réservés.',
       navigation: 'Navigation',
       builtWith: 'Construit avec Next.js, Material-UI, Vanta.js & Framer Motion',
@@ -416,7 +435,7 @@ export const translations = {
       heroTitle: 'Jean-François Lefebvre',
       heroSubtitle: 'Sites web et petits outils sur mesure.',
       ctaPortfolio: 'Voir les réalisations',
-      ctaContact: 'Discuter de votre projet',
+      ctaContact: 'Obtenir une estimation',
       footerPortfolio: 'Réalisations',
       footerContact: 'Contact',
       discoverMe: 'Découvrez-moi',
@@ -602,7 +621,7 @@ export const translations = {
       intro:
         'My goal: build tools that are simple, effective, and easy to use, with reliable technical support.\n\nSupport available remotely or in person on the Island of Montreal.',
       seeProjects: 'View my projects',
-      contactMe: 'Get a quick estimate',
+      contactMe: 'Get an estimate',
       statsStage: 'Internship completed',
       statsTech: 'Technologies mastered',
       statsAvailable: 'Available',
@@ -617,7 +636,7 @@ export const translations = {
       cardContact: 'Contact',
       cardContactDesc:
         'New site, redesign, updates, or a small tool—tell me what you need.',
-      stickyCTA: 'Discuss your project',
+      stickyCTA: 'Get an estimate',
       demosBandKicker: 'Demo showcases',
       demosBandTitle: 'See the craft before you decide',
       demosBandLead:
@@ -768,6 +787,17 @@ export const translations = {
       processLaunchTitle: 'Launch & follow-up',
       processLaunchText: 'Go-live, adjustments, and support for what comes next.',
       processLaunchDeliverable: 'Support',
+      processCta: 'Get an estimate',
+    },
+    common: {
+      getEstimate: 'Get an estimate',
+    },
+    proof: {
+      thermoKicker: 'Delivered project',
+      thermoTitle: 'Thermo-Trappeur — website for a Quebec SMB',
+      thermoBody:
+        'Showcase site for a heat-pump services company in Quebec: clear service presentation, contact form, and structure built to reassure visitors and make inquiries easy.',
+      thermoProjectLink: 'View the project',
     },
     contact: {
       title: 'Contact',
@@ -780,15 +810,18 @@ export const translations = {
       locationCity: 'Montreal, Quebec, Canada',
       openEmail: 'Open Email',
       copy: 'Copy',
-      sendMessage: 'Send me a message',
+      sendMessage: 'Get an estimate',
       sendMessageDesc:
-        'Fill out the form below and I will get back to you as soon as possible. The AI diagnosis is free in this demo: indicative guidance to help frame your need, not an automatic quote.',
+        'Describe your project in a few lines — I reply within 24 hours with a personalized estimate. First call included.',
+      pricingAnchor:
+        'Showcase sites from $1,200 · Audit $450 · Estimate within 48h · First call included',
+      optionalSectionsToggle: 'Advanced options (optional)',
       formName: 'Full name',
       formEmail: 'Email',
       formSubject: 'Subject',
       formPhoneOptional: 'Phone number (optional)',
       formMessage: 'Message',
-      sendButton: 'Send message',
+      sendButton: 'Get an estimate',
       sending: 'Sending...',
       followMe: 'Follow me',
       linkedInDesc: 'Let\'s connect and share our professional experience',
@@ -880,7 +913,7 @@ export const translations = {
       creativityDesc: 'Innovative problem solving',
       collaboration: 'Collaboration',
       collaborationDesc: 'Teamwork and communication',
-      contactCTA: 'Contact me',
+      contactCTA: 'Get an estimate',
       thanksMessage:
         'I look forward to discussing your project and proposing a clear next step.',
       formationDesc: 'Application development training with a focus on modern technologies.',
@@ -889,7 +922,7 @@ export const translations = {
       adaptabilityDesc: 'Continuous learning',
       quality: 'Quality',
       qualityDesc: 'Clean and maintainable code',
-      ctaTitle: 'Discuss your project',
+      ctaTitle: 'Get an estimate',
       ctaText:
         'Web project, custom tool, or hosting? Describe your need. I will propose a fit—website, small tool, or support to handle requests and conversion better.',
       whoCardP1:
@@ -944,6 +977,11 @@ export const translations = {
       viewLess: 'Show less',
       emptyWeb: 'No web projects yet',
       emptyLogiciel: 'No software projects yet',
+      heroCommercialLead:
+        'Need a showcase site for your business? From $499 — Montreal and Quebec.',
+      heroCommercialCta: 'Get an estimate',
+      heroCommercialSecondary: 'See the website offer',
+      heroCommercialSubject: 'Offer: professional website',
     },
     seo: {
       footerLink: 'Website creation Montreal and Quebec',
@@ -951,26 +989,26 @@ export const translations = {
       contactTitle: 'Need a custom website?',
       contactBody:
         'Explore my website creation and redesign offer for Quebec — based in Montreal, projects across the province.',
-      contactLink: 'Website creation Montreal and Quebec',
+      contactLink: 'Get an estimate',
       projetsTitle: 'Need a site like these?',
       projetsBody:
         'I build brochure sites and portfolios for freelancers and SMBs in Montreal and across Quebec.',
-      projetsLink: 'See the website offer',
+      projetsLink: 'Get an estimate',
       timelendrTitle: 'A brochure site for your business?',
       timelendrBody:
         'Beyond software tools, I design clear websites to present your offer in Quebec.',
-      timelendrLink: 'Website creation',
+      timelendrLink: 'Get an estimate',
       demosTitle: 'Get a custom site built',
       demosBody:
         'These demos show creative directions — I can build a site for your sector in Montreal and across Quebec.',
-      demosLink: 'Website creation Montreal and Quebec',
+      demosLink: 'Get an estimate',
     },
     footer: {
       landmarkLabel: 'Site footer',
       tagline:
         'Websites plus small, useful AI pieces (forms, qualifying inquiries) for small businesses. Custom tools. Builds, updates, and hosting.',
       contactPrompt: 'A website or small tool in mind? Let\'s talk!',
-      contactButton: 'Contact me',
+      contactButton: 'Get an estimate',
       rights: 'All rights reserved.',
       navigation: 'Navigation',
       builtWith: 'Built with Next.js, Material-UI, Vanta.js & Framer Motion',
@@ -979,7 +1017,7 @@ export const translations = {
       heroTitle: 'Jean-François Lefebvre',
       heroSubtitle: 'Custom websites and small tools.',
       ctaPortfolio: 'See selected work',
-      ctaContact: 'Discuss your project',
+      ctaContact: 'Get an estimate',
       footerPortfolio: 'Work',
       footerContact: 'Contact',
       discoverMe: 'Discover',
