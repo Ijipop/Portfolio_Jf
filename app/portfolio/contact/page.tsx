@@ -168,7 +168,7 @@ export default function Contact() {
     message: '',
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [showOptionalSections, setShowOptionalSections] = useState(false)
+  const [showOptionalSections, setShowOptionalSections] = useState(true)
   const contactPromises = [
     { icon: AccessTimeIcon, label: t('contact.promiseResponse') },
     { icon: HandshakeIcon, label: t('contact.promiseCall') },
@@ -521,16 +521,6 @@ export default function Contact() {
                 />
               </Box>
 
-              <CTAButton
-                variant="primary"
-                type="submit"
-                fullWidth
-                disabled={isSubmitting}
-                startIcon={isSubmitting ? <CircularProgress size={20} color="inherit" /> : <SendIcon />}
-              >
-                {isSubmitting ? t('contact.sending') : t('contact.sendButton')}
-              </CTAButton>
-
               <Box sx={{ mt: 2 }}>
                 <Button
                   type="button"
@@ -578,6 +568,18 @@ export default function Contact() {
                     </Box>
                   </Box>
                 </Collapse>
+              </Box>
+
+              <Box sx={{ mt: useCompactContact ? 2.5 : 3 }}>
+                <CTAButton
+                  variant="primary"
+                  type="submit"
+                  fullWidth
+                  disabled={isSubmitting}
+                  startIcon={isSubmitting ? <CircularProgress size={20} color="inherit" /> : <SendIcon />}
+                >
+                  {isSubmitting ? t('contact.sending') : t('contact.sendButton')}
+                </CTAButton>
               </Box>
             </Box>
           </ThreeDCardComponent>
