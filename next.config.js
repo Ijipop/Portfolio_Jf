@@ -1,8 +1,13 @@
 const path = require('path')
 
-const withBundleAnalyzer = require('@next/bundle-analyzer')({
-  enabled: process.env.ANALYZE === 'true',
-})
+/** Uniquement en local avec `npm run analyze` — évite require sur Vercel (devDependency absente en prod). */
+function withOptionalBundleAnalyzer(config) {
+  if (process.env.ANALYZE !== 'true') {
+    return config
+  }
+  const withBundleAnalyzer = require('@next/bundle-analyzer')({ enabled: true })
+  return withBundleAnalyzer(config)
+}
 
 /**
  * Réduit le traçage des fichiers serverless (limite Vercel : 250 Mo décompressés par fonction).
@@ -171,4 +176,4 @@ const nextConfig = {
   },
 }
 
-module.exports = withBundleAnalyzer(nextConfig)
+module.exports = withOptionalBundleAnalyzer(nextConfig)
