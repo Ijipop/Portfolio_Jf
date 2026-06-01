@@ -8,12 +8,11 @@ import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Chip from '@mui/material/Chip'
 import { alpha, styled, useTheme } from '@mui/material/styles'
-import type { SxProps, Theme } from '@mui/material/styles'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import Typography from '@mui/material/Typography'
 import Image from 'next/image'
+import { usePathname } from 'next/navigation'
 import React from 'react'
-import ThreeDCardComponent from '@/components/ThreeDCard'
 import ScrollReveal from '@/components/shared/ScrollReveal'
 import SkillTag from '@/components/shared/SkillTag'
 import CTAButton from '@/components/shared/CTAButton'
@@ -25,14 +24,16 @@ import { usePresentationMode } from '@/contexts/PresentationModeContext'
 import { useLanguage } from '@/contexts/LanguageContext'
 import { useThemeColors } from '@/hooks/useThemeColors'
 import { useTextColor } from '@/hooks/useTextColor'
-import { getBeigePresentationTopologyBackground } from '@/utils/syncPortfolioThemeToDocument'
+import { shouldShowTopology } from '@/utils/topologyRoutes'
 import type { Project } from '../projectTypes'
 import {
-  polaroidImageFillAnchorSx,
-  polaroidInnerPhotoHoleSx,
-  polaroidOuterFrameSx,
-  type PolaroidFramePalette,
-} from '../utils/polaroidFrameSx'
+  getProjectCardBodySx,
+  getProjectCardLinkIconOverlaySx,
+  getProjectCardMediaSx,
+  getProjectCardRootSx,
+  getProjectCardStatusOverlaySx,
+  projectCardImageFillAnchorSx,
+} from '../utils/projectCardEditorialSx'
 
 const StatusChip = styled(Chip)(({ theme, color }: { theme: any; color?: any }) => ({
   borderRadius: DESIGN_TOKENS.borderRadius.medium,
@@ -52,15 +53,11 @@ const TechStack = styled(Box)(({ theme }) => ({
   marginTop: theme.spacing(0.75),
 }))
 
-const ProjectImageContainer = styled(Box)(({ theme }) => ({
+const ProjectImageContainer = styled(Box)(() => ({
   position: 'relative',
-  overflow: 'visible',
-  borderRadius: `${DESIGN_TOKENS.borderRadius.medium}px`,
-  marginBottom: theme.spacing(0.5),
-  [theme.breakpoints.up('lg')]: { marginBottom: theme.spacing(0.65) },
-  /** Pas de largeur forcée : avec `fill` / `contain`, interfère avec la taille absolue et peut créer une frange sous l’image. */
+  overflow: 'hidden',
+  flexShrink: 0,
   '& img': {
-    transition: DESIGN_TOKENS.transitions.slow,
     borderRadius: 0,
     boxShadow: 'none',
   },
@@ -143,6 +140,8 @@ export default function ProjectCard({
   cardVariant = 'logiciel',
 }: ProjectCardProps) {
   const theme = useTheme()
+  const pathname = usePathname()
+  const isTopologyRoute = shouldShowTopology(pathname)
   const { primary, secondary, accent } = useThemeColors()
   const textColor = useTextColor()
   const { t } = useLanguage()
@@ -179,14 +178,6 @@ export default function ProjectCard({
     (!isTimelendrProject && project.downloadUrl?.trim()) ||
     (isTimelendrProject && (timelendrWindowsUrl || timelendrMacosUrl))
 
-  const polaroidPalette: PolaroidFramePalette = {
-    presentationMode,
-    primary,
-    secondary,
-    accent,
-    isNonDefaultPalette,
-  }
-
   const cardImageRaw = resolveProjectCardImage(project)
   const cardImageHref = cardImageRaw ? resolveImageUrl(cardImageRaw) : ''
   const projectTechs = project.technologies.split(',').map((tech) => tech.trim()).filter(Boolean)
@@ -202,72 +193,26 @@ export default function ProjectCard({
       ? [...projectMetaRoles, yearSegment].filter((item): item is string => Boolean(item))
       : [...projectMetaRoles, yearSegment, stackFallback].filter((item): item is string => Boolean(item))
 
-  const linkIconButtonSx = {
-    flexShrink: 0,
-    background: 'rgba(255, 255, 255, 0.95)',
-    borderRadius: '50%',
-    minWidth: 44,
-    minHeight: 44,
-    padding: 1,
-    boxSizing: 'border-box' as const,
-    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
-    border: '2px solid rgba(0, 0, 0, 0.1)',
-    transition: DESIGN_TOKENS.transitions.normal,
-    pointerEvents: 'auto' as const,
-    '&:hover': {
-      transform: 'scale(1.15)',
-      boxShadow: '0 8px 24px rgba(0, 0, 0, 0.2)',
-    },
-  }
+  const cardRootSx = getProjectCardRootSx({
+    isTopologyRoute,
+    presentationMode,
+    primary,
+    hasProjectAction: Boolean(hasProjectAction),
+    customTheme,
+    beigePresentationBgUrl,
+    theme,
+  })
 
-  const threeDCardSurfaceSx: SxProps<Theme> =
-    presentationMode === 'beige'
-      ? {
-          padding: 0,
-          overflow: 'hidden',
-          minHeight: 'fit-content',
-          display: 'flex',
-          flexDirection: 'column',
-          '& .MuiCardContent-root': {
-            padding: 0,
-            '&:last-child': { paddingBottom: 0 },
-          },
-          cursor: hasProjectAction ? 'pointer' : 'default',
-          background: `${getBeigePresentationTopologyBackground(customTheme, beigePresentationBgUrl)} !important`,
-          backgroundAttachment: { xs: 'scroll', md: 'fixed' },
-          backdropFilter: 'none',
-          WebkitBackdropFilter: 'none',
-          border: `1px solid ${primary}28`,
-          boxShadow: '0 8px 24px rgba(92, 77, 60, 0.1), 0 0 0 1px rgba(139, 126, 114, 0.08)',
-          '&:hover .project-card-image img': {
-            transform: 'scale(1.06)',
-          },
-        }
-      : {
-          padding: 0,
-          overflow: 'hidden',
-          minHeight: 'fit-content',
-          display: 'flex',
-          flexDirection: 'column',
-          '& .MuiCardContent-root': {
-            padding: 0,
-            '&:last-child': { paddingBottom: 0 },
-          },
-          cursor: hasProjectAction ? 'pointer' : 'default',
-          background: 'transparent !important',
-          backdropFilter: 'blur(12px) saturate(1.04)',
-          WebkitBackdropFilter: 'blur(12px) saturate(1.04)',
-          border: `1px solid ${
-            theme.palette.mode === 'dark' ? 'rgba(255,255,255,0.12)' : `${primary}28`
-          }`,
-          boxShadow:
-            theme.palette.mode === 'dark'
-              ? '0 12px 32px rgba(0,0,0,0.35)'
-              : '0 8px 28px rgba(15,23,42,0.08), 0 0 0 1px rgba(15,23,42,0.05)',
-          '&:hover .project-card-image img': {
-            transform: 'scale(1.06)',
-          },
-        }
+  const cardMediaSx = getProjectCardMediaSx({ isTopologyRoute, theme })
+
+  const handleCardClick = () => {
+    if (isOwnPortfolioSite) handleProjectClick('/portfolio')
+    else if (project.url?.trim()) handleProjectClick(project.url)
+    else if (project.siteUrl?.trim()) handleProjectClick(project.siteUrl)
+    else if (!isTimelendrProject && project.downloadUrl?.trim()) handleProjectClick(project.downloadUrl)
+    else if (isTimelendrProject && timelendrWindowsUrl) handleProjectClick(timelendrWindowsUrl)
+    else if (isTimelendrProject && timelendrMacosUrl) handleProjectClick(timelendrMacosUrl)
+  }
 
   let primaryHref: string | null = null
   let primaryLabel = viewProjectLabel
@@ -320,173 +265,103 @@ export default function ProjectCard({
           flexDirection: 'column',
         }}
       >
-        <ThreeDCardComponent
-          key={project.id}
-          subtle
-          fullHeight
-          floatingElements={0}
-          borderBeam={{ duration: 58, size: 180, delay: (index % 4) * 4 }}
-          onClick={() => {
-            if (isOwnPortfolioSite) handleProjectClick('/portfolio')
-            else if (project.url?.trim()) handleProjectClick(project.url)
-            else if (project.siteUrl?.trim()) handleProjectClick(project.siteUrl)
-            else if (!isTimelendrProject && project.downloadUrl?.trim()) handleProjectClick(project.downloadUrl)
-            else if (isTimelendrProject && timelendrWindowsUrl) handleProjectClick(timelendrWindowsUrl)
-            else if (isTimelendrProject && timelendrMacosUrl) handleProjectClick(timelendrMacosUrl)
-          }}
-          sx={threeDCardSurfaceSx}
-        >
-          <Box
-            sx={{
-              display: 'flex',
-              flexDirection: 'column',
-              textAlign: 'left',
-              alignItems: 'stretch',
-              width: '100%',
-              flex: 1,
-              minHeight: 0,
-            }}
-          >
-            <ProjectImageContainer
-              className="project-card-image"
-              sx={(muiTheme) => ({
-                width: '100%',
-                maxWidth: 'none',
-                mx: 0,
-                mb: { xs: 0.85, md: 1 },
-                flexShrink: 0,
-                ...polaroidOuterFrameSx(muiTheme, polaroidPalette),
-              })}
-            >
-              <Box
-                sx={(muiTheme) =>
-                  cardImageHref
-                    ? ({
-                        aspectRatio: '16 / 9',
-                        ...polaroidInnerPhotoHoleSx(muiTheme, polaroidPalette),
-                      } as Record<string, unknown>)
-                    : {
-                        position: 'relative',
-                        width: '100%',
-                        aspectRatio: '16 / 9',
-                        overflow: 'hidden',
-                        borderRadius: `${Math.max(8, DESIGN_TOKENS.borderRadius.medium - 4)}px`,
-                        background: BRAND_GLITCH_GRADIENT,
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                      }
+        <Box
+          component="article"
+          onClick={hasProjectAction ? handleCardClick : undefined}
+          onKeyDown={
+            hasProjectAction
+              ? (e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault()
+                    handleCardClick()
+                  }
                 }
-              >
-                {cardImageHref ? (
-                  <Box sx={polaroidImageFillAnchorSx}>
-                    <Image
-                      src={cardImageHref}
-                      alt={project.name}
-                      fill
-                      unoptimized={cardImageHref.startsWith('data:')}
-                      sizes="(max-width: 600px) 100vw, (max-width: 900px) 50vw, 33vw"
-                      style={{
-                        /** Toutes les vignettes projet : même cadre polaroid/dégradé ; voir tout le screenshot sans rogner */
-                        objectFit: 'contain',
-                        objectPosition: 'center',
-                      }}
-                    />
-                  </Box>
-                ) : (
-                  <Typography
-                    variant="h2"
-                    sx={{
-                      position: 'relative',
-                      zIndex: 1,
-                      color: 'white',
-                      fontWeight: 900,
-                      letterSpacing: '-0.08em',
-                      textShadow: '0 16px 50px rgba(0,0,0,0.35)',
-                    }}
-                  >
-                    {getProjectMonogram(project.name)}
-                  </Typography>
-                )}
+              : undefined
+          }
+          role={hasProjectAction ? 'button' : undefined}
+          tabIndex={hasProjectAction ? 0 : undefined}
+          sx={cardRootSx}
+        >
+          <ProjectImageContainer className="project-card-image" sx={cardMediaSx}>
+            {cardImageHref ? (
+              <Box sx={projectCardImageFillAnchorSx}>
+                <Image
+                  src={cardImageHref}
+                  alt={project.name}
+                  fill
+                  unoptimized={cardImageHref.startsWith('data:')}
+                  sizes="(max-width: 600px) 100vw, (max-width: 900px) 50vw, 33vw"
+                  style={{
+                    objectFit: 'contain',
+                    objectPosition: 'center',
+                  }}
+                />
               </Box>
-            </ProjectImageContainer>
-
-            <Box
-              sx={{
-                px: { xs: 1, sm: 1.25, md: 1.5 },
-                pt: { xs: 1, sm: 1.15, md: 1.25 },
-                pb: { xs: 1, sm: 1.25, md: 1.5 },
-                display: 'flex',
-                flexDirection: 'column',
-                flex: 1,
-                minHeight: 0,
-              }}
-            >
+            ) : (
               <Box
                 sx={{
+                  position: 'absolute',
+                  inset: 0,
+                  background: BRAND_GLITCH_GRADIENT,
                   display: 'flex',
                   alignItems: 'center',
-                  justifyContent: 'space-between',
-                  gap: 1,
-                  mb: 0.35,
-                  flexShrink: 0,
-                  flexWrap: { xs: 'wrap', md: 'nowrap' },
-                  rowGap: 0.75,
+                  justifyContent: 'center',
                 }}
               >
-                <Box
+                <Typography
+                  variant="h2"
                   sx={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: { xs: 1, sm: 1.25 },
-                    flex: '1 1 auto',
-                    minWidth: 0,
+                    color: 'white',
+                    fontWeight: 900,
+                    letterSpacing: '-0.08em',
+                    textShadow: '0 16px 50px rgba(0,0,0,0.35)',
                   }}
                 >
-                  <StatusChip
-                    icon={getStatusIcon(project.status)}
-                    label={project.status}
-                    color={getStatusColor(project.status)}
-                    size="small"
-                    sx={{ flexShrink: 0 }}
-                  />
-                  <Typography
-                    variant="subtitle1"
-                    component="h2"
-                    sx={{
-                      fontWeight: 900,
-                      lineHeight: 1.18,
-                      letterSpacing: '-0.035em',
-                      color: textColor,
-                      overflow: 'hidden',
-                      textOverflow: 'ellipsis',
-                      display: '-webkit-box',
-                      WebkitLineClamp: 2,
-                      WebkitBoxOrient: 'vertical',
-                      wordBreak: 'break-word',
-                    }}
-                  >
-                    {project.name}
-                  </Typography>
-                </Box>
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, flexShrink: 0, ml: { xs: 0, md: 'auto' } }}>
-                  {project.url && project.url.includes('github') && isOwnPortfolioSite && (
-                    <Box sx={{ ...linkIconButtonSx, zIndex: DESIGN_TOKENS.zIndex.overlay }} aria-hidden>
-                      <LanguageOutlinedIcon sx={{ fontSize: 18, color: '#000000', filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.1))' }} />
-                    </Box>
-                  )}
-                  {project.url && project.url.includes('github') && !isOwnPortfolioSite && (
-                    <Box sx={{ ...linkIconButtonSx, zIndex: DESIGN_TOKENS.zIndex.overlay }} aria-hidden>
-                      <GitHubIcon sx={{ fontSize: 18, color: '#000000', filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.1))' }} />
-                    </Box>
-                  )}
-                  {project.url && !project.url.includes('github') && (
-                    <Box sx={{ ...linkIconButtonSx, zIndex: DESIGN_TOKENS.zIndex.overlay }} aria-hidden>
-                      <LaunchIcon sx={{ fontSize: 18, color: '#000000', filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.1))' }} />
-                    </Box>
-                  )}
-                </Box>
+                  {getProjectMonogram(project.name)}
+                </Typography>
               </Box>
+            )}
+
+            <Box sx={getProjectCardStatusOverlaySx()}>
+              <StatusChip
+                icon={getStatusIcon(project.status)}
+                label={project.status}
+                color={getStatusColor(project.status)}
+                size="small"
+              />
+            </Box>
+
+            {project.url && (
+              <Box sx={getProjectCardLinkIconOverlaySx()} aria-hidden>
+                {project.url.includes('github') && isOwnPortfolioSite && (
+                  <LanguageOutlinedIcon sx={{ fontSize: 18 }} />
+                )}
+                {project.url.includes('github') && !isOwnPortfolioSite && <GitHubIcon sx={{ fontSize: 18 }} />}
+                {!project.url.includes('github') && <LaunchIcon sx={{ fontSize: 18 }} />}
+              </Box>
+            )}
+          </ProjectImageContainer>
+
+          <Box sx={getProjectCardBodySx()}>
+            <Typography
+              variant="subtitle1"
+              component="h2"
+              sx={{
+                fontWeight: 900,
+                lineHeight: 1.2,
+                letterSpacing: '-0.035em',
+                color: textColor,
+                mb: 0.5,
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                display: '-webkit-box',
+                WebkitLineClamp: 2,
+                WebkitBoxOrient: 'vertical',
+                wordBreak: 'break-word',
+              }}
+            >
+              {project.name}
+            </Typography>
 
               <Box sx={{ mb: 0.5 }}>
                 {isOwnPortfolioSite && (
@@ -715,9 +590,8 @@ export default function ProjectCard({
                   </>
                 )}
               </Box>
-            </Box>
           </Box>
-        </ThreeDCardComponent>
+        </Box>
       </Box>
     </ScrollReveal>
   )
