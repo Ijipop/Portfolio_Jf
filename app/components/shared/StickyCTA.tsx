@@ -9,20 +9,23 @@ interface StickyCTAProps {
   text?: string
   onClick?: () => void
   href?: string
+  /** When true, parent handles fixed positioning (mobile sticky bar wrapper). */
+  embedded?: boolean
 }
 
 export default function StickyCTA({
   text = "Travaillons ensemble",
   onClick,
-  href = '/portfolio/contact'
+  href = '/portfolio/contact',
+  embedded = false,
 }: StickyCTAProps) {
   return (
     <Box
       sx={{
-        position: 'fixed',
-        bottom: { xs: 0, md: 24 },
-        left: { xs: 0, md: 'auto' },
-        right: { xs: 0, md: 24 },
+        position: embedded ? { xs: 'relative', md: 'fixed' } : 'fixed',
+        bottom: embedded ? { xs: 'auto', md: 24 } : { xs: 0, md: 24 },
+        left: embedded ? { xs: 'auto', md: 'auto' } : { xs: 0, md: 'auto' },
+        right: embedded ? { xs: 'auto', md: 24 } : { xs: 0, md: 24 },
         zIndex: DESIGN_TOKENS.zIndex.stickyBar,
         background: (theme) => theme.palette.mode === 'dark'
           ? 'linear-gradient(to top, rgba(26, 26, 26, 0.95) 0%, rgba(26, 26, 26, 0.9) 100%)'
@@ -38,7 +41,7 @@ export default function StickyCTA({
         padding: DESIGN_TOKENS.spacing.md,
         boxShadow: '0 -4px 20px rgba(0,0,0,0.1)',
         display: 'block',
-        width: { xs: 'auto', md: 320 },
+        width: { xs: '100%', md: 320 },
       }}
     >
       {onClick ? (

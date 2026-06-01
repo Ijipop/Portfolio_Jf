@@ -18,7 +18,12 @@ import { useThemeColors } from '../hooks/useThemeColors'
 import { getTextColorForBackground } from '../utils/colorUtils'
 import { useLanguage } from '../contexts/LanguageContext'
 
-export default function Footer() {
+type FooterProps = {
+  /** Extra bottom space on mobile when a fixed sticky CTA bar is shown (home, SEO landing). */
+  mobileBottomClearance?: boolean
+}
+
+export default function Footer({ mobileBottomClearance = false }: FooterProps) {
   const currentYear = new Date().getFullYear()
   const router = useRouter()
   const theme = useTheme()
@@ -89,6 +94,12 @@ export default function Footer() {
         boxShadow: '0 -6px 18px rgba(2, 6, 23, 0.14), inset 0 1px 0 rgba(255, 255, 255, 0.2)',
         color: `${textColor} !important`,
         padding: theme.spacing(4, 0, 2),
+        ...(mobileBottomClearance && {
+          pb: {
+            xs: 'calc(7.5rem + env(safe-area-inset-bottom, 0px))',
+            md: theme.spacing(2),
+          },
+        }),
         marginTop: 'auto',
         position: 'relative',
         '&::before': {
@@ -138,7 +149,14 @@ export default function Footer() {
             <Typography variant="h6" sx={{ fontWeight: 600, mb: DESIGN_TOKENS.spacing.md, color: textColor }}>
               {t('footer.navigation')}
             </Typography>
-            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+            <Box
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                gap: 0.25,
+                '& a': { display: 'inline-block', py: 0.75 },
+              }}
+            >
               <Link href="/portfolio/projets" style={{ textDecoration: 'none' }}>
                 <Typography
                   variant="body2"

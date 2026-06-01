@@ -45,8 +45,10 @@ const FlipCard = styled(Box)(({ theme }) => ({
   WebkitPerspective: '1000px',
   MozPerspective: '1000px',
   transition: 'transform 0.2s ease',
-  '&:hover': {
-    animation: 'shake 0.5s ease-in-out',
+  '@media (hover: hover)': {
+    '&:hover': {
+      animation: 'shake 0.5s ease-in-out',
+    },
   },
   '@keyframes shake': {
     '0%, 100%': { transform: 'translateX(0)' },
@@ -322,7 +324,7 @@ export default function About() {
                     bottom: 8,
                     left: '50%',
                     transform: 'translateX(-50%)',
-                    fontSize: '0.65rem',
+                    fontSize: '0.75rem',
                     opacity: 0.6,
                     color: textColor
                   }}
@@ -429,7 +431,7 @@ export default function About() {
                     bottom: 8,
                     left: '50%',
                     transform: 'translateX(-50%)',
-                    fontSize: '0.65rem',
+                    fontSize: '0.75rem',
                     opacity: 0.6,
                     color: textColor
                   }}
@@ -537,7 +539,7 @@ export default function About() {
                     bottom: 8,
                     left: '50%',
                     transform: 'translateX(-50%)',
-                    fontSize: '0.65rem',
+                    fontSize: '0.75rem',
                     opacity: 0.6,
                     color: textColor
                   }}

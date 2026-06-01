@@ -232,7 +232,7 @@ export default function CreationSiteWebMontrealPage() {
           </Container>
         </Box>
       </InteractiveBackgroundSection>
-      <Footer />
+      <Footer mobileBottomClearance />
       <ScrollTriggeredStickyCTA text={t('home.stickyCTA')} href={contactHref} />
     </PageWrapper>
   )

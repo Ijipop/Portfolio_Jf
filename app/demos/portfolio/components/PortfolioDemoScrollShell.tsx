@@ -37,6 +37,12 @@ export default function PortfolioDemoScrollShell({ className, children }: Props)
       if (!(target instanceof HTMLElement)) return
 
       event.preventDefault()
+
+      if (window.matchMedia('(max-width: 639px)').matches) {
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' })
+        return
+      }
+
       scrollToTarget(target)
     }
 

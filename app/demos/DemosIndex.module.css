@@ -118,6 +118,13 @@
   opacity: 0.95;
 }
 
+@media (hover: none) {
+  .aiCaption {
+    color: #3d5266;
+    opacity: 0.95;
+  }
+}
+
 .aiVideoFrame {
   width: 100%;
   aspect-ratio: 16 / 9;

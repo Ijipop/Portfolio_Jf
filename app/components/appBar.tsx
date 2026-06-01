@@ -58,7 +58,11 @@ export default function AppBarComponent() {
 							sx={{
 								mr: { xs: 1, sm: 2 },
 								fontSize: { xs: '1rem', sm: '1.25rem' },
-								display: { xs: 'none', sm: 'block' },
+								display: { xs: 'block', sm: 'block' },
+								maxWidth: { xs: 72, sm: 'none' },
+								overflow: 'hidden',
+								textOverflow: 'ellipsis',
+								whiteSpace: 'nowrap',
 								cursor: 'pointer',
 								userSelect: 'none',
 								'&:hover': { opacity: 0.9 },
@@ -93,7 +97,9 @@ export default function AppBarComponent() {
 						>
 							{locale === 'fr' ? 'FR' : 'ENG'}
 						</Button>
-						<PresentationModeToggle />
+						<Box sx={{ display: { xs: 'none', sm: 'block' } }}>
+							<PresentationModeToggle />
+						</Box>
 						{presentationMode === 'dev' && <ThemeSelector />}
 					</Box>
 				</Toolbar>

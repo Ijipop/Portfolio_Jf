@@ -102,7 +102,7 @@ export function PresentationModeToggle() {
         py: 0.5,
         minWidth: { xs: 92, sm: 104 },
         borderRadius: 999,
-        fontSize: { xs: '0.66rem', sm: '0.75rem' },
+        fontSize: { xs: '0.75rem', sm: '0.75rem' },
         fontWeight: 800,
         letterSpacing: '0.01em',
         textTransform: 'none',

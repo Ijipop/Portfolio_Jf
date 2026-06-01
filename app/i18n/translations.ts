@@ -250,6 +250,10 @@ export const translations = {
       emailCopied: 'Adresse email copiée !',
       formErrors: 'Veuillez corriger les erreurs dans le formulaire',
       sendSuccess: 'Message envoyé avec succès !',
+      merciTitle: 'Message bien reçu',
+      merciBody:
+        'Merci pour votre demande. Je vous réponds sous 24 h avec une estimation personnalisée. Pensez à vérifier votre boîte courriel (et les indésirables).',
+      merciClose: 'Fermer',
       sendError: 'Erreur lors de l\'envoi du message',
       networkError: 'Erreur de connexion. Veuillez réessayer.',
       promiseResponse: 'Réponse < 24 h',
@@ -831,6 +835,10 @@ export const translations = {
       emailCopied: 'Email address copied!',
       formErrors: 'Please fix the errors in the form',
       sendSuccess: 'Message sent successfully!',
+      merciTitle: 'Message received',
+      merciBody:
+        'Thank you for your inquiry. I’ll reply within 24 hours with a personalized estimate. Please check your inbox (and spam folder).',
+      merciClose: 'Close',
       sendError: 'Error sending message',
       networkError: 'Connection error. Please try again.',
       promiseResponse: 'Reply < 24h',

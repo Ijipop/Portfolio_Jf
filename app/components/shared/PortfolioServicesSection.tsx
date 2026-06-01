@@ -246,7 +246,7 @@ function OfferPackCard({
                 background: `linear-gradient(135deg, #fffef7 0%, #fde68a 42%, #fbbf24 100%)`,
                 color: '#78350f',
                 fontWeight: 800,
-                fontSize: '0.62rem',
+                fontSize: { xs: '0.75rem', sm: '0.62rem' },
                 letterSpacing: '0.08em',
                 textTransform: 'uppercase',
                 lineHeight: 1.15,
