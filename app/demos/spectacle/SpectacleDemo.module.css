@@ -30,6 +30,14 @@
   gap: 1rem;
 }
 
+@media (max-width: 639px) {
+  .header {
+    flex-wrap: nowrap;
+    gap: 0.65rem;
+    padding-top: 1.15rem;
+  }
+}
+
 .venue {
   font-size: 0.7rem;
   font-weight: 700;

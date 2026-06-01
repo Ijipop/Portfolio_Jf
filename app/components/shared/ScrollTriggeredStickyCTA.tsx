@@ -35,9 +35,10 @@ export default function ScrollTriggeredStickyCTA({
         left: 0,
         right: 0,
         zIndex: 1100,
+        paddingBottom: 'env(safe-area-inset-bottom, 0px)',
       }}
     >
-      <StickyCTA text={text} href={href} />
+      <StickyCTA text={text} href={href} embedded />
     </Box>
   )
 }

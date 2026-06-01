@@ -179,7 +179,7 @@ export default function HomeClient({ initialShowIntro }: { initialShowIntro: boo
       </Container>
       </InteractiveBackgroundSection>
       
-      <Footer />
+      <Footer mobileBottomClearance />
       <ScrollTriggeredStickyCTA text={t('home.stickyCTA')} />
       </Box>
     </PageWrapper>

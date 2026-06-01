@@ -119,6 +119,13 @@ export default function IjipopGlitchTitle({ text, variant = 'page' }: IjipopGlit
           WebkitTextFillColor: 'transparent',
           textShadow: 'none',
           animation: 'ijipopGlitchBase 3.6s infinite steps(1, end)',
+          '@media (prefers-reduced-motion: reduce)': {
+            animation: 'none',
+            '&::before, &::after': {
+              animation: 'none',
+              opacity: 0,
+            },
+          },
           '@keyframes ijipopGlitchBase': {
             '0%, 74%, 100%': { transform: 'translate(0, 0) skewX(0deg)', opacity: 1 },
             '75%': { transform: 'translate(0, 0) skewX(-6deg)', opacity: 0.92 },

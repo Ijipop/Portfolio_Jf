@@ -79,8 +79,11 @@
   right: 0;
   top: calc(100% + 0.35rem);
   z-index: 30;
-  min-width: min(100vw - 2rem, 220px);
-  max-width: min(100vw - 1.5rem, 280px);
+  min-width: min(100%, calc(100vw - 2rem));
+  max-width: min(280px, calc(100vw - 1.5rem));
+  max-height: min(70dvh, 420px);
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
   padding: 0.65rem 0.85rem;
   border-radius: 10px;
   border: 1px solid rgba(12, 12, 12, 0.12);

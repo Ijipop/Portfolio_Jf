@@ -52,6 +52,10 @@ const StyledCTAButton = styled(Button, {
     fontWeight: 600,
     textTransform: 'none',
     whiteSpace: 'nowrap',
+    [theme.breakpoints.down('sm')]: {
+      whiteSpace: 'normal',
+      textWrap: 'balance',
+    },
     minHeight,
     transition: DESIGN_TOKENS.transitions.normal,
     position: 'relative' as const,

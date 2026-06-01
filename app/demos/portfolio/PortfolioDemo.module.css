@@ -107,9 +107,34 @@
 }
 
 @media (max-width: 639px) {
+  .stage {
+    position: relative;
+    inset: auto;
+    z-index: 1;
+    padding: 0;
+    min-height: 100vh;
+    min-height: 100dvh;
+  }
+
+  .scrollFrame {
+    display: none;
+  }
+
+  .scrollShell {
+    height: auto;
+    min-height: 100dvh;
+    border-radius: 0;
+    box-shadow: none;
+  }
+
   .top {
     flex-wrap: nowrap;
     padding: 1.25rem 0 1.5rem;
+  }
+
+  .section,
+  .cta {
+    scroll-margin-top: 4rem;
   }
 }
 

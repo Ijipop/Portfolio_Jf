@@ -17,6 +17,9 @@ export default function InteractiveBackgroundSection({
         position: 'relative',
         flex: 1,
         minHeight: 'calc(100vh - 200px)',
+        '@supports (height: 100dvh)': {
+          minHeight: 'calc(100dvh - 200px)',
+        },
         display: 'flex',
         flexDirection: 'column',
       }}

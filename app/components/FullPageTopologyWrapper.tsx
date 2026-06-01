@@ -121,6 +121,9 @@ export default function FullPageTopologyWrapper({ children }: FullPageTopologyWr
           position: 'relative',
           zIndex: 2,
           height: '100vh',
+          '@supports (height: 100dvh)': {
+            height: '100dvh',
+          },
           overflowY: 'auto',
           overflowX: 'hidden',
           overflowAnchor: 'none',

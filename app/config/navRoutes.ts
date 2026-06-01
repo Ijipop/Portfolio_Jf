@@ -35,7 +35,8 @@ export const NAV_ROUTES: NavRoute[] = [
     labelKey: 'nav.contact',
     path: '/portfolio/contact',
     ariaLabel: 'contact',
-    isActive: (pathname) => pathname === '/portfolio/contact',
+    isActive: (pathname) =>
+      pathname === '/portfolio/contact' || pathname.startsWith('/portfolio/contact/'),
   },
 ]
 

@@ -34,7 +34,7 @@ export default function NavMobile({ routes, pathname, onNavigate }: NavMobilePro
     <Box
       sx={{
         display: { xs: 'flex', sm: 'none' },
-        gap: 0.5,
+        gap: 0.25,
         flexGrow: 1,
         minWidth: 0,
         justifyContent: 'center',
@@ -54,7 +54,9 @@ export default function NavMobile({ routes, pathname, onNavigate }: NavMobilePro
               sx={{
                 color: active ? 'white' : 'rgba(255, 255, 255, 0.7)',
                 backgroundColor: active ? 'rgba(255, 255, 255, 0.15)' : 'transparent',
-                padding: 1,
+                minWidth: 44,
+                minHeight: 44,
+                padding: 0.75,
                 flexShrink: 0,
                 '&:hover': {
                   color: 'white',

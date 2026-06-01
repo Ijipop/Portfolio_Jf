@@ -206,7 +206,10 @@ export default function ProjectCard({
     flexShrink: 0,
     background: 'rgba(255, 255, 255, 0.95)',
     borderRadius: '50%',
+    minWidth: 44,
+    minHeight: 44,
     padding: 1,
+    boxSizing: 'border-box' as const,
     boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
     border: '2px solid rgba(0, 0, 0, 0.1)',
     transition: DESIGN_TOKENS.transitions.normal,
@@ -509,7 +512,7 @@ export default function ProjectCard({
                     textAlign: 'left',
                     lineHeight: 1.35,
                     mb: { xs: 0.5, md: 0.65 },
-                    fontSize: { xs: '0.72rem', sm: '0.75rem', md: '0.78rem' },
+                    fontSize: { xs: '0.8125rem', sm: '0.75rem', md: '0.78rem' },
                     overflow: 'visible',
                     display: 'block',
                     ...(isNonDefaultPalette ? { color: `${primary}ee` } : { color: 'rgba(255,255,255,0.92)' }),
@@ -546,7 +549,7 @@ export default function ProjectCard({
                   mb: 0.9,
                   color: textColor,
                   opacity: 0.78,
-                  fontSize: '0.64rem',
+                  fontSize: { xs: '0.75rem', sm: '0.75rem', md: '0.8125rem' },
                   fontWeight: 900,
                   letterSpacing: '0.11em',
                   textTransform: 'uppercase',
@@ -627,7 +630,8 @@ export default function ProjectCard({
                             minWidth: 0,
                             justifyContent: 'center',
                             px: { xs: 1, sm: 1.35 },
-                            py: 0.65,
+                            py: 1,
+                            minHeight: 44,
                             fontSize: '0.75rem',
                           }}
                           startIcon={<DownloadIcon sx={{ fontSize: 18 }} />}
@@ -648,7 +652,8 @@ export default function ProjectCard({
                             minWidth: 0,
                             justifyContent: 'center',
                             px: { xs: 1, sm: 1.35 },
-                            py: 0.65,
+                            py: 1,
+                            minHeight: 44,
                             fontSize: '0.75rem',
                           }}
                           startIcon={<DownloadIcon sx={{ fontSize: 18 }} />}
