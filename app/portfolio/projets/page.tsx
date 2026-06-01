@@ -394,7 +394,7 @@ export default function Projets() {
           </Box>
 
           {selectedProjectType === 'web' ? (
-            <Box sx={{ ...webSectionSurfaceSx, px: { xs: 0.5, sm: 1 }, pt: 1, pb: 1.5 }}>
+            <Box sx={{ px: { xs: 0.25, sm: 0.5 }, pt: 0.5, pb: 1 }}>
               <Tabs
                 value={webAudienceTab}
                 onChange={(_, v) => setWebAudienceTab(v as number)}

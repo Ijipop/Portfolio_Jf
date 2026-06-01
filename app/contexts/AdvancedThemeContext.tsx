@@ -3,7 +3,7 @@
 import { Box, CssBaseline } from '@mui/material'
 import { createTheme, PaletteMode, ThemeProvider } from '@mui/material/styles'
 import type { ThemeOptions } from '@mui/material/styles'
-import React, { createContext, useContext, useEffect, useState } from 'react'
+import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import { usePathname } from 'next/navigation'
 import { THEMES, ThemeName, getAvailableThemes } from '@/design-system/themes'
 import { shouldShowTopology } from '@/utils/topologyRoutes'
@@ -68,12 +68,27 @@ export function AdvancedThemeProvider({ children }: { children: React.ReactNode 
     })
   }, [themeName, presentationMode, beigePresentationBgUrl])
 
-  const setTheme = (newThemeName: ThemeName) => {
-    if (!THEMES[newThemeName]) return
-    if (presentationMode === 'beige' && newThemeName !== 'latte') return
-    setThemeName(newThemeName)
-    localStorage.setItem('themeName', newThemeName)
-  }
+  const setTheme = useCallback(
+    (newThemeName: ThemeName) => {
+      if (!THEMES[newThemeName]) return
+      if (presentationMode === 'beige' && newThemeName !== 'latte') return
+      setThemeName(newThemeName)
+      localStorage.setItem('themeName', newThemeName)
+    },
+    [presentationMode],
+  )
+
+  const availableThemes = useMemo(() => getAvailableThemes(), [])
+
+  const contextValue = useMemo(
+    () => ({
+      themeName,
+      customTheme,
+      setTheme,
+      availableThemes,
+    }),
+    [themeName, customTheme, setTheme, availableThemes],
+  )
 
   // Créer le thème MUI avec les couleurs personnalisées
   // Utiliser useMemo pour recréer le thème quand customTheme change
@@ -196,14 +211,7 @@ export function AdvancedThemeProvider({ children }: { children: React.ReactNode 
   }), [customTheme, mode, isTopologyRoute, isBeigePresentation])
 
   return (
-    <AdvancedThemeContext.Provider
-      value={{
-        themeName,
-        customTheme,
-        setTheme,
-        availableThemes: getAvailableThemes()
-      }}
-    >
+    <AdvancedThemeContext.Provider value={contextValue}>
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <Box

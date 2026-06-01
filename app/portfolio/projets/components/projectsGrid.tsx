@@ -7,12 +7,12 @@ export const ProjectsGrid = styled(Box)(({ theme }) => ({
   display: 'grid',
   gridTemplateColumns: '1fr',
   alignItems: 'stretch',
-  gap: theme.spacing(1.25),
+  gap: theme.spacing(2),
   [theme.breakpoints.up('sm')]: {
     gridTemplateColumns: 'repeat(2, 1fr)',
-    gap: theme.spacing(1.5),
+    gap: theme.spacing(2.5),
   },
   [theme.breakpoints.up('xl')]: {
-    gap: theme.spacing(2),
+    gap: theme.spacing(3),
   },
 }))

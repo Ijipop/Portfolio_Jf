@@ -7,7 +7,7 @@ import SeoJsonLd from './components/SeoJsonLd'
 import ThemeWrapper from './components/ThemeWrapper'
 import FullPageTopologyWrapper from './components/FullPageTopologyWrapper'
 import './globals.css'
-import { getBeigePresentationBgUrlFromDb } from '@/lib/site-appearance'
+import { getCachedBeigePresentationBgUrl } from '@/lib/cached-site-appearance'
 import { inter } from './fonts'
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://ijipop.com'
@@ -62,7 +62,7 @@ export const viewport = {
 }
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  const initialBeigePresentationBgUrl = await getBeigePresentationBgUrlFromDb()
+  const initialBeigePresentationBgUrl = await getCachedBeigePresentationBgUrl()
 
   return (
     <html lang="fr" className={inter.variable}>
@@ -77,9 +77,9 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         </ThemeWrapper>
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=AW-18192980748"
-          strategy="afterInteractive"
+          strategy="lazyOnload"
         />
-        <Script id="google-ads-aw" strategy="afterInteractive">
+        <Script id="google-ads-aw" strategy="lazyOnload">
           {`
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}

@@ -5,13 +5,14 @@ import Typography from '@mui/material/Typography'
 import { useTheme } from '@mui/material/styles'
 import { useLanguage } from '@/contexts/LanguageContext'
 import { useTextColor } from '@/hooks/useTextColor'
+import { memo } from 'react'
 import AutoplayLoopVideo from '@/components/shared/AutoplayLoopVideo'
 
 const DEMO_SRC = '/img/demo1.mp4'
 
 type Props = { compact?: boolean }
 
-export default function ContactCoffeeVideo({ compact = false }: Props) {
+function ContactCoffeeVideo({ compact = false }: Props) {
   const { t } = useLanguage()
   const textColor = useTextColor()
   const theme = useTheme()
@@ -54,3 +55,5 @@ export default function ContactCoffeeVideo({ compact = false }: Props) {
     </Box>
   )
 }
+
+export default memo(ContactCoffeeVideo)

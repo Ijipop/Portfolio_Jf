@@ -1,5 +1,14 @@
 const path = require('path')
 
+/** Uniquement en local avec `npm run analyze` — évite require sur Vercel (devDependency absente en prod). */
+function withOptionalBundleAnalyzer(config) {
+  if (process.env.ANALYZE !== 'true') {
+    return config
+  }
+  const withBundleAnalyzer = require('@next/bundle-analyzer')({ enabled: true })
+  return withBundleAnalyzer(config)
+}
+
 /**
  * Réduit le traçage des fichiers serverless (limite Vercel : 250 Mo décompressés par fonction).
  * Sur la build Linux, npm n’installe qu’un sous-ensemble de sharp ; en cas de traçage trop large,
@@ -144,9 +153,27 @@ const nextConfig = {
             value: 'origin-when-cross-origin'
           }
         ]
-      }
+      },
+      {
+        source: '/img/:path*',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+        ],
+      },
+      {
+        source: '/_next/static/:path*',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+        ],
+      },
     ]
   },
 }
 
-module.exports = nextConfig
+module.exports = withOptionalBundleAnalyzer(nextConfig)

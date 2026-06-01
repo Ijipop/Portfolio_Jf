@@ -1,7 +1,14 @@
 'use client'
 
-import React, { createContext, useContext, useState, useEffect } from 'react'
-import { translations, type Locale } from '../i18n/translations'
+import React, {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react'
+import { fr, loadTranslationDict, type Locale, type TranslationDict } from '../i18n/translations'
 
 type TranslationKey = string
 
@@ -28,33 +35,53 @@ const STORAGE_KEY = 'portfolio-locale'
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
   const [locale, setLocaleState] = useState<Locale>('fr')
   const [mounted, setMounted] = useState(false)
+  const [dict, setDict] = useState<TranslationDict>(fr as TranslationDict)
+
+  const applyLocale = useCallback(async (next: Locale) => {
+    setLocaleState(next)
+    if (typeof window !== 'undefined') {
+      localStorage.setItem(STORAGE_KEY, next)
+    }
+    const loaded = await loadTranslationDict(next)
+    setDict(loaded)
+  }, [])
 
   useEffect(() => {
     const saved = localStorage.getItem(STORAGE_KEY) as Locale | null
-    if (saved === 'fr' || saved === 'en') setLocaleState(saved)
+    const initial: Locale = saved === 'en' ? 'en' : 'fr'
+    if (initial === 'en') {
+      void loadTranslationDict('en').then(setDict)
+      setLocaleState('en')
+    }
     setMounted(true)
   }, [])
 
-  const setLocale = (newLocale: Locale) => {
-    setLocaleState(newLocale)
-    if (typeof window !== 'undefined') localStorage.setItem(STORAGE_KEY, newLocale)
-  }
-
-  // SSR + premier rendu client : toujours 'fr' pour éviter hydration mismatch et flash EN
-  const isServer = typeof window === 'undefined'
-  const resolvedLocale: Locale = (isServer || !mounted) ? 'fr' : locale
-
-  const t = (key: TranslationKey): string => {
-    const dict = translations[resolvedLocale] as Record<string, unknown>
-    const value = getNested(dict, key)
-    return value ?? key
-  }
-
-  return (
-    <LanguageContext.Provider value={{ locale: resolvedLocale, setLocale, t }}>
-      {children}
-    </LanguageContext.Provider>
+  const setLocale = useCallback(
+    (newLocale: Locale) => {
+      void applyLocale(newLocale)
+    },
+    [applyLocale],
   )
+
+  const isServer = typeof window === 'undefined'
+  const resolvedLocale: Locale = isServer || !mounted ? 'fr' : locale
+
+  const activeDict: TranslationDict = isServer || !mounted ? (fr as TranslationDict) : dict
+
+  const t = useCallback(
+    (key: TranslationKey): string => {
+      const value = getNested(activeDict as Record<string, unknown>, key)
+      return value ?? key
+    },
+    [activeDict],
+  )
+
+  const value = useMemo(
+    () => ({ locale: resolvedLocale, setLocale, t }),
+    [resolvedLocale, setLocale, t],
+  )
+
+  return <LanguageContext.Provider value={value}>{children}</LanguageContext.Provider>
 }
 
 export function useLanguage() {

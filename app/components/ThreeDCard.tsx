@@ -4,11 +4,18 @@ import { Box, Card, CardContent } from '@mui/material'
 import { styled, useTheme } from '@mui/material/styles'
 import type { SxProps, Theme } from '@mui/material/styles'
 import { motion } from 'framer-motion'
-import { useEffect, useState } from 'react'
+import dynamic from 'next/dynamic'
+import { useEffect, useState, type Ref } from 'react'
 import { usePathname } from 'next/navigation'
 import { shouldShowTopology } from '@/utils/topologyRoutes'
 import { getCardSurfaceSx } from '@/components/shared/cardSurface'
-import { BorderBeam } from '@/components/ui/border-beam'
+import { usePauseWhenOffscreen } from '@/hooks/usePauseWhenOffscreen'
+import type { BorderBeamProps } from '@/components/ui/border-beam'
+
+const BorderBeam = dynamic(
+  () => import('@/components/ui/border-beam').then((m) => ({ default: m.BorderBeam })),
+  { ssr: false },
+)
 
 export type ThreeDCardBorderBeamProps = {
   duration?: number
@@ -34,7 +41,7 @@ const ThreeDCard = styled(Card)(({ theme }) => ({
   cursor: 'pointer',
   transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
   transformStyle: 'preserve-3d',
-  minHeight: '240px', // Hauteur ultra compacte
+  minHeight: '240px',
   '&::before': {
     content: '""',
     position: 'absolute',
@@ -58,7 +65,6 @@ const ThreeDCard = styled(Card)(({ theme }) => ({
   }
 }))
 
-// Floating 3D Element - Plus subtil (opacité plus faible en palette default)
 const FloatingElement = styled(Box)(({ theme }) => ({
   position: 'absolute',
   background: 'var(--card-primary)',
@@ -67,18 +73,17 @@ const FloatingElement = styled(Box)(({ theme }) => ({
   animation: 'float 8s ease-in-out infinite',
   opacity: 'var(--card-decor-opacity, 0.6)',
   '@keyframes float': {
-    '0%, 100%': { 
+    '0%, 100%': {
       transform: 'translateY(0px) scale(1)',
       opacity: 0.4
     },
-    '50%': { 
+    '50%': {
       transform: 'translateY(-10px) scale(1.1)',
       opacity: 0.8
     }
   }
 }))
 
-// 3D Button avec effet de profondeur
 const ThreeDButton = styled(Box)(({ theme }) => ({
   background: theme.palette.mode === 'dark'
     ? 'linear-gradient(145deg, #2a2a2a, #1a1a1a)'
@@ -114,22 +119,21 @@ interface ThreeDCardProps {
   onClick?: () => void
   className?: string
   floatingElements?: number
-  /** Réduit hauteur et padding (pour cartes stats) */
   compact?: boolean
-  /** Carte en hauteur 100% pour aligner avec d'autres cartes dans une grille */
   fullHeight?: boolean
-  /** Moins d’effets (hover scale, pastilles flottantes) — ex. cartes projets */
   subtle?: boolean
-  /** Styles MUI supplémentaires */
   sx?: SxProps<Theme>
-  /** Animation de liseré lumineux (Magic UI Border Beam) */
   borderBeam?: boolean | ThreeDCardBorderBeamProps
 }
 
-export default function ThreeDCardComponent({ 
-  children, 
-  onClick, 
-  className, 
+function floatingSx(paused: boolean) {
+  return paused ? { animationPlayState: 'paused' as const } : undefined
+}
+
+export default function ThreeDCardComponent({
+  children,
+  onClick,
+  className,
   floatingElements = 3,
   compact = false,
   fullHeight = false,
@@ -140,7 +144,9 @@ export default function ThreeDCardComponent({
   const theme = useTheme()
   const pathname = usePathname()
   const isTopologyRoute = shouldShowTopology(pathname)
+  const { ref, paused } = usePauseWhenOffscreen<HTMLDivElement>()
   const [isMobile, setIsMobile] = useState(false)
+
   useEffect(() => {
     const check = () => {
       setIsMobile(
@@ -169,12 +175,17 @@ export default function ThreeDCardComponent({
         ? { duration: 45, size: 220 }
         : { duration: 45, size: 220, ...borderBeam }
 
+  const beamProps: BorderBeamProps | null = borderBeamProps
+    ? { ...borderBeamProps, paused }
+    : null
+
   return (
     <motion.div
+      ref={ref as Ref<HTMLDivElement>}
       style={fullHeight ? { height: '100%' } : undefined}
       initial={{ opacity: 0, scale: 0.9 }}
-      animate={{ opacity: 1, scale: 1 }}
-      transition={{ duration: 0.6, ease: "easeOut" }}
+      animate={paused ? false : { opacity: 1, scale: 1 }}
+      transition={{ duration: 0.6, ease: 'easeOut' }}
       whileHover={
         subtle || isMobile || isTopologyRoute ? undefined : { scale: 1.02 }
       }
@@ -206,10 +217,10 @@ export default function ThreeDCardComponent({
           ...(sxProp || {}),
         }}
       >
-        {/* Floating Elements désactivés sur mobile pour éviter les glitches */}
         {effectiveFloating > 0 && (
           <>
             <FloatingElement
+              className={paused ? 'perf-pause-animations' : undefined}
               sx={{
                 width: 8,
                 height: 8,
@@ -217,10 +228,12 @@ export default function ThreeDCardComponent({
                 right: 20,
                 animationDelay: '0s',
                 zIndex: 1,
+                ...floatingSx(paused),
               }}
             />
             {effectiveFloating > 1 && (
               <FloatingElement
+                className={paused ? 'perf-pause-animations' : undefined}
                 sx={{
                   width: 6,
                   height: 6,
@@ -228,11 +241,13 @@ export default function ThreeDCardComponent({
                   left: 20,
                   animationDelay: '1s',
                   zIndex: 1,
+                  ...floatingSx(paused),
                 }}
               />
             )}
             {effectiveFloating > 2 && (
               <FloatingElement
+                className={paused ? 'perf-pause-animations' : undefined}
                 sx={{
                   width: 4,
                   height: 4,
@@ -240,16 +255,16 @@ export default function ThreeDCardComponent({
                   right: 10,
                   animationDelay: '2s',
                   zIndex: 1,
+                  ...floatingSx(paused),
                 }}
               />
             )}
           </>
         )}
-        
+
         <CardContent
           sx={{
             position: 'relative',
-            /** Au-dessus du BorderBeam : sinon le masque du liseré peut laisser un filet clair au bord inférieur des médias arrondis. */
             zIndex: 3,
             backgroundColor: 'transparent',
             ...(fullHeight && {
@@ -257,8 +272,6 @@ export default function ThreeDCardComponent({
               display: 'flex',
               flexDirection: 'column',
               minHeight: 0,
-              // visible : ombre CTA non coupée sur un rectangle ; pas de overflow:auto ici
-              // (sinon scale/translate/shadow au hover déclenchent des scrollbars).
               overflow: 'visible',
               pb: 4,
             }),
@@ -266,7 +279,7 @@ export default function ThreeDCardComponent({
         >
           {children}
         </CardContent>
-        {borderBeamProps && (
+        {beamProps && (
           <Box
             sx={{
               position: 'absolute',
@@ -277,7 +290,7 @@ export default function ThreeDCardComponent({
               overflow: 'hidden',
             }}
           >
-            <BorderBeam {...borderBeamProps} />
+            <BorderBeam {...beamProps} />
           </Box>
         )}
       </ThreeDCard>
@@ -286,4 +299,3 @@ export default function ThreeDCardComponent({
 }
 
 export { FloatingElement, ThreeDButton }
-

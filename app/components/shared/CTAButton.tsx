@@ -9,7 +9,6 @@ import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
 import Button from '@mui/material/Button'
 import type { SxProps, Theme } from '@mui/material/styles'
 import { styled } from '@mui/material/styles'
-import { motion } from 'framer-motion'
 import { DESIGN_TOKENS } from '../../design-system/constants'
 import { useThemeColors } from '../../hooks/useThemeColors'
 
@@ -86,6 +85,12 @@ const StyledCTAButton = styled(Button, {
     '&:hover::before': {
       left: '100%',
     },
+    '&:hover:not(:disabled)': {
+      transform: 'translateY(-3px) scale(1.02)',
+    },
+    '&:active:not(:disabled)': {
+      transform: 'scale(0.98)',
+    },
     '&:active::after': {
       width: '300px',
       height: '300px',
@@ -139,8 +144,6 @@ const StyledCTAButton = styled(Button, {
   }
 })
 
-const MotionCTAButton = motion.create(StyledCTAButton)
-
 export default function CTAButton({
   children,
   onClick,
@@ -170,17 +173,14 @@ export default function CTAButton({
   }
 
   return (
-    <MotionCTAButton
+    <StyledCTAButton
       ctaVariant={variant}
       primaryColor={primary}
       secondaryColor={secondary}
       {...buttonProps}
-      whileHover={disabled ? undefined : { y: -3, scale: 1.02 }}
-      whileTap={disabled ? undefined : { scale: 0.98 }}
-      transition={{ type: 'spring', stiffness: 400, damping: 17 }}
     >
       {children}
-    </MotionCTAButton>
+    </StyledCTAButton>
   )
 }
 

@@ -10,7 +10,7 @@ import EmailIcon from '@mui/icons-material/Email'
 import CodeIcon from '@mui/icons-material/Code'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { memo, useEffect, useState } from 'react'
 import CTAButton from './shared/CTAButton'
 import { DESIGN_TOKENS } from '../design-system/constants'
 import { useAdvancedTheme } from '../contexts/AdvancedThemeContext'
@@ -23,7 +23,7 @@ type FooterProps = {
   mobileBottomClearance?: boolean
 }
 
-export default function Footer({ mobileBottomClearance = false }: FooterProps) {
+function Footer({ mobileBottomClearance = false }: FooterProps) {
   const currentYear = new Date().getFullYear()
   const router = useRouter()
   const theme = useTheme()
@@ -84,6 +84,7 @@ export default function Footer({ mobileBottomClearance = false }: FooterProps) {
   return (
     <Box
       component="footer"
+      className="perf-cv-auto"
       aria-label={t('footer.landmarkLabel')}
       sx={{
         background:
@@ -329,3 +330,5 @@ export default function Footer({ mobileBottomClearance = false }: FooterProps) {
     </Box>
   )
 }
+
+export default memo(Footer)
