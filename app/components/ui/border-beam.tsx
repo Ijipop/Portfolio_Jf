@@ -4,7 +4,7 @@ import { motion, type MotionStyle, type Transition } from "framer-motion"
 
 import { cn } from "@/lib/utils"
 
-interface BorderBeamProps {
+export interface BorderBeamProps {
   /**
    * The size of the border beam.
    */
@@ -49,6 +49,8 @@ interface BorderBeamProps {
    * The border width of the beam.
    */
   borderWidth?: number
+  /** Pause l’animation quand la carte est hors écran (perf, visuel inchangé à l’écran). */
+  paused?: boolean
 }
 
 export const BorderBeam = ({
@@ -63,6 +65,7 @@ export const BorderBeam = ({
   reverse = false,
   initialOffset = 0,
   borderWidth = 1,
+  paused = false,
 }: BorderBeamProps) => {
   return (
     <div
@@ -89,11 +92,15 @@ export const BorderBeam = ({
           } as MotionStyle
         }
         initial={{ offsetDistance: `${initialOffset}%` }}
-        animate={{
-          offsetDistance: reverse
-            ? [`${100 - initialOffset}%`, `${-initialOffset}%`]
-            : [`${initialOffset}%`, `${100 + initialOffset}%`],
-        }}
+        animate={
+          paused
+            ? false
+            : {
+                offsetDistance: reverse
+                  ? [`${100 - initialOffset}%`, `${-initialOffset}%`]
+                  : [`${initialOffset}%`, `${100 + initialOffset}%`],
+              }
+        }
         transition={{
           repeat: Infinity,
           ease: "linear",

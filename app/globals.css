@@ -436,3 +436,16 @@ body {
     animation: none;
     mix-blend-mode: normal;
 }
+
+/**
+ * Perf : report du rendu des sections hors écran (scroll identique une fois visible).
+ * contain-intrinsic-size évite un saut de layout approximatif au dévoilement.
+ */
+.perf-cv-auto {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 480px;
+}
+
+.perf-pause-animations {
+  animation-play-state: paused !important;
+}

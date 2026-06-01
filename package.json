@@ -27,6 +27,8 @@
     "deps:outdated": "npm outdated",
     "deps:watch": "npm outdated resend sharp prisma @prisma/client",
     "perf:lighthouse": "node scripts/print-lighthouse-instructions.mjs",
+    "analyze": "node scripts/run-analyze-build.mjs",
+    "encode:contact-demo": "node scripts/encode-contact-demo-video.mjs",
     "sync-loading-frames": "node scripts/sync-projects-loading-frames.mjs",
     "encode:loading-webm": "node scripts/encode-projects-loading-webm.mjs"
   },
@@ -65,6 +67,7 @@
     "web-vitals": "^5.1.0"
   },
   "devDependencies": {
+    "@next/bundle-analyzer": "^16.2.4",
     "@playwright/test": "^1.58.2",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",

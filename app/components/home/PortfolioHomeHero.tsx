@@ -6,8 +6,6 @@ import Typography from '@mui/material/Typography'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import Link from 'next/link'
 import { useLayoutEffect, useEffect, useMemo, useRef, useState } from 'react'
-import gsap from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import ScramblingText from '@/components/ScramblingText'
 import CTAButton from '@/components/shared/CTAButton'
 import HeaderSection from '@/components/shared/HeaderSection'
@@ -17,8 +15,7 @@ import { usePresentationMode } from '@/contexts/PresentationModeContext'
 import { useTextColor } from '@/hooks/useTextColor'
 import { useThemeColors } from '@/hooks/useThemeColors'
 import { deferUntilIdle } from '@/utils/deferUntilIdle'
-
-gsap.registerPlugin(ScrollTrigger)
+import { loadGsapWithScrollTrigger } from '@/utils/gsapScrollTrigger'
 
 export default function PortfolioHomeHero() {
   const { t } = useLanguage()
@@ -55,25 +52,29 @@ export default function PortfolioHomeHero() {
     const cancelDefer = deferUntilIdle(() => {
       if (cancelled) return
 
-      const ctx = gsap.context(() => {
-        gsap.fromTo(
-          el,
-          { y: 0, opacity: 1 },
-          {
-            y: 48,
-            opacity: 0.8,
-            ease: 'none',
-            scrollTrigger: {
-              trigger: el,
-              start: 'top 80px',
-              end: '+=420',
-              scrub: 0.5,
-            },
-          },
-        )
-      }, el)
+      void loadGsapWithScrollTrigger().then(({ gsap }) => {
+        if (cancelled) return
 
-      revert = () => ctx.revert()
+        const ctx = gsap.context(() => {
+          gsap.fromTo(
+            el,
+            { y: 0, opacity: 1 },
+            {
+              y: 48,
+              opacity: 0.8,
+              ease: 'none',
+              scrollTrigger: {
+                trigger: el,
+                start: 'top 80px',
+                end: '+=420',
+                scrub: 0.5,
+              },
+            },
+          )
+        }, el)
+
+        revert = () => ctx.revert()
+      })
     }, 900)
 
     return () => {

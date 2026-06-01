@@ -1,37 +1,40 @@
 'use client'
 
 import useMediaQuery from '@mui/material/useMediaQuery'
-import { ReactLenis } from 'lenis/react'
+import dynamic from 'next/dynamic'
+import { usePathname } from 'next/navigation'
 import type { ReactNode } from 'react'
-import LenisScrollTriggerBridge from './LenisScrollTriggerBridge'
+
+const LenisRoot = dynamic(() => import('./LenisRoot'), { ssr: false })
+
+/** Pages courtes : pas de Lenis (moins de RAF, scroll natif identique). */
+const LENIS_SKIP_PATH_PREFIXES = [
+  '/portfolio/contact',
+  '/admin',
+] as const
 
 type SmoothScrollProviderProps = {
   children: ReactNode
 }
 
+function shouldSkipLenis(pathname: string | null): boolean {
+  if (!pathname) return false
+  return LENIS_SKIP_PATH_PREFIXES.some(
+    (prefix) => pathname === prefix || pathname.startsWith(`${prefix}/`),
+  )
+}
+
 /**
- * Lenis en root sans lissage de la **molette** : scroll wheel = 100 % natif
- * (clic molette / autoscroll, Shift+molette, etc.).
- * Lenis reste utile pour la synchro scroll + Resize / intégrations futures (scrollTo).
+ * Lenis en root sans lissage de la **molette** : scroll wheel = 100 % natif.
+ * Lenis + GSAP pont chargés en chunks séparés (dynamic import).
  */
 export default function SmoothScrollProvider({ children }: SmoothScrollProviderProps) {
+  const pathname = usePathname()
   const reducedMotion = useMediaQuery('(prefers-reduced-motion: reduce)', { noSsr: true })
 
-  if (reducedMotion) {
+  if (reducedMotion || shouldSkipLenis(pathname)) {
     return children
   }
 
-  return (
-    <ReactLenis
-      root
-      options={{
-        autoRaf: true,
-        /** Désactivé volontairement : évite preventDefault sur wheel (réparation autoscroll molette). */
-        smoothWheel: false,
-      }}
-    >
-      <LenisScrollTriggerBridge />
-      {children}
-    </ReactLenis>
-  )
+  return <LenisRoot>{children}</LenisRoot>
 }

@@ -6,7 +6,7 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import React from 'react';
+import React, { memo } from 'react';
 import { ThemeSelector } from '@/components/ThemeSelector';
 import { PresentationModeToggle } from '@/components/PresentationModeToggle';
 import { usePresentationMode } from '@/contexts/PresentationModeContext';
@@ -19,7 +19,7 @@ import { NAV_ROUTES } from '@/config/navRoutes';
 
 import './components.css';
 
-export default function AppBarComponent() {
+function AppBarComponent() {
 	const router = useRouter();
 	const pathname = usePathname();
 	const { primary, secondary } = useThemeColors();
@@ -107,3 +107,5 @@ export default function AppBarComponent() {
 		</>
 	)
 }
+
+export default memo(AppBarComponent)

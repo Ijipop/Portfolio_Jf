@@ -7,17 +7,14 @@ import Link from 'next/link'
 import dynamic from 'next/dynamic'
 import { alpha } from '@mui/material/styles'
 import HomeAmbientBackdrop from './components/home/HomeAmbientBackdrop'
-import AiConversionTeaser from './components/home/AiConversionTeaser'
 import PortfolioHomeHero from './components/home/PortfolioHomeHero'
 import AppBarComponent from './components/appBar'
 import PageWrapper from './components/shared/PageWrapper'
 import InteractiveBackgroundSection from './components/shared/InteractiveBackgroundSection'
 import PortfolioServicesSection from './components/shared/PortfolioServicesSection'
-import PortfolioProcessSection from './components/shared/PortfolioProcessSection'
 import ClientProofSection from './components/shared/ClientProofSection'
 import ScrollTriggeredStickyCTA from './components/shared/ScrollTriggeredStickyCTA'
 import CTAButton from './components/shared/CTAButton'
-import ScrollReveal from './components/shared/ScrollReveal'
 import Footer from './components/Footer'
 import { DESIGN_TOKENS } from './design-system/constants'
 import { useThemeColors } from './hooks/useThemeColors'
@@ -29,6 +26,12 @@ const SignatureIntro = dynamic(() => import('./components/SignatureIntro'), { ss
 const HomeHeroServicesSection = dynamic(() => import('./components/home/HomeHeroServicesSection'), { ssr: false })
 const PortfolioStatsBand = dynamic(() => import('./components/shared/PortfolioStatsBand'), { ssr: false })
 const HomeNavigationCards = dynamic(() => import('./components/home/HomeNavigationCards'), { ssr: false })
+const PortfolioProcessSection = dynamic(
+  () => import('./components/shared/PortfolioProcessSection'),
+  { ssr: false },
+)
+const AiConversionTeaser = dynamic(() => import('./components/home/AiConversionTeaser'), { ssr: false })
+const ScrollReveal = dynamic(() => import('./components/shared/ScrollReveal'), { ssr: false })
 
 const INTRO_SESSION_KEY = 'portfolio-intro-seen'
 const SHOW_HOME_STATS_BAND = false
@@ -174,8 +177,12 @@ export default function HomeClient({ initialShowIntro }: { initialShowIntro: boo
         )}
 
         {SHOW_HOME_NAVIGATION_CARDS && <HomeNavigationCards />}
-        <PortfolioProcessSection />
-        <AiConversionTeaser />
+        <Box className="perf-cv-auto">
+          <PortfolioProcessSection />
+        </Box>
+        <Box className="perf-cv-auto">
+          <AiConversionTeaser />
+        </Box>
       </Container>
       </InteractiveBackgroundSection>
       

@@ -144,7 +144,7 @@ export const ContactLocationCard = memo(function ContactLocationCard({
   compact,
 }: ContactLocationCardProps) {
   return (
-    <Box sx={{ maxWidth: 800, mx: 'auto', mb: compact ? 4 : 6 }}>
+    <Box className="perf-cv-auto" sx={{ maxWidth: 800, mx: 'auto', mb: compact ? 4 : 6 }}>
       <ThreeDCardComponent floatingElements={2} sx={{ padding: { xs: 2, sm: 2.5, md: 3 } }}>
         <Box sx={{ textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           <LocationOnIcon sx={{ fontSize: 40, color: primary, mb: 1.5 }} />
@@ -182,7 +182,7 @@ export const ContactSocialSection = memo(function ContactSocialSection({
   compact,
 }: ContactSocialSectionProps) {
   return (
-    <Box sx={{ mt: compact ? 4 : 8, mb: compact ? 4 : 6 }}>
+    <Box className="perf-cv-auto" sx={{ mt: compact ? 4 : 8, mb: compact ? 4 : 6 }}>
       <Typography
         variant="h4"
         gutterBottom
@@ -283,5 +283,9 @@ type ContactCoffeeSectionProps = {
 export const ContactCoffeeSection = memo(function ContactCoffeeSection({
   compact,
 }: ContactCoffeeSectionProps) {
-  return <ContactCoffeeVideo compact={compact} />
+  return (
+    <Box className="perf-cv-auto">
+      <ContactCoffeeVideo compact={compact} />
+    </Box>
+  )
 })
