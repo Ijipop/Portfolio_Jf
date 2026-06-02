@@ -20,18 +20,22 @@ export const en = {
     },
     home: {
       heroTitle: 'Ijipop',
-      heroSubtitle: 'Websites & ongoing client care',
+      heroSubtitle: 'Clear, credible websites for Quebec SMBs',
       heroTagline:
-        'Showcase sites, redesigns and go-live support for freelancers and small businesses.\n\nUpdates, content changes and upkeep—I stay available after launch so your site stays current.\n\nCustom tools and light automation when that’s the right fit.',
+        'Showcase sites and redesigns for SMBs, self-employed professionals and creators across Quebec—built for serious inquiries. Simple tools or useful AI when it helps.',
+      heroOutcome:
+        'I help Quebec SMBs, self-employed professionals and creators get a clear, credible website focused on client inquiries—with simple tools or useful AI when you need them.',
       heroRealName: 'Jean-François Lefebvre',
-      heroOneLiner: 'Freelance web developer · Montreal',
+      heroOneLiner: 'Freelance web developer · Montreal, Quebec',
       mainSectionEyebrow: 'Custom website creation',
-      mainSectionTitle: 'Clear, fast websites designed for your business',
+      mainSectionTitle: 'Websites built to earn trust and bring in inquiries',
       mainSectionLeadMobile: '• Polished on mobile and desktop.',
-      mainSectionP1: 'Freelancers and SMBs — new sites, redesigns and small custom tools.',
+      mainSectionP1:
+        'SMBs, self-employed professionals, artists and small teams across Quebec.',
       mainSectionP2:
         '',
-      role: 'Developer specialized in custom websites and applications for freelancers and small businesses.',
+      role:
+        'Custom websites and small tools for Quebec SMBs—clear, credible and focused on real client inquiries.',
       intro:
         'My goal: build tools that are simple, effective, and easy to use, with reliable technical support.\n\nSupport available remotely or in person on the Island of Montreal.',
       seeProjects: 'View my projects',
@@ -43,23 +47,23 @@ export const en = {
       sectionSkills: 'Technologies & Skills',
       cardProjects: 'My Projects',
       cardProjectsDesc:
-        'Web work and small tools: shipped sites, redesigns, and projects for freelancers and SMBs.',
+        'Work for SMBs and professionals: shipped sites, redesigns and projects focused on contact.',
       cardAbout: 'About',
       cardAboutDesc:
-        'My background and how I can help with a site, a custom tool, or handling leads better (conversion, useful AI).',
+        'How I help you look credible online and receive more serious inquiries.',
       cardContact: 'Contact',
       cardContactDesc:
-        'New site, redesign, updates, or a small tool—tell me what you need.',
+        'New site, redesign or improving what you have—let’s focus on what pays off most.',
       stickyCTA: 'Get an estimate',
       demosBandKicker: 'Demo showcases',
       demosBandTitle: 'See the craft before you decide',
       demosBandLead:
         'Six one-pagers to show very different creative directions and sectors.',
       demosBandCta: 'Browse demos',
-      aiImpactKicker: 'New',
-      aiImpactTitle: 'Your website can become a sales assistant',
+      aiImpactKicker: 'Optional',
+      aiImpactTitle: 'When it helps: AI at the service of your inquiries',
       aiImpactLead:
-        'Add useful AI to your site: answer questions, qualify prospects, and track incoming requests.',
+        'Answers to common questions, prospect qualification and simple form tracking—without replacing a solid website.',
       aiImpactPrimaryCta: 'Try the AI diagnosis',
       aiImpactMetricLeads: 'Requests received',
       aiImpactMetricLeadsHint: 'One inbox for every inquiry.',
@@ -71,18 +75,19 @@ export const en = {
       aiImpactMetricConversionHint: 'See who completes the flow.',
       aiImpactDisclosure:
         'An example of the indicators your site can track to better understand incoming requests.',
-      heroEditorialPrefix: 'I design',
-      heroEditorialSuffix: 'credible and effective.',
-      heroRotatingSites: 'websites',
-      heroRotatingTools: 'tools',
-      heroRotatingSoftware: 'software',
-      heroRotatingInterfaces: 'interfaces',
+      heroEditorialPrefix: 'Websites that are',
+      heroEditorialSuffix: 'for SMBs and professionals across Quebec.',
+      heroRotatingSites: 'credible',
+      heroRotatingTools: 'clear',
+      heroRotatingSoftware: 'built for leads',
+      heroRotatingInterfaces: 'ready for Quebec',
       wowStatsYears: 'Years of experience',
       wowStatsProjects: 'Projects and prototypes',
       wowStatsTechs: 'Technologies mastered',
       servicesHomeKicker: 'OFFERS',
       servicesHomeTitle: 'Three ways I can help',
-      servicesHomeSubtitle: '',
+      servicesHomeSubtitle:
+        'SMBs, self-employed professionals, artists and small teams across Quebec.',
       servicesHomeFootnote:
         'Larger site, monthly care, software with sync or integrations? Write to me and let’s talk.',
       servicesPackPriceFrom: 'from',
@@ -101,14 +106,15 @@ export const en = {
       servicesPackPagePrice: '$1,200',
       servicesPackPagePriceNote:
         'Express version available from $499 when content is ready and needs are very simple.',
-      servicesPackPageFor: 'For a clear, clean, fast, credible online presence.',
-      servicesPackPageB1: 'Clear structure: services, contact, mobile-friendly',
-      servicesPackPageB2: 'Contact form that reaches your inbox',
-      servicesPackPageB3: 'Launch and basic SEO included',
+      servicesPackPageFor:
+        'For a clear, credible presence ready to receive inquiries.',
+      servicesPackPageB1: 'Clear message and path that build trust and invite contact',
+      servicesPackPageB2: 'Reliable form: every inquiry reaches your inbox',
+      servicesPackPageB3: 'Basic SEO so you can be found locally',
       servicesPackPageB4: 'Delivery in ~7 days with guidance',
       servicesPackPageCta: 'Share your vision',
       servicesPackPageSubject: 'Offer: professional website',
-      servicesPackPageBadge: 'Most popular',
+      servicesPackPageBadge: 'Recommended',
       servicesPackMaintainTitle: 'Monthly care',
       servicesPackMaintainPrice: '$75 – $150 / month',
       servicesPackMaintainFor: 'Site already live — yours or one we built.',
@@ -122,7 +128,7 @@ export const en = {
       servicesPackSoftwarePriceNote:
         'Custom software from $4,500 · quote based on complexity.',
       servicesPackSoftwareFor:
-        'Smart form, internal tool, mini-dashboard, or useful AI building block.',
+        'When a website is not enough: small tool, automation or useful AI building block.',
       servicesPackSoftwareB1: 'Clear brief and scope before we start',
       servicesPackSoftwareB2: 'Web or internal tool shaped to your work',
       servicesPackSoftwareB3: 'Usable version on delivery day',
@@ -134,10 +140,12 @@ export const en = {
       servicesHomeNewLead:
         'A modern site, easy to view on desktop and mobile, to present your services and make it easier for people to get in touch.',
       servicesHomeNewCta: 'Talk about your site →',
+      servicesHomeReassuranceTitle: 'No need to start from scratch',
       servicesHomeImproveTitle: 'Redesign or refresh',
       servicesHomeImproveLead:
-        'We keep what works, clarify the rest, and bring your site up to date. On request: basic SEO—metadata, structure, performance—with no ranking guarantees.',
+        'No need to redo everything: I can improve your current site, fix pain points and prioritize what brings the most value.',
       servicesHomeImproveCta: 'Improve your site →',
+      servicesHomeImproveSubject: 'Project: website redesign or improvement',
       servicesHomeToolsTitle: 'Helpful tools & support',
       servicesHomeToolsLead:
         'Clearer forms, lighter repetitive work, updates, and steady help after go-live.',
@@ -320,10 +328,10 @@ export const en = {
     },
     about: {
       title: 'About',
-      subtitle: 'Who am I?',
+      subtitle: 'How I help you',
       experience: 'Experience',
       experienceText:
-        'Software development training and a company internship. I build custom websites and small tools for freelancers and SMBs—simple, clear, focused on contact and inquiries.',
+        'I build websites and small tools for Quebec SMBs and professionals—clear, credible and designed for serious inquiries, not just “being online”.',
       formation: 'Education',
       skills: 'My Technical Skills',
       softSkills: 'Soft Skills',

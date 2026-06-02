@@ -7,12 +7,12 @@ export const metadata: Metadata = {
     absolute: 'Création de sites web à Montréal et partout au Québec',
   },
   description:
-    'Basé à Montréal, ijipop crée des sites vitrines, refontes et portfolios pour travailleurs autonomes et PME partout au Québec. Responsive, SEO de base, maintenance.',
+    'Création et refonte de sites web à Montréal et au Québec — PME et professionnels. Sites clairs, crédibles, orientés demandes clients. Audit dès 450 $, site dès 1 200 $.',
   alternates: { canonical: SEO_LANDING_PATH },
   openGraph: {
     title: 'Création de sites web à Montréal et au Québec | Ijipop',
     description:
-      'Sites vitrines, refontes et portfolios pour PME et travailleurs autonomes — Montréal et mandats partout au Québec.',
+      'Sites clairs et crédibles pour PME du Québec — Montréal et mandats partout au Québec. Prêts à recevoir des demandes sérieuses.',
     url: SEO_LANDING_PATH,
     locale: 'fr_CA',
     siteName: 'Jean-François Lefebvre — Ijipop',
@@ -29,7 +29,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Création de sites web à Montréal et au Québec | Ijipop',
     description:
-      'Sites vitrines, refontes et portfolios pour PME et travailleurs autonomes — Montréal et Québec.',
+      'Sites clairs et crédibles pour PME du Québec — Montréal et mandats partout au Québec. Prêts à recevoir des demandes sérieuses.',
     images: ['/og-default.png'],
   },
 }

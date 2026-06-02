@@ -13,7 +13,7 @@ const jsonLd = {
       url: siteUrl,
       name: 'Jean-François Lefebvre — Ijipop',
       description:
-        'Création et refonte de sites web pour PME et indépendants — basé à Montréal, mandats partout au Québec et à distance. Applications et outils sur mesure.',
+        'Sites web clairs et crédibles pour PME du Québec — orientés demandes clients. Basé à Montréal, mandats partout au Québec. Outils simples et IA utile au besoin.',
       inLanguage: 'fr-CA',
       publisher: { '@id': `${siteUrl}/#service` },
     },
@@ -24,7 +24,7 @@ const jsonLd = {
       url: siteUrl,
       logo: { '@type': 'ImageObject', url: logoUrl },
       description:
-        'Sites web vitrine, refonte et mise à jour pour travailleurs autonomes et PME — Montréal et partout au Québec. Développement logiciel et petits outils sur mesure.',
+        'Sites web clairs et crédibles pour PME du Québec — prêts à recevoir des demandes. Montréal et partout au Québec. Petits outils et IA utile au besoin.',
       areaServed: [
         { '@type': 'City', name: 'Montréal' },
         { '@type': 'AdministrativeArea', name: 'Québec, Canada' },

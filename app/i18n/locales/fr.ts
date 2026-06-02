@@ -20,18 +20,22 @@ export const fr = {
     },
     home: {
       heroTitle: 'Ijipop',
-      heroSubtitle: 'Création de sites & accompagnement PME',
+      heroSubtitle: 'Sites clairs et crédibles pour PME du Québec',
       heroTagline:
-        'Sites vitrine, refonte et mise en ligne pour indépendants et PME.\n\nMises à jour, contenu et entretien : je reste disponible après la livraison pour que votre site reste à jour.\n\nPetits outils et automatisation sur mesure lorsque c’est le bon complément.',
+        'Sites vitrine et refontes pour PME, travailleurs autonomes et créateurs du Québec — orientés demandes clients. Outils simples ou IA utile au besoin.',
+      heroOutcome:
+        'J’aide les PME, travailleurs autonomes et créateurs du Québec à avoir un site clair, crédible et orienté demandes clients — avec des outils simples ou de l’IA utile au besoin.',
       heroRealName: 'Jean-François Lefebvre',
-      heroOneLiner: 'Développeur web freelance · Montréal',
+      heroOneLiner: 'Développeur web freelance · Montréal, Québec',
       mainSectionEyebrow: 'Création de sites web sur mesure',
-      mainSectionTitle: 'Des sites web clairs, rapides et pensés pour votre entreprise',
+      mainSectionTitle: 'Des sites pensés pour inspirer confiance et recevoir des demandes',
       mainSectionLeadMobile: '• Impeccables sur mobile comme sur ordinateur.',
-      mainSectionP1: 'Indépendants et PME — création, refonte et petits outils sur mesure.',
+      mainSectionP1:
+        'PME, travailleurs autonomes, professionnels, artistes et petites équipes au Québec.',
       mainSectionP2:
         '',
-      role: "Développeur spécialisé en création de sites web et d'applications sur mesure pour travailleurs autonomes et petites entreprises.",
+      role:
+        'Sites web et petits outils sur mesure pour PME du Québec — clairs, crédibles et orientés vers vos demandes clients.',
       intro:
         "Mon objectif : créer des outils simples, efficaces et faciles à utiliser, tout en offrant un accompagnement technique fiable.\n\nSoutien technique disponible à distance ou en personne sur l'île de Montréal.",
       seeProjects: 'Voir mes projets',
@@ -43,23 +47,23 @@ export const fr = {
       sectionSkills: 'Technologies & Compétences',
       cardProjects: 'Mes Projets',
       cardProjectsDesc:
-        'Réalisations web et petits outils\u202f: sites livrés, refontes et mandats pour indépendants et PME.',
+        'Réalisations pour PME et professionnels\u202f: sites livrés, refontes et mandats orientés contact.',
       cardAbout: 'À Propos',
       cardAboutDesc:
-        'Mon parcours et comment je peux vous aider avec un site, un outil sur mesure ou une meilleure prise en charge des demandes (conversion, IA utile).',
+        'Comment je vous aide à paraître crédible en ligne et à mieux recevoir des demandes sérieuses.',
       cardContact: 'Contact',
       cardContactDesc:
-        'Nouveau site, refonte, mises à jour ou petit outil\u202f: parlons de votre besoin.',
+        'Nouveau site, refonte ou amélioration de l’existant\u202f: parlons de ce qui rapporte le plus.',
       stickyCTA: 'Obtenir une estimation',
       demosBandKicker: 'Vitrines démo',
       demosBandTitle: 'Voir le rendu avant de décider',
       demosBandLead:
         'Six mini-sites pour montrer des styles et des secteurs très différents.',
       demosBandCta: 'Explorer les démos',
-      aiImpactKicker: 'Nouveau',
-      aiImpactTitle: 'Votre site peut devenir un assistant commercial',
+      aiImpactKicker: 'Option',
+      aiImpactTitle: 'Quand c’est utile : IA au service de vos demandes',
       aiImpactLead:
-        'Ajoutez une IA utile à votre site : réponses aux questions, qualification des prospects et suivi simple des demandes reçues.',
+        'Réponses aux questions fréquentes, qualification des prospects et suivi simple des formulaires — sans remplacer un bon site.',
       aiImpactPrimaryCta: 'Tester le diagnostic IA',
       aiImpactMetricLeads: 'Demandes reçues',
       aiImpactMetricLeadsHint: 'Tout centraliser sans rien rater.',
@@ -71,18 +75,19 @@ export const fr = {
       aiImpactMetricConversionHint: 'Voir qui va au bout.',
       aiImpactDisclosure:
         'Exemple des indicateurs que votre site peut suivre pour mieux comprendre vos demandes.',
-      heroEditorialPrefix: 'Je conçois des',
-      heroEditorialSuffix: 'professionnels et efficaces.',
-      heroRotatingSites: 'sites web',
-      heroRotatingTools: 'outils',
-      heroRotatingSoftware: 'logiciels',
-      heroRotatingInterfaces: 'interfaces',
+      heroEditorialPrefix: 'Des sites',
+      heroEditorialSuffix: 'pour les PME et professionnels du Québec.',
+      heroRotatingSites: 'crédibles',
+      heroRotatingTools: 'clairs',
+      heroRotatingSoftware: 'orientés contact',
+      heroRotatingInterfaces: 'prêts pour le Québec',
       wowStatsYears: "Années d'expérience",
       wowStatsProjects: 'Projets et prototypes',
       wowStatsTechs: 'Technologies maîtrisées',
       servicesHomeKicker: 'OFFRES',
       servicesHomeTitle: 'Trois façons de vous aider',
-      servicesHomeSubtitle: '',
+      servicesHomeSubtitle:
+        'PME, travailleurs autonomes, professionnels, artistes et petites équipes au Québec.',
       servicesHomeFootnote:
         'Site plus large, entretien mensuel, logiciel avec sync ou intégrations ? Écrivez-moi et on en discute.',
       servicesPackPriceFrom: 'à partir de',
@@ -102,14 +107,15 @@ export const fr = {
       servicesPackPagePrice: '1 200 $',
       servicesPackPagePriceNote:
         'Version express possible dès 499 $ si le contenu est prêt et le besoin très simple.',
-      servicesPackPageFor: 'Pour une présence claire, propre, rapide et crédible.',
-      servicesPackPageB1: 'Structure claire : services, contact, mobile',
-      servicesPackPageB2: 'Formulaire qui arrive dans votre courriel',
-      servicesPackPageB3: 'Mise en ligne et SEO de base inclus',
+      servicesPackPageFor:
+        'Pour une présence claire, crédible et prête à recevoir des demandes.',
+      servicesPackPageB1: 'Message et parcours clairs pour rassurer et inciter au contact',
+      servicesPackPageB2: 'Formulaire fiable : chaque demande arrive dans votre courriel',
+      servicesPackPageB3: 'SEO de base pour être trouvé localement',
       servicesPackPageB4: 'Livraison en ~7 jours avec accompagnement',
       servicesPackPageCta: 'Partager votre vision',
       servicesPackPageSubject: 'Offre : site web professionnel',
-      servicesPackPageBadge: 'Le plus demandé',
+      servicesPackPageBadge: 'Recommandé',
       servicesPackMaintainTitle: 'Entretien mensuel',
       servicesPackMaintainPrice: '75 – 150 $ / mois',
       servicesPackMaintainFor: 'Site déjà en ligne — le vôtre ou celui qu’on a fait.',
@@ -123,7 +129,7 @@ export const fr = {
       servicesPackSoftwarePriceNote:
         'Logiciel sur mesure à partir de 4 500 $ · devis selon la complexité.',
       servicesPackSoftwareFor:
-        'Formulaire intelligent, outil interne, mini-dashboard ou brique d’IA utile.',
+        'Quand un site ne suffit pas : petit outil, automatisation ou brique d’IA utile.',
       servicesPackSoftwareB1: 'Brief et périmètre clairs avant de commencer',
       servicesPackSoftwareB2: 'Outil web ou interne adapté à votre métier',
       servicesPackSoftwareB3: 'Version utilisable dès la livraison',
@@ -135,10 +141,12 @@ export const fr = {
       servicesHomeNewLead:
         'Un site moderne, facile à consulter sur ordinateur comme sur mobile, pour présenter vos services et faciliter les prises de contact.',
       servicesHomeNewCta: 'Discuter de votre site →',
+      servicesHomeReassuranceTitle: 'Pas besoin de tout refaire',
       servicesHomeImproveTitle: 'Refonte ou amélioration',
       servicesHomeImproveLead:
-        'On garde ce qui fonctionne, on clarifie le reste et on remet votre site au goût du jour. Sur demande : SEO de base — métadonnées, structure, performance — sans promesse de classement.',
+        'Pas besoin de tout refaire : j’améliore aussi votre site actuel, je corrige les irritants et je priorise ce qui rapporte le plus.',
       servicesHomeImproveCta: 'Améliorer votre site →',
+      servicesHomeImproveSubject: 'Projet : refonte ou amélioration de site',
       servicesHomeToolsTitle: 'Outils et accompagnement',
       servicesHomeToolsLead:
         'Formulaires plus clairs, petites tâches répétitives allégées, mises à jour et soutien après la mise en ligne.',
@@ -321,10 +329,10 @@ export const fr = {
     },
     about: {
       title: 'À propos',
-      subtitle: 'Qui suis-je ?',
+      subtitle: 'Comment je vous aide',
       experience: 'Expérience',
       experienceText:
-        "Formation en développement logiciel et stage en entreprise. Je conçois des sites et petits outils sur mesure pour indépendants et PME : simple, clair, orienté contact et demandes.",
+        'Je conçois des sites et petits outils pour PME et professionnels au Québec : clairs, crédibles et pensés pour recevoir des demandes sérieuses — pas seulement pour « être en ligne ».',
       formation: 'Formation',
       skills: 'Mes Compétences Techniques',
       softSkills: 'Soft Skills',

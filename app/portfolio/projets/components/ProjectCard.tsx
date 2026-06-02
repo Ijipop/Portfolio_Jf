@@ -397,22 +397,24 @@ export default function ProjectCard({
                 </Typography>
               </Box>
 
-              <TechStack
-                sx={{
-                  visibility: 'visible !important',
-                  opacity: '1 !important',
-                  zIndex: DESIGN_TOKENS.zIndex.elevated,
-                  position: 'relative',
-                  justifyContent: 'flex-start',
-                  mb: { xs: 0.5, md: 0.65 },
-                }}
-              >
-                {projectTechs.map((tech, techIndex) => (
-                  <SkillTag key={techIndex} size="small" reflectionColor={reflectionColor}>
-                    {tech}
-                  </SkillTag>
-                ))}
-              </TechStack>
+              {cardVariant !== 'web' ? (
+                <TechStack
+                  sx={{
+                    visibility: 'visible !important',
+                    opacity: '1 !important',
+                    zIndex: DESIGN_TOKENS.zIndex.elevated,
+                    position: 'relative',
+                    justifyContent: 'flex-start',
+                    mb: { xs: 0.5, md: 0.65 },
+                  }}
+                >
+                  {projectTechs.map((tech, techIndex) => (
+                    <SkillTag key={techIndex} size="small" reflectionColor={reflectionColor}>
+                      {tech}
+                    </SkillTag>
+                  ))}
+                </TechStack>
+              ) : null}
 
               {projectMetaLineItems.length > 0 ? (
               <Box

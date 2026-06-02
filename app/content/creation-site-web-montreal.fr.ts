@@ -3,13 +3,13 @@ export const SEO_LANDING_PATH = '/creation-site-web-montreal'
 export const seoLandingContent = {
   h1: 'Création de sites web à Montréal et partout au Québec',
   intro:
-    'Basé à Montréal, ijipop accompagne les travailleurs autonomes, petites entreprises et professionnels partout au Québec pour créer des sites web modernes, clairs et adaptés à leurs besoins.',
+    'Basé à Montréal, j’accompagne les PME, travailleurs autonomes et professionnels du Québec pour des sites clairs, crédibles et orientés demandes clients — création ou refonte, avec outils simples ou IA utile au besoin.',
   contactSubject: 'Demande : création de site web (Montréal / Québec)',
   ctaPrimary: 'Obtenir une estimation',
   ctaSecondary: 'Voir mes réalisations au Québec',
   ctaFinalTitle: 'Prêt à lancer votre site web ?',
   ctaFinalBody:
-    'Que vous soyez à Montréal, en région ou en télétravail au Québec, discutons de votre projet — premier appel offert, devis sous 48 h.',
+    'À Montréal, en région ou à distance au Québec : parlons de votre site actuel ou de votre prochaine présence en ligne — devis clair, sans tunnel de surprises.',
   ctaFinalContact: 'Obtenir une estimation',
   ctaFinalProjects: 'Voir le portfolio',
   faqKicker: 'Questions fréquentes',
@@ -18,12 +18,12 @@ export const seoLandingContent = {
     {
       title: 'Création de sites vitrines',
       description:
-        'Sites clairs pour présenter votre activité, vos services et un moyen simple de vous contacter — pensés pour les visiteurs et les moteurs de recherche.',
+        'Sites clairs et crédibles pour présenter votre activité et recevoir des demandes sérieuses — pensés pour vos clients et pour Google local.',
     },
     {
       title: 'Refonte de site existant',
       description:
-        'Modernisation du design, amélioration de la vitesse, mise à jour du contenu et correction des points qui freinent vos conversions.',
+        'Pas besoin de tout refaire : on améliore ce qui fonctionne, on clarifie le message et on corrige ce qui bloque vos demandes clients.',
     },
     {
       title: 'Portfolio professionnel',
