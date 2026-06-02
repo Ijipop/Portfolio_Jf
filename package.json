@@ -29,6 +29,7 @@
     "perf:lighthouse": "node scripts/print-lighthouse-instructions.mjs",
     "analyze": "node scripts/run-analyze-build.mjs",
     "encode:contact-demo": "node scripts/encode-contact-demo-video.mjs",
+    "encode:ijipop-matrix-alpha": "node scripts/encode-ijipop-matrix-alpha.mjs",
     "sync-loading-frames": "node scripts/sync-projects-loading-frames.mjs",
     "encode:loading-webm": "node scripts/encode-projects-loading-webm.mjs"
   },
