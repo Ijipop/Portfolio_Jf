@@ -63,8 +63,8 @@ export default function ContactPageClient({ showMerciDialog = false }: ContactPa
 
   const showErrorSnackbar = useCallback((message: string) => {
     setSnackbarMessage(message)
-    setSnackbarSeverity('error')
-    setSnackbarOpen(true)
+      setSnackbarSeverity('error')
+      setSnackbarOpen(true)
   }, [])
 
   const handleValidationError = useCallback(() => {
@@ -83,7 +83,7 @@ export default function ContactPageClient({ showMerciDialog = false }: ContactPa
   }, [showErrorSnackbar, t])
 
   const handleFormSuccess = useCallback(() => {
-    router.push('/portfolio/contact/merci')
+        router.push('/portfolio/contact/merci')
   }, [router])
 
   const promiseLabels = useMemo(
@@ -99,21 +99,21 @@ export default function ContactPageClient({ showMerciDialog = false }: ContactPa
   return (
     <PageWrapper backgroundVariant="alternate">
       <AppBarComponent />
-
+      
       <ContactPageHeader titleText={t('contact.title')} subtitle={t('contact.subtitle')} />
 
       <InteractiveBackgroundSection>
-        <Container maxWidth="lg" sx={{ py: useCompactContact ? 4 : 8, position: 'relative', zIndex: 2 }}>
+      <Container maxWidth="lg" sx={{ py: useCompactContact ? 4 : 8, position: 'relative', zIndex: 2 }}>
           <ContactPromisesBar
             labels={promiseLabels}
             primary={primary}
-            textColor={textColor}
+                    textColor={textColor}
             compact={useCompactContact}
           />
 
           <ContactForm
             compact={useCompactContact}
-            textColor={textColor}
+                  textColor={textColor}
             primary={primary}
             onValidationError={handleValidationError}
             onSendError={handleSendError}
@@ -125,9 +125,9 @@ export default function ContactPageClient({ showMerciDialog = false }: ContactPa
             locationTitle={t('contact.location')}
             locationCity={t('contact.locationCity')}
             primary={primary}
-            textColor={textColor}
-            compact={useCompactContact}
-          />
+                      textColor={textColor}
+                      compact={useCompactContact}
+                    />
 
           <ContactSocialSection
             followMeTitle={t('contact.followMe')}
@@ -136,12 +136,12 @@ export default function ContactPageClient({ showMerciDialog = false }: ContactPa
             viewProfileLabel={t('contact.viewProfile')}
             viewReposLabel={t('contact.viewRepos')}
             primary={primary}
-            textColor={textColor}
-            compact={useCompactContact}
-          />
+                        textColor={textColor}
+                        compact={useCompactContact}
+                      />
 
           <ContactCoffeeSection compact={useCompactContact} />
-        </Container>
+      </Container>
       </InteractiveBackgroundSection>
 
       <ContactSuccessDialog open={merciDialogOpen} onClose={handleMerciDialogClose} />
@@ -152,19 +152,19 @@ export default function ContactPageClient({ showMerciDialog = false }: ContactPa
         onClose={handleCloseSnackbar}
         anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
       >
-        <Alert
-          onClose={handleCloseSnackbar}
+        <Alert 
+          onClose={handleCloseSnackbar} 
           severity={snackbarSeverity}
           icon={snackbarSeverity === 'success' ? <CheckCircleIcon /> : undefined}
-          sx={{
+          sx={{ 
             width: '100%',
             background:
               snackbarSeverity === 'success'
                 ? 'linear-gradient(135deg, #059669 0%, #047857 100%)'
                 : (th) =>
                     th.palette.mode === 'dark'
-                      ? 'linear-gradient(135deg, #ff6b35 0%, #ff1744 100%)'
-                      : 'linear-gradient(135deg, #dc2626 0%, #b91c1c 100%)',
+                ? 'linear-gradient(135deg, #ff6b35 0%, #ff1744 100%)'
+                : 'linear-gradient(135deg, #dc2626 0%, #b91c1c 100%)',
             color: 'white',
             '& .MuiAlert-icon': {
               color: 'white',
@@ -174,7 +174,7 @@ export default function ContactPageClient({ showMerciDialog = false }: ContactPa
           {snackbarMessage}
         </Alert>
       </Snackbar>
-
+      
       <Footer />
     </PageWrapper>
   )
