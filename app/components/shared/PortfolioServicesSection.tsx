@@ -21,6 +21,7 @@ import { getCardSurfaceSx } from '@/components/shared/cardSurface'
 import { DESIGN_TOKENS } from '@/design-system/constants'
 import { usePresentationMode } from '@/contexts/PresentationModeContext'
 import { CONTACT_SUBJECT_IMPROVE_SITE } from '@/i18n/contactSubjects'
+import { REASSURANCE_BANNER_COPY } from '@/i18n/reassuranceBannerCopy'
 import { useLanguage } from '@/contexts/LanguageContext'
 import { useTextColor } from '@/hooks/useTextColor'
 import { useThemeColors } from '@/hooks/useThemeColors'
@@ -522,6 +523,7 @@ function OfferPackCard({
 
 export default function PortfolioServicesSection() {
   const { t, locale } = useLanguage()
+  const reassurance = REASSURANCE_BANNER_COPY[locale]
   const pathname = usePathname()
   const isTopologyRoute = shouldShowTopology(pathname)
   const { mode: presentationMode } = usePresentationMode()
@@ -606,7 +608,7 @@ export default function PortfolioServicesSection() {
               mb: 1,
             }}
           >
-            {t('home.servicesHomeReassuranceTitle')}
+            {reassurance.title}
           </Typography>
           <Typography
             component="p"
@@ -618,7 +620,7 @@ export default function PortfolioServicesSection() {
               mb: 1.5,
             }}
           >
-            {t('home.servicesHomeImproveLead')}
+            {reassurance.lead}
           </Typography>
           <Link
             href={contactHref(CONTACT_SUBJECT_IMPROVE_SITE[locale])}
@@ -633,7 +635,7 @@ export default function PortfolioServicesSection() {
                 '&:hover': { textDecoration: 'underline' },
               }}
             >
-              {t('home.servicesHomeImproveCta')}
+              {reassurance.cta}
             </Typography>
           </Link>
         </Box>
