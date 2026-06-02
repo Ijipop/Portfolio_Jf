@@ -174,6 +174,23 @@ export default function PortfolioHomeHero() {
       <Typography
         component="p"
         sx={{
+          maxWidth: 640,
+          mx: 'auto',
+          mt: { xs: 0.5, sm: 1 },
+          mb: { xs: 1.25, sm: 1.5 },
+          px: { xs: 0.5, sm: 0 },
+          fontWeight: 500,
+          fontSize: { xs: '0.92rem', sm: '1.02rem' },
+          lineHeight: 1.55,
+          color: textColor,
+          opacity: 0.9,
+        }}
+      >
+        {t('home.heroOutcome')}
+      </Typography>
+      <Typography
+        component="p"
+        sx={{
           fontWeight: 700,
           fontSize: { xs: '1.03rem', sm: '1.2rem' },
           letterSpacing: '0.01em',

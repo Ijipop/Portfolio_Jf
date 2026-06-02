@@ -19,7 +19,7 @@ export const metadata: Metadata = {
     template: '%s | Jean-François Lefebvre',
   },
   description:
-    'Ijipop — création et refonte de sites web pour PME et indépendants, mises à jour et petits outils sur mesure. Basé à Montréal.',
+    'Ijipop — sites web clairs et crédibles pour PME du Québec, orientés demandes clients. Outils simples et IA utile au besoin. Basé à Montréal.',
   icons: {
     /** ICO + PNG 48 (Google) + SVG ; apple pour iOS / certains aperçus */
     icon: [
@@ -35,7 +35,7 @@ export const metadata: Metadata = {
     url: '/',
     siteName: 'Jean-François Lefebvre — Ijipop',
     description:
-      'Sites web vitrine et refonte, maintenance et petits outils pour PME et travailleurs autonomes au Québec.',
+      'Sites web clairs et crédibles pour PME du Québec — prêts à recevoir des demandes. Outils simples et IA utile au besoin.',
     images: [
       {
         url: '/og-default.png',
@@ -49,7 +49,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Jean-François Lefebvre — Ijipop',
     description:
-      'Sites web vitrine et refonte, maintenance et petits outils pour PME et travailleurs autonomes au Québec.',
+      'Sites web clairs et crédibles pour PME du Québec — prêts à recevoir des demandes. Outils simples et IA utile au besoin.',
     images: ['/og-default.png'],
   },
 }

@@ -20,6 +20,7 @@ import ScrollReveal from './ScrollReveal'
 import { getCardSurfaceSx } from '@/components/shared/cardSurface'
 import { DESIGN_TOKENS } from '@/design-system/constants'
 import { usePresentationMode } from '@/contexts/PresentationModeContext'
+import { CONTACT_SUBJECT_IMPROVE_SITE } from '@/i18n/contactSubjects'
 import { useLanguage } from '@/contexts/LanguageContext'
 import { useTextColor } from '@/hooks/useTextColor'
 import { useThemeColors } from '@/hooks/useThemeColors'
@@ -520,7 +521,7 @@ function OfferPackCard({
 }
 
 export default function PortfolioServicesSection() {
-  const { t } = useLanguage()
+  const { t, locale } = useLanguage()
   const pathname = usePathname()
   const isTopologyRoute = shouldShowTopology(pathname)
   const { mode: presentationMode } = usePresentationMode()
@@ -579,6 +580,62 @@ export default function PortfolioServicesSection() {
               {subtitle}
             </Typography>
           ) : null}
+        </Box>
+      </ScrollReveal>
+
+      <ScrollReveal direction="up" delay={0.08}>
+        <Box
+          sx={{
+            maxWidth: 680,
+            mx: 'auto',
+            mb: { xs: 3, md: 4 },
+            px: { xs: 2, sm: 2.5 },
+            py: { xs: 2, sm: 2.25 },
+            borderRadius: 2,
+            border: `1px solid ${alpha(primary, 0.22)}`,
+            bgcolor: alpha(primary, 0.06),
+            textAlign: 'center',
+          }}
+        >
+          <Typography
+            component="p"
+            sx={{
+              color: textColor,
+              fontWeight: 800,
+              fontSize: { xs: '1rem', sm: '1.08rem' },
+              mb: 1,
+            }}
+          >
+            {t('home.servicesHomeReassuranceTitle')}
+          </Typography>
+          <Typography
+            component="p"
+            sx={{
+              color: textColor,
+              opacity: 0.88,
+              fontSize: { xs: '0.9rem', sm: '0.95rem' },
+              lineHeight: 1.55,
+              mb: 1.5,
+            }}
+          >
+            {t('home.servicesHomeImproveLead')}
+          </Typography>
+          <Link
+            href={contactHref(CONTACT_SUBJECT_IMPROVE_SITE[locale])}
+            style={{ textDecoration: 'none' }}
+          >
+            <Typography
+              component="span"
+              sx={{
+                color: primary,
+                fontWeight: 700,
+                fontSize: '0.9rem',
+                '&:hover': { textDecoration: 'underline' },
+              }}
+            >
+              {t('home.servicesHomeImproveCta')}
+            </Typography>
+          </Link>
         </Box>
       </ScrollReveal>
 

@@ -9,7 +9,6 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import AppBarComponent from '@/components/appBar'
 import Footer from '@/components/Footer'
-import PortfolioProcessSection from '@/components/shared/PortfolioProcessSection'
 import PortfolioServicesSection from '@/components/shared/PortfolioServicesSection'
 import CTAButton from '@/components/shared/CTAButton'
 import InteractiveBackgroundSection from '@/components/shared/InteractiveBackgroundSection'
@@ -180,7 +179,6 @@ export default function CreationSiteWebMontrealPage() {
             />
 
             <PortfolioServicesSection />
-            <PortfolioProcessSection />
             <ServiceFaqSection
               kicker={seoLandingContent.faqKicker}
               title={seoLandingContent.faqTitle}
