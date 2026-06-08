@@ -180,9 +180,7 @@ export default function HomeClient({ initialShowIntro }: { initialShowIntro: boo
         <Box className="perf-cv-auto">
           <PortfolioProcessSection />
         </Box>
-        <Box className="perf-cv-auto">
-          <AiConversionTeaser />
-        </Box>
+        <AiConversionTeaser />
       </Container>
       </InteractiveBackgroundSection>
       

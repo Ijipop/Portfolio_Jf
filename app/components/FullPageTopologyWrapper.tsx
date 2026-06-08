@@ -6,6 +6,7 @@ import useMediaQuery from '@mui/material/useMediaQuery'
 import { ReactNode, useEffect, useRef } from 'react'
 import { usePathname } from 'next/navigation'
 import { useAdvancedTheme } from '@/contexts/AdvancedThemeContext'
+import { useBeigeDark } from '@/hooks/useBeigeDark'
 import { useBeigePresentationBg } from '@/contexts/BeigePresentationBgContext'
 import { useGraphicsMode } from '@/contexts/GraphicsModeContext'
 import { usePresentationMode } from '@/contexts/PresentationModeContext'
@@ -37,12 +38,14 @@ export default function FullPageTopologyWrapper({ children }: FullPageTopologyWr
   const { beigePresentationBgUrl } = useBeigePresentationBg()
   const { graphicsMode, downgradeReason } = useGraphicsMode()
   const { mode: presentationMode } = usePresentationMode()
+  const { beigeDark } = useBeigeDark()
   const prefersReducedMotion = useMediaQuery('(prefers-reduced-motion: reduce)', { noSsr: true })
   /** En « light » on coupe Vanta ; en mode présentation Créa (dev) on garde Vanta NET sauf si reduced-motion. */
   const creaWantsVanta = presentationMode === 'dev' && !prefersReducedMotion
   const useLightFallback = show && graphicsMode === 'light' && !creaWantsVanta
-  const useStaticProBackground = presentationMode === 'beige'
-  const useGradientOnly = useLightFallback || useStaticProBackground
+  const useBeigeImageBackground = presentationMode === 'beige' && !beigeDark
+  const useBeigeSunsetBackground = presentationMode === 'beige' && beigeDark
+  const useGradientOnly = useLightFallback || useBeigeImageBackground || useBeigeSunsetBackground
 
   // Remettre le scroll en haut au montage pour éviter titre coupé / contenu décalé
   useEffect(() => {
@@ -68,8 +71,16 @@ export default function FullPageTopologyWrapper({ children }: FullPageTopologyWr
       <Box
         component="div"
         data-testid="graphics-background-layer"
-        data-graphics-mode={useStaticProBackground ? 'beige' : useLightFallback ? 'light' : 'full'}
-        data-graphics-reason={useStaticProBackground ? 'presentation-beige' : downgradeReason ?? 'none'}
+        data-graphics-mode={
+          useBeigeImageBackground ? 'beige' : useBeigeSunsetBackground ? 'beige-dark' : useLightFallback ? 'light' : 'full'
+        }
+        data-graphics-reason={
+          useBeigeImageBackground
+            ? 'presentation-beige'
+            : useBeigeSunsetBackground
+              ? 'presentation-beige-dark'
+              : downgradeReason ?? 'none'
+        }
         sx={{
           position: 'fixed',
           top: 0,
@@ -86,7 +97,7 @@ export default function FullPageTopologyWrapper({ children }: FullPageTopologyWr
             sx={{
               width: '100%',
               height: '100%',
-              background: useStaticProBackground
+              background: useBeigeImageBackground
                 ? getBeigePresentationTopologyBackground(customTheme, beigePresentationBgUrl)
                 : `radial-gradient(circle at 20% 20%, ${customTheme.primary}22 0%, transparent 35%), radial-gradient(circle at 80% 30%, ${customTheme.secondary}18 0%, transparent 30%), linear-gradient(135deg, ${customTheme.bg} 0%, ${customTheme.bg2} 100%)`,
             }}
@@ -104,11 +115,13 @@ export default function FullPageTopologyWrapper({ children }: FullPageTopologyWr
           right: 0,
           bottom: 0,
           zIndex: 1,
-          background: useStaticProBackground
+          background: useBeigeImageBackground
             ? 'rgba(247, 243, 235, 0.1)'
-            : useLightFallback
-              ? 'rgba(0, 0, 0, 0.08)'
-              : 'rgba(0, 0, 0, 0.10)',
+            : useBeigeSunsetBackground
+              ? 'rgba(0, 0, 0, 0.06)'
+              : useLightFallback
+                ? 'rgba(0, 0, 0, 0.08)'
+                : 'rgba(0, 0, 0, 0.10)',
           pointerEvents: 'none',
         }}
         aria-hidden

@@ -211,6 +211,10 @@ export function getDevThemeChoices(): ThemeName[] {
   return (Object.keys(THEMES) as ThemeName[]).filter((name) => name !== 'latte')
 }
 
+/** Palette « sunset » utilisée comme variante sombre du mode Site (beige). */
+export const BEIGE_DARK_THEME: ThemeName = 'sunset'
+export const BEIGE_LIGHT_THEME: ThemeName = 'latte'
+
 /**
  * Obtenir le thème par défaut
  */

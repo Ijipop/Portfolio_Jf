@@ -4,6 +4,7 @@ import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import { useMemo } from 'react'
 import { useLanguage } from '@/contexts/LanguageContext'
+import { useBeigeDark } from '@/hooks/useBeigeDark'
 import { usePresentationMode } from '@/contexts/PresentationModeContext'
 import { useThemeColors } from '@/hooks/useThemeColors'
 import { dimHex, hexToRgb } from '@/utils/colorUtils'
@@ -44,6 +45,7 @@ export type IjipopGlitchTitleProps = {
 export default function IjipopGlitchTitle({ text, variant = 'page' }: IjipopGlitchTitleProps) {
   const { locale } = useLanguage()
   const { mode: presentationMode } = usePresentationMode()
+  const { beigeDark } = useBeigeDark()
   const { primary, secondary, accent } = useThemeColors()
 
   const { fillGradient, glitchRgb } = useMemo(() => {
@@ -55,7 +57,7 @@ export default function IjipopGlitchTitle({ text, variant = 'page' }: IjipopGlit
       fillGradient: buildPaletteGlitchGradient(primary, secondary, accent),
       glitchRgb: dimHex(primary, 0.5),
     }
-  }, [presentationMode, primary, secondary, accent])
+  }, [presentationMode, beigeDark, primary, secondary, accent])
 
   const display =
     variant === 'hero'

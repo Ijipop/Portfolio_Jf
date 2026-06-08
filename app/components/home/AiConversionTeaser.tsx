@@ -87,8 +87,9 @@ export default function AiConversionTeaser() {
           py: { xs: 3, sm: 3.5, md: 4.25 },
           borderRadius: DESIGN_TOKENS.borderRadius.banner,
           border: `1px solid ${alpha(primary, 0.32)}`,
+          borderBottom: `1px solid ${alpha(primary, 0.14)}`,
           background: outerBackground,
-          boxShadow: `0 24px 70px ${alpha(primary, 0.18)}`,
+          boxShadow: `0 12px 36px -10px ${alpha(primary, 0.14)}, 0 4px 16px -6px ${alpha(primary, 0.08)}`,
           overflow: 'hidden',
           position: 'relative',
           '&::before': {
@@ -100,6 +101,16 @@ export default function AiConversionTeaser() {
             borderRadius: '50%',
             background: `radial-gradient(circle, ${alpha(accent, 0.28)} 0%, transparent 68%)`,
             pointerEvents: 'none',
+          },
+          '&::after': {
+            content: '""',
+            position: 'absolute',
+            left: 0,
+            right: 0,
+            bottom: 0,
+            height: 20,
+            pointerEvents: 'none',
+            background: `linear-gradient(to bottom, transparent, ${alpha(customTheme.bg, 0.55)})`,
           },
         }}
       >

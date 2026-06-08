@@ -14,6 +14,8 @@ export const en = {
       presentationBeigeHint: 'Softer palette, no animated background (visitors / clients)',
       presentationDevHint: 'Neon themes and background effect (creator view)',
       presentationToggleGroup: 'Choose site display mode',
+      beigeDarkModeOn: 'Enable Sunset dark mode',
+      beigeDarkModeOff: 'Switch back to light mode',
     },
     intro: {
       skip: 'Skip',
