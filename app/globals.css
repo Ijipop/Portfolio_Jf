@@ -211,6 +211,12 @@ body {
   transition: background 0.3s ease;
 }
 
+/* Bascule clair/sunset Site : pas de fondu sur le fond */
+html[data-beige-dark-instant] body,
+html[data-beige-dark-instant] [data-theme-root] {
+  transition: none !important;
+}
+
 /* Scrollbar visible sur le conteneur topology (au-dessus du fond) */
 .topology-scroll-container {
   scrollbar-width: thin;

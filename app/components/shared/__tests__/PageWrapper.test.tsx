@@ -15,6 +15,14 @@ vi.mock('../../../contexts/AdvancedThemeContext', () => ({
   }),
 }))
 
+vi.mock('../../../contexts/PresentationModeContext', () => ({
+  usePresentationMode: () => ({
+    mode: 'dev',
+    setMode: vi.fn(),
+    hydrated: true,
+  }),
+}))
+
 describe('PageWrapper', () => {
   it('renders children on standard route', () => {
     mockPathname.mockReturnValue('/admin')

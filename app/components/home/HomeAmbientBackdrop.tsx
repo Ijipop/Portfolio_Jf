@@ -53,14 +53,6 @@ export default function HomeAmbientBackdrop() {
           '0%, 100%': { transform: 'translate3d(0, 0, 0) scale(1)' },
           '50%': { transform: 'translate3d(3%, 5%, 0) scale(1.04)' },
         },
-        '@keyframes ambientShimmer': {
-          '0%': { opacity: 0.26, transform: 'translate3d(-9%, 0, 0)' },
-          '100%': { opacity: 0.56, transform: 'translate3d(9%, 0, 0)' },
-        },
-        '@keyframes ambientBeam': {
-          '0%, 100%': { opacity: isDark ? 0.26 : 0.2, transform: 'translate3d(-5%, 0, 0) rotate(-10deg)' },
-          '50%': { opacity: isDark ? 0.5 : 0.38, transform: 'translate3d(6%, 0, 0) rotate(-7deg)' },
-        },
         '@media (prefers-reduced-motion: reduce)': {
           '& .ambient-anim': {
             animation: 'none !important',
@@ -129,47 +121,6 @@ export default function HomeAmbientBackdrop() {
           opacity: isDark ? 0.82 : 0.86,
           animation: 'ambientDriftC 24s ease-in-out infinite',
           willChange: 'transform',
-          ...animSx,
-        }}
-      />
-      <Box
-        className="ambient-anim"
-        sx={{
-          position: 'absolute',
-          width: { xs: '140%', md: '120%' },
-          height: { xs: '65%', md: '58%' },
-          left: { xs: '-22%', md: '-8%' },
-          top: { xs: '-8%', md: '-12%' },
-          background: `linear-gradient(
-            92deg,
-            transparent 0%,
-            ${alpha('#fff', isDark ? 0.06 : 0.14)} 38%,
-            ${alpha(primary, isDark ? 0.13 : 0.1)} 50%,
-            ${alpha('#fff', isDark ? 0.06 : 0.14)} 62%,
-            transparent 100%
-          )`,
-          filter: 'blur(22px)',
-          transformOrigin: 'center',
-          animation: 'ambientBeam 12s ease-in-out infinite',
-          ...animSx,
-        }}
-      />
-      <Box
-        className="ambient-anim"
-        sx={{
-          position: 'absolute',
-          inset: 0,
-          background: `linear-gradient(
-            108deg,
-            transparent 0%,
-            ${alpha(primary, isDark ? 0.07 : 0.06)} 42%,
-            ${alpha('#fff', isDark ? 0.05 : 0.11)} 50%,
-            ${alpha(primary, isDark ? 0.07 : 0.06)} 58%,
-            transparent 100%
-          )`,
-          backgroundSize: '220% 100%',
-          mixBlendMode: isDark ? 'screen' : 'multiply',
-          animation: 'ambientShimmer 11s ease-in-out infinite alternate',
           ...animSx,
         }}
       />

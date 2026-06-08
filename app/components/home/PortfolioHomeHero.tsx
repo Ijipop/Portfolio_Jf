@@ -11,6 +11,7 @@ import CTAButton from '@/components/shared/CTAButton'
 import HeaderSection from '@/components/shared/HeaderSection'
 import IjipopGlitchTitle, { BRAND_GLITCH_GRADIENT, buildPaletteGlitchGradient } from '@/components/shared/IjipopGlitchTitle'
 import { useLanguage } from '@/contexts/LanguageContext'
+import { useBeigeDark } from '@/hooks/useBeigeDark'
 import { usePresentationMode } from '@/contexts/PresentationModeContext'
 import { useTextColor } from '@/hooks/useTextColor'
 import { useThemeColors } from '@/hooks/useThemeColors'
@@ -20,6 +21,7 @@ import { loadGsapWithScrollTrigger } from '@/utils/gsapScrollTrigger'
 export default function PortfolioHomeHero() {
   const { t } = useLanguage()
   const { mode: presentationMode } = usePresentationMode()
+  const { beigeDark } = useBeigeDark()
   const { primary, secondary, accent } = useThemeColors()
   const textColor = useTextColor()
   const reducedMotion = useMediaQuery('(prefers-reduced-motion: reduce)', { noSsr: true })
@@ -28,10 +30,10 @@ export default function PortfolioHomeHero() {
   const [scramblePhase, setScramblePhase] = useState<'chaos' | 'settled'>('settled')
   const rotatingWordGradient = useMemo(
     () =>
-      presentationMode === 'beige'
+      presentationMode === 'beige' && !beigeDark
         ? BRAND_GLITCH_GRADIENT
         : buildPaletteGlitchGradient(primary, secondary, accent),
-    [presentationMode, primary, secondary, accent]
+    [presentationMode, beigeDark, primary, secondary, accent]
   )
 
   const rotatingWords = [

@@ -14,6 +14,8 @@ export const fr = {
       presentationBeigeHint: 'Palette sobre, sans animation de fond (pour visiteurs / clients)',
       presentationDevHint: 'Thèmes néon et effet de fond (version créateur)',
       presentationToggleGroup: 'Choisir le mode d’affichage du site',
+      beigeDarkModeOn: 'Activer le mode sombre Sunset',
+      beigeDarkModeOff: 'Revenir au mode clair',
     },
     intro: {
       skip: 'Passer',

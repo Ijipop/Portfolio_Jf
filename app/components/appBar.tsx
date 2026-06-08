@@ -7,11 +7,16 @@ import Typography from "@mui/material/Typography";
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import React, { memo } from 'react';
+import IconButton from '@mui/material/IconButton';
+import DarkModeOutlinedIcon from '@mui/icons-material/DarkModeOutlined';
+import LightModeOutlinedIcon from '@mui/icons-material/LightModeOutlined';
 import { ThemeSelector } from '@/components/ThemeSelector';
 import { PresentationModeToggle } from '@/components/PresentationModeToggle';
 import { usePresentationMode } from '@/contexts/PresentationModeContext';
 import { useThemeColors } from '@/hooks/useThemeColors';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { useBeigeDark } from '@/hooks/useBeigeDark';
+import { setBeigeDark } from '@/utils/beigeDarkModeStore';
 import Button from '@mui/material/Button';
 import NavDesktop from '@/components/appbar/NavDesktop';
 import NavMobile from '@/components/appbar/NavMobile';
@@ -25,6 +30,7 @@ function AppBarComponent() {
 	const { primary, secondary } = useThemeColors();
 	const { locale, setLocale, t } = useLanguage();
 	const { mode: presentationMode } = usePresentationMode();
+	const { beigeDark } = useBeigeDark();
 
 	const handleNavigate = (path: string) => router.push(path);
 
@@ -97,6 +103,37 @@ function AppBarComponent() {
 						>
 							{locale === 'fr' ? 'FR' : 'ENG'}
 						</Button>
+						{presentationMode === 'beige' && (
+							<IconButton
+								size="small"
+								onClick={() => setBeigeDark(!beigeDark)}
+								aria-label={beigeDark ? t('nav.beigeDarkModeOff') : t('nav.beigeDarkModeOn')}
+								title={beigeDark ? t('nav.beigeDarkModeOff') : t('nav.beigeDarkModeOn')}
+								sx={{
+									width: 40,
+									height: 40,
+									color: 'white',
+									border: '1px solid rgba(255,255,255,0.75)',
+									borderRadius: '50%',
+									background: beigeDark
+										? 'linear-gradient(135deg, rgba(255,107,53,0.55), rgba(255,23,68,0.5))'
+										: 'rgba(255,255,255,0.08)',
+									transition: 'none',
+									'&:hover': {
+										background: beigeDark
+											? 'linear-gradient(135deg, rgba(255,107,53,0.72), rgba(255,23,68,0.62))'
+											: 'rgba(255,255,255,0.16)',
+										borderColor: 'rgba(255,255,255,0.9)',
+									},
+								}}
+							>
+								{beigeDark ? (
+									<LightModeOutlinedIcon sx={{ fontSize: 20 }} />
+								) : (
+									<DarkModeOutlinedIcon sx={{ fontSize: 20 }} />
+								)}
+							</IconButton>
+						)}
 						<Box sx={{ display: { xs: 'none', sm: 'block' } }}>
 							<PresentationModeToggle />
 						</Box>

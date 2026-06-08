@@ -68,6 +68,8 @@ function getCardColorsForTheme(theme: (typeof THEMES)[ThemeName], name: ThemeNam
 export type SyncPortfolioThemeOptions = {
   /** Mode présentation « Site » (beige) : fond image + voile thème. */
   beigePresentation?: boolean
+  /** Mode Site sombre (sunset) : dégradé palette, sans image crème. */
+  beigeDark?: boolean
   /** Remplace l’image par défaut du mode Site (URL absolue ou chemin `/…`) si défini. */
   beigePresentationBgUrl?: string | null
 }
@@ -99,7 +101,7 @@ export function syncPortfolioThemeToDocument(
 
   const grad = `linear-gradient(135deg, ${theme.bg} 0%, ${theme.bg2} 25%, ${theme.bg} 50%, ${theme.bg2} 75%, ${theme.bg} 100%)`
   const pageBg =
-    options?.beigePresentation === true
+    options?.beigePresentation === true && options?.beigeDark !== true
       ? getBeigePresentationPageBackground(theme, options.beigePresentationBgUrl)
       : grad
   document.body.style.setProperty('background', pageBg, 'important')
