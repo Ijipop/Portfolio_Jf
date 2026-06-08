@@ -3,7 +3,15 @@
 import { Box, CssBaseline } from '@mui/material'
 import { createTheme, PaletteMode, ThemeProvider } from '@mui/material/styles'
 import type { ThemeOptions } from '@mui/material/styles'
-import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
+import React, {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useState,
+} from 'react'
 import { usePathname } from 'next/navigation'
 import {
   BEIGE_DARK_THEME,
@@ -19,6 +27,7 @@ import { useBeigePresentationBg } from '@/contexts/BeigePresentationBgContext'
 import { useGraphicsMode } from '@/contexts/GraphicsModeContext'
 import { usePresentationMode } from '@/contexts/PresentationModeContext'
 import { useBeigeDark } from '@/hooks/useBeigeDark'
+import { registerBeigeDarkInstantSync } from '@/utils/beigeDarkModeStore'
 import { DESIGN_TOKENS } from '@/design-system/constants'
 
 const LAST_DEV_THEME_KEY = 'lastDevThemeName'
@@ -47,11 +56,42 @@ export function AdvancedThemeProvider({ children }: { children: React.ReactNode 
   const { beigePresentationBgUrl } = useBeigePresentationBg()
   const { graphicsMode } = useGraphicsMode()
   const [themeName, setThemeName] = useState<ThemeName>(SSR_THEME_NAME)
-  const customTheme = THEMES[themeName] // Source unique de vérité
+
+  const isBeigePresentation = presentationMode === 'beige'
+  const activeThemeName = useMemo((): ThemeName => {
+    if (presentationHydrated && isBeigePresentation) {
+      return beigeDark ? BEIGE_DARK_THEME : BEIGE_LIGHT_THEME
+    }
+    return themeName
+  }, [presentationHydrated, isBeigePresentation, beigeDark, themeName])
+
+  const customTheme = THEMES[activeThemeName]
+
+  const syncDocumentTheme = useCallback(
+    (name: ThemeName, dark: boolean) => {
+      syncPortfolioThemeToDocument(name, {
+        beigePresentation: isBeigePresentation,
+        beigeDark: isBeigePresentation && dark,
+        beigePresentationBgUrl,
+      })
+    },
+    [isBeigePresentation, beigePresentationBgUrl],
+  )
+
+  useLayoutEffect(() => {
+    registerBeigeDarkInstantSync((enabled) => {
+      if (!isBeigePresentation) return
+      const target = enabled ? BEIGE_DARK_THEME : BEIGE_LIGHT_THEME
+      setThemeName(target)
+      localStorage.setItem('themeName', target)
+      syncDocumentTheme(target, enabled)
+    })
+    return () => registerBeigeDarkInstantSync(null)
+  }, [isBeigePresentation, syncDocumentTheme])
 
   useEffect(() => {
     if (!presentationHydrated) return
-    if (presentationMode === 'beige') {
+    if (isBeigePresentation) {
       const saved = localStorage.getItem('themeName') as ThemeName
       if (
         saved &&
@@ -73,15 +113,11 @@ export function AdvancedThemeProvider({ children }: { children: React.ReactNode 
     const pick = fromLast || fromThemeLs || 'default'
     setThemeName(pick)
     localStorage.setItem('themeName', pick)
-  }, [presentationMode, presentationHydrated, beigeDark])
+  }, [presentationMode, presentationHydrated, beigeDark, isBeigePresentation])
 
-  useEffect(() => {
-    syncPortfolioThemeToDocument(themeName, {
-      beigePresentation: presentationMode === 'beige',
-      beigeDark: presentationMode === 'beige' && beigeDark,
-      beigePresentationBgUrl,
-    })
-  }, [themeName, presentationMode, beigeDark, beigePresentationBgUrl])
+  useLayoutEffect(() => {
+    syncDocumentTheme(activeThemeName, beigeDark)
+  }, [activeThemeName, beigeDark, syncDocumentTheme])
 
   const setTheme = useCallback(
     (newThemeName: ThemeName) => {
@@ -97,17 +133,16 @@ export function AdvancedThemeProvider({ children }: { children: React.ReactNode 
 
   const contextValue = useMemo(
     () => ({
-      themeName,
+      themeName: activeThemeName,
       customTheme,
       setTheme,
       availableThemes,
     }),
-    [themeName, customTheme, setTheme, availableThemes],
+    [activeThemeName, customTheme, setTheme, availableThemes],
   )
 
   // Créer le thème MUI avec les couleurs personnalisées
   // Utiliser useMemo pour recréer le thème quand customTheme change
-  const isBeigePresentation = presentationMode === 'beige'
   const isBeigeLight = isBeigePresentation && !beigeDark
   const showBeigeAmbientBg =
     isBeigeLight && !isTopologyRoute && graphicsMode === 'full'
@@ -231,13 +266,14 @@ export function AdvancedThemeProvider({ children }: { children: React.ReactNode 
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <Box
+          data-theme-root
           sx={{
             position: 'relative',
             background: isTopologyRoute
               ? 'transparent'
               : `linear-gradient(135deg, ${customTheme.bg} 0%, ${customTheme.bg2} 25%, ${customTheme.bg} 50%, ${customTheme.bg2} 75%, ${customTheme.bg} 100%)`,
             minHeight: '100vh',
-            transition: 'background 0.5s ease'
+            transition: isBeigePresentation ? 'none' : 'background 0.5s ease',
           }}
         >
           <BeigePresentationAmbientBg enabled={showBeigeAmbientBg} />

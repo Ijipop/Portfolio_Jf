@@ -6,6 +6,7 @@ import { ReactNode, useEffect, useState } from 'react'
 import { usePathname } from 'next/navigation'
 import { GRADIENTS } from '@/design-system/constants'
 import { useAdvancedTheme } from '@/contexts/AdvancedThemeContext'
+import { usePresentationMode } from '@/contexts/PresentationModeContext'
 import { shouldShowTopology } from '@/utils/topologyRoutes'
 
 interface PageWrapperProps {
@@ -44,6 +45,8 @@ export default function PageWrapper({
   const pathname = usePathname()
   const isTopologyRoute = shouldShowTopology(pathname)
   const { customTheme } = useAdvancedTheme()
+  const { mode: presentationMode } = usePresentationMode()
+  const isBeigePresentation = presentationMode === 'beige'
 
   const getInitialBackground = () => {
     switch (backgroundVariant) {
@@ -106,7 +109,7 @@ export default function PageWrapper({
         overflow: isTopologyRoute ? (overflow ?? 'visible') : (overflow || 'hidden'),
         overflowX: overflowX,
         overflowY: overflowY,
-        transition: 'background 0.5s ease',
+        transition: isBeigePresentation ? 'none' : 'background 0.5s ease',
         '&::before': isTopologyRoute
           ? { content: 'none', display: 'none' }
           : {

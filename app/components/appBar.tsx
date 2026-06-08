@@ -8,7 +8,6 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import React, { memo } from 'react';
 import IconButton from '@mui/material/IconButton';
-import useMediaQuery from '@mui/material/useMediaQuery';
 import DarkModeOutlinedIcon from '@mui/icons-material/DarkModeOutlined';
 import LightModeOutlinedIcon from '@mui/icons-material/LightModeOutlined';
 import { ThemeSelector } from '@/components/ThemeSelector';
@@ -32,7 +31,6 @@ function AppBarComponent() {
 	const { locale, setLocale, t } = useLanguage();
 	const { mode: presentationMode } = usePresentationMode();
 	const { beigeDark } = useBeigeDark();
-	const reduceMotion = useMediaQuery('(prefers-reduced-motion: reduce)', { noSsr: true });
 
 	const handleNavigate = (path: string) => router.push(path);
 
@@ -120,7 +118,7 @@ function AppBarComponent() {
 									background: beigeDark
 										? 'linear-gradient(135deg, rgba(255,107,53,0.55), rgba(255,23,68,0.5))'
 										: 'rgba(255,255,255,0.08)',
-									transition: reduceMotion ? 'none' : 'background 0.22s ease, border-color 0.22s ease',
+									transition: 'none',
 									'&:hover': {
 										background: beigeDark
 											? 'linear-gradient(135deg, rgba(255,107,53,0.72), rgba(255,23,68,0.62))'
