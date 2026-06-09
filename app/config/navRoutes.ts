@@ -1,4 +1,4 @@
-export type NavRouteId = 'home' | 'projects' | 'about' | 'contact'
+export type NavRouteId = 'home' | 'projects' | 'about' | 'support' | 'contact'
 
 export interface NavRoute {
   id: NavRouteId
@@ -29,6 +29,13 @@ export const NAV_ROUTES: NavRoute[] = [
     path: '/portfolio/a-propos',
     ariaLabel: 'a propos',
     isActive: (pathname) => pathname === '/portfolio/a-propos',
+  },
+  {
+    id: 'support',
+    labelKey: 'nav.support',
+    path: '/soutien-informatique-montreal',
+    ariaLabel: 'soutien technique',
+    isActive: (pathname) => pathname === '/soutien-informatique-montreal',
   },
   {
     id: 'contact',

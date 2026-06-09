@@ -1,6 +1,7 @@
 'use client'
 
 import ContactMailIcon from '@mui/icons-material/ContactMail'
+import ComputerIcon from '@mui/icons-material/Computer'
 import HomeIcon from '@mui/icons-material/Home'
 import PersonIcon from '@mui/icons-material/Person'
 import WorkIcon from '@mui/icons-material/Work'
@@ -29,6 +30,8 @@ function renderIcon(id: NavRouteId) {
       return <PersonIcon sx={{ mr: { xs: 0, sm: 1 }, fontSize: { xs: 20, sm: 24 } }} />
     case 'contact':
       return <ContactMailIcon sx={{ mr: { xs: 0, sm: 1 }, fontSize: { xs: 20, sm: 24 } }} />
+    case 'support':
+      return <ComputerIcon sx={{ mr: { xs: 0, sm: 1 }, fontSize: { xs: 20, sm: 24 } }} />
   }
 }
 

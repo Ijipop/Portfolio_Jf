@@ -20,6 +20,10 @@ import ProjectWebBriefSection, {
   emptyProjectWebBrief,
   type ProjectWebBriefState,
 } from '@/components/contact/ProjectWebBriefSection'
+import TechnicalSupportBriefSection, {
+  emptyTechnicalSupportBrief,
+  type TechnicalSupportBriefState,
+} from '@/components/contact/TechnicalSupportBriefSection'
 import AiLeadDiagnosis, { type AiLeadDiagnosisResult } from '@/components/contact/AiLeadDiagnosis'
 import { DESIGN_TOKENS } from '@/design-system/constants'
 import { useLanguage } from '@/contexts/LanguageContext'
@@ -118,6 +122,8 @@ function ContactForm({
   const [formData, setFormData] = useState<ContactFormData>(EMPTY_CONTACT_FORM_DATA)
   const [includeProjectWeb, setIncludeProjectWeb] = useState(false)
   const [projectWeb, setProjectWeb] = useState<ProjectWebBriefState>(() => emptyProjectWebBrief())
+  const [includeTechnicalSupport, setIncludeTechnicalSupport] = useState(false)
+  const [technicalSupport, setTechnicalSupport] = useState<TechnicalSupportBriefState>(() => emptyTechnicalSupportBrief())
   const [aiDiagnosis, setAiDiagnosis] = useState<AiLeadDiagnosisResult | null>(null)
   const [formErrors, setFormErrors] = useState<ContactFormErrors>(EMPTY_CONTACT_FORM_ERRORS)
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -195,6 +201,16 @@ function ContactForm({
     setAiDiagnosis(null)
   }
 
+  const handleIncludeTechnicalSupportChange = (next: boolean) => {
+    setIncludeTechnicalSupport(next)
+    setAiDiagnosis(null)
+  }
+
+  const handleTechnicalSupportChange = (next: TechnicalSupportBriefState) => {
+    setTechnicalSupport(next)
+    setAiDiagnosis(null)
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
@@ -220,6 +236,7 @@ function ContactForm({
         body: JSON.stringify({
           ...formData,
           ...(includeProjectWeb ? { projectWeb } : {}),
+          ...(includeTechnicalSupport ? { technicalSupport } : {}),
           ...(aiDiagnosis ? { aiDiagnosis } : {}),
         }),
       })
@@ -231,6 +248,8 @@ function ContactForm({
         setFormErrors(EMPTY_CONTACT_FORM_ERRORS)
         setIncludeProjectWeb(false)
         setProjectWeb(emptyProjectWebBrief())
+        setIncludeTechnicalSupport(false)
+        setTechnicalSupport(emptyTechnicalSupportBrief())
         setAiDiagnosis(null)
         setIsSubmitting(false)
         onSuccess()
@@ -275,19 +294,6 @@ function ContactForm({
           </Typography>
           <Typography variant="body1" sx={{ color: textColor, opacity: 0.9, mb: 1.5 }}>
             {t('contact.sendMessageDesc')}
-          </Typography>
-          <Typography
-            variant="body2"
-            sx={{
-              color: textColor,
-              opacity: 0.85,
-              lineHeight: 1.6,
-              fontWeight: 600,
-              maxWidth: 520,
-              mx: 'auto',
-            }}
-          >
-            {t('contact.pricingAnchor')}
           </Typography>
         </Box>
 
@@ -420,6 +426,15 @@ function ContactForm({
                   onIncludeChange={handleIncludeProjectWebChange}
                   value={projectWeb}
                   onChange={handleProjectWebChange}
+                  textColor={textColor}
+                  compact={compact}
+                />
+
+                <TechnicalSupportBriefSection
+                  include={includeTechnicalSupport}
+                  onIncludeChange={handleIncludeTechnicalSupportChange}
+                  value={technicalSupport}
+                  onChange={handleTechnicalSupportChange}
                   textColor={textColor}
                   compact={compact}
                 />

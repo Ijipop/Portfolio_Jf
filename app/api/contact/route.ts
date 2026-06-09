@@ -50,6 +50,27 @@ const BUDGET_LABELS: Record<string, string> = {
   discuss: 'À discuter',
 }
 
+const SUPPORT_NEED_LABELS: Record<string, string> = {
+  troubleshooting: 'Dépannage Windows et ordinateur lent',
+  windowsInstall: 'Installation ou réinstallation de Windows',
+  ssdMigration: 'Migration vers SSD et clonage de disque',
+  dataRecovery: 'Récupération de données simple',
+  security: 'Sécurité de comptes et double authentification',
+  other: 'Autre besoin',
+}
+
+const SUPPORT_URGENCY_LABELS: Record<string, string> = {
+  today: 'Aujourd’hui / dès que possible',
+  thisWeek: 'Cette semaine',
+  flexible: 'Flexible',
+}
+
+const SUPPORT_MODE_LABELS: Record<string, string> = {
+  remote: 'À distance',
+  onsiteMontreal: 'Déplacement sur l’île de Montréal',
+  either: 'Selon le plus simple',
+}
+
 type AiPriority = 'high' | 'medium' | 'low'
 
 interface SafeAiDiagnosis {
@@ -133,6 +154,49 @@ function formatProjectWebHtml(pw: Record<string, unknown>): string | null {
   return `
     <hr style="border:none;border-top:1px solid #dee2e6;margin:24px 0;" />
     <h3 style="font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;font-size:16px;color:#212529;margin:0 0 12px 0;">Demande de projet web</h3>
+    ${wrapTable(rows.join(''))}
+  `
+}
+
+function formatTechnicalSupportHtml(ts: Record<string, unknown>): string | null {
+  const rows: string[] = []
+
+  const needType = typeof ts.needType === 'string' ? ts.needType : ''
+  if (needType && SUPPORT_NEED_LABELS[needType]) {
+    let value = SUPPORT_NEED_LABELS[needType]
+    if (needType === 'other' && typeof ts.needTypeOther === 'string' && ts.needTypeOther.trim()) {
+      value += ` — ${ts.needTypeOther.trim()}`
+    }
+    rows.push(emailRow('Type de besoin', value))
+  }
+
+  const urgency = typeof ts.urgency === 'string' ? ts.urgency : ''
+  if (urgency && SUPPORT_URGENCY_LABELS[urgency]) {
+    rows.push(emailRow('Niveau d’urgence', SUPPORT_URGENCY_LABELS[urgency]))
+  }
+
+  if (typeof ts.deviceOs === 'string' && ts.deviceOs.trim()) {
+    rows.push(emailRow('Appareil / OS', ts.deviceOs.trim()))
+  }
+
+  const supportMode = typeof ts.supportMode === 'string' ? ts.supportMode : ''
+  if (supportMode && SUPPORT_MODE_LABELS[supportMode]) {
+    rows.push(emailRow('Mode souhaité', SUPPORT_MODE_LABELS[supportMode]))
+  }
+
+  if (typeof ts.availability === 'string' && ts.availability.trim()) {
+    rows.push(emailRow('Disponibilités', ts.availability.trim()))
+  }
+
+  if (typeof ts.notes === 'string' && ts.notes.trim()) {
+    rows.push(emailRow('Notes complémentaires', ts.notes.trim()))
+  }
+
+  if (rows.length === 0) return null
+
+  return `
+    <hr style="border:none;border-top:1px solid #dee2e6;margin:24px 0;" />
+    <h3 style="font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;font-size:16px;color:#212529;margin:0 0 12px 0;">Demande de soutien technique</h3>
     ${wrapTable(rows.join(''))}
   `
 }
@@ -242,7 +306,7 @@ export async function POST(request: NextRequest) {
     })
     if (limited) return limited
 
-    const { name, email, subject, message, projectWeb, aiDiagnosis } = body
+    const { name, email, subject, message, projectWeb, technicalSupport, aiDiagnosis } = body
 
     // Validation des champs
     if (
@@ -328,6 +392,13 @@ export async function POST(request: NextRequest) {
         projectSection = formatted
       }
     }
+    let technicalSupportSection = ''
+    if (technicalSupport && typeof technicalSupport === 'object' && !Array.isArray(technicalSupport)) {
+      const formatted = formatTechnicalSupportHtml(technicalSupport as Record<string, unknown>)
+      if (formatted) {
+        technicalSupportSection = formatted
+      }
+    }
     const aiDiagnosisSection = formatAiDiagnosisHtml(aiDiagnosis)
 
     // Expéditeur : domaine vérifié dans Resend (ex. contact@votredomaine.com). Voir RESEND_FROM sur Vercel.
@@ -354,6 +425,7 @@ export async function POST(request: NextRequest) {
         ${wrapTable(mainRows)}
         ${aiDiagnosisSection}
         ${projectSection}
+        ${technicalSupportSection}
       </div>
     `
 

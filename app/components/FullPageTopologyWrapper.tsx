@@ -3,7 +3,7 @@
 import dynamic from 'next/dynamic'
 import Box from '@mui/material/Box'
 import useMediaQuery from '@mui/material/useMediaQuery'
-import { ReactNode, useEffect, useRef } from 'react'
+import { ReactNode, useEffect, useRef, useState } from 'react'
 import { usePathname } from 'next/navigation'
 import { useAdvancedTheme } from '@/contexts/AdvancedThemeContext'
 import { useBeigeDark } from '@/hooks/useBeigeDark'
@@ -32,7 +32,9 @@ interface FullPageTopologyWrapperProps {
 
 export default function FullPageTopologyWrapper({ children }: FullPageTopologyWrapperProps) {
   const pathname = usePathname()
-  const show = shouldShowTopology(pathname)
+  const [isMounted, setIsMounted] = useState(false)
+  const hydrationSafePathname = isMounted ? pathname : null
+  const show = shouldShowTopology(hydrationSafePathname)
   const scrollRef = useRef<HTMLDivElement>(null)
   const { customTheme } = useAdvancedTheme()
   const { beigePresentationBgUrl } = useBeigePresentationBg()
@@ -46,6 +48,10 @@ export default function FullPageTopologyWrapper({ children }: FullPageTopologyWr
   const useBeigeImageBackground = presentationMode === 'beige' && !beigeDark
   const useBeigeSunsetBackground = presentationMode === 'beige' && beigeDark
   const useGradientOnly = useLightFallback || useBeigeImageBackground || useBeigeSunsetBackground
+
+  useEffect(() => {
+    setIsMounted(true)
+  }, [])
 
   // Remettre le scroll en haut au montage pour éviter titre coupé / contenu décalé
   useEffect(() => {

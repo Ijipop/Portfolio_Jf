@@ -132,7 +132,7 @@ const nextConfig = {
   // chunks `.css` sous `/_next/static` peuvent recevoir `text/plain` ; avec nosniff le navigateur refuse
   // d’appliquer la feuille de style (MIME strict).
   async headers() {
-    return [
+    const headers = [
       {
         source: '/(.*)',
         headers: [
@@ -163,7 +163,11 @@ const nextConfig = {
           },
         ],
       },
-      {
+    ]
+
+    // En dev, ne jamais forcer un cache immuable sur les chunks Next/Turbopack.
+    if (process.env.NODE_ENV === 'production') {
+      headers.push({
         source: '/_next/static/:path*',
         headers: [
           {
@@ -171,8 +175,10 @@ const nextConfig = {
             value: 'public, max-age=31536000, immutable',
           },
         ],
-      },
-    ]
+      })
+    }
+
+    return headers
   },
 }
 
