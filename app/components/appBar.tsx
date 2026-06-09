@@ -86,10 +86,10 @@ function AppBarComponent() {
 							size="small"
 							onClick={() => setLocale(locale === 'fr' ? 'en' : 'fr')}
 							sx={{
-								minWidth: 40,
-								height: 40,
+								minWidth: { xs: 36, sm: 40 },
+								height: { xs: 36, sm: 40 },
 								fontSize: '0.75rem',
-								px: 1,
+								px: { xs: 0.75, sm: 1 },
 								py: 0,
 								color: 'white',
 								fontWeight: 700,
@@ -137,7 +137,11 @@ function AppBarComponent() {
 						<Box sx={{ display: { xs: 'none', sm: 'block' } }}>
 							<PresentationModeToggle />
 						</Box>
-						{presentationMode === 'dev' && <ThemeSelector />}
+						{presentationMode === 'dev' && (
+							<Box sx={{ display: { xs: 'none', sm: 'block' } }}>
+								<ThemeSelector />
+							</Box>
+						)}
 					</Box>
 				</Toolbar>
 			</AppBar>

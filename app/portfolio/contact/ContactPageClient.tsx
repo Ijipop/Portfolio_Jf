@@ -2,6 +2,7 @@
 
 import CheckCircleIcon from '@mui/icons-material/CheckCircle'
 import { Alert, Snackbar } from '@mui/material'
+import Box from '@mui/material/Box'
 import Container from '@mui/material/Container'
 import { useTheme } from '@mui/material/styles'
 import useMediaQuery from '@mui/material/useMediaQuery'
@@ -21,9 +22,11 @@ import AppBarComponent from '../../components/appBar'
 import PageWrapper from '../../components/shared/PageWrapper'
 import InteractiveBackgroundSection from '../../components/shared/InteractiveBackgroundSection'
 import Footer from '../../components/Footer'
+import CTAButton from '../../components/shared/CTAButton'
 import { useTextColor } from '../../hooks/useTextColor'
 import { useThemeColors } from '../../hooks/useThemeColors'
 import { useLanguage } from '../../contexts/LanguageContext'
+import { CONTACT_SUBJECT_TECH_SUPPORT } from '@/i18n/contactSubjects'
 
 type ContactPageClientProps = {
   /** Route /portfolio/contact/merci : popup ouverte + page_view pour Analytics. */
@@ -38,7 +41,7 @@ export default function ContactPageClient({ showMerciDialog = false }: ContactPa
   const useCompactContact = !isXlUp || !isTallViewport
   const textColor = useTextColor()
   const { primary } = useThemeColors()
-  const { t } = useLanguage()
+  const { t, locale } = useLanguage()
   const [snackbarOpen, setSnackbarOpen] = useState(false)
   const [snackbarMessage, setSnackbarMessage] = useState('')
   const [snackbarSeverity, setSnackbarSeverity] = useState<'success' | 'error'>('success')
@@ -110,6 +113,16 @@ export default function ContactPageClient({ showMerciDialog = false }: ContactPa
                     textColor={textColor}
             compact={useCompactContact}
           />
+
+          <Box sx={{ display: 'flex', justifyContent: 'center', mb: useCompactContact ? 2.2 : 3 }}>
+            <CTAButton
+              href={`/portfolio/contact?subject=${encodeURIComponent(CONTACT_SUBJECT_TECH_SUPPORT[locale])}#soutien-technique`}
+              variant="outline"
+              size="small"
+            >
+              {t('contact.supportShortcut')}
+            </CTAButton>
+          </Box>
 
           <ContactForm
             compact={useCompactContact}

@@ -3,6 +3,7 @@
 import AutoAwesomeOutlinedIcon from '@mui/icons-material/AutoAwesomeOutlined'
 import CheckRoundedIcon from '@mui/icons-material/CheckRounded'
 import CodeOutlinedIcon from '@mui/icons-material/CodeOutlined'
+import ComputerOutlinedIcon from '@mui/icons-material/ComputerOutlined'
 import LanguageOutlinedIcon from '@mui/icons-material/LanguageOutlined'
 import ManageSearchOutlinedIcon from '@mui/icons-material/ManageSearchOutlined'
 import Box from '@mui/material/Box'
@@ -21,6 +22,7 @@ import { getCardSurfaceSx } from '@/components/shared/cardSurface'
 import { DESIGN_TOKENS } from '@/design-system/constants'
 import { usePresentationMode } from '@/contexts/PresentationModeContext'
 import { CONTACT_SUBJECT_IMPROVE_SITE } from '@/i18n/contactSubjects'
+import { CONTACT_SUBJECT_TECH_SUPPORT } from '@/i18n/contactSubjects'
 import { REASSURANCE_BANNER_COPY } from '@/i18n/reassuranceBannerCopy'
 import { useLanguage } from '@/contexts/LanguageContext'
 import { useTextColor } from '@/hooks/useTextColor'
@@ -31,6 +33,7 @@ import type { SvgIconComponent } from '@mui/icons-material'
 const CONTACT_PATH = '/portfolio/contact'
 const TIMELENDR_PATH = '/logiciel/timelendr'
 const SEO_LANDING_PATH = '/creation-site-web-montreal'
+const SUPPORT_LANDING_PATH = '/soutien-informatique-montreal'
 /** Nombre de lignes « puce » — identique sur les 3 cartes pour l’alignement visuel. */
 const PACK_BULLET_SLOTS = 4
 const PACK_BULLET_ROW_MIN = 48
@@ -638,6 +641,54 @@ export default function PortfolioServicesSection() {
               {reassurance.cta}
             </Typography>
           </Link>
+        </Box>
+      </ScrollReveal>
+
+      <ScrollReveal direction="up" delay={0.1}>
+        <Box
+          sx={{
+            maxWidth: 740,
+            mx: 'auto',
+            mb: { xs: 3, md: 4 },
+            px: { xs: 2, sm: 2.5 },
+            py: { xs: 2, sm: 2.25 },
+            borderRadius: 2,
+            border: `1px solid ${alpha(primary, 0.24)}`,
+            bgcolor: alpha(primary, 0.08),
+            textAlign: 'center',
+          }}
+        >
+          <Box sx={{ display: 'inline-flex', alignItems: 'center', gap: 1, mb: 1 }}>
+            <ComputerOutlinedIcon sx={{ color: primary, fontSize: 22 }} />
+            <Typography sx={{ color: textColor, fontWeight: 800, fontSize: { xs: '1rem', sm: '1.06rem' } }}>
+              {t('home.servicesHomeSupportTitle')}
+            </Typography>
+          </Box>
+          <Typography
+            sx={{
+              color: textColor,
+              opacity: 0.88,
+              fontSize: { xs: '0.9rem', sm: '0.95rem' },
+              lineHeight: 1.55,
+              mb: 1.8,
+              maxWidth: 620,
+              mx: 'auto',
+            }}
+          >
+            {t('home.servicesHomeSupportLead')}
+          </Typography>
+          <Box sx={{ display: 'flex', gap: 1.2, justifyContent: 'center', flexWrap: 'wrap' }}>
+            <CTAButton href={SUPPORT_LANDING_PATH} variant="outline" size="small">
+              {t('home.servicesHomeSupportCta')}
+            </CTAButton>
+            <CTAButton
+              href={`${CONTACT_PATH}?subject=${encodeURIComponent(CONTACT_SUBJECT_TECH_SUPPORT[locale])}#soutien-technique`}
+              variant="primary"
+              size="small"
+            >
+              {t('common.getEstimate')}
+            </CTAButton>
+          </Box>
         </Box>
       </ScrollReveal>
 

@@ -50,14 +50,21 @@ const AdvancedThemeContext = createContext<AdvancedThemeContextType | undefined>
 export function AdvancedThemeProvider({ children }: { children: React.ReactNode }) {
   const mode: PaletteMode = 'light' // Mode fixe à light
   const pathname = usePathname()
-  const isTopologyRoute = shouldShowTopology(pathname)
+  const [isMounted, setIsMounted] = useState(false)
+  const hydrationSafePathname = isMounted ? pathname : null
+  const isTopologyRoute = shouldShowTopology(hydrationSafePathname)
   const { mode: presentationMode, hydrated: presentationHydrated } = usePresentationMode()
   const { beigeDark } = useBeigeDark()
   const { beigePresentationBgUrl } = useBeigePresentationBg()
   const { graphicsMode } = useGraphicsMode()
   const [themeName, setThemeName] = useState<ThemeName>(SSR_THEME_NAME)
 
-  const isBeigePresentation = presentationMode === 'beige'
+  useEffect(() => {
+    setIsMounted(true)
+  }, [])
+
+  /** Évite les divergences SSR/client : le mode beige visuel n'est actif qu'après hydratation du choix utilisateur. */
+  const isBeigePresentation = presentationHydrated && presentationMode === 'beige'
   const activeThemeName = useMemo((): ThemeName => {
     if (presentationHydrated && isBeigePresentation) {
       return beigeDark ? BEIGE_DARK_THEME : BEIGE_LIGHT_THEME

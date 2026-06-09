@@ -1,6 +1,7 @@
 'use client'
 
 import ContactMailIcon from '@mui/icons-material/ContactMail'
+import ComputerIcon from '@mui/icons-material/Computer'
 import HomeIcon from '@mui/icons-material/Home'
 import PersonIcon from '@mui/icons-material/Person'
 import WorkIcon from '@mui/icons-material/Work'
@@ -26,6 +27,8 @@ function renderIcon(id: NavRouteId) {
       return <PersonIcon />
     case 'contact':
       return <ContactMailIcon />
+    case 'support':
+      return <ComputerIcon />
   }
 }
 

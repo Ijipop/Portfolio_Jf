@@ -5,3 +5,8 @@ export const CONTACT_SUBJECT_IMPROVE_SITE: Record<Locale, string> = {
   fr: 'Projet : refonte ou amélioration de site',
   en: 'Project: website redesign or improvement',
 }
+
+export const CONTACT_SUBJECT_TECH_SUPPORT: Record<Locale, string> = {
+  fr: 'Demande : soutien informatique (Montréal / à distance)',
+  en: 'Request: technical support (Montreal / remote)',
+}
