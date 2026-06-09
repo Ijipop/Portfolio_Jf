@@ -127,7 +127,7 @@ function ContactForm({
   const [aiDiagnosis, setAiDiagnosis] = useState<AiLeadDiagnosisResult | null>(null)
   const [formErrors, setFormErrors] = useState<ContactFormErrors>(EMPTY_CONTACT_FORM_ERRORS)
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [showOptionalSections, setShowOptionalSections] = useState(true)
+  const [showOptionalSections, setShowOptionalSections] = useState(false)
 
   const debounceTimers = useRef<Partial<Record<ValidatableContactField, ReturnType<typeof setTimeout>>>>({})
 
@@ -320,7 +320,7 @@ function ContactForm({
             }}
           />
           <Box sx={{ display: 'grid', gap: compact ? 2 : 2.5, mb: compact ? 2 : 2.5 }}>
-            <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)' }, gap: 3 }}>
+            <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)' }, gap: { xs: 2, sm: 3 } }}>
               <StyledTextField
                 name="name"
                 label={t('contact.formName')}

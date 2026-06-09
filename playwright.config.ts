@@ -19,6 +19,16 @@ export default defineConfig({
   },
   projects: [
     { name: 'chromium', use: { ...devices['Desktop Chrome'] } },
+    {
+      name: 'mobile-chromium',
+      testMatch: /.*mobile\.spec\.ts/,
+      use: {
+        browserName: 'chromium',
+        viewport: { width: 390, height: 844 },
+        isMobile: true,
+        hasTouch: true,
+      },
+    },
   ],
   webServer: {
     command: 'npm run dev',

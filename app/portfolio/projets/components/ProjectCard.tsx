@@ -485,7 +485,7 @@ export default function ProjectCard({
                       sx={{
                         display: 'flex',
                         flexDirection: 'row',
-                        flexWrap: 'nowrap',
+                        flexWrap: { xs: 'wrap', sm: 'nowrap' },
                         alignItems: 'stretch',
                         justifyContent: 'flex-start',
                         gap: 0.5,

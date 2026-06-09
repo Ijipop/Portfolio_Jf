@@ -117,7 +117,7 @@ const HeaderSection = forwardRef<HTMLDivElement, HeaderSectionProps>(function He
           boxSizing: 'border-box',
         }),
         [theme.breakpoints.down('sm')]: {
-          padding: fullViewport ? theme.spacing(4.25, 1, 4) : theme.spacing(2.5, 1, 2),
+          padding: fullViewport ? theme.spacing(3.5, 1, 3.25) : theme.spacing(2.5, 1, 2),
         },
         ...(fullViewport && {
           '@media (max-width: 599.95px) and (max-height: 760px)': {
@@ -224,12 +224,11 @@ const HeaderSection = forwardRef<HTMLDivElement, HeaderSectionProps>(function He
                 fontWeight: 300,
                 color: textColor,
                 fontSize: { xs: '0.95rem', sm: 'inherit' },
-                overflowX: { xs: 'visible', sm: 'auto' },
-                overflowY: 'hidden',
-                scrollbarWidth: 'none',
-                msOverflowStyle: 'none',
-                '&::-webkit-scrollbar': { display: 'none' },
+                overflowX: 'visible',
+                overflowY: 'visible',
                 maxWidth: '100%',
+                whiteSpace: 'normal',
+                wordBreak: 'break-word',
               }}
             >
               {subtitle}

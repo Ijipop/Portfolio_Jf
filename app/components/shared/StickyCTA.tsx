@@ -38,10 +38,13 @@ export default function StickyCTA({
         border: { xs: 'none', md: (theme) => theme.palette.mode === 'dark'
           ? '1px solid rgba(255, 255, 255, 0.12)'
           : '1px solid rgba(0, 0, 0, 0.1)' },
-        padding: DESIGN_TOKENS.spacing.md,
+        padding: { xs: `${DESIGN_TOKENS.spacing.sm}px ${DESIGN_TOKENS.spacing.md}px`, md: DESIGN_TOKENS.spacing.md },
         boxShadow: '0 -4px 20px rgba(0,0,0,0.1)',
         display: 'block',
         width: { xs: '100%', md: 320 },
+        maxWidth: { xs: '100%', md: 320 },
+        boxSizing: 'border-box',
+        pointerEvents: 'auto',
       }}
     >
       {onClick ? (
