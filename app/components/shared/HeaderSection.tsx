@@ -75,16 +75,26 @@ const HeaderSection = forwardRef<HTMLDivElement, HeaderSectionProps>(function He
       clearInterval(interval)
     }
   }, [customTheme])
+
+  const fullViewportSurfaceBg = `radial-gradient(90% 70% at 50% -12%, ${alpha(primary, theme.palette.mode === 'dark' ? 0.28 : 0.2)} 0%, transparent 58%),
+    radial-gradient(64% 56% at 12% 24%, ${alpha(accent, theme.palette.mode === 'dark' ? 0.2 : 0.14)} 0%, transparent 52%),
+    radial-gradient(58% 52% at 88% 30%, ${alpha(secondary, theme.palette.mode === 'dark' ? 0.22 : 0.16)} 0%, transparent 54%),
+    linear-gradient(145deg, ${alpha('#ffffff', theme.palette.mode === 'dark' ? 0.09 : 0.22)} 0%, ${alpha('#f8fafc', theme.palette.mode === 'dark' ? 0.04 : 0.12)} 52%, ${alpha('#ffffff', theme.palette.mode === 'dark' ? 0.08 : 0.18)} 100%)`
+
+  const heroPadTop = {
+    xs: `calc(${theme.spacing(5.5)} + var(--app-bar-height, 56px))`,
+    sm: `calc(${theme.spacing(8)} + var(--app-bar-height, 64px))`,
+    md: 'calc(86px + var(--app-bar-height, 64px))',
+    lg: 'calc(108px + var(--app-bar-height, 64px))',
+    xl: 'calc(132px + var(--app-bar-height, 64px))',
+  }
   
   return (
     <Box
       ref={ref}
       sx={{
         background: fullViewport
-          ? `radial-gradient(90% 70% at 50% -12%, ${alpha(primary, theme.palette.mode === 'dark' ? 0.28 : 0.2)} 0%, transparent 58%),
-             radial-gradient(64% 56% at 12% 24%, ${alpha(accent, theme.palette.mode === 'dark' ? 0.2 : 0.14)} 0%, transparent 52%),
-             radial-gradient(58% 52% at 88% 30%, ${alpha(secondary, theme.palette.mode === 'dark' ? 0.22 : 0.16)} 0%, transparent 54%),
-             linear-gradient(145deg, ${alpha('#ffffff', theme.palette.mode === 'dark' ? 0.09 : 0.22)} 0%, ${alpha('#f8fafc', theme.palette.mode === 'dark' ? 0.04 : 0.12)} 52%, ${alpha('#ffffff', theme.palette.mode === 'dark' ? 0.08 : 0.18)} 100%)`
+          ? fullViewportSurfaceBg
           : 'linear-gradient(145deg, rgba(255, 255, 255, 0.13) 0%, rgba(241, 245, 249, 0.1) 50%, rgba(255, 255, 255, 0.12) 100%)',
         backdropFilter: 'blur(18px) saturate(1.18)',
         WebkitBackdropFilter: 'blur(18px) saturate(1.18)',
@@ -95,39 +105,41 @@ const HeaderSection = forwardRef<HTMLDivElement, HeaderSectionProps>(function He
         color: textColor,
         padding: fullViewport
           ? {
-              xs: theme.spacing(5.5, 0, 4),
-              sm: theme.spacing(8, 0, 5),
-            md: '86px 0 44px',
-            lg: '108px 0 52px',
-            xl: '132px 0 60px',
+              xs: `${heroPadTop.xs} 0 ${theme.spacing(4)}`,
+              sm: `${heroPadTop.sm} 0 ${theme.spacing(5)}`,
+              md: `${heroPadTop.md} 0 44px`,
+              lg: `${heroPadTop.lg} 0 52px`,
+              xl: `${heroPadTop.xl} 0 60px`,
             }
           : theme.spacing(3.5, 0, 2.5),
         textAlign: 'center',
         position: 'relative',
         overflow: 'hidden',
         ...(fullViewport && {
-          /** Mobile : occuper tout l’écran sous l’AppBar pour que les offres restent sous la ligne de flottaison. */
+          /** Le fond remonte sous l’AppBar sticky — supprime la bande claire entre navbar et hero. */
+          marginTop: 'calc(-1 * var(--app-bar-height, 64px))',
           minHeight: {
-            xs: 'calc(100svh - 56px)',
-            sm: 'calc(100dvh - 64px)',
-            md: 'calc(100dvh - 72px)',
+            xs: 'calc(100svh - var(--app-bar-height, 56px))',
+            sm: 'calc(100dvh - var(--app-bar-height, 64px))',
           },
           display: { xs: 'flex', sm: 'block' },
           flexDirection: { xs: 'column', sm: 'unset' },
           boxSizing: 'border-box',
         }),
         [theme.breakpoints.down('sm')]: {
-          padding: fullViewport ? theme.spacing(3.5, 1, 3.25) : theme.spacing(2.5, 1, 2),
+          padding: fullViewport
+            ? `calc(${theme.spacing(3.5)} + var(--app-bar-height, 56px)) 8px ${theme.spacing(3.25)}`
+            : theme.spacing(2.5, 1, 2),
         },
         ...(fullViewport && {
           '@media (max-width: 599.95px) and (max-height: 760px)': {
-            padding: theme.spacing(3.25, 1, 3.5),
+            padding: `calc(${theme.spacing(3.25)} + var(--app-bar-height, 56px)) 8px ${theme.spacing(3.5)}`,
           },
           '@media (min-width: 900px) and (max-height: 820px)': {
-            padding: '48px 0 38px',
+            padding: 'calc(48px + var(--app-bar-height, 64px)) 0 38px',
           },
           '@media (min-width: 900px) and (max-height: 680px)': {
-            padding: '34px 0 28px',
+            padding: 'calc(34px + var(--app-bar-height, 64px)) 0 28px',
           },
         }),
         '&::before': {

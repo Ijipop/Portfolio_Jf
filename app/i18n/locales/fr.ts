@@ -86,7 +86,7 @@ export const fr = {
       wowStatsProjects: 'Projets et prototypes',
       wowStatsTechs: 'Technologies maîtrisées',
       servicesHomeKicker: 'OFFRES',
-      servicesHomeTitle: 'Trois façons de vous aider',
+      servicesHomeTitle: 'Cinq façons de vous aider',
       servicesHomeSubtitle:
         'PME, travailleurs autonomes, professionnels, artistes et petites équipes au Québec.',
       servicesHomeFootnote:
@@ -104,6 +104,18 @@ export const fr = {
       servicesPackAuditB3: 'Mobile, confiance perçue, Google local (bases)',
       servicesPackAuditCta: 'Demander un audit',
       servicesPackAuditSubject: 'Offre : audit de site — 450 $',
+      servicesPackMinisiteTitle: 'Mini-site vitrine 1 page',
+      servicesPackMinisitePrice: '400 $',
+      servicesPackMinisitePriceNote:
+        'Idéal si votre contenu est prêt et votre besoin tient sur une seule page.',
+      servicesPackMinisiteFor:
+        'Pour une présence en ligne rapide, claire et crédible — sans pages multiples.',
+      servicesPackMinisiteB1: 'En-tête percutant : qui vous êtes, ce que vous offrez, appel à l’action',
+      servicesPackMinisiteB2: '3–4 sections clés (services, à propos, confiance, contact)',
+      servicesPackMinisiteB3: 'Design responsive et formulaire de contact fonctionnel',
+      servicesPackMinisiteB4: 'SEO de base et mise en ligne prête à partager',
+      servicesPackMinisiteCta: 'Lancer mon mini-site',
+      servicesPackMinisiteSubject: 'Offre : mini-site vitrine 1 page — à partir de 400 $',
       servicesPackPageTitle: 'Site web professionnel',
       servicesPackPagePrice: '1 200 $',
       servicesPackPagePriceNote:
@@ -138,6 +150,19 @@ export const fr = {
       servicesPackSoftwareCta: 'Décrire votre besoin',
       servicesPackSoftwareDemoCta: 'Voir un exemple : Timelendr',
       servicesPackSoftwareSubject: 'Offre : petit outil ou automatisation',
+      servicesPackSupportTitle: 'Soutien informatique',
+      servicesPackSupportPrice: 'Sur devis',
+      servicesPackSupportPriceNote:
+        'Selon le travail demandé · île de Montréal et à distance au Québec.',
+      servicesPackSupportFor:
+        'Pour dépanner sans jargon : ordinateur lent, Windows, courriels ou sécurité des comptes.',
+      servicesPackSupportB1: 'Dépannage Windows, lenteur et configuration de base',
+      servicesPackSupportB2: 'Migration SSD, sauvegardes et récupération simple',
+      servicesPackSupportB3: 'Outlook, Gmail, mots de passe et double authentification',
+      servicesPackSupportB4: 'À domicile, à distance ou en déplacement à Montréal',
+      servicesPackSupportCta: 'Demander une aide technique',
+      servicesPackSupportDetailCta: 'Voir tous les services',
+      servicesPackSupportSubject: 'Demande : soutien informatique (Montréal / à distance)',
       servicesHomeNewTitle: 'Nouveau site web',
       servicesHomeNewLead:
         'Un site moderne, facile à consulter sur ordinateur comme sur mobile, pour présenter vos services et faciliter les prises de contact.',

@@ -101,9 +101,20 @@ export default function HomeClient({ initialShowIntro }: { initialShowIntro: boo
           minHeight: '100vh',
         }}
       >
-      <AppBarComponent />
-
-      <PortfolioHomeHero />
+      <Box
+        component="header"
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 0,
+          m: 0,
+          p: 0,
+          flexShrink: 0,
+        }}
+      >
+        <AppBarComponent />
+        <PortfolioHomeHero />
+      </Box>
 
       <InteractiveBackgroundSection>
       <Container

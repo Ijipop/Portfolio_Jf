@@ -6,7 +6,7 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import React, { memo } from 'react';
+import React, { memo, useLayoutEffect, useRef } from 'react';
 import IconButton from '@mui/material/IconButton';
 import DarkModeOutlinedIcon from '@mui/icons-material/DarkModeOutlined';
 import LightModeOutlinedIcon from '@mui/icons-material/LightModeOutlined';
@@ -31,12 +31,33 @@ function AppBarComponent() {
 	const { locale, setLocale, t } = useLanguage();
 	const { mode: presentationMode } = usePresentationMode();
 	const { beigeDark } = useBeigeDark();
+	const appBarRef = useRef<HTMLDivElement>(null);
 
 	const handleNavigate = (path: string) => router.push(path);
+
+	useLayoutEffect(() => {
+		const node = appBarRef.current;
+		if (!node || typeof document === 'undefined') return;
+
+		const syncAppBarHeight = () => {
+			document.documentElement.style.setProperty('--app-bar-height', `${node.offsetHeight}px`);
+		};
+
+		syncAppBarHeight();
+		const observer = new ResizeObserver(syncAppBarHeight);
+		observer.observe(node);
+		window.addEventListener('resize', syncAppBarHeight);
+
+		return () => {
+			observer.disconnect();
+			window.removeEventListener('resize', syncAppBarHeight);
+		};
+	}, []);
 
 	return (
 		<>
 			<AppBar 
+				ref={appBarRef}
 				position="sticky" 
 				sx={{
 					top: 0,
@@ -46,6 +67,8 @@ function AppBarComponent() {
 					WebkitBackdropFilter: 'blur(14px) saturate(1.05)',
 					boxShadow: `0 4px 20px ${primary}40 !important`,
 					borderBottom: `1px solid ${primary}30 !important`,
+					flexShrink: 0,
+					mb: 0,
 				}}
 			>
 				<Toolbar sx={{ 
