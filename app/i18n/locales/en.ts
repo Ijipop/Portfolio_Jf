@@ -59,7 +59,7 @@ export const en = {
       demosBandKicker: 'Demo showcases',
       demosBandTitle: 'See the craft before you decide',
       demosBandLead:
-        'Six one-pagers to show very different creative directions and sectors.',
+        'Eight one-pagers to show very different creative directions and sectors.',
       demosBandCta: 'Browse demos',
       aiImpactKicker: 'Optional',
       aiImpactTitle: 'When it helps: AI at the service of your inquiries',

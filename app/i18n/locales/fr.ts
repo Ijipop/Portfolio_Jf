@@ -59,7 +59,7 @@ export const fr = {
       demosBandKicker: 'Vitrines démo',
       demosBandTitle: 'Voir le rendu avant de décider',
       demosBandLead:
-        'Six mini-sites pour montrer des styles et des secteurs très différents.',
+        'Huit mini-sites pour montrer des styles et des secteurs très différents.',
       demosBandCta: 'Explorer les démos',
       aiImpactKicker: 'Option',
       aiImpactTitle: 'Quand c’est utile : IA au service de vos demandes',
