@@ -44,9 +44,16 @@ function AppBarComponent() {
 		};
 
 		syncAppBarHeight();
+		window.addEventListener('resize', syncAppBarHeight);
+
+		if (typeof ResizeObserver === 'undefined') {
+			return () => {
+				window.removeEventListener('resize', syncAppBarHeight);
+			};
+		}
+
 		const observer = new ResizeObserver(syncAppBarHeight);
 		observer.observe(node);
-		window.addEventListener('resize', syncAppBarHeight);
 
 		return () => {
 			observer.disconnect();
