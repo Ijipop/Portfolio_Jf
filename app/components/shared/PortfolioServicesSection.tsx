@@ -39,6 +39,8 @@ const PACK_BULLET_SLOTS = 4
 const PACK_BULLET_ROW_MIN = 48
 /** Hauteur commune des bandeaux orange (notes courtes). */
 const PACK_HEADER_HEIGHT = { xs: 268, md: 280, lg: 292 }
+/** Délai entre chaque carte offre (gauche → droite). */
+const OFFER_CARD_STAGGER_S = 0.15
 type PackOffer = {
   id: string
   icon: SvgIconComponent
@@ -710,7 +712,15 @@ export default function PortfolioServicesSection() {
           const href = contactHref(subject)
 
           return (
-            <ScrollReveal key={offer.id} direction="up" delay={0.06 * index} fillHeight>
+            <ScrollReveal
+              key={offer.id}
+              direction="right"
+              distance={32}
+              duration={0.68}
+              delay={index * OFFER_CARD_STAGGER_S}
+              uncappedDelay
+              fillHeight
+            >
               <OfferPackCard
                 offer={offer}
                 href={href}
@@ -724,25 +734,6 @@ export default function PortfolioServicesSection() {
           )
         })}
       </Box>
-
-      <ScrollReveal direction="up" delay={0.1}>
-        <Typography
-          component="p"
-          sx={{
-            textAlign: 'center',
-            maxWidth: 520,
-            mx: 'auto',
-            mt: { xs: 3, md: 3.5 },
-            color: textColor,
-            opacity: 0.78,
-            fontSize: { xs: '0.9rem', sm: '0.95rem' },
-            lineHeight: 1.6,
-            px: { xs: 0.5, sm: 0 },
-          }}
-        >
-          {t('home.servicesHomeFootnote')}
-        </Typography>
-      </ScrollReveal>
     </Box>
   )
 }

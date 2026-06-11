@@ -9,6 +9,9 @@ interface ScrollRevealProps {
   delay?: number
   direction?: 'up' | 'down' | 'left' | 'right'
   distance?: number
+  duration?: number
+  /** Sans plafond à 0,16 s — pour enchaînements gauche→droite (offres). */
+  uncappedDelay?: boolean
   /** Remplit la hauteur de la cellule grille (cartes alignées). */
   fillHeight?: boolean
 }
@@ -18,6 +21,8 @@ export default function ScrollReveal({
   delay = 0,
   direction = 'up',
   distance = 40,
+  duration = 0.58,
+  uncappedDelay = false,
   fillHeight = false,
 }: ScrollRevealProps) {
   const [isVisible, setIsVisible] = useState(false)
@@ -106,8 +111,9 @@ export default function ScrollReveal({
       initial={getInitialPosition()}
       animate={isVisible ? getAnimatePosition() : getInitialPosition()}
       transition={{
-        duration: reducedMotion ? 0 : 0.58,
-        delay: reducedMotion ? 0 : isVisible ? Math.min(delay, 0.16) : 0,
+        duration: reducedMotion ? 0 : duration,
+        delay:
+          reducedMotion ? 0 : isVisible ? (uncappedDelay ? delay : Math.min(delay, 0.16)) : 0,
         ease: [0.25, 0.46, 0.45, 0.94],
       }}
     >
