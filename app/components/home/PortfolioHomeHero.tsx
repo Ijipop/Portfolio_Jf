@@ -163,9 +163,9 @@ export default function PortfolioHomeHero() {
         justifyContent="center"
         alignItems="stretch"
         sx={{
-          mt: { xs: 'auto', sm: 2.75 },
-          mb: { xs: 0, sm: 0 },
-          pt: { xs: 2, sm: 0 },
+          mt: 'auto',
+          mb: 0,
+          pt: { xs: 2, sm: 1.5 },
           px: { xs: 1, sm: 0 },
           width: '100%',
           maxWidth: { xs: 400, lg: 460, xl: 520 },
