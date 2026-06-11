@@ -6,6 +6,7 @@ import CodeOutlinedIcon from '@mui/icons-material/CodeOutlined'
 import ComputerOutlinedIcon from '@mui/icons-material/ComputerOutlined'
 import LanguageOutlinedIcon from '@mui/icons-material/LanguageOutlined'
 import ManageSearchOutlinedIcon from '@mui/icons-material/ManageSearchOutlined'
+import WebAssetOutlinedIcon from '@mui/icons-material/WebAssetOutlined'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import { alpha, useTheme } from '@mui/material/styles'
@@ -22,7 +23,6 @@ import { getCardSurfaceSx } from '@/components/shared/cardSurface'
 import { DESIGN_TOKENS } from '@/design-system/constants'
 import { usePresentationMode } from '@/contexts/PresentationModeContext'
 import { CONTACT_SUBJECT_IMPROVE_SITE } from '@/i18n/contactSubjects'
-import { CONTACT_SUBJECT_TECH_SUPPORT } from '@/i18n/contactSubjects'
 import { REASSURANCE_BANNER_COPY } from '@/i18n/reassuranceBannerCopy'
 import { useLanguage } from '@/contexts/LanguageContext'
 import { useTextColor } from '@/hooks/useTextColor'
@@ -34,11 +34,13 @@ const CONTACT_PATH = '/portfolio/contact'
 const TIMELENDR_PATH = '/logiciel/timelendr'
 const SEO_LANDING_PATH = '/creation-site-web-montreal'
 const SUPPORT_LANDING_PATH = '/soutien-informatique-montreal'
-/** Nombre de lignes « puce » — identique sur les 3 cartes pour l’alignement visuel. */
+/** Nombre de lignes « puce » — identique sur les cartes pour l’alignement visuel. */
 const PACK_BULLET_SLOTS = 4
 const PACK_BULLET_ROW_MIN = 48
 /** Hauteur commune des bandeaux orange (notes courtes). */
-const PACK_HEADER_HEIGHT = { xs: 268, md: 280 }
+const PACK_HEADER_HEIGHT = { xs: 268, md: 280, lg: 292 }
+/** Délai entre chaque carte offre (gauche → droite). */
+const OFFER_CARD_STAGGER_S = 0.15
 type PackOffer = {
   id: string
   icon: SvgIconComponent
@@ -67,6 +69,23 @@ const PACK_OFFERS: PackOffer[] = [
     priceNoteKey: 'home.servicesPackAuditPriceNote',
     ctaKey: 'home.servicesPackAuditCta',
     subjectKey: 'home.servicesPackAuditSubject',
+  },
+  {
+    id: 'minisite',
+    icon: WebAssetOutlinedIcon,
+    titleKey: 'home.servicesPackMinisiteTitle',
+    pricePrefixKey: 'home.servicesPackPriceFrom',
+    priceKey: 'home.servicesPackMinisitePrice',
+    priceNoteKey: 'home.servicesPackMinisitePriceNote',
+    forKey: 'home.servicesPackMinisiteFor',
+    bulletKeys: [
+      'home.servicesPackMinisiteB1',
+      'home.servicesPackMinisiteB2',
+      'home.servicesPackMinisiteB3',
+      'home.servicesPackMinisiteB4',
+    ],
+    ctaKey: 'home.servicesPackMinisiteCta',
+    subjectKey: 'home.servicesPackMinisiteSubject',
   },
   {
     id: 'page',
@@ -105,6 +124,24 @@ const PACK_OFFERS: PackOffer[] = [
     subjectKey: 'home.servicesPackSoftwareSubject',
     secondaryCtaKey: 'home.servicesPackSoftwareDemoCta',
     secondaryHref: TIMELENDR_PATH,
+  },
+  {
+    id: 'support',
+    icon: ComputerOutlinedIcon,
+    titleKey: 'home.servicesPackSupportTitle',
+    priceKey: 'home.servicesPackSupportPrice',
+    priceNoteKey: 'home.servicesPackSupportPriceNote',
+    forKey: 'home.servicesPackSupportFor',
+    bulletKeys: [
+      'home.servicesPackSupportB1',
+      'home.servicesPackSupportB2',
+      'home.servicesPackSupportB3',
+      'home.servicesPackSupportB4',
+    ],
+    ctaKey: 'home.servicesPackSupportCta',
+    subjectKey: 'home.servicesPackSupportSubject',
+    secondaryCtaKey: 'home.servicesPackSupportDetailCta',
+    secondaryHref: SUPPORT_LANDING_PATH,
   },
 ]
 
@@ -192,10 +229,10 @@ function OfferPackCard({
           minWidth: 0,
           alignSelf: 'stretch',
           flexShrink: 0,
-          height: PACK_HEADER_HEIGHT,
+          minHeight: PACK_HEADER_HEIGHT,
           boxSizing: 'border-box',
-          px: { xs: 2, md: 2.25 },
-          pt: { xs: 2, md: 2.25 },
+          px: { xs: 2, md: 2.25, lg: 1.75 },
+          pt: { xs: 2, md: 2.25, lg: 2 },
           pb: 1.75,
           background: serviceGradient,
           display: 'flex',
@@ -289,7 +326,7 @@ function OfferPackCard({
             zIndex: 1,
             color: '#fff',
             fontWeight: 900,
-            fontSize: { xs: '1.3rem', md: '1.45rem' },
+            fontSize: { xs: '1.3rem', md: '1.45rem', lg: '1.12rem' },
             lineHeight: 1.25,
             letterSpacing: '-0.02em',
             textShadow: `0 2px 10px ${alpha('#000', 0.18)}`,
@@ -331,7 +368,7 @@ function OfferPackCard({
             sx={{
               color: '#fff',
               fontWeight: 900,
-              fontSize: { xs: '1.5rem', md: '1.65rem' },
+              fontSize: { xs: '1.5rem', md: '1.65rem', lg: '1.38rem' },
               lineHeight: 1.1,
               letterSpacing: '-0.03em',
               textShadow: `0 2px 10px ${alpha('#000', 0.18)}`,
@@ -369,8 +406,8 @@ function OfferPackCard({
           alignItems: 'stretch',
           minHeight: 0,
           boxSizing: 'border-box',
-          px: { xs: 2.25, md: 2.5 },
-          py: { xs: 2, md: 2.25 },
+          px: { xs: 2.25, md: 2.5, lg: 1.75 },
+          py: { xs: 2, md: 2.25, lg: 2 },
           gap: 1.5,
         }}
       >
@@ -437,7 +474,7 @@ function OfferPackCard({
                 sx={{
                   color: textColor,
                   opacity: 0.92,
-                  fontSize: '0.84rem',
+                  fontSize: { xs: '0.84rem', lg: '0.78rem' },
                   lineHeight: 1.45,
                   fontWeight: 500,
                   textAlign: 'center',
@@ -644,63 +681,30 @@ export default function PortfolioServicesSection() {
         </Box>
       </ScrollReveal>
 
-      <ScrollReveal direction="up" delay={0.1}>
-        <Box
-          sx={{
-            maxWidth: 740,
-            mx: 'auto',
-            mb: { xs: 3, md: 4 },
-            px: { xs: 2, sm: 2.5 },
-            py: { xs: 2, sm: 2.25 },
-            borderRadius: 2,
-            border: `1px solid ${alpha(primary, 0.24)}`,
-            bgcolor: alpha(primary, 0.08),
-            textAlign: 'center',
-          }}
-        >
-          <Box sx={{ display: 'inline-flex', alignItems: 'center', gap: 1, mb: 1 }}>
-            <ComputerOutlinedIcon sx={{ color: primary, fontSize: 22 }} />
-            <Typography sx={{ color: textColor, fontWeight: 800, fontSize: { xs: '1rem', sm: '1.06rem' } }}>
-              {t('home.servicesHomeSupportTitle')}
-            </Typography>
-          </Box>
-          <Typography
-            sx={{
-              color: textColor,
-              opacity: 0.88,
-              fontSize: { xs: '0.9rem', sm: '0.95rem' },
-              lineHeight: 1.55,
-              mb: 1.8,
-              maxWidth: 620,
-              mx: 'auto',
-            }}
-          >
-            {t('home.servicesHomeSupportLead')}
-          </Typography>
-          <Box sx={{ display: 'flex', gap: 1.2, justifyContent: 'center', flexWrap: 'wrap' }}>
-            <CTAButton href={SUPPORT_LANDING_PATH} variant="outline" size="small">
-              {t('home.servicesHomeSupportCta')}
-            </CTAButton>
-            <CTAButton
-              href={`${CONTACT_PATH}?subject=${encodeURIComponent(CONTACT_SUBJECT_TECH_SUPPORT[locale])}#soutien-technique`}
-              variant="primary"
-              size="small"
-            >
-              {t('common.getEstimate')}
-            </CTAButton>
-          </Box>
-        </Box>
-      </ScrollReveal>
-
       <Box
         sx={{
+          width: { lg: 'min(100vw - 32px, 1720px)' },
+          maxWidth: { lg: '1720px' },
+          position: 'relative',
+          left: { lg: '50%' },
+          transform: { lg: 'translateX(-50%)' },
           display: 'grid',
-          gridTemplateColumns: { xs: '1fr', md: 'repeat(2, 1fr)', lg: 'repeat(3, 1fr)' },
+          gridTemplateColumns: {
+            xs: '1fr',
+            sm: 'repeat(2, minmax(0, 1fr))',
+            lg: 'repeat(5, minmax(0, 1fr))',
+          },
           gridTemplateRows: 'auto 1fr',
-          gap: { xs: 2, md: 2.5 },
+          gap: { xs: 2, md: 2, lg: 1.5 },
           alignItems: 'stretch',
           justifyItems: 'stretch',
           '& > *': { minWidth: 0, width: '100%' },
+          '& > *:nth-of-type(5)': {
+            gridColumn: { sm: '1 / -1', lg: 'auto' },
+            maxWidth: { sm: 420, md: 480, lg: 'none' },
+            width: { sm: '100%', lg: '100%' },
+            justifySelf: { sm: 'center', lg: 'stretch' },
+          },
         }}
       >
         {PACK_OFFERS.map((offer, index) => {
@@ -708,7 +712,15 @@ export default function PortfolioServicesSection() {
           const href = contactHref(subject)
 
           return (
-            <ScrollReveal key={offer.id} direction="up" delay={0.06 * index} fillHeight>
+            <ScrollReveal
+              key={offer.id}
+              direction="right"
+              distance={32}
+              duration={0.68}
+              delay={index * OFFER_CARD_STAGGER_S}
+              uncappedDelay
+              fillHeight
+            >
               <OfferPackCard
                 offer={offer}
                 href={href}
@@ -722,25 +734,6 @@ export default function PortfolioServicesSection() {
           )
         })}
       </Box>
-
-      <ScrollReveal direction="up" delay={0.1}>
-        <Typography
-          component="p"
-          sx={{
-            textAlign: 'center',
-            maxWidth: 520,
-            mx: 'auto',
-            mt: { xs: 3, md: 3.5 },
-            color: textColor,
-            opacity: 0.78,
-            fontSize: { xs: '0.9rem', sm: '0.95rem' },
-            lineHeight: 1.6,
-            px: { xs: 0.5, sm: 0 },
-          }}
-        >
-          {t('home.servicesHomeFootnote')}
-        </Typography>
-      </ScrollReveal>
     </Box>
   )
 }

@@ -59,7 +59,7 @@ export const en = {
       demosBandKicker: 'Demo showcases',
       demosBandTitle: 'See the craft before you decide',
       demosBandLead:
-        'Six one-pagers to show very different creative directions and sectors.',
+        'Eight one-pagers to show very different creative directions and sectors.',
       demosBandCta: 'Browse demos',
       aiImpactKicker: 'Optional',
       aiImpactTitle: 'When it helps: AI at the service of your inquiries',
@@ -86,7 +86,7 @@ export const en = {
       wowStatsProjects: 'Projects and prototypes',
       wowStatsTechs: 'Technologies mastered',
       servicesHomeKicker: 'OFFERS',
-      servicesHomeTitle: 'Three ways I can help',
+      servicesHomeTitle: 'Five ways I can help',
       servicesHomeSubtitle:
         'SMBs, self-employed professionals, artists and small teams across Quebec.',
       servicesHomeFootnote:
@@ -103,6 +103,18 @@ export const en = {
       servicesPackAuditB3: 'Mobile, trust, local Google basics',
       servicesPackAuditCta: 'Request an audit',
       servicesPackAuditSubject: 'Offer: website audit — $450',
+      servicesPackMinisiteTitle: 'One-page showcase mini-site',
+      servicesPackMinisitePrice: '$400',
+      servicesPackMinisitePriceNote:
+        'Ideal when your content is ready and everything fits on a single page.',
+      servicesPackMinisiteFor:
+        'For a fast, clear, credible online presence — without multiple pages.',
+      servicesPackMinisiteB1: 'Strong header: who you are, what you offer, clear call to action',
+      servicesPackMinisiteB2: '3–4 key sections (services, about, trust, contact)',
+      servicesPackMinisiteB3: 'Responsive design and a working contact form',
+      servicesPackMinisiteB4: 'Basic SEO and launch-ready hosting setup',
+      servicesPackMinisiteCta: 'Start my mini-site',
+      servicesPackMinisiteSubject: 'Offer: one-page showcase mini-site — from $400',
       servicesPackPageTitle: 'Professional website',
       servicesPackPagePrice: '$1,200',
       servicesPackPagePriceNote:
@@ -137,6 +149,19 @@ export const en = {
       servicesPackSoftwareCta: 'Describe your need',
       servicesPackSoftwareDemoCta: 'See an example: Timelendr',
       servicesPackSoftwareSubject: 'Offer: small tool or automation',
+      servicesPackSupportTitle: 'Technical support',
+      servicesPackSupportPrice: 'On quote',
+      servicesPackSupportPriceNote:
+        'Based on the work needed · Montreal Island and remote across Quebec.',
+      servicesPackSupportFor:
+        'Plain-language help: slow PC, Windows issues, email, or account security.',
+      servicesPackSupportB1: 'Windows troubleshooting, slowness, and basic setup',
+      servicesPackSupportB2: 'SSD migration, backups, and simple data recovery',
+      servicesPackSupportB3: 'Outlook, Gmail, passwords, and two-factor auth',
+      servicesPackSupportB4: 'At home, remote, or on-site in Montreal when needed',
+      servicesPackSupportCta: 'Request technical help',
+      servicesPackSupportDetailCta: 'See all support services',
+      servicesPackSupportSubject: 'Request: technical support (Montreal / remote)',
       servicesHomeNewTitle: 'New website',
       servicesHomeNewLead:
         'A modern site, easy to view on desktop and mobile, to present your services and make it easier for people to get in touch.',

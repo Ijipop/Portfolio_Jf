@@ -13,6 +13,9 @@ import { useLanguage } from '@/contexts/LanguageContext'
 import { useTextColor } from '@/hooks/useTextColor'
 import { useThemeColors } from '@/hooks/useThemeColors'
 
+/** Même enchaînement que les cartes offres (gauche → droite). */
+const PROCESS_CARD_STAGGER_S = 0.15
+
 const STEPS = [
   { number: '01', titleKey: 'home.processBriefTitle', textKey: 'home.processBriefText', deliverableKey: 'home.processBriefDeliverable' },
   { number: '02', titleKey: 'home.processMockupTitle', textKey: 'home.processMockupText', deliverableKey: 'home.processMockupDeliverable' },
@@ -48,6 +51,31 @@ export default function PortfolioProcessSection() {
   const cardShadow = isLatteTheme
     ? `0 16px 40px rgba(92, 77, 60, 0.12), inset 0 1px 0 ${hexToRgba('#ffffff', 0.38)}`
     : `0 18px 46px rgba(0, 0, 0, 0.28), 0 0 28px ${hexToRgba(primary, 0.1)}, inset 0 1px 0 ${hexToRgba('#ffffff', 0.08)}`
+
+  const processGridVariants = {
+    hidden: {},
+    show: {
+      transition: {
+        staggerChildren: reducedMotion ? 0 : PROCESS_CARD_STAGGER_S,
+        delayChildren: reducedMotion ? 0 : 0.05,
+      },
+    },
+  }
+
+  const processCardVariants = {
+    hidden: {
+      opacity: reducedMotion ? 1 : 0,
+      x: reducedMotion ? 0 : -32,
+    },
+    show: {
+      opacity: 1,
+      x: 0,
+      transition: {
+        duration: reducedMotion ? 0.01 : 0.68,
+        ease: [0.25, 0.46, 0.45, 0.94] as const,
+      },
+    },
+  }
 
   return (
     <Box sx={{ mb: { xs: 5, md: 8 } }}>
@@ -123,6 +151,11 @@ export default function PortfolioProcessSection() {
         </Box>
 
         <Box
+          component={motion.div}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, amount: 0.12, margin: '0px 0px -6% 0px' }}
+          variants={processGridVariants}
           sx={{
             position: 'relative',
             zIndex: 1,
@@ -131,25 +164,27 @@ export default function PortfolioProcessSection() {
             gap: { xs: 2, md: 1.5 },
           }}
         >
-          {STEPS.map((step, index) => (
-            <ScrollReveal key={step.number} direction="up" delay={0.06 * index} fillHeight>
-              <Box
-                sx={{
-                  position: 'relative',
-                  minHeight: { xs: 190, md: 280 },
-                  zIndex: 1,
-                  p: { xs: 2.5, md: 2.75 },
-                  pl: { xs: 6, md: 2.75 },
-                  borderRadius: '14px',
-                  border: `1px solid ${cardBorder}`,
-                  background: cardBackground,
-                  boxShadow: cardShadow,
-                  backdropFilter: 'blur(14px)',
-                  WebkitBackdropFilter: 'blur(14px)',
-                  overflow: 'hidden',
-                  height: '100%',
-                }}
-              >
+          {STEPS.map((step) => (
+            <Box
+              key={step.number}
+              component={motion.div}
+              variants={processCardVariants}
+              sx={{
+                position: 'relative',
+                minHeight: { xs: 190, md: 280 },
+                zIndex: 1,
+                p: { xs: 2.5, md: 2.75 },
+                pl: { xs: 6, md: 2.75 },
+                borderRadius: '14px',
+                border: `1px solid ${cardBorder}`,
+                background: cardBackground,
+                boxShadow: cardShadow,
+                backdropFilter: 'blur(14px)',
+                WebkitBackdropFilter: 'blur(14px)',
+                overflow: 'hidden',
+                height: '100%',
+              }}
+            >
                 <Typography
                   aria-hidden
                   sx={{
@@ -206,8 +241,7 @@ export default function PortfolioProcessSection() {
                 >
                   {t(step.deliverableKey)}
                 </Typography>
-              </Box>
-            </ScrollReveal>
+            </Box>
           ))}
         </Box>
       </Box>

@@ -1,7 +1,7 @@
 'use client'
 
-import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline'
-import VerifiedOutlinedIcon from '@mui/icons-material/VerifiedOutlined'
+import AutoAwesomeOutlinedIcon from '@mui/icons-material/AutoAwesomeOutlined'
+import ViewQuiltOutlinedIcon from '@mui/icons-material/ViewQuiltOutlined'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import { alpha, useTheme } from '@mui/material/styles'
@@ -16,32 +16,16 @@ import { getCardSurfaceSx } from '@/components/shared/cardSurface'
 import { DESIGN_TOKENS } from '@/design-system/constants'
 import { useAdvancedTheme } from '@/contexts/AdvancedThemeContext'
 import { usePresentationMode } from '@/contexts/PresentationModeContext'
+import { useLanguage } from '@/contexts/LanguageContext'
 import { useTextColor } from '@/hooks/useTextColor'
 import { useThemeColors } from '@/hooks/useThemeColors'
 import { useMemo } from 'react'
 
-type ClientProofSectionProps = {
-  kicker?: string
-  title: string
-  body: string
-  projectLabel: string
-  projectHref?: string
-  ctaLabel?: string
-  ctaHref?: string
-  /** Sans bouton estimation — preuve textuelle + lien projet seulement */
-  proofOnly?: boolean
-}
+/** Même largeur que ClientProofSection (« Projet livré »). */
+const PROOF_BAND_MAX_WIDTH = 860
 
-export default function ClientProofSection({
-  kicker,
-  title,
-  body,
-  projectLabel,
-  projectHref = '/portfolio/projets',
-  ctaLabel,
-  ctaHref,
-  proofOnly = false,
-}: ClientProofSectionProps) {
+export default function HomeDemosBand() {
+  const { t } = useLanguage()
   const textColor = useTextColor()
   const theme = useTheme()
   const { primary, secondary, accent } = useThemeColors()
@@ -60,10 +44,10 @@ export default function ClientProofSection({
   const outerBackground = useMemo(
     () =>
       isDark
-        ? `linear-gradient(145deg, ${alpha('#0f172a', 0.92)} 0%, ${alpha(primary, 0.14)} 42%, ${alpha(secondary, 0.1)} 100%)`
+        ? `linear-gradient(145deg, ${alpha('#0f172a', 0.9)} 0%, ${alpha(secondary, 0.16)} 38%, ${alpha(primary, 0.12)} 100%)`
         : presentationMode === 'beige'
-          ? `linear-gradient(145deg, ${alpha('#fffefb', 0.98)} 0%, ${alpha(customTheme.bg, 0.94)} 38%, ${alpha(primary, 0.1)} 100%)`
-          : `linear-gradient(145deg, ${alpha('#ffffff', 0.98)} 0%, ${alpha(customTheme.bg2, 0.9)} 40%, ${alpha(primary, 0.14)} 100%)`,
+          ? `linear-gradient(145deg, ${alpha('#fffefb', 0.98)} 0%, ${alpha(customTheme.bg2, 0.92)} 36%, ${alpha(secondary, 0.12)} 100%)`
+          : `linear-gradient(145deg, ${alpha('#ffffff', 0.98)} 0%, ${alpha(customTheme.bg, 0.9)} 38%, ${alpha(secondary, 0.14)} 100%)`,
     [isDark, presentationMode, customTheme.bg, customTheme.bg2, primary, secondary],
   )
 
@@ -75,37 +59,38 @@ export default function ClientProofSection({
   })
 
   return (
-    <ScrollReveal direction="up" delay={0.06}>
+    <ScrollReveal direction="up" delay={0.08}>
       <Box
         component="section"
         sx={{
           position: 'relative',
           mb: { xs: 5, md: 8 },
           mx: 'auto',
-          maxWidth: 860,
+          maxWidth: PROOF_BAND_MAX_WIDTH,
           p: { xs: 2.75, sm: 3.5 },
           pl: { xs: 2.75, sm: 3.75 },
           borderRadius: `${DESIGN_TOKENS.borderRadius.banner}px`,
-          border: `1px solid ${alpha(primary, isDark ? 0.34 : 0.26)}`,
+          border: `1px solid ${alpha(primary, isDark ? 0.34 : 0.24)}`,
           background: outerBackground,
           boxShadow: isDark
-            ? `0 22px 52px ${alpha('#000', 0.38)}, 0 0 0 1px ${alpha(primary, 0.14)}, inset 0 1px 0 ${alpha('#fff', 0.08)}`
-            : `0 22px 48px ${alpha(primary, 0.16)}, 0 0 0 1px ${alpha(primary, 0.08)}, inset 0 1px 0 ${alpha('#fff', 0.72)}`,
+            ? `0 22px 52px ${alpha('#000', 0.38)}, 0 0 0 1px ${alpha(secondary, 0.14)}, inset 0 1px 0 ${alpha('#fff', 0.08)}`
+            : `0 22px 48px ${alpha(secondary, 0.14)}, 0 0 0 1px ${alpha(primary, 0.08)}, inset 0 1px 0 ${alpha('#fff', 0.72)}`,
           overflow: 'hidden',
           transition: DESIGN_TOKENS.transitions.slow,
           '@media (hover: hover)': {
             '&:hover': {
               transform: 'translateY(-3px)',
               boxShadow: isDark
-                ? `0 28px 58px ${alpha('#000', 0.42)}, 0 0 0 1px ${alpha(primary, 0.2)}`
-                : `0 28px 54px ${alpha(primary, 0.2)}, 0 0 0 1px ${alpha(primary, 0.12)}`,
+                ? `0 28px 58px ${alpha('#000', 0.42)}, 0 0 0 1px ${alpha(secondary, 0.22)}`
+                : `0 28px 54px ${alpha(secondary, 0.18)}, 0 0 0 1px ${alpha(primary, 0.12)}`,
             },
           },
           '&::before': {
             content: '""',
             position: 'absolute',
             inset: 0,
-            background: `radial-gradient(72% 90% at 100% 0%, ${alpha(primary, isDark ? 0.22 : 0.14)} 0%, transparent 58%)`,
+            background: `radial-gradient(68% 85% at 0% 0%, ${alpha(secondary, isDark ? 0.2 : 0.12)} 0%, transparent 55%),
+              radial-gradient(58% 70% at 100% 100%, ${alpha(primary, isDark ? 0.18 : 0.1)} 0%, transparent 52%)`,
             pointerEvents: 'none',
           },
           ...surfaceSx,
@@ -120,9 +105,10 @@ export default function ClientProofSection({
             bottom: 0,
             width: 5,
             background: accentGradient,
-            boxShadow: `0 0 18px ${alpha(primary, 0.35)}`,
+            boxShadow: `0 0 18px ${alpha(secondary, 0.35)}`,
           }}
         />
+
         <Box
           sx={{
             position: 'relative',
@@ -142,43 +128,43 @@ export default function ClientProofSection({
               display: 'grid',
               placeItems: 'center',
               background: accentGradient,
-              boxShadow: `0 10px 24px ${alpha(primary, 0.28)}, inset 0 1px 0 ${alpha('#fff', 0.35)}`,
+              boxShadow: `0 10px 24px ${alpha(secondary, 0.28)}, inset 0 1px 0 ${alpha('#fff', 0.35)}`,
             }}
           >
-            <CheckCircleOutlineIcon sx={{ fontSize: { xs: 28, sm: 32 }, color: '#fff' }} aria-hidden />
+            <ViewQuiltOutlinedIcon sx={{ fontSize: { xs: 28, sm: 32 }, color: '#fff' }} aria-hidden />
           </Box>
+
           <Box sx={{ flex: 1, minWidth: 0 }}>
-            {kicker ? (
-              <Box
+            <Box
+              sx={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: 0.6,
+                mb: 1.15,
+                px: 1.15,
+                py: 0.45,
+                borderRadius: 999,
+                border: `1px solid ${alpha(secondary, 0.3)}`,
+                bgcolor: alpha(secondary, isDark ? 0.16 : 0.1),
+                boxShadow: `inset 0 1px 0 ${alpha('#fff', isDark ? 0.1 : 0.45)}`,
+              }}
+            >
+              <AutoAwesomeOutlinedIcon sx={{ fontSize: 15, color: secondary }} aria-hidden />
+              <Typography
+                component="span"
                 sx={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: 0.6,
-                  mb: 1.15,
-                  px: 1.15,
-                  py: 0.45,
-                  borderRadius: 999,
-                  border: `1px solid ${alpha(primary, 0.28)}`,
-                  bgcolor: alpha(primary, isDark ? 0.16 : 0.09),
-                  boxShadow: `inset 0 1px 0 ${alpha('#fff', isDark ? 0.1 : 0.45)}`,
+                  color: secondary,
+                  fontWeight: 900,
+                  letterSpacing: '0.12em',
+                  textTransform: 'uppercase',
+                  fontSize: '0.68rem',
+                  lineHeight: 1.2,
                 }}
               >
-                <VerifiedOutlinedIcon sx={{ fontSize: 15, color: primary }} aria-hidden />
-                <Typography
-                  component="span"
-                  sx={{
-                    color: primary,
-                    fontWeight: 900,
-                    letterSpacing: '0.12em',
-                    textTransform: 'uppercase',
-                    fontSize: '0.68rem',
-                    lineHeight: 1.2,
-                  }}
-                >
-                  {kicker}
-                </Typography>
-              </Box>
-            ) : null}
+                {t('home.demosBandKicker')}
+              </Typography>
+            </Box>
+
             <Typography
               component="h2"
               variant="h5"
@@ -191,42 +177,27 @@ export default function ClientProofSection({
                 fontSize: { xs: '1.28rem', sm: '1.45rem', md: '1.55rem' },
               }}
             >
-              {title}
+              {t('home.demosBandTitle')}
             </Typography>
+
             <Typography
               sx={{
                 color: textColor,
                 opacity: 0.9,
                 lineHeight: 1.65,
-                mb: proofOnly ? 2 : 2.5,
+                mb: 2,
                 fontSize: { xs: '0.95rem', sm: '1rem' },
                 maxWidth: 640,
               }}
             >
-              {body}
+              {t('home.demosBandLead')}
             </Typography>
-            {proofOnly ? (
-              <Link href={projectHref} style={{ textDecoration: 'none', display: 'inline-flex' }}>
-                <CTAButton variant="outline" size="medium">
-                  {projectLabel}
-                </CTAButton>
-              </Link>
-            ) : (
-              <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1.5, alignItems: 'center' }}>
-                {ctaLabel && ctaHref ? (
-                  <Link href={ctaHref} style={{ textDecoration: 'none' }}>
-                    <CTAButton variant="primary" size="medium">
-                      {ctaLabel}
-                    </CTAButton>
-                  </Link>
-                ) : null}
-                <Link href={projectHref} style={{ textDecoration: 'none' }}>
-                  <CTAButton variant="outline" size="medium">
-                    {projectLabel}
-                  </CTAButton>
-                </Link>
-              </Box>
-            )}
+
+            <Link href="/demos" style={{ textDecoration: 'none', display: 'inline-flex' }}>
+              <CTAButton variant="primary" size="medium">
+                {t('home.demosBandCta')}
+              </CTAButton>
+            </Link>
           </Box>
         </Box>
       </Box>

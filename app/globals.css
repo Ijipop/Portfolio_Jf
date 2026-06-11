@@ -62,6 +62,7 @@
   --accent-color: #5f7d8e;
   --theme-bg: #f7f3eb;
   --theme-bg2: #efe8dc;
+  --app-bar-height: 64px;
 
   /* shadcn / Tailwind tokens (composants ui/) */
   --background: oklch(1 0 0);

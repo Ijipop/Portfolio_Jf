@@ -2,10 +2,7 @@
 
 import Box from '@mui/material/Box'
 import Container from '@mui/material/Container'
-import Typography from '@mui/material/Typography'
-import Link from 'next/link'
 import dynamic from 'next/dynamic'
-import { alpha } from '@mui/material/styles'
 import HomeAmbientBackdrop from './components/home/HomeAmbientBackdrop'
 import PortfolioHomeHero from './components/home/PortfolioHomeHero'
 import AppBarComponent from './components/appBar'
@@ -14,11 +11,8 @@ import InteractiveBackgroundSection from './components/shared/InteractiveBackgro
 import PortfolioServicesSection from './components/shared/PortfolioServicesSection'
 import ClientProofSection from './components/shared/ClientProofSection'
 import ScrollTriggeredStickyCTA from './components/shared/ScrollTriggeredStickyCTA'
-import CTAButton from './components/shared/CTAButton'
+import HomeDemosBand from './components/home/HomeDemosBand'
 import Footer from './components/Footer'
-import { DESIGN_TOKENS } from './design-system/constants'
-import { useThemeColors } from './hooks/useThemeColors'
-import { useTextColor } from './hooks/useTextColor'
 import { useLanguage } from './contexts/LanguageContext'
 import { useEffect, useState } from 'react'
 
@@ -31,7 +25,6 @@ const PortfolioProcessSection = dynamic(
   { ssr: false },
 )
 const AiConversionTeaser = dynamic(() => import('./components/home/AiConversionTeaser'), { ssr: false })
-const ScrollReveal = dynamic(() => import('./components/shared/ScrollReveal'), { ssr: false })
 
 const INTRO_SESSION_KEY = 'portfolio-intro-seen'
 const SHOW_HOME_STATS_BAND = false
@@ -45,8 +38,6 @@ function setIntroSeenCookie() {
 }
 
 export default function HomeClient({ initialShowIntro }: { initialShowIntro: boolean }) {
-  const { primary } = useThemeColors()
-  const textColor = useTextColor()
   const { t } = useLanguage()
   const [showIntro, setShowIntro] = useState<boolean>(initialShowIntro)
 
@@ -101,9 +92,20 @@ export default function HomeClient({ initialShowIntro }: { initialShowIntro: boo
           minHeight: '100vh',
         }}
       >
-      <AppBarComponent />
-
-      <PortfolioHomeHero />
+      <Box
+        component="header"
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 0,
+          m: 0,
+          p: 0,
+          flexShrink: 0,
+        }}
+      >
+        <AppBarComponent />
+        <PortfolioHomeHero />
+      </Box>
 
       <InteractiveBackgroundSection>
       <Container
@@ -131,50 +133,7 @@ export default function HomeClient({ initialShowIntro }: { initialShowIntro: boo
 
         {SHOW_HOME_SITE_INTRO && <HomeHeroServicesSection />}
 
-        {SHOW_HOME_DEMOS_BAND && (
-        <ScrollReveal direction="up" delay={0.08}>
-          <Box
-            sx={{
-              mb: { xs: DESIGN_TOKENS.spacing.xl, md: DESIGN_TOKENS.spacing.xxl },
-              px: { xs: 3, sm: 4, md: 4.5 },
-              py: { xs: 3.25, sm: 3.75, md: 4 },
-              borderRadius: DESIGN_TOKENS.borderRadius.banner,
-              border: (theme) => `1px solid ${alpha(theme.palette.mode === 'dark' ? '#94a3b8' : primary, 0.22)}`,
-              background: (theme) =>
-                theme.palette.mode === 'dark'
-                  ? `linear-gradient(135deg, ${alpha(primary, 0.14)} 0%, ${alpha('#0f172a', 0.5)} 100%)`
-                  : `linear-gradient(135deg, ${alpha(primary, 0.09)} 0%, ${alpha(primary, 0.02)} 100%)`,
-              textAlign: { xs: 'center', sm: 'left' },
-              display: 'grid',
-              gap: { xs: 1.5, sm: 2 },
-              gridTemplateColumns: { xs: '1fr', sm: '1fr auto' },
-              alignItems: 'center',
-            }}
-          >
-            <Box>
-              <Typography
-                variant="overline"
-                sx={{ color: primary, fontWeight: 800, letterSpacing: '0.14em', display: 'block', mb: 0.75 }}
-              >
-                {t('home.demosBandKicker')}
-              </Typography>
-              <Typography variant="h5" sx={{ color: textColor, fontWeight: 800, mb: 0.75, lineHeight: 1.25 }}>
-                {t('home.demosBandTitle')}
-              </Typography>
-              <Typography variant="body2" sx={{ color: textColor, opacity: 0.88, lineHeight: 1.6, maxWidth: 560 }}>
-                {t('home.demosBandLead')}
-              </Typography>
-            </Box>
-            <Box sx={{ display: 'flex', justifyContent: { xs: 'center', sm: 'flex-end' } }}>
-              <Link href="/demos" style={{ textDecoration: 'none' }}>
-                <CTAButton variant="primary" size="medium">
-                  {t('home.demosBandCta')}
-                </CTAButton>
-              </Link>
-            </Box>
-          </Box>
-        </ScrollReveal>
-        )}
+        {SHOW_HOME_DEMOS_BAND && <HomeDemosBand />}
 
         {SHOW_HOME_NAVIGATION_CARDS && <HomeNavigationCards />}
         <Box className="perf-cv-auto">

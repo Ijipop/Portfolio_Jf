@@ -2,11 +2,11 @@
 
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
-import Image from 'next/image'
 import { usePathname } from 'next/navigation'
 import { DESIGN_TOKENS } from '@/design-system/constants'
 import { getCardSurfaceSx } from '@/components/shared/cardSurface'
 import { shouldShowTopology } from '@/utils/topologyRoutes'
+import AboutPortraitLoop from './AboutPortraitLoop'
 
 type TFn = (key: string) => string
 
@@ -18,9 +18,6 @@ type AboutPersonalStorySectionProps = {
 export default function AboutPersonalStorySection({ t, textColor }: AboutPersonalStorySectionProps) {
   const pathname = usePathname()
   const isTopologyRoute = shouldShowTopology(pathname)
-
-  const portraitSizes = '(max-width: 600px) min(100vw, 300px), 340px'
-  const portraitRadiusPx = `${DESIGN_TOKENS.borderRadius.small}px`
 
   return (
     <Box
@@ -59,27 +56,7 @@ export default function AboutPersonalStorySection({ t, textColor }: AboutPersona
           zIndex: 1,
         }}
       >
-        {/**
-         * Pas de boîte `aspect-ratio` + `fill` : uniquement la photo, dimensions intrinsèques (ratio 3/4 indicatif pour Next),
-         * `maxWidth` pour le responsive et coins arrondis sur le média — plus de « cadre » visible sous l’image.
-         */}
-        <Image
-          src="/img/moi8bit.png"
-          alt={t('about.photoPortraitAlt')}
-          width={480}
-          height={640}
-          sizes={portraitSizes}
-          priority={false}
-          unoptimized
-          style={{
-            maxWidth: 'min(100%, 340px)',
-            width: '100%',
-            height: 'auto',
-            borderRadius: portraitRadiusPx,
-            imageRendering: 'pixelated',
-            display: 'block',
-          }}
-        />
+        <AboutPortraitLoop alt={t('about.photoPortraitAlt')} />
       </Box>
 
       <Box sx={{ position: 'relative', zIndex: 1, maxWidth: 720, mx: 'auto' }}>
