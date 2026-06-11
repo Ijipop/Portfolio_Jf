@@ -1,11 +1,10 @@
 import '@testing-library/jest-dom/vitest'
-import { vi } from 'vitest'
 
 class ResizeObserverMock {
-  observe = vi.fn()
-  unobserve = vi.fn()
-  disconnect = vi.fn()
+  observe = () => {}
+  unobserve = () => {}
+  disconnect = () => {}
 }
 
-vi.stubGlobal('ResizeObserver', ResizeObserverMock)
+globalThis.ResizeObserver = ResizeObserverMock as typeof ResizeObserver
 
