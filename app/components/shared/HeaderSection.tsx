@@ -118,12 +118,13 @@ const HeaderSection = forwardRef<HTMLDivElement, HeaderSectionProps>(function He
         ...(fullViewport && {
           /** Le fond remonte sous l’AppBar sticky — supprime la bande claire entre navbar et hero. */
           marginTop: 'calc(-1 * var(--app-bar-height, 64px))',
+          /** Plein écran : la hauteur navbar est déjà compensée par marginTop + padding-top. */
           minHeight: {
-            xs: 'calc(100svh - var(--app-bar-height, 56px))',
-            sm: 'calc(100dvh - var(--app-bar-height, 64px))',
+            xs: '100svh',
+            sm: '100dvh',
           },
-          display: { xs: 'flex', sm: 'block' },
-          flexDirection: { xs: 'column', sm: 'unset' },
+          display: 'flex',
+          flexDirection: 'column',
           boxSizing: 'border-box',
         }),
         [theme.breakpoints.down('sm')]: {
@@ -167,11 +168,11 @@ const HeaderSection = forwardRef<HTMLDivElement, HeaderSectionProps>(function He
             ? {
                 position: 'relative',
                 zIndex: 1,
-                flex: { xs: 1, sm: 'unset' },
-                display: { xs: 'flex', sm: 'block' },
-                flexDirection: { xs: 'column', sm: 'unset' },
-                justifyContent: { xs: 'space-between', sm: 'unset' },
-                minHeight: { xs: 0, sm: 'unset' },
+                flex: 1,
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'space-between',
+                minHeight: 0,
                 width: '100%',
               }
             : undefined
