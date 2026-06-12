@@ -92,19 +92,44 @@ function AppBarComponent() {
 							variant="h6"
 							component="span"
 							sx={{
-								mr: { xs: 1, sm: 2 },
-								fontSize: { xs: '1rem', sm: '1.25rem' },
-								display: { xs: 'block', sm: 'block' },
-								maxWidth: { xs: 72, sm: 'none' },
-								overflow: 'hidden',
-								textOverflow: 'ellipsis',
-								whiteSpace: 'nowrap',
+								mr: { xs: 0.75, sm: 2 },
+								display: 'inline-flex',
+								flexDirection: { xs: 'column', sm: 'row' },
+								alignItems: { xs: 'flex-start', sm: 'baseline' },
+								gap: { xs: 0, sm: 0.5 },
+								flexShrink: 0,
+								lineHeight: { xs: 1.05, sm: 1.2 },
 								cursor: 'pointer',
 								userSelect: 'none',
+								fontWeight: 800,
+								letterSpacing: '-0.02em',
 								'&:hover': { opacity: 0.9 },
 							}}
 						>
-							{t('nav.portfolio')}
+							<Box
+								component="span"
+								sx={{
+									fontSize: { xs: '0.95rem', sm: '1.2rem' },
+									whiteSpace: 'nowrap',
+								}}
+							>
+								{t('nav.portfolio')}
+							</Box>
+							<Box
+								component="span"
+								sx={{
+									fontWeight: 600,
+									fontSize: { xs: '0.62rem', sm: '0.88em' },
+									opacity: 0.92,
+									letterSpacing: { xs: '0.08em', sm: '0.01em' },
+									textTransform: 'lowercase',
+									whiteSpace: 'nowrap',
+									mt: { xs: '-1px', sm: 0 },
+									pl: { xs: '1px', sm: 0 },
+								}}
+							>
+								{t('nav.portfolioSolutions')}
+							</Box>
 						</Typography>
 					</Link>
 					<NavDesktop routes={NAV_ROUTES} pathname={pathname} onNavigate={handleNavigate} t={t} />

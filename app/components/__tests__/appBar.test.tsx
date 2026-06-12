@@ -21,6 +21,7 @@ vi.mock('../../contexts/LanguageContext', () => ({
     t: (key: string) =>
       ({
         'nav.portfolio': 'ijipop',
+        'nav.portfolioSolutions': 'solutions',
         'nav.home': 'Accueil',
         'nav.projects': 'Réalisations',
         'nav.about': 'À propos',
@@ -59,6 +60,7 @@ describe('AppBarComponent', () => {
   it('renders core navigation labels', () => {
     render(<AppBarComponent />)
     expect(screen.getByText('ijipop')).toBeInTheDocument()
+    expect(screen.getByText('solutions')).toBeInTheDocument()
     expect(screen.getByText('Accueil')).toBeInTheDocument()
     expect(screen.getByText('Réalisations')).toBeInTheDocument()
     expect(screen.getByText('À propos')).toBeInTheDocument()
