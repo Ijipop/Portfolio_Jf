@@ -83,11 +83,30 @@
 }
 
 .heroIntro {
-  margin: 0 0 1.75rem;
+  margin: 0 0 1.25rem;
   font-size: clamp(0.9375rem, 1.8vw, 1.02rem);
   line-height: 1.65;
   color: var(--tl-text-muted);
   max-width: 42ch;
+}
+
+.heroTagline {
+  margin: 0 0 1.75rem;
+  padding: 0.85rem 1rem 0.85rem 1.1rem;
+  max-width: 46ch;
+  font-size: clamp(0.9rem, 1.7vw, 1rem);
+  font-weight: 600;
+  line-height: 1.55;
+  letter-spacing: -0.015em;
+  color: #e2e8f0;
+  border-radius: 12px;
+  border: 1px solid rgba(13, 148, 136, 0.35);
+  background: linear-gradient(
+    135deg,
+    rgba(13, 148, 136, 0.14) 0%,
+    rgba(139, 92, 246, 0.1) 100%
+  );
+  box-shadow: inset 3px 0 0 var(--tl-brand);
 }
 
 .heroActions {

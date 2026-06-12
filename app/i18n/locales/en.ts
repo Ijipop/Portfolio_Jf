@@ -76,6 +76,16 @@ export const en = {
       aiImpactMetricConversionHint: 'See who completes the flow.',
       aiImpactDisclosure:
         'An example of the indicators your site can track to better understand incoming requests.',
+      timelendrBandKicker: 'Timelendr · offline mode',
+      timelendrBandTitle: 'Try my Timeline software for free (offline mode)',
+      timelendrBandLead:
+        'Desktop app for visual planning — Windows and macOS, no web subscription.',
+      timelendrBandCtaWindows: 'Download — Windows',
+      timelendrBandCtaMacos: 'Download — macOS',
+      timelendrBandCtaBeta: 'Join the beta',
+      timelendrBandBetaNote: 'Want to join the beta? Get in touch!',
+      timelendrBandBetaSubject: 'Timelendr beta — participation',
+      timelendrBandDiscover: 'Discover Timelendr →',
       heroEditorialPrefix: 'I design',
       heroEditorialSuffix: 'credible and effective.',
       heroRotatingSites: 'websites',
@@ -104,21 +114,19 @@ export const en = {
       servicesPackAuditCta: 'Request an audit',
       servicesPackAuditSubject: 'Offer: website audit — $450',
       servicesPackMinisiteTitle: 'One-page showcase mini-site',
-      servicesPackMinisitePrice: '$400',
+      servicesPackMinisitePrice: '$400 – $499',
       servicesPackMinisitePriceNote:
-        'Ideal when your content is ready and everything fits on a single page.',
+        'Standard from $400 · express from $499 when content is ready and needs are very simple.',
       servicesPackMinisiteFor:
-        'For a fast, clear, credible online presence — without multiple pages.',
+        'For a fast one-page presence — standard or express depending on your needs.',
       servicesPackMinisiteB1: 'Strong header: who you are, what you offer, clear call to action',
       servicesPackMinisiteB2: '3–4 key sections (services, about, trust, contact)',
       servicesPackMinisiteB3: 'Responsive design and a working contact form',
       servicesPackMinisiteB4: 'Basic SEO and launch-ready hosting setup',
       servicesPackMinisiteCta: 'Start my mini-site',
-      servicesPackMinisiteSubject: 'Offer: one-page showcase mini-site — from $400',
+      servicesPackMinisiteSubject: 'Offer: one-page showcase mini-site — $400 to $499',
       servicesPackPageTitle: 'Professional website',
       servicesPackPagePrice: '$1,200',
-      servicesPackPagePriceNote:
-        'Express version available from $499 when content is ready and needs are very simple.',
       servicesPackPageFor:
         'For a clear, credible presence ready to receive inquiries.',
       servicesPackPageB1: 'Clear message and path that build trust and invite contact',
@@ -169,7 +177,7 @@ export const en = {
       servicesHomeReassuranceTitle: 'No need to start from scratch',
       servicesHomeImproveTitle: 'Redesign or refresh',
       servicesHomeImproveLead:
-        'No need to redo everything: I can improve your current site, fix pain points and prioritize what brings the most value.',
+        'I can improve your current site, fix pain points and prioritize what brings the most value.',
       servicesHomeImproveCta: 'Improve your site →',
       servicesHomeImproveSubject: 'Project: website redesign or improvement',
       servicesHomeToolsTitle: 'Helpful tools & support',
@@ -529,6 +537,8 @@ export const en = {
       subtitle: 'Visual planning for small teams and SMBs',
       intro:
         'Calendar, timelines and tasks in a native desktop app — built to show clearly who does what, when, and together.',
+      tagline:
+        'Families: your whole year at a glance. Small businesses: multiple projects, zero chaos. Same tool, same clarity.',
       heroKicker: 'Desktop application',
       heroCtaDownload: 'Download',
       heroCtaFeatures: 'See features',

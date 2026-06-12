@@ -23,6 +23,8 @@ interface CTAButtonProps {
   endIcon?: React.ReactNode
   type?: 'button' | 'submit' | 'reset'
   disabled?: boolean
+  target?: string
+  rel?: string
   sx?: SxProps<Theme>
 }
 
@@ -155,6 +157,8 @@ export default function CTAButton({
   endIcon,
   type,
   disabled,
+  target,
+  rel,
   sx,
 }: CTAButtonProps) {
   const { primary, secondary } = useThemeColors()
@@ -167,9 +171,11 @@ export default function CTAButton({
     size,
     type,
     disabled,
+    target,
+    rel,
     sx,
     startIcon: startIcon || (variant === 'primary' ? null : null),
-    endIcon: endIcon || (variant === 'primary' ? <ArrowForwardIcon /> : null),
+    endIcon: endIcon !== undefined ? endIcon : variant === 'primary' ? <ArrowForwardIcon /> : null,
   }
 
   return (

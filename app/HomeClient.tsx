@@ -12,6 +12,7 @@ import PortfolioServicesSection from './components/shared/PortfolioServicesSecti
 import ClientProofSection from './components/shared/ClientProofSection'
 import ScrollTriggeredStickyCTA from './components/shared/ScrollTriggeredStickyCTA'
 import HomeDemosBand from './components/home/HomeDemosBand'
+import HomeTimelendrBand from './components/home/HomeTimelendrBand'
 import Footer from './components/Footer'
 import { useLanguage } from './contexts/LanguageContext'
 import { useEffect, useState } from 'react'
@@ -140,6 +141,7 @@ export default function HomeClient({ initialShowIntro }: { initialShowIntro: boo
           <PortfolioProcessSection />
         </Box>
         <AiConversionTeaser />
+        <HomeTimelendrBand />
       </Container>
       </InteractiveBackgroundSection>
       

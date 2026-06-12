@@ -76,6 +76,16 @@ export const fr = {
       aiImpactMetricConversionHint: 'Voir qui va au bout.',
       aiImpactDisclosure:
         'Exemple des indicateurs que votre site peut suivre pour mieux comprendre vos demandes.',
+      timelendrBandKicker: 'Timelendr · mode hors ligne',
+      timelendrBandTitle: 'Tester mon logiciel de Timeline gratuitement (mode Offline)',
+      timelendrBandLead:
+        'Application desktop pour planifier visuellement — Windows et macOS, sans abonnement web.',
+      timelendrBandCtaWindows: 'Télécharger — Windows',
+      timelendrBandCtaMacos: 'Télécharger — macOS',
+      timelendrBandCtaBeta: 'Rejoindre la bêta',
+      timelendrBandBetaNote: 'Pour participer à la Bêta, contactez-moi !',
+      timelendrBandBetaSubject: 'Bêta Timelendr — participation',
+      timelendrBandDiscover: 'Découvrir Timelendr →',
       heroEditorialPrefix: 'Je conçois des',
       heroEditorialSuffix: 'professionnels et efficaces.',
       heroRotatingSites: 'sites web',
@@ -105,21 +115,19 @@ export const fr = {
       servicesPackAuditCta: 'Demander un audit',
       servicesPackAuditSubject: 'Offre : audit de site — 450 $',
       servicesPackMinisiteTitle: 'Mini-site vitrine 1 page',
-      servicesPackMinisitePrice: '400 $',
+      servicesPackMinisitePrice: '400 – 499 $',
       servicesPackMinisitePriceNote:
-        'Idéal si votre contenu est prêt et votre besoin tient sur une seule page.',
+        'Standard dès 400 $ · version express dès 499 $ si le contenu est prêt et le besoin très simple.',
       servicesPackMinisiteFor:
-        'Pour une présence en ligne rapide, claire et crédible — sans pages multiples.',
+        'Pour une présence en ligne rapide sur une page — standard ou express selon votre besoin.',
       servicesPackMinisiteB1: 'En-tête percutant : qui vous êtes, ce que vous offrez, appel à l’action',
       servicesPackMinisiteB2: '3–4 sections clés (services, à propos, confiance, contact)',
       servicesPackMinisiteB3: 'Design responsive et formulaire de contact fonctionnel',
       servicesPackMinisiteB4: 'SEO de base et mise en ligne prête à partager',
       servicesPackMinisiteCta: 'Lancer mon mini-site',
-      servicesPackMinisiteSubject: 'Offre : mini-site vitrine 1 page — à partir de 400 $',
+      servicesPackMinisiteSubject: 'Offre : mini-site vitrine 1 page — 400 à 499 $',
       servicesPackPageTitle: 'Site web professionnel',
       servicesPackPagePrice: '1 200 $',
-      servicesPackPagePriceNote:
-        'Version express possible dès 499 $ si le contenu est prêt et le besoin très simple.',
       servicesPackPageFor:
         'Pour une présence claire, crédible et prête à recevoir des demandes.',
       servicesPackPageB1: 'Message et parcours clairs pour rassurer et inciter au contact',
@@ -155,7 +163,7 @@ export const fr = {
       servicesPackSupportPriceNote:
         'Selon le travail demandé · île de Montréal et à distance au Québec.',
       servicesPackSupportFor:
-        'Pour dépanner sans jargon : ordinateur lent, Windows, courriels ou sécurité des comptes.',
+        'Pour dépanner : ordinateur lent, Windows, courriels ou sécurité des comptes.',
       servicesPackSupportB1: 'Dépannage Windows, lenteur et configuration de base',
       servicesPackSupportB2: 'Migration SSD, sauvegardes et récupération simple',
       servicesPackSupportB3: 'Outlook, Gmail, mots de passe et double authentification',
@@ -170,7 +178,7 @@ export const fr = {
       servicesHomeReassuranceTitle: 'Pas besoin de tout refaire',
       servicesHomeImproveTitle: 'Refonte ou amélioration',
       servicesHomeImproveLead:
-        'Pas besoin de tout refaire : j’améliore aussi votre site actuel, je corrige les irritants et je priorise ce qui rapporte le plus.',
+        'J’améliore aussi votre site actuel, je corrige les irritants et je priorise ce qui rapporte le plus.',
       servicesHomeImproveCta: 'Améliorer votre site →',
       servicesHomeImproveSubject: 'Projet : refonte ou amélioration de site',
       servicesHomeToolsTitle: 'Outils et accompagnement',
@@ -529,6 +537,8 @@ export const fr = {
       subtitle: 'Planification visuelle pour petites équipes et PME',
       intro:
         'Calendrier, timelines et tâches dans une app desktop native — conçue pour voir clairement qui fait quoi, quand, et en équipe.',
+      tagline:
+        'Famille : aperçu de toute l’année en un coup d’œil. Petite entreprise : plusieurs projets, zéro chaos. Même outil, même clarté.',
       heroKicker: 'Application desktop',
       heroCtaDownload: 'Télécharger',
       heroCtaFeatures: 'Voir les fonctionnalités',
