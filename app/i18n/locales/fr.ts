@@ -2,6 +2,7 @@
 export const fr = {
     nav: {
       portfolio: 'ijipop',
+      portfolioSolutions: 'solutions',
       home: 'Accueil',
       projects: 'Réalisations',
       about: 'À propos',

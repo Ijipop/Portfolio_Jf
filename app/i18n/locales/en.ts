@@ -2,6 +2,7 @@
 export const en = {
     nav: {
       portfolio: 'ijipop',
+      portfolioSolutions: 'solutions',
       home: 'Home',
       projects: 'Work',
       about: 'About',
