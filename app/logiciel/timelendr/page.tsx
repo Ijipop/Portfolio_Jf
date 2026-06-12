@@ -111,6 +111,7 @@ export default function TimelendrPage() {
                   <h1 className={styles.heroTitle}>{t('timelendr.title')}</h1>
                   <p className={styles.heroSubtitle}>{t('timelendr.subtitle')}</p>
                   <p className={styles.heroIntro}>{t('timelendr.intro')}</p>
+                  <p className={styles.heroTagline}>{t('timelendr.tagline')}</p>
                   <div className={styles.heroActions}>
                     <CTAButton
                       variant="primary"

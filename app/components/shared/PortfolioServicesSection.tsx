@@ -74,7 +74,6 @@ const PACK_OFFERS: PackOffer[] = [
     id: 'minisite',
     icon: WebAssetOutlinedIcon,
     titleKey: 'home.servicesPackMinisiteTitle',
-    pricePrefixKey: 'home.servicesPackPriceFrom',
     priceKey: 'home.servicesPackMinisitePrice',
     priceNoteKey: 'home.servicesPackMinisitePriceNote',
     forKey: 'home.servicesPackMinisiteFor',
@@ -93,7 +92,6 @@ const PACK_OFFERS: PackOffer[] = [
     titleKey: 'home.servicesPackPageTitle',
     pricePrefixKey: 'home.servicesPackPriceFrom',
     priceKey: 'home.servicesPackPagePrice',
-    priceNoteKey: 'home.servicesPackPagePriceNote',
     forKey: 'home.servicesPackPageFor',
     bulletKeys: [
       'home.servicesPackPageB1',
