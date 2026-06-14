@@ -2,19 +2,24 @@
 
 import Box from '@mui/material/Box'
 import { useEffect, useState } from 'react'
+import { useLanguage } from '@/contexts/LanguageContext'
 import StickyCTA from './StickyCTA'
 
 type ScrollTriggeredStickyCTAProps = {
-  text: string
+  text?: string
+  textKey?: string
   href?: string
   threshold?: number
 }
 
 export default function ScrollTriggeredStickyCTA({
   text,
+  textKey = 'home.stickyCTA',
   href = '/portfolio/contact',
   threshold = 400,
 }: ScrollTriggeredStickyCTAProps) {
+  const { t } = useLanguage()
+  const label = text ?? t(textKey)
   const [visible, setVisible] = useState(false)
 
   useEffect(() => {
@@ -39,7 +44,7 @@ export default function ScrollTriggeredStickyCTA({
         pointerEvents: 'none',
       }}
     >
-      <StickyCTA text={text} href={href} embedded />
+      <StickyCTA text={label} href={href} embedded />
     </Box>
   )
 }

@@ -129,6 +129,18 @@ function ContactForm({
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [showOptionalSections, setShowOptionalSections] = useState(false)
 
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    const openFromHash = () => {
+      if (window.location.hash.replace(/^#/, '') === 'diagnostic-ia') {
+        setShowOptionalSections(true)
+      }
+    }
+    openFromHash()
+    window.addEventListener('hashchange', openFromHash)
+    return () => window.removeEventListener('hashchange', openFromHash)
+  }, [])
+
   const debounceTimers = useRef<Partial<Record<ValidatableContactField, ReturnType<typeof setTimeout>>>>({})
 
   useEffect(() => {

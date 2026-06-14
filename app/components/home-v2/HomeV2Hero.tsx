@@ -54,9 +54,9 @@ export default function HomeV2Hero() {
         alignItems: 'center',
         justifyContent: 'center',
         textAlign: 'center',
-        pt: { xs: 14, sm: 16, md: 18 },
-        pb: { xs: 8, md: 10 },
-        px: { xs: 2, sm: 3 },
+        pt: { xs: 3, sm: 4, md: 5 },
+        pb: { xs: 6, md: 8 },
+        px: 0,
       }}
     >
       <Box

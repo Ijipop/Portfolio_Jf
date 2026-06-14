@@ -3,35 +3,24 @@
 import Box from '@mui/material/Box'
 import Container from '@mui/material/Container'
 import dynamic from 'next/dynamic'
-import HomeAmbientBackdrop from '@/components/home/HomeAmbientBackdrop'
-import PortfolioHomeHero from '@/components/home/PortfolioHomeHero'
 import AppBarComponent from '@/components/appBar'
 import PageWrapper from '@/components/shared/PageWrapper'
 import InteractiveBackgroundSection from '@/components/shared/InteractiveBackgroundSection'
-import PortfolioServicesSection from '@/components/shared/PortfolioServicesSection'
-import ClientProofSection from '@/components/shared/ClientProofSection'
 import ScrollTriggeredStickyCTA from '@/components/shared/ScrollTriggeredStickyCTA'
 import HomeDemosBand from '@/components/home/HomeDemosBand'
 import HomeTimelendrBand from '@/components/home/HomeTimelendrBand'
+import HomeV2Hero from '@/components/home-v2/HomeV2Hero'
+import HomeV2Services from '@/components/home-v2/HomeV2Services'
+import HomeV2Pricing from '@/components/home-v2/HomeV2Pricing'
+import HomeV2Credibility from '@/components/home-v2/HomeV2Credibility'
+import HomeV2FinalCta from '@/components/home-v2/HomeV2FinalCta'
 import Footer from '@/components/Footer'
-import { useLanguage } from '@/contexts/LanguageContext'
 import { useEffect, useState } from 'react'
 
 const SignatureIntro = dynamic(() => import('@/components/SignatureIntro'), { ssr: false })
-const HomeHeroServicesSection = dynamic(() => import('@/components/home/HomeHeroServicesSection'), { ssr: false })
-const PortfolioStatsBand = dynamic(() => import('@/components/shared/PortfolioStatsBand'), { ssr: false })
-const HomeNavigationCards = dynamic(() => import('@/components/home/HomeNavigationCards'), { ssr: false })
-const PortfolioProcessSection = dynamic(
-  () => import('@/components/shared/PortfolioProcessSection'),
-  { ssr: false },
-)
-const AiConversionTeaser = dynamic(() => import('@/components/home/AiConversionTeaser'), { ssr: false })
 
 const INTRO_SESSION_KEY = 'portfolio-intro-seen'
-const SHOW_HOME_STATS_BAND = false
-const SHOW_HOME_SITE_INTRO = false
 const SHOW_HOME_DEMOS_BAND = true
-const SHOW_HOME_NAVIGATION_CARDS = false
 
 function setIntroSeenCookie() {
   if (typeof document === 'undefined') return
@@ -39,10 +28,8 @@ function setIntroSeenCookie() {
 }
 
 export default function HomeClient({ initialShowIntro }: { initialShowIntro: boolean }) {
-  const { t } = useLanguage()
   const [showIntro, setShowIntro] = useState<boolean>(initialShowIntro)
 
-  // Synchroniser avec cookie/sessionStorage après montage pour éviter flash d'hydration
   useEffect(() => {
     const seen =
       typeof window !== 'undefined' &&
@@ -75,80 +62,60 @@ export default function HomeClient({ initialShowIntro }: { initialShowIntro: boo
 
   return (
     <>
-      {showIntro && (
-        <SignatureIntro onComplete={handleIntroComplete} />
-      )}
+      {showIntro && <SignatureIntro onComplete={handleIntroComplete} />}
       {!showIntro && (
-      <PageWrapper backgroundVariant="default">
-      <Box sx={{ opacity: 0.78 }}>
-        <HomeAmbientBackdrop />
-      </Box>
-      <Box
-        sx={{
-          position: 'relative',
-          zIndex: 2,
-          display: 'flex',
-          flexDirection: 'column',
-          flex: 1,
-          minHeight: '100vh',
-        }}
-      >
-      <Box
-        component="header"
-        sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          gap: 0,
-          m: 0,
-          p: 0,
-          flexShrink: 0,
-        }}
-      >
-        <AppBarComponent />
-        <PortfolioHomeHero />
-      </Box>
+        <PageWrapper backgroundVariant="default">
+          <Box
+            sx={{
+              position: 'relative',
+              zIndex: 2,
+              display: 'flex',
+              flexDirection: 'column',
+              flex: 1,
+              minHeight: '100vh',
+            }}
+          >
+            <Box
+              component="header"
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                gap: 0,
+                m: 0,
+                p: 0,
+                flexShrink: 0,
+              }}
+            >
+              <AppBarComponent />
+              <Container maxWidth="lg" sx={{ px: { xs: 1.5, sm: 3, md: 4 } }}>
+                <HomeV2Hero />
+              </Container>
+            </Box>
 
-      <InteractiveBackgroundSection>
-      <Container
-        maxWidth="lg"
-        sx={{
-          /** Espace au-dessus des offres — réduit sur mobile (le hero remplit déjà le viewport). */
-          pt: { xs: 'clamp(20px, 5vw, 32px)', sm: '60px' },
-          pb: { xs: 10, sm: 4, md: 8 },
-          px: { xs: 1.5, sm: 3, md: 4 },
-          position: 'relative',
-          zIndex: 2,
-        }}
-      >
-        {SHOW_HOME_STATS_BAND && <PortfolioStatsBand />}
-        <PortfolioServicesSection />
+            <InteractiveBackgroundSection>
+              <Container
+                maxWidth="lg"
+                sx={{
+                  pt: { xs: 2, sm: 3 },
+                  pb: { xs: 10, sm: 4, md: 8 },
+                  px: { xs: 1.5, sm: 3, md: 4 },
+                  position: 'relative',
+                  zIndex: 2,
+                }}
+              >
+                <HomeV2Services />
+                <HomeV2Pricing />
+                <HomeV2Credibility />
+                {SHOW_HOME_DEMOS_BAND && <HomeDemosBand />}
+                <HomeTimelendrBand />
+                <HomeV2FinalCta />
+              </Container>
+            </InteractiveBackgroundSection>
 
-        <ClientProofSection
-          kicker={t('proof.thermoKicker')}
-          title={t('proof.thermoTitle')}
-          body={t('proof.thermoBody')}
-          projectLabel={t('proof.thermoProjectLink')}
-          projectHref="/portfolio/projets"
-          proofOnly
-        />
-
-        {SHOW_HOME_SITE_INTRO && <HomeHeroServicesSection />}
-
-        {SHOW_HOME_DEMOS_BAND && <HomeDemosBand />}
-
-        {SHOW_HOME_NAVIGATION_CARDS && <HomeNavigationCards />}
-        <Box className="perf-cv-auto">
-          <PortfolioProcessSection />
-        </Box>
-        <AiConversionTeaser />
-        <HomeTimelendrBand />
-      </Container>
-      </InteractiveBackgroundSection>
-      
-      <Footer mobileBottomClearance />
-      <ScrollTriggeredStickyCTA text={t('home.stickyCTA')} />
-      </Box>
-    </PageWrapper>
+            <Footer mobileBottomClearance />
+            <ScrollTriggeredStickyCTA textKey="homeV2.heroCtaPrimary" />
+          </Box>
+        </PageWrapper>
       )}
     </>
   )

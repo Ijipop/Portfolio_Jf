@@ -1,20 +1,9 @@
-/** Palette sombre dédiée à /accueil-v2 — indépendante du thème global. */
+import { SITE_DARK } from '@/design-system/siteDark'
+
+/** Alias partagé — aligné sur le thème sombre global du site. */
 export const HOME_V2 = {
-  bg: '#08080c',
-  bgElevated: '#0f0f14',
-  surface: 'rgba(255, 255, 255, 0.04)',
-  surfaceHover: 'rgba(255, 255, 255, 0.06)',
-  border: 'rgba(255, 255, 255, 0.08)',
-  borderHover: 'rgba(234, 88, 12, 0.35)',
-  text: '#f4f4f5',
-  textSecondary: '#a1a1aa',
-  textMuted: '#71717a',
-  brandOrange: '#ea580c',
-  brandGlow: 'rgba(234, 88, 12, 0.12)',
-  brandGlowStrong: 'rgba(234, 88, 12, 0.22)',
-  maxWidth: 1200,
-  sectionPy: { xs: 6, md: 10 },
-  cardRadius: '16px',
+  ...SITE_DARK,
+  sectionPy: { xs: 5, md: 8 },
   cardRadiusLg: '20px',
 } as const
 

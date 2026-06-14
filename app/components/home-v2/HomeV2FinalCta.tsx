@@ -17,7 +17,7 @@ export default function HomeV2FinalCta() {
       component="section"
       sx={{
         py: HOME_V2.sectionPy,
-        px: { xs: 2, sm: 3 },
+        px: 0,
       }}
     >
       <Box sx={{ maxWidth: HOME_V2.maxWidth, mx: 'auto' }}>
