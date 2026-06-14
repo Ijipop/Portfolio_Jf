@@ -234,13 +234,27 @@ export default function HomeTimelendrBand() {
 
           <Typography
             component="p"
-            sx={{ mt: 1.5, fontSize: '0.8rem', opacity: 0.55 }}
+            sx={{ mt: 1.5, fontSize: '0.8rem' }}
           >
             <Link
               href="/logiciel/timelendr"
-              style={{ color: 'inherit', fontWeight: 700, textDecoration: 'underline', textUnderlineOffset: 3 }}
+              style={{ textDecoration: 'none' }}
             >
-              {t('home.timelendrBandDiscover')}
+              <Box
+                component="span"
+                sx={{
+                  color: '#2dd4bf',
+                  fontWeight: 700,
+                  textDecoration: 'underline',
+                  textUnderlineOffset: 4,
+                  transition: 'color 0.2s ease',
+                  '&:hover': {
+                    color: '#99f6e4',
+                  },
+                }}
+              >
+                {t('home.timelendrBandDiscover')}
+              </Box>
             </Link>
           </Typography>
         </Box>
