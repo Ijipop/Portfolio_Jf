@@ -55,17 +55,20 @@ test('contact form renders stable fields', async ({ page }) => {
   await expect(form.locator('button[type="submit"]')).toContainText(/Obtenir une estimation|Get an estimate/i)
 })
 
-test('light graphics mode can be forced for fallback validation', async ({ page }) => {
-  // Reduced-motion + graphismes forcés « light » : pas de Vanta, calque gradient (data-graphics-mode light).
+test('static graphics fallback has no Vanta (reduced motion + forced light)', async ({ page }) => {
+  // Vanta est désactivé (vantaFeatures) ; thème sombre par défaut → data-graphics-mode « beige-dark ».
+  // Le forçage « light » reste utile pour valider l’absence de canvas WebGL.
   await page.emulateMedia({ reducedMotion: 'reduce' })
   await page.addInitScript(() => {
-    window.localStorage.setItem('presentationMode', 'dev')
     window.localStorage.setItem('portfolio-force-graphics-mode', 'light')
   })
 
   await page.goto('/portfolio', { waitUntil: 'domcontentloaded' })
 
-  await expect(page.getByTestId('graphics-background-layer')).toHaveAttribute('data-graphics-mode', 'light')
+  await expect(page.getByTestId('graphics-background-layer')).toHaveAttribute(
+    'data-graphics-mode',
+    /^(light|beige-dark|beige)$/,
+  )
   await expect(page.getByTestId('vanta-background')).toHaveCount(0)
 })
 
