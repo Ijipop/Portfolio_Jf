@@ -154,6 +154,16 @@ export const THEMES = {
     bg2: '#efe8dc',
     moodHint: 'portfolio client, crème latte, bleu ardoise et taupe pour lier au beige',
   },
+  /** Palette V2 sombre — mode Site par défaut (ijipop premium dark) */
+  siteDark: {
+    name: 'Site Dark',
+    primary: '#ea580c',
+    secondary: '#c2410c',
+    accent: '#fb923c',
+    bg: '#08080c',
+    bg2: '#0f0f14',
+    moodHint: 'sombre premium, orange ijipop, crédible et vendeur',
+  },
 } as const
 
 export type ThemeName = keyof typeof THEMES
@@ -206,13 +216,13 @@ export function getAvailableThemes(): ThemeName[] {
   return Object.keys(THEMES) as ThemeName[]
 }
 
-/** Thèmes affichés en mode Créa (exclut latte, réservé au mode Site) */
+/** Thèmes affichés en mode Créa (exclut latte et siteDark, réservés au mode Site) */
 export function getDevThemeChoices(): ThemeName[] {
-  return (Object.keys(THEMES) as ThemeName[]).filter((name) => name !== 'latte')
+  return (Object.keys(THEMES) as ThemeName[]).filter((name) => name !== 'latte' && name !== 'siteDark')
 }
 
-/** Palette « sunset » utilisée comme variante sombre du mode Site (beige). */
-export const BEIGE_DARK_THEME: ThemeName = 'sunset'
+/** Palette siteDark utilisée comme variante sombre du mode Site (beige). */
+export const BEIGE_DARK_THEME: ThemeName = 'siteDark'
 export const BEIGE_LIGHT_THEME: ThemeName = 'latte'
 
 /**

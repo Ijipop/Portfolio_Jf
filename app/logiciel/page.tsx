@@ -6,7 +6,7 @@ import CardActionArea from '@mui/material/CardActionArea'
 import CardContent from '@mui/material/CardContent'
 import Container from '@mui/material/Container'
 import Typography from '@mui/material/Typography'
-import { usePathname, useRouter } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import AppBarComponent from '../components/appBar'
 import PageWrapper from '../components/shared/PageWrapper'
 import InteractiveBackgroundSection from '../components/shared/InteractiveBackgroundSection'
@@ -16,17 +16,16 @@ import { useLanguage } from '../contexts/LanguageContext'
 import { DESIGN_TOKENS } from '../design-system/constants'
 import { useThemeColors } from '../hooks/useThemeColors'
 import { useTextColor } from '../hooks/useTextColor'
-import { shouldShowTopology } from '../utils/topologyRoutes'
+import { useCardSurfaceOptions } from '@/hooks/useCardSurfaceOptions'
 import { getCardSurfaceSx } from '../components/shared/cardSurface'
 
 export default function LogicielPage() {
   const router = useRouter()
-  const pathname = usePathname()
-  const isTopologyRoute = shouldShowTopology(pathname)
+  const { isTopologyRoute, isSiteDark } = useCardSurfaceOptions()
   const { t } = useLanguage()
   const { primary, secondary } = useThemeColors()
   const textColor = useTextColor()
-  const cardSurfaceSx = getCardSurfaceSx({ isTopologyRoute, variant: 'flat', level: 'soft', interactive: false })
+  const cardSurfaceSx = getCardSurfaceSx({ isTopologyRoute, isSiteDark, variant: 'flat', level: 'soft', interactive: false })
 
   return (
     <PageWrapper backgroundVariant="default">

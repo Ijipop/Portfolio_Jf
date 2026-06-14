@@ -11,7 +11,6 @@ import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import { alpha, useTheme } from '@mui/material/styles'
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
 import { useMemo } from 'react'
 import CTAButton from '@/components/shared/CTAButton'
 import {
@@ -20,6 +19,7 @@ import {
 } from './IjipopGlitchTitle'
 import ScrollReveal from './ScrollReveal'
 import { getCardSurfaceSx } from '@/components/shared/cardSurface'
+import { useCardSurfaceOptions } from '@/hooks/useCardSurfaceOptions'
 import { DESIGN_TOKENS } from '@/design-system/constants'
 import { usePresentationMode } from '@/contexts/PresentationModeContext'
 import { CONTACT_SUBJECT_IMPROVE_SITE } from '@/i18n/contactSubjects'
@@ -27,7 +27,6 @@ import { REASSURANCE_BANNER_COPY } from '@/i18n/reassuranceBannerCopy'
 import { useLanguage } from '@/contexts/LanguageContext'
 import { useTextColor } from '@/hooks/useTextColor'
 import { useThemeColors } from '@/hooks/useThemeColors'
-import { shouldShowTopology } from '@/utils/topologyRoutes'
 import type { SvgIconComponent } from '@mui/icons-material'
 
 const CONTACT_PATH = '/portfolio/contact'
@@ -155,6 +154,7 @@ type OfferPackCardProps = {
   primary: string
   secondary: string
   isTopologyRoute: boolean
+  isSiteDark: boolean
 }
 
 function OfferPackCard({
@@ -165,6 +165,7 @@ function OfferPackCard({
   primary,
   secondary,
   isTopologyRoute,
+  isSiteDark,
 }: OfferPackCardProps) {
   const { t } = useLanguage()
   const theme = useTheme()
@@ -174,6 +175,7 @@ function OfferPackCard({
 
   const surfaceSx = getCardSurfaceSx({
     isTopologyRoute,
+    isSiteDark,
     variant: featured ? 'elevated' : 'glass',
     level: featured ? 'balanced' : 'soft',
     interactive: false,
@@ -562,8 +564,7 @@ function OfferPackCard({
 export default function PortfolioServicesSection() {
   const { t, locale } = useLanguage()
   const reassurance = REASSURANCE_BANNER_COPY[locale]
-  const pathname = usePathname()
-  const isTopologyRoute = shouldShowTopology(pathname)
+  const { isTopologyRoute, isSiteDark } = useCardSurfaceOptions()
   const { mode: presentationMode } = usePresentationMode()
   const textColor = useTextColor()
   const { primary, secondary, accent } = useThemeColors()
@@ -727,6 +728,7 @@ export default function PortfolioServicesSection() {
                 primary={primary}
                 secondary={secondary}
                 isTopologyRoute={isTopologyRoute}
+                isSiteDark={isSiteDark}
               />
             </ScrollReveal>
           )

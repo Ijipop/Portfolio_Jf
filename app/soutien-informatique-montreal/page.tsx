@@ -23,11 +23,14 @@ import { DESIGN_TOKENS } from '@/design-system/constants'
 import { useLanguage } from '@/contexts/LanguageContext'
 import { useTextColor } from '@/hooks/useTextColor'
 import { useThemeColors } from '@/hooks/useThemeColors'
+import { useSiteDarkChrome } from '@/hooks/useSiteDarkChrome'
+import { SITE_DARK } from '@/design-system/siteDark'
 import { CONTACT_SUBJECT_TECH_SUPPORT } from '@/i18n/contactSubjects'
 
 export default function SoutienInformatiqueMontrealPage() {
   const textColor = useTextColor()
   const { primary } = useThemeColors()
+  const siteDarkChrome = useSiteDarkChrome()
   const { locale } = useLanguage()
   const prefersReducedMotion = useReducedMotion()
   const supportSubject = CONTACT_SUBJECT_TECH_SUPPORT[locale] ?? supportLandingContent.contactSubject
@@ -59,13 +62,17 @@ export default function SoutienInformatiqueMontrealPage() {
                   mb: 5,
                   p: { xs: 2, sm: 2.5 },
                   borderRadius: `${DESIGN_TOKENS.borderRadius.large}px`,
-                  border: `1px solid ${alpha(primary, 0.28)}`,
-                  background: (theme) =>
-                    theme.palette.mode === 'dark' ? alpha('#020617', 0.6) : alpha('#ffffff', 0.72),
-                  boxShadow: (theme) =>
-                    theme.palette.mode === 'dark'
-                      ? `0 14px 34px ${alpha(primary, 0.2)}`
-                      : `0 14px 28px ${alpha(primary, 0.16)}`,
+                  border: siteDarkChrome
+                    ? `1px solid ${SITE_DARK.border}`
+                    : `1px solid ${alpha(primary, 0.28)}`,
+                  background: siteDarkChrome
+                    ? SITE_DARK.surface
+                    : alpha('#ffffff', 0.72),
+                  backdropFilter: siteDarkChrome ? 'blur(12px)' : undefined,
+                  WebkitBackdropFilter: siteDarkChrome ? 'blur(12px)' : undefined,
+                  boxShadow: siteDarkChrome
+                    ? `0 12px 40px rgba(0, 0, 0, 0.35), 0 0 0 1px ${SITE_DARK.brandGlow}`
+                    : `0 14px 28px ${alpha(primary, 0.16)}`,
                 }}
               >
                 <Typography
@@ -129,13 +136,24 @@ export default function SoutienInformatiqueMontrealPage() {
                       }}
                       sx={{
                         borderRadius: `${DESIGN_TOKENS.borderRadius.medium}px`,
-                        border: `1px solid ${alpha(primary, 0.22)}`,
-                        background: alpha(primary, 0.06),
+                        border: siteDarkChrome
+                          ? `1px solid ${SITE_DARK.border}`
+                          : `1px solid ${alpha(primary, 0.22)}`,
+                        background: siteDarkChrome
+                          ? SITE_DARK.surfaceHover
+                          : alpha(primary, 0.06),
                         px: 1.5,
                         py: 1.1,
                         display: 'flex',
                         alignItems: 'flex-start',
                         gap: 1,
+                        transition: 'border-color 0.2s ease, background 0.2s ease',
+                        '&:hover': siteDarkChrome
+                          ? {
+                              borderColor: SITE_DARK.borderHover,
+                              background: 'rgba(255, 255, 255, 0.08)',
+                            }
+                          : undefined,
                       }}
                     >
                       <CheckCircleOutlineRoundedIcon sx={{ color: primary, fontSize: '1.1rem', mt: '2px' }} />
@@ -150,11 +168,12 @@ export default function SoutienInformatiqueMontrealPage() {
                   sx={{
                     mb: 3,
                     borderRadius: `${DESIGN_TOKENS.borderRadius.large}px`,
-                    border: `1px solid ${alpha(primary, 0.26)}`,
-                    background: (theme) =>
-                      theme.palette.mode === 'dark'
-                        ? `linear-gradient(135deg, ${alpha(primary, 0.24)} 0%, ${alpha('#0f172a', 0.66)} 100%)`
-                        : `linear-gradient(135deg, ${alpha(primary, 0.16)} 0%, ${alpha('#ffffff', 0.88)} 100%)`,
+                    border: siteDarkChrome
+                      ? `1px solid ${SITE_DARK.borderHover}`
+                      : `1px solid ${alpha(primary, 0.26)}`,
+                    background: siteDarkChrome
+                      ? `linear-gradient(135deg, ${SITE_DARK.brandGlow} 0%, ${SITE_DARK.surface} 100%)`
+                      : `linear-gradient(135deg, ${alpha(primary, 0.16)} 0%, ${alpha('#ffffff', 0.88)} 100%)`,
                     px: { xs: 2, sm: 2.8 },
                     py: { xs: 2.2, sm: 2.8 },
                   }}

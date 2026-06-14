@@ -40,5 +40,12 @@ describe('shouldShowTopology', () => {
     vi.stubEnv('NEXT_PUBLIC_TOPOLOGY_SCOPE', 'targeted')
     expect(shouldShowTopology('/test/vanta-birds')).toBe(false)
   })
+
+  it('excludes /accueil-v2 preview route for dedicated dark background', () => {
+    vi.stubEnv('NEXT_PUBLIC_TOPOLOGY_SCOPE', 'global')
+    expect(shouldShowTopology('/accueil-v2')).toBe(false)
+    vi.stubEnv('NEXT_PUBLIC_TOPOLOGY_SCOPE', 'targeted')
+    expect(shouldShowTopology('/accueil-v2')).toBe(false)
+  })
 })
 

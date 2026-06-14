@@ -23,17 +23,19 @@ import {
 import { shouldShowTopology } from '@/utils/topologyRoutes'
 import { syncPortfolioThemeToDocument } from '@/utils/syncPortfolioThemeToDocument'
 import { BeigePresentationAmbientBg } from '@/components/BeigePresentationAmbientBg'
+import SiteDarkBackdrop from '@/components/shared/SiteDarkBackdrop'
 import { useBeigePresentationBg } from '@/contexts/BeigePresentationBgContext'
 import { useGraphicsMode } from '@/contexts/GraphicsModeContext'
 import { usePresentationMode } from '@/contexts/PresentationModeContext'
 import { useBeigeDark } from '@/hooks/useBeigeDark'
 import { registerBeigeDarkInstantSync } from '@/utils/beigeDarkModeStore'
+import { isTimelendrRoute } from '@/utils/isTimelendrRoute'
 import { DESIGN_TOKENS } from '@/design-system/constants'
 
 const LAST_DEV_THEME_KEY = 'lastDevThemeName'
 
 /** Même valeur SSR et premier rendu client — localStorage appliqué après hydratation (voir effet presentationHydrated). */
-const SSR_THEME_NAME: ThemeName = 'latte'
+const SSR_THEME_NAME: ThemeName = 'siteDark'
 
 const FONT_STACK = 'var(--font-inter), system-ui, -apple-system, "Segoe UI", sans-serif'
 const TYPO = DESIGN_TOKENS.typography
@@ -65,12 +67,14 @@ export function AdvancedThemeProvider({ children }: { children: React.ReactNode 
 
   /** Évite les divergences SSR/client : le mode beige visuel n'est actif qu'après hydratation du choix utilisateur. */
   const isBeigePresentation = presentationHydrated && presentationMode === 'beige'
+  const isTimelendr = isTimelendrRoute(hydrationSafePathname)
   const activeThemeName = useMemo((): ThemeName => {
+    if (isTimelendr) return BEIGE_LIGHT_THEME
     if (presentationHydrated && isBeigePresentation) {
       return beigeDark ? BEIGE_DARK_THEME : BEIGE_LIGHT_THEME
     }
     return themeName
-  }, [presentationHydrated, isBeigePresentation, beigeDark, themeName])
+  }, [presentationHydrated, isBeigePresentation, beigeDark, themeName, isTimelendr])
 
   const customTheme = THEMES[activeThemeName]
 
@@ -123,8 +127,9 @@ export function AdvancedThemeProvider({ children }: { children: React.ReactNode 
   }, [presentationMode, presentationHydrated, beigeDark, isBeigePresentation])
 
   useLayoutEffect(() => {
-    syncDocumentTheme(activeThemeName, beigeDark)
-  }, [activeThemeName, beigeDark, syncDocumentTheme])
+    const effectiveDark = isTimelendr ? false : beigeDark
+    syncDocumentTheme(activeThemeName, effectiveDark)
+  }, [activeThemeName, beigeDark, syncDocumentTheme, isTimelendr])
 
   const setTheme = useCallback(
     (newThemeName: ThemeName) => {
@@ -150,7 +155,8 @@ export function AdvancedThemeProvider({ children }: { children: React.ReactNode 
 
   // Créer le thème MUI avec les couleurs personnalisées
   // Utiliser useMemo pour recréer le thème quand customTheme change
-  const isBeigeLight = isBeigePresentation && !beigeDark
+  const isBeigeLight = isBeigePresentation && !beigeDark && !isTimelendr
+  const isSiteDark = isBeigePresentation && beigeDark && !isTimelendr
   const showBeigeAmbientBg =
     isBeigeLight && !isTopologyRoute && graphicsMode === 'full'
 
@@ -168,8 +174,8 @@ export function AdvancedThemeProvider({ children }: { children: React.ReactNode 
         dark: customTheme.secondary + 'CC'
       },
       background: {
-        default: isBeigeLight ? '#faf8f5' : isBeigePresentation ? customTheme.bg : '#f5f7fa',
-        paper: isBeigeLight ? '#fffefb' : isBeigePresentation ? customTheme.bg2 : '#ffffff',
+        default: isBeigeLight ? '#faf8f5' : isSiteDark ? customTheme.bg : isBeigePresentation ? customTheme.bg : '#f5f7fa',
+        paper: isBeigeLight ? '#fffefb' : isSiteDark ? customTheme.bg2 : isBeigePresentation ? customTheme.bg2 : '#ffffff',
       }
     },
     typography: {
@@ -266,7 +272,7 @@ export function AdvancedThemeProvider({ children }: { children: React.ReactNode 
         }
       }
     }
-  }), [customTheme, mode, isTopologyRoute, isBeigePresentation, isBeigeLight])
+  }), [customTheme, mode, isTopologyRoute, isBeigePresentation, isBeigeLight, isSiteDark])
 
   return (
     <AdvancedThemeContext.Provider value={contextValue}>
@@ -278,12 +284,15 @@ export function AdvancedThemeProvider({ children }: { children: React.ReactNode 
             position: 'relative',
             background: isTopologyRoute
               ? 'transparent'
-              : `linear-gradient(135deg, ${customTheme.bg} 0%, ${customTheme.bg2} 25%, ${customTheme.bg} 50%, ${customTheme.bg2} 75%, ${customTheme.bg} 100%)`,
+              : isSiteDark
+                ? 'transparent'
+                : `linear-gradient(135deg, ${customTheme.bg} 0%, ${customTheme.bg2} 25%, ${customTheme.bg} 50%, ${customTheme.bg2} 75%, ${customTheme.bg} 100%)`,
             minHeight: '100vh',
             transition: isBeigePresentation ? 'none' : 'background 0.5s ease',
           }}
         >
           <BeigePresentationAmbientBg enabled={showBeigeAmbientBg} />
+          <SiteDarkBackdrop />
           <Box sx={{ position: 'relative', zIndex: 1, minHeight: '100vh' }}>{children}</Box>
         </Box>
       </ThemeProvider>

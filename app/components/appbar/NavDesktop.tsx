@@ -11,13 +11,17 @@ import Typography from '@mui/material/Typography'
 import Link from 'next/link'
 import React from 'react'
 import { DESIGN_TOKENS } from '@/design-system/constants'
+import { SITE_DARK } from '@/design-system/siteDark'
 import { NavRoute, NavRouteId } from '@/config/navRoutes'
+
+type NavAppearance = 'legacy' | 'darkGlass'
 
 interface NavDesktopProps {
   routes: NavRoute[]
   pathname: string
   onNavigate: (path: string) => void
   t: (key: string) => string
+  appearance?: NavAppearance
 }
 
 function renderIcon(id: NavRouteId) {
@@ -35,7 +39,8 @@ function renderIcon(id: NavRouteId) {
   }
 }
 
-export default function NavDesktop({ routes, pathname, onNavigate, t }: NavDesktopProps) {
+export default function NavDesktop({ routes, pathname, onNavigate, t, appearance = 'legacy' }: NavDesktopProps) {
+  const darkGlass = appearance === 'darkGlass'
   return (
     <Box
       sx={{
@@ -54,8 +59,20 @@ export default function NavDesktop({ routes, pathname, onNavigate, t }: NavDeskt
               color="inherit"
               component="span"
               sx={{
-              color: active ? 'white' : 'rgba(255, 255, 255, 0.8)',
-              backgroundColor: active ? 'rgba(255, 255, 255, 0.15)' : 'transparent',
+              color: darkGlass
+                ? active
+                  ? SITE_DARK.text
+                  : SITE_DARK.textSecondary
+                : active
+                  ? 'white'
+                  : 'rgba(255, 255, 255, 0.8)',
+              backgroundColor: darkGlass
+                ? active
+                  ? SITE_DARK.surface
+                  : 'transparent'
+                : active
+                  ? 'rgba(255, 255, 255, 0.15)'
+                  : 'transparent',
               borderRadius: DESIGN_TOKENS.borderRadius.small,
               px: { xs: 1, sm: 2 },
               py: 1,
@@ -70,13 +87,13 @@ export default function NavDesktop({ routes, pathname, onNavigate, t }: NavDeskt
                   transform: 'translateX(-50%)',
                   width: '80%',
                   height: '3px',
-                  background: 'white',
+                  background: darkGlass ? SITE_DARK.brandOrange : 'white',
                   borderRadius: '2px 2px 0 0',
                 },
               }),
               '&:hover': {
-                color: 'white',
-                backgroundColor: 'rgba(255, 255, 255, 0.15)',
+                color: darkGlass ? SITE_DARK.text : 'white',
+                backgroundColor: darkGlass ? SITE_DARK.surfaceHover : 'rgba(255, 255, 255, 0.15)',
                 transform: 'translateY(-2px)',
               },
             }}

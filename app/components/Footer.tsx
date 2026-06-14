@@ -17,6 +17,8 @@ import { useAdvancedTheme } from '../contexts/AdvancedThemeContext'
 import { useThemeColors } from '../hooks/useThemeColors'
 import { getTextColorForBackground } from '../utils/colorUtils'
 import { useLanguage } from '../contexts/LanguageContext'
+import { useSiteDarkChrome } from '@/hooks/useSiteDarkChrome'
+import { siteDarkGlassSurfaceTop } from '@/design-system/siteDarkSurfaces'
 
 type FooterProps = {
   /** Extra bottom space on mobile when a fixed sticky CTA bar is shown (home, SEO landing). */
@@ -30,6 +32,7 @@ function Footer({ mobileBottomClearance = false }: FooterProps) {
   const { primary, secondary } = useThemeColors()
   const { customTheme } = useAdvancedTheme()
   const { t } = useLanguage()
+  const siteDarkChrome = useSiteDarkChrome()
   const [footerBackground, setFooterBackground] = useState<string>(
     `linear-gradient(135deg, ${customTheme.bg} 0%, ${customTheme.bg2} 50%, ${customTheme.bg} 100%)`
   )
@@ -87,13 +90,17 @@ function Footer({ mobileBottomClearance = false }: FooterProps) {
       className="perf-cv-auto"
       aria-label={t('footer.landmarkLabel')}
       sx={{
-        background:
-          'linear-gradient(145deg, rgba(255, 255, 255, 0.13) 0%, rgba(241, 245, 249, 0.1) 50%, rgba(255, 255, 255, 0.12) 100%) !important',
-        backdropFilter: 'blur(14px) saturate(1.05)',
-        WebkitBackdropFilter: 'blur(14px) saturate(1.05)',
-        borderTop: '1px solid rgba(148, 163, 184, 0.22)',
-        boxShadow: '0 -6px 18px rgba(2, 6, 23, 0.14), inset 0 1px 0 rgba(255, 255, 255, 0.2)',
-        color: `${textColor} !important`,
+        ...(siteDarkChrome
+          ? siteDarkGlassSurfaceTop
+          : {
+              background:
+                'linear-gradient(145deg, rgba(255, 255, 255, 0.13) 0%, rgba(241, 245, 249, 0.1) 50%, rgba(255, 255, 255, 0.12) 100%) !important',
+              backdropFilter: 'blur(14px) saturate(1.05)',
+              WebkitBackdropFilter: 'blur(14px) saturate(1.05)',
+              borderTop: '1px solid rgba(148, 163, 184, 0.22)',
+              boxShadow: '0 -6px 18px rgba(2, 6, 23, 0.14), inset 0 1px 0 rgba(255, 255, 255, 0.2)',
+            }),
+        color: siteDarkChrome ? '#f4f4f5 !important' : `${textColor} !important`,
         padding: theme.spacing(4, 0, 2),
         ...(mobileBottomClearance && {
           pb: {

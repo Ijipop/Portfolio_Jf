@@ -129,7 +129,7 @@ export const GRADIENTS = {
   },
   // Overlay gradients pour les effets ::before
   overlays: {
-    darkRadial: 'radial-gradient(circle at 25% 25%, rgba(255, 107, 53, 0.05) 0%, transparent 50%), radial-gradient(circle at 75% 75%, rgba(255, 23, 68, 0.05) 0%, transparent 50%)',
+    darkRadial: 'radial-gradient(circle at 25% 25%, rgba(234, 88, 12, 0.08) 0%, transparent 50%), radial-gradient(circle at 75% 75%, rgba(251, 146, 60, 0.06) 0%, transparent 50%)',
     lightRadial: 'radial-gradient(circle at 20% 30%, rgba(59, 130, 246, 0.08) 0%, transparent 50%), radial-gradient(circle at 80% 70%, rgba(5, 150, 105, 0.06) 0%, transparent 50%)',
   },
 } as const
