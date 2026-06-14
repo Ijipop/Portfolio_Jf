@@ -16,7 +16,9 @@ import { useAdvancedTheme } from '@/contexts/AdvancedThemeContext'
 import { useLanguage } from '@/contexts/LanguageContext'
 import { usePresentationMode } from '@/contexts/PresentationModeContext'
 import { DESIGN_TOKENS } from '@/design-system/constants'
+import { SITE_DARK } from '@/design-system/siteDark'
 import { useTextColor } from '@/hooks/useTextColor'
+import { useSiteDarkChrome } from '@/hooks/useSiteDarkChrome'
 import { useThemeColors } from '@/hooks/useThemeColors'
 
 const METRICS = [
@@ -48,34 +50,41 @@ export default function AiConversionTeaser() {
   const { primary, secondary, accent } = useThemeColors()
   const { customTheme } = useAdvancedTheme()
   const { mode: presentationMode } = usePresentationMode()
+  const isSiteDark = useSiteDarkChrome()
 
   const outerBackground = useMemo(
     () =>
-      presentationMode === 'beige'
-        ? `linear-gradient(135deg, ${alpha(customTheme.bg, 0.88)} 0%, ${alpha(customTheme.bg2, 0.82)} 48%, ${alpha(primary, 0.1)} 100%)`
-        : `linear-gradient(135deg, ${alpha(customTheme.bg, 0.96)} 0%, ${alpha(customTheme.bg2, 0.92)} 45%, ${alpha(primary, 0.22)} 100%)`,
-    [presentationMode, customTheme.bg, customTheme.bg2, primary],
+      isSiteDark
+        ? `linear-gradient(135deg, ${SITE_DARK.surface} 0%, rgba(8, 8, 12, 0.92) 48%, ${alpha(primary, 0.14)} 100%)`
+        : presentationMode === 'beige'
+          ? `linear-gradient(135deg, ${alpha(customTheme.bg, 0.88)} 0%, ${alpha(customTheme.bg2, 0.82)} 48%, ${alpha(primary, 0.1)} 100%)`
+          : `linear-gradient(135deg, ${alpha(customTheme.bg, 0.96)} 0%, ${alpha(customTheme.bg2, 0.92)} 45%, ${alpha(primary, 0.22)} 100%)`,
+    [isSiteDark, presentationMode, customTheme.bg, customTheme.bg2, primary],
   )
 
   const videoFrameBackground = useMemo(
     () =>
-      presentationMode === 'beige'
-        ? alpha(customTheme.bg, 0.72)
-        : alpha(customTheme.bg2, 0.9),
-    [presentationMode, customTheme.bg, customTheme.bg2],
+      isSiteDark
+        ? alpha(SITE_DARK.surface, 0.85)
+        : presentationMode === 'beige'
+          ? alpha(customTheme.bg, 0.72)
+          : alpha(customTheme.bg2, 0.9),
+    [isSiteDark, presentationMode, customTheme.bg, customTheme.bg2],
   )
 
   const metricCardBackground = useMemo(
     () =>
-      presentationMode === 'beige'
-        ? `linear-gradient(145deg, ${alpha(customTheme.bg, 0.78)} 0%, ${alpha(customTheme.bg2, 0.72)} 55%, ${alpha(primary, 0.06)} 100%)`
-        : `linear-gradient(145deg, ${alpha(customTheme.bg, 0.92)} 0%, ${alpha(customTheme.bg2, 0.9)} 50%, ${alpha(primary, 0.16)} 100%)`,
-    [presentationMode, customTheme.bg, customTheme.bg2, primary],
+      isSiteDark
+        ? `linear-gradient(145deg, rgba(8, 8, 12, 0.88) 0%, ${SITE_DARK.surface} 55%, ${alpha(primary, 0.1)} 100%)`
+        : presentationMode === 'beige'
+          ? `linear-gradient(145deg, ${alpha(customTheme.bg, 0.78)} 0%, ${alpha(customTheme.bg2, 0.72)} 55%, ${alpha(primary, 0.06)} 100%)`
+          : `linear-gradient(145deg, ${alpha(customTheme.bg, 0.92)} 0%, ${alpha(customTheme.bg2, 0.9)} 50%, ${alpha(primary, 0.16)} 100%)`,
+    [isSiteDark, presentationMode, customTheme.bg, customTheme.bg2, primary],
   )
 
   const metricBorder = useMemo(
-    () => alpha(primary, presentationMode === 'beige' ? 0.2 : 0.32),
-    [presentationMode, primary],
+    () => alpha(primary, isSiteDark ? 0.28 : presentationMode === 'beige' ? 0.2 : 0.32),
+    [isSiteDark, presentationMode, primary],
   )
 
   return (
@@ -110,7 +119,7 @@ export default function AiConversionTeaser() {
             bottom: 0,
             height: 20,
             pointerEvents: 'none',
-            background: `linear-gradient(to bottom, transparent, ${alpha(customTheme.bg, 0.55)})`,
+            background: `linear-gradient(to bottom, transparent, ${alpha(isSiteDark ? SITE_DARK.bg : customTheme.bg, 0.55)})`,
           },
         }}
       >

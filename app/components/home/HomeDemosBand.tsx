@@ -4,7 +4,7 @@ import AutoAwesomeOutlinedIcon from '@mui/icons-material/AutoAwesomeOutlined'
 import ViewQuiltOutlinedIcon from '@mui/icons-material/ViewQuiltOutlined'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
-import { alpha, useTheme } from '@mui/material/styles'
+import { alpha } from '@mui/material/styles'
 import Link from 'next/link'
 import CTAButton from '@/components/shared/CTAButton'
 import ScrollReveal from '@/components/shared/ScrollReveal'
@@ -14,6 +14,11 @@ import {
 } from '@/components/shared/IjipopGlitchTitle'
 import { getCardSurfaceSx } from '@/components/shared/cardSurface'
 import { DESIGN_TOKENS } from '@/design-system/constants'
+import {
+  siteDarkSectionBandBackground,
+  siteDarkSectionBandHoverShadow,
+  siteDarkSectionBandShadow,
+} from '@/design-system/siteDarkSurfaces'
 import { useAdvancedTheme } from '@/contexts/AdvancedThemeContext'
 import { usePresentationMode } from '@/contexts/PresentationModeContext'
 import { useLanguage } from '@/contexts/LanguageContext'
@@ -28,11 +33,10 @@ const PROOF_BAND_MAX_WIDTH = 860
 export default function HomeDemosBand() {
   const { t } = useLanguage()
   const textColor = useTextColor()
-  const theme = useTheme()
   const { primary, secondary, accent } = useThemeColors()
   const { customTheme } = useAdvancedTheme()
   const { mode: presentationMode } = usePresentationMode()
-  const isDark = theme.palette.mode === 'dark'
+  const isSiteDark = useSiteDarkChrome()
 
   const accentGradient = useMemo(
     () =>
@@ -44,15 +48,13 @@ export default function HomeDemosBand() {
 
   const outerBackground = useMemo(
     () =>
-      isDark
-        ? `linear-gradient(145deg, ${alpha('#0f172a', 0.9)} 0%, ${alpha(secondary, 0.16)} 38%, ${alpha(primary, 0.12)} 100%)`
+      isSiteDark
+        ? siteDarkSectionBandBackground(primary, secondary)
         : presentationMode === 'beige'
           ? `linear-gradient(145deg, ${alpha('#fffefb', 0.98)} 0%, ${alpha(customTheme.bg2, 0.92)} 36%, ${alpha(secondary, 0.12)} 100%)`
           : `linear-gradient(145deg, ${alpha('#ffffff', 0.98)} 0%, ${alpha(customTheme.bg, 0.9)} 38%, ${alpha(secondary, 0.14)} 100%)`,
-    [isDark, presentationMode, customTheme.bg, customTheme.bg2, primary, secondary],
+    [isSiteDark, presentationMode, customTheme.bg, customTheme.bg2, primary, secondary],
   )
-
-  const isSiteDark = useSiteDarkChrome()
 
   const surfaceSx = getCardSurfaceSx({
     isTopologyRoute: false,
@@ -74,18 +76,18 @@ export default function HomeDemosBand() {
           p: { xs: 2.75, sm: 3.5 },
           pl: { xs: 2.75, sm: 3.75 },
           borderRadius: `${DESIGN_TOKENS.borderRadius.banner}px`,
-          border: `1px solid ${alpha(primary, isDark ? 0.34 : 0.24)}`,
+          border: `1px solid ${alpha(primary, isSiteDark ? 0.34 : 0.24)}`,
           background: outerBackground,
-          boxShadow: isDark
-            ? `0 22px 52px ${alpha('#000', 0.38)}, 0 0 0 1px ${alpha(secondary, 0.14)}, inset 0 1px 0 ${alpha('#fff', 0.08)}`
+          boxShadow: isSiteDark
+            ? siteDarkSectionBandShadow
             : `0 22px 48px ${alpha(secondary, 0.14)}, 0 0 0 1px ${alpha(primary, 0.08)}, inset 0 1px 0 ${alpha('#fff', 0.72)}`,
           overflow: 'hidden',
           transition: DESIGN_TOKENS.transitions.slow,
           '@media (hover: hover)': {
             '&:hover': {
               transform: 'translateY(-3px)',
-              boxShadow: isDark
-                ? `0 28px 58px ${alpha('#000', 0.42)}, 0 0 0 1px ${alpha(secondary, 0.22)}`
+              boxShadow: isSiteDark
+                ? siteDarkSectionBandHoverShadow
                 : `0 28px 54px ${alpha(secondary, 0.18)}, 0 0 0 1px ${alpha(primary, 0.12)}`,
             },
           },
@@ -93,8 +95,8 @@ export default function HomeDemosBand() {
             content: '""',
             position: 'absolute',
             inset: 0,
-            background: `radial-gradient(68% 85% at 0% 0%, ${alpha(secondary, isDark ? 0.2 : 0.12)} 0%, transparent 55%),
-              radial-gradient(58% 70% at 100% 100%, ${alpha(primary, isDark ? 0.18 : 0.1)} 0%, transparent 52%)`,
+            background: `radial-gradient(68% 85% at 0% 0%, ${alpha(secondary, isSiteDark ? 0.2 : 0.12)} 0%, transparent 55%),
+              radial-gradient(58% 70% at 100% 100%, ${alpha(primary, isSiteDark ? 0.18 : 0.1)} 0%, transparent 52%)`,
             pointerEvents: 'none',
           },
           ...surfaceSx,
@@ -149,8 +151,8 @@ export default function HomeDemosBand() {
                 py: 0.45,
                 borderRadius: 999,
                 border: `1px solid ${alpha(secondary, 0.3)}`,
-                bgcolor: alpha(secondary, isDark ? 0.16 : 0.1),
-                boxShadow: `inset 0 1px 0 ${alpha('#fff', isDark ? 0.1 : 0.45)}`,
+                bgcolor: alpha(secondary, isSiteDark ? 0.16 : 0.1),
+                boxShadow: `inset 0 1px 0 ${alpha('#fff', isSiteDark ? 0.1 : 0.45)}`,
               }}
             >
               <AutoAwesomeOutlinedIcon sx={{ fontSize: 15, color: secondary }} aria-hidden />

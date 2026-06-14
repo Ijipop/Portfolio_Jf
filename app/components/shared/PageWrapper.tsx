@@ -111,7 +111,7 @@ export default function PageWrapper({
         minHeight: '100vh',
         display: 'flex',
         flexDirection: 'column',
-        background: isTopologyRoute ? 'transparent' : (background || GRADIENTS.backgrounds.light),
+        background: isTopologyRoute || siteDarkChrome ? 'transparent' : (background || GRADIENTS.backgrounds.light),
         position: 'relative',
         overflow: isTopologyRoute ? (overflow ?? 'visible') : (overflow || 'hidden'),
         overflowX: overflowX,
