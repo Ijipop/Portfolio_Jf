@@ -50,7 +50,6 @@ interface AdvancedThemeContextType {
 const AdvancedThemeContext = createContext<AdvancedThemeContextType | undefined>(undefined)
 
 export function AdvancedThemeProvider({ children }: { children: React.ReactNode }) {
-  const mode: PaletteMode = 'light' // Mode fixe à light
   const pathname = usePathname()
   const [isMounted, setIsMounted] = useState(false)
   const hydrationSafePathname = isMounted ? pathname : null
@@ -70,7 +69,7 @@ export function AdvancedThemeProvider({ children }: { children: React.ReactNode 
   const isTimelendr = isTimelendrRoute(hydrationSafePathname)
   const activeThemeName = useMemo((): ThemeName => {
     if (isTimelendr) return BEIGE_LIGHT_THEME
-    if (presentationHydrated && isBeigePresentation) {
+    if (!presentationHydrated || isBeigePresentation) {
       return beigeDark ? BEIGE_DARK_THEME : BEIGE_LIGHT_THEME
     }
     return themeName
@@ -156,7 +155,9 @@ export function AdvancedThemeProvider({ children }: { children: React.ReactNode 
   // Créer le thème MUI avec les couleurs personnalisées
   // Utiliser useMemo pour recréer le thème quand customTheme change
   const isBeigeLight = isBeigePresentation && !beigeDark && !isTimelendr
-  const isSiteDark = isBeigePresentation && beigeDark && !isTimelendr
+  /** Refonte V2 sombre — aligné sur useSiteDarkChrome (beigeDark, hors Timelendr). */
+  const isSiteDark = beigeDark && !isTimelendr
+  const mode: PaletteMode = isSiteDark ? 'dark' : 'light'
   const showBeigeAmbientBg =
     isBeigeLight && !isTopologyRoute && graphicsMode === 'full'
 

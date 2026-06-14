@@ -4,7 +4,7 @@ import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline'
 import VerifiedOutlinedIcon from '@mui/icons-material/VerifiedOutlined'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
-import { alpha, useTheme } from '@mui/material/styles'
+import { alpha } from '@mui/material/styles'
 import Link from 'next/link'
 import { useMemo } from 'react'
 import CTAButton from '@/components/shared/CTAButton'
@@ -15,6 +15,11 @@ import {
 } from '@/components/shared/IjipopGlitchTitle'
 import { getCardSurfaceSx } from '@/components/shared/cardSurface'
 import { DESIGN_TOKENS } from '@/design-system/constants'
+import {
+  siteDarkSectionBandBackground,
+  siteDarkSectionBandHoverShadow,
+  siteDarkSectionBandShadow,
+} from '@/design-system/siteDarkSurfaces'
 import { useAdvancedTheme } from '@/contexts/AdvancedThemeContext'
 import { usePresentationMode } from '@/contexts/PresentationModeContext'
 import { useTextColor } from '@/hooks/useTextColor'
@@ -44,11 +49,10 @@ export default function ClientProofSection({
   proofOnly = false,
 }: ClientProofSectionProps) {
   const textColor = useTextColor()
-  const theme = useTheme()
   const { primary, secondary, accent } = useThemeColors()
   const { customTheme } = useAdvancedTheme()
   const { mode: presentationMode } = usePresentationMode()
-  const isDark = theme.palette.mode === 'dark'
+  const isSiteDark = useSiteDarkChrome()
 
   const accentGradient = useMemo(
     () =>
@@ -60,15 +64,13 @@ export default function ClientProofSection({
 
   const outerBackground = useMemo(
     () =>
-      isDark
-        ? `linear-gradient(145deg, ${alpha('#0f172a', 0.92)} 0%, ${alpha(primary, 0.14)} 42%, ${alpha(secondary, 0.1)} 100%)`
+      isSiteDark
+        ? siteDarkSectionBandBackground(primary, secondary)
         : presentationMode === 'beige'
           ? `linear-gradient(145deg, ${alpha('#fffefb', 0.98)} 0%, ${alpha(customTheme.bg, 0.94)} 38%, ${alpha(primary, 0.1)} 100%)`
           : `linear-gradient(145deg, ${alpha('#ffffff', 0.98)} 0%, ${alpha(customTheme.bg2, 0.9)} 40%, ${alpha(primary, 0.14)} 100%)`,
-    [isDark, presentationMode, customTheme.bg, customTheme.bg2, primary, secondary],
+    [isSiteDark, presentationMode, customTheme.bg, customTheme.bg2, primary, secondary],
   )
-
-  const isSiteDark = useSiteDarkChrome()
 
   const surfaceSx = getCardSurfaceSx({
     isTopologyRoute: false,
@@ -90,18 +92,18 @@ export default function ClientProofSection({
           p: { xs: 2.75, sm: 3.5 },
           pl: { xs: 2.75, sm: 3.75 },
           borderRadius: `${DESIGN_TOKENS.borderRadius.banner}px`,
-          border: `1px solid ${alpha(primary, isDark ? 0.34 : 0.26)}`,
+          border: `1px solid ${alpha(primary, isSiteDark ? 0.34 : 0.26)}`,
           background: outerBackground,
-          boxShadow: isDark
-            ? `0 22px 52px ${alpha('#000', 0.38)}, 0 0 0 1px ${alpha(primary, 0.14)}, inset 0 1px 0 ${alpha('#fff', 0.08)}`
+          boxShadow: isSiteDark
+            ? siteDarkSectionBandShadow
             : `0 22px 48px ${alpha(primary, 0.16)}, 0 0 0 1px ${alpha(primary, 0.08)}, inset 0 1px 0 ${alpha('#fff', 0.72)}`,
           overflow: 'hidden',
           transition: DESIGN_TOKENS.transitions.slow,
           '@media (hover: hover)': {
             '&:hover': {
               transform: 'translateY(-3px)',
-              boxShadow: isDark
-                ? `0 28px 58px ${alpha('#000', 0.42)}, 0 0 0 1px ${alpha(primary, 0.2)}`
+              boxShadow: isSiteDark
+                ? siteDarkSectionBandHoverShadow
                 : `0 28px 54px ${alpha(primary, 0.2)}, 0 0 0 1px ${alpha(primary, 0.12)}`,
             },
           },
@@ -109,7 +111,7 @@ export default function ClientProofSection({
             content: '""',
             position: 'absolute',
             inset: 0,
-            background: `radial-gradient(72% 90% at 100% 0%, ${alpha(primary, isDark ? 0.22 : 0.14)} 0%, transparent 58%)`,
+            background: `radial-gradient(72% 90% at 100% 0%, ${alpha(primary, isSiteDark ? 0.22 : 0.14)} 0%, transparent 58%)`,
             pointerEvents: 'none',
           },
           ...surfaceSx,
@@ -163,8 +165,8 @@ export default function ClientProofSection({
                   py: 0.45,
                   borderRadius: 999,
                   border: `1px solid ${alpha(primary, 0.28)}`,
-                  bgcolor: alpha(primary, isDark ? 0.16 : 0.09),
-                  boxShadow: `inset 0 1px 0 ${alpha('#fff', isDark ? 0.1 : 0.45)}`,
+                  bgcolor: alpha(primary, isSiteDark ? 0.16 : 0.09),
+                  boxShadow: `inset 0 1px 0 ${alpha('#fff', isSiteDark ? 0.1 : 0.45)}`,
                 }}
               >
                 <VerifiedOutlinedIcon sx={{ fontSize: 15, color: primary }} aria-hidden />

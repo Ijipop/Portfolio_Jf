@@ -4,7 +4,6 @@ import Box from '@mui/material/Box'
 import { usePathname } from 'next/navigation'
 import { SITE_DARK, siteDarkPageGradient } from '@/design-system/siteDark'
 import { useBeigeDark } from '@/hooks/useBeigeDark'
-import { usePresentationMode } from '@/contexts/PresentationModeContext'
 import { isTimelendrRoute } from '@/utils/isTimelendrRoute'
 
 type SiteDarkBackdropProps = {
@@ -14,11 +13,10 @@ type SiteDarkBackdropProps = {
 
 export default function SiteDarkBackdrop({ force = false }: SiteDarkBackdropProps) {
   const pathname = usePathname()
-  const { mode: presentationMode } = usePresentationMode()
   const { beigeDark } = useBeigeDark()
 
   if (isTimelendrRoute(pathname)) return null
-  const show = force || (presentationMode === 'beige' && beigeDark)
+  const show = force || beigeDark
   if (!show) return null
 
   return (
