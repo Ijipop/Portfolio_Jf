@@ -7,6 +7,8 @@ import { usePathname } from 'next/navigation'
 import { GRADIENTS } from '@/design-system/constants'
 import { useAdvancedTheme } from '@/contexts/AdvancedThemeContext'
 import { usePresentationMode } from '@/contexts/PresentationModeContext'
+import { useSiteDarkChrome } from '@/hooks/useSiteDarkChrome'
+import { SITE_DARK } from '@/design-system/siteDark'
 import { shouldShowTopology } from '@/utils/topologyRoutes'
 
 interface PageWrapperProps {
@@ -47,6 +49,7 @@ export default function PageWrapper({
   const { customTheme } = useAdvancedTheme()
   const { mode: presentationMode } = usePresentationMode()
   const isBeigePresentation = presentationMode === 'beige'
+  const siteDarkChrome = useSiteDarkChrome()
 
   const getInitialBackground = () => {
     switch (backgroundVariant) {
@@ -95,7 +98,11 @@ export default function PageWrapper({
   const getOverlay = () => {
     if (!showRadialOverlay) return 'none'
 
-    return overlayVariant === 'dark' ? GRADIENTS.overlays.darkRadial : GRADIENTS.overlays.lightRadial
+    return overlayVariant === 'dark' || siteDarkChrome
+      ? siteDarkChrome
+        ? `radial-gradient(ellipse at 50% -5%, ${SITE_DARK.brandGlowStrong} 0%, transparent 55%)`
+        : GRADIENTS.overlays.darkRadial
+      : GRADIENTS.overlays.lightRadial
   }
 
   return (

@@ -6,7 +6,7 @@ import Button from '@mui/material/Button'
 import { motion, AnimatePresence } from 'framer-motion'
 import { DESIGN_TOKENS } from '@/design-system/constants'
 import { useThemeColors } from '../hooks/useThemeColors'
-import { useLanguage } from '../contexts/LanguageContext'
+import { useLanguage } from '@/contexts/LanguageContext'
 import { useState, useEffect, useCallback } from 'react'
 
 const INTRO_DURATION_MS = 2800

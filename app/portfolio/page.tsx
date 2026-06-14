@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import { cookies } from 'next/headers'
-import HomeClient from '../HomeClient'
+import HomeClient from '@/components/home/HomeClient'
 
 const INTRO_COOKIE_KEY = 'portfolio-intro-seen'
 

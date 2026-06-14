@@ -4,6 +4,8 @@ import Box from '@mui/material/Box'
 import Link from 'next/link'
 import CTAButton from './CTAButton'
 import { DESIGN_TOKENS } from '../../design-system/constants'
+import { useSiteDarkChrome } from '@/hooks/useSiteDarkChrome'
+import { SITE_DARK } from '@/design-system/siteDark'
 
 interface StickyCTAProps {
   text?: string
@@ -19,6 +21,7 @@ export default function StickyCTA({
   href = '/portfolio/contact',
   embedded = false,
 }: StickyCTAProps) {
+  const siteDarkChrome = useSiteDarkChrome()
   return (
     <Box
       sx={{
@@ -27,17 +30,16 @@ export default function StickyCTA({
         left: embedded ? { xs: 'auto', md: 'auto' } : { xs: 0, md: 'auto' },
         right: embedded ? { xs: 'auto', md: 24 } : { xs: 0, md: 24 },
         zIndex: DESIGN_TOKENS.zIndex.stickyBar,
-        background: (theme) => theme.palette.mode === 'dark'
-          ? 'linear-gradient(to top, rgba(26, 26, 26, 0.95) 0%, rgba(26, 26, 26, 0.9) 100%)'
+        background: siteDarkChrome
+          ? `linear-gradient(to top, ${SITE_DARK.appBarGlass} 0%, rgba(8, 8, 12, 0.95) 100%)`
           : 'linear-gradient(to top, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.9) 100%)',
         backdropFilter: 'blur(10px)',
-        borderTop: (theme) => theme.palette.mode === 'dark'
-          ? '1px solid rgba(255, 255, 255, 0.1)'
-          : '1px solid rgba(0, 0, 0, 0.1)',
+        borderTop: siteDarkChrome ? `1px solid ${SITE_DARK.border}` : '1px solid rgba(0, 0, 0, 0.1)',
         borderRadius: { xs: 0, md: DESIGN_TOKENS.borderRadius.large },
-        border: { xs: 'none', md: (theme) => theme.palette.mode === 'dark'
-          ? '1px solid rgba(255, 255, 255, 0.12)'
-          : '1px solid rgba(0, 0, 0, 0.1)' },
+        border: {
+          xs: 'none',
+          md: siteDarkChrome ? `1px solid ${SITE_DARK.border}` : '1px solid rgba(0, 0, 0, 0.1)',
+        },
         padding: { xs: `${DESIGN_TOKENS.spacing.sm}px ${DESIGN_TOKENS.spacing.md}px`, md: DESIGN_TOKENS.spacing.md },
         boxShadow: '0 -4px 20px rgba(0,0,0,0.1)',
         display: 'block',

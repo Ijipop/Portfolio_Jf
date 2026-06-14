@@ -7,7 +7,7 @@ import OfflineBoltOutlinedIcon from '@mui/icons-material/OfflineBoltOutlined'
 import WindowOutlinedIcon from '@mui/icons-material/WindowOutlined'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
-import { alpha, useTheme } from '@mui/material/styles'
+import { alpha } from '@mui/material/styles'
 import Link from 'next/link'
 import { useMemo } from 'react'
 import CTAButton from '@/components/shared/CTAButton'
@@ -20,6 +20,7 @@ import { useLanguage } from '@/contexts/LanguageContext'
 import { useTimelendrLatestDownloads } from '@/hooks/useTimelendrLatestDownloads'
 import { useTextColor } from '@/hooks/useTextColor'
 import { useThemeColors } from '@/hooks/useThemeColors'
+import { useSiteDarkChrome } from '@/hooks/useSiteDarkChrome'
 
 const BAND_MAX_WIDTH = 860
 const TIMELENDR_TEAL = '#0d9488'
@@ -29,27 +30,27 @@ const FALLBACK_DOWNLOADS_HREF = '/logiciel/timelendr#timelendr-downloads'
 export default function HomeTimelendrBand() {
   const { t } = useLanguage()
   const textColor = useTextColor()
-  const theme = useTheme()
   const { primary, secondary } = useThemeColors()
   const { customTheme } = useAdvancedTheme()
   const { mode: presentationMode } = usePresentationMode()
   const { windowsUrl, macosUrl } = useTimelendrLatestDownloads()
-  const isDark = theme.palette.mode === 'dark'
+  const siteDarkChrome = useSiteDarkChrome()
 
   const betaContactHref = `/portfolio/contact?subject=${encodeURIComponent(t('home.timelendrBandBetaSubject'))}`
 
   const outerBackground = useMemo(
     () =>
-      isDark
+      siteDarkChrome
         ? `linear-gradient(145deg, ${alpha('#0f172a', 0.94)} 0%, ${alpha(TIMELENDR_TEAL, 0.22)} 42%, ${alpha(primary, 0.1)} 100%)`
         : presentationMode === 'beige'
           ? `linear-gradient(145deg, ${alpha('#fffefb', 0.98)} 0%, ${alpha(customTheme.bg2, 0.9)} 40%, ${alpha(TIMELENDR_TEAL, 0.1)} 100%)`
           : `linear-gradient(145deg, ${alpha('#ffffff', 0.98)} 0%, ${alpha(customTheme.bg, 0.92)} 38%, ${alpha(TIMELENDR_TEAL, 0.12)} 100%)`,
-    [isDark, presentationMode, customTheme.bg, customTheme.bg2, primary],
+    [siteDarkChrome, presentationMode, customTheme.bg, customTheme.bg2, primary],
   )
 
   const surfaceSx = getCardSurfaceSx({
     isTopologyRoute: false,
+    isSiteDark: siteDarkChrome,
     variant: 'elevated',
     level: 'balanced',
     interactive: false,
@@ -76,10 +77,10 @@ export default function HomeTimelendrBand() {
           maxWidth: BAND_MAX_WIDTH,
           p: { xs: 2.75, sm: 3.5, md: 4 },
           borderRadius: `${DESIGN_TOKENS.borderRadius.banner}px`,
-          border: `1px solid ${alpha(TIMELENDR_TEAL, isDark ? 0.38 : 0.28)}`,
+          border: `1px solid ${alpha(TIMELENDR_TEAL, siteDarkChrome ? 0.38 : 0.28)}`,
           background: outerBackground,
-          boxShadow: isDark
-            ? `0 22px 52px ${alpha('#000', 0.38)}, inset 0 1px 0 ${alpha('#fff', 0.08)}`
+          boxShadow: siteDarkChrome
+            ? `0 22px 52px ${alpha('#000', 0.38)}, inset 0 1px 0 ${alpha('#fff', 0.06)}`
             : `0 22px 48px ${alpha(secondary, 0.12)}, inset 0 1px 0 ${alpha('#fff', 0.75)}`,
           overflow: 'hidden',
           ...surfaceSx,
@@ -233,13 +234,27 @@ export default function HomeTimelendrBand() {
 
           <Typography
             component="p"
-            sx={{ mt: 1.5, fontSize: '0.8rem', opacity: 0.55 }}
+            sx={{ mt: 1.5, fontSize: '0.8rem' }}
           >
             <Link
               href="/logiciel/timelendr"
-              style={{ color: 'inherit', fontWeight: 700, textDecoration: 'underline', textUnderlineOffset: 3 }}
+              style={{ textDecoration: 'none' }}
             >
-              {t('home.timelendrBandDiscover')}
+              <Box
+                component="span"
+                sx={{
+                  color: '#2dd4bf',
+                  fontWeight: 700,
+                  textDecoration: 'underline',
+                  textUnderlineOffset: 4,
+                  transition: 'color 0.2s ease',
+                  '&:hover': {
+                    color: '#99f6e4',
+                  },
+                }}
+              >
+                {t('home.timelendrBandDiscover')}
+              </Box>
             </Link>
           </Typography>
         </Box>

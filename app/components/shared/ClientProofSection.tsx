@@ -6,6 +6,7 @@ import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import { alpha, useTheme } from '@mui/material/styles'
 import Link from 'next/link'
+import { useMemo } from 'react'
 import CTAButton from '@/components/shared/CTAButton'
 import ScrollReveal from '@/components/shared/ScrollReveal'
 import {
@@ -18,7 +19,7 @@ import { useAdvancedTheme } from '@/contexts/AdvancedThemeContext'
 import { usePresentationMode } from '@/contexts/PresentationModeContext'
 import { useTextColor } from '@/hooks/useTextColor'
 import { useThemeColors } from '@/hooks/useThemeColors'
-import { useMemo } from 'react'
+import { useSiteDarkChrome } from '@/hooks/useSiteDarkChrome'
 
 type ClientProofSectionProps = {
   kicker?: string
@@ -67,8 +68,11 @@ export default function ClientProofSection({
     [isDark, presentationMode, customTheme.bg, customTheme.bg2, primary, secondary],
   )
 
+  const isSiteDark = useSiteDarkChrome()
+
   const surfaceSx = getCardSurfaceSx({
     isTopologyRoute: false,
+    isSiteDark,
     variant: 'elevated',
     level: 'balanced',
     interactive: true,

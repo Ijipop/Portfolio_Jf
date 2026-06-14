@@ -17,6 +17,7 @@ import { DESIGN_TOKENS } from '@/design-system/constants'
 import { useAdvancedTheme } from '@/contexts/AdvancedThemeContext'
 import { usePresentationMode } from '@/contexts/PresentationModeContext'
 import { useLanguage } from '@/contexts/LanguageContext'
+import { useSiteDarkChrome } from '@/hooks/useSiteDarkChrome'
 import { useTextColor } from '@/hooks/useTextColor'
 import { useThemeColors } from '@/hooks/useThemeColors'
 import { useMemo } from 'react'
@@ -51,8 +52,11 @@ export default function HomeDemosBand() {
     [isDark, presentationMode, customTheme.bg, customTheme.bg2, primary, secondary],
   )
 
+  const isSiteDark = useSiteDarkChrome()
+
   const surfaceSx = getCardSurfaceSx({
     isTopologyRoute: false,
+    isSiteDark,
     variant: 'elevated',
     level: 'balanced',
     interactive: true,

@@ -10,11 +10,15 @@ import IconButton from '@mui/material/IconButton'
 import Link from 'next/link'
 import React from 'react'
 import { NavRoute, NavRouteId } from '@/config/navRoutes'
+import { SITE_DARK } from '@/design-system/siteDark'
+
+type NavAppearance = 'legacy' | 'darkGlass'
 
 interface NavMobileProps {
   routes: NavRoute[]
   pathname: string
   onNavigate: (path: string) => void
+  appearance?: NavAppearance
 }
 
 function renderIcon(id: NavRouteId) {
@@ -32,7 +36,8 @@ function renderIcon(id: NavRouteId) {
   }
 }
 
-export default function NavMobile({ routes, pathname, onNavigate }: NavMobileProps) {
+export default function NavMobile({ routes, pathname, onNavigate, appearance = 'legacy' }: NavMobileProps) {
+  const darkGlass = appearance === 'darkGlass'
   return (
     <Box
       sx={{
@@ -55,15 +60,27 @@ export default function NavMobile({ routes, pathname, onNavigate }: NavMobilePro
               component="span"
               aria-label={route.ariaLabel}
               sx={{
-                color: active ? 'white' : 'rgba(255, 255, 255, 0.7)',
-                backgroundColor: active ? 'rgba(255, 255, 255, 0.15)' : 'transparent',
+                color: darkGlass
+                  ? active
+                    ? SITE_DARK.text
+                    : SITE_DARK.textSecondary
+                  : active
+                    ? 'white'
+                    : 'rgba(255, 255, 255, 0.7)',
+                backgroundColor: darkGlass
+                  ? active
+                    ? SITE_DARK.surface
+                    : 'transparent'
+                  : active
+                    ? 'rgba(255, 255, 255, 0.15)'
+                    : 'transparent',
                 minWidth: 44,
                 minHeight: 44,
                 padding: 0.75,
                 flexShrink: 0,
                 '&:hover': {
-                  color: 'white',
-                  backgroundColor: 'rgba(255, 255, 255, 0.15)',
+                  color: darkGlass ? SITE_DARK.text : 'white',
+                  backgroundColor: darkGlass ? SITE_DARK.surfaceHover : 'rgba(255, 255, 255, 0.15)',
                 },
               }}
             >

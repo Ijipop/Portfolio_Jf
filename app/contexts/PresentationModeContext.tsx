@@ -8,6 +8,7 @@ import React, {
   useMemo,
   useState,
 } from 'react'
+import { PRESENTATION_DEV_MODE_ENABLED } from '@/utils/vantaFeatures'
 
 export type PresentationMode = 'beige' | 'dev'
 
@@ -28,8 +29,10 @@ export function PresentationModeProvider({ children }: { children: React.ReactNo
   useEffect(() => {
     try {
       const raw = localStorage.getItem(STORAGE_KEY)
-      if (raw === 'dev' || raw === 'beige') {
+      if (raw === 'beige' || (PRESENTATION_DEV_MODE_ENABLED && raw === 'dev')) {
         setModeState(raw)
+      } else if (raw === 'dev') {
+        localStorage.setItem(STORAGE_KEY, 'beige')
       }
     } finally {
       setHydrated(true)
@@ -37,9 +40,10 @@ export function PresentationModeProvider({ children }: { children: React.ReactNo
   }, [])
 
   const setMode = useCallback((next: PresentationMode) => {
-    setModeState(next)
+    const resolved = PRESENTATION_DEV_MODE_ENABLED || next === 'beige' ? next : 'beige'
+    setModeState(resolved)
     try {
-      localStorage.setItem(STORAGE_KEY, next)
+      localStorage.setItem(STORAGE_KEY, resolved)
     } catch {
       /* ignore quota */
     }

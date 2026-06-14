@@ -9,6 +9,9 @@ import { THEMES } from '../../design-system/themes'
 import { useAdvancedTheme } from '../../contexts/AdvancedThemeContext'
 import { useThemeColors } from '../../hooks/useThemeColors'
 import { useTextColor } from '../../hooks/useTextColor'
+import { useSiteDarkChrome } from '@/hooks/useSiteDarkChrome'
+import { siteDarkGlassSurface } from '@/design-system/siteDarkSurfaces'
+import { SITE_DARK } from '@/design-system/siteDark'
 import { alpha, useTheme } from '@mui/material/styles'
 
 // Fonction utilitaire pour convertir hex en rgba
@@ -37,6 +40,7 @@ const HeaderSection = forwardRef<HTMLDivElement, HeaderSectionProps>(function He
   const textColor = useTextColor()
   const theme = useTheme()
   const { customTheme } = useAdvancedTheme()
+  const siteDarkChrome = useSiteDarkChrome()
   const [headerBackground, setHeaderBackground] = useState<string>(
     `linear-gradient(135deg, ${customTheme.bg} 0%, ${customTheme.bg2} 25%, ${customTheme.bg} 50%, ${customTheme.bg2} 75%, ${customTheme.bg} 100%)`
   )
@@ -76,7 +80,11 @@ const HeaderSection = forwardRef<HTMLDivElement, HeaderSectionProps>(function He
     }
   }, [customTheme])
 
-  const fullViewportSurfaceBg = `radial-gradient(90% 70% at 50% -12%, ${alpha(primary, theme.palette.mode === 'dark' ? 0.28 : 0.2)} 0%, transparent 58%),
+  const fullViewportSurfaceBg = siteDarkChrome
+    ? `radial-gradient(90% 70% at 50% -12%, ${SITE_DARK.brandGlowStrong} 0%, transparent 58%),
+    radial-gradient(64% 56% at 12% 24%, ${SITE_DARK.brandGlow} 0%, transparent 52%),
+    linear-gradient(145deg, ${SITE_DARK.surface} 0%, rgba(8, 8, 12, 0.92) 52%, ${SITE_DARK.surface} 100%)`
+    : `radial-gradient(90% 70% at 50% -12%, ${alpha(primary, theme.palette.mode === 'dark' ? 0.28 : 0.2)} 0%, transparent 58%),
     radial-gradient(64% 56% at 12% 24%, ${alpha(accent, theme.palette.mode === 'dark' ? 0.2 : 0.14)} 0%, transparent 52%),
     radial-gradient(58% 52% at 88% 30%, ${alpha(secondary, theme.palette.mode === 'dark' ? 0.22 : 0.16)} 0%, transparent 54%),
     linear-gradient(145deg, ${alpha('#ffffff', theme.palette.mode === 'dark' ? 0.09 : 0.22)} 0%, ${alpha('#f8fafc', theme.palette.mode === 'dark' ? 0.04 : 0.12)} 52%, ${alpha('#ffffff', theme.palette.mode === 'dark' ? 0.08 : 0.18)} 100%)`
@@ -95,10 +103,15 @@ const HeaderSection = forwardRef<HTMLDivElement, HeaderSectionProps>(function He
       sx={{
         background: fullViewport
           ? fullViewportSurfaceBg
-          : 'linear-gradient(145deg, rgba(255, 255, 255, 0.13) 0%, rgba(241, 245, 249, 0.1) 50%, rgba(255, 255, 255, 0.12) 100%)',
+          : siteDarkChrome
+            ? siteDarkGlassSurface.background
+            : 'linear-gradient(145deg, rgba(255, 255, 255, 0.13) 0%, rgba(241, 245, 249, 0.1) 50%, rgba(255, 255, 255, 0.12) 100%)',
         backdropFilter: 'blur(18px) saturate(1.18)',
         WebkitBackdropFilter: 'blur(18px) saturate(1.18)',
-        borderBottom: `1px solid ${alpha(primary, fullViewport ? 0.26 : 0.18)}`,
+        ...(siteDarkChrome && !fullViewport ? siteDarkGlassSurface : {}),
+        borderBottom: siteDarkChrome
+          ? `1px solid ${SITE_DARK.border}`
+          : `1px solid ${alpha(primary, fullViewport ? 0.26 : 0.18)}`,
         boxShadow: fullViewport
           ? `0 18px 70px ${alpha(primary, 0.18)}, inset 0 1px 0 ${alpha('#ffffff', 0.26)}`
           : '0 6px 18px rgba(2, 6, 23, 0.14), inset 0 1px 0 rgba(255, 255, 255, 0.2)',

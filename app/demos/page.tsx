@@ -1,12 +1,8 @@
 import Link from 'next/link'
-import { THEMES } from '@/design-system/themes'
-import { getBeigePresentationTopologyBackground } from '@/utils/syncPortfolioThemeToDocument'
 import DemosAiVideoShowcase from './DemosAiVideoShowcase'
 import DemosIndexAnimatedGrid from './DemosIndexAnimatedGrid'
 import DemosSeoCta from './DemosSeoCta'
 import styles from './DemosIndex.module.css'
-
-const hubBackground = getBeigePresentationTopologyBackground(THEMES.latte)
 
 const demos = [
   {
@@ -68,7 +64,7 @@ export default function DemosIndexPage() {
   }))
 
   return (
-    <div className={styles.page} style={{ background: hubBackground }}>
+    <div className={styles.page}>
       <div className={styles.inner}>
         <span className={styles.kicker}>Exemples de styles</span>
         <h1 className={styles.title}>Huit directions créatives pour votre prochain site</h1>

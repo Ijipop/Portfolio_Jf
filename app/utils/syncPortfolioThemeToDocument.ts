@@ -1,4 +1,5 @@
 import { THEMES, type ThemeName } from '@/design-system/themes'
+import { SITE_DARK, siteDarkPageGradient, siteDarkTopologyBackground } from '@/design-system/siteDark'
 import { getImageUrl } from '@/lib/getImageUrl'
 
 /** Image de fond par défaut du mode présentation « Site » (`beige`, servie depuis /public). */
@@ -49,6 +50,14 @@ export function getBeigePresentationTopologyBackground(
 }
 
 function getCardColorsForTheme(theme: (typeof THEMES)[ThemeName], name: ThemeName) {
+  if (name === 'siteDark') {
+    return {
+      primary: theme.primary,
+      secondary: theme.secondary,
+      background: `linear-gradient(145deg, ${SITE_DARK.surface} 0%, rgba(8, 8, 12, 0.92) 100%)`,
+      cardGradient: `linear-gradient(145deg, ${SITE_DARK.brandGlow} 0%, rgba(255,255,255,0.03) 50%, ${SITE_DARK.brandGlow} 100%)`,
+    }
+  }
   if (name === 'default' || name === 'latte') {
     return {
       primary: theme.primary,
@@ -99,11 +108,29 @@ export function syncPortfolioThemeToDocument(
   root.style.setProperty('--card-overlay-opacity', isLightSurface ? '0.14' : '0.3')
   root.style.setProperty('--card-decor-opacity', isLightSurface ? '0.35' : '0.6')
 
+  if (name === 'siteDark') {
+    root.classList.add('dark')
+    root.style.setProperty('--background', SITE_DARK.bg)
+    root.style.setProperty('--foreground', SITE_DARK.text)
+    root.style.setProperty('--card', SITE_DARK.bgElevated)
+    root.style.setProperty('--card-foreground', SITE_DARK.text)
+    root.style.setProperty('--muted-foreground', SITE_DARK.textSecondary)
+    root.style.setProperty('--border', SITE_DARK.border)
+    root.style.setProperty('--site-surface', SITE_DARK.surface)
+    root.style.setProperty('--site-border', SITE_DARK.border)
+    root.style.setProperty('--site-text', SITE_DARK.text)
+    root.style.setProperty('--site-text-secondary', SITE_DARK.textSecondary)
+  } else {
+    root.classList.remove('dark')
+  }
+
   const grad = `linear-gradient(135deg, ${theme.bg} 0%, ${theme.bg2} 25%, ${theme.bg} 50%, ${theme.bg2} 75%, ${theme.bg} 100%)`
   const pageBg =
     options?.beigePresentation === true && options?.beigeDark !== true
       ? getBeigePresentationPageBackground(theme, options.beigePresentationBgUrl)
-      : grad
+      : name === 'siteDark'
+        ? siteDarkPageGradient()
+        : grad
   document.body.style.setProperty('background', pageBg, 'important')
   document.documentElement.style.setProperty('background', pageBg, 'important')
 }

@@ -55,13 +55,17 @@
 :root {
   /**
    * Premier paint (HTML statique / avant syncPortfolioThemeToDocument).
-   * Aligné sur THEMES.latte + SSR_THEME_NAME pour éviter le flash bleu/vert (#3b82f6 / #059669).
+   * Aligné sur THEMES.siteDark — mode Site sombre par défaut.
    */
-  --primary-color: #3d5266;
-  --secondary-color: #6f655c;
-  --accent-color: #5f7d8e;
-  --theme-bg: #f7f3eb;
-  --theme-bg2: #efe8dc;
+  --primary-color: #ea580c;
+  --secondary-color: #c2410c;
+  --accent-color: #fb923c;
+  --theme-bg: #08080c;
+  --theme-bg2: #0f0f14;
+  --site-surface: rgba(255, 255, 255, 0.04);
+  --site-border: rgba(255, 255, 255, 0.08);
+  --site-text: #f4f4f5;
+  --site-text-secondary: #a1a1aa;
   --app-bar-height: 64px;
 
   /* shadcn / Tailwind tokens (composants ui/) */

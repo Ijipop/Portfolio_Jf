@@ -10,9 +10,12 @@ import { useBeigeDark } from '@/hooks/useBeigeDark'
 import { useBeigePresentationBg } from '@/contexts/BeigePresentationBgContext'
 import { useGraphicsMode } from '@/contexts/GraphicsModeContext'
 import { usePresentationMode } from '@/contexts/PresentationModeContext'
+import { siteDarkTopologyBackground } from '@/design-system/siteDark'
 import { shouldShowTopology } from '@/utils/topologyRoutes'
+import { isTimelendrRoute } from '@/utils/isTimelendrRoute'
 import { getBeigePresentationTopologyBackground } from '@/utils/syncPortfolioThemeToDocument'
 import { VANTA_PRELOAD_SOURCES } from '@/utils/vantaAssets'
+import { VANTA_NET_ENABLED } from '@/utils/vantaFeatures'
 import { preloadExternalScripts } from '@/utils/vantaScriptLoader'
 import { deferUntilIdle } from '@/utils/deferUntilIdle'
 
@@ -43,11 +46,13 @@ export default function FullPageTopologyWrapper({ children }: FullPageTopologyWr
   const { beigeDark } = useBeigeDark()
   const prefersReducedMotion = useMediaQuery('(prefers-reduced-motion: reduce)', { noSsr: true })
   /** En « light » on coupe Vanta ; en mode présentation Créa (dev) on garde Vanta NET sauf si reduced-motion. */
-  const creaWantsVanta = presentationMode === 'dev' && !prefersReducedMotion
+  const creaWantsVanta =
+    VANTA_NET_ENABLED && presentationMode === 'dev' && !prefersReducedMotion
   const useLightFallback = show && graphicsMode === 'light' && !creaWantsVanta
-  const useBeigeImageBackground = presentationMode === 'beige' && !beigeDark
-  const useBeigeSunsetBackground = presentationMode === 'beige' && beigeDark
-  const useGradientOnly = useLightFallback || useBeigeImageBackground || useBeigeSunsetBackground
+  const useBeigeImageBackground = (presentationMode === 'beige' && !beigeDark) || isTimelendrRoute(hydrationSafePathname)
+  const useBeigeSunsetBackground = presentationMode === 'beige' && beigeDark && !isTimelendrRoute(hydrationSafePathname)
+  const useGradientOnly =
+    !VANTA_NET_ENABLED || useLightFallback || useBeigeImageBackground || useBeigeSunsetBackground
 
   useEffect(() => {
     setIsMounted(true)
@@ -78,7 +83,13 @@ export default function FullPageTopologyWrapper({ children }: FullPageTopologyWr
         component="div"
         data-testid="graphics-background-layer"
         data-graphics-mode={
-          useBeigeImageBackground ? 'beige' : useBeigeSunsetBackground ? 'beige-dark' : useLightFallback ? 'light' : 'full'
+          useBeigeImageBackground
+            ? 'beige'
+            : useBeigeSunsetBackground
+              ? 'beige-dark'
+              : useLightFallback || !VANTA_NET_ENABLED
+                ? 'light'
+                : 'full'
         }
         data-graphics-reason={
           useBeigeImageBackground
@@ -105,7 +116,9 @@ export default function FullPageTopologyWrapper({ children }: FullPageTopologyWr
               height: '100%',
               background: useBeigeImageBackground
                 ? getBeigePresentationTopologyBackground(customTheme, beigePresentationBgUrl)
-                : `radial-gradient(circle at 20% 20%, ${customTheme.primary}22 0%, transparent 35%), radial-gradient(circle at 80% 30%, ${customTheme.secondary}18 0%, transparent 30%), linear-gradient(135deg, ${customTheme.bg} 0%, ${customTheme.bg2} 100%)`,
+                : useBeigeSunsetBackground
+                  ? siteDarkTopologyBackground()
+                  : `radial-gradient(circle at 20% 20%, ${customTheme.primary}22 0%, transparent 35%), radial-gradient(circle at 80% 30%, ${customTheme.secondary}18 0%, transparent 30%), linear-gradient(135deg, ${customTheme.bg} 0%, ${customTheme.bg2} 100%)`,
             }}
           />
         ) : (

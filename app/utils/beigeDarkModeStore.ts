@@ -18,8 +18,9 @@ export function registerBeigeDarkInstantSync(fn: InstantSyncFn | null): void {
 }
 
 export function readBeigeDarkFromStorage(): boolean {
-  if (typeof window === 'undefined') return false
+  if (typeof window === 'undefined') return true
   const raw = localStorage.getItem(BEIGE_DARK_STORAGE_KEY)
+  if (raw === null) return true
   return raw === '1' || raw === 'true'
 }
 

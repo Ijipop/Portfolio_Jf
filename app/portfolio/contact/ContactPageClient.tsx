@@ -6,6 +6,7 @@ import Box from '@mui/material/Box'
 import Container from '@mui/material/Container'
 import { useTheme } from '@mui/material/styles'
 import useMediaQuery from '@mui/material/useMediaQuery'
+import dynamic from 'next/dynamic'
 import { useRouter } from 'next/navigation'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import ContactSuccessDialog from '../../components/contact/ContactSuccessDialog'
@@ -27,6 +28,8 @@ import { useTextColor } from '../../hooks/useTextColor'
 import { useThemeColors } from '../../hooks/useThemeColors'
 import { useLanguage } from '../../contexts/LanguageContext'
 import { CONTACT_SUBJECT_TECH_SUPPORT } from '@/i18n/contactSubjects'
+
+const AiConversionTeaser = dynamic(() => import('@/components/home/AiConversionTeaser'), { ssr: false })
 
 type ContactPageClientProps = {
   /** Route /portfolio/contact/merci : popup ouverte + page_view pour Analytics. */
@@ -123,6 +126,8 @@ export default function ContactPageClient({ showMerciDialog = false }: ContactPa
               {t('contact.supportShortcut')}
             </CTAButton>
           </Box>
+
+          <AiConversionTeaser />
 
           <ContactForm
             compact={useCompactContact}
