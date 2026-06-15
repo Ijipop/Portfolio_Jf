@@ -8,6 +8,7 @@ import ThemeWrapper from './components/ThemeWrapper'
 import FullPageTopologyWrapper from './components/FullPageTopologyWrapper'
 import './globals.css'
 import { getCachedBeigePresentationBgUrl } from '@/lib/cached-site-appearance'
+import { beigeDarkBootstrapScript } from '@/utils/beigeDarkBootstrapScript'
 import { inter } from './fonts'
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://ijipop.com'
@@ -65,7 +66,10 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const initialBeigePresentationBgUrl = await getCachedBeigePresentationBgUrl()
 
   return (
-    <html lang="fr" className={inter.variable}>
+    <html lang="fr" className={`${inter.variable} dark`} suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: beigeDarkBootstrapScript }} />
+      </head>
       <body>
         <SeoJsonLd />
         <ThemeWrapper initialBeigePresentationBgUrl={initialBeigePresentationBgUrl}>

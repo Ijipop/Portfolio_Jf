@@ -1,6 +1,8 @@
-/** Persistance du mode sombre « sunset » en présentation Site (beige). */
+/** Persistance du mode sombre V2 (refonte siteDark). */
 
 export const BEIGE_DARK_STORAGE_KEY = 'beigeDarkMode'
+/** Présent si l'utilisateur a basculé manuellement clair/sombre au moins une fois. */
+export const BEIGE_DARK_USER_CHOICE_KEY = 'beigeDarkUserChoice'
 export const BEIGE_DARK_MODE_EVENT = 'portfolio:beige-dark-change'
 export const BEIGE_DARK_INSTANT_ATTR = 'data-beige-dark-instant'
 
@@ -21,7 +23,24 @@ export function readBeigeDarkFromStorage(): boolean {
   if (typeof window === 'undefined') return true
   const raw = localStorage.getItem(BEIGE_DARK_STORAGE_KEY)
   if (raw === null) return true
-  return raw === '1' || raw === 'true'
+
+  const explicitChoice = localStorage.getItem(BEIGE_DARK_USER_CHOICE_KEY)
+  const themeName = localStorage.getItem('themeName')
+  const wantsLight = raw === '0' || raw === 'false'
+
+  // État incohérent post-refonte V2 : thème siteDark mais flag clair sans choix explicite.
+  if (wantsLight && themeName === 'siteDark' && explicitChoice !== '1') {
+    try {
+      localStorage.setItem(BEIGE_DARK_STORAGE_KEY, '1')
+    } catch {
+      /* ignore */
+    }
+    cached = true
+    return true
+  }
+
+  if (wantsLight) return false
+  return true
 }
 
 export function getBeigeDark(): boolean {
@@ -44,6 +63,7 @@ export function setBeigeDark(enabled: boolean): void {
   try {
     if (typeof window !== 'undefined') {
       localStorage.setItem(BEIGE_DARK_STORAGE_KEY, enabled ? '1' : '0')
+      localStorage.setItem(BEIGE_DARK_USER_CHOICE_KEY, '1')
     }
   } catch {
     /* ignore quota */
