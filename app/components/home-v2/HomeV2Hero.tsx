@@ -13,6 +13,8 @@ import { useHomeV2Tokens } from './homeV2Tokens'
 
 const CONTACT_PATH = '/portfolio/contact'
 
+const heroViewportHeight = 'calc(100dvh - var(--app-bar-height, 64px))'
+
 export default function HomeV2Hero() {
   const { t } = useLanguage()
   const { tokens: v2 } = useHomeV2Tokens()
@@ -48,16 +50,21 @@ export default function HomeV2Hero() {
       component="section"
       sx={{
         position: 'relative',
-        minHeight: { xs: 'auto', md: '85vh' },
-        maxHeight: { md: '900px' },
+        height: heroViewportHeight,
+        minHeight: heroViewportHeight,
+        maxHeight: heroViewportHeight,
+        '@supports (height: 100dvh)': {
+          height: heroViewportHeight,
+          minHeight: heroViewportHeight,
+          maxHeight: heroViewportHeight,
+        },
         display: 'flex',
         flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
+        alignItems: 'stretch',
         textAlign: 'center',
-        pt: { xs: 3, sm: 4, md: 5 },
-        pb: { xs: 6, md: 8 },
+        pt: { xs: 2, sm: 3, md: 4 },
         px: 0,
+        overflow: 'hidden',
       }}
     >
       <Box
@@ -74,8 +81,29 @@ export default function HomeV2Hero() {
         }}
       />
 
-      <Box sx={{ position: 'relative', zIndex: 1, width: '100%', maxWidth: 800 }}>
-        <Box sx={{ mb: { xs: 2, md: 3 } }}>
+      <Box
+        sx={{
+          position: 'relative',
+          zIndex: 1,
+          flex: 1,
+          minHeight: 0,
+          width: '100%',
+          maxWidth: 800,
+          mx: 'auto',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          overflow: 'hidden',
+        }}
+      >
+        <Box
+          sx={{
+            mb: { xs: 5, md: 6 },
+            '@media (max-height: 820px)': { mb: 4 },
+            '@media (max-height: 680px)': { mb: 3 },
+            '@media (max-height: 500px)': { mb: 2 },
+          }}
+        >
           <IjipopGlitchTitle text={t('homeV2.heroTitle')} variant="hero" />
         </Box>
 
@@ -95,6 +123,17 @@ export default function HomeV2Hero() {
             letterSpacing: '-0.03em',
             color: v2.text,
             mb: { xs: 2, md: 2.5 },
+            '@media (max-height: 760px)': {
+              mb: 1.5,
+            },
+            '@media (max-height: 680px)': {
+              mb: 1,
+            },
+            '@media (max-height: 500px)': {
+              mb: 0.75,
+              fontSize: 'clamp(1rem, 4.5vw, 1.35rem)',
+              gap: 0.2,
+            },
           }}
         >
           <Box component="span">{t('homeV2.heroEditorialPrefix')}</Box>
@@ -143,24 +182,86 @@ export default function HomeV2Hero() {
             mx: 'auto',
             lineHeight: 1.55,
             mb: 2,
+            '@media (max-height: 760px)': {
+              mb: 1.25,
+              fontSize: '0.95rem',
+            },
+            '@media (max-height: 680px)': {
+              mb: 0.75,
+              fontSize: '0.9rem',
+            },
+            '@media (max-height: 500px)': {
+              mb: 0.5,
+              fontSize: '0.82rem',
+              lineHeight: 1.4,
+            },
           }}
         >
           {t('homeV2.heroSubtitle')}
         </Typography>
 
-        <Typography sx={{ fontWeight: 600, fontSize: '1rem', color: v2.text, mb: 0.5 }}>
+        <Typography
+          sx={{
+            fontWeight: 600,
+            fontSize: '1rem',
+            color: v2.text,
+            mb: 0.5,
+            '@media (max-height: 760px)': {
+              fontSize: '0.92rem',
+              mb: 0.25,
+            },
+            '@media (max-height: 680px)': {
+              fontSize: '0.88rem',
+              mb: 0,
+            },
+            '@media (max-height: 500px)': {
+              fontSize: '0.8rem',
+            },
+          }}
+        >
           {t('homeV2.heroRealName')}
         </Typography>
-        <Typography sx={{ fontSize: '0.9rem', color: v2.textMuted, mb: { xs: 3, md: 4 } }}>
+        <Typography
+          sx={{
+            fontSize: '0.9rem',
+            color: v2.textMuted,
+            mb: 0,
+            '@media (max-height: 760px)': {
+              fontSize: '0.82rem',
+            },
+            '@media (max-height: 680px)': {
+              fontSize: '0.78rem',
+            },
+            '@media (max-height: 500px)': {
+              fontSize: '0.72rem',
+            },
+          }}
+        >
           {t('homeV2.heroOneLiner')}
         </Typography>
+      </Box>
 
+      <Box
+        sx={{
+          position: 'relative',
+          zIndex: 1,
+          flexShrink: 0,
+          width: '100%',
+          maxWidth: 440,
+          mx: 'auto',
+          pt: { xs: 1.5, sm: 2 },
+          pb: 'max(16px, env(safe-area-inset-bottom, 0px))',
+          '@media (max-height: 500px)': {
+            pt: 1,
+            pb: 'max(12px, env(safe-area-inset-bottom, 0px))',
+          },
+        }}
+      >
         <Stack
           direction={{ xs: 'column', sm: 'row' }}
           spacing={1.5}
           justifyContent="center"
           alignItems="stretch"
-          sx={{ maxWidth: 440, mx: 'auto' }}
         >
           <HomeV2Cta href={CONTACT_PATH} variant="primary" size="large" fullWidth>
             {t('homeV2.heroCtaPrimary')}
