@@ -2,7 +2,7 @@
 
 import type { PaletteMode } from '@mui/material'
 
-import { SITE_DARK } from '@/design-system/siteDark'
+import { SITE_DARK, SITE_LIGHT } from '@/design-system/siteDark'
 
 export type CardSurfaceVariant = 'glass' | 'elevated' | 'flat' | 'flipFace'
 export type CardSurfaceLevel = 'soft' | 'balanced'
@@ -10,6 +10,8 @@ export type CardSurfaceLevel = 'soft' | 'balanced'
 interface CardSurfaceOptions {
   isTopologyRoute: boolean
   isSiteDark?: boolean
+  /** Mode Site clair (beige) — hors Timelendr. */
+  isSiteLight?: boolean
   variant?: CardSurfaceVariant
   level?: CardSurfaceLevel
   interactive?: boolean
@@ -27,6 +29,21 @@ const SITE_DARK_BACKGROUNDS: Record<CardSurfaceLevel, Record<CardSurfaceVariant,
     elevated: `linear-gradient(145deg, rgba(255,255,255,0.05) 0%, rgba(8, 8, 12, 0.88) 100%)`,
     flat: `linear-gradient(145deg, rgba(255,255,255,0.03) 0%, rgba(8, 8, 12, 0.8) 100%)`,
     flipFace: `linear-gradient(145deg, rgba(255,255,255,0.06) 0%, rgba(8, 8, 12, 0.86) 100%)`,
+  },
+}
+
+const SITE_LIGHT_BACKGROUNDS: Record<CardSurfaceLevel, Record<CardSurfaceVariant, string>> = {
+  balanced: {
+    glass: `linear-gradient(145deg, ${SITE_LIGHT.surface} 0%, rgba(255, 254, 251, 0.88) 50%, ${SITE_LIGHT.surface} 100%)`,
+    elevated: `linear-gradient(145deg, rgba(255, 254, 251, 0.92) 0%, rgba(239, 232, 220, 0.85) 50%, rgba(255, 254, 251, 0.9) 100%)`,
+    flat: `linear-gradient(145deg, ${SITE_LIGHT.surface} 0%, rgba(247, 243, 235, 0.9) 100%)`,
+    flipFace: `linear-gradient(145deg, rgba(255, 254, 251, 0.94) 0%, rgba(239, 232, 220, 0.88) 100%)`,
+  },
+  soft: {
+    glass: `linear-gradient(145deg, ${SITE_LIGHT.surface} 0%, rgba(247, 243, 235, 0.86) 100%)`,
+    elevated: `linear-gradient(145deg, rgba(255, 254, 251, 0.9) 0%, rgba(239, 232, 220, 0.82) 100%)`,
+    flat: `linear-gradient(145deg, rgba(255, 254, 251, 0.88) 0%, rgba(247, 243, 235, 0.84) 100%)`,
+    flipFace: `linear-gradient(145deg, rgba(255, 254, 251, 0.92) 0%, rgba(239, 232, 220, 0.86) 100%)`,
   },
 }
 
@@ -71,18 +88,23 @@ const SHADOW_BY_LEVEL: Record<CardSurfaceLevel, Record<CardSurfaceVariant, strin
 export function getCardSurfaceSx({
   isTopologyRoute,
   isSiteDark = false,
+  isSiteLight = false,
   variant = 'elevated',
   level = 'balanced',
   interactive = true,
 }: CardSurfaceOptions): Record<string, unknown> {
-  if (!isTopologyRoute && !isSiteDark) return {}
+  if (!isTopologyRoute && !isSiteDark && !isSiteLight) return {}
 
   const background = isSiteDark
     ? SITE_DARK_BACKGROUNDS[level][variant]
-    : BACKGROUND_BY_LEVEL[level][variant]
+    : isSiteLight
+      ? SITE_LIGHT_BACKGROUNDS[level][variant]
+      : BACKGROUND_BY_LEVEL[level][variant]
   const baseShadow = isSiteDark
     ? '0 8px 28px rgba(0, 0, 0, 0.35)'
-    : SHADOW_BY_LEVEL[level][variant]
+    : isSiteLight
+      ? '0 8px 24px rgba(92, 77, 60, 0.12)'
+      : SHADOW_BY_LEVEL[level][variant]
 
   return {
     background: `${background} !important`,
@@ -90,16 +112,22 @@ export function getCardSurfaceSx({
     WebkitBackdropFilter: 'blur(14px) saturate(1.05)',
     border: isSiteDark
       ? `1px solid ${SITE_DARK.border} !important`
-      : '1px solid rgba(148, 163, 184, 0.22) !important',
+      : isSiteLight
+        ? `1px solid ${SITE_LIGHT.border} !important`
+        : '1px solid rgba(148, 163, 184, 0.22) !important',
     boxShadow: isSiteDark
       ? `${baseShadow}, inset 0 1px 0 rgba(255, 255, 255, 0.04) !important`
-      : `${baseShadow}, inset 0 1px 0 rgba(255, 255, 255, 0.2) !important`,
+      : isSiteLight
+        ? `${baseShadow}, inset 0 1px 0 rgba(255, 255, 255, 0.65) !important`
+        : `${baseShadow}, inset 0 1px 0 rgba(255, 255, 255, 0.2) !important`,
     ...(interactive && {
       '&:hover': {
         transform: 'none !important',
         boxShadow: isSiteDark
           ? `0 12px 36px rgba(0, 0, 0, 0.4), 0 0 0 1px ${SITE_DARK.borderHover}, inset 0 1px 0 rgba(255, 255, 255, 0.06) !important`
-          : '0 10px 28px rgba(2, 6, 23, 0.26), 0 0 0 1px rgba(56, 189, 248, 0.24), inset 0 1px 0 rgba(255, 255, 255, 0.24) !important',
+          : isSiteLight
+            ? `0 10px 28px rgba(92, 77, 60, 0.14), 0 0 0 1px ${SITE_LIGHT.borderHover}, inset 0 1px 0 rgba(255, 255, 255, 0.75) !important`
+            : '0 10px 28px rgba(2, 6, 23, 0.26), 0 0 0 1px rgba(56, 189, 248, 0.24), inset 0 1px 0 rgba(255, 255, 255, 0.24) !important',
       },
     }),
   }

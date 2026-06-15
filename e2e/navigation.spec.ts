@@ -84,6 +84,29 @@ test('logiciel and SEO landing routes are reachable', async ({ page }) => {
   await expect(page).toHaveURL(/\/creation-site-web-montreal/)
 })
 
+test('site light mode uses dark text on home and contact', async ({ page }) => {
+  await page.addInitScript(() => {
+    window.localStorage.setItem('beigeDarkMode', '0')
+    window.localStorage.setItem('beigeDarkUserChoice', '1')
+  })
+
+  await page.goto('/', { waitUntil: 'domcontentloaded' })
+  await expect(page.locator('html')).not.toHaveClass(/dark/)
+
+  const heroName = page.getByText(/Jean-François Lefebvre/i).first()
+  await expect(heroName).toBeVisible()
+  await expect
+    .poll(async () => heroName.evaluate((el) => window.getComputedStyle(el).color))
+    .not.toBe('rgb(244, 244, 245)')
+
+  await page.goto('/portfolio/contact', { waitUntil: 'domcontentloaded' })
+  const contactHeading = page.getByRole('heading', { level: 1 }).first()
+  await expect(contactHeading).toBeVisible()
+  await expect
+    .poll(async () => contactHeading.evaluate((el) => window.getComputedStyle(el).color))
+    .not.toBe('rgb(244, 244, 245)')
+})
+
 test('demos index and demo routes', async ({ page }) => {
   await page.goto('/demos', { waitUntil: 'domcontentloaded' })
   await expect(page).toHaveURL(/\/demos\/?$/)

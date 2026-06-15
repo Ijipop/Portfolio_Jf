@@ -5,6 +5,7 @@ import { Alert, Snackbar } from '@mui/material'
 import Box from '@mui/material/Box'
 import Container from '@mui/material/Container'
 import { useTheme } from '@mui/material/styles'
+import { useSiteDarkChrome } from '../../hooks/useSiteDarkChrome'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import dynamic from 'next/dynamic'
 import { useRouter } from 'next/navigation'
@@ -39,6 +40,7 @@ type ContactPageClientProps = {
 export default function ContactPageClient({ showMerciDialog = false }: ContactPageClientProps) {
   const router = useRouter()
   const theme = useTheme()
+  const siteDarkChrome = useSiteDarkChrome()
   const isXlUp = useMediaQuery(theme.breakpoints.up('xl'))
   const isTallViewport = useMediaQuery('(min-height: 1000px)', { noSsr: true })
   const useCompactContact = !isXlUp || !isTallViewport
@@ -179,10 +181,9 @@ export default function ContactPageClient({ showMerciDialog = false }: ContactPa
             background:
               snackbarSeverity === 'success'
                 ? 'linear-gradient(135deg, #059669 0%, #047857 100%)'
-                : (th) =>
-                    th.palette.mode === 'dark'
-                ? 'linear-gradient(135deg, #ff6b35 0%, #ff1744 100%)'
-                : 'linear-gradient(135deg, #dc2626 0%, #b91c1c 100%)',
+                : siteDarkChrome
+                  ? 'linear-gradient(135deg, #ff6b35 0%, #ff1744 100%)'
+                  : 'linear-gradient(135deg, #dc2626 0%, #b91c1c 100%)',
             color: 'white',
             '& .MuiAlert-icon': {
               color: 'white',

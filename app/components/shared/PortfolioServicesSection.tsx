@@ -9,7 +9,7 @@ import ManageSearchOutlinedIcon from '@mui/icons-material/ManageSearchOutlined'
 import WebAssetOutlinedIcon from '@mui/icons-material/WebAssetOutlined'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
-import { alpha, useTheme } from '@mui/material/styles'
+import { alpha } from '@mui/material/styles'
 import Link from 'next/link'
 import { useMemo } from 'react'
 import CTAButton from '@/components/shared/CTAButton'
@@ -168,9 +168,7 @@ function OfferPackCard({
   isSiteDark,
 }: OfferPackCardProps) {
   const { t } = useLanguage()
-  const theme = useTheme()
   const Icon = offer.icon
-  const isDark = theme.palette.mode === 'dark'
   const featured = offer.featured === true
 
   const surfaceSx = getCardSurfaceSx({
@@ -182,10 +180,10 @@ function OfferPackCard({
   })
 
   const cardBg = featured
-    ? isDark
+    ? isSiteDark
       ? `linear-gradient(165deg, ${alpha(primary, 0.22)} 0%, ${alpha('#0f172a', 0.92)} 38%, ${alpha(secondary, 0.12)} 100%)`
       : `linear-gradient(165deg, ${alpha(primary, 0.12)} 0%, ${alpha('#fff', 0.98)} 42%, ${alpha(secondary, 0.08)} 100%)`
-    : isDark
+    : isSiteDark
       ? `linear-gradient(160deg, ${alpha('#1e293b', 0.85)} 0%, ${alpha('#0f172a', 0.75)} 100%)`
       : `linear-gradient(160deg, ${alpha('#fff', 0.96)} 0%, ${alpha(primary, 0.04)} 100%)`
 
@@ -207,10 +205,10 @@ function OfferPackCard({
         borderRadius: cardRadius,
         overflow: 'hidden',
         background: cardBg,
-        border: `1px solid ${alpha(primary, featured ? 0.4 : isDark ? 0.28 : 0.18)}`,
+        border: `1px solid ${alpha(primary, featured ? 0.4 : isSiteDark ? 0.28 : 0.18)}`,
         boxShadow: featured
           ? `0 20px 44px ${alpha(primary, 0.18)}, 0 0 0 1px ${alpha(primary, 0.1)}`
-          : `0 12px 32px ${alpha(isDark ? '#000' : primary, isDark ? 0.3 : 0.08)}`,
+          : `0 12px 32px ${alpha(isSiteDark ? '#000' : primary, isSiteDark ? 0.3 : 0.08)}`,
         transition: DESIGN_TOKENS.transitions.slow,
         '&:hover': {
           transform: 'translateY(-4px)',
@@ -462,8 +460,8 @@ function OfferPackCard({
                 px: 1.25,
                 minHeight: PACK_BULLET_ROW_MIN,
                 borderRadius: innerRadius,
-                bgcolor: alpha(primary, isDark ? 0.12 : 0.06),
-                border: `1px solid ${alpha(primary, isDark ? 0.2 : 0.1)}`,
+                bgcolor: alpha(primary, isSiteDark ? 0.12 : 0.06),
+                border: `1px solid ${alpha(primary, isSiteDark ? 0.2 : 0.1)}`,
               }}
             >
               <CheckRoundedIcon

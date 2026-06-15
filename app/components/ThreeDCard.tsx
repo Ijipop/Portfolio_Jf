@@ -9,6 +9,8 @@ import { useEffect, useState, type Ref } from 'react'
 import { usePathname } from 'next/navigation'
 import { shouldShowTopology } from '@/utils/topologyRoutes'
 import { getCardSurfaceSx } from '@/components/shared/cardSurface'
+import { useCardSurfaceOptions } from '@/hooks/useCardSurfaceOptions'
+import { useSiteDarkChrome } from '@/hooks/useSiteDarkChrome'
 import { usePauseWhenOffscreen } from '@/hooks/usePauseWhenOffscreen'
 import type { BorderBeamProps } from '@/components/ui/border-beam'
 
@@ -28,14 +30,10 @@ export type ThreeDCardBorderBeamProps = {
   initialOffset?: number
 }
 
-// 3D Card avec perspective et transformations
+// 3D Card — styles structurels ; surfaces via getCardSurfaceSx dans le composant
 const ThreeDCard = styled(Card)(({ theme }) => ({
-  background: 'var(--card-background, linear-gradient(145deg, #e2e8f0 0%, #cbd5e1 50%, #e2e8f0 100%))',
   borderRadius: 24,
   padding: theme.spacing(4),
-  boxShadow: theme.palette.mode === 'dark'
-    ? '0 20px 60px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 107, 53, 0.2)'
-    : '0 20px 60px rgba(0, 0, 0, 0.1), 0 0 0 1px var(--card-primary, transparent)',
   position: 'relative',
   overflow: 'hidden',
   cursor: 'pointer',
@@ -49,20 +47,10 @@ const ThreeDCard = styled(Card)(({ theme }) => ({
     left: 0,
     right: 0,
     bottom: 0,
-    background: theme.palette.mode === 'dark'
-      ? 'linear-gradient(135deg, rgba(255, 107, 53, 0.1) 0%, rgba(255, 23, 68, 0.1) 100%)'
-      : 'var(--card-card-gradient, linear-gradient(135deg, var(--card-primary, transparent) 0%, var(--card-secondary, transparent) 100%))',
     opacity: 0,
     transition: 'opacity 0.3s ease',
     zIndex: 1,
   },
-  '&:hover': {
-    transform: 'translateY(-8px)',
-    boxShadow: `0 30px 80px rgba(0, 0, 0, 0.6), 0 0 0 2px var(--card-hover-primary, var(--card-primary)), 0 0 40px var(--card-hover-secondary, var(--card-secondary)), 0 0 60px var(--card-hover-glow, transparent)`,
-    '&::before': {
-      opacity: 0.5,
-    }
-  }
 }))
 
 const FloatingElement = styled(Box)(({ theme }) => ({
@@ -144,6 +132,8 @@ export default function ThreeDCardComponent({
   const theme = useTheme()
   const pathname = usePathname()
   const isTopologyRoute = shouldShowTopology(pathname)
+  const siteDarkChrome = useSiteDarkChrome()
+  const cardSurface = useCardSurfaceOptions()
   const { ref, paused } = usePauseWhenOffscreen<HTMLDivElement>()
   const [isMobile, setIsMobile] = useState(false)
 
@@ -162,7 +152,7 @@ export default function ThreeDCardComponent({
   const effectiveFloating = subtle || isMobile ? 0 : floatingElements
 
   const surfaceSx = getCardSurfaceSx({
-    isTopologyRoute,
+    ...cardSurface,
     variant: 'flat',
     level: 'soft',
     interactive: true,
@@ -205,10 +195,9 @@ export default function ThreeDCardComponent({
             ...(fullHeight ? { minHeight: 0 } : { minHeight: 'auto' }),
             '&:hover': {
               transform: 'translateY(-2px)',
-              boxShadow:
-                theme.palette.mode === 'dark'
-                  ? '0 10px 28px rgba(0,0,0,0.35)'
-                  : '0 6px 20px rgba(15,23,42,0.1)',
+              boxShadow: siteDarkChrome
+                ? '0 10px 28px rgba(0,0,0,0.35)'
+                : '0 6px 20px rgba(92, 77, 60, 0.12)',
               '&::before': { opacity: 0.12 },
             },
           }),

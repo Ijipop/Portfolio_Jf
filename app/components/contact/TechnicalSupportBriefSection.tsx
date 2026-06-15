@@ -59,17 +59,17 @@ const DenseTextField = styled(TextField, {
     color: textColor || '#fff',
     '& .MuiOutlinedInput-input': { color: textColor || '#fff' },
     '&:hover .MuiOutlinedInput-notchedOutline': {
-      borderColor: theme.palette.mode === 'dark' ? '#60a5fa' : '#1e3a8a',
+      borderColor: theme.palette.primary.main,
     },
     '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
       borderWidth: '2px',
-      borderColor: theme.palette.mode === 'dark' ? '#60a5fa' : '#1e3a8a',
+      borderColor: theme.palette.primary.main,
     },
   },
   '& .MuiInputLabel-root': {
     fontSize: '0.875rem',
     color: textColor || '#fff',
-    '&.Mui-focused': { color: theme.palette.mode === 'dark' ? '#60a5fa' : '#1e3a8a' },
+    '&.Mui-focused': { color: theme.palette.primary.main },
   },
   '& .MuiFormHelperText-root': {
     fontSize: '0.75rem',
