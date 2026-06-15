@@ -13,7 +13,7 @@ import { CONTACT_SUBJECT_IMPROVE_SITE } from '@/i18n/contactSubjects'
 import { useLanguage } from '@/contexts/LanguageContext'
 import HomeV2Cta from './HomeV2Cta'
 import HomeV2Section from './HomeV2Section'
-import { HOME_V2, homeV2CardSx } from './homeV2Tokens'
+import { useHomeV2Tokens } from './homeV2Tokens'
 
 const CONTACT_PATH = '/portfolio/contact'
 const SUPPORT_PATH = '/soutien-informatique-montreal'
@@ -61,13 +61,14 @@ const SERVICE_CARDS: ServiceCard[] = [
 
 function ServiceCardItem({ card, index, href }: { card: ServiceCard; index: number; href: string }) {
   const { t } = useLanguage()
+  const { tokens: v2, cardSx } = useHomeV2Tokens()
   const Icon = card.icon
 
   return (
     <ScrollReveal delay={index * 0.1} distance={28}>
       <Box
         sx={{
-          ...homeV2CardSx,
+          ...cardSx,
           p: { xs: 2.5, md: 3 },
           height: '100%',
           display: 'flex',
@@ -82,27 +83,27 @@ function ServiceCardItem({ card, index, href }: { card: ServiceCard; index: numb
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            background: HOME_V2.brandGlow,
-            border: `1px solid ${HOME_V2.borderHover}`,
+            background: v2.brandGlow,
+            border: `1px solid ${v2.borderHover}`,
             mb: 2,
           }}
         >
-          <Icon sx={{ color: HOME_V2.brandOrange, fontSize: 24 }} />
+          <Icon sx={{ color: v2.brandOrange, fontSize: 24 }} />
         </Box>
 
-        <Typography component="h3" sx={{ fontWeight: 700, fontSize: '1.125rem', color: HOME_V2.text, mb: 1 }}>
+        <Typography component="h3" sx={{ fontWeight: 700, fontSize: '1.125rem', color: v2.text, mb: 1 }}>
           {t(card.titleKey)}
         </Typography>
 
-        <Typography sx={{ fontSize: '0.9375rem', color: HOME_V2.textSecondary, lineHeight: 1.55, mb: 2 }}>
+        <Typography sx={{ fontSize: '0.9375rem', color: v2.textSecondary, lineHeight: 1.55, mb: 2 }}>
           {t(card.leadKey)}
         </Typography>
 
         <Stack spacing={0.75} sx={{ mb: 3, flex: 1 }}>
           {card.bulletKeys.map((key) => (
             <Stack key={key} direction="row" spacing={1} alignItems="flex-start">
-              <CheckRoundedIcon sx={{ fontSize: 18, color: HOME_V2.brandOrange, mt: 0.15, flexShrink: 0 }} />
-              <Typography sx={{ fontSize: '0.875rem', color: HOME_V2.textSecondary, lineHeight: 1.45 }}>
+              <CheckRoundedIcon sx={{ fontSize: 18, color: v2.brandOrange, mt: 0.15, flexShrink: 0 }} />
+              <Typography sx={{ fontSize: '0.875rem', color: v2.textSecondary, lineHeight: 1.45 }}>
                 {t(key)}
               </Typography>
             </Stack>
