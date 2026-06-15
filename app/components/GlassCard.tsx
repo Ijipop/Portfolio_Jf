@@ -3,24 +3,12 @@
 import { Box, Card, CardContent } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import { motion } from 'framer-motion'
-import { usePathname } from 'next/navigation'
-import { shouldShowTopology } from '@/utils/topologyRoutes'
 import { getCardSurfaceSx } from '@/components/shared/cardSurface'
+import { useCardSurfaceOptions } from '@/hooks/useCardSurfaceOptions'
 
-// Glassmorphism Card avec effets de verre
-const GlassCard = styled(Card)(({ theme }) => ({
-  background: theme.palette.mode === 'dark'
-    ? 'rgba(26, 26, 26, 0.25)'
-    : 'var(--card-background, linear-gradient(145deg, #e2e8f0 0%, #cbd5e1 50%, #e2e8f0 100%))',
-  backdropFilter: 'blur(20px)',
-  WebkitBackdropFilter: 'blur(20px)',
-  border: theme.palette.mode === 'dark'
-    ? '1px solid rgba(255, 255, 255, 0.18)'
-    : '1px solid var(--card-primary, rgba(255, 255, 255, 0.3))',
+// Glassmorphism Card — surfaces via getCardSurfaceSx dans le composant
+const GlassCard = styled(Card)(() => ({
   borderRadius: 24,
-  boxShadow: theme.palette.mode === 'dark'
-    ? '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)'
-    : '0 8px 32px rgba(0, 0, 0, 0.1), 0 0 0 1px var(--card-primary, transparent), inset 0 1px 0 rgba(255, 255, 255, 0.8)',
   position: 'relative',
   overflow: 'hidden',
   transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
@@ -31,22 +19,10 @@ const GlassCard = styled(Card)(({ theme }) => ({
     left: 0,
     right: 0,
     bottom: 0,
-    background: theme.palette.mode === 'dark'
-      ? 'linear-gradient(135deg, rgba(255, 107, 53, 0.1) 0%, rgba(255, 23, 68, 0.1) 100%)'
-      : 'linear-gradient(135deg, var(--card-primary, rgba(59, 130, 246, 0.1)) 0%, var(--card-secondary, rgba(5, 150, 105, 0.1)) 100%)',
     opacity: 0,
     transition: 'opacity 0.3s ease',
     zIndex: 1,
   },
-  '&:hover': {
-    transform: 'translateY(-8px) scale(1.02)',
-    boxShadow: theme.palette.mode === 'dark'
-      ? '0 20px 40px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 107, 53, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2)'
-      : '0 20px 40px rgba(0, 0, 0, 0.15), 0 0 0 1px var(--card-hover-primary, rgba(59, 130, 246, 0.3)), inset 0 1px 0 rgba(255, 255, 255, 0.9)',
-    '&::before': {
-      opacity: 1,
-    }
-  }
 }))
 
 // Neumorphism Button
@@ -118,10 +94,9 @@ interface GlassCardProps {
 }
 
 export default function GlassCardComponent({ children, onClick, className }: GlassCardProps) {
-  const pathname = usePathname()
-  const isTopologyRoute = shouldShowTopology(pathname)
+  const cardSurface = useCardSurfaceOptions()
   const surfaceSx = getCardSurfaceSx({
-    isTopologyRoute,
+    ...cardSurface,
     variant: 'flat',
     level: 'soft',
     interactive: true,

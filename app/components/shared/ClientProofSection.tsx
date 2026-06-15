@@ -19,8 +19,10 @@ import {
   siteDarkSectionBandBackground,
   siteDarkSectionBandHoverShadow,
   siteDarkSectionBandShadow,
+  siteLightSectionBandBackground,
+  siteLightSectionBandHoverShadow,
+  siteLightSectionBandShadow,
 } from '@/design-system/siteDarkSurfaces'
-import { useAdvancedTheme } from '@/contexts/AdvancedThemeContext'
 import { usePresentationMode } from '@/contexts/PresentationModeContext'
 import { useTextColor } from '@/hooks/useTextColor'
 import { useThemeColors } from '@/hooks/useThemeColors'
@@ -50,7 +52,6 @@ export default function ClientProofSection({
 }: ClientProofSectionProps) {
   const textColor = useTextColor()
   const { primary, secondary, accent } = useThemeColors()
-  const { customTheme } = useAdvancedTheme()
   const { mode: presentationMode } = usePresentationMode()
   const isSiteDark = useSiteDarkChrome()
 
@@ -66,10 +67,8 @@ export default function ClientProofSection({
     () =>
       isSiteDark
         ? siteDarkSectionBandBackground(primary, secondary)
-        : presentationMode === 'beige'
-          ? `linear-gradient(145deg, ${alpha('#fffefb', 0.98)} 0%, ${alpha(customTheme.bg, 0.94)} 38%, ${alpha(primary, 0.1)} 100%)`
-          : `linear-gradient(145deg, ${alpha('#ffffff', 0.98)} 0%, ${alpha(customTheme.bg2, 0.9)} 40%, ${alpha(primary, 0.14)} 100%)`,
-    [isSiteDark, presentationMode, customTheme.bg, customTheme.bg2, primary, secondary],
+        : siteLightSectionBandBackground(primary, secondary),
+    [isSiteDark, primary, secondary],
   )
 
   const surfaceSx = getCardSurfaceSx({
@@ -96,7 +95,7 @@ export default function ClientProofSection({
           background: outerBackground,
           boxShadow: isSiteDark
             ? siteDarkSectionBandShadow
-            : `0 22px 48px ${alpha(primary, 0.16)}, 0 0 0 1px ${alpha(primary, 0.08)}, inset 0 1px 0 ${alpha('#fff', 0.72)}`,
+            : siteLightSectionBandShadow,
           overflow: 'hidden',
           transition: DESIGN_TOKENS.transitions.slow,
           '@media (hover: hover)': {
@@ -104,7 +103,7 @@ export default function ClientProofSection({
               transform: 'translateY(-3px)',
               boxShadow: isSiteDark
                 ? siteDarkSectionBandHoverShadow
-                : `0 28px 54px ${alpha(primary, 0.2)}, 0 0 0 1px ${alpha(primary, 0.12)}`,
+                : siteLightSectionBandHoverShadow,
             },
           },
           '&::before': {

@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { SITE_DARK } from '@/design-system/siteDark'
+import { SITE_DARK, SITE_LIGHT } from '@/design-system/siteDark'
 import { useSiteDarkChrome } from '@/hooks/useSiteDarkChrome'
 
 /** Tokens V2 sombre (défaut). */
@@ -9,25 +9,9 @@ export const HOME_V2_DARK = {
   cardRadiusLg: '20px',
 } as const
 
-/** Tokens V2 mode Site clair (beige latte). */
+/** Tokens V2 mode Site clair — alias SITE_LIGHT + layout accueil. */
 export const HOME_V2_LIGHT = {
-  bg: '#f7f3eb',
-  bgElevated: '#efe8dc',
-  surface: 'rgba(255, 254, 251, 0.82)',
-  surfaceHover: 'rgba(255, 254, 251, 0.95)',
-  border: 'rgba(92, 77, 60, 0.16)',
-  borderHover: 'rgba(234, 88, 12, 0.32)',
-  text: '#1c1917',
-  textSecondary: '#44403c',
-  textMuted: '#78716c',
-  brandOrange: '#ea580c',
-  brandOrangeLight: '#fb923c',
-  brandOrangeDeep: '#c2410c',
-  brandGlow: 'rgba(234, 88, 12, 0.1)',
-  brandGlowStrong: 'rgba(234, 88, 12, 0.18)',
-  appBarGlass: 'rgba(247, 243, 235, 0.88)',
-  maxWidth: 1200,
-  cardRadius: '16px',
+  ...SITE_LIGHT,
   sectionPy: { xs: 5, md: 8 },
   cardRadiusLg: '20px',
 } as const

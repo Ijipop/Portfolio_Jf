@@ -90,6 +90,12 @@ export default function IjipopGlitchTitle({ text, variant = 'page' }: IjipopGlit
           '@media (max-width: 599.95px) and (max-height: 760px)': {
             fontSize: 'clamp(4rem, 16vw, 4.8rem)',
           },
+          '@media (max-height: 680px)': {
+            fontSize: 'clamp(4.5rem, 14vw, 6.5rem)',
+          },
+          '@media (max-height: 500px)': {
+            fontSize: 'clamp(3.25rem, 12vw, 4rem)',
+          },
           '@media (min-width: 900px) and (max-height: 820px)': {
             fontSize: 'clamp(8.8rem, 12vw, 11rem)',
           },

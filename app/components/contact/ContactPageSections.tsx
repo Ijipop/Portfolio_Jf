@@ -34,24 +34,15 @@ const SocialIconWrapper = styled(Box)(({ theme }) => ({
   width: 80,
   height: 80,
   borderRadius: '50%',
-  background:
-    theme.palette.mode === 'dark'
-      ? 'linear-gradient(135deg, #4a90e2 0%, #357abd 100%)'
-      : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+  background: `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.secondary.main} 100%)`,
   color: 'white',
   marginBottom: theme.spacing(2),
   cursor: 'pointer',
   transition: DESIGN_TOKENS.transitions.normal,
-  boxShadow:
-    theme.palette.mode === 'dark'
-      ? '0 4px 20px rgba(74, 144, 226, 0.3)'
-      : '0 4px 20px rgba(102, 126, 234, 0.3)',
+  boxShadow: `0 4px 20px ${theme.palette.primary.main}40`,
   '&:hover': {
     transform: 'translateY(-4px) scale(1.1)',
-    boxShadow:
-      theme.palette.mode === 'dark'
-        ? '0 8px 30px rgba(74, 144, 226, 0.5)'
-        : '0 8px 30px rgba(102, 126, 234, 0.5)',
+    boxShadow: `0 8px 30px ${theme.palette.primary.main}55`,
   },
 }))
 

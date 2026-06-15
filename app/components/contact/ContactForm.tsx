@@ -62,20 +62,20 @@ const StyledTextField = styled(TextField, {
     },
     '&:hover': {
       '& .MuiOutlinedInput-notchedOutline': {
-        borderColor: theme.palette.mode === 'dark' ? '#60a5fa' : '#1e3a8a',
+        borderColor: theme.palette.primary.main,
       },
     },
     '&.Mui-focused': {
       '& .MuiOutlinedInput-notchedOutline': {
         borderWidth: '2px',
-        borderColor: theme.palette.mode === 'dark' ? '#60a5fa' : '#1e3a8a',
+        borderColor: theme.palette.primary.main,
       },
     },
   },
   '& .MuiInputLabel-root': {
     color: textColor || '#ffffff',
     '&.Mui-focused': {
-      color: theme.palette.mode === 'dark' ? '#60a5fa' : '#1e3a8a',
+      color: theme.palette.primary.main,
     },
   },
   '& .MuiFormHelperText-root': {
@@ -311,9 +311,8 @@ function ContactForm({
         borderBeam={{
           duration: 45,
           size: 220,
-          ...(theme.palette.mode === 'dark'
-            ? { colorFrom: '#ff6b35', colorTo: '#6b6b6f' }
-            : { colorFrom: '#ea580c', colorTo: '#948c82' }),
+          colorFrom: primary,
+          colorTo: '#948c82',
         }}
       >
         <Box sx={{ textAlign: 'center', mb: compact ? 2 : 3 }}>

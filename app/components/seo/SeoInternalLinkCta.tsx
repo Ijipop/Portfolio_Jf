@@ -8,8 +8,7 @@ import Link from 'next/link'
 import CTAButton from '@/components/shared/CTAButton'
 import ScrollReveal from '@/components/shared/ScrollReveal'
 import { DESIGN_TOKENS } from '@/design-system/constants'
-import { useAdvancedTheme } from '@/contexts/AdvancedThemeContext'
-import { usePresentationMode } from '@/contexts/PresentationModeContext'
+import { useSiteThemeTokens } from '@/hooks/useSiteThemeTokens'
 import { useTextColor } from '@/hooks/useTextColor'
 import { useThemeColors } from '@/hooks/useThemeColors'
 import { useMemo } from 'react'
@@ -31,15 +30,12 @@ export default function SeoInternalLinkCta({
 }: SeoInternalLinkCtaProps) {
   const textColor = useTextColor()
   const { primary } = useThemeColors()
-  const { customTheme } = useAdvancedTheme()
-  const { mode: presentationMode } = usePresentationMode()
+  const tokens = useSiteThemeTokens()
 
   const outerBackground = useMemo(
     () =>
-      presentationMode === 'beige'
-        ? `linear-gradient(135deg, ${alpha(customTheme.bg, 0.88)} 0%, ${alpha(customTheme.bg2, 0.82)} 48%, ${alpha(primary, 0.1)} 100%)`
-        : `linear-gradient(135deg, ${alpha(customTheme.bg, 0.96)} 0%, ${alpha(customTheme.bg2, 0.92)} 45%, ${alpha(primary, 0.22)} 100%)`,
-    [presentationMode, customTheme.bg, customTheme.bg2, primary],
+      `linear-gradient(135deg, ${tokens.surface} 0%, ${alpha(tokens.bg, 0.88)} 48%, ${alpha(primary, 0.1)} 100%)`,
+    [tokens.surface, tokens.bg, primary],
   )
 
   const isCompact = variant === 'compact'

@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { DEMOS_HUB_LINK_LABEL } from '../demoLabels'
 import DemoSocialIconsDecorative from '../DemoSocialIconsDecorative'
 import DemoVitrineAttribution from '../DemoVitrineAttribution'
 import RestaurantDemoGallery from './RestaurantDemoGallery'
@@ -20,7 +21,7 @@ export default function RestaurantDemoPage() {
               Réserver une table
             </a>
             <Link className={`${styles.btn} ${styles.btnOutline}`} href="/demos">
-              Autres vitrines
+              {DEMOS_HUB_LINK_LABEL}
             </Link>
           </div>
         </header>

@@ -18,8 +18,10 @@ import {
   siteDarkSectionBandBackground,
   siteDarkSectionBandHoverShadow,
   siteDarkSectionBandShadow,
+  siteLightSectionBandBackground,
+  siteLightSectionBandHoverShadow,
+  siteLightSectionBandShadow,
 } from '@/design-system/siteDarkSurfaces'
-import { useAdvancedTheme } from '@/contexts/AdvancedThemeContext'
 import { usePresentationMode } from '@/contexts/PresentationModeContext'
 import { useLanguage } from '@/contexts/LanguageContext'
 import { useSiteDarkChrome } from '@/hooks/useSiteDarkChrome'
@@ -34,7 +36,6 @@ export default function HomeDemosBand() {
   const { t } = useLanguage()
   const textColor = useTextColor()
   const { primary, secondary, accent } = useThemeColors()
-  const { customTheme } = useAdvancedTheme()
   const { mode: presentationMode } = usePresentationMode()
   const isSiteDark = useSiteDarkChrome()
 
@@ -50,10 +51,8 @@ export default function HomeDemosBand() {
     () =>
       isSiteDark
         ? siteDarkSectionBandBackground(primary, secondary)
-        : presentationMode === 'beige'
-          ? `linear-gradient(145deg, ${alpha('#fffefb', 0.98)} 0%, ${alpha(customTheme.bg2, 0.92)} 36%, ${alpha(secondary, 0.12)} 100%)`
-          : `linear-gradient(145deg, ${alpha('#ffffff', 0.98)} 0%, ${alpha(customTheme.bg, 0.9)} 38%, ${alpha(secondary, 0.14)} 100%)`,
-    [isSiteDark, presentationMode, customTheme.bg, customTheme.bg2, primary, secondary],
+        : siteLightSectionBandBackground(primary, secondary),
+    [isSiteDark, primary, secondary],
   )
 
   const surfaceSx = getCardSurfaceSx({
@@ -80,7 +79,7 @@ export default function HomeDemosBand() {
           background: outerBackground,
           boxShadow: isSiteDark
             ? siteDarkSectionBandShadow
-            : `0 22px 48px ${alpha(secondary, 0.14)}, 0 0 0 1px ${alpha(primary, 0.08)}, inset 0 1px 0 ${alpha('#fff', 0.72)}`,
+            : siteLightSectionBandShadow,
           overflow: 'hidden',
           transition: DESIGN_TOKENS.transitions.slow,
           '@media (hover: hover)': {
@@ -88,7 +87,7 @@ export default function HomeDemosBand() {
               transform: 'translateY(-3px)',
               boxShadow: isSiteDark
                 ? siteDarkSectionBandHoverShadow
-                : `0 28px 54px ${alpha(secondary, 0.18)}, 0 0 0 1px ${alpha(primary, 0.12)}`,
+                : siteLightSectionBandHoverShadow,
             },
           },
           '&::before': {

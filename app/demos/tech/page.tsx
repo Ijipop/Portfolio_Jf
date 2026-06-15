@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import ScrollReveal from '@/components/shared/ScrollReveal'
+import { DEMOS_HUB_LINK_LABEL } from '../demoLabels'
 import DemoResponsiveTopNav from '../DemoResponsiveTopNav'
 import DemoSocialIconsDecorative from '../DemoSocialIconsDecorative'
 import DemoVitrineAttribution from '../DemoVitrineAttribution'
@@ -41,7 +42,7 @@ export default function TechDemoPage() {
                 Réserver une démo
               </a>
               <Link className={`${styles.btn} ${styles.btnGhost}`} href="/demos">
-                Autres vitrines
+                {DEMOS_HUB_LINK_LABEL}
               </Link>
             </div>
           </div>

@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import ScrollReveal from '@/components/shared/ScrollReveal'
+import { DEMOS_HUB_LINK_LABEL } from '../../demoLabels'
 import { HERO } from '../portfolioDemoContent'
 import styles from '../PortfolioDemo.module.css'
 
@@ -25,7 +26,7 @@ export default function PortfolioDemoHero() {
               </a>
             </div>
             <Link className={styles.heroDemosLink} href="/demos">
-              Autres vitrines démo
+              {DEMOS_HUB_LINK_LABEL}
             </Link>
           </div>
           <aside className={styles.metricsPanel} aria-label="Repères">

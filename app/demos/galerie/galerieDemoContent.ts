@@ -1,3 +1,5 @@
+import { DEMOS_HUB_LINK_LABEL } from '../demoLabels'
+
 export const SITE = {
   brand: 'Ligne claire',
   navProjects: 'Travaux',
@@ -104,5 +106,5 @@ export const INFO = {
 
 export const FOOTER = {
   copyright: '© 2026 Ligne claire',
-  backLabel: 'Autres vitrines',
+  backLabel: DEMOS_HUB_LINK_LABEL,
 } as const
