@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { DEMOS_HUB_LINK_LABEL } from '../demoLabels'
 import DemoSocialIconsDecorative from '../DemoSocialIconsDecorative'
 import DemoVitrineAttribution from '../DemoVitrineAttribution'
 import styles from './WellnessDemo.module.css'
@@ -22,7 +23,7 @@ export default function WellnessDemoPage() {
               Réserver un soin
             </a>
             <Link className={styles.secondary} href="/demos">
-              Autres vitrines
+              {DEMOS_HUB_LINK_LABEL}
             </Link>
           </div>
         </header>
