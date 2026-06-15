@@ -13,7 +13,7 @@ import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import { styled, useTheme } from '@mui/material/styles'
 import { useSearchParams } from 'next/navigation'
-import { Suspense, memo, useCallback, useEffect, useRef, useState } from 'react'
+import { Suspense, memo, useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import ThreeDCardComponent from '@/components/ThreeDCard'
 import CTAButton from '@/components/shared/CTAButton'
 import ProjectWebBriefSection, {
@@ -39,6 +39,16 @@ import {
 } from '@/components/contact/contactFormValidation'
 
 const VALIDATION_DEBOUNCE_MS = 300
+const DIAGNOSTIC_IA_HASH = 'diagnostic-ia'
+
+function isDiagnosticIaHash(): boolean {
+  if (typeof window === 'undefined') return false
+  return window.location.hash.replace(/^#/, '') === DIAGNOSTIC_IA_HASH
+}
+
+function scrollToContactForm(): void {
+  document.getElementById('contact-form')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+}
 
 const StyledTextField = styled(TextField, {
   shouldForwardProp: (prop) => prop !== 'textColor' && prop !== 'helperTextColor',
@@ -128,17 +138,22 @@ function ContactForm({
   const [formErrors, setFormErrors] = useState<ContactFormErrors>(EMPTY_CONTACT_FORM_ERRORS)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [showOptionalSections, setShowOptionalSections] = useState(false)
+  const [diagnosticDeepLink, setDiagnosticDeepLink] = useState(false)
 
-  useEffect(() => {
-    if (typeof window === 'undefined') return
-    const openFromHash = () => {
-      if (window.location.hash.replace(/^#/, '') === 'diagnostic-ia') {
-        setShowOptionalSections(true)
-      }
+  useLayoutEffect(() => {
+    const syncDiagnosticDeepLink = () => {
+      const active = isDiagnosticIaHash()
+      setDiagnosticDeepLink(active)
+      if (!active) return
+      setShowOptionalSections(true)
+      window.requestAnimationFrame(() => {
+        window.requestAnimationFrame(scrollToContactForm)
+      })
     }
-    openFromHash()
-    window.addEventListener('hashchange', openFromHash)
-    return () => window.removeEventListener('hashchange', openFromHash)
+
+    syncDiagnosticDeepLink()
+    window.addEventListener('hashchange', syncDiagnosticDeepLink)
+    return () => window.removeEventListener('hashchange', syncDiagnosticDeepLink)
   }, [])
 
   const debounceTimers = useRef<Partial<Record<ValidatableContactField, ReturnType<typeof setTimeout>>>>({})
@@ -279,10 +294,12 @@ function ContactForm({
 
   return (
     <Box
+      id="contact-form"
       sx={{
         maxWidth: '800px',
         margin: '0 auto',
         mb: compact ? 4 : 6,
+        scrollMarginTop: 'calc(var(--app-bar-height, 64px) + 20px)',
       }}
     >
       <Suspense fallback={null}>
@@ -409,30 +426,32 @@ function ContactForm({
           </Box>
 
           <Box sx={{ mt: 2 }}>
-            <Button
-              type="button"
-              onClick={() => setShowOptionalSections((open) => !open)}
-              endIcon={
-                <ExpandMoreIcon
-                  sx={{
-                    transform: showOptionalSections ? 'rotate(180deg)' : 'none',
-                    transition: 'transform 0.2s ease',
-                  }}
-                />
-              }
-              sx={{
-                color: textColor,
-                opacity: 0.85,
-                textTransform: 'none',
-                fontWeight: 700,
-                px: 0,
-                '&:hover': { bgcolor: 'transparent', opacity: 1 },
-              }}
-            >
-              {t('contact.optionalSectionsToggle')}
-            </Button>
-            <Collapse in={showOptionalSections}>
-              <Box sx={{ display: 'grid', gap: compact ? 2 : 2.5, mt: 1.5 }}>
+            {!diagnosticDeepLink ? (
+              <Button
+                type="button"
+                onClick={() => setShowOptionalSections((open) => !open)}
+                endIcon={
+                  <ExpandMoreIcon
+                    sx={{
+                      transform: showOptionalSections ? 'rotate(180deg)' : 'none',
+                      transition: 'transform 0.2s ease',
+                    }}
+                  />
+                }
+                sx={{
+                  color: textColor,
+                  opacity: 0.85,
+                  textTransform: 'none',
+                  fontWeight: 700,
+                  px: 0,
+                  '&:hover': { bgcolor: 'transparent', opacity: 1 },
+                }}
+              >
+                {t('contact.optionalSectionsToggle')}
+              </Button>
+            ) : null}
+            <Collapse in={diagnosticDeepLink || showOptionalSections} timeout={diagnosticDeepLink ? 0 : undefined}>
+              <Box sx={{ display: 'grid', gap: compact ? 2 : 2.5, mt: diagnosticDeepLink ? 0 : 1.5 }}>
                 <ProjectWebBriefSection
                   include={includeProjectWeb}
                   onIncludeChange={handleIncludeProjectWebChange}
@@ -451,7 +470,7 @@ function ContactForm({
                   compact={compact}
                 />
 
-                <Box id="diagnostic-ia" sx={{ scrollMarginTop: 96 }}>
+                <Box id={DIAGNOSTIC_IA_HASH} sx={{ scrollMarginTop: 'calc(var(--app-bar-height, 64px) + 20px)' }}>
                   <AiLeadDiagnosis
                     formData={formData}
                     projectWeb={projectWeb}

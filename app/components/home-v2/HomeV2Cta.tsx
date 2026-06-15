@@ -4,7 +4,7 @@ import Button from '@mui/material/Button'
 import type { SxProps, Theme } from '@mui/material/styles'
 import Link from 'next/link'
 import { BRAND_GLITCH_GRADIENT } from '@/components/shared/IjipopGlitchTitle'
-import { HOME_V2 } from './homeV2Tokens'
+import { useHomeV2Tokens } from './homeV2Tokens'
 
 type HomeV2CtaProps = {
   children: React.ReactNode
@@ -23,6 +23,7 @@ export default function HomeV2Cta({
   fullWidth = false,
   sx,
 }: HomeV2CtaProps) {
+  const { tokens: v2 } = useHomeV2Tokens()
   const minHeight = size === 'large' ? 52 : 44
   const fontSize = size === 'large' ? '1rem' : '0.9375rem'
   const px = size === 'large' ? 3 : 2.5
@@ -33,32 +34,32 @@ export default function HomeV2Cta({
           background: BRAND_GLITCH_GRADIENT,
           color: '#fff',
           border: 'none',
-          boxShadow: `0 4px 24px ${HOME_V2.brandGlowStrong}`,
+          boxShadow: `0 4px 24px ${v2.brandGlowStrong}`,
           '&:hover': {
-            boxShadow: `0 8px 32px ${HOME_V2.brandGlowStrong}`,
+            boxShadow: `0 8px 32px ${v2.brandGlowStrong}`,
             transform: 'translateY(-1px)',
             background: BRAND_GLITCH_GRADIENT,
           },
         }
       : variant === 'secondary'
         ? {
-            background: HOME_V2.surface,
-            color: HOME_V2.text,
-            border: `1px solid ${HOME_V2.border}`,
+            background: v2.surface,
+            color: v2.text,
+            border: `1px solid ${v2.border}`,
             backdropFilter: 'blur(8px)',
             '&:hover': {
-              background: HOME_V2.surfaceHover,
-              borderColor: HOME_V2.borderHover,
+              background: v2.surfaceHover,
+              borderColor: v2.borderHover,
             },
           }
         : {
             background: 'transparent',
-            color: HOME_V2.textSecondary,
-            border: `1px solid ${HOME_V2.border}`,
+            color: v2.textSecondary,
+            border: `1px solid ${v2.border}`,
             '&:hover': {
-              color: HOME_V2.text,
-              borderColor: HOME_V2.borderHover,
-              background: HOME_V2.surface,
+              color: v2.text,
+              borderColor: v2.borderHover,
+              background: v2.surface,
             },
           }
 

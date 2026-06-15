@@ -64,8 +64,8 @@ export function AdvancedThemeProvider({ children }: { children: React.ReactNode 
     setIsMounted(true)
   }, [])
 
-  /** Évite les divergences SSR/client : le mode beige visuel n'est actif qu'après hydratation du choix utilisateur. */
-  const isBeigePresentation = presentationHydrated && presentationMode === 'beige'
+  /** Mode Site (beige) — optimiste avant hydratation pour éviter flash clair. */
+  const isBeigePresentation = !presentationHydrated || presentationMode === 'beige'
   const isTimelendr = isTimelendrRoute(hydrationSafePathname)
   const activeThemeName = useMemo((): ThemeName => {
     if (isTimelendr) return BEIGE_LIGHT_THEME
@@ -80,24 +80,23 @@ export function AdvancedThemeProvider({ children }: { children: React.ReactNode 
   const syncDocumentTheme = useCallback(
     (name: ThemeName, dark: boolean) => {
       syncPortfolioThemeToDocument(name, {
-        beigePresentation: isBeigePresentation,
-        beigeDark: isBeigePresentation && dark,
+        beigePresentation: isBeigePresentation && !isTimelendr,
+        beigeDark: dark && !isTimelendr,
         beigePresentationBgUrl,
       })
     },
-    [isBeigePresentation, beigePresentationBgUrl],
+    [isBeigePresentation, beigePresentationBgUrl, isTimelendr],
   )
 
   useLayoutEffect(() => {
     registerBeigeDarkInstantSync((enabled) => {
-      if (!isBeigePresentation) return
       const target = enabled ? BEIGE_DARK_THEME : BEIGE_LIGHT_THEME
       setThemeName(target)
       localStorage.setItem('themeName', target)
       syncDocumentTheme(target, enabled)
     })
     return () => registerBeigeDarkInstantSync(null)
-  }, [isBeigePresentation, syncDocumentTheme])
+  }, [syncDocumentTheme])
 
   useEffect(() => {
     if (!presentationHydrated) return

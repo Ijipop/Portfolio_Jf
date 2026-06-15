@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import DemosAiVideoShowcase from './DemosAiVideoShowcase'
 import DemosIndexAnimatedGrid from './DemosIndexAnimatedGrid'
+import DemosIndexShell from './DemosIndexShell'
 import DemosSeoCta from './DemosSeoCta'
 import styles from './DemosIndex.module.css'
 
@@ -64,8 +65,9 @@ export default function DemosIndexPage() {
   }))
 
   return (
-    <div className={styles.page}>
-      <div className={styles.inner}>
+    <DemosIndexShell>
+      <div className={styles.page}>
+        <div className={styles.inner}>
         <span className={styles.kicker}>Exemples de styles</span>
         <h1 className={styles.title}>Huit directions créatives pour votre prochain site</h1>
         <p className={styles.lead}>
@@ -77,7 +79,8 @@ export default function DemosIndexPage() {
         <Link href="/" className={styles.back}>
           ← Retour à l’accueil
         </Link>
+        </div>
       </div>
-    </div>
+    </DemosIndexShell>
   )
 }

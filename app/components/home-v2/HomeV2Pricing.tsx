@@ -15,7 +15,7 @@ import { BRAND_GLITCH_GRADIENT } from '@/components/shared/IjipopGlitchTitle'
 import { useLanguage } from '@/contexts/LanguageContext'
 import HomeV2Cta from './HomeV2Cta'
 import HomeV2Section from './HomeV2Section'
-import { HOME_V2, homeV2CardSx, homeV2FeaturedCardSx } from './homeV2Tokens'
+import { useHomeV2Tokens } from './homeV2Tokens'
 
 const CONTACT_PATH = '/portfolio/contact'
 
@@ -97,6 +97,7 @@ function contactHref(subject: string) {
 
 function PricingCard({ offer, index }: { offer: PackOffer; index: number }) {
   const { t } = useLanguage()
+  const { tokens: v2, cardSx, featuredCardSx } = useHomeV2Tokens()
   const Icon = offer.icon
   const featured = offer.featured === true
   const href = contactHref(t(offer.subjectKey))
@@ -105,7 +106,7 @@ function PricingCard({ offer, index }: { offer: PackOffer; index: number }) {
     <ScrollReveal delay={index * 0.1} distance={28} uncappedDelay>
       <Box
         sx={{
-          ...(featured ? homeV2FeaturedCardSx : homeV2CardSx),
+          ...(featured ? featuredCardSx : cardSx),
           p: { xs: 2.5, md: 3 },
           height: '100%',
           display: 'flex',
@@ -122,10 +123,10 @@ function PricingCard({ offer, index }: { offer: PackOffer; index: number }) {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              background: featured ? BRAND_GLITCH_GRADIENT : HOME_V2.brandGlow,
+              background: featured ? BRAND_GLITCH_GRADIENT : v2.brandGlow,
             }}
           >
-            <Icon sx={{ color: featured ? '#fff' : HOME_V2.brandOrange, fontSize: 22 }} />
+            <Icon sx={{ color: featured ? '#fff' : v2.brandOrange, fontSize: 22 }} />
           </Box>
           {offer.badgeKey ? (
             <Typography
@@ -137,9 +138,9 @@ function PricingCard({ offer, index }: { offer: PackOffer; index: number }) {
                 px: 1.25,
                 py: 0.5,
                 borderRadius: '6px',
-                background: HOME_V2.brandGlow,
-                color: HOME_V2.brandOrange,
-                border: `1px solid ${HOME_V2.borderHover}`,
+                background: v2.brandGlow,
+                color: v2.brandOrange,
+                border: `1px solid ${v2.borderHover}`,
               }}
             >
               {t(offer.badgeKey)}
@@ -147,24 +148,24 @@ function PricingCard({ offer, index }: { offer: PackOffer; index: number }) {
           ) : null}
         </Stack>
 
-        <Typography component="h3" sx={{ fontWeight: 700, fontSize: featured ? '1.25rem' : '1.0625rem', color: HOME_V2.text, mb: 0.75 }}>
+        <Typography component="h3" sx={{ fontWeight: 700, fontSize: featured ? '1.25rem' : '1.0625rem', color: v2.text, mb: 0.75 }}>
           {t(offer.titleKey)}
         </Typography>
 
-        <Typography sx={{ fontSize: featured ? '1.75rem' : '1.5rem', fontWeight: 800, color: HOME_V2.text, mb: 0.5, letterSpacing: '-0.02em' }}>
+        <Typography sx={{ fontSize: featured ? '1.75rem' : '1.5rem', fontWeight: 800, color: v2.text, mb: 0.5, letterSpacing: '-0.02em' }}>
           {offer.pricePrefixKey ? `${t(offer.pricePrefixKey)} ` : ''}
           {t(offer.priceKey)}
         </Typography>
 
-        <Typography sx={{ fontSize: '0.875rem', color: HOME_V2.textMuted, lineHeight: 1.45, mb: 2 }}>
+        <Typography sx={{ fontSize: '0.875rem', color: v2.textMuted, lineHeight: 1.45, mb: 2 }}>
           {t(offer.forKey)}
         </Typography>
 
         <Stack spacing={0.75} sx={{ mb: 3, flex: 1 }}>
           {offer.bulletKeys.map((key) => (
             <Stack key={key} direction="row" spacing={1} alignItems="flex-start">
-              <CheckRoundedIcon sx={{ fontSize: 17, color: HOME_V2.brandOrange, mt: 0.15, flexShrink: 0 }} />
-              <Typography sx={{ fontSize: '0.8125rem', color: HOME_V2.textSecondary, lineHeight: 1.45 }}>
+              <CheckRoundedIcon sx={{ fontSize: 17, color: v2.brandOrange, mt: 0.15, flexShrink: 0 }} />
+              <Typography sx={{ fontSize: '0.8125rem', color: v2.textSecondary, lineHeight: 1.45 }}>
                 {t(key)}
               </Typography>
             </Stack>
@@ -181,6 +182,7 @@ function PricingCard({ offer, index }: { offer: PackOffer; index: number }) {
 
 export default function HomeV2Pricing() {
   const { t } = useLanguage()
+  const { tokens: v2 } = useHomeV2Tokens()
 
   const featured = PACK_OFFERS.find((o) => o.featured)!
   const others = PACK_OFFERS.filter((o) => !o.featured)
@@ -213,7 +215,7 @@ export default function HomeV2Pricing() {
         sx={{
           mt: 3,
           fontSize: '0.875rem',
-          color: HOME_V2.textMuted,
+          color: v2.textMuted,
           textAlign: 'center',
           lineHeight: 1.5,
         }}

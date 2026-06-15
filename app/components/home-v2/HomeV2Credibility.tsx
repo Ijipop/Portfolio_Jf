@@ -10,7 +10,7 @@ import type { SvgIconComponent } from '@mui/icons-material'
 import ScrollReveal from '@/components/shared/ScrollReveal'
 import { useLanguage } from '@/contexts/LanguageContext'
 import HomeV2Section from './HomeV2Section'
-import { HOME_V2, homeV2CardSx } from './homeV2Tokens'
+import { useHomeV2Tokens } from './homeV2Tokens'
 
 const PROJECTS_PATH = '/portfolio/projets'
 
@@ -28,6 +28,7 @@ const PILLARS: Pillar[] = [
 
 export default function HomeV2Credibility() {
   const { t } = useLanguage()
+  const { tokens: v2, cardSx } = useHomeV2Tokens()
 
   return (
     <HomeV2Section
@@ -46,12 +47,12 @@ export default function HomeV2Credibility() {
           const Icon = pillar.icon
           return (
             <ScrollReveal key={pillar.titleKey} delay={index * 0.1} distance={24}>
-              <Box sx={{ ...homeV2CardSx, p: { xs: 2.5, md: 3 }, height: '100%' }}>
-                <Icon sx={{ color: HOME_V2.brandOrange, fontSize: 28, mb: 1.5 }} />
-                <Typography component="h3" sx={{ fontWeight: 700, fontSize: '1.0625rem', color: HOME_V2.text, mb: 1 }}>
+              <Box sx={{ ...cardSx, p: { xs: 2.5, md: 3 }, height: '100%' }}>
+                <Icon sx={{ color: v2.brandOrange, fontSize: 28, mb: 1.5 }} />
+                <Typography component="h3" sx={{ fontWeight: 700, fontSize: '1.0625rem', color: v2.text, mb: 1 }}>
                   {t(pillar.titleKey)}
                 </Typography>
-                <Typography sx={{ fontSize: '0.9rem', color: HOME_V2.textSecondary, lineHeight: 1.55 }}>
+                <Typography sx={{ fontSize: '0.9rem', color: v2.textSecondary, lineHeight: 1.55 }}>
                   {t(pillar.bodyKey)}
                 </Typography>
               </Box>
@@ -61,13 +62,13 @@ export default function HomeV2Credibility() {
       </Box>
 
       <ScrollReveal distance={20}>
-        <Typography sx={{ fontSize: '0.9rem', color: HOME_V2.textMuted, textAlign: 'center', lineHeight: 1.55 }}>
+        <Typography sx={{ fontSize: '0.9rem', color: v2.textMuted, textAlign: 'center', lineHeight: 1.55 }}>
           {t('homeV2.credibilityProof')}{' '}
           <Typography
             component={Link}
             href={PROJECTS_PATH}
             sx={{
-              color: HOME_V2.brandOrange,
+              color: v2.brandOrange,
               fontWeight: 600,
               fontSize: 'inherit',
               textDecoration: 'none',

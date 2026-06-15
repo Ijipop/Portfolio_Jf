@@ -9,12 +9,13 @@ import ScramblingText from '@/components/ScramblingText'
 import IjipopGlitchTitle, { BRAND_GLITCH_GRADIENT } from '@/components/shared/IjipopGlitchTitle'
 import { useLanguage } from '@/contexts/LanguageContext'
 import HomeV2Cta from './HomeV2Cta'
-import { HOME_V2 } from './homeV2Tokens'
+import { useHomeV2Tokens } from './homeV2Tokens'
 
 const CONTACT_PATH = '/portfolio/contact'
 
 export default function HomeV2Hero() {
   const { t } = useLanguage()
+  const { tokens: v2 } = useHomeV2Tokens()
   const reducedMotion = useMediaQuery('(prefers-reduced-motion: reduce)', { noSsr: true })
   const [wordIndex, setWordIndex] = useState(0)
   const [scramblePhase, setScramblePhase] = useState<'chaos' | 'settled'>('settled')
@@ -68,7 +69,7 @@ export default function HomeV2Hero() {
           transform: 'translateX(-50%)',
           width: 'min(600px, 90vw)',
           height: 'min(400px, 50vh)',
-          background: `radial-gradient(ellipse at center, ${HOME_V2.brandGlowStrong} 0%, transparent 65%)`,
+          background: `radial-gradient(ellipse at center, ${v2.brandGlowStrong} 0%, transparent 65%)`,
           pointerEvents: 'none',
         }}
       />
@@ -92,7 +93,7 @@ export default function HomeV2Hero() {
             },
             lineHeight: 1.15,
             letterSpacing: '-0.03em',
-            color: HOME_V2.text,
+            color: v2.text,
             mb: { xs: 2, md: 2.5 },
           }}
         >
@@ -137,7 +138,7 @@ export default function HomeV2Hero() {
         <Typography
           sx={{
             fontSize: { xs: '1rem', sm: '1.125rem' },
-            color: HOME_V2.textSecondary,
+            color: v2.textSecondary,
             maxWidth: 560,
             mx: 'auto',
             lineHeight: 1.55,
@@ -147,10 +148,10 @@ export default function HomeV2Hero() {
           {t('homeV2.heroSubtitle')}
         </Typography>
 
-        <Typography sx={{ fontWeight: 600, fontSize: '1rem', color: HOME_V2.text, mb: 0.5 }}>
+        <Typography sx={{ fontWeight: 600, fontSize: '1rem', color: v2.text, mb: 0.5 }}>
           {t('homeV2.heroRealName')}
         </Typography>
-        <Typography sx={{ fontSize: '0.9rem', color: HOME_V2.textMuted, mb: { xs: 3, md: 4 } }}>
+        <Typography sx={{ fontSize: '0.9rem', color: v2.textMuted, mb: { xs: 3, md: 4 } }}>
           {t('homeV2.heroOneLiner')}
         </Typography>
 
