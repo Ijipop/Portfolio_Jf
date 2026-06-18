@@ -2,17 +2,15 @@
 
 import Box from '@mui/material/Box'
 import { styled } from '@mui/material/styles'
-/** 1 colonne sur xs ; 2 colonnes dès sm (cf. plan refonte Projets). */
+
+/** Row compacte : 1 colonne xs–md ; 2 colonnes dès lg. */
 export const ProjectsGrid = styled(Box)(({ theme }) => ({
   display: 'grid',
   gridTemplateColumns: '1fr',
   alignItems: 'stretch',
-  gap: theme.spacing(2),
-  [theme.breakpoints.up('sm')]: {
+  gap: theme.spacing(1.5),
+  [theme.breakpoints.up('lg')]: {
     gridTemplateColumns: 'repeat(2, 1fr)',
-    gap: theme.spacing(2.5),
-  },
-  [theme.breakpoints.up('xl')]: {
-    gap: theme.spacing(3),
+    gap: theme.spacing(2),
   },
 }))

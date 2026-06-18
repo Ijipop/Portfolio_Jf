@@ -17,32 +17,43 @@ import ScrollReveal from '@/components/shared/ScrollReveal'
 import SkillTag from '@/components/shared/SkillTag'
 import CTAButton from '@/components/shared/CTAButton'
 import { DESIGN_TOKENS } from '@/design-system/constants'
+import { SITE_DARK, SITE_LIGHT } from '@/design-system/siteDark'
 import { BRAND_GLITCH_GRADIENT } from '@/components/shared/IjipopGlitchTitle'
 import { useAdvancedTheme } from '@/contexts/AdvancedThemeContext'
 import { useBeigePresentationBg } from '@/contexts/BeigePresentationBgContext'
 import { usePresentationMode } from '@/contexts/PresentationModeContext'
 import { useLanguage } from '@/contexts/LanguageContext'
+import { useCardSurfaceOptions } from '@/hooks/useCardSurfaceOptions'
 import { useThemeColors } from '@/hooks/useThemeColors'
 import { useTextColor } from '@/hooks/useTextColor'
 import { shouldShowTopology } from '@/utils/topologyRoutes'
 import type { Project } from '../projectTypes'
 import {
-  getProjectCardBodySx,
-  getProjectCardLinkIconOverlaySx,
-  getProjectCardMediaSx,
+  getProjectCardActionsSx,
+  getProjectCardContentSx,
+  getProjectCardDownloadGridSx,
+  getProjectCardGhostBtnSx,
+  getProjectCardLinkIconSx,
   getProjectCardRootSx,
-  getProjectCardStatusOverlaySx,
-  projectCardImageFillAnchorSx,
+  getProjectCardThumbnailSx,
+  getProjectCardTitleRowSx,
 } from '../utils/projectCardEditorialSx'
 
-const StatusChip = styled(Chip)(({ theme, color }: { theme: any; color?: any }) => ({
+const MAX_VISIBLE_TECHS = 3
+
+const StatusChip = styled(Chip)(({ theme }) => ({
   borderRadius: DESIGN_TOKENS.borderRadius.medium,
   fontWeight: 600,
-  fontSize: '0.875rem',
-  padding: theme.spacing(0.5, 1.5),
-  boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+  fontSize: '0.6875rem',
+  height: 22,
+  flexShrink: 0,
+  boxShadow: '0 1px 6px rgba(0,0,0,0.08)',
   '& .MuiChip-label': {
-    padding: theme.spacing(0.5, 1),
+    padding: theme.spacing(0, 0.75),
+  },
+  '& .MuiChip-icon': {
+    fontSize: '0.875rem',
+    marginLeft: theme.spacing(0.5),
   },
 }))
 
@@ -50,18 +61,15 @@ const TechStack = styled(Box)(({ theme }) => ({
   display: 'flex',
   flexWrap: 'wrap',
   gap: theme.spacing(0.5),
-  marginTop: theme.spacing(0.75),
+  marginTop: theme.spacing(0.35),
 }))
 
-const ProjectImageContainer = styled(Box)(() => ({
-  position: 'relative',
-  overflow: 'hidden',
-  flexShrink: 0,
-  '& img': {
-    borderRadius: 0,
-    boxShadow: 'none',
-  },
-}))
+type SecondaryAction = {
+  href: string
+  label: string
+  ariaLabel: string
+  withDownloadIcon?: boolean
+}
 
 function resolveProjectCardImage(project: Project): string | undefined {
   const uploaded = project.imageUrl?.trim()
@@ -142,13 +150,13 @@ export default function ProjectCard({
   const theme = useTheme()
   const pathname = usePathname()
   const isTopologyRoute = shouldShowTopology(pathname)
+  const { isSiteDark, isSiteLight } = useCardSurfaceOptions()
   const { primary, secondary, accent } = useThemeColors()
   const textColor = useTextColor()
   const { t } = useLanguage()
-  const { themeName, customTheme } = useAdvancedTheme()
+  const { customTheme } = useAdvancedTheme()
   const { beigePresentationBgUrl } = useBeigePresentationBg()
   const { mode: presentationMode } = usePresentationMode()
-  const isNonDefaultPalette = themeName !== 'default'
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
   const reflectionColors = [
     primary,
@@ -163,6 +171,22 @@ export default function ProjectCard({
     primary,
   ]
   const reflectionColor = reflectionColors[index % reflectionColors.length]
+
+  const descriptionColor =
+    isSiteDark || theme.palette.mode === 'dark'
+      ? SITE_DARK.text
+      : isSiteLight || presentationMode === 'beige'
+        ? SITE_LIGHT.textSecondary
+        : SITE_DARK.text
+
+  const metaTextColor =
+    isSiteDark || theme.palette.mode === 'dark'
+      ? SITE_DARK.textSecondary
+      : isSiteLight || presentationMode === 'beige'
+        ? SITE_LIGHT.textMuted
+        : SITE_DARK.textSecondary
+
+  const ghostBtnTextColor = isSiteDark || theme.palette.mode === 'dark' ? SITE_DARK.text : SITE_LIGHT.textSecondary
 
   const lowerName = project.name.toLowerCase()
   const lowerUrl = (project.url ?? '').toLowerCase()
@@ -181,12 +205,13 @@ export default function ProjectCard({
   const cardImageRaw = resolveProjectCardImage(project)
   const cardImageHref = cardImageRaw ? resolveImageUrl(cardImageRaw) : ''
   const projectTechs = project.technologies.split(',').map((tech) => tech.trim()).filter(Boolean)
+  const visibleTechs = projectTechs.slice(0, MAX_VISIBLE_TECHS)
+  const overflowTechCount = Math.max(0, projectTechs.length - MAX_VISIBLE_TECHS)
   const projectRoleLabel = cardVariant === 'web' ? t('projects.metaRoleWeb') : t('projects.metaRoleSoftware')
   const yearSegment = project.createdAt
     ? `${t('projects.metaYear')} ${new Date(project.createdAt).getFullYear()}`
     : null
   const stackFallback = projectTechs[0] ?? t('projects.metaStack')
-  /** Pas de pastille « Site web » sous les techno ; année (et rôle logiciel) seulement. */
   const projectMetaRoles = cardVariant === 'web' ? [] : [projectRoleLabel]
   const projectMetaLineItems: string[] =
     projectTechs.length > 0
@@ -195,15 +220,19 @@ export default function ProjectCard({
 
   const cardRootSx = getProjectCardRootSx({
     isTopologyRoute,
+    isSiteDark,
+    isSiteLight,
     presentationMode,
     primary,
+    secondary,
     hasProjectAction: Boolean(hasProjectAction),
     customTheme,
     beigePresentationBgUrl,
     theme,
   })
 
-  const cardMediaSx = getProjectCardMediaSx({ isTopologyRoute, theme })
+  const thumbnailSx = getProjectCardThumbnailSx({ primary, theme, isSiteDark })
+  const ghostBtnSx = getProjectCardGhostBtnSx({ primary, isSiteDark, mutedTextColor: ghostBtnTextColor })
 
   const handleCardClick = () => {
     if (isOwnPortfolioSite) handleProjectClick('/portfolio')
@@ -236,37 +265,61 @@ export default function ProjectCard({
     primaryLabel = downloadTimelendrMacosLabel
   }
 
-  const timelendrDownloadsBesideProject =
-    isTimelendrProject && Boolean(project.url?.trim()) && Boolean(timelendrWindowsUrl || timelendrMacosUrl)
-
-  const secondaryBtnSx = {
-    alignSelf: 'flex-start' as const,
-    py: 0.5,
-    px: 1.25,
-    fontSize: '0.75rem',
-    textTransform: 'none' as const,
-  }
-
   const webViewSiteHref = cardVariant === 'web' ? getWebViewSiteButtonHref(project) : null
+
+  const secondaryActions: SecondaryAction[] = []
+  if (cardVariant !== 'web') {
+    if (project.siteUrl?.trim() && primaryHref !== project.siteUrl.trim()) {
+      secondaryActions.push({
+        href: project.siteUrl.trim(),
+        label: viewSiteLabel,
+        ariaLabel: viewSiteLabel,
+      })
+    }
+    if (isTimelendrProject && timelendrWindowsUrl && primaryHref !== timelendrWindowsUrl) {
+      secondaryActions.push({
+        href: timelendrWindowsUrl,
+        label: 'Windows',
+        ariaLabel: downloadTimelendrPcLabel,
+        withDownloadIcon: true,
+      })
+    }
+    if (isTimelendrProject && timelendrMacosUrl && primaryHref !== timelendrMacosUrl) {
+      secondaryActions.push({
+        href: timelendrMacosUrl,
+        label: 'macOS',
+        ariaLabel: downloadTimelendrMacosLabel,
+        withDownloadIcon: true,
+      })
+    }
+    if (!isTimelendrProject && project.downloadUrl?.trim() && primaryHref !== project.downloadUrl.trim()) {
+      secondaryActions.push({
+        href: project.downloadUrl.trim(),
+        label: downloadProjectLabel,
+        ariaLabel: downloadProjectLabel,
+        withDownloadIcon: true,
+      })
+    }
+  }
 
   return (
     <ScrollReveal
       key={project.id}
       direction="up"
-      distance={isMobile ? 30 : 50}
+      distance={isMobile ? 24 : 36}
       delay={isMobile ? 0.08 * (index % 4) : 0.05 * (index % 4)}
     >
       <Box
         sx={{
           width: '100%',
           height: '100%',
-          minHeight: { xs: 280, sm: 300 },
           display: 'flex',
           flexDirection: 'column',
         }}
       >
         <Box
           component="article"
+          className="project-card-row"
           onClick={hasProjectAction ? handleCardClick : undefined}
           onKeyDown={
             hasProjectAction
@@ -282,26 +335,27 @@ export default function ProjectCard({
           tabIndex={hasProjectAction ? 0 : undefined}
           sx={cardRootSx}
         >
-          <ProjectImageContainer className="project-card-image" sx={cardMediaSx}>
+          <Box className="project-card-thumbnail" sx={thumbnailSx}>
             {cardImageHref ? (
-              <Box sx={projectCardImageFillAnchorSx}>
-                <Image
-                  src={cardImageHref}
-                  alt={project.name}
-                  fill
-                  unoptimized={cardImageHref.startsWith('data:')}
-                  sizes="(max-width: 600px) 100vw, (max-width: 900px) 50vw, 33vw"
-                  style={{
-                    objectFit: 'contain',
-                    objectPosition: 'center',
-                  }}
-                />
-              </Box>
+              <Image
+                src={cardImageHref}
+                alt={project.name}
+                width={56}
+                height={56}
+                unoptimized={cardImageHref.startsWith('data:')}
+                sizes="56px"
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'cover',
+                  objectPosition: 'center',
+                }}
+              />
             ) : (
               <Box
                 sx={{
-                  position: 'absolute',
-                  inset: 0,
+                  width: '100%',
+                  height: '100%',
                   background: BRAND_GLITCH_GRADIENT,
                   display: 'flex',
                   alignItems: 'center',
@@ -309,127 +363,139 @@ export default function ProjectCard({
                 }}
               >
                 <Typography
-                  variant="h2"
+                  variant="body2"
                   sx={{
                     color: 'white',
                     fontWeight: 900,
-                    letterSpacing: '-0.08em',
-                    textShadow: '0 16px 50px rgba(0,0,0,0.35)',
+                    letterSpacing: '-0.06em',
+                    fontSize: '0.875rem',
                   }}
                 >
                   {getProjectMonogram(project.name)}
                 </Typography>
               </Box>
             )}
+          </Box>
 
-            <Box sx={getProjectCardStatusOverlaySx()}>
+          <Box sx={getProjectCardContentSx()}>
+            <Box sx={getProjectCardTitleRowSx()}>
+              <Typography
+                variant="subtitle2"
+                component="h2"
+                sx={{
+                  fontWeight: 800,
+                  lineHeight: 1.25,
+                  letterSpacing: '-0.03em',
+                  color: textColor,
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap',
+                  flex: '1 1 auto',
+                  minWidth: 0,
+                }}
+              >
+                {project.name}
+              </Typography>
               <StatusChip
                 icon={getStatusIcon(project.status)}
                 label={project.status}
                 color={getStatusColor(project.status)}
                 size="small"
               />
+              {project.url ? (
+                <Box sx={getProjectCardLinkIconSx(isSiteDark)} aria-hidden>
+                  {project.url.includes('github') && isOwnPortfolioSite && (
+                    <LanguageOutlinedIcon sx={{ fontSize: 15 }} />
+                  )}
+                  {project.url.includes('github') && !isOwnPortfolioSite && <GitHubIcon sx={{ fontSize: 15 }} />}
+                  {!project.url.includes('github') && <LaunchIcon sx={{ fontSize: 15 }} />}
+                </Box>
+              ) : null}
             </Box>
 
-            {project.url && (
-              <Box sx={getProjectCardLinkIconOverlaySx()} aria-hidden>
-                {project.url.includes('github') && isOwnPortfolioSite && (
-                  <LanguageOutlinedIcon sx={{ fontSize: 18 }} />
-                )}
-                {project.url.includes('github') && !isOwnPortfolioSite && <GitHubIcon sx={{ fontSize: 18 }} />}
-                {!project.url.includes('github') && <LaunchIcon sx={{ fontSize: 18 }} />}
-              </Box>
-            )}
-          </ProjectImageContainer>
+            {isOwnPortfolioSite ? (
+              <Typography
+                variant="caption"
+                component="p"
+                sx={{
+                  display: 'block',
+                  mb: 0.35,
+                  lineHeight: 1.4,
+                  fontWeight: 600,
+                  fontStyle: 'italic',
+                  fontSize: '0.6875rem',
+                  color: descriptionColor,
+                  opacity: 0.92,
+                }}
+              >
+                {t('projects.portfolioSelfNotice')}
+              </Typography>
+            ) : null}
 
-          <Box sx={getProjectCardBodySx()}>
             <Typography
-              variant="subtitle1"
-              component="h2"
+              variant="body2"
               sx={{
-                fontWeight: 900,
-                lineHeight: 1.2,
-                letterSpacing: '-0.035em',
-                color: textColor,
-                mb: 0.5,
+                textAlign: 'left',
+                lineHeight: 1.45,
+                mb: 0.4,
+                fontSize: '0.8125rem',
                 overflow: 'hidden',
-                textOverflow: 'ellipsis',
                 display: '-webkit-box',
                 WebkitLineClamp: 2,
                 WebkitBoxOrient: 'vertical',
-                wordBreak: 'break-word',
+                color: descriptionColor,
+                opacity: 0.92,
               }}
             >
-              {project.name}
+              {project.description}
             </Typography>
 
-              <Box sx={{ mb: 0.5 }}>
-                {isOwnPortfolioSite && (
-                  <Typography
-                    variant="caption"
-                    component="p"
+            {cardVariant !== 'web' ? (
+              <TechStack
+                sx={{
+                  visibility: 'visible !important',
+                  opacity: '1 !important',
+                  zIndex: DESIGN_TOKENS.zIndex.elevated,
+                  position: 'relative',
+                  justifyContent: 'flex-start',
+                  mb: 0.4,
+                }}
+              >
+                {visibleTechs.map((tech, techIndex) => (
+                  <SkillTag key={techIndex} size="small" reflectionColor={reflectionColor}>
+                    {tech}
+                  </SkillTag>
+                ))}
+                {overflowTechCount > 0 ? (
+                  <Chip
+                    label={`+${overflowTechCount}`}
+                    size="small"
                     sx={{
-                      display: 'block',
-                      mb: 0.85,
-                      lineHeight: 1.45,
-                      fontWeight: 600,
-                      fontStyle: 'italic',
-                      opacity: 0.88,
-                      ...(isNonDefaultPalette ? { color: `${primary}ee` } : { color: 'rgba(255,255,255,0.88)' }),
+                      height: 22,
+                      fontSize: '0.6875rem',
+                      fontWeight: 700,
+                      bgcolor: alpha(primary, 0.12),
+                      color: textColor,
+                      border: `1px solid ${alpha(primary, 0.2)}`,
                     }}
-                  >
-                    {t('projects.portfolioSelfNotice')}
-                  </Typography>
-                )}
-                <Typography
-                  variant="body2"
-                  sx={{
-                    textAlign: 'left',
-                    lineHeight: 1.35,
-                    mb: { xs: 0.5, md: 0.65 },
-                    fontSize: { xs: '0.8125rem', sm: '0.75rem', md: '0.78rem' },
-                    overflow: 'visible',
-                    display: 'block',
-                    ...(isNonDefaultPalette ? { color: `${primary}ee` } : { color: 'rgba(255,255,255,0.92)' }),
-                  }}
-                >
-                  {project.description}
-                </Typography>
-              </Box>
+                  />
+                ) : null}
+              </TechStack>
+            ) : null}
 
-              {cardVariant !== 'web' ? (
-                <TechStack
-                  sx={{
-                    visibility: 'visible !important',
-                    opacity: '1 !important',
-                    zIndex: DESIGN_TOKENS.zIndex.elevated,
-                    position: 'relative',
-                    justifyContent: 'flex-start',
-                    mb: { xs: 0.5, md: 0.65 },
-                  }}
-                >
-                  {projectTechs.map((tech, techIndex) => (
-                    <SkillTag key={techIndex} size="small" reflectionColor={reflectionColor}>
-                      {tech}
-                    </SkillTag>
-                  ))}
-                </TechStack>
-              ) : null}
-
-              {projectMetaLineItems.length > 0 ? (
+            {projectMetaLineItems.length > 0 ? (
               <Box
                 sx={{
                   display: 'flex',
                   flexWrap: 'wrap',
                   alignItems: 'center',
-                  gap: 0.65,
-                  mb: 0.9,
-                  color: textColor,
-                  opacity: 0.78,
-                  fontSize: { xs: '0.75rem', sm: '0.75rem', md: '0.8125rem' },
-                  fontWeight: 900,
-                  letterSpacing: '0.11em',
+                  gap: 0.5,
+                  mb: 0.65,
+                  fontSize: '0.6875rem',
+                  fontWeight: 800,
+                  letterSpacing: '0.1em',
                   textTransform: 'uppercase',
+                  color: metaTextColor,
                 }}
               >
                 {projectMetaLineItems.map((item, metaIndex) => (
@@ -441,157 +507,46 @@ export default function ProjectCard({
                   </React.Fragment>
                 ))}
               </Box>
-              ) : null}
+            ) : null}
 
-              <Box
-                sx={{
-                  pt: 0.25,
-                  mt: 'auto',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'flex-start',
-                  gap: 0.5,
-                  flexShrink: 0,
-                  width: '100%',
-                }}
-                onClick={(e) => e.stopPropagation()}
-              >
-                {cardVariant === 'web' ? (
-                  webViewSiteHref ? (
+            <Box sx={getProjectCardActionsSx()} onClick={(e) => e.stopPropagation()}>
+              {cardVariant === 'web' ? (
+                webViewSiteHref ? (
+                  <Box sx={{ alignSelf: 'flex-start' }}>
                     <CTAButton variant="primary" size="small" onClick={() => handleProjectClick(webViewSiteHref)}>
                       {viewSiteLabel}
                     </CTAButton>
-                  ) : null
-                ) : timelendrDownloadsBesideProject ? (
-                  <Box
-                    sx={{
-                      display: 'flex',
-                      flexDirection: 'row',
-                      flexWrap: 'wrap',
-                      alignItems: 'center',
-                      width: '100%',
-                      gap: 1,
-                      rowGap: 0.75,
-                    }}
-                  >
-                    {primaryHref && (
-                      <Box sx={{ flexShrink: 0 }}>
-                        <CTAButton variant="primary" size="small" onClick={() => handleProjectClick(primaryHref)}>
-                          {primaryLabel}
-                        </CTAButton>
-                      </Box>
-                    )}
-                    <Box
-                      sx={{
-                        display: 'flex',
-                        flexDirection: 'row',
-                        flexWrap: { xs: 'wrap', sm: 'nowrap' },
-                        alignItems: 'stretch',
-                        justifyContent: 'flex-start',
-                        gap: 0.5,
-                        flex: '1 1 0',
-                        minWidth: { xs: '100%', sm: 0 },
-                        maxWidth: { xs: '100%', sm: 400 },
-                        marginLeft: { xs: 0, sm: 'auto' },
-                      }}
-                    >
-                      {timelendrWindowsUrl && primaryHref !== timelendrWindowsUrl && (
-                        <Button
-                          variant="outlined"
-                          color="primary"
-                          size="small"
-                          sx={{
-                            ...secondaryBtnSx,
-                            alignSelf: 'stretch',
-                            flex: '1 1 0',
-                            minWidth: 0,
-                            justifyContent: 'center',
-                            px: { xs: 1, sm: 1.35 },
-                            py: 1,
-                            minHeight: 44,
-                            fontSize: '0.75rem',
-                          }}
-                          startIcon={<DownloadIcon sx={{ fontSize: 18 }} />}
-                          onClick={() => handleProjectClick(timelendrWindowsUrl)}
-                        >
-                          {downloadTimelendrPcLabel}
-                        </Button>
-                      )}
-                      {timelendrMacosUrl && primaryHref !== timelendrMacosUrl && (
-                        <Button
-                          variant="outlined"
-                          color="primary"
-                          size="small"
-                          sx={{
-                            ...secondaryBtnSx,
-                            alignSelf: 'stretch',
-                            flex: '1 1 0',
-                            minWidth: 0,
-                            justifyContent: 'center',
-                            px: { xs: 1, sm: 1.35 },
-                            py: 1,
-                            minHeight: 44,
-                            fontSize: '0.75rem',
-                          }}
-                          startIcon={<DownloadIcon sx={{ fontSize: 18 }} />}
-                          onClick={() => handleProjectClick(timelendrMacosUrl)}
-                        >
-                          {downloadTimelendrMacosLabel}
-                        </Button>
-                      )}
-                    </Box>
                   </Box>
-                ) : (
-                  <>
-                    {primaryHref && (
+                ) : null
+              ) : (
+                <>
+                  {primaryHref ? (
+                    <Box sx={{ alignSelf: 'flex-start' }}>
                       <CTAButton variant="primary" size="small" onClick={() => handleProjectClick(primaryHref)}>
                         {primaryLabel}
                       </CTAButton>
-                    )}
-                    {project.siteUrl?.trim() && primaryHref !== project.siteUrl.trim() && (
-                      <Button variant="outlined" color="primary" size="small" sx={secondaryBtnSx} onClick={() => handleProjectClick(project.siteUrl!)}>
-                        {viewSiteLabel}
-                      </Button>
-                    )}
-                    {isTimelendrProject && timelendrWindowsUrl && primaryHref !== timelendrWindowsUrl && (
-                      <Button
-                        variant="outlined"
-                        color="primary"
-                        size="small"
-                        sx={secondaryBtnSx}
-                        startIcon={<DownloadIcon sx={{ fontSize: 18 }} />}
-                        onClick={() => handleProjectClick(timelendrWindowsUrl)}
-                      >
-                        {downloadTimelendrPcLabel}
-                      </Button>
-                    )}
-                    {isTimelendrProject && timelendrMacosUrl && primaryHref !== timelendrMacosUrl && (
-                      <Button
-                        variant="outlined"
-                        color="primary"
-                        size="small"
-                        sx={secondaryBtnSx}
-                        startIcon={<DownloadIcon sx={{ fontSize: 18 }} />}
-                        onClick={() => handleProjectClick(timelendrMacosUrl)}
-                      >
-                        {downloadTimelendrMacosLabel}
-                      </Button>
-                    )}
-                    {!isTimelendrProject && project.downloadUrl?.trim() && primaryHref !== project.downloadUrl.trim() && (
-                      <Button
-                        variant="outlined"
-                        color="primary"
-                        size="small"
-                        sx={secondaryBtnSx}
-                        startIcon={<DownloadIcon sx={{ fontSize: 18 }} />}
-                        onClick={() => handleProjectClick(project.downloadUrl!)}
-                      >
-                        {downloadProjectLabel}
-                      </Button>
-                    )}
-                  </>
-                )}
-              </Box>
+                    </Box>
+                  ) : null}
+                  {secondaryActions.length > 0 ? (
+                    <Box sx={getProjectCardDownloadGridSx(secondaryActions.length)}>
+                      {secondaryActions.map((action) => (
+                        <Button
+                          key={action.href}
+                          variant="text"
+                          size="small"
+                          aria-label={action.ariaLabel}
+                          sx={ghostBtnSx}
+                          startIcon={action.withDownloadIcon ? <DownloadIcon sx={{ fontSize: 14 }} /> : undefined}
+                          onClick={() => handleProjectClick(action.href)}
+                        >
+                          {action.label}
+                        </Button>
+                      ))}
+                    </Box>
+                  ) : null}
+                </>
+              )}
+            </Box>
           </Box>
         </Box>
       </Box>
