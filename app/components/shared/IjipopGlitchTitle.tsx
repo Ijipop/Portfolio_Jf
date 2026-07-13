@@ -106,7 +106,8 @@ export default function IjipopGlitchTitle({ text, variant = 'page' }: IjipopGlit
         fontWeight: 900,
         letterSpacing,
         textTransform: 'none',
-        lineHeight: 1.05,
+        lineHeight: 1.15,
+        overflow: 'visible',
         mb,
         color: 'transparent',
       }}
@@ -117,6 +118,8 @@ export default function IjipopGlitchTitle({ text, variant = 'page' }: IjipopGlit
         sx={{
           position: 'relative',
           display: 'inline-block',
+          overflow: 'visible',
+          py: '0.06em',
           color: 'transparent',
           backgroundColor: 'transparent',
           backgroundImage: fillGradient,
