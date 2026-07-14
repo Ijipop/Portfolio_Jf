@@ -93,12 +93,13 @@ export default function HomeV2Hero() {
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'center',
-          overflow: 'hidden',
+          overflow: 'visible',
         }}
       >
         <Box
           sx={{
             mb: { xs: 5, md: 6 },
+            overflow: 'visible',
             '@media (max-height: 820px)': { mb: 4 },
             '@media (max-height: 680px)': { mb: 3 },
             '@media (max-height: 500px)': { mb: 2 },

@@ -221,11 +221,20 @@ const HeaderSection = forwardRef<HTMLDivElement, HeaderSectionProps>(function He
             textRendering: 'optimizeLegibility',
             WebkitFontSmoothing: 'antialiased',
             MozOsxFontSmoothing: 'grayscale',
-            imageRendering: 'crisp-edges',
-            backfaceVisibility: 'hidden',
-            transform: 'translateZ(0)',
+            /** translateZ + backfaceVisibility créent une couche GPU qui clippe les tittles (i/j). */
+            ...(titleIsGlitch
+              ? {
+                  overflow: 'visible',
+                  lineHeight: 'inherit',
+                  imageRendering: 'auto',
+                }
+              : {
+                  imageRendering: 'crisp-edges',
+                  backfaceVisibility: 'hidden',
+                  transform: 'translateZ(0)',
+                }),
             position: 'relative',
-            zIndex: 1
+            zIndex: 1,
           }}
         >
           {title}
