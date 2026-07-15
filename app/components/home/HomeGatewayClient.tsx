@@ -110,11 +110,14 @@ export default function HomeGatewayClient() {
           spacing={{ xs: 2, md: 2.5 }}
           sx={{ width: '100%', alignItems: 'stretch' }}
         >
-          {choices.map((choice) => (
+              {choices.map((choice) => (
             <Box
               key={choice.href}
               component={Link}
               href={choice.href}
+              data-testid={
+                choice.href === WEB_HREF ? 'gateway-choice-web' : 'gateway-choice-support'
+              }
               sx={{
                 flex: 1,
                 display: 'flex',
