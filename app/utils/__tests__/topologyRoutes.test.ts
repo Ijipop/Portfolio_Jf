@@ -30,8 +30,11 @@ describe('shouldShowTopology', () => {
     expect(shouldShowTopology(null)).toBe(false)
   })
 
-  it('keeps topology enabled on landing page', () => {
-    expect(shouldShowTopology('/')).toBe(true)
+  it('disables topology on gateway landing (dedicated HomeV2Backdrop)', () => {
+    vi.stubEnv('NEXT_PUBLIC_TOPOLOGY_SCOPE', 'global')
+    expect(shouldShowTopology('/')).toBe(false)
+    vi.stubEnv('NEXT_PUBLIC_TOPOLOGY_SCOPE', 'targeted')
+    expect(shouldShowTopology('/')).toBe(false)
   })
 
   it('excludes /test routes so labs can use their own WebGL canvas', () => {

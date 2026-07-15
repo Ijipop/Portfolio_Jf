@@ -5,7 +5,11 @@ test('landing reaches portfolio and contact in two clicks max', async ({ page })
 
   await expect(page.getByTestId('gateway-choice-web')).toBeVisible()
   await expect(page.getByTestId('gateway-choice-support')).toBeVisible()
-  await expect(page.getByText(/Bienvenue sur ijipop solutions|Welcome to ijipop solutions/i).first()).toBeVisible()
+  const gatewayHeading = page.getByRole('heading', { level: 1 })
+  await expect(gatewayHeading).toContainText(/Bienvenue chez|Welcome to/i)
+  await expect(gatewayHeading).toContainText(/ijipop/i)
+  await expect(gatewayHeading).toContainText(/solutions/i)
+  await expect(page.getByText(/Que puis-je faire pour vous|How can I help you/i).first()).toBeVisible()
 
   await page.getByTestId('gateway-choice-web').click()
   await expect(page).toHaveURL(/\/portfolio\/?$/)

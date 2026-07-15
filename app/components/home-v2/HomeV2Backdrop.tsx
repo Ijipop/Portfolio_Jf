@@ -3,7 +3,17 @@
 import Box from '@mui/material/Box'
 import { HOME_V2 } from './homeV2Tokens'
 
-export default function HomeV2Backdrop() {
+type HomeV2BackdropProps = {
+  /**
+   * `top` = lueur collée en haut du viewport (accueil).
+   * `center` = lueur derrière le contenu (gateway / grands écrans).
+   */
+  glowPlacement?: 'top' | 'center'
+}
+
+export default function HomeV2Backdrop({ glowPlacement = 'top' }: HomeV2BackdropProps) {
+  const centered = glowPlacement === 'center'
+
   return (
     <Box
       aria-hidden
@@ -16,13 +26,23 @@ export default function HomeV2Backdrop() {
         '&::before': {
           content: '""',
           position: 'absolute',
-          top: '-20%',
+          top: centered ? '50%' : '-20%',
           left: '50%',
-          transform: 'translateX(-50%)',
-          width: 'min(900px, 120vw)',
-          height: 'min(700px, 80vh)',
+          transform: centered ? 'translate(-50%, -52%)' : 'translateX(-50%)',
+          width: centered ? 'min(980px, 68vw)' : 'min(900px, 120vw)',
+          height: centered ? 'min(520px, 52vh)' : 'min(700px, 80vh)',
           background: `radial-gradient(ellipse at center, ${HOME_V2.brandGlowStrong} 0%, transparent 70%)`,
-          opacity: 0.9,
+          opacity: centered ? 0.85 : 0.9,
+          ...(centered && {
+            '@media (min-height: 900px)': {
+              top: '46%',
+              transform: 'translate(-50%, -55%)',
+            },
+            '@media (min-height: 1100px)': {
+              top: '44%',
+              transform: 'translate(-50%, -58%)',
+            },
+          }),
         },
         '&::after': {
           content: '""',
