@@ -10,14 +10,31 @@ export const metadata: Metadata = {
       'Jean-François Lefebvre | Ijipop — sites web & logiciels pour PME au Québec',
   },
   description:
-    'Ijipop — développement web pour PME et indépendants : sites vitrine, refonte et maintenance. Réalisations et prise de contact — Montréal et télétravail.',
+    'Création et refonte de sites web pour PME et indépendants : site vitrine, performance, accessibilité, maintenance. Montréal et mandats à distance.',
   openGraph: {
-    title: 'Jean-François Lefebvre | Ijipop — sites web pour PME au Québec',
+    title:
+      'Jean-François Lefebvre | Ijipop — sites web & logiciels pour PME au Québec',
     description:
-      'Création de sites web, refonte et petite maintenance pour petites entreprises — aperçu des mandats et contact.',
+      'Création et refonte de sites web pour PME et travailleurs autonomes au Québec. Petits logiciels et outils sur mesure — Montréal.',
     url: '/portfolio',
     locale: 'fr_CA',
     siteName: 'Jean-François Lefebvre — Ijipop',
+    images: [
+      {
+        url: '/og-default.png',
+        width: 1200,
+        height: 630,
+        alt: 'Jean-François Lefebvre — Ijipop, sites web et logiciels pour PME au Québec',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title:
+      'Jean-François Lefebvre | Ijipop — sites web & logiciels pour PME au Québec',
+    description:
+      'Création et refonte de sites web pour PME et travailleurs autonomes au Québec. Petits logiciels et outils sur mesure — Montréal.',
+    images: ['/og-default.png'],
   },
 }
 

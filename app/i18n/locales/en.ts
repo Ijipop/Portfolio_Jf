@@ -1,4 +1,6 @@
 /** English translations */
+import { homeGatewayCopy } from '../homeGatewayCopy'
+
 export const en = {
     nav: {
       portfolio: 'ijipop',
@@ -253,6 +255,7 @@ export const en = {
     common: {
       getEstimate: 'Get an estimate',
     },
+    homeGateway: homeGatewayCopy.en,
     homeV2: {
       metaTitle: 'Ijipop — Websites & tech support · Montreal',
       navContact: 'Contact',

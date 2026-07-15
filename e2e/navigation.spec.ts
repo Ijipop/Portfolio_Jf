@@ -3,12 +3,16 @@ import { expect, test } from '@playwright/test'
 test('landing reaches portfolio and contact in two clicks max', async ({ page }) => {
   await page.goto('/', { waitUntil: 'domcontentloaded' })
 
-  await expect(page.getByRole('contentinfo')).toBeVisible()
-  await expect(page.locator('a[href="/portfolio/projets"]').first()).toBeVisible()
-  await expect(page.locator('a[href="/portfolio/contact"]').first()).toBeVisible()
+  await expect(page.getByTestId('gateway-choice-web')).toBeVisible()
+  await expect(page.getByTestId('gateway-choice-support')).toBeVisible()
+  await expect(page.getByText(/Bienvenue sur ijipop solutions|Welcome to ijipop solutions/i).first()).toBeVisible()
 
-  await page.goto('/portfolio/contact', { waitUntil: 'domcontentloaded' })
+  await page.getByTestId('gateway-choice-web').click()
+  await expect(page).toHaveURL(/\/portfolio\/?$/)
 
+  const contactNav = page.locator('a[href="/portfolio/contact"]').first()
+  await expect(contactNav).toBeVisible()
+  await contactNav.click()
   await expect(page).toHaveURL(/\/portfolio\/contact/)
   await expect(page.getByTestId('contact-form')).toBeVisible()
 })
@@ -94,7 +98,7 @@ test('home hero CTAs stay visible within the first viewport', async ({ page }) =
 
   for (const viewport of viewports) {
     await page.setViewportSize(viewport)
-    await page.goto('/', { waitUntil: 'domcontentloaded' })
+    await page.goto('/portfolio', { waitUntil: 'domcontentloaded' })
 
     const primaryCta = page.getByRole('link', { name: /Obtenir une estimation|Get an estimate/i }).first()
     const secondaryCta = page.getByRole('link', { name: /Voir les forfaits|View packages/i }).first()
@@ -116,13 +120,50 @@ test('home hero CTAs stay visible within the first viewport', async ({ page }) =
   }
 })
 
+test('gateway choice CTAs stay visible within the first viewport', async ({ page }) => {
+  // Évite opacity/transform transitoires qui font renvoyer null à boundingBox() en CI.
+  await page.emulateMedia({ reducedMotion: 'reduce' })
+
+  const viewports = [
+    { width: 390, height: 844 },
+    { width: 1280, height: 800 },
+  ]
+
+  for (const viewport of viewports) {
+    await page.setViewportSize(viewport)
+    await page.goto('/', { waitUntil: 'load' })
+
+    const webCta = page.getByTestId('gateway-choice-web')
+    const supportCta = page.getByTestId('gateway-choice-support')
+
+    await expect(webCta).toBeVisible()
+    await expect(supportCta).toBeVisible()
+
+    const isFullyInFirstViewport = (testId: string) =>
+      page.evaluate((id) => {
+        const el = document.querySelector(`[data-testid="${id}"]`)
+        if (!el) return false
+        const rect = el.getBoundingClientRect()
+        const tolerance = 8
+        return (
+          rect.width > 0 &&
+          rect.height > 0 &&
+          rect.top >= -tolerance &&
+          rect.bottom <= window.innerHeight + tolerance
+        )
+      }, testId)
+
+    await expect.poll(() => isFullyInFirstViewport('gateway-choice-web')).toBe(true)
+    await expect.poll(() => isFullyInFirstViewport('gateway-choice-support')).toBe(true)
+  }
+})
 test('site light mode uses dark text on home and contact', async ({ page }) => {
   await page.addInitScript(() => {
     window.localStorage.setItem('beigeDarkMode', '0')
     window.localStorage.setItem('beigeDarkUserChoice', '1')
   })
 
-  await page.goto('/', { waitUntil: 'domcontentloaded' })
+  await page.goto('/portfolio', { waitUntil: 'domcontentloaded' })
   await expect(page.locator('html')).not.toHaveClass(/dark/)
 
   const heroName = page.getByText(/Jean-François Lefebvre/i).first()
