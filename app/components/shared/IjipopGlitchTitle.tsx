@@ -38,8 +38,8 @@ export function buildPaletteGlitchGradient(primary: string, secondary: string, a
 export type IjipopGlitchTitleProps = {
   /** Texte brut (traduction). En `page`, affichage en capitales pour coller aux titres de section. */
   text: string
-  /** `hero` = accueil (ijipop en minuscules). `page` = titres Projets / À propos / Contact. */
-  variant?: 'hero' | 'page'
+  /** `hero` = accueil (ijipop en minuscules). `page` = titres Projets / À propos / Contact. `gateway` = phrase welcome, casse préservée. */
+  variant?: 'hero' | 'page' | 'gateway'
 }
 
 export default function IjipopGlitchTitle({ text, variant = 'page' }: IjipopGlitchTitleProps) {
@@ -49,20 +49,22 @@ export default function IjipopGlitchTitle({ text, variant = 'page' }: IjipopGlit
   const { primary, secondary, accent } = useThemeColors()
 
   const { fillGradient, glitchRgb } = useMemo(() => {
-    /** Mode Site (beige) : même dégradé ijipop que l’accueil pour hero et pages portfolio. */
-    if (presentationMode === 'beige') {
+    /** Gateway + mode Site (beige) : dégradé marque orange ijipop. */
+    if (variant === 'gateway' || presentationMode === 'beige') {
       return { fillGradient: BRAND_GLITCH_GRADIENT, glitchRgb: BRAND_GLITCH_LAYER }
     }
     return {
       fillGradient: buildPaletteGlitchGradient(primary, secondary, accent),
       glitchRgb: dimHex(primary, 0.5),
     }
-  }, [presentationMode, beigeDark, primary, secondary, accent])
+  }, [variant, presentationMode, beigeDark, primary, secondary, accent])
 
   const display =
     variant === 'hero'
       ? text.toLowerCase()
-      : text.toLocaleUpperCase(locale === 'en' ? 'en-US' : 'fr-FR')
+      : variant === 'gateway'
+        ? text
+        : text.toLocaleUpperCase(locale === 'en' ? 'en-US' : 'fr-FR')
   const dataText = variant === 'hero' ? text : display
 
   const fontSize =
@@ -74,11 +76,23 @@ export default function IjipopGlitchTitle({ text, variant = 'page' }: IjipopGlit
           lg: 'clamp(10.5rem, 13vw, 14.25rem)',
           xl: 'clamp(12rem, 12vw, 15.75rem)',
         }
-      : { xs: '1.75rem', sm: '2.75rem', md: '3.75rem' }
+      : variant === 'gateway'
+        ? {
+            xs: 'clamp(1.65rem, 7.2vw, 2.15rem)',
+            sm: 'clamp(2.1rem, 5.2vw, 2.75rem)',
+            md: 'clamp(2.55rem, 4.2vw, 3.35rem)',
+            lg: 'clamp(2.9rem, 3.6vw, 3.75rem)',
+          }
+        : { xs: '1.75rem', sm: '2.75rem', md: '3.75rem' }
 
-  const letterSpacing = variant === 'hero' ? { xs: '0.03em', sm: '0.05em' } : { xs: '0.05em', sm: '0.1em' }
+  const letterSpacing =
+    variant === 'hero'
+      ? { xs: '0.03em', sm: '0.05em' }
+      : variant === 'gateway'
+        ? { xs: '-0.02em', sm: '-0.01em' }
+        : { xs: '0.05em', sm: '0.1em' }
 
-  const mb = variant === 'hero' ? { xs: 0.9, sm: 1.2 } : 0
+  const mb = variant === 'hero' || variant === 'gateway' ? { xs: 0.9, sm: 1.2 } : 0
 
   return (
     <Typography
@@ -86,6 +100,8 @@ export default function IjipopGlitchTitle({ text, variant = 'page' }: IjipopGlit
       sx={{
         display: 'inline-block',
         fontSize,
+        maxWidth: variant === 'gateway' ? '100%' : undefined,
+        textAlign: variant === 'gateway' ? 'center' : undefined,
         ...(variant === 'hero' && {
           '@media (max-width: 599.95px) and (max-height: 760px)': {
             fontSize: 'clamp(4rem, 16vw, 4.8rem)',
@@ -101,6 +117,14 @@ export default function IjipopGlitchTitle({ text, variant = 'page' }: IjipopGlit
           },
           '@media (min-width: 900px) and (max-height: 680px)': {
             fontSize: 'clamp(7.8rem, 10.5vw, 9.4rem)',
+          },
+        }),
+        ...(variant === 'gateway' && {
+          '@media (max-height: 680px)': {
+            fontSize: 'clamp(1.85rem, 3.8vw, 2.6rem)',
+          },
+          '@media (max-height: 500px)': {
+            fontSize: 'clamp(1.45rem, 3.2vw, 1.9rem)',
           },
         }),
         fontWeight: 900,

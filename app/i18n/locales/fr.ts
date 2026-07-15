@@ -1,4 +1,6 @@
 /** Traductions françaises */
+import { homeGatewayCopy } from '../homeGatewayCopy'
+
 export const fr = {
     nav: {
       portfolio: 'ijipop',
@@ -254,6 +256,7 @@ export const fr = {
     common: {
       getEstimate: 'Obtenir une estimation',
     },
+    homeGateway: homeGatewayCopy.fr,
     homeV2: {
       metaTitle: 'Ijipop — Sites web & soutien technique · Montréal',
       navContact: 'Contact',
