@@ -121,6 +121,9 @@ test('home hero CTAs stay visible within the first viewport', async ({ page }) =
 })
 
 test('gateway choice CTAs stay visible within the first viewport', async ({ page }) => {
+  // Évite opacity/transform transitoires qui font renvoyer null à boundingBox() en CI.
+  await page.emulateMedia({ reducedMotion: 'reduce' })
+
   const viewports = [
     { width: 390, height: 844 },
     { width: 1280, height: 800 },
@@ -128,7 +131,7 @@ test('gateway choice CTAs stay visible within the first viewport', async ({ page
 
   for (const viewport of viewports) {
     await page.setViewportSize(viewport)
-    await page.goto('/', { waitUntil: 'domcontentloaded' })
+    await page.goto('/', { waitUntil: 'load' })
 
     const webCta = page.getByTestId('gateway-choice-web')
     const supportCta = page.getByTestId('gateway-choice-support')
@@ -136,29 +139,24 @@ test('gateway choice CTAs stay visible within the first viewport', async ({ page
     await expect(webCta).toBeVisible()
     await expect(supportCta).toBeVisible()
 
-    // Attendre la fin du slide-in (delay max 240ms + durée) avant boundingBox
-    await expect
-      .poll(async () => {
-        const webBox = await webCta.boundingBox()
-        const supportBox = await supportCta.boundingBox()
-        return webBox != null && supportBox != null
-      })
-      .toBe(true)
+    const isFullyInFirstViewport = (testId: string) =>
+      page.evaluate((id) => {
+        const el = document.querySelector(`[data-testid="${id}"]`)
+        if (!el) return false
+        const rect = el.getBoundingClientRect()
+        const tolerance = 8
+        return (
+          rect.width > 0 &&
+          rect.height > 0 &&
+          rect.top >= -tolerance &&
+          rect.bottom <= window.innerHeight + tolerance
+        )
+      }, testId)
 
-    const viewportHeight = await page.evaluate(() => window.innerHeight)
-    const webBox = await webCta.boundingBox()
-    const supportBox = await supportCta.boundingBox()
-
-    expect(webBox).not.toBeNull()
-    expect(supportBox).not.toBeNull()
-    if (webBox && supportBox) {
-      const tolerance = 8
-      expect(webBox.y + webBox.height).toBeLessThanOrEqual(viewportHeight + tolerance)
-      expect(supportBox.y + supportBox.height).toBeLessThanOrEqual(viewportHeight + tolerance)
-    }
+    await expect.poll(() => isFullyInFirstViewport('gateway-choice-web')).toBe(true)
+    await expect.poll(() => isFullyInFirstViewport('gateway-choice-support')).toBe(true)
   }
 })
-
 test('site light mode uses dark text on home and contact', async ({ page }) => {
   await page.addInitScript(() => {
     window.localStorage.setItem('beigeDarkMode', '0')
