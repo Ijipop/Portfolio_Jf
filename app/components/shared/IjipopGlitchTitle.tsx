@@ -103,8 +103,9 @@ export default function IjipopGlitchTitle({ text, variant = 'page' }: IjipopGlit
       sx={{
         display: 'inline-block',
         fontSize,
-        maxWidth: variant === 'gateway' ? '100%' : undefined,
-        textAlign: variant === 'gateway' ? 'center' : undefined,
+        maxWidth: variant === 'gateway' || variant === 'hero' ? '100%' : undefined,
+        textAlign: variant === 'gateway' || variant === 'hero' ? 'center' : undefined,
+        mx: variant === 'hero' ? 'auto' : undefined,
         ...(variant === 'hero' && {
           '@media (max-width: 599.95px) and (max-height: 760px)': {
             fontSize: 'clamp(4rem, 16vw, 4.8rem)',
@@ -115,11 +116,15 @@ export default function IjipopGlitchTitle({ text, variant = 'page' }: IjipopGlit
           '@media (max-height: 500px)': {
             fontSize: 'clamp(3.25rem, 12vw, 4rem)',
           },
-          '@media (min-width: 900px) and (max-height: 820px)': {
-            fontSize: 'clamp(8.8rem, 12vw, 11rem)',
+          /** Laptops ~15" : l’ancien scale (~9–11rem) faisait chevaucher texte et CTAs. */
+          '@media (min-width: 900px) and (max-height: 920px)': {
+            fontSize: 'clamp(5.2rem, 7.5vw, 6.75rem)',
           },
-          '@media (min-width: 900px) and (max-height: 680px)': {
-            fontSize: 'clamp(7.8rem, 10.5vw, 9.4rem)',
+          '@media (min-width: 900px) and (max-height: 800px)': {
+            fontSize: 'clamp(4.4rem, 6.5vw, 5.6rem)',
+          },
+          '@media (min-width: 900px) and (max-height: 700px)': {
+            fontSize: 'clamp(3.6rem, 5.5vw, 4.6rem)',
           },
         }),
         ...(variant === 'gateway' && {
