@@ -78,10 +78,12 @@ export default function IjipopGlitchTitle({ text, variant = 'page' }: IjipopGlit
         }
       : variant === 'gateway'
         ? {
-            xs: 'clamp(1.65rem, 7.2vw, 2.15rem)',
-            sm: 'clamp(2.1rem, 5.2vw, 2.75rem)',
-            md: 'clamp(2.55rem, 4.2vw, 3.35rem)',
-            lg: 'clamp(2.9rem, 3.6vw, 3.75rem)',
+            /** Aligné sur HomeGatewayClient (halo + titre partagent le même scale). */
+            xs: 'clamp(3.1rem, 14vw, 4.1rem)',
+            sm: 'clamp(4.2rem, 10vw, 5.4rem)',
+            md: 'clamp(4.6rem, 6vw, 5.8rem)',
+            lg: 'clamp(5rem, 4.5vw, 6.1rem)',
+            xl: 'clamp(5.2rem, 3.8vw, 6.25rem)',
           }
         : { xs: '1.75rem', sm: '2.75rem', md: '3.75rem' }
 
@@ -89,10 +91,11 @@ export default function IjipopGlitchTitle({ text, variant = 'page' }: IjipopGlit
     variant === 'hero'
       ? { xs: '0.03em', sm: '0.05em' }
       : variant === 'gateway'
-        ? { xs: '-0.02em', sm: '-0.01em' }
+        ? { xs: '0.015em', sm: '0.02em' }
         : { xs: '0.05em', sm: '0.1em' }
 
-  const mb = variant === 'hero' || variant === 'gateway' ? { xs: 0.9, sm: 1.2 } : 0
+  /** Gateway : le parent (eyebrow + suffix) gère l’espacement. */
+  const mb = variant === 'hero' ? { xs: 0.9, sm: 1.2 } : 0
 
   return (
     <Typography
@@ -120,11 +123,14 @@ export default function IjipopGlitchTitle({ text, variant = 'page' }: IjipopGlit
           },
         }),
         ...(variant === 'gateway' && {
-          '@media (max-height: 680px)': {
-            fontSize: 'clamp(1.85rem, 3.8vw, 2.6rem)',
+          '@media (max-height: 720px)': {
+            fontSize: 'clamp(3rem, 9vw, 5.2rem)',
+          },
+          '@media (max-height: 640px)': {
+            fontSize: 'clamp(2.6rem, 8vw, 4.2rem)',
           },
           '@media (max-height: 500px)': {
-            fontSize: 'clamp(1.45rem, 3.2vw, 1.9rem)',
+            fontSize: 'clamp(2.2rem, 7vw, 3.2rem)',
           },
         }),
         fontWeight: 900,

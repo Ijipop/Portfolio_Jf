@@ -58,9 +58,12 @@ export default function HomeGatewayClient() {
         py: { xs: 2.5, sm: 4, md: 5 },
         color: SITE_DARK.text,
         overflow: 'visible',
+        '@media (min-height: 900px)': {
+          py: 'clamp(48px, 8vh, 96px)',
+        },
       }}
     >
-      <HomeV2Backdrop />
+      <HomeV2Backdrop glowPlacement="center" />
 
       <Box
         sx={{
@@ -69,6 +72,15 @@ export default function HomeGatewayClient() {
           width: '100%',
           maxWidth: 960,
           textAlign: 'center',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          '@media (min-height: 900px)': {
+            gap: 'clamp(28px, 4.5vh, 56px)',
+          },
+          '@media (min-height: 1100px)': {
+            gap: 'clamp(36px, 5.5vh, 72px)',
+          },
           '@keyframes gatewayFadeUp': {
             from: { opacity: 0, transform: 'translateY(14px)' },
             to: { opacity: 1, transform: 'translateY(0)' },
@@ -83,11 +95,125 @@ export default function HomeGatewayClient() {
           component="h1"
           sx={{
             m: 0,
-            mb: { xs: 1, sm: 1.5, md: 2 },
+            mb: { xs: 1.5, sm: 2, md: 2.5 },
+            '@media (min-height: 900px)': { mb: 0 },
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
             animation: reducedMotion ? 'none' : 'gatewayFadeUp 0.55s ease both',
           }}
         >
-          <IjipopGlitchTitle text={copy.welcome} variant="gateway" />
+          <Typography
+            component="span"
+            sx={{
+              mb: 1,
+              fontSize: { xs: '1.2rem', sm: '1.45rem', md: '1.65rem' },
+              fontWeight: 500,
+              fontStyle: 'italic',
+              letterSpacing: '-0.01em',
+              color: SITE_DARK.textSecondary,
+            }}
+          >
+            {copy.welcomeEyebrow}
+          </Typography>
+
+          <Box
+            sx={{
+              display: 'inline-flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              mx: 'auto',
+            }}
+          >
+            <Box
+              sx={{
+                position: 'relative',
+                display: 'inline-block',
+                pt: { xs: '0.55em', sm: '0.5em', md: '0.4em', lg: '0.36em' },
+                /** Plafond plus bas en desktop : évite un titre/halo disproportionnés. */
+                fontSize: {
+                  xs: 'clamp(3.1rem, 14vw, 4.1rem)',
+                  sm: 'clamp(4.2rem, 10vw, 5.4rem)',
+                  md: 'clamp(4.6rem, 6vw, 5.8rem)',
+                  lg: 'clamp(5rem, 4.5vw, 6.1rem)',
+                  xl: 'clamp(5.2rem, 3.8vw, 6.25rem)',
+                },
+                '@media (max-height: 720px)': {
+                  fontSize: 'clamp(3rem, 8vw, 4.8rem)',
+                },
+                '@media (max-height: 640px)': {
+                  fontSize: 'clamp(2.6rem, 7.5vw, 4rem)',
+                },
+                '@media (max-height: 500px)': {
+                  fontSize: 'clamp(2.2rem, 7vw, 3.2rem)',
+                },
+              }}
+            >
+              <Box
+                aria-hidden
+                sx={{
+                  position: 'absolute',
+                  left: '50%',
+                  top: 0,
+                  transform: 'translateX(-50%)',
+                  width: { xs: '60%', sm: '56%', md: '50%', lg: '46%' },
+                  height: { xs: '0.4em', md: '0.3em', lg: '0.26em' },
+                  pointerEvents: 'none',
+                }}
+              >
+                <Box
+                  sx={{
+                    position: 'absolute',
+                    left: '50%',
+                    top: '60%',
+                    transform: 'translate(-50%, -50%)',
+                    width: { xs: '130%', md: '120%', lg: '115%' },
+                    height: '100%',
+                    background: {
+                      xs: `radial-gradient(ellipse 80% 90% at 50% 70%, ${SITE_DARK.brandGlowStrong} 0%, transparent 70%)`,
+                      md: `radial-gradient(ellipse 70% 85% at 50% 70%, ${SITE_DARK.brandGlow} 0%, transparent 72%)`,
+                    },
+                  }}
+                />
+                <Box
+                  sx={{
+                    position: 'absolute',
+                    left: '50%',
+                    top: '52%',
+                    transform: 'translate(-50%, -50%)',
+                    width: '100%',
+                    height: { xs: 2.5, sm: 3, md: 3, lg: 3.5 },
+                    borderRadius: 99,
+                    background: `linear-gradient(90deg, transparent, ${SITE_DARK.brandOrangeLight} 20%, ${SITE_DARK.brandOrange} 50%, ${SITE_DARK.brandOrangeLight} 80%, transparent)`,
+                  }}
+                />
+              </Box>
+
+              <Box
+                sx={{
+                  position: 'relative',
+                  zIndex: 1,
+                  '& > .MuiTypography-root': { fontSize: '1em !important' },
+                }}
+              >
+                <IjipopGlitchTitle text={copy.brand} variant="gateway" />
+              </Box>
+            </Box>
+
+            <Typography
+              component="span"
+              sx={{
+                mt: { xs: -0.4, sm: -0.55 },
+                fontSize: { xs: '1.45rem', sm: '1.75rem', md: '2rem' },
+                fontWeight: 700,
+                letterSpacing: '0.14em',
+                textTransform: 'lowercase',
+                color: SITE_DARK.brandOrangeLight,
+              }}
+            >
+              {copy.brandSuffix}
+            </Typography>
+          </Box>
         </Box>
 
         <Typography
@@ -95,6 +221,7 @@ export default function HomeGatewayClient() {
           sx={{
             m: 0,
             mb: { xs: 2.25, sm: 3.5, md: 5 },
+            '@media (min-height: 900px)': { mb: 0 },
             fontSize: { xs: '1rem', sm: '1.2rem', md: '1.3rem' },
             fontWeight: 500,
             letterSpacing: '-0.01em',

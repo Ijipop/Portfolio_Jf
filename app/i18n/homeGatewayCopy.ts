@@ -1,7 +1,11 @@
 /** Copy de la page gateway `/` — source unique FR/EN (évite les misses i18n HMR). */
 export const homeGatewayCopy = {
   fr: {
+    /** Phrase complète — metadata / SEO éventuel */
     welcome: 'Bienvenue sur ijipop solutions',
+    welcomeEyebrow: 'Bienvenue chez',
+    brand: 'ijipop',
+    brandSuffix: 'solutions',
     prompt: 'Que puis-je faire pour vous ?',
     webTitle: 'Création de site web',
     webDesc: 'Sites vitrine, refonte et mise en ligne pour PME et indépendants.',
@@ -12,6 +16,9 @@ export const homeGatewayCopy = {
   },
   en: {
     welcome: 'Welcome to ijipop solutions',
+    welcomeEyebrow: 'Welcome to',
+    brand: 'ijipop',
+    brandSuffix: 'solutions',
     prompt: 'How can I help you?',
     webTitle: 'Website creation',
     webDesc: 'Showcase sites, redesigns and launch for SMBs and freelancers.',

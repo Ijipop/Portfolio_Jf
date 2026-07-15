@@ -16,11 +16,11 @@ export function shouldShowTopology(pathname: string | null): boolean {
   // Preview accueil v2 : fond sombre dédié, sans topology globale.
   if (pathname.startsWith('/accueil-v2')) return false
 
+  // Gateway `/` : fond dédié (HomeV2Backdrop) — évite le halo topology collé en haut du viewport.
+  if (pathname === '/') return false
+
   const scope = getTopologyScope()
   if (scope === 'global') return true
-
-  // Accueil : même en mode ciblé, le hero doit garder le fond animé (topology landing).
-  if (pathname === '/') return true
 
   return TOPOLOGY_PATH_PREFIXES.some(
     (prefix) => pathname === prefix || pathname.startsWith(`${prefix}/`)
