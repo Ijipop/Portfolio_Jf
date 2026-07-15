@@ -60,10 +60,10 @@ export default function HomeV2Hero() {
         },
         display: 'flex',
         flexDirection: 'column',
-        alignItems: 'stretch',
+        alignItems: 'center',
         textAlign: 'center',
-        pt: { xs: 2, sm: 3, md: 4 },
-        px: 0,
+        pt: { xs: 1, sm: 1.5 },
+        px: { xs: 2, sm: 3 },
         overflow: 'hidden',
       }}
     >
@@ -92,17 +92,26 @@ export default function HomeV2Hero() {
           mx: 'auto',
           display: 'flex',
           flexDirection: 'column',
+          alignItems: 'center',
           justifyContent: 'center',
-          overflow: 'visible',
+          textAlign: 'center',
+          overflow: 'hidden',
+          pb: { xs: 1, sm: 1.5 },
         }}
       >
         <Box
           sx={{
+            width: '100%',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            textAlign: 'center',
             mb: { xs: 5, md: 6 },
             overflow: 'visible',
-            '@media (max-height: 820px)': { mb: 4 },
-            '@media (max-height: 680px)': { mb: 3 },
-            '@media (max-height: 500px)': { mb: 2 },
+            '@media (max-height: 920px)': { mb: 2.5 },
+            '@media (max-height: 800px)': { mb: 2 },
+            '@media (max-height: 680px)': { mb: 1.5 },
+            '@media (max-height: 500px)': { mb: 1 },
           }}
         >
           <IjipopGlitchTitle text={t('homeV2.heroTitle')} variant="hero" />
@@ -124,14 +133,21 @@ export default function HomeV2Hero() {
             letterSpacing: '-0.03em',
             color: v2.text,
             mb: { xs: 2, md: 2.5 },
-            '@media (max-height: 760px)': {
-              mb: 1.5,
+            '@media (min-width: 900px) and (max-height: 900px)': {
+              mb: 1.25,
+              fontSize: 'clamp(1.35rem, 2.4vw, 1.75rem)',
             },
-            '@media (max-height: 680px)': {
+            '@media (max-height: 900px)': {
+              mb: 1.25,
+            },
+            '@media (max-height: 760px)': {
               mb: 1,
             },
-            '@media (max-height: 500px)': {
+            '@media (max-height: 680px)': {
               mb: 0.75,
+            },
+            '@media (max-height: 500px)': {
+              mb: 0.5,
               fontSize: 'clamp(1rem, 4.5vw, 1.35rem)',
               gap: 0.2,
             },
@@ -183,13 +199,17 @@ export default function HomeV2Hero() {
             mx: 'auto',
             lineHeight: 1.55,
             mb: 2,
-            '@media (max-height: 760px)': {
+            '@media (max-height: 900px)': {
               mb: 1.25,
-              fontSize: '0.95rem',
+              fontSize: '0.98rem',
+            },
+            '@media (max-height: 760px)': {
+              mb: 1,
+              fontSize: '0.92rem',
             },
             '@media (max-height: 680px)': {
               mb: 0.75,
-              fontSize: '0.9rem',
+              fontSize: '0.88rem',
             },
             '@media (max-height: 500px)': {
               mb: 0.5,
@@ -207,12 +227,16 @@ export default function HomeV2Hero() {
             fontSize: '1rem',
             color: v2.text,
             mb: 0.5,
+            '@media (max-height: 900px)': {
+              fontSize: '0.95rem',
+              mb: 0.35,
+            },
             '@media (max-height: 760px)': {
-              fontSize: '0.92rem',
+              fontSize: '0.9rem',
               mb: 0.25,
             },
             '@media (max-height: 680px)': {
-              fontSize: '0.88rem',
+              fontSize: '0.86rem',
               mb: 0,
             },
             '@media (max-height: 500px)': {
@@ -227,14 +251,11 @@ export default function HomeV2Hero() {
             fontSize: '0.9rem',
             color: v2.textMuted,
             mb: 0,
-            '@media (max-height: 760px)': {
-              fontSize: '0.82rem',
+            '@media (max-height: 900px)': {
+              fontSize: '0.84rem',
             },
-            '@media (max-height: 680px)': {
-              fontSize: '0.78rem',
-            },
-            '@media (max-height: 500px)': {
-              fontSize: '0.72rem',
+            '@media (max-height: 800px)': {
+              display: 'none',
             },
           }}
         >
@@ -245,13 +266,17 @@ export default function HomeV2Hero() {
       <Box
         sx={{
           position: 'relative',
-          zIndex: 1,
+          zIndex: 2,
           flexShrink: 0,
           width: '100%',
           maxWidth: 440,
           mx: 'auto',
           pt: { xs: 1.5, sm: 2 },
           pb: 'max(16px, env(safe-area-inset-bottom, 0px))',
+          background: `linear-gradient(180deg, transparent 0%, ${v2.bg} 28%)`,
+          '@media (max-height: 900px)': {
+            pt: 1.25,
+          },
           '@media (max-height: 500px)': {
             pt: 1,
             pb: 'max(12px, env(safe-area-inset-bottom, 0px))',
