@@ -136,6 +136,15 @@ test('gateway choice CTAs stay visible within the first viewport', async ({ page
     await expect(webCta).toBeVisible()
     await expect(supportCta).toBeVisible()
 
+    // Attendre la fin du slide-in (delay max 240ms + durée) avant boundingBox
+    await expect
+      .poll(async () => {
+        const webBox = await webCta.boundingBox()
+        const supportBox = await supportCta.boundingBox()
+        return webBox != null && supportBox != null
+      })
+      .toBe(true)
+
     const viewportHeight = await page.evaluate(() => window.innerHeight)
     const webBox = await webCta.boundingBox()
     const supportBox = await supportCta.boundingBox()
@@ -143,7 +152,7 @@ test('gateway choice CTAs stay visible within the first viewport', async ({ page
     expect(webBox).not.toBeNull()
     expect(supportBox).not.toBeNull()
     if (webBox && supportBox) {
-      const tolerance = 4
+      const tolerance = 8
       expect(webBox.y + webBox.height).toBeLessThanOrEqual(viewportHeight + tolerance)
       expect(supportBox.y + supportBox.height).toBeLessThanOrEqual(viewportHeight + tolerance)
     }

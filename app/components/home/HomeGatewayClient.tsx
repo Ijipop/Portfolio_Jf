@@ -55,9 +55,9 @@ export default function HomeGatewayClient() {
         alignItems: 'center',
         justifyContent: 'center',
         px: { xs: 2, sm: 3, md: 4 },
-        py: { xs: 4, sm: 5 },
+        py: { xs: 2.5, sm: 4, md: 5 },
         color: SITE_DARK.text,
-        overflow: 'hidden',
+        overflow: 'visible',
       }}
     >
       <HomeV2Backdrop />
@@ -70,8 +70,12 @@ export default function HomeGatewayClient() {
           maxWidth: 960,
           textAlign: 'center',
           '@keyframes gatewayFadeUp': {
-            from: { opacity: 0, transform: 'translateY(18px)' },
+            from: { opacity: 0, transform: 'translateY(14px)' },
             to: { opacity: 1, transform: 'translateY(0)' },
+          },
+          '@keyframes gatewaySlideUp': {
+            from: { transform: 'translateY(14px)' },
+            to: { transform: 'translateY(0)' },
           },
         }}
       >
@@ -79,8 +83,8 @@ export default function HomeGatewayClient() {
           component="h1"
           sx={{
             m: 0,
-            mb: { xs: 1.5, sm: 2 },
-            animation: reducedMotion ? 'none' : 'gatewayFadeUp 0.7s ease both',
+            mb: { xs: 1, sm: 1.5, md: 2 },
+            animation: reducedMotion ? 'none' : 'gatewayFadeUp 0.55s ease both',
           }}
         >
           <IjipopGlitchTitle text={copy.welcome} variant="gateway" />
@@ -90,15 +94,15 @@ export default function HomeGatewayClient() {
           component="p"
           sx={{
             m: 0,
-            mb: { xs: 3.5, sm: 4.5, md: 5.5 },
-            fontSize: { xs: '1.05rem', sm: '1.2rem', md: '1.3rem' },
+            mb: { xs: 2.25, sm: 3.5, md: 5 },
+            fontSize: { xs: '1rem', sm: '1.2rem', md: '1.3rem' },
             fontWeight: 500,
             letterSpacing: '-0.01em',
             color: SITE_DARK.textSecondary,
-            animation: reducedMotion ? 'none' : 'gatewayFadeUp 0.7s ease 0.08s both',
-            '@media (max-height: 680px)': {
-              mb: 3,
-              fontSize: '1.05rem',
+            animation: reducedMotion ? 'none' : 'gatewayFadeUp 0.55s ease 0.06s both',
+            '@media (max-height: 720px)': {
+              mb: 2,
+              fontSize: '0.98rem',
             },
           }}
         >
@@ -107,7 +111,7 @@ export default function HomeGatewayClient() {
 
         <Stack
           direction={{ xs: 'column', md: 'row' }}
-          spacing={{ xs: 2, md: 2.5 }}
+          spacing={{ xs: 1.5, md: 2.5 }}
           sx={{ width: '100%', alignItems: 'stretch' }}
         >
               {choices.map((choice) => (
@@ -126,8 +130,8 @@ export default function HomeGatewayClient() {
                 textAlign: 'left',
                 textDecoration: 'none',
                 color: 'inherit',
-                minHeight: { xs: 168, md: 220 },
-                p: { xs: 2.75, sm: 3.25, md: 3.5 },
+                minHeight: { xs: 'auto', md: 220 },
+                p: { xs: 2, sm: 2.75, md: 3.5 },
                 borderRadius: SITE_DARK.cardRadius,
                 background: SITE_DARK.surface,
                 backdropFilter: 'blur(14px)',
@@ -136,9 +140,10 @@ export default function HomeGatewayClient() {
                 boxShadow: `0 10px 40px rgba(0, 0, 0, 0.35)`,
                 transition:
                   'border-color 0.28s ease, box-shadow 0.28s ease, transform 0.28s ease, background 0.28s ease',
+                /** Pas d’opacity:0 — évite boundingBox null pendant le delay (e2e / a11y). */
                 animation: reducedMotion
                   ? 'none'
-                  : `gatewayFadeUp 0.75s ease ${choice.delayMs}ms both`,
+                  : `gatewaySlideUp 0.55s ease ${choice.delayMs}ms both`,
                 '&:hover': {
                   borderColor: SITE_DARK.borderHover,
                   background: SITE_DARK.surfaceHover,
@@ -161,12 +166,12 @@ export default function HomeGatewayClient() {
               <Typography
                 component="span"
                 sx={{
-                  fontSize: { xs: '1.35rem', sm: '1.55rem', md: '1.7rem' },
+                  fontSize: { xs: '1.2rem', sm: '1.45rem', md: '1.7rem' },
                   fontWeight: 800,
                   letterSpacing: '-0.03em',
                   lineHeight: 1.15,
                   color: SITE_DARK.text,
-                  mb: 1.25,
+                  mb: { xs: 0.75, sm: 1.25 },
                 }}
               >
                 {choice.title}
@@ -175,10 +180,10 @@ export default function HomeGatewayClient() {
                 component="span"
                 sx={{
                   flex: 1,
-                  fontSize: { xs: '0.95rem', sm: '1rem' },
-                  lineHeight: 1.55,
+                  fontSize: { xs: '0.9rem', sm: '1rem' },
+                  lineHeight: 1.5,
                   color: SITE_DARK.textSecondary,
-                  mb: 2.5,
+                  mb: { xs: 1.5, sm: 2.5 },
                 }}
               >
                 {choice.description}
