@@ -13,6 +13,7 @@ import { homeGatewayCopy } from '@/i18n/homeGatewayCopy'
 
 const WEB_HREF = '/portfolio'
 const SUPPORT_HREF = '/soutien-informatique-montreal'
+const SOFTWARE_HREF = '/logiciel'
 
 type GatewayChoice = {
   href: string
@@ -346,6 +347,75 @@ export default function HomeGatewayClient() {
             </Box>
           ))}
         </Stack>
+
+        <Box
+          component={Link}
+          href={SOFTWARE_HREF}
+          data-testid="gateway-soft-cta-software"
+          sx={{
+            mt: { xs: 2.25, sm: 3, md: 3.5 },
+            '@media (min-height: 900px)': { mt: 0 },
+            '@media (max-height: 720px)': { mt: 1.75 },
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: 1,
+            px: { xs: 1.75, sm: 2.25 },
+            py: { xs: 0.85, sm: 1 },
+            borderRadius: 999,
+            textDecoration: 'none',
+            background: `linear-gradient(135deg, ${SITE_DARK.brandOrangeLight} 0%, ${SITE_DARK.brandOrange} 55%, #b91c1c 100%)`,
+            boxShadow: `0 8px 28px ${SITE_DARK.brandGlowStrong}, 0 0 0 1px rgba(255, 255, 255, 0.12) inset`,
+            transition: 'transform 0.22s ease, box-shadow 0.22s ease, filter 0.22s ease',
+            animation: reducedMotion
+              ? 'none'
+              : 'gatewayFadeUp 0.55s ease 0.32s both',
+            '&:hover': {
+              transform: reducedMotion ? 'none' : 'translateY(-2px)',
+              boxShadow: `0 12px 36px ${SITE_DARK.brandGlowStrong}, 0 0 0 1px rgba(255, 255, 255, 0.18) inset`,
+              filter: 'brightness(1.06)',
+              '& .gateway-soft-arrow': {
+                transform: 'translateX(3px)',
+              },
+            },
+            '&:focus-visible': {
+              outline: `2px solid ${SITE_DARK.brandOrangeLight}`,
+              outlineOffset: 3,
+            },
+            '@media (prefers-reduced-motion: reduce)': {
+              transition: 'filter 0.2s ease',
+            },
+          }}
+        >
+          <Box
+            component="span"
+            sx={{
+              display: 'inline-block',
+              fontSize: { xs: '0.9rem', sm: '0.98rem' },
+              fontWeight: 800,
+              letterSpacing: '0.02em',
+              lineHeight: 1.2,
+              color: '#fff7ed',
+              textShadow: '0 1px 0 rgba(0,0,0,0.18)',
+            }}
+          >
+            {copy.softCta}
+          </Box>
+          <Box
+            component="span"
+            className="gateway-soft-arrow"
+            aria-hidden
+            sx={{
+              display: 'inline-block',
+              color: '#fff7ed',
+              fontWeight: 800,
+              transition: 'transform 0.2s ease',
+              fontSize: '1.1em',
+              lineHeight: 1,
+            }}
+          >
+            →
+          </Box>
+        </Box>
       </Box>
     </Box>
   )

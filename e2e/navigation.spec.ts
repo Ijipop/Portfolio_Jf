@@ -161,6 +161,15 @@ test('gateway choice CTAs stay visible within the first viewport', async ({ page
     await expect.poll(() => isFullyInFirstViewport('gateway-choice-support')).toBe(true)
   }
 })
+
+test('gateway soft CTA links to software page', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' })
+  await page.goto('/', { waitUntil: 'domcontentloaded' })
+
+  const softCta = page.getByTestId('gateway-soft-cta-software')
+  await expect(softCta).toBeVisible()
+  await expect(softCta).toHaveAttribute('href', '/logiciel')
+})
 test('site light mode uses dark text on home and contact', async ({ page }) => {
   await page.addInitScript(() => {
     window.localStorage.setItem('beigeDarkMode', '0')

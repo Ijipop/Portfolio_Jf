@@ -273,7 +273,6 @@ export default function HomeV2Hero() {
           mx: 'auto',
           pt: { xs: 1.5, sm: 2 },
           pb: 'max(16px, env(safe-area-inset-bottom, 0px))',
-          background: `linear-gradient(180deg, transparent 0%, ${v2.bg} 28%)`,
           '@media (max-height: 900px)': {
             pt: 1.25,
           },

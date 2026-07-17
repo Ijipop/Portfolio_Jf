@@ -1,9 +1,6 @@
 'use client'
 
 import DownloadIcon from '@mui/icons-material/Download'
-import GitHubIcon from '@mui/icons-material/GitHub'
-import LanguageOutlinedIcon from '@mui/icons-material/LanguageOutlined'
-import LaunchIcon from '@mui/icons-material/Launch'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Chip from '@mui/material/Chip'
@@ -33,11 +30,17 @@ import {
   getProjectCardContentSx,
   getProjectCardDownloadGridSx,
   getProjectCardGhostBtnSx,
-  getProjectCardLinkIconSx,
   getProjectCardRootSx,
   getProjectCardThumbnailSx,
   getProjectCardTitleRowSx,
 } from '../utils/projectCardEditorialSx'
+import {
+  getShowcaseCardMediaSx,
+  getSoftwareCardActionsSx,
+  getSoftwareCardBodySx,
+  getSoftwareCardIconTileSx,
+  getSoftwareCardRootSx,
+} from '../utils/projectCardSoftwareSx'
 
 const MAX_VISIBLE_TECHS = 3
 
@@ -71,22 +74,63 @@ type SecondaryAction = {
   withDownloadIcon?: boolean
 }
 
-function resolveProjectCardImage(project: Project): string | undefined {
-  const uploaded = project.imageUrl?.trim()
-  if (uploaded) return uploaded
-
+/** Icônes vitrine : priorité sur l’ancien upload screenshot admin. */
+function resolveBrandIcon(project: Project): string | undefined {
   const n = project.name.toLowerCase()
-  const u = (project.url ?? '').toLowerCase()
-  if (n.includes('thermo') && n.includes('trappeur')) return 'imgs/images/Thermo.png'
+  const u = `${project.url ?? ''} ${project.siteUrl ?? ''}`.toLowerCase()
   if (
     n.includes('timelendr') ||
     n.includes('timelendar') ||
     u.includes('/logiciel/timelendr') ||
     u.includes('/logiciel/timelendar')
   ) {
-    return 'imgs/images/timelendr.png'
+    return '/imgs/images/timelendrpro.svg'
+  }
+  if (
+    n.includes('overstamp') ||
+    n.includes('overtstamp') ||
+    n.includes('fanmark') ||
+    n.includes('fan mark') ||
+    u.includes('overstamp.studio')
+  ) {
+    return '/imgs/images/Overstamp_icon.svg'
+  }
+  if (n.includes('space taker') || n.includes('spacetaker') || n.includes('space-taker')) {
+    return '/imgs/images/SpaceTaker_icon.png'
   }
   return undefined
+}
+
+function resolveProjectCardImage(project: Project): string | undefined {
+  const brandIcon = resolveBrandIcon(project)
+  if (brandIcon) return brandIcon
+
+  const uploaded = project.imageUrl?.trim()
+  if (uploaded) return uploaded
+
+  const n = project.name.toLowerCase()
+  if (n.includes('thermo') && n.includes('trappeur')) return '/imgs/images/Thermo.png'
+  return undefined
+}
+
+function isBrowserSoftwareApp(project: Project): boolean {
+  const n = project.name.toLowerCase()
+  const u = `${project.url ?? ''} ${project.siteUrl ?? ''}`.toLowerCase()
+  return (
+    n.includes('overstamp') ||
+    n.includes('overtstamp') ||
+    n.includes('fanmark') ||
+    n.includes('fan mark') ||
+    u.includes('overstamp.studio')
+  )
+}
+
+function getLaunchableSiteHref(project: Project): string | null {
+  const site = project.siteUrl?.trim()
+  if (site) return site
+  const u = project.url?.trim()
+  if (u && !u.toLowerCase().includes('github.com')) return u
+  return null
 }
 
 /** Projet « vitrine portfolio » : URL GitHub du repo du site — on ne renvoie pas vers GitHub, mais vers ce site. */
@@ -128,6 +172,7 @@ export type ProjectCardProps = {
   downloadProjectLabel?: string
   downloadTimelendrPcLabel?: string
   downloadTimelendrMacosLabel?: string
+  openAppLabel?: string
   cardVariant?: 'web' | 'logiciel'
 }
 
@@ -145,6 +190,7 @@ export default function ProjectCard({
   downloadProjectLabel = 'Télécharger le projet',
   downloadTimelendrPcLabel = 'Télécharger Timelendr PC',
   downloadTimelendrMacosLabel = 'Télécharger Timelendr macOS',
+  openAppLabel = 'Ouvrir',
   cardVariant = 'logiciel',
 }: ProjectCardProps) {
   const theme = useTheme()
@@ -196,58 +242,103 @@ export default function ProjectCard({
     lowerUrl.includes('/logiciel/timelendr') ||
     lowerUrl.includes('/logiciel/timelendar')
   const isOwnPortfolioSite = isPortfolioOwnSiteProject(project)
-  const hasProjectAction =
-    project.url?.trim() ||
-    project.siteUrl?.trim() ||
-    (!isTimelendrProject && project.downloadUrl?.trim()) ||
-    (isTimelendrProject && (timelendrWindowsUrl || timelendrMacosUrl))
+  const isBrowserApp = isBrowserSoftwareApp(project)
+  const isWebCard = cardVariant === 'web'
+  const isSoftwareCard = cardVariant === 'logiciel'
+  const isShowcaseCard = isWebCard || isSoftwareCard
+  const launchableSiteHref = getLaunchableSiteHref(project)
+  const webViewSiteHref = isWebCard ? getWebViewSiteButtonHref(project) : null
+  const hasProjectAction = isWebCard
+    ? Boolean(webViewSiteHref)
+    : Boolean(
+        (isBrowserApp && launchableSiteHref) ||
+          (!isBrowserApp &&
+            (project.url?.trim() ||
+              project.siteUrl?.trim() ||
+              (!isTimelendrProject && project.downloadUrl?.trim()) ||
+              (isTimelendrProject && (timelendrWindowsUrl || timelendrMacosUrl)))),
+      )
 
+  const brandIcon = resolveBrandIcon(project)
   const cardImageRaw = resolveProjectCardImage(project)
   const cardImageHref = cardImageRaw ? resolveImageUrl(cardImageRaw) : ''
+  /** Icône app (vs screenshot) : tile carré + contain, même pour un site web type Overstamp. */
+  const usesAppIconPresentation = isSoftwareCard || Boolean(brandIcon)
   const projectTechs = project.technologies.split(',').map((tech) => tech.trim()).filter(Boolean)
   const visibleTechs = projectTechs.slice(0, MAX_VISIBLE_TECHS)
   const overflowTechCount = Math.max(0, projectTechs.length - MAX_VISIBLE_TECHS)
-  const projectRoleLabel = cardVariant === 'web' ? t('projects.metaRoleWeb') : t('projects.metaRoleSoftware')
+  const projectRoleLabel = isWebCard
+    ? t('projects.metaRoleWeb')
+    : isBrowserApp
+      ? t('projects.metaRoleBrowserApp')
+      : t('projects.metaRoleSoftware')
   const yearSegment = project.createdAt
     ? `${t('projects.metaYear')} ${new Date(project.createdAt).getFullYear()}`
     : null
   const stackFallback = projectTechs[0] ?? t('projects.metaStack')
-  const projectMetaRoles = cardVariant === 'web' ? [] : [projectRoleLabel]
+  const projectMetaRoles = [projectRoleLabel]
   const projectMetaLineItems: string[] =
     projectTechs.length > 0
       ? [...projectMetaRoles, yearSegment].filter((item): item is string => Boolean(item))
       : [...projectMetaRoles, yearSegment, stackFallback].filter((item): item is string => Boolean(item))
 
-  const cardRootSx = getProjectCardRootSx({
-    isTopologyRoute,
-    isSiteDark,
-    isSiteLight,
-    presentationMode,
-    primary,
-    secondary,
-    hasProjectAction: Boolean(hasProjectAction),
-    customTheme,
-    beigePresentationBgUrl,
-    theme,
-  })
+  const cardRootSx = isShowcaseCard
+    ? getSoftwareCardRootSx({
+        isSiteDark,
+        isSiteLight,
+        presentationMode,
+        primary,
+        hasProjectAction: Boolean(hasProjectAction),
+        theme,
+      })
+    : getProjectCardRootSx({
+        isTopologyRoute,
+        isSiteDark,
+        isSiteLight,
+        presentationMode,
+        primary,
+        secondary,
+        hasProjectAction: Boolean(hasProjectAction),
+        customTheme,
+        beigePresentationBgUrl,
+        theme,
+      })
 
-  const thumbnailSx = getProjectCardThumbnailSx({ primary, theme, isSiteDark })
+  const thumbnailSx = usesAppIconPresentation
+    ? getSoftwareCardIconTileSx({ primary, theme, isSiteDark })
+    : isWebCard
+      ? getShowcaseCardMediaSx({ primary, theme, isSiteDark })
+      : getProjectCardThumbnailSx({ primary, theme, isSiteDark })
   const ghostBtnSx = getProjectCardGhostBtnSx({ primary, isSiteDark, mutedTextColor: ghostBtnTextColor })
 
   const handleCardClick = () => {
-    if (isOwnPortfolioSite) handleProjectClick('/portfolio')
-    else if (project.url?.trim()) handleProjectClick(project.url)
-    else if (project.siteUrl?.trim()) handleProjectClick(project.siteUrl)
-    else if (!isTimelendrProject && project.downloadUrl?.trim()) handleProjectClick(project.downloadUrl)
-    else if (isTimelendrProject && timelendrWindowsUrl) handleProjectClick(timelendrWindowsUrl)
+    if (isWebCard && webViewSiteHref) handleProjectClick(webViewSiteHref)
+    else if (isOwnPortfolioSite) handleProjectClick('/portfolio')
+    else if (isBrowserApp && launchableSiteHref) handleProjectClick(launchableSiteHref)
+    else if (!isBrowserApp && project.url?.trim()) handleProjectClick(project.url)
+    else if (!isBrowserApp && project.siteUrl?.trim()) handleProjectClick(project.siteUrl)
+    else if (!isTimelendrProject && !isBrowserApp && project.downloadUrl?.trim()) {
+      handleProjectClick(project.downloadUrl)
+    } else if (isTimelendrProject && timelendrWindowsUrl) handleProjectClick(timelendrWindowsUrl)
     else if (isTimelendrProject && timelendrMacosUrl) handleProjectClick(timelendrMacosUrl)
   }
 
   let primaryHref: string | null = null
   let primaryLabel = viewProjectLabel
-  if (isOwnPortfolioSite) {
+  if (isWebCard) {
+    primaryHref = webViewSiteHref
+    primaryLabel = viewSiteLabel
+  } else if (isOwnPortfolioSite) {
     primaryHref = '/portfolio'
     primaryLabel = viewSiteLabel
+  } else if (isBrowserApp) {
+    if (launchableSiteHref) {
+      primaryHref = launchableSiteHref
+      primaryLabel = openAppLabel
+    }
+  } else if (isTimelendrProject && project.url?.trim()) {
+    primaryHref = project.url.trim()
+    primaryLabel = viewProjectLabel
   } else if (project.url?.trim()) {
     primaryHref = project.url.trim()
     primaryLabel = viewProjectLabel
@@ -265,10 +356,8 @@ export default function ProjectCard({
     primaryLabel = downloadTimelendrMacosLabel
   }
 
-  const webViewSiteHref = cardVariant === 'web' ? getWebViewSiteButtonHref(project) : null
-
   const secondaryActions: SecondaryAction[] = []
-  if (cardVariant !== 'web') {
+  if (isSoftwareCard && !isBrowserApp) {
     if (project.siteUrl?.trim() && primaryHref !== project.siteUrl.trim()) {
       secondaryActions.push({
         href: project.siteUrl.trim(),
@@ -319,7 +408,7 @@ export default function ProjectCard({
       >
         <Box
           component="article"
-          className="project-card-row"
+          className={isShowcaseCard ? 'showcase-card' : 'project-card-row'}
           onClick={hasProjectAction ? handleCardClick : undefined}
           onKeyDown={
             hasProjectAction
@@ -335,22 +424,50 @@ export default function ProjectCard({
           tabIndex={hasProjectAction ? 0 : undefined}
           sx={cardRootSx}
         >
-          <Box className="project-card-thumbnail" sx={thumbnailSx}>
+          <Box
+            className={
+              usesAppIconPresentation
+                ? 'software-card-icon'
+                : isWebCard
+                  ? 'showcase-card-media'
+                  : 'project-card-thumbnail'
+            }
+            sx={thumbnailSx}
+          >
             {cardImageHref ? (
-              <Image
-                src={cardImageHref}
-                alt={project.name}
-                width={56}
-                height={56}
-                unoptimized={cardImageHref.startsWith('data:')}
-                sizes="56px"
-                style={{
-                  width: '100%',
-                  height: '100%',
-                  objectFit: 'cover',
-                  objectPosition: 'center',
-                }}
-              />
+              isShowcaseCard ? (
+                <Box
+                  component="img"
+                  src={cardImageHref}
+                  alt={project.name}
+                  sx={{
+                    width: '100%',
+                    height: '100%',
+                    objectFit: usesAppIconPresentation ? 'contain' : 'cover',
+                    objectPosition: usesAppIconPresentation ? 'center' : 'center top',
+                    p: usesAppIconPresentation ? '12%' : 0,
+                    display: 'block',
+                  }}
+                />
+              ) : (
+                <Image
+                  src={cardImageHref}
+                  alt={project.name}
+                  width={56}
+                  height={56}
+                  unoptimized={
+                    cardImageHref.startsWith('data:') ||
+                    cardImageHref.toLowerCase().includes('.svg')
+                  }
+                  sizes="56px"
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    objectFit: 'cover',
+                    objectPosition: 'center',
+                  }}
+                />
+              )
             ) : (
               <Box
                 sx={{
@@ -368,7 +485,7 @@ export default function ProjectCard({
                     color: 'white',
                     fontWeight: 900,
                     letterSpacing: '-0.06em',
-                    fontSize: '0.875rem',
+                    fontSize: isShowcaseCard ? '1.75rem' : '0.875rem',
                   }}
                 >
                   {getProjectMonogram(project.name)}
@@ -377,40 +494,45 @@ export default function ProjectCard({
             )}
           </Box>
 
-          <Box sx={getProjectCardContentSx()}>
-            <Box sx={getProjectCardTitleRowSx()}>
+          <Box sx={isShowcaseCard ? getSoftwareCardBodySx() : getProjectCardContentSx()}>
+            <Box
+              sx={
+                isShowcaseCard
+                  ? {
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      gap: 0.75,
+                    }
+                  : getProjectCardTitleRowSx()
+              }
+            >
               <Typography
-                variant="subtitle2"
+                variant={isShowcaseCard ? 'h6' : 'subtitle2'}
                 component="h2"
                 sx={{
                   fontWeight: 800,
-                  lineHeight: 1.25,
+                  lineHeight: 1.2,
                   letterSpacing: '-0.03em',
                   color: textColor,
                   overflow: 'hidden',
                   textOverflow: 'ellipsis',
-                  whiteSpace: 'nowrap',
-                  flex: '1 1 auto',
+                  whiteSpace: isShowcaseCard ? 'normal' : 'nowrap',
+                  flex: isShowcaseCard ? undefined : '1 1 auto',
                   minWidth: 0,
+                  fontSize: isShowcaseCard ? { xs: '1.2rem', md: '1.35rem' } : undefined,
                 }}
               >
                 {project.name}
               </Typography>
-              <StatusChip
-                icon={getStatusIcon(project.status)}
-                label={project.status}
-                color={getStatusColor(project.status)}
-                size="small"
-              />
-              {project.url ? (
-                <Box sx={getProjectCardLinkIconSx(isSiteDark)} aria-hidden>
-                  {project.url.includes('github') && isOwnPortfolioSite && (
-                    <LanguageOutlinedIcon sx={{ fontSize: 15 }} />
-                  )}
-                  {project.url.includes('github') && !isOwnPortfolioSite && <GitHubIcon sx={{ fontSize: 15 }} />}
-                  {!project.url.includes('github') && <LaunchIcon sx={{ fontSize: 15 }} />}
-                </Box>
-              ) : null}
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.75, flexWrap: 'wrap', justifyContent: 'center' }}>
+                <StatusChip
+                  icon={getStatusIcon(project.status)}
+                  label={project.status}
+                  color={getStatusColor(project.status)}
+                  size="small"
+                />
+              </Box>
             </Box>
 
             {isOwnPortfolioSite ? (
@@ -426,6 +548,7 @@ export default function ProjectCard({
                   fontSize: '0.6875rem',
                   color: descriptionColor,
                   opacity: 0.92,
+                  textAlign: isShowcaseCard ? 'center' : 'left',
                 }}
               >
                 {t('projects.portfolioSelfNotice')}
@@ -435,13 +558,13 @@ export default function ProjectCard({
             <Typography
               variant="body2"
               sx={{
-                textAlign: 'left',
-                lineHeight: 1.45,
-                mb: 0.4,
-                fontSize: '0.8125rem',
+                textAlign: isShowcaseCard ? 'center' : 'left',
+                lineHeight: 1.5,
+                mb: isShowcaseCard ? 0 : 0.4,
+                fontSize: isShowcaseCard ? '0.9rem' : '0.8125rem',
                 overflow: 'hidden',
                 display: '-webkit-box',
-                WebkitLineClamp: 2,
+                WebkitLineClamp: isShowcaseCard ? 3 : 2,
                 WebkitBoxOrient: 'vertical',
                 color: descriptionColor,
                 opacity: 0.92,
@@ -450,15 +573,15 @@ export default function ProjectCard({
               {project.description}
             </Typography>
 
-            {cardVariant !== 'web' ? (
+            {visibleTechs.length > 0 ? (
               <TechStack
                 sx={{
                   visibility: 'visible !important',
                   opacity: '1 !important',
                   zIndex: DESIGN_TOKENS.zIndex.elevated,
                   position: 'relative',
-                  justifyContent: 'flex-start',
-                  mb: 0.4,
+                  justifyContent: 'center',
+                  mb: isShowcaseCard ? 0 : 0.4,
                 }}
               >
                 {visibleTechs.map((tech, techIndex) => (
@@ -489,8 +612,9 @@ export default function ProjectCard({
                   display: 'flex',
                   flexWrap: 'wrap',
                   alignItems: 'center',
+                  justifyContent: isShowcaseCard ? 'center' : 'flex-start',
                   gap: 0.5,
-                  mb: 0.65,
+                  mb: isShowcaseCard ? 0 : 0.65,
                   fontSize: '0.6875rem',
                   fontWeight: 800,
                   letterSpacing: '0.1em',
@@ -509,43 +633,39 @@ export default function ProjectCard({
               </Box>
             ) : null}
 
-            <Box sx={getProjectCardActionsSx()} onClick={(e) => e.stopPropagation()}>
-              {cardVariant === 'web' ? (
-                webViewSiteHref ? (
-                  <Box sx={{ alignSelf: 'flex-start' }}>
-                    <CTAButton variant="primary" size="small" onClick={() => handleProjectClick(webViewSiteHref)}>
-                      {viewSiteLabel}
-                    </CTAButton>
-                  </Box>
-                ) : null
-              ) : (
-                <>
-                  {primaryHref ? (
-                    <Box sx={{ alignSelf: 'flex-start' }}>
-                      <CTAButton variant="primary" size="small" onClick={() => handleProjectClick(primaryHref)}>
-                        {primaryLabel}
-                      </CTAButton>
-                    </Box>
-                  ) : null}
-                  {secondaryActions.length > 0 ? (
-                    <Box sx={getProjectCardDownloadGridSx(secondaryActions.length)}>
-                      {secondaryActions.map((action) => (
-                        <Button
-                          key={action.href}
-                          variant="text"
-                          size="small"
-                          aria-label={action.ariaLabel}
-                          sx={ghostBtnSx}
-                          startIcon={action.withDownloadIcon ? <DownloadIcon sx={{ fontSize: 14 }} /> : undefined}
-                          onClick={() => handleProjectClick(action.href)}
-                        >
-                          {action.label}
-                        </Button>
-                      ))}
-                    </Box>
-                  ) : null}
-                </>
-              )}
+            <Box
+              sx={isShowcaseCard ? getSoftwareCardActionsSx() : getProjectCardActionsSx()}
+              onClick={(e) => e.stopPropagation()}
+            >
+              {primaryHref ? (
+                <Box sx={{ width: '100%' }}>
+                  <CTAButton
+                    variant="primary"
+                    size={isShowcaseCard ? 'medium' : 'small'}
+                    fullWidth={isShowcaseCard}
+                    onClick={() => handleProjectClick(primaryHref)}
+                  >
+                    {primaryLabel}
+                  </CTAButton>
+                </Box>
+              ) : null}
+              {secondaryActions.length > 0 ? (
+                <Box sx={getProjectCardDownloadGridSx(secondaryActions.length)}>
+                  {secondaryActions.map((action) => (
+                    <Button
+                      key={action.href}
+                      variant="text"
+                      size="small"
+                      aria-label={action.ariaLabel}
+                      sx={ghostBtnSx}
+                      startIcon={action.withDownloadIcon ? <DownloadIcon sx={{ fontSize: 14 }} /> : undefined}
+                      onClick={() => handleProjectClick(action.href)}
+                    >
+                      {action.label}
+                    </Button>
+                  ))}
+                </Box>
+              ) : null}
             </Box>
           </Box>
         </Box>

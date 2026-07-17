@@ -524,6 +524,7 @@ export const fr = {
       portfolioSelfNotice:
         'Ce projet, c’est le site portfolio que vous parcourez — le lien public pointe ici.',
       viewSite: 'Voir le site',
+      openApp: 'Ouvrir',
       downloadProject: 'Télécharger le projet',
       downloadTimelendrPc: 'Télécharger Timelendr PC',
       downloadTimelendrMacos: 'Télécharger Timelendr macOS',
@@ -541,6 +542,7 @@ export const fr = {
       webSectionEmpty: 'Aucun projet dans cette catégorie pour le moment.',
       metaRoleWeb: 'Site web',
       metaRoleSoftware: 'Outil sur mesure',
+      metaRoleBrowserApp: 'App navigateur',
       metaYear: 'Année',
       metaStack: 'Stack',
       statsTotal: 'projets',

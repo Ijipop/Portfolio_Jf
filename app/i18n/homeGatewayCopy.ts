@@ -13,6 +13,7 @@ export const homeGatewayCopy = {
     supportTitle: 'Soutien technique',
     supportDesc: 'Dépannage, entretien et accompagnement informatique au quotidien.',
     supportCta: 'En savoir plus',
+    softCta: 'Voir mes logiciels',
   },
   en: {
     welcome: 'Welcome to ijipop solutions',
@@ -26,6 +27,7 @@ export const homeGatewayCopy = {
     supportTitle: 'Tech support',
     supportDesc: 'Troubleshooting, upkeep and day-to-day IT help.',
     supportCta: 'Learn more',
+    softCta: 'See my software',
   },
 } as const
 

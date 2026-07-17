@@ -8,37 +8,29 @@ import TrendingUpIcon from '@mui/icons-material/TrendingUp'
 import Alert from '@mui/material/Alert'
 import Box from '@mui/material/Box'
 import Container from '@mui/material/Container'
-import Tab from '@mui/material/Tab'
-import Tabs from '@mui/material/Tabs'
 import ToggleButton from '@mui/material/ToggleButton'
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup'
 import Typography from '@mui/material/Typography'
 import { styled, alpha } from '@mui/material/styles'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
 import { navigateProjectUrl } from '@/lib/navigateProjectUrl'
 import { getImageUrl } from '@/lib/getImageUrl'
 import React from 'react'
 import AppBarComponent from '../../components/appBar'
 import ProjectsLoadingFrameSection from './ProjectsLoadingFrameSection'
-import ScrollReveal from '../../components/shared/ScrollReveal'
 import HeaderSection from '../../components/shared/HeaderSection'
 import IjipopGlitchTitle from '../../components/shared/IjipopGlitchTitle'
 import PageWrapper from '../../components/shared/PageWrapper'
 import InteractiveBackgroundSection from '../../components/shared/InteractiveBackgroundSection'
 import Footer from '../../components/Footer'
-import { DESIGN_TOKENS, GRADIENTS } from '../../design-system/constants'
-import { usePresentationMode } from '../../contexts/PresentationModeContext'
+import { DESIGN_TOKENS } from '../../design-system/constants'
 import { useLanguage } from '../../contexts/LanguageContext'
 import { useThemeColors } from '../../hooks/useThemeColors'
 import { useTextColor } from '../../hooks/useTextColor'
 import type { Project, TimelendrLatestLinks } from './projectTypes'
 import { ProjectsGrid } from './components/projectsGrid'
-import ProjectsStatsStrip from './components/ProjectsStatsStrip'
 import ProjectCard from './components/ProjectCard'
-import CTAButton from '../../components/shared/CTAButton'
-import Link from 'next/link'
-
 const AnimatedBox = styled(Box)({
   animation: 'fadeIn 0.6s ease-out',
   '@keyframes fadeIn': {
@@ -47,55 +39,12 @@ const AnimatedBox = styled(Box)({
   },
 })
 
-function useCardBackgroundFromThemeVars(fallback: string) {
-  const [filterBackground, setFilterBackground] = useState(fallback)
-
-  useEffect(() => {
-    const updateFilterBackground = () => {
-      if (typeof window === 'undefined') return
-
-      const cardBg = getComputedStyle(document.documentElement).getPropertyValue('--card-background')?.trim()
-
-      if (cardBg && cardBg !== 'none') {
-        setFilterBackground(cardBg)
-      } else {
-        const bg = getComputedStyle(document.documentElement).getPropertyValue('--theme-bg')?.trim()
-        const bg2 = getComputedStyle(document.documentElement).getPropertyValue('--theme-bg2')?.trim()
-
-        if (bg && bg2) {
-          setFilterBackground(`linear-gradient(145deg, ${bg} 0%, ${bg2} 50%, ${bg} 100%)`)
-        } else {
-          setFilterBackground(fallback)
-        }
-      }
-    }
-
-    updateFilterBackground()
-
-    const observer = new MutationObserver(updateFilterBackground)
-    observer.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ['style'],
-    })
-
-    const interval = setInterval(updateFilterBackground, 200)
-
-    return () => {
-      observer.disconnect()
-      clearInterval(interval)
-    }
-  }, [fallback])
-
-  return filterBackground
-}
-
 export default function Projets() {
   const router = useRouter()
   const pathname = usePathname()
   const { primary } = useThemeColors()
   const textColor = useTextColor()
   const { t } = useLanguage()
-  const { mode: presentationMode } = usePresentationMode()
   /** Couleurs de section alignées sur la palette / thème courant (Créa et Site). */
   const projetsSectionText = textColor
   const [projects, setProjects] = useState<Project[]>([])
@@ -106,46 +55,6 @@ export default function Projets() {
   const [timelendrMacosUrl, setTimelendrMacosUrl] = useState<string | null>(null)
   /** 0 = perso, 1 = pro — défaut pro comme l’ancien accordéon « Réalisations professionnelles » ouvert. */
   const [webAudienceTab, setWebAudienceTab] = useState(1)
-
-  const sectionGlassBg = useCardBackgroundFromThemeVars(GRADIENTS.cards.light)
-  const glassProjectSectionSurfaceSx = useMemo(
-    () =>
-      ({
-        background: `${sectionGlassBg} !important`,
-        backdropFilter: 'blur(10px)',
-        WebkitBackdropFilter: 'blur(10px)',
-        border: `1px solid ${primary}22 !important`,
-        borderRadius: `${DESIGN_TOKENS.borderRadius.medium}px`,
-        boxShadow: `0 2px 16px ${primary}10, inset 0 1px 0 rgba(255, 255, 255, 0.12)`,
-        overflow: 'hidden',
-        transition: DESIGN_TOKENS.transitions.normal,
-        '&:hover': {
-          border: `1px solid ${primary}38 !important`,
-          boxShadow: `0 4px 20px ${primary}14, inset 0 1px 0 rgba(255, 255, 255, 0.16)`,
-        },
-      }) as const,
-    [sectionGlassBg, primary],
-  )
-
-  const webSectionSurfaceSx = useMemo(() => {
-    if (presentationMode === 'beige') {
-      return {
-        background: 'transparent !important',
-        backdropFilter: 'none',
-        WebkitBackdropFilter: 'none',
-        border: `1px solid ${primary}22`,
-        borderRadius: `${DESIGN_TOKENS.borderRadius.medium}px`,
-        boxShadow: 'none',
-        overflow: 'hidden',
-        transition: DESIGN_TOKENS.transitions.normal,
-        '&:hover': {
-          border: `1px solid ${primary}32`,
-          boxShadow: 'none',
-        },
-      } as const
-    }
-    return glassProjectSectionSurfaceSx
-  }, [presentationMode, glassProjectSectionSurfaceSx, primary])
 
   useEffect(() => {
     fetchProjects()
@@ -263,12 +172,6 @@ export default function Projets() {
     router.replace(`${pathname}?type=${next}`, { scroll: false })
   }
 
-  const getCompletedProjects = () =>
-    projects.filter((p) => ['terminee', 'fini', 'terminé'].includes(p.status.toLowerCase())).length
-
-  const getInProgressProjects = () =>
-    projects.filter((p) => ['wip', 'en cours', 'en cours de développement'].includes(p.status.toLowerCase())).length
-
   const projectsByType = projects.filter((project) => (project.projectType ?? 'web') === selectedProjectType)
 
   const orderedProjects = [...projectsByType].sort((a, b) => {
@@ -312,40 +215,14 @@ export default function Projets() {
       <HeaderSection title={<IjipopGlitchTitle text={t('projects.title')} />} subtitle={t('projects.subtitle')} />
 
       <InteractiveBackgroundSection>
-        <Container maxWidth="lg" sx={{ pt: { xs: 2, sm: 3 }, pb: 0, px: { xs: 1.5, sm: 3 } }}>
-          <ScrollReveal direction="up" delay={0.04}>
-            <Box sx={{ textAlign: 'center', maxWidth: 720, mx: 'auto', mb: { xs: 3, md: 4 } }}>
-              <Typography
-                sx={{
-                  color: textColor,
-                  opacity: 0.9,
-                  lineHeight: 1.65,
-                  mb: 2.5,
-                  fontSize: { xs: '0.98rem', sm: '1.05rem' },
-                }}
-              >
-                {t('projects.heroCommercialLead')}
-              </Typography>
-              <Box sx={{ display: 'flex', gap: 2, justifyContent: 'center', flexWrap: 'wrap' }}>
-                <Link
-                  href={`/portfolio/contact?subject=${encodeURIComponent(t('projects.heroCommercialSubject'))}`}
-                  style={{ textDecoration: 'none' }}
-                >
-                  <CTAButton variant="primary" size="large">
-                    {t('projects.heroCommercialCta')}
-                  </CTAButton>
-                </Link>
-                <Link href="/creation-site-web-montreal" style={{ textDecoration: 'none' }}>
-                  <CTAButton variant="outline" size="large">
-                    {t('projects.heroCommercialSecondary')}
-                  </CTAButton>
-                </Link>
-              </Box>
-            </Box>
-          </ScrollReveal>
-        </Container>
-
-        <Container maxWidth="lg" sx={{ py: { xs: 3, sm: 4, md: 4, xl: 5 }, position: 'relative', zIndex: 2 }}>
+        <Container
+          maxWidth="lg"
+          sx={{
+            py: { xs: 3, sm: 4, md: 5, xl: 5 },
+            position: 'relative',
+            zIndex: 2,
+          }}
+        >
           {error && (
             <AnimatedBox>
               <Alert severity="error" sx={{ mb: 4, borderRadius: DESIGN_TOKENS.borderRadius.small }}>
@@ -354,36 +231,40 @@ export default function Projets() {
             </AnimatedBox>
           )}
 
-          <ScrollReveal direction="up" delay={0.05}>
-            <ProjectsStatsStrip
-              total={projects.length}
-              completed={getCompletedProjects()}
-              inProgress={getInProgressProjects()}
-              t={t}
-              containerSx={webSectionSurfaceSx}
-              textColor={projetsSectionText}
-              primary={primary}
-            />
-          </ScrollReveal>
-
-          <Box sx={{ display: 'flex', justifyContent: 'center', mb: 3 }}>
+          <Box sx={{ display: 'flex', justifyContent: 'center', mb: { xs: 3, md: 4 } }}>
             <ToggleButtonGroup
               exclusive
-              size="small"
+              size="medium"
               value={selectedProjectType}
               onChange={handleProjectTypeChange}
               aria-label={t('projects.title')}
               sx={{
+                p: 0.5,
+                borderRadius: '999px',
+                border: `1px solid ${alpha(primary, 0.28)}`,
+                bgcolor: alpha(primary, 0.06),
+                '& .MuiToggleButtonGroup-grouped': {
+                  border: 'none !important',
+                  borderRadius: '999px !important',
+                  mx: 0.25,
+                },
                 '& .MuiToggleButton-root': {
-                  px: { xs: 2, sm: 2.5 },
-                  py: 1,
+                  px: { xs: 2.25, sm: 3 },
+                  py: 1.1,
                   fontWeight: 700,
                   textTransform: 'none',
-                  borderColor: `${alpha(primary, 0.35)} !important`,
                   color: projetsSectionText,
+                  transition: 'background-color 0.2s ease, color 0.2s ease',
                   '&.Mui-selected': {
-                    bgcolor: alpha(primary, 0.18),
-                    color: primary,
+                    bgcolor: primary,
+                    color: '#fff',
+                    boxShadow: `0 8px 22px ${alpha(primary, 0.35)}`,
+                    '&:hover': {
+                      bgcolor: primary,
+                    },
+                  },
+                  '&:hover': {
+                    bgcolor: alpha(primary, 0.12),
                   },
                 },
               }}
@@ -394,43 +275,58 @@ export default function Projets() {
           </Box>
 
           {selectedProjectType === 'web' ? (
-            <Box sx={{ px: { xs: 0.25, sm: 0.5 }, pt: 0.5, pb: 1 }}>
-              <Tabs
-                value={webAudienceTab}
-                onChange={(_, v) => setWebAudienceTab(v as number)}
-                variant="fullWidth"
-                sx={{
-                  minHeight: 44,
-                  mb: 1.5,
-                  '& .MuiTab-root': {
-                    textTransform: 'none',
-                    fontWeight: 800,
-                    fontSize: '0.85rem',
-                    color: alpha(projetsSectionText, 0.72),
-                    '&.Mui-selected': {
-                      color: projetsSectionText,
+            <Box sx={{ pt: 0.5, pb: 1 }}>
+              <Box sx={{ display: 'flex', justifyContent: 'center', mb: { xs: 2.5, md: 3.5 } }}>
+                <ToggleButtonGroup
+                  exclusive
+                  size="small"
+                  value={webAudienceTab === 0 ? 'personal' : 'professional'}
+                  onChange={(_, v) => {
+                    if (v === 'personal') setWebAudienceTab(0)
+                    if (v === 'professional') setWebAudienceTab(1)
+                  }}
+                  aria-label={t('projects.webSectionPersonalTitle')}
+                  sx={{
+                    p: 0.4,
+                    borderRadius: '999px',
+                    border: `1px solid ${alpha(primary, 0.22)}`,
+                    bgcolor: alpha(primary, 0.04),
+                    '& .MuiToggleButtonGroup-grouped': {
+                      border: 'none !important',
+                      borderRadius: '999px !important',
+                      mx: 0.2,
                     },
-                  },
-                  '& .MuiTabs-indicator': {
-                    height: 3,
-                    borderRadius: 1,
-                    bgcolor: primary,
-                  },
-                }}
-              >
-                <Tab label={t('projects.webSectionPersonalTitle')} />
-                <Tab label={t('projects.webSectionProfessionalTitle')} />
-              </Tabs>
+                    '& .MuiToggleButton-root': {
+                      px: { xs: 1.75, sm: 2.25 },
+                      py: 0.85,
+                      fontWeight: 700,
+                      textTransform: 'none',
+                      fontSize: '0.85rem',
+                      color: alpha(projetsSectionText, 0.78),
+                      '&.Mui-selected': {
+                        bgcolor: alpha(primary, 0.2),
+                        color: primary,
+                        '&:hover': { bgcolor: alpha(primary, 0.24) },
+                      },
+                    },
+                  }}
+                >
+                  <ToggleButton value="personal">{t('projects.webSectionPersonalTitle')}</ToggleButton>
+                  <ToggleButton value="professional">{t('projects.webSectionProfessionalTitle')}</ToggleButton>
+                </ToggleButtonGroup>
+              </Box>
 
               {webAudienceTab === 0 && (
                 <Box>
                   <Typography
                     variant="body2"
                     sx={{
-                      mb: 2,
-                      px: 0.5,
+                      mb: 2.5,
+                      textAlign: 'center',
                       color: projetsSectionText,
-                      opacity: 0.82,
+                      opacity: 0.78,
+                      maxWidth: 520,
+                      mx: 'auto',
                     }}
                   >
                     {t('projects.webSectionPersonalSubtitle')}
@@ -438,12 +334,12 @@ export default function Projets() {
                   {webPersonalProjects.length === 0 ? (
                     <Typography
                       variant="body2"
-                      sx={{ px: 0.5, color: projetsSectionText, opacity: 0.75 }}
+                      sx={{ textAlign: 'center', color: projetsSectionText, opacity: 0.75 }}
                     >
                       {t('projects.webSectionEmpty')}
                     </Typography>
                   ) : (
-                    <ProjectsGrid>
+                    <ProjectsGrid variant="showcase">
                       {webPersonalProjects.map((project, index) => (
                         <ProjectCard
                           key={project.id}
@@ -473,10 +369,12 @@ export default function Projets() {
                   <Typography
                     variant="body2"
                     sx={{
-                      mb: 2,
-                      px: 0.5,
+                      mb: 2.5,
+                      textAlign: 'center',
                       color: projetsSectionText,
-                      opacity: 0.82,
+                      opacity: 0.78,
+                      maxWidth: 520,
+                      mx: 'auto',
                     }}
                   >
                     {t('projects.webSectionProfessionalSubtitle')}
@@ -484,12 +382,12 @@ export default function Projets() {
                   {webProfessionalProjects.length === 0 ? (
                     <Typography
                       variant="body2"
-                      sx={{ px: 0.5, color: projetsSectionText, opacity: 0.75 }}
+                      sx={{ textAlign: 'center', color: projetsSectionText, opacity: 0.75 }}
                     >
                       {t('projects.webSectionEmpty')}
                     </Typography>
                   ) : (
-                    <ProjectsGrid>
+                    <ProjectsGrid variant="showcase">
                       {webProfessionalProjects.map((project, index) => (
                         <ProjectCard
                           key={project.id}
@@ -515,7 +413,7 @@ export default function Projets() {
               )}
             </Box>
           ) : (
-            <ProjectsGrid>
+            <ProjectsGrid variant="showcase">
               {orderedProjects.map((project, index) => (
                 <ProjectCard
                   key={project.id}
@@ -532,6 +430,8 @@ export default function Projets() {
                   downloadProjectLabel={t('projects.downloadProject')}
                   downloadTimelendrPcLabel={t('projects.downloadTimelendrPc')}
                   downloadTimelendrMacosLabel={t('projects.downloadTimelendrMacos')}
+                  openAppLabel={t('projects.openApp')}
+                  cardVariant="logiciel"
                 />
               ))}
             </ProjectsGrid>

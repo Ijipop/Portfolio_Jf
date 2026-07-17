@@ -1,0 +1,109 @@
+<svg width="1024" height="1024" viewBox="0 0 1024 1024" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Timelendr app icon">
+  <defs>
+    <linearGradient id="bg" x1="180" y1="120" x2="860" y2="910" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#FFF3D6"/>
+      <stop offset="0.48" stop-color="#E8B85B"/>
+      <stop offset="1" stop-color="#7A3F12"/>
+    </linearGradient>
+
+    <linearGradient id="ink" x1="230" y1="160" x2="820" y2="870" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#2B180B"/>
+      <stop offset="1" stop-color="#070504"/>
+    </linearGradient>
+
+    <linearGradient id="gold" x1="315" y1="260" x2="720" y2="760" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#FFE8A8"/>
+      <stop offset="0.5" stop-color="#DCA642"/>
+      <stop offset="1" stop-color="#8B4F16"/>
+    </linearGradient>
+
+    <linearGradient id="paper" x1="316" y1="278" x2="708" y2="770" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#FFF9E8"/>
+      <stop offset="1" stop-color="#E8C87A"/>
+    </linearGradient>
+
+    <filter id="softShadow" x="-20%" y="-20%" width="140%" height="150%">
+      <feDropShadow dx="0" dy="22" stdDeviation="22" flood-color="#1A0E05" flood-opacity="0.35"/>
+    </filter>
+
+    <filter id="innerGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="10" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+  </defs>
+
+  <!-- outer badge -->
+  <rect x="96" y="96" width="832" height="832" rx="222" fill="url(#bg)"/>
+  <rect x="119" y="119" width="786" height="786" rx="202" stroke="url(#ink)" stroke-width="34"/>
+  <rect x="159" y="159" width="706" height="706" rx="176" stroke="#FFF0BE" stroke-width="12" opacity="0.58"/>
+
+  <!-- subtle retro sunburst -->
+  <g opacity="0.12" stroke="#2A1609" stroke-width="22" stroke-linecap="round">
+    <path d="M512 143V244"/>
+    <path d="M512 780V881"/>
+    <path d="M143 512H244"/>
+    <path d="M780 512H881"/>
+    <path d="M251 251L323 323"/>
+    <path d="M701 701L773 773"/>
+    <path d="M773 251L701 323"/>
+    <path d="M323 701L251 773"/>
+  </g>
+
+  <!-- main calendar body -->
+  <g filter="url(#softShadow)">
+    <path d="M301 289C301 258.624 325.624 234 356 234H668C698.376 234 723 258.624 723 289V741C723 771.376 698.376 796 668 796H356C325.624 796 301 771.376 301 741V289Z" fill="url(#paper)" stroke="url(#ink)" stroke-width="28" stroke-linejoin="round"/>
+
+    <!-- top binding strip -->
+    <path d="M301 309C301 267.579 334.579 234 376 234H648C689.421 234 723 267.579 723 309V371H301V309Z" fill="url(#ink)"/>
+    <path d="M326 371H698" stroke="#FFF1BE" stroke-width="10" opacity="0.45"/>
+
+    <!-- binding rings -->
+    <g stroke="#FFF1BE" stroke-width="30" stroke-linecap="round">
+      <path d="M403 210V281"/>
+      <path d="M621 210V281"/>
+    </g>
+    <g stroke="#2A1709" stroke-width="14" stroke-linecap="round">
+      <path d="M403 210V281"/>
+      <path d="M621 210V281"/>
+    </g>
+
+    <!-- calendar grid, stylized oldschool -->
+    <g stroke="#2A1709" stroke-width="18" stroke-linecap="round" opacity="0.86">
+      <path d="M380 456H644"/>
+      <path d="M380 537H644"/>
+      <path d="M380 618H644"/>
+      <path d="M449 431V671"/>
+      <path d="M575 431V671"/>
+    </g>
+
+    <!-- clock face -->
+    <circle cx="512" cy="554" r="118" fill="url(#gold)" stroke="#2A1709" stroke-width="24"/>
+    <circle cx="512" cy="554" r="88" fill="#FFF4C8" stroke="#5D3211" stroke-width="10" opacity="0.92"/>
+
+    <!-- clock ticks -->
+    <g stroke="#2A1709" stroke-width="10" stroke-linecap="round">
+      <path d="M512 479V496"/>
+      <path d="M512 612V629"/>
+      <path d="M437 554H454"/>
+      <path d="M570 554H587"/>
+      <path d="M459 501L471 513"/>
+      <path d="M553 595L565 607"/>
+      <path d="M565 501L553 513"/>
+      <path d="M471 595L459 607"/>
+    </g>
+
+    <!-- hands -->
+    <g stroke="#2A1709" stroke-width="17" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M512 554V501"/>
+      <path d="M512 554L562 584"/>
+    </g>
+    <circle cx="512" cy="554" r="15" fill="#2A1709"/>
+
+    <!-- little retro corner spark -->
+    <path d="M673 676C685 676 696 665 696 653C696 665 707 676 719 676C707 676 696 687 696 699C696 687 685 676 673 676Z" fill="#2A1709"/>
+  </g>
+
+  <!-- premium rim highlights -->
+  <path d="M257 176C346 123 459 116 564 137" stroke="#FFF6D5" stroke-width="18" stroke-linecap="round" opacity="0.42"/>
+  <path d="M805 646C784 742 717 818 625 851" stroke="#180C04" stroke-width="18" stroke-linecap="round" opacity="0.22"/>
+</svg>
