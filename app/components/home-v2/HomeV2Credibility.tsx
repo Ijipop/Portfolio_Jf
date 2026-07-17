@@ -12,7 +12,7 @@ import { useLanguage } from '@/contexts/LanguageContext'
 import HomeV2Section from './HomeV2Section'
 import { useHomeV2Tokens } from './homeV2Tokens'
 
-const PROJECTS_PATH = '/portfolio/projets'
+const PROJECTS_PATH = '/portfolio/projets?type=web'
 
 type Pillar = {
   icon: SvgIconComponent

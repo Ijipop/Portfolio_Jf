@@ -180,12 +180,16 @@ function PricingCard({ offer, index }: { offer: PackOffer; index: number }) {
   )
 }
 
+/** Packs lane Web uniquement (pas software / support). */
+const WEB_PACK_IDS = new Set(['audit', 'minisite', 'page'])
+
 export default function HomeV2Pricing() {
   const { t } = useLanguage()
   const { tokens: v2 } = useHomeV2Tokens()
 
-  const featured = PACK_OFFERS.find((o) => o.featured)!
-  const others = PACK_OFFERS.filter((o) => !o.featured)
+  const webPacks = PACK_OFFERS.filter((o) => WEB_PACK_IDS.has(o.id))
+  const featured = webPacks.find((o) => o.featured)!
+  const others = webPacks.filter((o) => !o.featured)
 
   return (
     <HomeV2Section
@@ -201,7 +205,7 @@ export default function HomeV2Pricing() {
       <Box
         sx={{
           display: 'grid',
-          gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)', lg: 'repeat(4, 1fr)' },
+          gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)' },
           gap: { xs: 2, md: 2.5 },
           alignItems: 'stretch',
         }}

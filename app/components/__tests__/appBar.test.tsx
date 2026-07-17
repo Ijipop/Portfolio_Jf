@@ -67,9 +67,9 @@ describe('AppBarComponent', () => {
     expect(screen.getByText('Contact')).toBeInTheDocument()
   })
 
-  it('renders Accueil as a link to /portfolio', () => {
+  it('renders Accueil as a link to /', () => {
     render(<AppBarComponent />)
     const homeLink = screen.getByText('Accueil').closest('a')
-    expect(homeLink).toHaveAttribute('href', '/portfolio')
+    expect(homeLink).toHaveAttribute('href', '/')
   })
 })

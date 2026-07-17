@@ -269,14 +269,15 @@ export const fr = {
       heroRotatingSoftware: 'logiciels',
       heroRotatingInterfaces: 'interfaces',
       heroSubtitle:
-        'Sites web, refontes et soutien technique pour indépendants, artistes et PME au Québec.',
+        'Sites vitrine, refontes et pages claires pour indépendants, artistes et PME au Québec.',
       heroRealName: 'Jean-François Lefebvre',
       heroOneLiner: 'Développeur web · Montréal',
       heroCtaPrimary: 'Obtenir une estimation',
       heroCtaSecondary: 'Voir les forfaits',
+      heroSeeWebProjects: 'Voir réalisations sites',
       servicesKicker: 'Services',
-      servicesTitle: 'Trois façons de vous aider',
-      servicesLead: 'Des mandats clairs, du premier site au suivi après la livraison.',
+      servicesTitle: 'Sites web, refontes et formulaires',
+      servicesLead: 'Des mandats clairs — du premier site aux outils de contact.',
       serviceWebTitle: 'Création de sites web',
       serviceWebLead:
         'Un site moderne et mobile, pour présenter vos services et faciliter les prises de contact.',
@@ -302,7 +303,7 @@ export const fr = {
       pricingTitle: 'Des offres claires, sans surprise',
       pricingLead: 'PME, travailleurs autonomes, professionnels et artistes au Québec.',
       pricingFootnote:
-        'Entretien mensuel pour site en ligne : 75 – 150 $/mois. Site plus large ou logiciel complexe ? Écrivez-moi.',
+        'Entretien mensuel pour site en ligne : 75 – 150 $/mois. Site plus large ou besoin sur mesure ? Écrivez-moi.',
       toolsKicker: 'Logiciels & petits outils',
       toolsTitle: 'Quand un site ne suffit pas',
       toolsLead:
@@ -524,6 +525,7 @@ export const fr = {
       portfolioSelfNotice:
         'Ce projet, c’est le site portfolio que vous parcourez — le lien public pointe ici.',
       viewSite: 'Voir le site',
+      openApp: 'Ouvrir',
       downloadProject: 'Télécharger le projet',
       downloadTimelendrPc: 'Télécharger Timelendr PC',
       downloadTimelendrMacos: 'Télécharger Timelendr macOS',
@@ -541,6 +543,7 @@ export const fr = {
       webSectionEmpty: 'Aucun projet dans cette catégorie pour le moment.',
       metaRoleWeb: 'Site web',
       metaRoleSoftware: 'Outil sur mesure',
+      metaRoleBrowserApp: 'App navigateur',
       metaYear: 'Année',
       metaStack: 'Stack',
       statsTotal: 'projets',

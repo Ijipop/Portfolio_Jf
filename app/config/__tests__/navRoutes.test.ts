@@ -13,7 +13,9 @@ describe('NAV_ROUTES', () => {
     const support = NAV_ROUTES.find((r) => r.id === 'support')
     const contact = NAV_ROUTES.find((r) => r.id === 'contact')
 
-    expect(home?.isActive('/portfolio')).toBe(true)
+    expect(home?.path).toBe('/')
+    expect(home?.isActive('/')).toBe(true)
+    expect(home?.isActive('/portfolio')).toBe(false)
     expect(home?.isActive('/portfolio/projets')).toBe(false)
     expect(projects?.isActive('/portfolio/projets')).toBe(true)
     expect(projects?.isActive('/logiciel')).toBe(false)

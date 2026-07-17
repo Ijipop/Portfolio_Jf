@@ -12,9 +12,9 @@ export const NAV_ROUTES: NavRoute[] = [
   {
     id: 'home',
     labelKey: 'nav.home',
-    path: '/portfolio',
+    path: '/',
     ariaLabel: 'accueil',
-    isActive: (pathname) => pathname === '/portfolio',
+    isActive: (pathname) => pathname === '/',
   },
   {
     id: 'projects',

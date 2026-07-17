@@ -13,6 +13,9 @@ export const homeGatewayCopy = {
     supportTitle: 'Soutien technique',
     supportDesc: 'Dépannage, entretien et accompagnement informatique au quotidien.',
     supportCta: 'En savoir plus',
+    softwareTitle: 'Logiciels & outils',
+    softwareDesc: 'Applications et outils sur mesure — Timelendr, Overstamp, Space Taker et plus.',
+    softwareCta: 'Voir les logiciels',
   },
   en: {
     welcome: 'Welcome to ijipop solutions',
@@ -26,6 +29,9 @@ export const homeGatewayCopy = {
     supportTitle: 'Tech support',
     supportDesc: 'Troubleshooting, upkeep and day-to-day IT help.',
     supportCta: 'Learn more',
+    softwareTitle: 'Software & tools',
+    softwareDesc: 'Custom apps and tools — Timelendr, Overstamp, Space Taker and more.',
+    softwareCta: 'See the software',
   },
 } as const
 

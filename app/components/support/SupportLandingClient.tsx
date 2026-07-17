@@ -17,6 +17,7 @@ import InteractiveBackgroundSection from '@/components/shared/InteractiveBackgro
 import PageWrapper from '@/components/shared/PageWrapper'
 import ScrollReveal from '@/components/shared/ScrollReveal'
 import ScrollTriggeredStickyCTA from '@/components/shared/ScrollTriggeredStickyCTA'
+import LaneCrossLinks from '@/components/home/LaneCrossLinks'
 import { supportLandingContent } from '@/content/soutien-informatique-montreal.fr'
 import { useLanguage } from '@/contexts/LanguageContext'
 import { useTextColor } from '@/hooks/useTextColor'
@@ -484,6 +485,9 @@ export default function SupportLandingClient() {
                 </Link>
               </Box>
             </ScrollReveal>
+          </Container>
+          <Container maxWidth="lg" sx={{ px: { xs: 1.5, sm: 2, md: 3 }, pb: { xs: 2, sm: 3 } }}>
+            <LaneCrossLinks current="support" />
           </Container>
         </Box>
       </InteractiveBackgroundSection>

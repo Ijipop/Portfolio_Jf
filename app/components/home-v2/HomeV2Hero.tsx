@@ -12,6 +12,7 @@ import HomeV2Cta from './HomeV2Cta'
 import { useHomeV2Tokens } from './homeV2Tokens'
 
 const CONTACT_PATH = '/portfolio/contact'
+const WEB_PROJECTS_PATH = '/portfolio/projets?type=web'
 
 const heroViewportHeight = 'calc(100dvh - var(--app-bar-height, 64px))'
 
@@ -22,12 +23,8 @@ export default function HomeV2Hero() {
   const [wordIndex, setWordIndex] = useState(0)
   const [scramblePhase, setScramblePhase] = useState<'chaos' | 'settled'>('settled')
 
-  const rotatingWords = [
-    t('homeV2.heroRotatingSites'),
-    t('homeV2.heroRotatingTools'),
-    t('homeV2.heroRotatingSoftware'),
-    t('homeV2.heroRotatingInterfaces'),
-  ]
+  /** Vocabulaire lane Web uniquement. */
+  const rotatingWords = [t('homeV2.heroRotatingSites'), t('homeV2.heroRotatingInterfaces')]
 
   const rotatingWordGradient = useMemo(() => BRAND_GLITCH_GRADIENT, [])
 
@@ -40,7 +37,7 @@ export default function HomeV2Hero() {
         setWordIndex((current) => (current + 1) % rotatingWords.length)
         setScramblePhase('settled')
       }, 560)
-    }, 3000)
+    }, 5200)
 
     return () => window.clearInterval(interval)
   }, [reducedMotion, rotatingWords.length])
@@ -273,7 +270,6 @@ export default function HomeV2Hero() {
           mx: 'auto',
           pt: { xs: 1.5, sm: 2 },
           pb: 'max(16px, env(safe-area-inset-bottom, 0px))',
-          background: `linear-gradient(180deg, transparent 0%, ${v2.bg} 28%)`,
           '@media (max-height: 900px)': {
             pt: 1.25,
           },
@@ -296,6 +292,22 @@ export default function HomeV2Hero() {
             {t('homeV2.heroCtaSecondary')}
           </HomeV2Cta>
         </Stack>
+        <Box
+          component="a"
+          href={WEB_PROJECTS_PATH}
+          sx={{
+            display: 'inline-block',
+            mt: 1.75,
+            fontSize: '0.9rem',
+            fontWeight: 600,
+            color: v2.textSecondary,
+            textDecoration: 'none',
+            transition: 'color 0.2s ease',
+            '&:hover': { color: v2.brandOrangeLight },
+          }}
+        >
+          {t('homeV2.heroSeeWebProjects')} →
+        </Box>
       </Box>
     </Box>
   )

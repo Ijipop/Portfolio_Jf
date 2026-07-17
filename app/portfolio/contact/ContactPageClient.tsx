@@ -129,8 +129,6 @@ export default function ContactPageClient({ showMerciDialog = false }: ContactPa
             </CTAButton>
           </Box>
 
-          <AiConversionTeaser />
-
           <ContactForm
             compact={useCompactContact}
                   textColor={textColor}
@@ -140,6 +138,8 @@ export default function ContactPageClient({ showMerciDialog = false }: ContactPa
             onNetworkError={handleNetworkError}
             onSuccess={handleFormSuccess}
           />
+
+          <AiConversionTeaser />
 
           <ContactLocationCard
             locationTitle={t('contact.location')}
