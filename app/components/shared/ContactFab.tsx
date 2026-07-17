@@ -10,7 +10,8 @@ import { useLanguage } from '@/contexts/LanguageContext'
 import { DESIGN_TOKENS } from '@/design-system/constants'
 import { useThemeColors } from '@/hooks/useThemeColors'
 
-const HIDDEN_PATHS = ['/', '/portfolio/contact', '/portfolio/contact/merci']
+/** Pas de FAB sur gateway, contact, ni hub web (sticky CTA déjà présent). */
+const HIDDEN_PATHS = ['/', '/portfolio', '/portfolio/contact', '/portfolio/contact/merci']
 
 export default function ContactFab() {
   const pathname = usePathname()

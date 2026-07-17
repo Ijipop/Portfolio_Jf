@@ -13,7 +13,7 @@ import { homeGatewayCopy } from '@/i18n/homeGatewayCopy'
 
 const WEB_HREF = '/portfolio'
 const SUPPORT_HREF = '/soutien-informatique-montreal'
-const SOFTWARE_HREF = '/logiciel'
+const SOFTWARE_HREF = '/portfolio/projets?type=logiciel'
 
 type GatewayChoice = {
   href: string
@@ -21,6 +21,7 @@ type GatewayChoice = {
   description: string
   cta: string
   delayMs: number
+  testId: string
 }
 
 export default function HomeGatewayClient() {
@@ -35,13 +36,23 @@ export default function HomeGatewayClient() {
       description: copy.webDesc,
       cta: copy.webCta,
       delayMs: 120,
+      testId: 'gateway-choice-web',
     },
     {
       href: SUPPORT_HREF,
       title: copy.supportTitle,
       description: copy.supportDesc,
       cta: copy.supportCta,
-      delayMs: 240,
+      delayMs: 200,
+      testId: 'gateway-choice-support',
+    },
+    {
+      href: SOFTWARE_HREF,
+      title: copy.softwareTitle,
+      description: copy.softwareDesc,
+      cta: copy.softwareCta,
+      delayMs: 280,
+      testId: 'gateway-choice-software',
     },
   ]
 
@@ -56,7 +67,7 @@ export default function HomeGatewayClient() {
         alignItems: 'center',
         justifyContent: 'center',
         px: { xs: 2, sm: 3, md: 4 },
-        py: { xs: 2.5, sm: 4, md: 5 },
+        py: { xs: 1.5, sm: 3, md: 5 },
         color: SITE_DARK.text,
         overflow: 'visible',
         '@media (min-height: 900px)': {
@@ -96,7 +107,7 @@ export default function HomeGatewayClient() {
           component="h1"
           sx={{
             m: 0,
-            mb: { xs: 1.5, sm: 2, md: 2.5 },
+            mb: { xs: 1, sm: 2, md: 2.5 },
             '@media (min-height: 900px)': { mb: 0 },
             display: 'flex',
             flexDirection: 'column',
@@ -107,8 +118,8 @@ export default function HomeGatewayClient() {
           <Typography
             component="span"
             sx={{
-              mb: 1,
-              fontSize: { xs: '1.2rem', sm: '1.45rem', md: '1.65rem' },
+              mb: { xs: 0.5, sm: 1 },
+              fontSize: { xs: '1rem', sm: '1.45rem', md: '1.65rem' },
               fontWeight: 500,
               fontStyle: 'italic',
               letterSpacing: '-0.01em',
@@ -133,7 +144,7 @@ export default function HomeGatewayClient() {
                 pt: { xs: '0.55em', sm: '0.5em', md: '0.4em', lg: '0.36em' },
                 /** Plafond plus bas en desktop : évite un titre/halo disproportionnés. */
                 fontSize: {
-                  xs: 'clamp(3.1rem, 14vw, 4.1rem)',
+                  xs: 'clamp(2.6rem, 12vw, 3.4rem)',
                   sm: 'clamp(4.2rem, 10vw, 5.4rem)',
                   md: 'clamp(4.6rem, 6vw, 5.8rem)',
                   lg: 'clamp(5rem, 4.5vw, 6.1rem)',
@@ -204,8 +215,8 @@ export default function HomeGatewayClient() {
             <Typography
               component="span"
               sx={{
-                mt: { xs: -0.4, sm: -0.55 },
-                fontSize: { xs: '1.45rem', sm: '1.75rem', md: '2rem' },
+                mt: { xs: -0.35, sm: -0.55 },
+                fontSize: { xs: '1.15rem', sm: '1.75rem', md: '2rem' },
                 fontWeight: 700,
                 letterSpacing: '0.14em',
                 textTransform: 'lowercase',
@@ -221,9 +232,9 @@ export default function HomeGatewayClient() {
           component="p"
           sx={{
             m: 0,
-            mb: { xs: 2.25, sm: 3.5, md: 5 },
+            mb: { xs: 1.5, sm: 3.5, md: 5 },
             '@media (min-height: 900px)': { mb: 0 },
-            fontSize: { xs: '1rem', sm: '1.2rem', md: '1.3rem' },
+            fontSize: { xs: '0.95rem', sm: '1.2rem', md: '1.3rem' },
             fontWeight: 500,
             letterSpacing: '-0.01em',
             color: SITE_DARK.textSecondary,
@@ -239,17 +250,15 @@ export default function HomeGatewayClient() {
 
         <Stack
           direction={{ xs: 'column', md: 'row' }}
-          spacing={{ xs: 1.5, md: 2.5 }}
+          spacing={{ xs: 1, sm: 1.5, md: 2 }}
           sx={{ width: '100%', alignItems: 'stretch' }}
         >
               {choices.map((choice) => (
             <Box
-              key={choice.href}
+              key={choice.testId}
               component={Link}
               href={choice.href}
-              data-testid={
-                choice.href === WEB_HREF ? 'gateway-choice-web' : 'gateway-choice-support'
-              }
+              data-testid={choice.testId}
               sx={{
                 flex: 1,
                 display: 'flex',
@@ -258,8 +267,8 @@ export default function HomeGatewayClient() {
                 textAlign: 'left',
                 textDecoration: 'none',
                 color: 'inherit',
-                minHeight: { xs: 'auto', md: 220 },
-                p: { xs: 2, sm: 2.75, md: 3.5 },
+                minHeight: { xs: 'auto', md: 200 },
+                p: { xs: 1.35, sm: 2.5, md: 3 },
                 borderRadius: SITE_DARK.cardRadius,
                 background: SITE_DARK.surface,
                 backdropFilter: 'blur(14px)',
@@ -294,12 +303,12 @@ export default function HomeGatewayClient() {
               <Typography
                 component="span"
                 sx={{
-                  fontSize: { xs: '1.2rem', sm: '1.45rem', md: '1.7rem' },
+                  fontSize: { xs: '1.05rem', sm: '1.45rem', md: '1.7rem' },
                   fontWeight: 800,
                   letterSpacing: '-0.03em',
                   lineHeight: 1.15,
                   color: SITE_DARK.text,
-                  mb: { xs: 0.75, sm: 1.25 },
+                  mb: { xs: 0.35, sm: 1.25 },
                 }}
               >
                 {choice.title}
@@ -308,10 +317,17 @@ export default function HomeGatewayClient() {
                 component="span"
                 sx={{
                   flex: 1,
-                  fontSize: { xs: '0.9rem', sm: '1rem' },
-                  lineHeight: 1.5,
+                  fontSize: { xs: '0.8rem', sm: '1rem' },
+                  lineHeight: { xs: 1.35, sm: 1.5 },
                   color: SITE_DARK.textSecondary,
-                  mb: { xs: 1.5, sm: 2.5 },
+                  mb: { xs: 0.75, sm: 2.5 },
+                  display: { xs: '-webkit-box', sm: 'block' },
+                  WebkitLineClamp: 2,
+                  WebkitBoxOrient: 'vertical',
+                  overflow: { xs: 'hidden', sm: 'visible' },
+                  '@media (min-width: 600px)': {
+                    WebkitLineClamp: 'unset',
+                  },
                 }}
               >
                 {choice.description}
@@ -323,7 +339,7 @@ export default function HomeGatewayClient() {
                   alignItems: 'center',
                   gap: 1,
                   mt: 'auto',
-                  fontSize: '0.95rem',
+                  fontSize: { xs: '0.85rem', sm: '0.95rem' },
                   fontWeight: 700,
                   letterSpacing: '0.02em',
                   color: SITE_DARK.brandOrange,
@@ -347,75 +363,6 @@ export default function HomeGatewayClient() {
             </Box>
           ))}
         </Stack>
-
-        <Box
-          component={Link}
-          href={SOFTWARE_HREF}
-          data-testid="gateway-soft-cta-software"
-          sx={{
-            mt: { xs: 2.25, sm: 3, md: 3.5 },
-            '@media (min-height: 900px)': { mt: 0 },
-            '@media (max-height: 720px)': { mt: 1.75 },
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: 1,
-            px: { xs: 1.75, sm: 2.25 },
-            py: { xs: 0.85, sm: 1 },
-            borderRadius: 999,
-            textDecoration: 'none',
-            background: `linear-gradient(135deg, ${SITE_DARK.brandOrangeLight} 0%, ${SITE_DARK.brandOrange} 55%, #b91c1c 100%)`,
-            boxShadow: `0 8px 28px ${SITE_DARK.brandGlowStrong}, 0 0 0 1px rgba(255, 255, 255, 0.12) inset`,
-            transition: 'transform 0.22s ease, box-shadow 0.22s ease, filter 0.22s ease',
-            animation: reducedMotion
-              ? 'none'
-              : 'gatewayFadeUp 0.55s ease 0.32s both',
-            '&:hover': {
-              transform: reducedMotion ? 'none' : 'translateY(-2px)',
-              boxShadow: `0 12px 36px ${SITE_DARK.brandGlowStrong}, 0 0 0 1px rgba(255, 255, 255, 0.18) inset`,
-              filter: 'brightness(1.06)',
-              '& .gateway-soft-arrow': {
-                transform: 'translateX(3px)',
-              },
-            },
-            '&:focus-visible': {
-              outline: `2px solid ${SITE_DARK.brandOrangeLight}`,
-              outlineOffset: 3,
-            },
-            '@media (prefers-reduced-motion: reduce)': {
-              transition: 'filter 0.2s ease',
-            },
-          }}
-        >
-          <Box
-            component="span"
-            sx={{
-              display: 'inline-block',
-              fontSize: { xs: '0.9rem', sm: '0.98rem' },
-              fontWeight: 800,
-              letterSpacing: '0.02em',
-              lineHeight: 1.2,
-              color: '#fff7ed',
-              textShadow: '0 1px 0 rgba(0,0,0,0.18)',
-            }}
-          >
-            {copy.softCta}
-          </Box>
-          <Box
-            component="span"
-            className="gateway-soft-arrow"
-            aria-hidden
-            sx={{
-              display: 'inline-block',
-              color: '#fff7ed',
-              fontWeight: 800,
-              transition: 'transform 0.2s ease',
-              fontSize: '1.1em',
-              lineHeight: 1,
-            }}
-          >
-            →
-          </Box>
-        </Box>
       </Box>
     </Box>
   )

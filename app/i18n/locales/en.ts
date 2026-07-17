@@ -268,14 +268,15 @@ export const en = {
       heroRotatingSoftware: 'software',
       heroRotatingInterfaces: 'interfaces',
       heroSubtitle:
-        'Websites, redesigns and tech support for freelancers, artists and SMBs in Quebec.',
+        'Showcase sites, redesigns and clear pages for freelancers, artists and SMBs in Quebec.',
       heroRealName: 'Jean-François Lefebvre',
       heroOneLiner: 'Web developer · Montreal',
       heroCtaPrimary: 'Get an estimate',
       heroCtaSecondary: 'View packages',
+      heroSeeWebProjects: 'See website work',
       servicesKicker: 'Services',
-      servicesTitle: 'Three ways I can help',
-      servicesLead: 'Clear mandates — from first site to post-launch support.',
+      servicesTitle: 'Websites, redesigns and forms',
+      servicesLead: 'Clear mandates — from first site to contact tools.',
       serviceWebTitle: 'Website creation',
       serviceWebLead:
         'A modern, mobile-friendly site to present your services and make contact easy.',
@@ -301,7 +302,7 @@ export const en = {
       pricingTitle: 'Clear offers, no surprises',
       pricingLead: 'SMBs, freelancers, professionals and artists in Quebec.',
       pricingFootnote:
-        'Monthly maintenance for live sites: $75 – $150/month. Larger site or complex software? Get in touch.',
+        'Monthly maintenance for live sites: $75 – $150/month. Larger site or custom needs? Get in touch.',
       toolsKicker: 'Software & small tools',
       toolsTitle: 'When a website isn’t enough',
       toolsLead:

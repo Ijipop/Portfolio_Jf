@@ -5,6 +5,7 @@ test('landing reaches portfolio and contact in two clicks max', async ({ page })
 
   await expect(page.getByTestId('gateway-choice-web')).toBeVisible()
   await expect(page.getByTestId('gateway-choice-support')).toBeVisible()
+  await expect(page.getByTestId('gateway-choice-software')).toBeVisible()
   const gatewayHeading = page.getByRole('heading', { level: 1 })
   await expect(gatewayHeading).toContainText(/Bienvenue chez|Welcome to/i)
   await expect(gatewayHeading).toContainText(/ijipop/i)
@@ -14,10 +15,12 @@ test('landing reaches portfolio and contact in two clicks max', async ({ page })
   await page.getByTestId('gateway-choice-web').click()
   await expect(page).toHaveURL(/\/portfolio\/?$/)
 
-  const contactNav = page.locator('a[href="/portfolio/contact"]').first()
+  const contactNav = page.getByRole('banner').getByRole('link', { name: /^Contact$/i })
   await expect(contactNav).toBeVisible()
-  await contactNav.click()
-  await expect(page).toHaveURL(/\/portfolio\/contact/)
+  await Promise.all([
+    page.waitForURL(/\/portfolio\/contact/),
+    contactNav.click(),
+  ])
   await expect(page.getByTestId('contact-form')).toBeVisible()
 })
 
@@ -139,9 +142,11 @@ test('gateway choice CTAs stay visible within the first viewport', async ({ page
 
     const webCta = page.getByTestId('gateway-choice-web')
     const supportCta = page.getByTestId('gateway-choice-support')
+    const softwareCta = page.getByTestId('gateway-choice-software')
 
     await expect(webCta).toBeVisible()
     await expect(supportCta).toBeVisible()
+    await expect(softwareCta).toBeVisible()
 
     const isFullyInFirstViewport = (testId: string) =>
       page.evaluate((id) => {
@@ -159,16 +164,17 @@ test('gateway choice CTAs stay visible within the first viewport', async ({ page
 
     await expect.poll(() => isFullyInFirstViewport('gateway-choice-web')).toBe(true)
     await expect.poll(() => isFullyInFirstViewport('gateway-choice-support')).toBe(true)
+    await expect.poll(() => isFullyInFirstViewport('gateway-choice-software')).toBe(true)
   }
 })
 
-test('gateway soft CTA links to software page', async ({ page }) => {
+test('gateway software card links to logiciels showcase', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' })
   await page.goto('/', { waitUntil: 'domcontentloaded' })
 
-  const softCta = page.getByTestId('gateway-soft-cta-software')
-  await expect(softCta).toBeVisible()
-  await expect(softCta).toHaveAttribute('href', '/logiciel')
+  const softwareCta = page.getByTestId('gateway-choice-software')
+  await expect(softwareCta).toBeVisible()
+  await expect(softwareCta).toHaveAttribute('href', '/portfolio/projets?type=logiciel')
 })
 test('site light mode uses dark text on home and contact', async ({ page }) => {
   await page.addInitScript(() => {

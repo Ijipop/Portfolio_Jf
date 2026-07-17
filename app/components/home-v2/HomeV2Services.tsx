@@ -1,7 +1,7 @@
 'use client'
 
 import CheckRoundedIcon from '@mui/icons-material/CheckRounded'
-import ComputerOutlinedIcon from '@mui/icons-material/ComputerOutlined'
+import DynamicFormOutlinedIcon from '@mui/icons-material/DynamicFormOutlined'
 import LanguageOutlinedIcon from '@mui/icons-material/LanguageOutlined'
 import RefreshOutlinedIcon from '@mui/icons-material/RefreshOutlined'
 import Box from '@mui/material/Box'
@@ -16,7 +16,6 @@ import HomeV2Section from './HomeV2Section'
 import { useHomeV2Tokens } from './homeV2Tokens'
 
 const CONTACT_PATH = '/portfolio/contact'
-const SUPPORT_PATH = '/soutien-informatique-montreal'
 
 type ServiceCard = {
   id: string
@@ -29,6 +28,7 @@ type ServiceCard = {
   improveSubject?: boolean
 }
 
+/** Lane Web uniquement — pas de soutien / logiciels ici. */
 const SERVICE_CARDS: ServiceCard[] = [
   {
     id: 'web',
@@ -49,13 +49,17 @@ const SERVICE_CARDS: ServiceCard[] = [
     improveSubject: true,
   },
   {
-    id: 'support',
-    icon: ComputerOutlinedIcon,
-    titleKey: 'homeV2.serviceSupportTitle',
-    leadKey: 'homeV2.serviceSupportLead',
-    bulletKeys: ['homeV2.serviceSupportB1', 'homeV2.serviceSupportB2', 'homeV2.serviceSupportB3'],
-    ctaKey: 'homeV2.serviceSupportCta',
-    href: SUPPORT_PATH,
+    id: 'forms',
+    icon: DynamicFormOutlinedIcon,
+    titleKey: 'home.servicesFormsTitle',
+    leadKey: 'home.servicesFormsLead',
+    bulletKeys: [
+      'home.servicesFormsBullet1',
+      'home.servicesFormsBullet2',
+      'home.servicesFormsBullet3',
+    ],
+    ctaKey: 'homeV2.serviceWebCta',
+    href: CONTACT_PATH,
   },
 ]
 

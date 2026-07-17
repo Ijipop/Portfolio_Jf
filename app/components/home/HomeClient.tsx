@@ -7,8 +7,7 @@ import AppBarComponent from '@/components/appBar'
 import PageWrapper from '@/components/shared/PageWrapper'
 import InteractiveBackgroundSection from '@/components/shared/InteractiveBackgroundSection'
 import ScrollTriggeredStickyCTA from '@/components/shared/ScrollTriggeredStickyCTA'
-import HomeDemosBand from '@/components/home/HomeDemosBand'
-import HomeTimelendrBand from '@/components/home/HomeTimelendrBand'
+import LaneCrossLinks from '@/components/home/LaneCrossLinks'
 import HomeV2Hero from '@/components/home-v2/HomeV2Hero'
 import HomeV2Services from '@/components/home-v2/HomeV2Services'
 import HomeV2Pricing from '@/components/home-v2/HomeV2Pricing'
@@ -20,7 +19,6 @@ import { useEffect, useState } from 'react'
 const SignatureIntro = dynamic(() => import('@/components/SignatureIntro'), { ssr: false })
 
 const INTRO_SESSION_KEY = 'portfolio-intro-seen'
-const SHOW_HOME_DEMOS_BAND = true
 
 function setIntroSeenCookie() {
   if (typeof document === 'undefined') return
@@ -106,9 +104,8 @@ export default function HomeClient({ initialShowIntro }: { initialShowIntro: boo
                 <HomeV2Services />
                 <HomeV2Pricing />
                 <HomeV2Credibility />
-                {SHOW_HOME_DEMOS_BAND && <HomeDemosBand />}
-                <HomeTimelendrBand />
                 <HomeV2FinalCta />
+                <LaneCrossLinks current="web" />
               </Container>
             </InteractiveBackgroundSection>
 
