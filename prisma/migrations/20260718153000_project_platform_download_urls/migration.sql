@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "Project" ADD COLUMN IF NOT EXISTS "windowsUrl" TEXT;
+ALTER TABLE "Project" ADD COLUMN IF NOT EXISTS "macosUrl" TEXT;

@@ -6,6 +6,11 @@ const { PrismaClient } = require('@prisma/client')
 
 const prisma = new PrismaClient()
 
+const SPACE_TAKER_WINDOWS_EXE =
+  'https://github.com/Ijipop/Space-Taker/releases/download/v0.2.0/SpaceTaker_0.2.0_x64-setup.exe'
+const SPACE_TAKER_MACOS_DMG =
+  'https://github.com/Ijipop/Space-Taker/releases/download/v0.2.0/SpaceTaker_0.2.0_aarch64.dmg'
+
 const SHOWCASE = [
   {
     matchNames: ['timelendr', 'timelendar'],
@@ -46,14 +51,17 @@ const SHOWCASE = [
       name: 'Space Taker',
       description:
         'Outil simple et rapide pour voir d’un coup d’œil ce qui prend de la place sur votre disque dur.',
-      technologies: 'Desktop, Windows',
+      technologies: 'Desktop, Windows, macOS',
       status: 'Terminé',
       projectType: 'logiciel',
       webAudience: null,
       displayOrder: 3,
+      /** Pas de « Voir le projet » vers un binaire — CTA = Windows + macOS. */
       url: '',
       siteUrl: null,
       downloadUrl: null,
+      windowsUrl: SPACE_TAKER_WINDOWS_EXE,
+      macosUrl: SPACE_TAKER_MACOS_DMG,
       imageUrl: '/imgs/images/SpaceTaker_icon.png',
     },
   },
@@ -82,11 +90,15 @@ async function upsertOne({ matchNames, data }) {
         webAudience: data.webAudience,
         displayOrder: data.displayOrder,
         url: data.url ?? hit.url,
-        siteUrl: data.siteUrl ?? hit.siteUrl,
+        siteUrl: Object.prototype.hasOwnProperty.call(data, 'siteUrl') ? data.siteUrl : hit.siteUrl,
         imageUrl: data.imageUrl,
         ...(Object.prototype.hasOwnProperty.call(data, 'downloadUrl')
           ? { downloadUrl: data.downloadUrl }
           : {}),
+        ...(Object.prototype.hasOwnProperty.call(data, 'windowsUrl')
+          ? { windowsUrl: data.windowsUrl }
+          : {}),
+        ...(Object.prototype.hasOwnProperty.call(data, 'macosUrl') ? { macosUrl: data.macosUrl } : {}),
       },
     })
     console.log(`Updated: ${updated.name} (#${updated.id})`)
@@ -105,6 +117,8 @@ async function upsertOne({ matchNames, data }) {
       url: data.url || '',
       siteUrl: data.siteUrl,
       downloadUrl: data.downloadUrl ?? null,
+      windowsUrl: data.windowsUrl ?? null,
+      macosUrl: data.macosUrl ?? null,
       imageUrl: data.imageUrl,
     },
   })

@@ -527,6 +527,8 @@ export const fr = {
       viewSite: 'Voir le site',
       openApp: 'Ouvrir',
       downloadProject: 'Télécharger le projet',
+      downloadWindows: 'Télécharger pour Windows',
+      downloadMacos: 'Télécharger pour macOS',
       downloadTimelendrPc: 'Télécharger Timelendr PC',
       downloadTimelendrMacos: 'Télécharger Timelendr macOS',
       noProjects: 'Aucun projet trouvé avec cette technologie',

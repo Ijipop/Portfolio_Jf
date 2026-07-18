@@ -36,6 +36,10 @@ model Project {
   siteUrl      String?
   /** Lien direct vers binaire (.exe, .dmg, etc.) ou page de téléchargement */
   downloadUrl  String?
+  /** Téléchargement Windows (.exe / installateur) — logiciels desktop */
+  windowsUrl   String?
+  /** Téléchargement macOS (.dmg) — logiciels desktop */
+  macosUrl     String?
   imageUrl     String?  // URL de l'image du projet
   /** Sites web uniquement : perso vs pro (null pour logiciel ou héritage) */
   webAudience  WebProjectAudience?

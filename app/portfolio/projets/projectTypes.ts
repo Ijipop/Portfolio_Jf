@@ -10,6 +10,8 @@ export interface Project {
   url: string
   siteUrl?: string | null
   downloadUrl?: string | null
+  windowsUrl?: string | null
+  macosUrl?: string | null
   imageUrl?: string
   createdAt: string
   updatedAt: string
