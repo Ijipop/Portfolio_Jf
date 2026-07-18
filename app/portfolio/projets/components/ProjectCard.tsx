@@ -673,6 +673,9 @@ export default function ProjectCard({
                     </Button>
                   ))}
                 </Box>
+              ) : isShowcaseCard && primaryHref ? (
+                /** Réserve la rangée secondaire pour aligner « Ouvrir » avec « Voir le projet ». */
+                <Box aria-hidden sx={{ minHeight: 32, width: '100%' }} />
               ) : null}
             </Box>
           </Box>
