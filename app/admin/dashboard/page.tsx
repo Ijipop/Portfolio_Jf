@@ -65,6 +65,8 @@ interface Project {
   url?: string;
   siteUrl?: string | null;
   downloadUrl?: string | null;
+  windowsUrl?: string | null;
+  macosUrl?: string | null;
   imageUrl?: string;
   createdAt: string;
   updatedAt: string;
@@ -188,6 +190,8 @@ export default function AdminDashboard() {
     url: '',
     siteUrl: '',
     downloadUrl: '',
+    windowsUrl: '',
+    macosUrl: '',
     imageUrl: ''
   });
   const [uploading, setUploading] = useState(false);
@@ -460,6 +464,8 @@ export default function AdminDashboard() {
         url: project.url || '',
         siteUrl: project.siteUrl || '',
         downloadUrl: project.downloadUrl || '',
+        windowsUrl: project.windowsUrl || '',
+        macosUrl: project.macosUrl || '',
         imageUrl: project.imageUrl || ''
       });
       setPreviewImage(project.imageUrl ? getImageUrl(project.imageUrl) : null);
@@ -476,6 +482,8 @@ export default function AdminDashboard() {
         url: '',
         siteUrl: '',
         downloadUrl: '',
+        windowsUrl: '',
+        macosUrl: '',
         imageUrl: ''
       });
       setPreviewImage(null);
@@ -499,6 +507,8 @@ export default function AdminDashboard() {
       url: '',
       siteUrl: '',
       downloadUrl: '',
+      windowsUrl: '',
+      macosUrl: '',
       imageUrl: ''
     });
     setPreviewImage(null);
@@ -1368,8 +1378,28 @@ export default function AdminDashboard() {
               variant="outlined"
               value={formData.downloadUrl}
               onChange={(e) => setFormData({ ...formData, downloadUrl: e.target.value })}
-              placeholder="https://… (lien .exe, .dmg, page GitHub Releases, etc.)"
-              helperText="URL optionnelle vers un dépôt ou fichier installable pour les visiteurs."
+              placeholder="https://… (lien générique .exe, .dmg, page Releases, etc.)"
+              helperText="Lien unique de secours. Pour Windows / macOS séparés, utilisez les champs ci-dessous."
+            />
+            <TextField
+              margin="dense"
+              label="Téléchargement Windows (PC)"
+              fullWidth
+              variant="outlined"
+              value={formData.windowsUrl}
+              onChange={(e) => setFormData({ ...formData, windowsUrl: e.target.value })}
+              placeholder="https://… (.exe ou installateur Windows)"
+              helperText="Affiche un bouton Windows sur la carte logiciel."
+            />
+            <TextField
+              margin="dense"
+              label="Téléchargement macOS"
+              fullWidth
+              variant="outlined"
+              value={formData.macosUrl}
+              onChange={(e) => setFormData({ ...formData, macosUrl: e.target.value })}
+              placeholder="https://… (.dmg)"
+              helperText="Affiche un bouton macOS sur la carte logiciel."
             />
             <Box sx={{ mt: 1, mb: 1 }}>
               <input
@@ -1393,7 +1423,7 @@ export default function AdminDashboard() {
                 </Button>
               </label>
               <Typography variant="caption" color="text.secondary" display="block" sx={{ mt: 0.5 }}>
-                Met à jour le champ avec l’URL du fichier (chemin relatif sous <code>public/</code> par défaut, ou URL
+                Remplit le champ « Télécharger le projet » (chemin relatif sous <code>public/</code>, ou URL
                 absolue si Blob est configuré).
               </Typography>
             </Box>

@@ -2,6 +2,7 @@ import { prisma } from '@/lib/prisma'
 import { authAdminToken } from '@/lib/auth-admin-request'
 import { messageForProjectSaveError } from '@/lib/prisma-project-save-error'
 import { resolveWebAudience } from '@/lib/project-web-audience'
+import { parseOptionalHttpUrl } from '@/lib/optionalHttpUrl'
 import { normalizeProjectImageUrlInput } from '@/lib/stored-image-value'
 import { NextRequest, NextResponse } from 'next/server'
 
@@ -35,6 +36,8 @@ const publicProjectSelect = {
 	url: true,
 	siteUrl: true,
 	downloadUrl: true,
+	windowsUrl: true,
+	macosUrl: true,
 	imageUrl: true,
 } as const
 
@@ -106,7 +109,21 @@ export async function POST(request: NextRequest)
 	try
 	{
 		const body = await request.json()
-		const { name, description, technologies, status, url, siteUrl, downloadUrl, imageUrl, projectType, displayOrder, webAudience } = body
+		const {
+			name,
+			description,
+			technologies,
+			status,
+			url,
+			siteUrl,
+			downloadUrl,
+			windowsUrl,
+			macosUrl,
+			imageUrl,
+			projectType,
+			displayOrder,
+			webAudience,
+		} = body
 		const pt = parseProjectType(projectType)
 
 		// Validation des données
@@ -158,22 +175,24 @@ export async function POST(request: NextRequest)
 			)
 		}
 
-		const site =
-			typeof siteUrl === 'string' && siteUrl.trim().length > 0 ? siteUrl.trim() : null
-		if (site && !/^https?:\/\//i.test(site)) {
-			return NextResponse.json(
-				{ success: false, error: 'L’URL du site doit commencer par http:// ou https://' },
-				{ status: 400 }
-			)
+		const site = parseOptionalHttpUrl(siteUrl, 'du site')
+		if (!site.ok) {
+			return NextResponse.json({ success: false, error: site.error }, { status: 400 })
 		}
 
-		const dl =
-			typeof downloadUrl === 'string' && downloadUrl.trim().length > 0 ? downloadUrl.trim() : null
-		if (dl && !/^https?:\/\//i.test(dl)) {
-			return NextResponse.json(
-				{ success: false, error: 'L’URL de téléchargement doit commencer par http:// ou https://' },
-				{ status: 400 }
-			)
+		const dl = parseOptionalHttpUrl(downloadUrl, 'de téléchargement')
+		if (!dl.ok) {
+			return NextResponse.json({ success: false, error: dl.error }, { status: 400 })
+		}
+
+		const win = parseOptionalHttpUrl(windowsUrl, 'Windows')
+		if (!win.ok) {
+			return NextResponse.json({ success: false, error: win.error }, { status: 400 })
+		}
+
+		const mac = parseOptionalHttpUrl(macosUrl, 'macOS')
+		if (!mac.ok) {
+			return NextResponse.json({ success: false, error: mac.error }, { status: 400 })
 		}
 
 		const imgNorm = normalizeProjectImageUrlInput(imageUrl)
@@ -189,8 +208,10 @@ export async function POST(request: NextRequest)
 				technologies: technologies.trim(),
 				status: status.trim(),
 				url: url || '',
-				siteUrl: site,
-				downloadUrl: dl,
+				siteUrl: site.value,
+				downloadUrl: dl.value,
+				windowsUrl: win.value,
+				macosUrl: mac.value,
 				imageUrl: imgNorm.value,
 				projectType: pt,
 				displayOrder: parseDisplayOrder(displayOrder),

@@ -248,6 +248,9 @@ export default function ProjectCard({
   const isShowcaseCard = isWebCard || isSoftwareCard
   const launchableSiteHref = getLaunchableSiteHref(project)
   const webViewSiteHref = isWebCard ? getWebViewSiteButtonHref(project) : null
+  const projectWindowsUrl = project.windowsUrl?.trim() || null
+  const projectMacosUrl = project.macosUrl?.trim() || null
+
   const hasProjectAction = isWebCard
     ? Boolean(webViewSiteHref)
     : Boolean(
@@ -256,6 +259,7 @@ export default function ProjectCard({
             (project.url?.trim() ||
               project.siteUrl?.trim() ||
               (!isTimelendrProject && project.downloadUrl?.trim()) ||
+              (!isTimelendrProject && (projectWindowsUrl || projectMacosUrl)) ||
               (isTimelendrProject && (timelendrWindowsUrl || timelendrMacosUrl)))),
       )
 
@@ -319,9 +323,18 @@ export default function ProjectCard({
     else if (!isBrowserApp && project.siteUrl?.trim()) handleProjectClick(project.siteUrl)
     else if (!isTimelendrProject && !isBrowserApp && project.downloadUrl?.trim()) {
       handleProjectClick(project.downloadUrl)
+    } else if (!isTimelendrProject && !isBrowserApp && projectWindowsUrl) {
+      handleProjectClick(projectWindowsUrl)
+    } else if (!isTimelendrProject && !isBrowserApp && projectMacosUrl) {
+      handleProjectClick(projectMacosUrl)
     } else if (isTimelendrProject && timelendrWindowsUrl) handleProjectClick(timelendrWindowsUrl)
     else if (isTimelendrProject && timelendrMacosUrl) handleProjectClick(timelendrMacosUrl)
   }
+
+  const platformWindowsHref = isTimelendrProject ? timelendrWindowsUrl : projectWindowsUrl
+  const platformMacosHref = isTimelendrProject ? timelendrMacosUrl : projectMacosUrl
+  const downloadWindowsAria = isTimelendrProject ? downloadTimelendrPcLabel : t('projects.downloadWindows')
+  const downloadMacosAria = isTimelendrProject ? downloadTimelendrMacosLabel : t('projects.downloadMacos')
 
   let primaryHref: string | null = null
   let primaryLabel = viewProjectLabel
@@ -348,13 +361,8 @@ export default function ProjectCard({
   } else if (!isTimelendrProject && project.downloadUrl?.trim()) {
     primaryHref = project.downloadUrl!.trim()
     primaryLabel = downloadProjectLabel
-  } else if (isTimelendrProject && timelendrWindowsUrl) {
-    primaryHref = timelendrWindowsUrl
-    primaryLabel = downloadTimelendrPcLabel
-  } else if (isTimelendrProject && timelendrMacosUrl) {
-    primaryHref = timelendrMacosUrl
-    primaryLabel = downloadTimelendrMacosLabel
   }
+  /** Windows / macOS : toujours en rangée secondaire (même modèle Timelendr), jamais en CTA orange. */
 
   const secondaryActions: SecondaryAction[] = []
   if (isSoftwareCard && !isBrowserApp) {
@@ -365,19 +373,19 @@ export default function ProjectCard({
         ariaLabel: viewSiteLabel,
       })
     }
-    if (isTimelendrProject && timelendrWindowsUrl && primaryHref !== timelendrWindowsUrl) {
+    if (platformWindowsHref) {
       secondaryActions.push({
-        href: timelendrWindowsUrl,
+        href: platformWindowsHref,
         label: 'Windows',
-        ariaLabel: downloadTimelendrPcLabel,
+        ariaLabel: downloadWindowsAria,
         withDownloadIcon: true,
       })
     }
-    if (isTimelendrProject && timelendrMacosUrl && primaryHref !== timelendrMacosUrl) {
+    if (platformMacosHref) {
       secondaryActions.push({
-        href: timelendrMacosUrl,
+        href: platformMacosHref,
         label: 'macOS',
-        ariaLabel: downloadTimelendrMacosLabel,
+        ariaLabel: downloadMacosAria,
         withDownloadIcon: true,
       })
     }
