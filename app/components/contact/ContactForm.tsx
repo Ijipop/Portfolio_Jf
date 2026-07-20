@@ -37,6 +37,7 @@ import {
   validateAllContactFields,
   validateContactField,
 } from '@/components/contact/contactFormValidation'
+import { submitContactRequest } from '@/components/contact/submitContactRequest'
 
 const VALIDATION_DEBOUNCE_MS = 300
 const DIAGNOSTIC_IA_HASH = 'diagnostic-ia'
@@ -256,40 +257,32 @@ function ContactForm({
 
     setIsSubmitting(true)
 
-    try {
-      const response = await fetch('/api/contact', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          ...formData,
-          ...(includeProjectWeb ? { projectWeb } : {}),
-          ...(includeTechnicalSupport ? { technicalSupport } : {}),
-          ...(aiDiagnosis ? { aiDiagnosis } : {}),
-        }),
-      })
+    const result = await submitContactRequest(
+      {
+        ...formData,
+        ...(includeProjectWeb ? { projectWeb } : {}),
+        ...(includeTechnicalSupport ? { technicalSupport } : {}),
+        ...(aiDiagnosis ? { aiDiagnosis } : {}),
+      },
+      t('contact.sendError'),
+    )
 
-      const data = await response.json()
+    setIsSubmitting(false)
 
-      if (data.success) {
-        setFormData(EMPTY_CONTACT_FORM_DATA)
-        setFormErrors(EMPTY_CONTACT_FORM_ERRORS)
-        setIncludeProjectWeb(false)
-        setProjectWeb(emptyProjectWebBrief())
-        setIncludeTechnicalSupport(false)
-        setTechnicalSupport(emptyTechnicalSupportBrief())
-        setAiDiagnosis(null)
-        setIsSubmitting(false)
-        onSuccess()
-        return
-      }
-
-      onSendError(typeof data.error === 'string' ? data.error : t('contact.sendError'))
-    } catch (error) {
-      console.error('Erreur:', error)
-      onNetworkError()
-    } finally {
-      setIsSubmitting(false)
+    if (result.ok) {
+      setFormData(EMPTY_CONTACT_FORM_DATA)
+      setFormErrors(EMPTY_CONTACT_FORM_ERRORS)
+      setIncludeProjectWeb(false)
+      setProjectWeb(emptyProjectWebBrief())
+      setIncludeTechnicalSupport(false)
+      setTechnicalSupport(emptyTechnicalSupportBrief())
+      setAiDiagnosis(null)
+      onSuccess()
+      return
     }
+
+    if (result.kind === 'network') onNetworkError()
+    else onSendError(result.error)
   }
 
   return (

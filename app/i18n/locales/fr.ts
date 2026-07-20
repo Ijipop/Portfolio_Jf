@@ -572,6 +572,10 @@ export const fr = {
       projetsBody:
         'Je crée des sites vitrines et portfolios pour travailleurs autonomes et PME à Montréal et partout au Québec.',
       projetsLink: 'Obtenir une estimation',
+      logicielsTitle: 'Besoin d’un outil ?',
+      logicielsBody:
+        'Petit outil, automatisation ou idée sur mesure — décrivez votre besoin et on en parle.',
+      logicielsLink: 'Parler de votre besoin',
       timelendrTitle: 'Un site vitrine pour votre activité ?',
       timelendrBody:
         'En plus des outils logiciels, je conçois des sites web clairs pour présenter votre offre au Québec.',

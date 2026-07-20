@@ -22,6 +22,7 @@ export type SupportNeedKey =
   | 'ssdMigration'
   | 'dataRecovery'
   | 'security'
+  | 'computerBasics'
   | 'other'
   | ''
 

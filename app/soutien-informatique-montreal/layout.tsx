@@ -6,12 +6,12 @@ export const metadata: Metadata = {
     absolute: 'Soutien informatique à Montréal et à distance',
   },
   description:
-    'Dépannage Windows, migration SSD, sécurité de comptes, sauvegardes et assistance informatique pour particuliers, travailleurs autonomes et petites entreprises à Montréal ou à distance.',
+    'Technicien diplômé à Montréal et à distance. Prix clairs, aide humaine, sans centre d’appel. Appelez le (514) 447-3183.',
   alternates: { canonical: SUPPORT_LANDING_PATH },
   openGraph: {
     title: 'Soutien informatique à Montréal et à distance | Ijipop',
     description:
-      'Support technique simple, clair et abordable : dépannage PC, installation Windows, migration SSD, sécurité et accompagnement informatique.',
+      'Aide informatique claire et humaine : dépannage, Windows, SSD, sauvegardes. Prix affichés. Montréal et à distance.',
     url: SUPPORT_LANDING_PATH,
     locale: 'fr_CA',
     siteName: 'Jean-François Lefebvre - Ijipop',
@@ -28,7 +28,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Soutien informatique à Montréal et à distance | Ijipop',
     description:
-      'Support technique humain pour particuliers et petites entreprises : à distance ou en déplacement sur l’île de Montréal.',
+      'Technicien diplômé : à distance ou sur l’île de Montréal. Prix clairs. (514) 447-3183.',
     images: ['/og-default.png'],
   },
 }

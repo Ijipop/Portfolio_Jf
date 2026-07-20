@@ -24,8 +24,10 @@ import IjipopGlitchTitle from '../../components/shared/IjipopGlitchTitle'
 import PageWrapper from '../../components/shared/PageWrapper'
 import InteractiveBackgroundSection from '../../components/shared/InteractiveBackgroundSection'
 import Footer from '../../components/Footer'
+import SeoInternalLinkCta from '../../components/seo/SeoInternalLinkCta'
 import { DESIGN_TOKENS } from '../../design-system/constants'
 import { useLanguage } from '../../contexts/LanguageContext'
+import { CONTACT_SUBJECT_SOFTWARE } from '@/i18n/contactSubjects'
 import { useThemeColors } from '../../hooks/useThemeColors'
 import { useTextColor } from '../../hooks/useTextColor'
 import type { Project, TimelendrLatestLinks } from './projectTypes'
@@ -44,7 +46,7 @@ export default function Projets() {
   const pathname = usePathname()
   const { primary } = useThemeColors()
   const textColor = useTextColor()
-  const { t } = useLanguage()
+  const { t, locale } = useLanguage()
   /** Couleurs de section alignées sur la palette / thème courant (Créa et Site). */
   const projetsSectionText = textColor
   const [projects, setProjects] = useState<Project[]>([])
@@ -457,6 +459,16 @@ export default function Projets() {
                 </Typography>
               </Box>
             </AnimatedBox>
+          )}
+
+          {selectedProjectType === 'logiciel' && (
+            <SeoInternalLinkCta
+              title={t('seo.logicielsTitle')}
+              body={t('seo.logicielsBody')}
+              href={`/portfolio/contact?subject=${encodeURIComponent(CONTACT_SUBJECT_SOFTWARE[locale])}`}
+              linkLabel={t('seo.logicielsLink')}
+              variant="compact"
+            />
           )}
         </Container>
       </InteractiveBackgroundSection>

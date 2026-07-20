@@ -99,12 +99,13 @@ export default function ScrollReveal({
         containIntrinsicSize: fillHeight ? 'auto 320px' : 'auto 200px',
         ...(fillHeight
           ? {
-              height: '100%',
               width: '100%',
-              display: 'grid',
-              gridRow: 'span 2',
-              gridTemplateRows: 'subgrid',
+              height: '100%',
               minHeight: 0,
+              display: 'grid',
+              // 6 rangées carte vitrine : média, titre, description, techs, méta, actions
+              gridRow: 'span 6',
+              gridTemplateRows: 'subgrid',
             }
           : {}),
       }}

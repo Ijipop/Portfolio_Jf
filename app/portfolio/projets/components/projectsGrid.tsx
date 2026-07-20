@@ -17,14 +17,18 @@ export const ProjectsGrid = styled(Box, {
         display: 'grid',
         gridTemplateColumns: '1fr',
         alignItems: 'stretch',
-        gap: theme.spacing(2.5),
+        columnGap: theme.spacing(2.5),
+        // Espacement vertical entre « rangées » de cartes (6 tracks / carte)
+        rowGap: theme.spacing(2.5),
         [theme.breakpoints.up('md')]: {
           gridTemplateColumns: 'repeat(2, 1fr)',
-          gap: theme.spacing(3),
+          columnGap: theme.spacing(3),
+          rowGap: theme.spacing(3),
         },
         [theme.breakpoints.up('lg')]: {
           gridTemplateColumns: 'repeat(3, 1fr)',
-          gap: theme.spacing(3.5),
+          columnGap: theme.spacing(3.5),
+          rowGap: theme.spacing(3.5),
         },
       }
     : {
