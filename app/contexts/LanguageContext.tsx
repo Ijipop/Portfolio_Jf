@@ -66,7 +66,10 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
   const isServer = typeof window === 'undefined'
   const resolvedLocale: Locale = isServer || !mounted ? 'fr' : locale
 
-  const activeDict: TranslationDict = isServer || !mounted ? (fr as TranslationDict) : dict
+  // FR: toujours le module importé (évite un dict state périmé après HMR de locales/fr.ts).
+  // EN: dict chargé à la demande.
+  const activeDict: TranslationDict =
+    isServer || !mounted || resolvedLocale === 'fr' ? (fr as TranslationDict) : dict
 
   const t = useCallback(
     (key: TranslationKey): string => {

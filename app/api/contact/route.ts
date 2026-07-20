@@ -56,6 +56,7 @@ const SUPPORT_NEED_LABELS: Record<string, string> = {
   ssdMigration: 'Migration vers SSD et clonage de disque',
   dataRecovery: 'Récupération de données simple',
   security: 'Sécurité de comptes et double authentification',
+  computerBasics: 'Initiation à l’ordinateur (usage de base, pas de programmation)',
   other: 'Autre besoin',
 }
 

@@ -31,6 +31,8 @@ async function main() {
         imageUrl: IMAGE_URL,
         downloadUrl: DOWNLOAD_URL,
         projectType: 'logiciel',
+        description:
+          'Quiz de révision (1re–3e). Questions perso. Non affilié au ministère.',
       },
     });
     console.log(

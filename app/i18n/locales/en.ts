@@ -572,6 +572,10 @@ export const en = {
       projetsBody:
         'I build brochure sites and portfolios for freelancers and SMBs in Montreal and across Quebec.',
       projetsLink: 'Get an estimate',
+      logicielsTitle: 'Need a tool?',
+      logicielsBody:
+        'Small tool, automation, or a custom idea — tell me what you need and we’ll talk it through.',
+      logicielsLink: 'Talk about your need',
       timelendrTitle: 'A brochure site for your business?',
       timelendrBody:
         'Beyond software tools, I design clear websites to present your offer in Quebec.',

@@ -29,10 +29,12 @@ export function getSoftwareCardRootSx({
     width: '100%',
     height: '100%',
     minHeight: { xs: 300, md: 340 },
-    display: 'flex',
-    flexDirection: 'column',
+    display: 'grid',
+    gridRow: 'span 6',
+    gridTemplateRows: 'subgrid',
     alignItems: 'stretch',
-    gap: { xs: 1.75, md: 2 },
+    columnGap: 0,
+    rowGap: { xs: 1.75, md: 2 },
     p: { xs: 2.25, sm: 2.5, md: 2.75 },
     position: 'relative',
     borderRadius: { xs: '22px', md: '26px' },
@@ -131,24 +133,20 @@ export function getShowcaseCardMediaSx({
 
 export function getSoftwareCardBodySx(): Record<string, unknown> {
   return {
-    flex: 1,
-    minWidth: 0,
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'stretch',
-    textAlign: 'center',
-    gap: 0.75,
+    // Les enfants participent à la sous-grille de la carte (alignement inter-cartes)
+    display: 'contents',
   }
 }
 
 export function getSoftwareCardActionsSx(): Record<string, unknown> {
   return {
-    mt: 'auto',
-    pt: 1,
+    pt: 0.25,
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'stretch',
+    alignSelf: 'end',
     gap: 0.75,
     width: '100%',
+    minWidth: 0,
   }
 }

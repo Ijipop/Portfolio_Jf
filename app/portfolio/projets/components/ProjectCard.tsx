@@ -266,8 +266,10 @@ export default function ProjectCard({
   const brandIcon = resolveBrandIcon(project)
   const cardImageRaw = resolveProjectCardImage(project)
   const cardImageHref = cardImageRaw ? resolveImageUrl(cardImageRaw) : ''
-  /** Icône app (vs screenshot) : tile carré + contain, même pour un site web type Overstamp. */
-  const usesAppIconPresentation = isSoftwareCard || Boolean(brandIcon)
+  /** Tile carré réservé aux cartes logiciel — les sites web gardent tous le même cadre 16:10. */
+  const usesAppIconPresentation = isSoftwareCard
+  /** Icône marque dans un cadre site : contain + padding (pas cover). */
+  const mediaUsesContain = usesAppIconPresentation || Boolean(brandIcon && isWebCard)
   const projectTechs = project.technologies.split(',').map((tech) => tech.trim()).filter(Boolean)
   const visibleTechs = projectTechs.slice(0, MAX_VISIBLE_TECHS)
   const overflowTechCount = Math.max(0, projectTechs.length - MAX_VISIBLE_TECHS)
@@ -310,7 +312,7 @@ export default function ProjectCard({
 
   const thumbnailSx = usesAppIconPresentation
     ? getSoftwareCardIconTileSx({ primary, theme, isSiteDark })
-    : isWebCard
+    : isShowcaseCard
       ? getShowcaseCardMediaSx({ primary, theme, isSiteDark })
       : getProjectCardThumbnailSx({ primary, theme, isSiteDark })
   const ghostBtnSx = getProjectCardGhostBtnSx({ primary, isSiteDark, mutedTextColor: ghostBtnTextColor })
@@ -405,14 +407,26 @@ export default function ProjectCard({
       direction="up"
       distance={isMobile ? 24 : 36}
       delay={isMobile ? 0.08 * (index % 4) : 0.05 * (index % 4)}
+      fillHeight={isShowcaseCard}
     >
       <Box
-        sx={{
-          width: '100%',
-          height: '100%',
-          display: 'flex',
-          flexDirection: 'column',
-        }}
+        sx={
+          isShowcaseCard
+            ? {
+                width: '100%',
+                height: '100%',
+                minHeight: 0,
+                display: 'grid',
+                gridRow: 'span 6',
+                gridTemplateRows: 'subgrid',
+              }
+            : {
+                width: '100%',
+                height: '100%',
+                display: 'flex',
+                flexDirection: 'column',
+              }
+        }
       >
         <Box
           component="article"
@@ -436,7 +450,7 @@ export default function ProjectCard({
             className={
               usesAppIconPresentation
                 ? 'software-card-icon'
-                : isWebCard
+                : isShowcaseCard
                   ? 'showcase-card-media'
                   : 'project-card-thumbnail'
             }
@@ -451,9 +465,9 @@ export default function ProjectCard({
                   sx={{
                     width: '100%',
                     height: '100%',
-                    objectFit: usesAppIconPresentation ? 'contain' : 'cover',
-                    objectPosition: usesAppIconPresentation ? 'center' : 'center top',
-                    p: usesAppIconPresentation ? '12%' : 0,
+                    objectFit: mediaUsesContain ? 'contain' : 'cover',
+                    objectPosition: mediaUsesContain ? 'center' : 'center top',
+                    p: mediaUsesContain ? { xs: '18%', md: '20%' } : 0,
                     display: 'block',
                   }}
                 />
@@ -510,7 +524,10 @@ export default function ProjectCard({
                       display: 'flex',
                       flexDirection: 'column',
                       alignItems: 'center',
+                      justifyContent: 'flex-start',
                       gap: 0.75,
+                      minWidth: 0,
+                      textAlign: 'center',
                     }
                   : getProjectCardTitleRowSx()
               }
@@ -526,6 +543,9 @@ export default function ProjectCard({
                   overflow: 'hidden',
                   textOverflow: 'ellipsis',
                   whiteSpace: isShowcaseCard ? 'normal' : 'nowrap',
+                  display: isShowcaseCard ? '-webkit-box' : undefined,
+                  WebkitLineClamp: isShowcaseCard ? 2 : undefined,
+                  WebkitBoxOrient: isShowcaseCard ? 'vertical' : undefined,
                   flex: isShowcaseCard ? undefined : '1 1 auto',
                   minWidth: 0,
                   fontSize: isShowcaseCard ? { xs: '1.2rem', md: '1.35rem' } : undefined,
@@ -533,7 +553,16 @@ export default function ProjectCard({
               >
                 {project.name}
               </Typography>
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.75, flexWrap: 'wrap', justifyContent: 'center' }}>
+              <Box
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 0.75,
+                  flexWrap: 'wrap',
+                  justifyContent: 'center',
+                  minHeight: 22,
+                }}
+              >
                 <StatusChip
                   icon={getStatusIcon(project.status)}
                   label={project.status}
@@ -543,103 +572,107 @@ export default function ProjectCard({
               </Box>
             </Box>
 
-            {isOwnPortfolioSite ? (
-              <Typography
-                variant="caption"
-                component="p"
-                sx={{
-                  display: 'block',
-                  mb: 0.35,
-                  lineHeight: 1.4,
-                  fontWeight: 600,
-                  fontStyle: 'italic',
-                  fontSize: '0.6875rem',
-                  color: descriptionColor,
-                  opacity: 0.92,
-                  textAlign: isShowcaseCard ? 'center' : 'left',
-                }}
-              >
-                {t('projects.portfolioSelfNotice')}
-              </Typography>
-            ) : null}
-
-            <Typography
-              variant="body2"
+            <Box
               sx={{
+                minWidth: 0,
                 textAlign: isShowcaseCard ? 'center' : 'left',
-                lineHeight: 1.5,
-                mb: isShowcaseCard ? 0 : 0.4,
-                fontSize: isShowcaseCard ? '0.9rem' : '0.8125rem',
-                overflow: 'hidden',
-                display: '-webkit-box',
-                WebkitLineClamp: isShowcaseCard ? 3 : 2,
-                WebkitBoxOrient: 'vertical',
-                color: descriptionColor,
-                opacity: 0.92,
               }}
             >
-              {project.description}
-            </Typography>
-
-            {visibleTechs.length > 0 ? (
-              <TechStack
+              {isOwnPortfolioSite ? (
+                <Typography
+                  variant="caption"
+                  component="p"
+                  sx={{
+                    display: 'block',
+                    mb: 0.35,
+                    lineHeight: 1.4,
+                    fontWeight: 600,
+                    fontStyle: 'italic',
+                    fontSize: '0.6875rem',
+                    color: descriptionColor,
+                    opacity: 0.92,
+                  }}
+                >
+                  {t('projects.portfolioSelfNotice')}
+                </Typography>
+              ) : null}
+              <Typography
+                variant="body2"
                 sx={{
-                  visibility: 'visible !important',
-                  opacity: '1 !important',
-                  zIndex: DESIGN_TOKENS.zIndex.elevated,
-                  position: 'relative',
-                  justifyContent: 'center',
+                  lineHeight: 1.5,
                   mb: isShowcaseCard ? 0 : 0.4,
+                  fontSize: isShowcaseCard ? '0.9rem' : '0.8125rem',
+                  overflow: 'hidden',
+                  display: '-webkit-box',
+                  WebkitLineClamp: isShowcaseCard ? 3 : 2,
+                  WebkitBoxOrient: 'vertical',
+                  color: descriptionColor,
+                  opacity: 0.92,
                 }}
               >
-                {visibleTechs.map((tech, techIndex) => (
-                  <SkillTag key={techIndex} size="small" reflectionColor={reflectionColor}>
-                    {tech}
-                  </SkillTag>
-                ))}
-                {overflowTechCount > 0 ? (
-                  <Chip
-                    label={`+${overflowTechCount}`}
-                    size="small"
-                    sx={{
-                      height: 22,
-                      fontSize: '0.6875rem',
-                      fontWeight: 700,
-                      bgcolor: alpha(primary, 0.12),
-                      color: textColor,
-                      border: `1px solid ${alpha(primary, 0.2)}`,
-                    }}
-                  />
-                ) : null}
-              </TechStack>
-            ) : null}
+                {project.description}
+              </Typography>
+            </Box>
 
-            {projectMetaLineItems.length > 0 ? (
-              <Box
-                sx={{
-                  display: 'flex',
-                  flexWrap: 'wrap',
-                  alignItems: 'center',
-                  justifyContent: isShowcaseCard ? 'center' : 'flex-start',
-                  gap: 0.5,
-                  mb: isShowcaseCard ? 0 : 0.65,
-                  fontSize: '0.6875rem',
-                  fontWeight: 800,
-                  letterSpacing: '0.1em',
-                  textTransform: 'uppercase',
-                  color: metaTextColor,
-                }}
-              >
-                {projectMetaLineItems.map((item, metaIndex) => (
-                  <React.Fragment key={`${project.id}-meta-${metaIndex}-${item}`}>
-                    {metaIndex > 0 && (
-                      <Box component="span" sx={{ width: 3, height: 3, borderRadius: '50%', background: primary, opacity: 0.8 }} />
-                    )}
-                    <Box component="span">{item}</Box>
-                  </React.Fragment>
-                ))}
-              </Box>
-            ) : null}
+            <TechStack
+              sx={{
+                visibility: 'visible !important',
+                opacity: '1 !important',
+                zIndex: DESIGN_TOKENS.zIndex.elevated,
+                position: 'relative',
+                justifyContent: 'center',
+                alignContent: 'start',
+                mb: isShowcaseCard ? 0 : 0.4,
+                minWidth: 0,
+              }}
+            >
+              {visibleTechs.map((tech, techIndex) => (
+                <SkillTag key={techIndex} size="small" reflectionColor={reflectionColor}>
+                  {tech}
+                </SkillTag>
+              ))}
+              {overflowTechCount > 0 ? (
+                <Chip
+                  label={`+${overflowTechCount}`}
+                  size="small"
+                  sx={{
+                    height: 22,
+                    fontSize: '0.6875rem',
+                    fontWeight: 700,
+                    bgcolor: alpha(primary, 0.12),
+                    color: textColor,
+                    border: `1px solid ${alpha(primary, 0.2)}`,
+                  }}
+                />
+              ) : null}
+            </TechStack>
+
+            <Box
+              sx={{
+                display: 'flex',
+                flexWrap: 'wrap',
+                alignItems: 'center',
+                justifyContent: isShowcaseCard ? 'center' : 'flex-start',
+                alignContent: 'start',
+                gap: 0.5,
+                mb: isShowcaseCard ? 0 : 0.65,
+                minWidth: 0,
+                fontSize: '0.6875rem',
+                fontWeight: 800,
+                letterSpacing: '0.1em',
+                textTransform: 'uppercase',
+                color: metaTextColor,
+              }}
+            >
+              {projectMetaLineItems.map((item, metaIndex) => (
+                <React.Fragment key={`${project.id}-meta-${metaIndex}-${item}`}>
+                  {metaIndex > 0 && (
+                    <Box component="span" sx={{ width: 3, height: 3, borderRadius: '50%', background: primary, opacity: 0.8 }} />
+                  )}
+                  <Box component="span">{item}</Box>
+                </React.Fragment>
+              ))}
+            </Box>
 
             <Box
               sx={isShowcaseCard ? getSoftwareCardActionsSx() : getProjectCardActionsSx()}
