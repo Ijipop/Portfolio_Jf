@@ -576,6 +576,9 @@ export const fr = {
       logicielsBody:
         'Petit outil, automatisation ou idée sur mesure — décrivez votre besoin et on en parle.',
       logicielsLink: 'Parler de votre besoin',
+      webDemosTitle: 'Besoin d’inspiration ?',
+      webDemosBody: 'Exemples de directions graphiques pour un site vitrine.',
+      webDemosLink: 'Voir les démos',
       timelendrTitle: 'Un site vitrine pour votre activité ?',
       timelendrBody:
         'En plus des outils logiciels, je conçois des sites web clairs pour présenter votre offre au Québec.',

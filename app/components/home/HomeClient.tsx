@@ -13,7 +13,9 @@ import HomeV2Services from '@/components/home-v2/HomeV2Services'
 import HomeV2Pricing from '@/components/home-v2/HomeV2Pricing'
 import HomeV2Credibility from '@/components/home-v2/HomeV2Credibility'
 import HomeV2FinalCta from '@/components/home-v2/HomeV2FinalCta'
+import SeoInternalLinkCta from '@/components/seo/SeoInternalLinkCta'
 import Footer from '@/components/Footer'
+import { useLanguage } from '@/contexts/LanguageContext'
 import { useEffect, useState } from 'react'
 
 const SignatureIntro = dynamic(() => import('@/components/SignatureIntro'), { ssr: false })
@@ -26,6 +28,7 @@ function setIntroSeenCookie() {
 }
 
 export default function HomeClient({ initialShowIntro }: { initialShowIntro: boolean }) {
+  const { t } = useLanguage()
   const [showIntro, setShowIntro] = useState<boolean>(initialShowIntro)
 
   useEffect(() => {
@@ -104,6 +107,13 @@ export default function HomeClient({ initialShowIntro }: { initialShowIntro: boo
                 <HomeV2Services />
                 <HomeV2Pricing />
                 <HomeV2Credibility />
+                <SeoInternalLinkCta
+                  title={t('seo.webDemosTitle')}
+                  body={t('seo.webDemosBody')}
+                  href="/demos"
+                  linkLabel={t('seo.webDemosLink')}
+                  variant="compact"
+                />
                 <HomeV2FinalCta />
                 <LaneCrossLinks current="web" />
               </Container>
