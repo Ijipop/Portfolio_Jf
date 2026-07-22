@@ -576,6 +576,9 @@ export const en = {
       logicielsBody:
         'Small tool, automation, or a custom idea — tell me what you need and we’ll talk it through.',
       logicielsLink: 'Talk about your need',
+      webDemosTitle: 'Need inspiration?',
+      webDemosBody: 'Sample visual directions for a brochure site.',
+      webDemosLink: 'View demos',
       timelendrTitle: 'A brochure site for your business?',
       timelendrBody:
         'Beyond software tools, I design clear websites to present your offer in Quebec.',

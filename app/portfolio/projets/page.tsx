@@ -461,6 +461,16 @@ export default function Projets() {
             </AnimatedBox>
           )}
 
+          {selectedProjectType === 'web' && (
+            <SeoInternalLinkCta
+              title={t('seo.webDemosTitle')}
+              body={t('seo.webDemosBody')}
+              href="/demos"
+              linkLabel={t('seo.webDemosLink')}
+              variant="compact"
+            />
+          )}
+
           {selectedProjectType === 'logiciel' && (
             <SeoInternalLinkCta
               title={t('seo.logicielsTitle')}
