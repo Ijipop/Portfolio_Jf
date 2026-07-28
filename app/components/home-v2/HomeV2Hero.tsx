@@ -114,21 +114,6 @@ export default function HomeV2Hero() {
         },
       }}
     >
-      <Box
-        aria-hidden
-        sx={{
-          position: 'absolute',
-          top: '8%',
-          left: { xs: '50%', lg: '22%' },
-          transform: 'translateX(-50%)',
-          width: 'min(420px, 55vw)',
-          height: 'min(280px, 36vh)',
-          background: `radial-gradient(ellipse at center, ${v2.brandGlowStrong} 0%, transparent 65%)`,
-          pointerEvents: 'none',
-          zIndex: 0,
-        }}
-      />
-
       <motion.div
         variants={reducedMotion ? undefined : stagger}
         initial={reducedMotion ? undefined : 'hidden'}
@@ -141,7 +126,7 @@ export default function HomeV2Hero() {
             maxWidth: { xs: 560, lg: '100%' },
             mx: { xs: 'auto', lg: 0 },
             minWidth: 0,
-            overflow: 'hidden',
+            overflow: 'visible',
             containerType: 'inline-size',
           }}
         >
@@ -157,39 +142,67 @@ export default function HomeV2Hero() {
                 '@media (max-height: 420px)': { mb: 0.5 },
               }}
             >
-              <IjipopGlitchTitle
-                text={t('homeV2.heroTitle')}
-                variant="hero"
+              <Box
                 sx={{
-                  fontSize: {
-                    xs: 'clamp(4.35rem, 18vw, 5.25rem)',
-                    sm: 'clamp(5.8rem, 13vw, 7.75rem)',
-                    md: 'clamp(6.25rem, 9vw, 8rem)',
-                    lg: 'clamp(5.5rem, 18cqi, 7.25rem)',
-                    xl: 'clamp(6rem, 16cqi, 7.75rem)',
-                  },
+                  position: 'relative',
+                  display: 'inline-flex',
                   maxWidth: '100%',
-                  mx: { xs: 'auto', lg: 0 },
-                  textAlign: { xs: 'center', lg: 'left' },
-                  '@media (min-width: 900px) and (max-height: 920px)': {
-                    fontSize: 'clamp(5rem, 16cqi, 6.5rem)',
-                  },
-                  '@media (min-width: 900px) and (max-height: 800px)': {
-                    fontSize: 'clamp(4.4rem, 14cqi, 5.6rem)',
-                  },
-                  '@media (min-width: 900px) and (max-height: 700px)': {
-                    fontSize: 'clamp(3.8rem, 12cqi, 4.8rem)',
-                  },
-                  '@media (max-height: 500px)': {
-                    fontSize: 'clamp(2.35rem, 7vw, 3.1rem)',
-                    mb: 0.35,
-                  },
-                  '@media (max-height: 420px)': {
-                    fontSize: 'clamp(2rem, 6vw, 2.55rem)',
-                    mb: 0.2,
-                  },
+                  // Laisse le halo déborder un peu sans clipper le titre parent
+                  overflow: 'visible',
                 }}
-              />
+              >
+                <Box
+                  aria-hidden
+                  sx={{
+                    position: 'absolute',
+                    top: '50%',
+                    left: '50%',
+                    transform: 'translate(-50%, -48%)',
+                    width: '120%',
+                    height: '115%',
+                    minWidth: 280,
+                    minHeight: 140,
+                    background: `radial-gradient(ellipse at center, ${v2.brandGlowStrong} 0%, transparent 68%)`,
+                    pointerEvents: 'none',
+                    zIndex: 0,
+                  }}
+                />
+                <IjipopGlitchTitle
+                  text={t('homeV2.heroTitle')}
+                  variant="hero"
+                  sx={{
+                    position: 'relative',
+                    zIndex: 1,
+                    fontSize: {
+                      xs: 'clamp(4.35rem, 18vw, 5.25rem)',
+                      sm: 'clamp(5.8rem, 13vw, 7.75rem)',
+                      md: 'clamp(6.25rem, 9vw, 8rem)',
+                      lg: 'clamp(5.5rem, 18cqi, 7.25rem)',
+                      xl: 'clamp(6rem, 16cqi, 7.75rem)',
+                    },
+                    maxWidth: '100%',
+                    mx: { xs: 'auto', lg: 0 },
+                    textAlign: { xs: 'center', lg: 'left' },
+                    '@media (min-width: 900px) and (max-height: 920px)': {
+                      fontSize: 'clamp(5rem, 16cqi, 6.5rem)',
+                    },
+                    '@media (min-width: 900px) and (max-height: 800px)': {
+                      fontSize: 'clamp(4.4rem, 14cqi, 5.6rem)',
+                    },
+                    '@media (min-width: 900px) and (max-height: 700px)': {
+                      fontSize: 'clamp(3.8rem, 12cqi, 4.8rem)',
+                    },
+                    '@media (max-height: 500px)': {
+                      fontSize: 'clamp(2.35rem, 7vw, 3.1rem)',
+                      mb: 0.35,
+                    },
+                    '@media (max-height: 420px)': {
+                      fontSize: 'clamp(2rem, 6vw, 2.55rem)',
+                      mb: 0.2,
+                    },
+                  }}
+                />
+              </Box>
             </Box>
           </motion.div>
 
