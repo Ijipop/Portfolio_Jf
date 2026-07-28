@@ -372,6 +372,8 @@ export const en = {
       viewProfile: 'View profile',
       githubDesc: 'Discover my open source projects and contributions',
       viewRepos: 'View repos',
+      facebookDesc: 'Follow my updates and projects on Facebook',
+      viewFacebook: 'View page',
       emailCopied: 'Email address copied!',
       formErrors: 'Please fix the errors in the form',
       sendSuccess: 'Message sent successfully!',

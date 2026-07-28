@@ -373,6 +373,8 @@ export const fr = {
       viewProfile: 'Voir le profil',
       githubDesc: 'Découvrez mes projets open source et contributions',
       viewRepos: 'Voir les repos',
+      facebookDesc: 'Suivez mes actualités et projets sur Facebook',
+      viewFacebook: 'Voir la page',
       emailCopied: 'Adresse email copiée !',
       formErrors: 'Veuillez corriger les erreurs dans le formulaire',
       sendSuccess: 'Message envoyé avec succès !',

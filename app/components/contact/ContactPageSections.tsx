@@ -4,6 +4,7 @@ import AccessTimeIcon from '@mui/icons-material/AccessTime'
 import GitHubIcon from '@mui/icons-material/GitHub'
 import HandshakeIcon from '@mui/icons-material/Handshake'
 import LinkedInIcon from '@mui/icons-material/LinkedIn'
+import FacebookIcon from '@mui/icons-material/Facebook'
 import LocationOnIcon from '@mui/icons-material/LocationOn'
 import RequestQuoteIcon from '@mui/icons-material/RequestQuote'
 import Box from '@mui/material/Box'
@@ -155,8 +156,10 @@ type ContactSocialSectionProps = {
   followMeTitle: string
   linkedInDesc: string
   githubDesc: string
+  facebookDesc: string
   viewProfileLabel: string
   viewReposLabel: string
+  viewFacebookLabel: string
   primary: string
   textColor: string
   compact: boolean
@@ -166,8 +169,10 @@ export const ContactSocialSection = memo(function ContactSocialSection({
   followMeTitle,
   linkedInDesc,
   githubDesc,
+  facebookDesc,
   viewProfileLabel,
   viewReposLabel,
+  viewFacebookLabel,
   primary,
   textColor,
   compact,
@@ -184,9 +189,9 @@ export const ContactSocialSection = memo(function ContactSocialSection({
       <Box
         sx={{
           display: 'grid',
-          gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)' },
+          gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)', md: 'repeat(3, 1fr)' },
           gap: 4,
-          maxWidth: 800,
+          maxWidth: 1100,
           mx: 'auto',
           alignItems: 'stretch',
         }}
@@ -259,6 +264,43 @@ export const ContactSocialSection = memo(function ContactSocialSection({
             </Box>
             <CTAButton variant="outline" size="small" fullWidth>
               {viewReposLabel}
+            </CTAButton>
+          </SocialCardContent>
+        </ThreeDCardComponent>
+
+        <ThreeDCardComponent
+          onClick={() =>
+            window.open('https://www.facebook.com/profile.php?id=61590097455032', '_blank')
+          }
+          floatingElements={2}
+          sx={{
+            height: '100%',
+            minHeight: { xs: 220, sm: 240 },
+            padding: { xs: 2, sm: 2.5 },
+            display: 'flex',
+            flexDirection: 'column',
+            '& .MuiCardContent-root': {
+              flex: 1,
+              display: 'flex',
+              flexDirection: 'column',
+              minHeight: 0,
+            },
+          }}
+        >
+          <SocialCardContent>
+            <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}>
+              <SocialIconWrapper>
+                <FacebookIcon sx={{ fontSize: 40 }} />
+              </SocialIconWrapper>
+              <Typography variant="h6" gutterBottom sx={{ fontWeight: 600, color: primary }}>
+                Facebook
+              </Typography>
+              <Typography variant="body2" sx={{ mb: 2, color: textColor, opacity: 0.8 }}>
+                {facebookDesc}
+              </Typography>
+            </Box>
+            <CTAButton variant="outline" size="small" fullWidth>
+              {viewFacebookLabel}
             </CTAButton>
           </SocialCardContent>
         </ThreeDCardComponent>
