@@ -100,6 +100,18 @@ export default function HomeV2Hero() {
         px: { xs: 1.5, sm: 2, md: 3, lg: 4 },
         overflow: 'hidden',
         boxSizing: 'border-box',
+        /** Landscape / viewports courts : CTAs doivent rester dans le 1er écran (e2e). */
+        '@media (max-height: 500px)': {
+          pt: 1,
+          pb: 1.5,
+          rowGap: 1.5,
+          minHeight: 'auto',
+          alignItems: 'start',
+        },
+        '@media (max-height: 420px)': {
+          pt: 0.75,
+          pb: 1,
+        },
       }}
     >
       <Box
@@ -141,6 +153,8 @@ export default function HomeV2Hero() {
                 mb: { xs: 2.5, md: 3 },
                 maxWidth: '100%',
                 minWidth: 0,
+                '@media (max-height: 500px)': { mb: 1 },
+                '@media (max-height: 420px)': { mb: 0.5 },
               }}
             >
               <IjipopGlitchTitle
@@ -166,6 +180,14 @@ export default function HomeV2Hero() {
                   '@media (min-width: 900px) and (max-height: 700px)': {
                     fontSize: 'clamp(3.8rem, 12cqi, 4.8rem)',
                   },
+                  '@media (max-height: 500px)': {
+                    fontSize: 'clamp(2.35rem, 7vw, 3.1rem)',
+                    mb: 0.35,
+                  },
+                  '@media (max-height: 420px)': {
+                    fontSize: 'clamp(2rem, 6vw, 2.55rem)',
+                    mb: 0.2,
+                  },
                 }}
               />
             </Box>
@@ -189,6 +211,15 @@ export default function HomeV2Hero() {
                 letterSpacing: '-0.03em',
                 color: v2.text,
                 mb: { xs: 1.75, md: 2 },
+                '@media (max-height: 500px)': {
+                  fontSize: 'clamp(0.95rem, 2.4vw, 1.15rem)',
+                  gap: 0.15,
+                  mb: 0.75,
+                },
+                '@media (max-height: 420px)': {
+                  fontSize: '0.9rem',
+                  mb: 0.5,
+                },
               }}
             >
               <Box component="span">{t('homeV2.heroEditorialPrefix')}</Box>
@@ -239,6 +270,7 @@ export default function HomeV2Hero() {
                 mx: { xs: 'auto', lg: 0 },
                 lineHeight: 1.55,
                 mb: 2,
+                '@media (max-height: 560px)': { display: 'none' },
               }}
             >
               {t('homeV2.heroSubtitle')}
@@ -253,6 +285,10 @@ export default function HomeV2Hero() {
                 fontSize: '1rem',
                 color: v2.text,
                 mb: 0.35,
+                '@media (max-height: 500px)': {
+                  fontSize: '0.875rem',
+                  mb: 0,
+                },
               }}
             >
               {t('homeV2.heroRealName')}
@@ -264,6 +300,7 @@ export default function HomeV2Hero() {
                 color: v2.textMuted,
                 mb: 0,
                 '@media (max-height: 720px)': { display: { md: 'none' } },
+                '@media (max-height: 560px)': { display: 'none' },
               }}
             >
               {t('homeV2.heroOneLiner')}
@@ -280,6 +317,13 @@ export default function HomeV2Hero() {
                 mt: { xs: 3, md: 3.5 },
                 maxWidth: { xs: 300, sm: 320 },
                 mx: { xs: 'auto', lg: 0 },
+                '@media (max-height: 560px)': {
+                  mt: 1.25,
+                  maxWidth: 300,
+                },
+                '@media (max-height: 420px)': {
+                  mt: 0.75,
+                },
               }}
             >
               <HomeV2Cta href={CONTACT_PATH} variant="primary" size="small" fullWidth>
@@ -302,6 +346,7 @@ export default function HomeV2Hero() {
                 textDecoration: 'none',
                 transition: 'color 0.2s ease',
                 '&:hover': { color: v2.brandOrangeLight },
+                '@media (max-height: 560px)': { display: 'none' },
               }}
             >
               {t('homeV2.heroSeeWebProjects')} →
@@ -329,6 +374,11 @@ export default function HomeV2Hero() {
             background: `linear-gradient(160deg, ${v2.surface} 0%, ${v2.bg} 100%)`,
             boxShadow: `0 28px 64px rgba(0,0,0,0.32)`,
             p: { xs: 1.25, md: 1.5 },
+            /** Masquer la vitrine quand la hauteur ne permet pas les CTAs above-the-fold. */
+            '@media (max-height: 560px)': { display: 'none' },
+            '@media (max-width: 1199.95px) and (max-height: 760px)': {
+              display: 'none',
+            },
           }}
         >
           <Box
