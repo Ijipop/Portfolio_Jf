@@ -6,6 +6,7 @@ import Typography from '@mui/material/Typography'
 import { useTheme } from '@mui/material/styles'
 import GitHubIcon from '@mui/icons-material/GitHub'
 import LinkedInIcon from '@mui/icons-material/LinkedIn'
+import FacebookIcon from '@mui/icons-material/Facebook'
 import EmailIcon from '@mui/icons-material/Email'
 import CodeIcon from '@mui/icons-material/Code'
 import Link from 'next/link'
@@ -82,6 +83,31 @@ function Footer({ mobileBottomClearance = false }: FooterProps) {
 
   const handleLinkedInClick = () => {
     window.open('https://www.linkedin.com/in/jean-fran%C3%A7ois-lefebvre-92380329a/', '_blank')
+  }
+
+  const handleFacebookClick = () => {
+    window.open('https://www.facebook.com/profile.php?id=61590097455032', '_blank')
+  }
+
+  const socialIconSx = {
+    display: 'inline-flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: 48,
+    height: 48,
+    borderRadius: '50%',
+    background: textColor === '#ffffff' ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)',
+    color: textColor,
+    margin: theme.spacing(0, 1),
+    cursor: 'pointer',
+    transition: DESIGN_TOKENS.transitions.normal,
+    position: 'relative' as const,
+    zIndex: 1,
+    '&:hover': {
+      background: textColor === '#ffffff' ? 'rgba(255,255,255,0.25)' : 'rgba(0,0,0,0.15)',
+      transform: 'scale(1.15) translateY(-2px)',
+      boxShadow: `0 4px 12px ${primary}40`,
+    },
   }
 
   return (
@@ -234,58 +260,15 @@ function Footer({ mobileBottomClearance = false }: FooterProps) {
             <Typography variant="h6" sx={{ fontWeight: 600, mb: DESIGN_TOKENS.spacing.md, color: textColor }}>
               {t('contact.followMe')}
             </Typography>
-            <Box sx={{ display: 'flex', gap: 1, mb: DESIGN_TOKENS.spacing.lg }}>
-              <Box
-                onClick={handleGitHubClick}
-                aria-label="GitHub"
-                sx={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  width: 48,
-                  height: 48,
-                  borderRadius: '50%',
-                  background: textColor === '#ffffff' ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)',
-                  color: textColor,
-                  margin: theme.spacing(0, 1),
-                  cursor: 'pointer',
-                  transition: DESIGN_TOKENS.transitions.normal,
-                  position: 'relative',
-                  zIndex: 1,
-                  '&:hover': {
-                    background: textColor === '#ffffff' ? 'rgba(255,255,255,0.25)' : 'rgba(0,0,0,0.15)',
-                    transform: 'scale(1.15) translateY(-2px)',
-                    boxShadow: `0 4px 12px ${primary}40`,
-                  }
-                }}
-              >
+            <Box sx={{ display: 'flex', gap: 1, mb: DESIGN_TOKENS.spacing.lg, flexWrap: 'wrap' }}>
+              <Box onClick={handleGitHubClick} aria-label="GitHub" sx={socialIconSx}>
                 <GitHubIcon />
               </Box>
-              <Box
-                onClick={handleLinkedInClick}
-                aria-label="LinkedIn"
-                sx={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  width: 48,
-                  height: 48,
-                  borderRadius: '50%',
-                  background: textColor === '#ffffff' ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)',
-                  color: textColor,
-                  margin: theme.spacing(0, 1),
-                  cursor: 'pointer',
-                  transition: DESIGN_TOKENS.transitions.normal,
-                  position: 'relative',
-                  zIndex: 1,
-                  '&:hover': {
-                    background: textColor === '#ffffff' ? 'rgba(255,255,255,0.25)' : 'rgba(0,0,0,0.15)',
-                    transform: 'scale(1.15) translateY(-2px)',
-                    boxShadow: `0 4px 12px ${primary}40`,
-                  }
-                }}
-              >
+              <Box onClick={handleLinkedInClick} aria-label="LinkedIn" sx={socialIconSx}>
                 <LinkedInIcon />
+              </Box>
+              <Box onClick={handleFacebookClick} aria-label="Facebook" sx={socialIconSx}>
+                <FacebookIcon />
               </Box>
               <Box
                 onClick={handleEmailClick}
