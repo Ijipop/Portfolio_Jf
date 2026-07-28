@@ -2,6 +2,7 @@
 
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
+import type { SxProps, Theme } from '@mui/material/styles'
 import { useMemo } from 'react'
 import { useLanguage } from '@/contexts/LanguageContext'
 import { useBeigeDark } from '@/hooks/useBeigeDark'
@@ -40,9 +41,11 @@ export type IjipopGlitchTitleProps = {
   text: string
   /** `hero` = accueil (ijipop en minuscules). `page` = titres Projets / À propos / Contact. `gateway` = phrase welcome, casse préservée. */
   variant?: 'hero' | 'page' | 'gateway'
+  /** Override optionnel (ex. hero split 2 colonnes). */
+  sx?: SxProps<Theme>
 }
 
-export default function IjipopGlitchTitle({ text, variant = 'page' }: IjipopGlitchTitleProps) {
+export default function IjipopGlitchTitle({ text, variant = 'page', sx }: IjipopGlitchTitleProps) {
   const { locale } = useLanguage()
   const { mode: presentationMode } = usePresentationMode()
   const { beigeDark } = useBeigeDark()
@@ -145,6 +148,7 @@ export default function IjipopGlitchTitle({ text, variant = 'page' }: IjipopGlit
         overflow: 'visible',
         mb,
         color: 'transparent',
+        ...((sx ?? {}) as object),
       }}
     >
       <Box

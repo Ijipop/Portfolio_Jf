@@ -96,6 +96,9 @@ test('logiciel and SEO landing routes are reachable', async ({ page }) => {
 })
 
 test('home hero CTAs stay visible within the first viewport', async ({ page }) => {
+  // Évite opacity/transform transitoires (même pattern que le test gateway).
+  await page.emulateMedia({ reducedMotion: 'reduce' })
+
   const viewports = [
     { width: 390, height: 844 },
     { width: 844, height: 390 },

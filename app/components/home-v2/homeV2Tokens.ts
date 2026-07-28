@@ -7,6 +7,8 @@ export const HOME_V2_DARK = {
   ...SITE_DARK,
   sectionPy: { xs: 5, md: 8 },
   cardRadiusLg: '20px',
+  fontDisplay: 'var(--font-instrument), "Instrument Sans", sans-serif',
+  fontBody: 'var(--font-manrope), Manrope, sans-serif',
 } as const
 
 /** Tokens V2 mode Site clair — alias SITE_LIGHT + layout accueil. */
@@ -14,6 +16,8 @@ export const HOME_V2_LIGHT = {
   ...SITE_LIGHT,
   sectionPy: { xs: 5, md: 8 },
   cardRadiusLg: '20px',
+  fontDisplay: 'var(--font-instrument), "Instrument Sans", sans-serif',
+  fontBody: 'var(--font-manrope), Manrope, sans-serif',
 } as const
 
 export type HomeV2Tokens = typeof HOME_V2_DARK | typeof HOME_V2_LIGHT
@@ -28,10 +32,11 @@ export function buildHomeV2CardSx(tokens: HomeV2Tokens) {
     WebkitBackdropFilter: 'blur(12px)',
     border: `1px solid ${tokens.border}`,
     borderRadius: tokens.cardRadius,
-    transition: 'border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease',
+    transition: 'border-color 0.35s ease, box-shadow 0.35s ease, transform 0.4s cubic-bezier(0.22, 1, 0.36, 1)',
     '&:hover': {
       borderColor: tokens.borderHover,
-      boxShadow: `0 8px 32px ${tokens.brandGlow}`,
+      boxShadow: `0 12px 36px ${tokens.brandGlow}`,
+      transform: 'translateY(-3px)',
     },
   } as const
 }
@@ -40,12 +45,14 @@ export function buildHomeV2FeaturedCardSx(tokens: HomeV2Tokens) {
   const base = buildHomeV2CardSx(tokens)
   return {
     ...base,
+    position: 'relative' as const,
+    overflow: 'hidden' as const,
     border: `1px solid ${tokens.borderHover}`,
     boxShadow: `0 12px 40px ${tokens.brandGlowStrong}, 0 0 0 1px ${tokens.brandGlow}`,
     '&:hover': {
       borderColor: 'rgba(234, 88, 12, 0.5)',
-      boxShadow: `0 16px 48px ${tokens.brandGlowStrong}`,
-      transform: 'translateY(-2px)',
+      boxShadow: `0 18px 52px ${tokens.brandGlowStrong}`,
+      transform: 'translateY(-4px)',
     },
   } as const
 }

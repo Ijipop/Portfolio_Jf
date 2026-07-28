@@ -10,7 +10,7 @@ type HomeV2CtaProps = {
   children: React.ReactNode
   href?: string
   variant?: 'primary' | 'secondary' | 'outline'
-  size?: 'medium' | 'large'
+  size?: 'small' | 'medium' | 'large'
   fullWidth?: boolean
   sx?: SxProps<Theme>
 }
@@ -24,9 +24,10 @@ export default function HomeV2Cta({
   sx,
 }: HomeV2CtaProps) {
   const { tokens: v2 } = useHomeV2Tokens()
-  const minHeight = size === 'large' ? 52 : 44
-  const fontSize = size === 'large' ? '1rem' : '0.9375rem'
-  const px = size === 'large' ? 3 : 2.5
+  const minHeight = size === 'large' ? 52 : size === 'small' ? 36 : 44
+  const fontSize = size === 'large' ? '1rem' : size === 'small' ? '0.8125rem' : '0.9375rem'
+  const px = size === 'large' ? 3 : size === 'small' ? 2 : 2.5
+  const py = size === 'small' ? 0.75 : 1.25
 
   const variantSx: SxProps<Theme> =
     variant === 'primary'
@@ -36,8 +37,8 @@ export default function HomeV2Cta({
           border: 'none',
           boxShadow: `0 4px 24px ${v2.brandGlowStrong}`,
           '&:hover': {
-            boxShadow: `0 8px 32px ${v2.brandGlowStrong}`,
-            transform: 'translateY(-1px)',
+            boxShadow: `0 12px 40px ${v2.brandGlowStrong}`,
+            transform: 'translateY(-2px) scale(1.01)',
             background: BRAND_GLITCH_GRADIENT,
           },
         }
@@ -50,6 +51,7 @@ export default function HomeV2Cta({
             '&:hover': {
               background: v2.surfaceHover,
               borderColor: v2.borderHover,
+              transform: 'translateY(-2px)',
             },
           }
         : {
@@ -60,6 +62,7 @@ export default function HomeV2Cta({
               color: v2.text,
               borderColor: v2.borderHover,
               background: v2.surface,
+              transform: 'translateY(-1px)',
             },
           }
 
@@ -67,11 +70,13 @@ export default function HomeV2Cta({
     minHeight,
     fontSize,
     px,
-    py: 1.25,
+    py,
     fontWeight: 600,
+    fontFamily: v2.fontBody,
     textTransform: 'none',
-    borderRadius: '12px',
-    transition: 'all 0.25s ease',
+    borderRadius: '999px',
+    transition:
+      'transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.35s ease, border-color 0.25s ease, background 0.25s ease',
     width: fullWidth ? '100%' : 'auto',
     ...variantSx,
     ...sx,

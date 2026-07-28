@@ -11,6 +11,7 @@ import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import type { SvgIconComponent } from '@mui/icons-material'
 import ScrollReveal from '@/components/shared/ScrollReveal'
+import { BorderBeam } from '@/components/ui/border-beam'
 import { BRAND_GLITCH_GRADIENT } from '@/components/shared/IjipopGlitchTitle'
 import { useLanguage } from '@/contexts/LanguageContext'
 import HomeV2Cta from './HomeV2Cta'
@@ -114,6 +115,9 @@ function PricingCard({ offer, index }: { offer: PackOffer; index: number }) {
           gridColumn: featured ? { md: 'span 2' } : undefined,
         }}
       >
+        {featured ? (
+          <BorderBeam size={90} duration={8} borderWidth={1.5} colorFrom="#ea580c" colorTo="#fb923c" />
+        ) : null}
         <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ mb: 2 }}>
           <Box
             sx={{
@@ -131,13 +135,14 @@ function PricingCard({ offer, index }: { offer: PackOffer; index: number }) {
           {offer.badgeKey ? (
             <Typography
               sx={{
+                fontFamily: v2.fontBody,
                 fontSize: '0.7rem',
                 fontWeight: 700,
                 letterSpacing: '0.08em',
                 textTransform: 'uppercase',
                 px: 1.25,
                 py: 0.5,
-                borderRadius: '6px',
+                borderRadius: '999px',
                 background: v2.brandGlow,
                 color: v2.brandOrange,
                 border: `1px solid ${v2.borderHover}`,
@@ -148,16 +153,34 @@ function PricingCard({ offer, index }: { offer: PackOffer; index: number }) {
           ) : null}
         </Stack>
 
-        <Typography component="h3" sx={{ fontWeight: 700, fontSize: featured ? '1.25rem' : '1.0625rem', color: v2.text, mb: 0.75 }}>
+        <Typography
+          component="h3"
+          sx={{
+            fontFamily: v2.fontDisplay,
+            fontWeight: 700,
+            fontSize: featured ? '1.25rem' : '1.0625rem',
+            color: v2.text,
+            mb: 0.75,
+          }}
+        >
           {t(offer.titleKey)}
         </Typography>
 
-        <Typography sx={{ fontSize: featured ? '1.75rem' : '1.5rem', fontWeight: 800, color: v2.text, mb: 0.5, letterSpacing: '-0.02em' }}>
+        <Typography
+          sx={{
+            fontFamily: v2.fontDisplay,
+            fontSize: featured ? '1.75rem' : '1.5rem',
+            fontWeight: 800,
+            color: v2.text,
+            mb: 0.5,
+            letterSpacing: '-0.02em',
+          }}
+        >
           {offer.pricePrefixKey ? `${t(offer.pricePrefixKey)} ` : ''}
           {t(offer.priceKey)}
         </Typography>
 
-        <Typography sx={{ fontSize: '0.875rem', color: v2.textMuted, lineHeight: 1.45, mb: 2 }}>
+        <Typography sx={{ fontFamily: v2.fontBody, fontSize: '0.875rem', color: v2.textMuted, lineHeight: 1.45, mb: 2 }}>
           {t(offer.forKey)}
         </Typography>
 
@@ -165,7 +188,7 @@ function PricingCard({ offer, index }: { offer: PackOffer; index: number }) {
           {offer.bulletKeys.map((key) => (
             <Stack key={key} direction="row" spacing={1} alignItems="flex-start">
               <CheckRoundedIcon sx={{ fontSize: 17, color: v2.brandOrange, mt: 0.15, flexShrink: 0 }} />
-              <Typography sx={{ fontSize: '0.8125rem', color: v2.textSecondary, lineHeight: 1.45 }}>
+              <Typography sx={{ fontFamily: v2.fontBody, fontSize: '0.8125rem', color: v2.textSecondary, lineHeight: 1.45 }}>
                 {t(key)}
               </Typography>
             </Stack>

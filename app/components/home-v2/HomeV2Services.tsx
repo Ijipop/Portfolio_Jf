@@ -95,11 +95,14 @@ function ServiceCardItem({ card, index, href }: { card: ServiceCard; index: numb
           <Icon sx={{ color: v2.brandOrange, fontSize: 24 }} />
         </Box>
 
-        <Typography component="h3" sx={{ fontWeight: 700, fontSize: '1.125rem', color: v2.text, mb: 1 }}>
+        <Typography
+          component="h3"
+          sx={{ fontFamily: v2.fontDisplay, fontWeight: 700, fontSize: '1.125rem', color: v2.text, mb: 1 }}
+        >
           {t(card.titleKey)}
         </Typography>
 
-        <Typography sx={{ fontSize: '0.9375rem', color: v2.textSecondary, lineHeight: 1.55, mb: 2 }}>
+        <Typography sx={{ fontFamily: v2.fontBody, fontSize: '0.9375rem', color: v2.textSecondary, lineHeight: 1.55, mb: 2 }}>
           {t(card.leadKey)}
         </Typography>
 
@@ -107,7 +110,7 @@ function ServiceCardItem({ card, index, href }: { card: ServiceCard; index: numb
           {card.bulletKeys.map((key) => (
             <Stack key={key} direction="row" spacing={1} alignItems="flex-start">
               <CheckRoundedIcon sx={{ fontSize: 18, color: v2.brandOrange, mt: 0.15, flexShrink: 0 }} />
-              <Typography sx={{ fontSize: '0.875rem', color: v2.textSecondary, lineHeight: 1.45 }}>
+              <Typography sx={{ fontFamily: v2.fontBody, fontSize: '0.875rem', color: v2.textSecondary, lineHeight: 1.45 }}>
                 {t(key)}
               </Typography>
             </Stack>

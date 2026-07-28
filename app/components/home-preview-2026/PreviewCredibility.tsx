@@ -7,59 +7,64 @@ import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import Link from 'next/link'
 import type { SvgIconComponent } from '@mui/icons-material'
-import ScrollReveal from '@/components/shared/ScrollReveal'
 import { useLanguage } from '@/contexts/LanguageContext'
-import HomeV2Section from './HomeV2Section'
-import { useHomeV2Tokens } from './homeV2Tokens'
+import PreviewReveal from './PreviewReveal'
+import PreviewSection from './PreviewSection'
+import { PREVIEW } from './previewTokens'
 
 const PROJECTS_PATH = '/portfolio/projets?type=web'
 
-type Pillar = {
-  icon: SvgIconComponent
-  titleKey: string
-  bodyKey: string
-}
-
-const PILLARS: Pillar[] = [
-  { icon: LocationOnOutlinedIcon, titleKey: 'homeV2.credibilityLocalTitle', bodyKey: 'homeV2.credibilityLocalBody' },
-  { icon: RouteOutlinedIcon, titleKey: 'homeV2.credibilityProcessTitle', bodyKey: 'homeV2.credibilityProcessBody' },
-  { icon: VerifiedOutlinedIcon, titleKey: 'homeV2.credibilityPromiseTitle', bodyKey: 'homeV2.credibilityPromiseBody' },
+const PILLARS: { icon: SvgIconComponent; titleKey: string; bodyKey: string }[] = [
+  {
+    icon: LocationOnOutlinedIcon,
+    titleKey: 'homeV2.credibilityLocalTitle',
+    bodyKey: 'homeV2.credibilityLocalBody',
+  },
+  {
+    icon: RouteOutlinedIcon,
+    titleKey: 'homeV2.credibilityProcessTitle',
+    bodyKey: 'homeV2.credibilityProcessBody',
+  },
+  {
+    icon: VerifiedOutlinedIcon,
+    titleKey: 'homeV2.credibilityPromiseTitle',
+    bodyKey: 'homeV2.credibilityPromiseBody',
+  },
 ]
 
-export default function HomeV2Credibility() {
+export default function PreviewCredibility() {
   const { t } = useLanguage()
-  const { tokens: v2 } = useHomeV2Tokens()
 
   return (
-    <HomeV2Section kicker={t('homeV2.credibilityKicker')} title={t('homeV2.credibilityTitle')}>
+    <PreviewSection kicker={t('homeV2.credibilityKicker')} title={t('homeV2.credibilityTitle')}>
       <Box
         sx={{
           display: 'grid',
           gridTemplateColumns: { xs: '1fr', md: 'repeat(3, 1fr)' },
           gap: { xs: 3, md: 4 },
-          mb: 3.5,
+          mb: 4,
         }}
       >
         {PILLARS.map((pillar, index) => {
           const Icon = pillar.icon
           return (
-            <ScrollReveal key={pillar.titleKey} delay={index * 0.1} distance={24}>
+            <PreviewReveal key={pillar.titleKey} delay={index * 0.08}>
               <Box
                 sx={{
-                  borderTop: `1px solid ${v2.border}`,
+                  py: { xs: 1, md: 1.5 },
+                  borderTop: `1px solid ${PREVIEW.border}`,
                   pt: 2.5,
-                  height: '100%',
                 }}
               >
-                <Icon sx={{ color: v2.brandOrange, fontSize: 28, mb: 1.5 }} />
+                <Icon sx={{ color: PREVIEW.orange, fontSize: 28, mb: 1.75 }} />
                 <Typography
                   component="h3"
                   sx={{
-                    fontFamily: v2.fontDisplay,
+                    fontFamily: PREVIEW.fontDisplay,
                     fontWeight: 700,
-                    fontSize: '1.1rem',
+                    fontSize: '1.15rem',
                     letterSpacing: '-0.02em',
-                    color: v2.text,
+                    color: PREVIEW.text,
                     mb: 1,
                   }}
                 >
@@ -67,28 +72,28 @@ export default function HomeV2Credibility() {
                 </Typography>
                 <Typography
                   sx={{
-                    fontFamily: v2.fontBody,
-                    fontSize: '0.92rem',
-                    color: v2.textSecondary,
-                    lineHeight: 1.55,
+                    fontFamily: PREVIEW.fontBody,
+                    fontSize: '0.95rem',
+                    color: PREVIEW.textSecondary,
+                    lineHeight: 1.6,
                   }}
                 >
                   {t(pillar.bodyKey)}
                 </Typography>
               </Box>
-            </ScrollReveal>
+            </PreviewReveal>
           )
         })}
       </Box>
 
-      <ScrollReveal distance={20}>
+      <PreviewReveal>
         <Typography
           sx={{
-            fontFamily: v2.fontBody,
-            fontSize: '0.9rem',
-            color: v2.textMuted,
+            fontFamily: PREVIEW.fontBody,
+            fontSize: '0.95rem',
+            color: PREVIEW.textMuted,
             textAlign: 'center',
-            lineHeight: 1.55,
+            lineHeight: 1.6,
           }}
         >
           {t('homeV2.credibilityProof')}{' '}
@@ -96,10 +101,10 @@ export default function HomeV2Credibility() {
             component={Link}
             href={PROJECTS_PATH}
             sx={{
-              color: v2.brandOrange,
+              color: PREVIEW.orangeLight,
               fontWeight: 600,
               fontSize: 'inherit',
-              fontFamily: v2.fontBody,
+              fontFamily: PREVIEW.fontBody,
               textDecoration: 'none',
               '&:hover': { textDecoration: 'underline' },
             }}
@@ -107,7 +112,7 @@ export default function HomeV2Credibility() {
             {t('homeV2.credibilityProofLink')}
           </Typography>
         </Typography>
-      </ScrollReveal>
-    </HomeV2Section>
+      </PreviewReveal>
+    </PreviewSection>
   )
 }

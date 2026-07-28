@@ -28,6 +28,7 @@ export default function HomeV2Section({ id, kicker, title, lead, children }: Hom
       <Box sx={{ maxWidth: v2.maxWidth, mx: 'auto' }}>
         <Typography
           sx={{
+            fontFamily: v2.fontBody,
             fontSize: '0.75rem',
             fontWeight: 700,
             letterSpacing: '0.14em',
@@ -41,12 +42,13 @@ export default function HomeV2Section({ id, kicker, title, lead, children }: Hom
         <Typography
           component="h2"
           sx={{
-            fontSize: { xs: '1.75rem', md: '2.25rem' },
+            fontFamily: v2.fontDisplay,
+            fontSize: { xs: '1.75rem', md: '2.35rem' },
             fontWeight: 700,
-            letterSpacing: '-0.03em',
+            letterSpacing: '-0.035em',
             color: v2.text,
             mb: lead ? 1.5 : 4,
-            lineHeight: 1.2,
+            lineHeight: 1.15,
           }}
         >
           {title}
@@ -54,6 +56,7 @@ export default function HomeV2Section({ id, kicker, title, lead, children }: Hom
         {lead ? (
           <Typography
             sx={{
+              fontFamily: v2.fontBody,
               fontSize: { xs: '1rem', md: '1.0625rem' },
               color: v2.textSecondary,
               maxWidth: 640,
