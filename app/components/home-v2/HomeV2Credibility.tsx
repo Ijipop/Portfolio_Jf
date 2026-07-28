@@ -28,31 +28,51 @@ const PILLARS: Pillar[] = [
 
 export default function HomeV2Credibility() {
   const { t } = useLanguage()
-  const { tokens: v2, cardSx } = useHomeV2Tokens()
+  const { tokens: v2 } = useHomeV2Tokens()
 
   return (
-    <HomeV2Section
-      kicker={t('homeV2.credibilityKicker')}
-      title={t('homeV2.credibilityTitle')}
-    >
+    <HomeV2Section kicker={t('homeV2.credibilityKicker')} title={t('homeV2.credibilityTitle')}>
       <Box
         sx={{
           display: 'grid',
           gridTemplateColumns: { xs: '1fr', md: 'repeat(3, 1fr)' },
-          gap: { xs: 2, md: 2.5 },
-          mb: 3,
+          gap: { xs: 3, md: 4 },
+          mb: 3.5,
         }}
       >
         {PILLARS.map((pillar, index) => {
           const Icon = pillar.icon
           return (
             <ScrollReveal key={pillar.titleKey} delay={index * 0.1} distance={24}>
-              <Box sx={{ ...cardSx, p: { xs: 2.5, md: 3 }, height: '100%' }}>
+              <Box
+                sx={{
+                  borderTop: `1px solid ${v2.border}`,
+                  pt: 2.5,
+                  height: '100%',
+                }}
+              >
                 <Icon sx={{ color: v2.brandOrange, fontSize: 28, mb: 1.5 }} />
-                <Typography component="h3" sx={{ fontWeight: 700, fontSize: '1.0625rem', color: v2.text, mb: 1 }}>
+                <Typography
+                  component="h3"
+                  sx={{
+                    fontFamily: v2.fontDisplay,
+                    fontWeight: 700,
+                    fontSize: '1.1rem',
+                    letterSpacing: '-0.02em',
+                    color: v2.text,
+                    mb: 1,
+                  }}
+                >
                   {t(pillar.titleKey)}
                 </Typography>
-                <Typography sx={{ fontSize: '0.9rem', color: v2.textSecondary, lineHeight: 1.55 }}>
+                <Typography
+                  sx={{
+                    fontFamily: v2.fontBody,
+                    fontSize: '0.92rem',
+                    color: v2.textSecondary,
+                    lineHeight: 1.55,
+                  }}
+                >
                   {t(pillar.bodyKey)}
                 </Typography>
               </Box>
@@ -62,7 +82,15 @@ export default function HomeV2Credibility() {
       </Box>
 
       <ScrollReveal distance={20}>
-        <Typography sx={{ fontSize: '0.9rem', color: v2.textMuted, textAlign: 'center', lineHeight: 1.55 }}>
+        <Typography
+          sx={{
+            fontFamily: v2.fontBody,
+            fontSize: '0.9rem',
+            color: v2.textMuted,
+            textAlign: 'center',
+            lineHeight: 1.55,
+          }}
+        >
           {t('homeV2.credibilityProof')}{' '}
           <Typography
             component={Link}
@@ -71,6 +99,7 @@ export default function HomeV2Credibility() {
               color: v2.brandOrange,
               fontWeight: 600,
               fontSize: 'inherit',
+              fontFamily: v2.fontBody,
               textDecoration: 'none',
               '&:hover': { textDecoration: 'underline' },
             }}

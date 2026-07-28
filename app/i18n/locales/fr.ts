@@ -108,7 +108,7 @@ export const fr = {
       servicesPackPriceFromDes: 'dès',
       servicesPackPriceRange: 'fourchette indicative',
       servicesPackAuditTitle: 'Audit de votre site',
-      servicesPackAuditPrice: '450 $',
+      servicesPackAuditPrice: '299 $',
       servicesPackAuditPriceNote: 'Audit plus détaillé sur devis.',
       servicesPackAuditFor:
         'Pour savoir ce qui bloque : clarté, mobile, confiance, Google local.',
@@ -116,7 +116,7 @@ export const fr = {
       servicesPackAuditB2: 'Liste de priorités (quoi faire en premier)',
       servicesPackAuditB3: 'Mobile, confiance perçue, Google local (bases)',
       servicesPackAuditCta: 'Demander un audit',
-      servicesPackAuditSubject: 'Offre : audit de site — 450 $',
+      servicesPackAuditSubject: 'Offre : audit de site — 299 $',
       servicesPackMinisiteTitle: 'Mini-site vitrine 1 page',
       servicesPackMinisitePrice: '400 – 499 $',
       servicesPackMinisitePriceNote:
@@ -329,7 +329,7 @@ export const fr = {
         'Projet livré : Thermo-Trappeur — site vitrine pour une PME québécoise en thermopompe.',
       credibilityProofLink: 'Voir le projet',
       finalCtaTitle: 'Un projet en tête ? Parlons-en simplement.',
-      finalCtaSubtitle: 'Site vitrine à partir de 1 200 $ · Audit 450 $ · Devis sous 48 h',
+      finalCtaSubtitle: 'Site vitrine à partir de 400 $ · Audit 299 $ · Devis sous 48 h',
       finalCtaButton: 'Obtenir une estimation',
       footerName: 'Jean-François Lefebvre',
       footerLocation: 'Montréal, Québec',
@@ -358,7 +358,7 @@ export const fr = {
       sendMessageDesc:
         'Décrivez votre projet en quelques lignes — je vous réponds sous 24 h avec une estimation personnalisée. Premier appel offert.',
       pricingAnchor:
-        'Site vitrine à partir de 1 200 $ · Audit 450 $ · Devis sous 48 h · Premier appel offert',
+        'Site vitrine à partir de 1 200 $ · Audit 299 $ · Devis sous 48 h · Premier appel offert',
       optionalSectionsToggle: 'Options avancées (facultatif)',
       supportShortcut: 'Besoin de soutien technique ? Ouvrir le formulaire dédié',
       formName: 'Nom complet',

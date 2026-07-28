@@ -7,7 +7,7 @@ export const metadata: Metadata = {
     absolute: 'Création de sites web à Montréal et partout au Québec',
   },
   description:
-    'Création et refonte de sites web à Montréal et au Québec — PME et professionnels. Sites clairs, crédibles, orientés demandes clients. Audit dès 450 $, site dès 1 200 $.',
+    'Création et refonte de sites web à Montréal et au Québec — PME et professionnels. Sites clairs, crédibles, orientés demandes clients. Audit dès 299 $, site dès 1 200 $.',
   alternates: { canonical: SEO_LANDING_PATH },
   openGraph: {
     title: 'Création de sites web à Montréal et au Québec | Ijipop',

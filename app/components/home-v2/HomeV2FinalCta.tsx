@@ -37,6 +37,7 @@ export default function HomeV2FinalCta() {
             <Typography
               component="h2"
               sx={{
+                fontFamily: v2.fontDisplay,
                 fontSize: { xs: '1.5rem', md: '2rem' },
                 fontWeight: 700,
                 letterSpacing: '-0.03em',
@@ -50,6 +51,7 @@ export default function HomeV2FinalCta() {
 
             <Typography
               sx={{
+                fontFamily: v2.fontBody,
                 fontSize: '0.9375rem',
                 color: v2.textSecondary,
                 mb: 3,

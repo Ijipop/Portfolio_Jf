@@ -55,7 +55,7 @@ export const seoLandingContent = {
     {
       question: 'Combien coûte la création d’un site web à Montréal ?',
       answer:
-        'Un site vitrine professionnel démarre à partir de 1 200 $ selon le nombre de pages, le contenu à produire et les fonctionnalités (formulaire, galerie, blog léger). Un audit express est disponible à 450 $ si vous hésitez entre refonte et création. Je fournis un devis clair après un premier échange — sans engagement.',
+        'Un site vitrine professionnel démarre à partir de 1 200 $ selon le nombre de pages, le contenu à produire et les fonctionnalités (formulaire, galerie, blog léger). Un audit express est disponible à 299 $ si vous hésitez entre refonte et création. Je fournis un devis clair après un premier échange — sans engagement.',
     },
     {
       question: 'Est-ce que vous créez des sites pour travailleurs autonomes ?',
