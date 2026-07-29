@@ -163,6 +163,14 @@ export default function Projets() {
         void router.push('/logiciel/timelendr')
         return
       }
+      if (normalized.includes('/cpu-ze')) {
+        void router.push('/cpu-ze')
+        return
+      }
+      if (normalized.includes('/spacetaker') || normalized.includes('/space-taker')) {
+        void router.push('/spacetaker')
+        return
+      }
       navigateProjectUrl(url, router)
     },
     [router],
