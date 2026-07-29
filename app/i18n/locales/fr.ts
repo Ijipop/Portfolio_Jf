@@ -663,11 +663,23 @@ export const fr = {
       bullet3: 'Indicateurs simples (demandes, relances) pour comprendre ce qui se passe après la mise en ligne.',
       ctaProjects: 'Voir mes réalisations',
     },
+    productSecurity: {
+      title: 'Signature et avertissements de sécurité (Windows / Mac)',
+      lead:
+        'L’application n’est pas signée : nous n’avons pas de certificat de signature de code (licence payante). Sous Windows et macOS, l’antivirus ou le système peut donc afficher un avertissement de sécurité au premier lancement.',
+      p1: 'Ce n’est pas dangereux. Le logiciel est sain ; il n’est simplement pas encore assez rentable pour justifier le coût d’une licence de signature. Nous préférons rester transparents sur ce point.',
+    },
     timelendr: {
       title: 'Timelendr',
+      lead: 'Calendrier, timelines et tâches — voir clairement qui fait quoi, quand, en équipe.',
       subtitle: 'Planification visuelle pour petites équipes et PME',
       intro:
         'Calendrier, timelines et tâches dans une app desktop native — conçue pour voir clairement qui fait quoi, quand, et en équipe.',
+      benefitsTitle: 'En bref',
+      otherSoftware: 'Autres logiciels →',
+      moreLinks: 'Liens',
+      downloadWindows: 'Télécharger pour Windows',
+      downloadMacos: 'Télécharger pour macOS',
       tagline:
         'Famille : aperçu de toute l’année en un coup d’œil. Petite entreprise : plusieurs projets, zéro chaos. Même outil, même clarté.',
       heroKicker: 'Application desktop',

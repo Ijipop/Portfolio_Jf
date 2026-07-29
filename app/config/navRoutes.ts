@@ -5,7 +5,13 @@ export interface NavRoute {
   labelKey: string
   path: string
   ariaLabel: string
-  isActive: (pathname: string) => boolean
+  /** `search` = query string sans `?` (ex. `type=logiciel`). */
+  isActive: (pathname: string, search?: string) => boolean
+}
+
+function hasTypeLogiciel(search?: string): boolean {
+  if (!search) return false
+  return new URLSearchParams(search).get('type') === 'logiciel'
 }
 
 export const NAV_ROUTES: NavRoute[] = [
@@ -21,14 +27,16 @@ export const NAV_ROUTES: NavRoute[] = [
     labelKey: 'nav.projects',
     path: '/portfolio/projets',
     ariaLabel: 'projets',
-    isActive: (pathname) => pathname === '/portfolio/projets',
+    isActive: (pathname, search) =>
+      pathname === '/portfolio/projets' && !hasTypeLogiciel(search),
   },
   {
     id: 'software',
     labelKey: 'nav.software',
-    path: '/logiciel',
+    path: '/portfolio/projets?type=logiciel',
     ariaLabel: 'logiciels',
-    isActive: (pathname) =>
+    isActive: (pathname, search) =>
+      (pathname === '/portfolio/projets' && hasTypeLogiciel(search)) ||
       pathname === '/logiciel' ||
       pathname.startsWith('/logiciel/') ||
       pathname === '/cpu-ze' ||

@@ -4,6 +4,7 @@ import Link from 'next/link'
 import ProductDownloadRow from '@/components/product-landings/ProductDownloadRow'
 import ProductImageCarousel from '@/components/product-landings/ProductImageCarousel'
 import ProductLandingShell from '@/components/product-landings/ProductLandingShell'
+import ProductSecurityNotice from '@/components/product-landings/ProductSecurityNotice'
 import { PRODUCT_DOWNLOADS } from '@/components/product-landings/productDownloads'
 import { useLanguage } from '@/contexts/LanguageContext'
 import styles from './CpuZeLanding.module.css'
@@ -74,11 +75,13 @@ export default function CpuZeLandingClient() {
           </ul>
         </section>
 
+        <ProductSecurityNotice accent="#f59e0b" />
+
         <nav className={styles.footerLinks} aria-label={t('cpuZe.moreLinks')}>
           <Link href={PRODUCT_DOWNLOADS.cpuZe.github} target="_blank" rel="noopener noreferrer">
             {t('cpuZe.github')}
           </Link>
-          <Link href="/logiciel">{t('cpuZe.otherSoftware')}</Link>
+          <Link href="/portfolio/projets?type=logiciel">{t('cpuZe.otherSoftware')}</Link>
         </nav>
       </div>
     </ProductLandingShell>

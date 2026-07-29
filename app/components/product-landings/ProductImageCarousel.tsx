@@ -9,7 +9,9 @@ import IconButton from '@mui/material/IconButton'
 import Typography from '@mui/material/Typography'
 import { AnimatePresence, motion } from 'framer-motion'
 import Image from 'next/image'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
+
+const AUTOPLAY_MS = 4500
 
 type ProductImageCarouselProps = {
   /** Ex. `/img/cpu-ze` — charge `gallery.json` dans ce dossier. */
@@ -28,8 +30,11 @@ export default function ProductImageCarousel({
 }: ProductImageCarouselProps) {
   const [slides, setSlides] = useState<string[]>([])
   const [index, setIndex] = useState(0)
+  const [direction, setDirection] = useState(1)
   const [lightboxOpen, setLightboxOpen] = useState(false)
   const [failedSrc, setFailedSrc] = useState<string | null>(null)
+  const [paused, setPaused] = useState(false)
+  const reducedMotionRef = useRef(false)
 
   useEffect(() => {
     let cancelled = false
@@ -57,13 +62,36 @@ export default function ProductImageCarousel({
     }
   }, [galleryBasePath])
 
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    const mq = window.matchMedia('(prefers-reduced-motion: reduce)')
+    reducedMotionRef.current = mq.matches
+    const onChange = () => {
+      reducedMotionRef.current = mq.matches
+    }
+    mq.addEventListener('change', onChange)
+    return () => mq.removeEventListener('change', onChange)
+  }, [])
+
   const go = useCallback(
     (dir: -1 | 1) => {
       if (slides.length === 0) return
+      setDirection(dir)
       setIndex((i) => (i + dir + slides.length) % slides.length)
     },
     [slides.length],
   )
+
+  const goTo = useCallback((next: number) => {
+    setDirection(next > index ? 1 : -1)
+    setIndex(next)
+  }, [index])
+
+  useEffect(() => {
+    if (slides.length < 2 || lightboxOpen || paused || reducedMotionRef.current) return
+    const id = window.setInterval(() => go(1), AUTOPLAY_MS)
+    return () => window.clearInterval(id)
+  }, [slides.length, lightboxOpen, paused, go])
 
   const current = slides[index]
   const showImage = current && current !== failedSrc
@@ -102,7 +130,15 @@ export default function ProductImageCarousel({
         }
 
   return (
-    <Box sx={{ position: 'relative' }}>
+    <Box
+      sx={{ position: 'relative' }}
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+      onFocusCapture={() => setPaused(true)}
+      onBlurCapture={(e) => {
+        if (!e.currentTarget.contains(e.relatedTarget as Node | null)) setPaused(false)
+      }}
+    >
       <Box
         sx={{
           position: 'relative',
@@ -124,11 +160,11 @@ export default function ProductImageCarousel({
           }
         }}
       >
-        <AnimatePresence mode="wait" custom={1}>
+        <AnimatePresence mode="wait" custom={direction}>
           {showImage ? (
             <motion.div
               key={current}
-              custom={1}
+              custom={direction}
               variants={variants}
               initial="enter"
               animate="center"
@@ -141,7 +177,7 @@ export default function ProductImageCarousel({
                 alt=""
                 fill
                 sizes="(max-width: 900px) 100vw, 720px"
-                style={{ objectFit: 'cover' }}
+                style={{ objectFit: 'contain', objectPosition: 'center' }}
                 onError={() => setFailedSrc(current)}
                 unoptimized={current.endsWith('.gif')}
               />
@@ -191,7 +227,7 @@ export default function ProductImageCarousel({
             component="button"
             type="button"
             aria-label={`Slide ${i + 1}`}
-            onClick={() => setIndex(i)}
+            onClick={() => goTo(i)}
             sx={{
               width: i === index ? 18 : 8,
               height: 8,

@@ -4,6 +4,7 @@ import Link from 'next/link'
 import ProductDownloadRow from '@/components/product-landings/ProductDownloadRow'
 import ProductImageCarousel from '@/components/product-landings/ProductImageCarousel'
 import ProductLandingShell from '@/components/product-landings/ProductLandingShell'
+import ProductSecurityNotice from '@/components/product-landings/ProductSecurityNotice'
 import { PRODUCT_DOWNLOADS } from '@/components/product-landings/productDownloads'
 import { useLanguage } from '@/contexts/LanguageContext'
 import styles from './SpaceTakerLanding.module.css'
@@ -83,11 +84,13 @@ export default function SpaceTakerLandingClient() {
           </ul>
         </section>
 
+        <ProductSecurityNotice accent="#22d3ee" />
+
         <nav className={styles.footerLinks} aria-label={t('spaceTaker.moreLinks')}>
           <Link href={PRODUCT_DOWNLOADS.spaceTaker.github} target="_blank" rel="noopener noreferrer">
             {t('spaceTaker.github')}
           </Link>
-          <Link href="/logiciel">{t('spaceTaker.otherSoftware')}</Link>
+          <Link href="/portfolio/projets?type=logiciel">{t('spaceTaker.otherSoftware')}</Link>
         </nav>
       </div>
     </ProductLandingShell>
