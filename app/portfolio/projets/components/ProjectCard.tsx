@@ -99,7 +99,7 @@ function resolveBrandIcon(project: Project): string | undefined {
     return '/imgs/images/SpaceTaker_icon.png'
   }
   if (n.includes('cpu-ze') || n.includes('cpu ze') || n.includes('cpuze') || u.includes('/cpu-ze')) {
-    return '/img/cpu-ze/cpu-ze-01.png'
+    return '/imgs/images/CPU-ZE.png'
   }
   return undefined
 }

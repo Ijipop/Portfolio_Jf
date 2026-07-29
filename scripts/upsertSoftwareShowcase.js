@@ -83,7 +83,7 @@ const SHOWCASE = [
       downloadUrl: null,
       windowsUrl: CPU_ZE_WINDOWS_EXE,
       macosUrl: null,
-      imageUrl: '/img/cpu-ze/cpu-ze-01.png',
+      imageUrl: '/imgs/images/CPU-ZE.png',
     },
   },
 ]
