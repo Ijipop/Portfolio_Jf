@@ -19,6 +19,16 @@ export function shouldShowTopology(pathname: string | null): boolean {
   // Gateway `/` : fond dédié (HomeV2Backdrop) — évite le halo topology collé en haut du viewport.
   if (pathname === '/') return false
 
+  // Landings produit standalone : fond CSS dédié.
+  if (
+    pathname === '/cpu-ze' ||
+    pathname.startsWith('/cpu-ze/') ||
+    pathname === '/spacetaker' ||
+    pathname.startsWith('/spacetaker/')
+  ) {
+    return false
+  }
+
   const scope = getTopologyScope()
   if (scope === 'global') return true
 

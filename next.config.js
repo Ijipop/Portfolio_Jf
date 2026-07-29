@@ -124,6 +124,12 @@ const nextConfig = {
         destination: '/creation-site-web-montreal',
         permanent: true,
       },
+      { source: '/CPU-ZE', destination: '/cpu-ze', permanent: true },
+      { source: '/CPU-ze', destination: '/cpu-ze', permanent: true },
+      { source: '/Cpu-Ze', destination: '/cpu-ze', permanent: true },
+      { source: '/Spacetaker', destination: '/spacetaker', permanent: true },
+      { source: '/SpaceTaker', destination: '/spacetaker', permanent: true },
+      { source: '/space-taker', destination: '/spacetaker', permanent: true },
     ]
   },
 
