@@ -12,7 +12,7 @@ import { useGraphicsMode } from '@/contexts/GraphicsModeContext'
 import { usePresentationMode } from '@/contexts/PresentationModeContext'
 import { siteDarkTopologyBackground } from '@/design-system/siteDark'
 import { shouldShowTopology } from '@/utils/topologyRoutes'
-import { isTimelendrRoute } from '@/utils/isTimelendrRoute'
+import { isProductLandingRoute } from '@/components/product-landings/productLandingRoutes'
 import { getBeigePresentationTopologyBackground } from '@/utils/syncPortfolioThemeToDocument'
 import { VANTA_PRELOAD_SOURCES } from '@/utils/vantaAssets'
 import { VANTA_NET_ENABLED } from '@/utils/vantaFeatures'
@@ -49,8 +49,8 @@ export default function FullPageTopologyWrapper({ children }: FullPageTopologyWr
   const creaWantsVanta =
     VANTA_NET_ENABLED && presentationMode === 'dev' && !prefersReducedMotion
   const useLightFallback = show && graphicsMode === 'light' && !creaWantsVanta
-  const useBeigeImageBackground = (presentationMode === 'beige' && !beigeDark) || isTimelendrRoute(hydrationSafePathname)
-  const useBeigeSunsetBackground = presentationMode === 'beige' && beigeDark && !isTimelendrRoute(hydrationSafePathname)
+  const useBeigeImageBackground = (presentationMode === 'beige' && !beigeDark) || isProductLandingRoute(hydrationSafePathname)
+  const useBeigeSunsetBackground = presentationMode === 'beige' && beigeDark && !isProductLandingRoute(hydrationSafePathname)
   const useGradientOnly =
     !VANTA_NET_ENABLED || useLightFallback || useBeigeImageBackground || useBeigeSunsetBackground
 

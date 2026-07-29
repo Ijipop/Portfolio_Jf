@@ -4,7 +4,7 @@ import Box from '@mui/material/Box'
 import { usePathname } from 'next/navigation'
 import { SITE_DARK, siteDarkPageGradient } from '@/design-system/siteDark'
 import { useBeigeDark } from '@/hooks/useBeigeDark'
-import { isTimelendrRoute } from '@/utils/isTimelendrRoute'
+import { isProductLandingRoute } from '@/components/product-landings/productLandingRoutes'
 
 type SiteDarkBackdropProps = {
   /** Force l’affichage (ex. topology layer). */
@@ -15,7 +15,7 @@ export default function SiteDarkBackdrop({ force = false }: SiteDarkBackdropProp
   const pathname = usePathname()
   const { beigeDark } = useBeigeDark()
 
-  if (isTimelendrRoute(pathname)) return null
+  if (isProductLandingRoute(pathname)) return null
   const show = force || beigeDark
   if (!show) return null
 

@@ -24,7 +24,7 @@ import NavMobile from '@/components/appbar/NavMobile';
 import { NAV_ROUTES } from '@/config/navRoutes';
 import { SITE_DARK } from '@/design-system/siteDark';
 import { useSiteDarkChrome } from '@/hooks/useSiteDarkChrome';
-import { isTimelendrRoute } from '@/utils/isTimelendrRoute';
+import { isProductLandingRoute } from '@/components/product-landings/productLandingRoutes';
 
 import './components.css';
 
@@ -36,9 +36,9 @@ function AppBarComponent() {
 	const { mode: presentationMode } = usePresentationMode();
 	const { beigeDark } = useBeigeDark();
 	const siteDarkChrome = useSiteDarkChrome();
-	const isTimelendr = isTimelendrRoute(pathname);
+	const isProductLanding = isProductLandingRoute(pathname);
 	const useLegacyBar =
-		isTimelendr ||
+		isProductLanding ||
 		(PRESENTATION_DEV_MODE_ENABLED && presentationMode === 'dev') ||
 		(presentationMode === 'beige' && !beigeDark);
 	const [scrolled, setScrolled] = useState(false);

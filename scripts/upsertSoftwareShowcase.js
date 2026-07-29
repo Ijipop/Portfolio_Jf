@@ -1,5 +1,5 @@
 /**
- * Upsert showcase logiciels: Timelendr, Overstamp, Space Taker.
+ * Upsert showcase logiciels: Timelendr, Overstamp, Space Taker, CPU-ZE.
  * Usage: node scripts/upsertSoftwareShowcase.js
  */
 const { PrismaClient } = require('@prisma/client')
@@ -7,9 +7,11 @@ const { PrismaClient } = require('@prisma/client')
 const prisma = new PrismaClient()
 
 const SPACE_TAKER_WINDOWS_EXE =
-  'https://github.com/Ijipop/Space-Taker/releases/download/v0.2.0/SpaceTaker_0.2.0_x64-setup.exe'
+  'https://github.com/Ijipop/Space-Taker/releases/download/v0.2.23/SpaceTaker_0.2.23_x64-setup.exe'
 const SPACE_TAKER_MACOS_DMG =
   'https://github.com/Ijipop/Space-Taker/releases/download/v0.2.0/SpaceTaker_0.2.0_aarch64.dmg'
+const CPU_ZE_WINDOWS_EXE =
+  'https://github.com/Ijipop/CPU-ZE/releases/download/v0.3.13/CPU-ZE_0.3.13_x64-setup.exe'
 
 const SHOWCASE = [
   {
@@ -56,13 +58,32 @@ const SHOWCASE = [
       projectType: 'logiciel',
       webAudience: null,
       displayOrder: 3,
-      /** Pas de « Voir le projet » vers un binaire — CTA = Windows + macOS. */
-      url: '',
+      /** Landing produit. */
+      url: '/spacetaker',
       siteUrl: null,
       downloadUrl: null,
       windowsUrl: SPACE_TAKER_WINDOWS_EXE,
       macosUrl: SPACE_TAKER_MACOS_DMG,
       imageUrl: '/imgs/images/SpaceTaker_icon.png',
+    },
+  },
+  {
+    matchNames: ['cpu-ze', 'cpu ze', 'cpuze'],
+    data: {
+      name: 'CPU-ZE',
+      description:
+        'Voir CPU, RAM et températures en un coup d’œil — mini gestionnaire de tâches Windows, clair et léger.',
+      technologies: 'Desktop, Windows',
+      status: 'Terminé',
+      projectType: 'logiciel',
+      webAudience: null,
+      displayOrder: 4,
+      url: '/cpu-ze',
+      siteUrl: null,
+      downloadUrl: null,
+      windowsUrl: CPU_ZE_WINDOWS_EXE,
+      macosUrl: null,
+      imageUrl: '/img/cpu-ze/cpu-ze-01.png',
     },
   },
 ]

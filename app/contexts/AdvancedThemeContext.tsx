@@ -29,7 +29,7 @@ import { useGraphicsMode } from '@/contexts/GraphicsModeContext'
 import { usePresentationMode } from '@/contexts/PresentationModeContext'
 import { useBeigeDark } from '@/hooks/useBeigeDark'
 import { registerBeigeDarkInstantSync } from '@/utils/beigeDarkModeStore'
-import { isTimelendrRoute } from '@/utils/isTimelendrRoute'
+import { isProductLandingRoute } from '@/components/product-landings/productLandingRoutes'
 import { DESIGN_TOKENS } from '@/design-system/constants'
 
 const LAST_DEV_THEME_KEY = 'lastDevThemeName'
@@ -66,26 +66,26 @@ export function AdvancedThemeProvider({ children }: { children: React.ReactNode 
 
   /** Mode Site (beige) — optimiste avant hydratation pour éviter flash clair. */
   const isBeigePresentation = !presentationHydrated || presentationMode === 'beige'
-  const isTimelendr = isTimelendrRoute(hydrationSafePathname)
+  const isProductLanding = isProductLandingRoute(hydrationSafePathname)
   const activeThemeName = useMemo((): ThemeName => {
-    if (isTimelendr) return BEIGE_LIGHT_THEME
+    if (isProductLanding) return BEIGE_LIGHT_THEME
     if (!presentationHydrated || isBeigePresentation) {
       return beigeDark ? BEIGE_DARK_THEME : BEIGE_LIGHT_THEME
     }
     return themeName
-  }, [presentationHydrated, isBeigePresentation, beigeDark, themeName, isTimelendr])
+  }, [presentationHydrated, isBeigePresentation, beigeDark, themeName, isProductLanding])
 
   const customTheme = THEMES[activeThemeName]
 
   const syncDocumentTheme = useCallback(
     (name: ThemeName, dark: boolean) => {
       syncPortfolioThemeToDocument(name, {
-        beigePresentation: isBeigePresentation && !isTimelendr,
-        beigeDark: dark && !isTimelendr,
+        beigePresentation: isBeigePresentation && !isProductLanding,
+        beigeDark: dark && !isProductLanding,
         beigePresentationBgUrl,
       })
     },
-    [isBeigePresentation, beigePresentationBgUrl, isTimelendr],
+    [isBeigePresentation, beigePresentationBgUrl, isProductLanding],
   )
 
   useLayoutEffect(() => {
@@ -125,9 +125,9 @@ export function AdvancedThemeProvider({ children }: { children: React.ReactNode 
   }, [presentationMode, presentationHydrated, beigeDark, isBeigePresentation])
 
   useLayoutEffect(() => {
-    const effectiveDark = isTimelendr ? false : beigeDark
+    const effectiveDark = isProductLanding ? false : beigeDark
     syncDocumentTheme(activeThemeName, effectiveDark)
-  }, [activeThemeName, beigeDark, syncDocumentTheme, isTimelendr])
+  }, [activeThemeName, beigeDark, syncDocumentTheme, isProductLanding])
 
   const setTheme = useCallback(
     (newThemeName: ThemeName) => {
@@ -153,9 +153,9 @@ export function AdvancedThemeProvider({ children }: { children: React.ReactNode 
 
   // Créer le thème MUI avec les couleurs personnalisées
   // Utiliser useMemo pour recréer le thème quand customTheme change
-  const isBeigeLight = isBeigePresentation && !beigeDark && !isTimelendr
-  /** Refonte V2 sombre — aligné sur useSiteDarkChrome (beigeDark, hors Timelendr). */
-  const isSiteDark = beigeDark && !isTimelendr
+  const isBeigeLight = isBeigePresentation && !beigeDark && !isProductLanding
+  /** Refonte V2 sombre — aligné sur useSiteDarkChrome (beigeDark, hors landings produit). */
+  const isSiteDark = beigeDark && !isProductLanding
   const mode: PaletteMode = isSiteDark ? 'dark' : 'light'
   const showBeigeAmbientBg =
     isBeigeLight && !isTopologyRoute && graphicsMode === 'full'

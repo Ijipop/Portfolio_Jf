@@ -1,0 +1,149 @@
+.page {
+  --st-bg: #071218;
+  --st-surface: rgba(255, 255, 255, 0.045);
+  --st-border: rgba(165, 243, 252, 0.16);
+  --st-cyan: #22d3ee;
+  --st-cyanSoft: #a5f3fc;
+  --st-text: #f0fdfa;
+  --st-muted: rgba(240, 253, 250, 0.64);
+  --font-display: var(--font-st-display), system-ui, sans-serif;
+  --font-body: var(--font-st-body), system-ui, sans-serif;
+
+  position: relative;
+  min-height: 100dvh;
+  color: var(--st-text);
+  font-family: var(--font-body);
+  background:
+    radial-gradient(ellipse 60% 45% at 80% 0%, rgba(34, 211, 238, 0.18) 0%, transparent 55%),
+    radial-gradient(ellipse 45% 35% at 10% 30%, rgba(165, 243, 252, 0.06) 0%, transparent 50%),
+    var(--st-bg);
+  overflow: hidden;
+}
+
+.blocks {
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 42%;
+  pointer-events: none;
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  grid-template-rows: repeat(6, 1fr);
+  gap: 6px;
+  padding: 0 4% 6%;
+  opacity: 0.35;
+}
+
+.block {
+  border-radius: 8px;
+  background: rgba(34, 211, 238, 0.12);
+  border: 1px solid rgba(34, 211, 238, 0.18);
+  transform: scale(0.85);
+  opacity: 0;
+  animation: blockIn 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes blockIn {
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .block {
+    animation: none;
+    transform: none;
+    opacity: 1;
+  }
+}
+
+.inner {
+  position: relative;
+  z-index: 1;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 4.5rem 1.25rem 5rem;
+}
+
+.hero {
+  display: grid;
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+  max-width: 36rem;
+}
+
+.brand {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(2.5rem, 9vw, 3.85rem);
+  letter-spacing: -0.045em;
+  line-height: 1.02;
+  color: var(--st-text);
+}
+
+.brandAccent {
+  color: var(--st-cyan);
+}
+
+.lead {
+  font-size: clamp(1.1rem, 2.6vw, 1.3rem);
+  line-height: 1.5;
+  color: var(--st-muted);
+}
+
+.section {
+  margin-top: 3.25rem;
+}
+
+.sectionTitle {
+  font-family: var(--font-display);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--st-cyan);
+  margin-bottom: 1.25rem;
+}
+
+.benefits {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.9rem;
+}
+
+.benefits li {
+  display: flex;
+  gap: 0.85rem;
+  align-items: flex-start;
+  font-size: 1.05rem;
+  line-height: 1.45;
+}
+
+.chip {
+  flex-shrink: 0;
+  margin-top: 0.15rem;
+  width: 1.35rem;
+  height: 1.35rem;
+  border-radius: 6px;
+  background: rgba(34, 211, 238, 0.18);
+  border: 1px solid rgba(34, 211, 238, 0.35);
+}
+
+.footerLinks {
+  margin-top: 3rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.25rem;
+  font-size: 0.9rem;
+}
+
+.footerLinks a {
+  color: var(--st-muted);
+  text-decoration: none;
+}
+
+.footerLinks a:hover {
+  color: var(--st-cyanSoft);
+}
