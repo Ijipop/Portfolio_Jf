@@ -6,7 +6,7 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Link from 'next/link';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import React, { memo, useLayoutEffect, useRef, useState, useEffect } from 'react';
+import React, { memo, Suspense, useLayoutEffect, useRef, useState, useEffect } from 'react';
 import IconButton from '@mui/material/IconButton';
 import DarkModeOutlinedIcon from '@mui/icons-material/DarkModeOutlined';
 import LightModeOutlinedIcon from '@mui/icons-material/LightModeOutlined';
@@ -28,11 +28,63 @@ import { isProductLandingRoute } from '@/components/product-landings/productLand
 
 import './components.css';
 
+type AppBarNavProps = {
+	pathname: string
+	onNavigate: (path: string) => void
+	t: (key: string) => string
+	appearance: 'legacy' | 'darkGlass'
+}
+
+/** Isolé + Suspense : useSearchParams casse le prerender SSG sans boundary. */
+function AppBarNav({ pathname, onNavigate, t, appearance }: AppBarNavProps) {
+	const searchParams = useSearchParams()
+	const search = searchParams.toString()
+	return (
+		<>
+			<NavDesktop
+				routes={NAV_ROUTES}
+				pathname={pathname}
+				search={search}
+				onNavigate={onNavigate}
+				t={t}
+				appearance={appearance}
+			/>
+			<NavMobile
+				routes={NAV_ROUTES}
+				pathname={pathname}
+				search={search}
+				onNavigate={onNavigate}
+				appearance={appearance}
+			/>
+		</>
+	)
+}
+
+function AppBarNavFallback({ pathname, onNavigate, t, appearance }: AppBarNavProps) {
+	return (
+		<>
+			<NavDesktop
+				routes={NAV_ROUTES}
+				pathname={pathname}
+				search=""
+				onNavigate={onNavigate}
+				t={t}
+				appearance={appearance}
+			/>
+			<NavMobile
+				routes={NAV_ROUTES}
+				pathname={pathname}
+				search=""
+				onNavigate={onNavigate}
+				appearance={appearance}
+			/>
+		</>
+	)
+}
+
 function AppBarComponent() {
 	const router = useRouter();
 	const pathname = usePathname();
-	const searchParams = useSearchParams();
-	const search = searchParams.toString();
 	const { primary, secondary } = useThemeColors();
 	const { locale, setLocale, t } = useLanguage();
 	const { mode: presentationMode } = usePresentationMode();
@@ -45,6 +97,13 @@ function AppBarComponent() {
 		(presentationMode === 'beige' && !beigeDark);
 	const [scrolled, setScrolled] = useState(false);
 	const appBarRef = useRef<HTMLDivElement>(null);
+	const navAppearance = siteDarkChrome ? 'darkGlass' : 'legacy'
+	const navProps: AppBarNavProps = {
+		pathname,
+		onNavigate: (path) => router.push(path),
+		t,
+		appearance: navAppearance,
+	}
 
 	useEffect(() => {
 		if (useLegacyBar) return;
@@ -53,8 +112,6 @@ function AppBarComponent() {
 		window.addEventListener('scroll', onScroll, { passive: true });
 		return () => window.removeEventListener('scroll', onScroll);
 	}, [useLegacyBar]);
-
-	const handleNavigate = (path: string) => router.push(path);
 
 	useLayoutEffect(() => {
 		const node = appBarRef.current;
@@ -171,8 +228,9 @@ function AppBarComponent() {
 							</Box>
 						</Typography>
 					</Link>
-					<NavDesktop routes={NAV_ROUTES} pathname={pathname} search={search} onNavigate={handleNavigate} t={t} appearance={siteDarkChrome ? 'darkGlass' : 'legacy'} />
-					<NavMobile routes={NAV_ROUTES} pathname={pathname} search={search} onNavigate={handleNavigate} appearance={siteDarkChrome ? 'darkGlass' : 'legacy'} />
+					<Suspense fallback={<AppBarNavFallback {...navProps} />}>
+						<AppBarNav {...navProps} />
+					</Suspense>
 					
 					{/* Toggle langue + Thème + Menu (espacés et alignés) */}
 					<Box sx={{ display: 'flex', alignItems: 'center', gap: { xs: 1, sm: 2 }, ml: { xs: 0.5, sm: 1 }, flexShrink: 0 }}>
