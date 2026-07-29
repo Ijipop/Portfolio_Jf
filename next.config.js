@@ -124,11 +124,9 @@ const nextConfig = {
         destination: '/creation-site-web-montreal',
         permanent: true,
       },
-      { source: '/CPU-ZE', destination: '/cpu-ze', permanent: true },
-      { source: '/CPU-ze', destination: '/cpu-ze', permanent: true },
-      { source: '/Cpu-Ze', destination: '/cpu-ze', permanent: true },
-      { source: '/Spacetaker', destination: '/spacetaker', permanent: true },
-      { source: '/SpaceTaker', destination: '/spacetaker', permanent: true },
+      // Ne pas ajouter de redirects « CPU-ZE → cpu-ze » / « SpaceTaker → spacetaker » :
+      // sur Vercel le matching est case-insensitive, donc /cpu-ze matchait /CPU-ZE et
+      // redirigeait vers lui-même (boucle 308 → page morte).
       { source: '/space-taker', destination: '/spacetaker', permanent: true },
     ]
   },
