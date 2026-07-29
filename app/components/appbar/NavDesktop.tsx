@@ -20,6 +20,8 @@ type NavAppearance = 'legacy' | 'darkGlass'
 interface NavDesktopProps {
   routes: NavRoute[]
   pathname: string
+  /** Query string sans `?` (pour activer Logiciel vs Projets). */
+  search?: string
   onNavigate: (path: string) => void
   t: (key: string) => string
   appearance?: NavAppearance
@@ -42,7 +44,14 @@ function renderIcon(id: NavRouteId) {
   }
 }
 
-export default function NavDesktop({ routes, pathname, onNavigate, t, appearance = 'legacy' }: NavDesktopProps) {
+export default function NavDesktop({
+  routes,
+  pathname,
+  search,
+  onNavigate,
+  t,
+  appearance = 'legacy',
+}: NavDesktopProps) {
   const darkGlass = appearance === 'darkGlass'
   return (
     <Box
@@ -55,7 +64,7 @@ export default function NavDesktop({ routes, pathname, onNavigate, t, appearance
       }}
     >
       {routes.map((route) => {
-        const active = route.isActive(pathname)
+        const active = route.isActive(pathname, search)
         return (
           <Link key={route.id} href={route.path} style={{ textDecoration: 'none', color: 'inherit' }}>
             <IconButton

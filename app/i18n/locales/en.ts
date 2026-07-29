@@ -663,11 +663,23 @@ export const en = {
       bullet3: 'Simple indicators (requests, follow-ups) to see what happens after launch.',
       ctaProjects: 'View my work',
     },
+    productSecurity: {
+      title: 'Code signing and security warnings (Windows / Mac)',
+      lead:
+        'The app is not code-signed: we do not have a paid code-signing certificate. On Windows and macOS, antivirus or the OS may show a security warning on first launch.',
+      p1: 'This is not dangerous. The software is safe; it simply is not yet profitable enough to justify the cost of a signing licence. We prefer to be transparent about this.',
+    },
     timelendr: {
       title: 'Timelendr',
+      lead: 'Calendar, timelines and tasks — see clearly who does what, when, together.',
       subtitle: 'Visual planning for small teams and SMBs',
       intro:
         'Calendar, timelines and tasks in a native desktop app — built to show clearly who does what, when, and together.',
+      benefitsTitle: 'At a glance',
+      otherSoftware: 'Other software →',
+      moreLinks: 'Links',
+      downloadWindows: 'Download for Windows',
+      downloadMacos: 'Download for macOS',
       tagline:
         'Families: your whole year at a glance. Small businesses: multiple projects, zero chaos. Same tool, same clarity.',
       heroKicker: 'Desktop application',

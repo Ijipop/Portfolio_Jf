@@ -1,9 +1,8 @@
 'use client'
 
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
 import Box from '@mui/material/Box'
-import { useTheme } from '@mui/material/styles'
 import Dialog from '@mui/material/Dialog'
 import IconButton from '@mui/material/IconButton'
 import Typography from '@mui/material/Typography'
@@ -11,13 +10,9 @@ import ChevronLeft from '@mui/icons-material/ChevronLeft'
 import ChevronRight from '@mui/icons-material/ChevronRight'
 import CloseIcon from '@mui/icons-material/Close'
 import { motion, AnimatePresence } from 'framer-motion'
-import { useThemeColors } from '@/hooks/useThemeColors'
-import { useTextColor } from '@/hooks/useTextColor'
-import { DESIGN_TOKENS } from '@/design-system/constants'
-import { getCardSurfaceSx, getProjectImageLetterboxGlassSx } from '@/components/shared/cardSurface'
-import { shouldShowTopology } from '@/utils/topologyRoutes'
-import { usePathname } from 'next/navigation'
 import { useLanguage } from '@/contexts/LanguageContext'
+
+const AUTOPLAY_MS = 4500
 
 const GALLERY_CAP_KEYS = [
   'timelendr.galleryCap1',
@@ -37,17 +32,18 @@ type Props = {
   hideTitle?: boolean
 }
 
-export default function TimelendrCarousel({ title, emptyMessage, variant = 'default', hideTitle = false }: Props) {
+export default function TimelendrCarousel({
+  title,
+  emptyMessage,
+  hideTitle = false,
+}: Props) {
   const { t } = useLanguage()
-  const pathname = usePathname()
-  const isTopologyRoute = shouldShowTopology(pathname)
-  const theme = useTheme()
-  const { primary } = useThemeColors()
-  const textColor = useTextColor()
   const [slides, setSlides] = useState<string[]>([])
   const [index, setIndex] = useState(0)
   const [failedSrc, setFailedSrc] = useState<string | null>(null)
   const [lightboxOpen, setLightboxOpen] = useState(false)
+  const [paused, setPaused] = useState(false)
+  const reducedMotionRef = useRef(false)
 
   useEffect(() => {
     let cancelled = false
@@ -70,170 +66,162 @@ export default function TimelendrCarousel({ title, emptyMessage, variant = 'defa
     }
   }, [])
 
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    const mq = window.matchMedia('(prefers-reduced-motion: reduce)')
+    reducedMotionRef.current = mq.matches
+    const onChange = () => {
+      reducedMotionRef.current = mq.matches
+    }
+    mq.addEventListener('change', onChange)
+    return () => mq.removeEventListener('change', onChange)
+  }, [])
+
   const go = useCallback(
     (dir: -1 | 1) => {
       if (slides.length === 0) return
       setIndex((i) => (i + dir + slides.length) % slides.length)
     },
-    [slides.length]
+    [slides.length],
   )
 
-  const surface = getCardSurfaceSx({
-    isTopologyRoute,
-    variant: 'flat',
-    level: 'soft',
-    interactive: false,
-  })
-
-  const isHero = variant === 'hero'
+  useEffect(() => {
+    if (slides.length < 2 || lightboxOpen || paused || reducedMotionRef.current) return
+    const id = window.setInterval(() => go(1), AUTOPLAY_MS)
+    return () => window.clearInterval(id)
+  }, [slides.length, lightboxOpen, paused, go])
 
   if (slides.length === 0) {
-    if (isHero) {
-      return (
-        <Box
-          sx={{
-            borderRadius: '14px',
-            border: '1px solid rgba(255,255,255,0.12)',
-            bgcolor: 'rgba(15,23,42,0.5)',
-            p: 3,
-            minHeight: 280,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
-        >
-          <Typography sx={{ color: textColor, opacity: 0.75, lineHeight: 1.65, textAlign: 'center', maxWidth: 420 }}>
-            {emptyMessage}
-          </Typography>
-        </Box>
-      )
-    }
     return (
       <Box
         sx={{
-          ...surface,
-          borderRadius: DESIGN_TOKENS.borderRadius.medium,
-          p: { xs: 3, sm: 4 },
-          mb: 4,
-          textAlign: 'center',
+          borderRadius: '18px',
+          border: '1px solid rgba(255,255,255,0.12)',
+          bgcolor: 'rgba(0,0,0,0.28)',
+          minHeight: { xs: 220, md: 300 },
+          display: 'grid',
+          placeItems: 'center',
+          px: 3,
         }}
       >
-        <Typography variant="h5" sx={{ fontWeight: 700, color: textColor, mb: 2 }}>
-          {title}
-        </Typography>
-        <Typography sx={{ color: textColor, opacity: 0.85, lineHeight: 1.7, maxWidth: 520, mx: 'auto' }}>
+        <Typography sx={{ opacity: 0.7, textAlign: 'center', maxWidth: 360, lineHeight: 1.6 }}>
           {emptyMessage}
         </Typography>
       </Box>
     )
   }
 
-  const carouselBody = (
-    <>
-      {!hideTitle && (
-        <Typography variant="h5" sx={{ fontWeight: 700, color: textColor, mb: 2, textAlign: 'center' }}>
-          {title}
-        </Typography>
-      )}
+  const current = slides[index]
+  const showImage = Boolean(current && current !== failedSrc)
+
+  return (
+    <Box
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+      onFocusCapture={() => setPaused(true)}
+      onBlurCapture={(e) => {
+        if (!e.currentTarget.contains(e.relatedTarget as Node | null)) setPaused(false)
+      }}
+    >
+      {!hideTitle ? (
+        <Typography sx={{ fontWeight: 700, mb: 2, textAlign: 'center' }}>{title}</Typography>
+      ) : null}
+
       <Box
-        onClick={() => failedSrc !== slides[index] && setLightboxOpen(true)}
+        onClick={() => showImage && setLightboxOpen(true)}
+        role={showImage ? 'button' : undefined}
+        tabIndex={showImage ? 0 : undefined}
+        onKeyDown={(e) => {
+          if (!showImage) return
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault()
+            setLightboxOpen(true)
+          }
+        }}
         sx={{
           position: 'relative',
-          borderRadius: isHero ? '0 0 10px 10px' : DESIGN_TOKENS.borderRadius.small,
+          borderRadius: '18px',
           overflow: 'hidden',
-          ...(isHero
-            ? { bgcolor: '#0f172a', border: 'none' }
-            : {
-                ...getProjectImageLetterboxGlassSx(theme.palette.mode),
-                border: `1px solid ${primary}35`,
-              }),
-          aspectRatio: isHero ? { xs: '16/10', md: '16/9' } : { xs: '4/3', sm: '16/10' },
-          maxHeight: isHero ? { md: 480 } : { sm: 520 },
-          mx: 'auto',
-          cursor: failedSrc !== slides[index] ? 'zoom-in' : 'default',
-          boxShadow: isHero ? 'none' : undefined,
+          border: '1px solid rgba(255,255,255,0.12)',
+          bgcolor: 'rgba(0,0,0,0.35)',
+          aspectRatio: '16 / 10',
+          cursor: showImage ? 'zoom-in' : 'default',
         }}
       >
         <AnimatePresence mode="wait" initial={false}>
           <motion.div
-            key={slides[index]}
-            initial={{ opacity: 0, x: 24 }}
+            key={current}
+            initial={{ opacity: 0, x: 28 }}
             animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -24 }}
-            transition={{ duration: 0.35, ease: [0.25, 0.46, 0.45, 0.94] }}
-            style={{
-              position: 'absolute',
-              inset: 0,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
+            exit={{ opacity: 0, x: -28 }}
+            transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+            style={{ position: 'absolute', inset: 0 }}
           >
-            {failedSrc !== slides[index] ? (
+            {showImage ? (
               <Image
-                src={slides[index]}
+                src={current}
                 alt={index < GALLERY_CAP_KEYS.length ? t(GALLERY_CAP_KEYS[index]) : title}
                 fill
                 sizes="(max-width: 900px) 100vw, 800px"
-                style={{ objectFit: 'contain' }}
+                style={{ objectFit: 'contain', objectPosition: 'center' }}
                 priority={index === 0}
-                onError={() => setFailedSrc(slides[index])}
+                onError={() => setFailedSrc(current)}
               />
             ) : (
-              <Typography sx={{ color: textColor, opacity: 0.7, p: 2 }}>{emptyMessage}</Typography>
+              <Box sx={{ position: 'absolute', inset: 0, display: 'grid', placeItems: 'center' }}>
+                <Typography sx={{ opacity: 0.65 }}>{emptyMessage}</Typography>
+              </Box>
             )}
           </motion.div>
         </AnimatePresence>
-        <IconButton
-          aria-label="Précédent"
-          onClick={(e) => {
-            e.stopPropagation()
-            go(-1)
-          }}
-          sx={{
-            position: 'absolute',
-            left: 8,
-            top: '50%',
-            transform: 'translateY(-50%)',
-            borderRadius: DESIGN_TOKENS.borderRadius.small,
-            bgcolor: 'rgba(0,0,0,0.45)',
-            color: 'white',
-            '&:hover': { bgcolor: 'rgba(0,0,0,0.65)' },
-          }}
-        >
-          <ChevronLeft />
-        </IconButton>
-        <IconButton
-          aria-label="Suivant"
-          onClick={(e) => {
-            e.stopPropagation()
-            go(1)
-          }}
-          sx={{
-            position: 'absolute',
-            right: 8,
-            top: '50%',
-            transform: 'translateY(-50%)',
-            borderRadius: DESIGN_TOKENS.borderRadius.small,
-            bgcolor: 'rgba(0,0,0,0.45)',
-            color: 'white',
-            '&:hover': { bgcolor: 'rgba(0,0,0,0.65)' },
-          }}
-        >
-          <ChevronRight />
-        </IconButton>
       </Box>
+
+      {slides.length > 1 ? (
+        <Box
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: 1.5,
+            mt: 1.75,
+          }}
+        >
+          <IconButton
+            aria-label="Previous"
+            onClick={() => go(-1)}
+            sx={{ color: 'inherit', border: '1px solid rgba(255,255,255,0.16)' }}
+          >
+            <ChevronLeft />
+          </IconButton>
+          <Typography sx={{ fontSize: '0.85rem', opacity: 0.7, minWidth: 48, textAlign: 'center' }}>
+            {index + 1} / {slides.length}
+          </Typography>
+          <IconButton
+            aria-label="Next"
+            onClick={() => go(1)}
+            sx={{ color: 'inherit', border: '1px solid rgba(255,255,255,0.16)' }}
+          >
+            <ChevronRight />
+          </IconButton>
+        </Box>
+      ) : null}
+
       <AnimatePresence mode="wait" initial={false}>
-        <motion.div key={`cap-${index}`} initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} transition={{ duration: 0.25 }}>
+        <motion.div
+          key={`cap-${index}`}
+          initial={{ opacity: 0, y: 6 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.25 }}
+        >
           <Typography
             component="p"
             sx={{
               textAlign: 'center',
-              color: isHero ? 'rgba(255,255,255,0.82)' : textColor,
-              opacity: isHero ? 1 : 0.92,
-              lineHeight: 1.6,
+              opacity: 0.82,
+              lineHeight: 1.55,
               px: { xs: 1, sm: 2 },
-              pt: 2,
+              pt: 1.5,
               pb: 0.5,
               minHeight: { xs: '3.2em', sm: '2.8em' },
               fontSize: { xs: '0.9rem', sm: '0.95rem' },
@@ -244,174 +232,59 @@ export default function TimelendrCarousel({ title, emptyMessage, variant = 'defa
           </Typography>
         </motion.div>
       </AnimatePresence>
+
       <Box sx={{ display: 'flex', justifyContent: 'center', gap: 0.75, mt: 1, flexWrap: 'wrap' }}>
         {slides.map((_, i) => (
           <Box
             key={i}
+            component="button"
+            type="button"
+            aria-label={`Slide ${i + 1}`}
             onClick={() => setIndex(i)}
-            role="button"
-            tabIndex={0}
-            onKeyDown={(e) => e.key === 'Enter' && setIndex(i)}
             sx={{
-              width: i === index ? 28 : 8,
+              width: i === index ? 18 : 8,
               height: 8,
-              borderRadius: '2px',
-              bgcolor: i === index ? (isHero ? '#0d9488' : primary) : isHero ? 'rgba(13,148,136,0.35)' : `${primary}40`,
+              borderRadius: 99,
+              border: 'none',
               cursor: 'pointer',
-              transition: 'all 0.25s ease',
-              '&:hover': { bgcolor: i === index ? (isHero ? '#0d9488' : primary) : isHero ? 'rgba(13,148,136,0.55)' : `${primary}70` },
+              bgcolor: i === index ? '#2dd4bf' : 'rgba(255,255,255,0.28)',
+              transition: 'width 0.25s ease, background 0.25s ease',
             }}
           />
         ))}
       </Box>
-    </>
-  )
-
-  return (
-    <>
-      {isHero ? (
-        <Box
-          sx={{
-            position: 'relative',
-            borderRadius: '14px',
-            overflow: 'hidden',
-            border: '1px solid rgba(255,255,255,0.14)',
-            boxShadow: '0 32px 80px rgba(0,0,0,0.45), 0 0 0 1px rgba(13,148,136,0.15)',
-            '&::before': {
-              content: '""',
-              position: 'absolute',
-              inset: '-40%',
-              background: 'radial-gradient(circle, rgba(13,148,136,0.25) 0%, transparent 55%)',
-              pointerEvents: 'none',
-              zIndex: 0,
-            },
-          }}
-        >
-          <Box
-            sx={{
-              position: 'relative',
-              zIndex: 1,
-              display: 'flex',
-              alignItems: 'center',
-              gap: 1,
-              px: 1.5,
-              py: 1,
-              bgcolor: 'rgba(15,23,42,0.95)',
-              borderBottom: '1px solid rgba(255,255,255,0.08)',
-            }}
-          >
-            <Box sx={{ display: 'flex', gap: 0.6 }}>
-              {['#ff5f57', '#febc2e', '#28c840'].map((c) => (
-                <Box key={c} sx={{ width: 10, height: 10, borderRadius: '50%', bgcolor: c, opacity: 0.9 }} />
-              ))}
-            </Box>
-            <Typography sx={{ flex: 1, textAlign: 'center', fontSize: '0.75rem', fontWeight: 600, color: 'rgba(255,255,255,0.55)', letterSpacing: '0.04em' }}>
-              Timelendr
-            </Typography>
-            <Box sx={{ width: 52 }} aria-hidden />
-          </Box>
-          <Box sx={{ position: 'relative', zIndex: 1, p: { xs: 0, sm: 0 }, bgcolor: 'rgba(15,23,42,0.6)' }}>
-            {carouselBody}
-          </Box>
-        </Box>
-      ) : (
-        <Box
-          sx={{
-            ...surface,
-            borderRadius: DESIGN_TOKENS.borderRadius.medium,
-            p: { xs: 2, sm: 2.5 },
-            mb: 4,
-            overflow: 'hidden',
-          }}
-        >
-          {carouselBody}
-        </Box>
-      )}
 
       <Dialog
         open={lightboxOpen}
         onClose={() => setLightboxOpen(false)}
-        maxWidth={false}
+        maxWidth="lg"
         fullWidth
-        slotProps={{
-          backdrop: { sx: { bgcolor: 'rgba(0,0,0,0.88)' } },
-        }}
-        PaperProps={{
-          sx: {
-            m: 0,
-            maxWidth: '100vw',
-            maxHeight: '100vh',
-            width: '100%',
-            height: '100%',
-            bgcolor: 'transparent',
-            boxShadow: 'none',
-            overflow: 'hidden',
-            borderRadius: 0,
-          },
-        }}
+        PaperProps={{ sx: { bgcolor: '#0a0a0c', backgroundImage: 'none' } }}
       >
         <IconButton
           aria-label={t('timelendr.lightboxClose')}
           onClick={() => setLightboxOpen(false)}
-          sx={{
-            position: 'fixed',
-            top: 12,
-            right: 12,
-            zIndex: 2,
-            borderRadius: DESIGN_TOKENS.borderRadius.small,
-            color: 'white',
-            bgcolor: 'rgba(0,0,0,0.5)',
-            '&:hover': { bgcolor: 'rgba(0,0,0,0.7)' },
-          }}
+          sx={{ position: 'absolute', right: 8, top: 8, zIndex: 2, color: '#fff' }}
         >
           <CloseIcon />
         </IconButton>
-        <Box
-          onClick={() => setLightboxOpen(false)}
-          sx={{
-            minHeight: '100vh',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            p: { xs: 2, sm: 4 },
-            pt: 6,
-          }}
-        >
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={slides[index]}
-            alt={index < GALLERY_CAP_KEYS.length ? t(GALLERY_CAP_KEYS[index]) : title}
-            onClick={(e) => e.stopPropagation()}
-            style={{
-              maxWidth: 'min(96vw, 1400px)',
-              maxHeight: 'min(85vh, 900px)',
-              width: 'auto',
-              height: 'auto',
-              objectFit: 'contain',
-              borderRadius: DESIGN_TOKENS.borderRadius.bannerInner,
-              boxShadow: '0 8px 48px rgba(0,0,0,0.5)',
-            }}
-          />
-          {index < GALLERY_CAP_KEYS.length && (
-            <Typography
-              sx={{
-                mt: 2,
-                color: 'rgba(255,255,255,0.92)',
-                textAlign: 'center',
-                maxWidth: 640,
-                lineHeight: 1.5,
-                fontSize: '1.03rem',
-              }}
-            >
-              {t(GALLERY_CAP_KEYS[index])}
-            </Typography>
-          )}
-          <Typography sx={{ mt: 1.5, color: 'rgba(255,255,255,0.5)', fontSize: '0.8rem' }}>
-            {t('timelendr.lightboxHint')}
+        {showImage ? (
+          <Box sx={{ position: 'relative', width: '100%', aspectRatio: '16 / 10' }}>
+            <Image
+              src={current}
+              alt={index < GALLERY_CAP_KEYS.length ? t(GALLERY_CAP_KEYS[index]) : title}
+              fill
+              sizes="100vw"
+              style={{ objectFit: 'contain' }}
+            />
+          </Box>
+        ) : null}
+        {index < GALLERY_CAP_KEYS.length ? (
+          <Typography sx={{ px: 3, pb: 3, pt: 1, textAlign: 'center', opacity: 0.85 }}>
+            {t(GALLERY_CAP_KEYS[index])}
           </Typography>
-        </Box>
+        ) : null}
       </Dialog>
-    </>
+    </Box>
   )
 }

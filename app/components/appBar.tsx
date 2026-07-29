@@ -5,7 +5,7 @@ import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Link from 'next/link';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import React, { memo, useLayoutEffect, useRef, useState, useEffect } from 'react';
 import IconButton from '@mui/material/IconButton';
 import DarkModeOutlinedIcon from '@mui/icons-material/DarkModeOutlined';
@@ -31,6 +31,8 @@ import './components.css';
 function AppBarComponent() {
 	const router = useRouter();
 	const pathname = usePathname();
+	const searchParams = useSearchParams();
+	const search = searchParams.toString();
 	const { primary, secondary } = useThemeColors();
 	const { locale, setLocale, t } = useLanguage();
 	const { mode: presentationMode } = usePresentationMode();
@@ -169,8 +171,8 @@ function AppBarComponent() {
 							</Box>
 						</Typography>
 					</Link>
-					<NavDesktop routes={NAV_ROUTES} pathname={pathname} onNavigate={handleNavigate} t={t} appearance={siteDarkChrome ? 'darkGlass' : 'legacy'} />
-					<NavMobile routes={NAV_ROUTES} pathname={pathname} onNavigate={handleNavigate} appearance={siteDarkChrome ? 'darkGlass' : 'legacy'} />
+					<NavDesktop routes={NAV_ROUTES} pathname={pathname} search={search} onNavigate={handleNavigate} t={t} appearance={siteDarkChrome ? 'darkGlass' : 'legacy'} />
+					<NavMobile routes={NAV_ROUTES} pathname={pathname} search={search} onNavigate={handleNavigate} appearance={siteDarkChrome ? 'darkGlass' : 'legacy'} />
 					
 					{/* Toggle langue + Thème + Menu (espacés et alignés) */}
 					<Box sx={{ display: 'flex', alignItems: 'center', gap: { xs: 1, sm: 2 }, ml: { xs: 0.5, sm: 1 }, flexShrink: 0 }}>

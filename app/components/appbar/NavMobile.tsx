@@ -18,6 +18,8 @@ type NavAppearance = 'legacy' | 'darkGlass'
 interface NavMobileProps {
   routes: NavRoute[]
   pathname: string
+  /** Query string sans `?` (pour activer Logiciel vs Projets). */
+  search?: string
   onNavigate: (path: string) => void
   appearance?: NavAppearance
 }
@@ -39,7 +41,13 @@ function renderIcon(id: NavRouteId) {
   }
 }
 
-export default function NavMobile({ routes, pathname, onNavigate, appearance = 'legacy' }: NavMobileProps) {
+export default function NavMobile({
+  routes,
+  pathname,
+  search,
+  onNavigate,
+  appearance = 'legacy',
+}: NavMobileProps) {
   const darkGlass = appearance === 'darkGlass'
   return (
     <Box
@@ -55,7 +63,7 @@ export default function NavMobile({ routes, pathname, onNavigate, appearance = '
       }}
     >
       {routes.map((route) => {
-        const active = route.isActive(pathname)
+        const active = route.isActive(pathname, search)
         return (
           <Link key={route.id} href={route.path} style={{ textDecoration: 'none', color: 'inherit' }}>
             <IconButton

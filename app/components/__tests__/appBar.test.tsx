@@ -8,6 +8,7 @@ const pushMock = vi.fn()
 vi.mock('next/navigation', () => ({
   useRouter: () => ({ push: pushMock }),
   usePathname: () => '/portfolio',
+  useSearchParams: () => new URLSearchParams(),
 }))
 
 vi.mock('../../hooks/useThemeColors', () => ({
