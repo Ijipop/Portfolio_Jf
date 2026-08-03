@@ -62,9 +62,11 @@ const SHOWCASE = [
       url: '/spacetaker',
       siteUrl: null,
       downloadUrl: null,
+      /** Défaut création uniquement — ne pas écraser les URLs admin à l’update. */
       windowsUrl: SPACE_TAKER_WINDOWS_EXE,
       macosUrl: SPACE_TAKER_MACOS_DMG,
       imageUrl: '/imgs/images/SpaceTaker_icon.png',
+      preserveDownloadUrlsOnUpdate: true,
     },
   },
   {
@@ -81,9 +83,11 @@ const SHOWCASE = [
       url: '/cpu-ze',
       siteUrl: null,
       downloadUrl: null,
+      /** Défaut création uniquement — ne pas écraser les URLs admin à l’update. */
       windowsUrl: CPU_ZE_WINDOWS_EXE,
       macosUrl: null,
       imageUrl: '/imgs/images/CPU-ZE.png',
+      preserveDownloadUrlsOnUpdate: true,
     },
   },
 ]
@@ -113,13 +117,19 @@ async function upsertOne({ matchNames, data }) {
         url: data.url ?? hit.url,
         siteUrl: Object.prototype.hasOwnProperty.call(data, 'siteUrl') ? data.siteUrl : hit.siteUrl,
         imageUrl: data.imageUrl,
-        ...(Object.prototype.hasOwnProperty.call(data, 'downloadUrl')
-          ? { downloadUrl: data.downloadUrl }
-          : {}),
-        ...(Object.prototype.hasOwnProperty.call(data, 'windowsUrl')
-          ? { windowsUrl: data.windowsUrl }
-          : {}),
-        ...(Object.prototype.hasOwnProperty.call(data, 'macosUrl') ? { macosUrl: data.macosUrl } : {}),
+        ...(data.preserveDownloadUrlsOnUpdate
+          ? {}
+          : {
+              ...(Object.prototype.hasOwnProperty.call(data, 'downloadUrl')
+                ? { downloadUrl: data.downloadUrl }
+                : {}),
+              ...(Object.prototype.hasOwnProperty.call(data, 'windowsUrl')
+                ? { windowsUrl: data.windowsUrl }
+                : {}),
+              ...(Object.prototype.hasOwnProperty.call(data, 'macosUrl')
+                ? { macosUrl: data.macosUrl }
+                : {}),
+            }),
       },
     })
     console.log(`Updated: ${updated.name} (#${updated.id})`)
