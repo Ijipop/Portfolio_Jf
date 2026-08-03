@@ -5,13 +5,17 @@ import ProductDownloadRow from '@/components/product-landings/ProductDownloadRow
 import ProductImageCarousel from '@/components/product-landings/ProductImageCarousel'
 import ProductLandingShell from '@/components/product-landings/ProductLandingShell'
 import ProductSecurityNotice from '@/components/product-landings/ProductSecurityNotice'
-import { PRODUCT_DOWNLOADS } from '@/components/product-landings/productDownloads'
+import type { ProductDownloadLinks } from '@/components/product-landings/productDownloads'
 import { useLanguage } from '@/contexts/LanguageContext'
 import styles from './CpuZeLanding.module.css'
 
 const BENEFIT_KEYS = ['cpuZe.b1', 'cpuZe.b2', 'cpuZe.b3', 'cpuZe.b4'] as const
 
-export default function CpuZeLandingClient() {
+type CpuZeLandingClientProps = {
+  downloads: ProductDownloadLinks
+}
+
+export default function CpuZeLandingClient({ downloads }: CpuZeLandingClientProps) {
   const { t } = useLanguage()
 
   return (
@@ -25,7 +29,7 @@ export default function CpuZeLandingClient() {
             accentHover="#fbbf24"
             items={[
               {
-                href: PRODUCT_DOWNLOADS.cpuZe.windows,
+                href: downloads.windows,
                 label: t('cpuZe.downloadWindows'),
                 primary: true,
               },
@@ -78,7 +82,7 @@ export default function CpuZeLandingClient() {
         <ProductSecurityNotice accent="#f59e0b" />
 
         <nav className={styles.footerLinks} aria-label={t('cpuZe.moreLinks')}>
-          <Link href={PRODUCT_DOWNLOADS.cpuZe.github} target="_blank" rel="noopener noreferrer">
+          <Link href={downloads.github} target="_blank" rel="noopener noreferrer">
             {t('cpuZe.github')}
           </Link>
           <Link href="/portfolio/projets?type=logiciel">{t('cpuZe.otherSoftware')}</Link>

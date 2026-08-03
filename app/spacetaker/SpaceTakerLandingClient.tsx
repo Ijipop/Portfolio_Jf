@@ -5,7 +5,7 @@ import ProductDownloadRow from '@/components/product-landings/ProductDownloadRow
 import ProductImageCarousel from '@/components/product-landings/ProductImageCarousel'
 import ProductLandingShell from '@/components/product-landings/ProductLandingShell'
 import ProductSecurityNotice from '@/components/product-landings/ProductSecurityNotice'
-import { PRODUCT_DOWNLOADS } from '@/components/product-landings/productDownloads'
+import type { ProductDownloadLinks } from '@/components/product-landings/productDownloads'
 import { useLanguage } from '@/contexts/LanguageContext'
 import styles from './SpaceTakerLanding.module.css'
 
@@ -19,7 +19,11 @@ const DECOR_BLOCKS = [
   { col: '10 / 13', row: '1 / 7', delay: '0.3s', opacity: 1 },
 ]
 
-export default function SpaceTakerLandingClient() {
+type SpaceTakerLandingClientProps = {
+  downloads: ProductDownloadLinks
+}
+
+export default function SpaceTakerLandingClient({ downloads }: SpaceTakerLandingClientProps) {
   const { t } = useLanguage()
 
   return (
@@ -50,14 +54,18 @@ export default function SpaceTakerLandingClient() {
             accentHover="#67e8f9"
             items={[
               {
-                href: PRODUCT_DOWNLOADS.spaceTaker.windows,
+                href: downloads.windows,
                 label: t('spaceTaker.downloadWindows'),
                 primary: true,
               },
-              {
-                href: PRODUCT_DOWNLOADS.spaceTaker.macos,
-                label: t('spaceTaker.downloadMacos'),
-              },
+              ...(downloads.macos
+                ? [
+                    {
+                      href: downloads.macos,
+                      label: t('spaceTaker.downloadMacos'),
+                    },
+                  ]
+                : []),
             ]}
           />
         </header>
@@ -87,7 +95,7 @@ export default function SpaceTakerLandingClient() {
         <ProductSecurityNotice accent="#22d3ee" />
 
         <nav className={styles.footerLinks} aria-label={t('spaceTaker.moreLinks')}>
-          <Link href={PRODUCT_DOWNLOADS.spaceTaker.github} target="_blank" rel="noopener noreferrer">
+          <Link href={downloads.github} target="_blank" rel="noopener noreferrer">
             {t('spaceTaker.github')}
           </Link>
           <Link href="/portfolio/projets?type=logiciel">{t('spaceTaker.otherSoftware')}</Link>

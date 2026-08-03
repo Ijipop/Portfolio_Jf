@@ -41,13 +41,23 @@ export default function HomeClient({ initialShowIntro }: { initialShowIntro: boo
 
   useEffect(() => {
     if (typeof window === 'undefined') return
+
+    // Évite de rouvrir au milieu de la page (forfaits) via scroll restoration.
+    if ('scrollRestoration' in window.history) {
+      window.history.scrollRestoration = 'manual'
+    }
+
     const scrollToHash = () => {
       const raw = window.location.hash.replace(/^#/, '')
-      if (!raw) return
+      if (!raw) {
+        window.scrollTo(0, 0)
+        return
+      }
       window.requestAnimationFrame(() => {
         document.getElementById(raw)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
       })
     }
+
     scrollToHash()
     window.addEventListener('hashchange', scrollToHash)
     return () => window.removeEventListener('hashchange', scrollToHash)

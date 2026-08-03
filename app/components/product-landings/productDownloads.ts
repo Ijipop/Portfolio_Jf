@@ -1,4 +1,7 @@
-/** URLs de téléchargement des landings produit (source unique). */
+/**
+ * Fallback des landings produit si windowsUrl / macosUrl admin sont vides.
+ * Source de vérité live : champs projet en admin (DB).
+ */
 export const PRODUCT_DOWNLOADS = {
   cpuZe: {
     windows:
@@ -13,3 +16,9 @@ export const PRODUCT_DOWNLOADS = {
     github: 'https://github.com/Ijipop/Space-Taker',
   },
 } as const
+
+export type ProductDownloadLinks = {
+  windows: string
+  macos?: string
+  github: string
+}
