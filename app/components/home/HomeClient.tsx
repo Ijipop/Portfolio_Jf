@@ -7,10 +7,9 @@ import AppBarComponent from '@/components/appBar'
 import PageWrapper from '@/components/shared/PageWrapper'
 import InteractiveBackgroundSection from '@/components/shared/InteractiveBackgroundSection'
 import ScrollTriggeredStickyCTA from '@/components/shared/ScrollTriggeredStickyCTA'
-import LaneCrossLinks from '@/components/home/LaneCrossLinks'
 import HomeV2Backdrop from '@/components/home-v2/HomeV2Backdrop'
 import HomeV2Hero from '@/components/home-v2/HomeV2Hero'
-import HomeV2ProofBand from '@/components/home-v2/HomeV2ProofBand'
+import HomeV2CaseStudies from '@/components/home-v2/HomeV2CaseStudies'
 import HomeV2Services from '@/components/home-v2/HomeV2Services'
 import HomeV2Pricing from '@/components/home-v2/HomeV2Pricing'
 import HomeV2Credibility from '@/components/home-v2/HomeV2Credibility'
@@ -44,7 +43,6 @@ export default function HomeClient({ initialShowIntro }: { initialShowIntro: boo
   useEffect(() => {
     if (typeof window === 'undefined') return
 
-    // Évite de rouvrir au milieu de la page (forfaits) via scroll restoration.
     if ('scrollRestoration' in window.history) {
       window.history.scrollRestoration = 'manual'
     }
@@ -117,7 +115,7 @@ export default function HomeClient({ initialShowIntro }: { initialShowIntro: boo
                   zIndex: 2,
                 }}
               >
-                <HomeV2ProofBand />
+                <HomeV2CaseStudies />
                 <HomeV2Services />
                 <HomeV2Pricing />
                 <HomeV2Credibility />
@@ -129,7 +127,6 @@ export default function HomeClient({ initialShowIntro }: { initialShowIntro: boo
                   variant="compact"
                 />
                 <HomeV2FinalCta />
-                <LaneCrossLinks current="web" />
               </Container>
             </InteractiveBackgroundSection>
 

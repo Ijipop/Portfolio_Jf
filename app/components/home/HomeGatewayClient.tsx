@@ -36,7 +36,6 @@ type LaneChoice = {
   delayMs: number
   testId: string
   icon: typeof LanguageOutlinedIcon
-  featured?: boolean
 }
 
 export default function HomeGatewayClient() {
@@ -53,7 +52,6 @@ export default function HomeGatewayClient() {
       delayMs: 80,
       testId: 'gateway-choice-web',
       icon: LanguageOutlinedIcon,
-      featured: true,
     },
     {
       href: SUPPORT_HREF,
@@ -286,13 +284,9 @@ export default function HomeGatewayClient() {
                   minHeight: { xs: 'auto', md: 200 },
                   p: { xs: 1.75, sm: 2.25 },
                   borderRadius: SITE_DARK.cardRadius,
-                  background: lane.featured
-                    ? `linear-gradient(160deg, rgba(232, 93, 4, 0.12) 0%, ${SITE_DARK.surface} 50%, rgba(232,240,248,0.02) 100%)`
-                    : SITE_DARK.surface,
-                  border: `1px solid ${lane.featured ? SITE_DARK.borderHover : SITE_DARK.border}`,
-                  boxShadow: lane.featured
-                    ? `0 12px 36px ${SITE_DARK.brandGlow}`
-                    : `0 8px 24px rgba(0, 0, 0, 0.22)`,
+                  background: SITE_DARK.surface,
+                  border: `1px solid ${SITE_DARK.border}`,
+                  boxShadow: `0 8px 24px rgba(0, 0, 0, 0.22)`,
                   transition:
                     'border-color 0.3s ease, box-shadow 0.35s ease, transform 0.35s cubic-bezier(0.22, 1, 0.36, 1)',
                   animation: reducedMotion
@@ -323,10 +317,8 @@ export default function HomeGatewayClient() {
                     alignItems: 'center',
                     justifyContent: 'center',
                     mb: 1.25,
-                    background: lane.featured
-                      ? 'linear-gradient(165deg, #fdba74 14%, #e85d04 62%, #b91c1c 100%)'
-                      : SITE_DARK.brandGlow,
-                    color: lane.featured ? '#fff' : SITE_DARK.brandOrangeLight,
+                    background: SITE_DARK.brandGlow,
+                    color: SITE_DARK.brandOrangeLight,
                   }}
                 >
                   <Icon sx={{ fontSize: 22 }} />

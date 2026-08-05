@@ -258,7 +258,18 @@ export default function About() {
       />
 
       <InteractiveBackgroundSection>
-      <Container maxWidth="lg" sx={{ py: 6, position: 'relative', zIndex: 2 }}>
+      <Container
+        maxWidth="lg"
+        sx={{
+          py: 6,
+          position: 'relative',
+          zIndex: 2,
+          fontFamily: 'var(--font-body), "Plus Jakarta Sans", sans-serif',
+          '& h1, & h2, & h3, & h4': {
+            fontFamily: 'var(--font-display), Outfit, sans-serif',
+          },
+        }}
+      >
         <ScrollReveal direction="up" delay={0.05}>
         <Box sx={{ 
           display: 'grid', 

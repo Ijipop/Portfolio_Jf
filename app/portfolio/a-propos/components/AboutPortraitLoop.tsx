@@ -11,9 +11,10 @@ const PORTRAIT_MAX_WIDTH = 340
 const PORTRAIT_ASPECT = '3 / 4'
 const PORTRAIT_INTERVAL_MS = 5200
 
+/** Vraie photo d’abord, puis pixel 8 bits — alternance lente. */
 const PORTRAITS = [
-  { src: '/img/moi8bit.png', pixelated: true },
   { src: '/img/Jf.jpg', pixelated: false },
+  { src: '/img/moi8bit.png', pixelated: true },
 ] as const
 
 type AboutPortraitLoopProps = {

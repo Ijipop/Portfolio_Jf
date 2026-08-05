@@ -539,7 +539,10 @@ export default function ProjectCard({
                 variant={isShowcaseCard ? 'h6' : 'subtitle2'}
                 component="h2"
                 sx={{
-                  fontWeight: 800,
+                  fontFamily: isShowcaseCard
+                    ? 'var(--font-display), Outfit, sans-serif'
+                    : undefined,
+                  fontWeight: 700,
                   lineHeight: 1.2,
                   letterSpacing: '-0.03em',
                   color: textColor,
@@ -556,23 +559,25 @@ export default function ProjectCard({
               >
                 {project.name}
               </Typography>
-              <Box
-                sx={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: 0.75,
-                  flexWrap: 'wrap',
-                  justifyContent: 'center',
-                  minHeight: 22,
-                }}
-              >
-                <StatusChip
-                  icon={getStatusIcon(project.status)}
-                  label={project.status}
-                  color={getStatusColor(project.status)}
-                  size="small"
-                />
-              </Box>
+              {!isShowcaseCard ? (
+                <Box
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 0.75,
+                    flexWrap: 'wrap',
+                    justifyContent: 'center',
+                    minHeight: 22,
+                  }}
+                >
+                  <StatusChip
+                    icon={getStatusIcon(project.status)}
+                    label={project.status}
+                    color={getStatusColor(project.status)}
+                    size="small"
+                  />
+                </Box>
+              ) : null}
             </Box>
 
             <Box
