@@ -103,17 +103,24 @@ function resolveBrandIcon(project: Project): string | undefined {
     return '/imgs/images/CPU-ZE.png'
   }
   if (n.includes('deskdot') || n.includes('desk dot') || n.includes('desk-dot') || u.includes('/deskdot')) {
-    return '/img/deskdot/deskdot-icon.png'
+    return '/imgs/images/DeskDot_icon.png'
   }
   return undefined
 }
 
+/** Ignore les data URLs trop lourdes (souvent cassées via next/image) — fallback icône marque. */
+const MAX_INLINE_IMAGE_CHARS = 120_000
+
 function resolveProjectCardImage(project: Project): string | undefined {
+  /** Image admin d’abord — les icônes marque locales ne sont qu’un fallback. */
+  const uploaded = project.imageUrl?.trim()
+  if (uploaded) {
+    const isHugeDataUrl = uploaded.startsWith('data:') && uploaded.length > MAX_INLINE_IMAGE_CHARS
+    if (!isHugeDataUrl) return uploaded
+  }
+
   const brandIcon = resolveBrandIcon(project)
   if (brandIcon) return brandIcon
-
-  const uploaded = project.imageUrl?.trim()
-  if (uploaded) return uploaded
 
   const n = project.name.toLowerCase()
   if (n.includes('thermo') && n.includes('trappeur')) return '/imgs/images/Thermo.png'
@@ -272,7 +279,16 @@ export default function ProjectCard({
 
   const brandIcon = resolveBrandIcon(project)
   const cardImageRaw = resolveProjectCardImage(project)
-  const cardImageHref = cardImageRaw ? resolveImageUrl(cardImageRaw) : ''
+  const [imageBroken, setImageBroken] = React.useState(false)
+  React.useEffect(() => {
+    setImageBroken(false)
+  }, [cardImageRaw, project.id])
+  const fallbackImageHref = brandIcon ? resolveImageUrl(brandIcon) : ''
+  const preferredImageHref = cardImageRaw ? resolveImageUrl(cardImageRaw) : ''
+  const cardImageHref =
+    imageBroken && fallbackImageHref && fallbackImageHref !== preferredImageHref
+      ? fallbackImageHref
+      : preferredImageHref
   /** Tile carré réservé aux cartes logiciel — les sites web gardent tous le même cadre 16:10. */
   const usesAppIconPresentation = isSoftwareCard
   /** Icône marque dans un cadre site : contain + padding (pas cover). */
@@ -472,6 +488,7 @@ export default function ProjectCard({
                   component="img"
                   src={cardImageHref}
                   alt={project.name}
+                  onError={() => setImageBroken(true)}
                   sx={{
                     width: '100%',
                     height: '100%',
@@ -491,6 +508,7 @@ export default function ProjectCard({
                     cardImageHref.startsWith('data:') ||
                     cardImageHref.toLowerCase().includes('.svg')
                   }
+                  onError={() => setImageBroken(true)}
                   sizes="56px"
                   style={{
                     width: '100%',
