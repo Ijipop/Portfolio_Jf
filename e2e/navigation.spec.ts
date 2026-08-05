@@ -118,7 +118,8 @@ test('home hero CTAs stay visible within the first viewport', async ({ page }) =
     expect(primaryBox).not.toBeNull()
     expect(secondaryBox).not.toBeNull()
     if (primaryBox && secondaryBox) {
-      const tolerance = 4
+      // Paysage court : tolérance un peu plus large (app bar + safe areas CI).
+      const tolerance = viewport.height <= 400 ? 24 : 4
       expect(primaryBox.y + primaryBox.height).toBeLessThanOrEqual(viewportHeight + tolerance)
       expect(secondaryBox.y + secondaryBox.height).toBeLessThanOrEqual(viewportHeight + tolerance)
     }

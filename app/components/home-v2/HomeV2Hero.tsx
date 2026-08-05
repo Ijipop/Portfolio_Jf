@@ -49,6 +49,13 @@ export default function HomeV2Hero() {
         px: { xs: 0.5, sm: 1 },
         overflow: 'visible',
         boxSizing: 'border-box',
+        /** iPhone paysage / courtes hauteurs : tout le hero + CTAs dans le 1er viewport. */
+        '@media (max-height: 480px)': {
+          minHeight: 'auto',
+          alignItems: 'flex-start',
+          pt: 0.75,
+          pb: 1.25,
+        },
       }}
     >
       <motion.div
@@ -70,6 +77,7 @@ export default function HomeV2Hero() {
                 display: 'flex',
                 justifyContent: 'center',
                 mb: { xs: 2.5, md: 3 },
+                '@media (max-height: 480px)': { mb: 0.75 },
               }}
             >
               <IjipopGlitchTitle
@@ -82,6 +90,9 @@ export default function HomeV2Hero() {
                     md: 'clamp(5.8rem, 9vw, 7.5rem)',
                   },
                   textAlign: 'center',
+                  '@media (max-height: 480px)': {
+                    fontSize: 'clamp(2.4rem, 9vh, 3.2rem) !important',
+                  },
                 }}
               />
             </Box>
@@ -101,6 +112,11 @@ export default function HomeV2Hero() {
                 letterSpacing: '-0.03em',
                 color: v2.text,
                 mb: 1.5,
+                '@media (max-height: 480px)': {
+                  fontSize: '1.05rem',
+                  mb: 0.5,
+                  lineHeight: 1.2,
+                },
               }}
             >
               {t('homeV2.heroHeadline')}
@@ -117,6 +133,15 @@ export default function HomeV2Hero() {
                 mx: 'auto',
                 lineHeight: 1.55,
                 mb: 2,
+                '@media (max-height: 480px)': {
+                  fontSize: '0.88rem',
+                  lineHeight: 1.35,
+                  mb: 0.75,
+                  display: '-webkit-box',
+                  WebkitLineClamp: 2,
+                  WebkitBoxOrient: 'vertical',
+                  overflow: 'hidden',
+                },
               }}
             >
               {t('homeV2.heroSubtitle')}
@@ -131,6 +156,10 @@ export default function HomeV2Hero() {
                 fontSize: '0.95rem',
                 color: v2.text,
                 mb: 0.25,
+                '@media (max-height: 480px)': {
+                  fontSize: '0.8rem',
+                  mb: 0,
+                },
               }}
             >
               {t('homeV2.heroRealName')}
@@ -141,6 +170,10 @@ export default function HomeV2Hero() {
                 fontSize: '0.88rem',
                 color: v2.textMuted,
                 mb: 0,
+                '@media (max-height: 480px)': {
+                  fontSize: '0.75rem',
+                  display: 'none',
+                },
               }}
             >
               {t('homeV2.heroOneLiner')}
@@ -157,6 +190,13 @@ export default function HomeV2Hero() {
                 mt: { xs: 3, md: 3.5 },
                 maxWidth: { xs: 320, sm: 420 },
                 mx: 'auto',
+                '@media (max-height: 480px)': {
+                  mt: 1,
+                  flexDirection: 'row',
+                  maxWidth: 400,
+                  spacing: 1,
+                  gap: 1,
+                },
               }}
             >
               <HomeV2Cta href={CONTACT_PATH} variant="primary" size="small" fullWidth>
