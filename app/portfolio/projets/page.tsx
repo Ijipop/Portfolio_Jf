@@ -20,15 +20,14 @@ import React from 'react'
 import AppBarComponent from '../../components/appBar'
 import ProjectsLoadingFrameSection from './ProjectsLoadingFrameSection'
 import HeaderSection from '../../components/shared/HeaderSection'
-import IjipopGlitchTitle from '../../components/shared/IjipopGlitchTitle'
 import PageWrapper from '../../components/shared/PageWrapper'
 import InteractiveBackgroundSection from '../../components/shared/InteractiveBackgroundSection'
 import Footer from '../../components/Footer'
 import SeoInternalLinkCta from '../../components/seo/SeoInternalLinkCta'
 import { DESIGN_TOKENS } from '../../design-system/constants'
+import { SITE_DARK } from '../../design-system/siteDark'
 import { useLanguage } from '../../contexts/LanguageContext'
 import { CONTACT_SUBJECT_SOFTWARE } from '@/i18n/contactSubjects'
-import { useThemeColors } from '../../hooks/useThemeColors'
 import { useTextColor } from '../../hooks/useTextColor'
 import type { Project, TimelendrLatestLinks } from './projectTypes'
 import { ProjectsGrid } from './components/projectsGrid'
@@ -44,10 +43,10 @@ const AnimatedBox = styled(Box)({
 export default function Projets() {
   const router = useRouter()
   const pathname = usePathname()
-  const { primary } = useThemeColors()
+  const brand = SITE_DARK.brandOrange
   const textColor = useTextColor()
   const { t, locale } = useLanguage()
-  /** Couleurs de section alignées sur la palette / thème courant (Créa et Site). */
+  /** Couleurs de section alignées sur SITE (ambre marque). */
   const projetsSectionText = textColor
   const [projects, setProjects] = useState<Project[]>([])
   const [loading, setLoading] = useState(true)
@@ -171,6 +170,10 @@ export default function Projets() {
         void router.push('/spacetaker')
         return
       }
+      if (normalized.includes('/deskdot') || normalized.includes('deskdot') || normalized.includes('desk-dot')) {
+        void router.push('/deskdot')
+        return
+      }
       navigateProjectUrl(url, router)
     },
     [router],
@@ -222,7 +225,7 @@ export default function Projets() {
     <PageWrapper backgroundVariant="default" overlayVariant="light" overflowX="hidden" overflowY="auto">
       <AppBarComponent />
 
-      <HeaderSection title={<IjipopGlitchTitle text={t('projects.title')} />} subtitle={t('projects.subtitle')} />
+      <HeaderSection title={t('projects.title')} subtitle={t('projects.subtitle')} />
 
       <InteractiveBackgroundSection>
         <Container
@@ -270,15 +273,15 @@ export default function Projets() {
                   color: alpha(projetsSectionText, 0.72),
                   transition: 'background-color 0.2s ease, color 0.2s ease',
                   '&.Mui-selected': {
-                    bgcolor: alpha(primary, 0.16),
-                    color: primary,
+                    bgcolor: alpha(brand, 0.16),
+                    color: brand,
                     boxShadow: 'none',
                     '&:hover': {
-                      bgcolor: alpha(primary, 0.2),
+                      bgcolor: alpha(brand, 0.2),
                     },
                   },
                   '&:hover': {
-                    bgcolor: alpha(primary, 0.08),
+                    bgcolor: alpha(brand, 0.08),
                   },
                 },
               }}
@@ -319,15 +322,15 @@ export default function Projets() {
                       fontSize: '0.82rem',
                       color: alpha(projetsSectionText, 0.7),
                       '&.Mui-selected': {
-                        bgcolor: alpha(primary, 0.14),
-                        color: primary,
-                        '&:hover': { bgcolor: alpha(primary, 0.18) },
+                        bgcolor: alpha(brand, 0.14),
+                        color: brand,
+                        '&:hover': { bgcolor: alpha(brand, 0.18) },
                       },
                     },
                   }}
                 >
-                  <ToggleButton value="personal">{t('projects.webSectionPersonalTitle')}</ToggleButton>
                   <ToggleButton value="professional">{t('projects.webSectionProfessionalTitle')}</ToggleButton>
+                  <ToggleButton value="personal">{t('projects.webSectionPersonalTitle')}</ToggleButton>
                 </ToggleButtonGroup>
               </Box>
 

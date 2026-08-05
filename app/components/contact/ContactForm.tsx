@@ -53,7 +53,7 @@ function scrollToContactForm(): void {
 
 const StyledTextField = styled(TextField, {
   shouldForwardProp: (prop) => prop !== 'textColor' && prop !== 'helperTextColor',
-})<{ textColor?: string; helperTextColor?: string }>(({ theme, textColor, helperTextColor }) => ({
+})<{ textColor?: string; helperTextColor?: string }>(({ textColor, helperTextColor }) => ({
   '& .MuiOutlinedInput-root': {
     borderRadius: DESIGN_TOKENS.borderRadius.small,
     transition: DESIGN_TOKENS.transitions.normal,
@@ -63,20 +63,20 @@ const StyledTextField = styled(TextField, {
     },
     '&:hover': {
       '& .MuiOutlinedInput-notchedOutline': {
-        borderColor: theme.palette.primary.main,
+        borderColor: SITE_DARK.brandOrange,
       },
     },
     '&.Mui-focused': {
       '& .MuiOutlinedInput-notchedOutline': {
         borderWidth: '2px',
-        borderColor: theme.palette.primary.main,
+        borderColor: SITE_DARK.brandOrange,
       },
     },
   },
   '& .MuiInputLabel-root': {
     color: textColor || '#ffffff',
     '&.Mui-focused': {
-      color: theme.palette.primary.main,
+      color: SITE_DARK.brandOrange,
     },
   },
   '& .MuiFormHelperText-root': {

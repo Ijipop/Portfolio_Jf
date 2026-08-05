@@ -1,8 +1,7 @@
 'use client'
 
 import Box from '@mui/material/Box'
-import Link from 'next/link'
-import CTAButton from './CTAButton'
+import HomeV2Cta from '@/components/home-v2/HomeV2Cta'
 import { DESIGN_TOKENS } from '../../design-system/constants'
 import { useSiteDarkChrome } from '@/hooks/useSiteDarkChrome'
 import { SITE_DARK } from '@/design-system/siteDark'
@@ -16,8 +15,7 @@ interface StickyCTAProps {
 }
 
 export default function StickyCTA({
-  text = "Travaillons ensemble",
-  onClick,
+  text = 'Travaillons ensemble',
   href = '/portfolio/contact',
   embedded = false,
 }: StickyCTAProps) {
@@ -31,7 +29,7 @@ export default function StickyCTA({
         right: embedded ? { xs: 'auto', md: 24 } : { xs: 0, md: 24 },
         zIndex: DESIGN_TOKENS.zIndex.stickyBar,
         background: siteDarkChrome
-          ? `linear-gradient(to top, ${SITE_DARK.appBarGlass} 0%, rgba(8, 8, 12, 0.95) 100%)`
+          ? `linear-gradient(to top, ${SITE_DARK.appBarGlass} 0%, rgba(12, 17, 24, 0.95) 100%)`
           : 'linear-gradient(to top, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.9) 100%)',
         backdropFilter: 'blur(10px)',
         borderTop: siteDarkChrome ? `1px solid ${SITE_DARK.border}` : '1px solid rgba(0, 0, 0, 0.1)',
@@ -40,7 +38,10 @@ export default function StickyCTA({
           xs: 'none',
           md: siteDarkChrome ? `1px solid ${SITE_DARK.border}` : '1px solid rgba(0, 0, 0, 0.1)',
         },
-        padding: { xs: `${DESIGN_TOKENS.spacing.sm}px ${DESIGN_TOKENS.spacing.md}px`, md: DESIGN_TOKENS.spacing.md },
+        padding: {
+          xs: `${DESIGN_TOKENS.spacing.sm}px ${DESIGN_TOKENS.spacing.md}px`,
+          md: DESIGN_TOKENS.spacing.md,
+        },
         boxShadow: '0 -4px 20px rgba(0,0,0,0.1)',
         display: 'block',
         width: { xs: '100%', md: 320 },
@@ -49,18 +50,9 @@ export default function StickyCTA({
         pointerEvents: 'auto',
       }}
     >
-      {onClick ? (
-        <CTAButton variant="primary" fullWidth size="large" onClick={onClick}>
-          {text}
-        </CTAButton>
-      ) : (
-        <Link href={href} style={{ textDecoration: 'none' }}>
-          <CTAButton variant="primary" fullWidth size="large">
-            {text}
-          </CTAButton>
-        </Link>
-      )}
+      <HomeV2Cta href={href} variant="primary" fullWidth size="large">
+        {text}
+      </HomeV2Cta>
     </Box>
   )
 }
-

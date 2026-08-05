@@ -36,16 +36,16 @@ export default function SiteDarkBackdrop({ force = false }: SiteDarkBackdropProp
           transform: 'translateX(-50%)',
           width: 'min(900px, 120vw)',
           height: 'min(700px, 80vh)',
-          background: `radial-gradient(ellipse at center, ${SITE_DARK.brandGlowStrong} 0%, transparent 70%)`,
-          opacity: 0.85,
+          background: `radial-gradient(ellipse at center, ${SITE_DARK.brandGlow} 0%, transparent 72%)`,
+          opacity: 0.55,
         },
         '&::after': {
           content: '""',
           position: 'absolute',
           inset: 0,
-          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E")`,
-          opacity: 0.3,
-          mixBlendMode: 'overlay',
+          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.2' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.018'/%3E%3C/svg%3E")`,
+          opacity: 1,
+          mixBlendMode: 'normal',
         },
       }}
     />

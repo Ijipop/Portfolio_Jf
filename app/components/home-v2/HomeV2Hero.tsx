@@ -72,38 +72,18 @@ export default function HomeV2Hero() {
                 mb: { xs: 2.5, md: 3 },
               }}
             >
-              <Box sx={{ position: 'relative', display: 'inline-flex' }}>
-                <Box
-                  aria-hidden
-                  sx={{
-                    position: 'absolute',
-                    top: '50%',
-                    left: '50%',
-                    transform: 'translate(-50%, -48%)',
-                    width: '118%',
-                    height: '110%',
-                    minWidth: 240,
-                    minHeight: 100,
-                    background: `radial-gradient(ellipse at center, ${v2.brandGlowStrong} 0%, transparent 70%)`,
-                    pointerEvents: 'none',
-                    zIndex: 0,
-                  }}
-                />
-                <IjipopGlitchTitle
-                  text={t('homeV2.heroTitle')}
-                  variant="hero"
-                  sx={{
-                    position: 'relative',
-                    zIndex: 1,
-                    fontSize: {
-                      xs: 'clamp(3.8rem, 16vw, 5rem)',
-                      sm: 'clamp(5rem, 12vw, 6.8rem)',
-                      md: 'clamp(5.8rem, 9vw, 7.5rem)',
-                    },
-                    textAlign: 'center',
-                  }}
-                />
-              </Box>
+              <IjipopGlitchTitle
+                text={t('homeV2.heroTitle')}
+                variant="hero"
+                sx={{
+                  fontSize: {
+                    xs: 'clamp(3.8rem, 16vw, 5rem)',
+                    sm: 'clamp(5rem, 12vw, 6.8rem)',
+                    md: 'clamp(5.8rem, 9vw, 7.5rem)',
+                  },
+                  textAlign: 'center',
+                }}
+              />
             </Box>
           </motion.div>
 

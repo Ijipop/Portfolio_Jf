@@ -43,6 +43,7 @@ import {
 } from '../utils/projectCardSoftwareSx'
 
 const MAX_VISIBLE_TECHS = 3
+const MAX_SHOWCASE_TECHS = 2
 
 const StatusChip = styled(Chip)(({ theme }) => ({
   borderRadius: DESIGN_TOKENS.borderRadius.medium,
@@ -100,6 +101,9 @@ function resolveBrandIcon(project: Project): string | undefined {
   }
   if (n.includes('cpu-ze') || n.includes('cpu ze') || n.includes('cpuze') || u.includes('/cpu-ze')) {
     return '/imgs/images/CPU-ZE.png'
+  }
+  if (n.includes('deskdot') || n.includes('desk dot') || n.includes('desk-dot') || u.includes('/deskdot')) {
+    return '/img/deskdot/deskdot-icon.png'
   }
   return undefined
 }
@@ -274,8 +278,11 @@ export default function ProjectCard({
   /** Icône marque dans un cadre site : contain + padding (pas cover). */
   const mediaUsesContain = usesAppIconPresentation || Boolean(brandIcon && isWebCard)
   const projectTechs = project.technologies.split(',').map((tech) => tech.trim()).filter(Boolean)
-  const visibleTechs = projectTechs.slice(0, MAX_VISIBLE_TECHS)
-  const overflowTechCount = Math.max(0, projectTechs.length - MAX_VISIBLE_TECHS)
+  const techLimit = isShowcaseCard ? MAX_SHOWCASE_TECHS : MAX_VISIBLE_TECHS
+  const visibleTechs = projectTechs.slice(0, techLimit)
+  const overflowTechCount = isShowcaseCard
+    ? 0
+    : Math.max(0, projectTechs.length - techLimit)
   const projectRoleLabel = isWebCard
     ? t('projects.metaRoleWeb')
     : isBrowserApp

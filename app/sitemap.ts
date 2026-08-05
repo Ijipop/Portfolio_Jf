@@ -18,6 +18,7 @@ const paths: { path: string; priority: number; changeFrequency: MetadataRoute.Si
     { path: '/logiciel/timelendr', priority: 0.7, changeFrequency: 'monthly' },
     { path: '/cpu-ze', priority: 0.75, changeFrequency: 'monthly' },
     { path: '/spacetaker', priority: 0.75, changeFrequency: 'monthly' },
+    { path: '/deskdot', priority: 0.75, changeFrequency: 'monthly' },
   ]
 
 export default function sitemap(): MetadataRoute.Sitemap {

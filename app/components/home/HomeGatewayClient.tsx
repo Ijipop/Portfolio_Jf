@@ -177,7 +177,8 @@ export default function HomeGatewayClient() {
                     transform: 'translate(-50%, -50%)',
                     width: '120%',
                     height: '100%',
-                    background: `radial-gradient(ellipse 80% 90% at 50% 70%, ${SITE_DARK.brandGlowStrong} 0%, transparent 72%)`,
+                    background: `radial-gradient(ellipse 80% 90% at 50% 70%, ${SITE_DARK.brandGlow} 0%, transparent 72%)`,
+                    opacity: 0.55,
                   }}
                 />
                 <Box

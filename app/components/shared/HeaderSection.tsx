@@ -98,25 +98,31 @@ const HeaderSection = forwardRef<HTMLDivElement, HeaderSectionProps>(function He
     xl: 'calc(132px + var(--app-bar-height, 64px))',
   }
   
+  const calmFunnelHeader = siteDarkChrome && !fullViewport
+
   return (
     <Box
       ref={ref}
       sx={{
         background: fullViewport
           ? fullViewportSurfaceBg
-          : siteDarkChrome
-            ? siteDarkGlassSurface.background
-            : siteLightGlassSurface.background,
-        backdropFilter: 'blur(18px) saturate(1.18)',
-        WebkitBackdropFilter: 'blur(18px) saturate(1.18)',
-        ...(siteDarkChrome && !fullViewport ? siteDarkGlassSurface : {}),
+          : calmFunnelHeader
+            ? 'transparent'
+            : siteDarkChrome
+              ? siteDarkGlassSurface.background
+              : siteLightGlassSurface.background,
+        backdropFilter: calmFunnelHeader ? 'none' : 'blur(18px) saturate(1.18)',
+        WebkitBackdropFilter: calmFunnelHeader ? 'none' : 'blur(18px) saturate(1.18)',
+        ...(siteDarkChrome && !fullViewport && !calmFunnelHeader ? siteDarkGlassSurface : {}),
         ...(!siteDarkChrome && !fullViewport ? siteLightGlassSurface : {}),
         borderBottom: siteDarkChrome
           ? `1px solid ${SITE_DARK.border}`
           : `1px solid ${SITE_LIGHT.border}`,
         boxShadow: fullViewport
           ? `0 18px 70px ${alpha(primary, 0.18)}, inset 0 1px 0 ${alpha('#ffffff', 0.26)}`
-          : '0 6px 18px rgba(2, 6, 23, 0.14), inset 0 1px 0 rgba(255, 255, 255, 0.2)',
+          : calmFunnelHeader
+            ? 'none'
+            : '0 6px 18px rgba(2, 6, 23, 0.14), inset 0 1px 0 rgba(255, 255, 255, 0.2)',
         color: textColor,
         padding: fullViewport
           ? {
@@ -158,22 +164,28 @@ const HeaderSection = forwardRef<HTMLDivElement, HeaderSectionProps>(function He
             padding: 'calc(34px + var(--app-bar-height, 64px)) 0 28px',
           },
         }),
-        '&::before': {
-          content: '""',
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          background: fullViewport
-            ? `linear-gradient(${alpha(primary, 0.08)} 1px, transparent 1px),
+        ...(!calmFunnelHeader
+          ? {
+              '&::before': {
+                content: '""',
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                background: fullViewport
+                  ? `linear-gradient(${alpha(primary, 0.08)} 1px, transparent 1px),
                linear-gradient(90deg, ${alpha(primary, 0.08)} 1px, transparent 1px),
                url("data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%23ffffff" fill-opacity="0.1"%3E%3Ccircle cx="30" cy="30" r="1.5"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`
-            : 'url("data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%23ffffff" fill-opacity="0.08"%3E%3Ccircle cx="30" cy="30" r="1.5"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")',
-          backgroundSize: fullViewport ? '52px 52px, 52px 52px, 60px 60px' : undefined,
-          opacity: fullViewport ? 0.52 : 1,
-          maskImage: fullViewport ? 'linear-gradient(to bottom, black 0%, transparent 78%)' : undefined,
-        },
+                  : 'url("data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%23ffffff" fill-opacity="0.08"%3E%3Ccircle cx="30" cy="30" r="1.5"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")',
+                backgroundSize: fullViewport ? '52px 52px, 52px 52px, 60px 60px' : undefined,
+                opacity: fullViewport ? 0.52 : 1,
+                maskImage: fullViewport
+                  ? 'linear-gradient(to bottom, black 0%, transparent 78%)'
+                  : undefined,
+              },
+            }
+          : {}),
       }}
     >
       <Container
@@ -211,12 +223,31 @@ const HeaderSection = forwardRef<HTMLDivElement, HeaderSectionProps>(function He
                 mb: '26px',
               },
             }),
-            fontWeight: 900,
-            fontSize: titleIsGlitch ? 'inherit' : { xs: '1.75rem', sm: '2.75rem', md: '3.75rem' },
-            textShadow: titleIsGlitch ? 'none' : `0 0 20px ${hexToRgba(primary, 0.8)}, 0 4px 8px rgba(0,0,0,0.3)`,
-            letterSpacing: titleIsGlitch ? 'inherit' : { xs: '0.05em', sm: '0.1em' },
-            textTransform: titleIsGlitch ? 'none' : 'uppercase',
-            color: titleIsGlitch ? 'transparent' : primary,
+            fontFamily: titleIsGlitch
+              ? undefined
+              : 'var(--font-display), Outfit, sans-serif',
+            fontWeight: titleIsGlitch ? 900 : 700,
+            fontSize: titleIsGlitch
+              ? 'inherit'
+              : calmFunnelHeader
+                ? { xs: '2rem', sm: '2.5rem', md: '3rem' }
+                : { xs: '1.75rem', sm: '2.75rem', md: '3.75rem' },
+            textShadow: titleIsGlitch
+              ? 'none'
+              : calmFunnelHeader
+                ? 'none'
+                : `0 0 20px ${hexToRgba(primary, 0.8)}, 0 4px 8px rgba(0,0,0,0.3)`,
+            letterSpacing: titleIsGlitch
+              ? 'inherit'
+              : calmFunnelHeader
+                ? '-0.03em'
+                : { xs: '0.05em', sm: '0.1em' },
+            textTransform: titleIsGlitch || calmFunnelHeader ? 'none' : 'uppercase',
+            color: titleIsGlitch
+              ? 'transparent'
+              : calmFunnelHeader
+                ? SITE_DARK.text
+                : primary,
             filter: 'none',
             textRendering: 'optimizeLegibility',
             WebkitFontSmoothing: 'antialiased',
@@ -228,11 +259,15 @@ const HeaderSection = forwardRef<HTMLDivElement, HeaderSectionProps>(function He
                   lineHeight: 'inherit',
                   imageRendering: 'auto',
                 }
-              : {
-                  imageRendering: 'crisp-edges',
-                  backfaceVisibility: 'hidden',
-                  transform: 'translateZ(0)',
-                }),
+              : calmFunnelHeader
+                ? {
+                    lineHeight: 1.15,
+                  }
+                : {
+                    imageRendering: 'crisp-edges',
+                    backfaceVisibility: 'hidden',
+                    transform: 'translateZ(0)',
+                  }),
             position: 'relative',
             zIndex: 1,
           }}

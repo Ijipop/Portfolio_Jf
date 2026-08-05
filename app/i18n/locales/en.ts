@@ -378,7 +378,7 @@ export const en = {
     contact: {
       title: 'Contact',
       subtitle:
-        'New site, redesign, or updates? Describe your need in a few lines — I reply within 24 hours. First call included.',
+        'New site, redesign, or updates? Describe your need — reply within 24 hours.',
       email: 'Email',
       phone: 'Phone',
       phoneOnRequest: 'On request!',
@@ -687,6 +687,24 @@ export const en = {
       b3: 'Quick to open, easy to read',
       b4: 'Available on Windows and macOS',
       github: 'View on GitHub',
+      otherSoftware: 'More software →',
+      moreLinks: 'Links',
+    },
+    deskDot: {
+      title: 'DeskDot',
+      lead: 'Radial launcher for Windows. Hover, click, it’s launched.',
+      downloadWindows: 'Download for Windows',
+      downloadSoon: 'Coming soon',
+      galleryTitle: 'Preview',
+      galleryEmpty:
+        'Screenshots will show up here — add images to public/img/deskdot/ and list them in gallery.json.',
+      benefitsTitle: 'At a glance',
+      b1: 'Instant — Dot → ring → apps, folders, files',
+      b2: 'Customizable — colors, size, sounds, pills or pie, blur, shadow',
+      b3: 'Multiple Dots / layers — scroll wheel to switch context',
+      b4: 'Auto-hide — invisible until hover (Alt to reveal all)',
+      b5: 'Native Windows — drag & drop, shortcuts, start with Windows',
+      b6: 'Local & private — config stays on your machine',
       otherSoftware: 'More software →',
       moreLinks: 'Links',
     },

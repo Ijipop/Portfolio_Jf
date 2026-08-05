@@ -6,8 +6,6 @@ import dynamic from 'next/dynamic'
 import AppBarComponent from '@/components/appBar'
 import PageWrapper from '@/components/shared/PageWrapper'
 import InteractiveBackgroundSection from '@/components/shared/InteractiveBackgroundSection'
-import ScrollTriggeredStickyCTA from '@/components/shared/ScrollTriggeredStickyCTA'
-import HomeV2Backdrop from '@/components/home-v2/HomeV2Backdrop'
 import HomeV2Hero from '@/components/home-v2/HomeV2Hero'
 import HomeV2CaseStudies from '@/components/home-v2/HomeV2CaseStudies'
 import HomeV2Services from '@/components/home-v2/HomeV2Services'
@@ -76,7 +74,6 @@ export default function HomeClient({ initialShowIntro }: { initialShowIntro: boo
       {showIntro && <SignatureIntro onComplete={handleIntroComplete} />}
       {!showIntro && (
         <PageWrapper backgroundVariant="default">
-          <HomeV2Backdrop glowPlacement="top" />
           <Box
             sx={{
               position: 'relative',
@@ -131,7 +128,6 @@ export default function HomeClient({ initialShowIntro }: { initialShowIntro: boo
             </InteractiveBackgroundSection>
 
             <Footer mobileBottomClearance />
-            <ScrollTriggeredStickyCTA textKey="homeV2.heroCtaPrimary" />
           </Box>
         </PageWrapper>
       )}

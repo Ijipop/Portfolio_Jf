@@ -379,7 +379,7 @@ export const fr = {
     contact: {
       title: 'Contact',
       subtitle:
-        'Nouveau site, refonte ou site à mettre à jour ? Décrivez votre besoin en quelques lignes — je vous réponds sous 24 h. Premier appel offert.',
+        'Nouveau site, refonte ou mise à jour ? Décrivez votre besoin — réponse sous 24 h.',
       email: 'Email',
       phone: 'Téléphone',
       phoneOnRequest: 'Sur demande !',
@@ -674,7 +674,7 @@ export const fr = {
       otherSoftware: 'Autres logiciels →',
       moreLinks: 'Liens',
     },
-    spaceTaker: {
+      spaceTaker: {
       title: 'Space Taker',
       lead: 'Repérer ce qui prend de la place sur le disque — simple et rapide.',
       downloadWindows: 'Télécharger pour Windows',
@@ -687,6 +687,24 @@ export const fr = {
       b3: 'Rapide à lancer, facile à lire',
       b4: 'Disponible sur Windows et macOS',
       github: 'Voir sur GitHub',
+      otherSoftware: 'Autres logiciels →',
+      moreLinks: 'Liens',
+    },
+    deskDot: {
+      title: 'DeskDot',
+      lead: 'Lanceur radial pour Windows. Survole, clique, c’est lancé.',
+      downloadWindows: 'Télécharger pour Windows',
+      downloadSoon: 'Bientôt disponible',
+      galleryTitle: 'Aperçu',
+      galleryEmpty:
+        'Les captures arriveront ici — déposez des images dans public/img/deskdot/ et listez-les dans gallery.json.',
+      benefitsTitle: 'En bref',
+      b1: 'Instantané — Dot → anneau → apps, dossiers, fichiers',
+      b2: 'Personnalisable — couleurs, taille, sons, pastilles ou tarte, flou, ombre',
+      b3: 'Plusieurs Dots / couches — molette pour changer de contexte',
+      b4: 'Auto-hide — invisible jusqu’au survol (Alt pour tout montrer)',
+      b5: 'Windows natif — glisser-déposer, raccourcis, démarrage auto',
+      b6: 'Local & privé — config sur ta machine',
       otherSoftware: 'Autres logiciels →',
       moreLinks: 'Liens',
     },

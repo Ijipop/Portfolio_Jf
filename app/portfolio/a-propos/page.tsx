@@ -12,7 +12,6 @@ import { useRouter, usePathname } from 'next/navigation'
 import { useState, useEffect } from 'react'
 import { shouldShowTopology } from '@/utils/topologyRoutes'
 import HeaderSection from '../../components/shared/HeaderSection'
-import IjipopGlitchTitle from '../../components/shared/IjipopGlitchTitle'
 import AppBarComponent from '../../components/appBar'
 import PageWrapper from '../../components/shared/PageWrapper'
 import InteractiveBackgroundSection from '../../components/shared/InteractiveBackgroundSection'
@@ -252,10 +251,7 @@ export default function About() {
       <AppBarComponent />
       
       {/* Hero Section */}
-      <HeaderSection 
-        title={<IjipopGlitchTitle text={t('about.title')} />}
-        subtitle={t('about.subtitle')}
-      />
+      <HeaderSection title={t('about.title')} subtitle={t('about.subtitle')} />
 
       <InteractiveBackgroundSection>
       <Container

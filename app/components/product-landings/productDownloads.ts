@@ -15,6 +15,11 @@ export const PRODUCT_DOWNLOADS = {
       'https://github.com/Ijipop/Space-Taker/releases/download/v0.2.0/SpaceTaker_0.2.0_aarch64.dmg',
     github: 'https://github.com/Ijipop/Space-Taker',
   },
+  /** Fallback vide : source de vérité = windowsUrl admin. */
+  deskDot: {
+    windows: '',
+    github: '',
+  },
 } as const
 
 export type ProductDownloadLinks = {

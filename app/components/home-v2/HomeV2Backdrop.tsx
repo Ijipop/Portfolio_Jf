@@ -11,7 +11,7 @@ type HomeV2BackdropProps = {
   glowPlacement?: 'top' | 'center'
 }
 
-/** Fond confiance : encre bleutée, lueur ambre discrète, grain léger. */
+/** Fond confiance : encre bleutée, une lueur ambre soft, grain très fin. */
 export default function HomeV2Backdrop({ glowPlacement = 'top' }: HomeV2BackdropProps) {
   const centered = glowPlacement === 'center'
 
@@ -32,17 +32,17 @@ export default function HomeV2Backdrop({ glowPlacement = 'top' }: HomeV2Backdrop
           transform: centered ? 'translate(-50%, -50%)' : 'translateX(-50%)',
           width: centered ? 'min(860px, 72vw)' : 'min(920px, 110vw)',
           height: centered ? 'min(420px, 42vh)' : 'min(520px, 62vh)',
-          background: `radial-gradient(ellipse at center, ${SITE_DARK.brandGlowStrong} 0%, transparent 70%)`,
-          opacity: centered ? 0.55 : 0.5,
+          background: `radial-gradient(ellipse at center, ${SITE_DARK.brandGlow} 0%, transparent 72%)`,
+          opacity: centered ? 0.7 : 0.65,
         },
         '&::after': {
           content: '""',
           position: 'absolute',
           inset: 0,
           backgroundImage: `
-            radial-gradient(ellipse 80% 50% at 10% 100%, rgba(56, 90, 130, 0.12) 0%, transparent 55%),
-            radial-gradient(ellipse 60% 40% at 90% 20%, rgba(232, 93, 4, 0.06) 0%, transparent 50%),
-            url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E")
+            radial-gradient(ellipse 80% 50% at 10% 100%, rgba(56, 90, 130, 0.1) 0%, transparent 55%),
+            radial-gradient(ellipse 60% 40% at 90% 20%, rgba(232, 93, 4, 0.04) 0%, transparent 50%),
+            url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.2' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.018'/%3E%3C/svg%3E")
           `,
           opacity: 1,
           mixBlendMode: 'normal',

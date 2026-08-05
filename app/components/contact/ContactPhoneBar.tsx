@@ -4,7 +4,6 @@ import PhoneOutlinedIcon from '@mui/icons-material/PhoneOutlined'
 import SmsOutlinedIcon from '@mui/icons-material/SmsOutlined'
 import Box from '@mui/material/Box'
 import Stack from '@mui/material/Stack'
-import Typography from '@mui/material/Typography'
 import {
   SUPPORT_PHONE_DISPLAY,
   SUPPORT_PHONE_HREF,
@@ -49,7 +48,6 @@ export default function ContactPhoneBar({ primary, textColor, compact = false }:
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        gap: 1,
         mb: compact ? 2.5 : 3.5,
       }}
     >
@@ -63,18 +61,6 @@ export default function ContactPhoneBar({ primary, textColor, compact = false }:
           {t('contact.smsCta')}
         </Box>
       </Stack>
-      <Typography
-        sx={{
-          fontSize: '0.8rem',
-          color: textColor,
-          opacity: 0.72,
-          textAlign: 'center',
-        }}
-      >
-        {t('contact.phoneHint')}
-        {' · '}
-        {t('contact.pricingAnchor')}
-      </Typography>
     </Box>
   )
 }

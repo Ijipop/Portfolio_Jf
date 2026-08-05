@@ -4,17 +4,17 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle'
 import { Alert, Snackbar } from '@mui/material'
 import Box from '@mui/material/Box'
 import Container from '@mui/material/Container'
+import Link from '@mui/material/Link'
 import { useTheme } from '@mui/material/styles'
 import { useSiteDarkChrome } from '../../hooks/useSiteDarkChrome'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import { useRouter } from 'next/navigation'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import ContactSuccessDialog from '../../components/contact/ContactSuccessDialog'
 import ContactForm from '../../components/contact/ContactForm'
 import {
   ContactLocationCard,
   ContactPageHeader,
-  ContactPromisesBar,
   ContactSocialSection,
 } from '../../components/contact/ContactPageSections'
 import ContactPhoneBar from '../../components/contact/ContactPhoneBar'
@@ -23,11 +23,10 @@ import AppBarComponent from '../../components/appBar'
 import PageWrapper from '../../components/shared/PageWrapper'
 import InteractiveBackgroundSection from '../../components/shared/InteractiveBackgroundSection'
 import Footer from '../../components/Footer'
-import CTAButton from '../../components/shared/CTAButton'
 import { useTextColor } from '../../hooks/useTextColor'
-import { useThemeColors } from '../../hooks/useThemeColors'
 import { useLanguage } from '../../contexts/LanguageContext'
 import { CONTACT_SUBJECT_TECH_SUPPORT } from '@/i18n/contactSubjects'
+import { SITE_DARK } from '@/design-system/siteDark'
 
 type ContactPageClientProps = {
   /** Route /portfolio/contact/merci : popup ouverte + page_view pour Analytics. */
@@ -42,7 +41,7 @@ export default function ContactPageClient({ showMerciDialog = false }: ContactPa
   const isTallViewport = useMediaQuery('(min-height: 1000px)', { noSsr: true })
   const useCompactContact = !isXlUp || !isTallViewport
   const textColor = useTextColor()
-  const { primary } = useThemeColors()
+  const brand = SITE_DARK.brandOrange
   const { t, locale } = useLanguage()
   const [snackbarOpen, setSnackbarOpen] = useState(false)
   const [snackbarMessage, setSnackbarMessage] = useState('')
@@ -68,8 +67,8 @@ export default function ContactPageClient({ showMerciDialog = false }: ContactPa
 
   const showErrorSnackbar = useCallback((message: string) => {
     setSnackbarMessage(message)
-      setSnackbarSeverity('error')
-      setSnackbarOpen(true)
+    setSnackbarSeverity('error')
+    setSnackbarOpen(true)
   }, [])
 
   const handleValidationError = useCallback(() => {
@@ -88,50 +87,38 @@ export default function ContactPageClient({ showMerciDialog = false }: ContactPa
   }, [showErrorSnackbar, t])
 
   const handleFormSuccess = useCallback(() => {
-        router.push('/portfolio/contact/merci')
+    router.push('/portfolio/contact/merci')
   }, [router])
-
-  const promiseLabels = useMemo(
-    () =>
-      [t('contact.promiseResponse'), t('contact.promiseCall'), t('contact.promiseEstimate')] as [
-        string,
-        string,
-        string,
-      ],
-    [t],
-  )
 
   return (
     <PageWrapper backgroundVariant="alternate">
       <AppBarComponent />
-      
+
       <ContactPageHeader titleText={t('contact.title')} subtitle={t('contact.subtitle')} />
 
       <InteractiveBackgroundSection>
-      <Container maxWidth="lg" sx={{ py: useCompactContact ? 4 : 8, position: 'relative', zIndex: 2 }}>
-          <ContactPromisesBar
-            labels={promiseLabels}
-            primary={primary}
-            textColor={textColor}
-            compact={useCompactContact}
-          />
+        <Container maxWidth="lg" sx={{ py: useCompactContact ? 4 : 8, position: 'relative', zIndex: 2 }}>
+          <ContactPhoneBar primary={brand} textColor={textColor} compact={useCompactContact} />
 
-          <ContactPhoneBar primary={primary} textColor={textColor} compact={useCompactContact} />
-
-          <Box sx={{ display: 'flex', justifyContent: 'center', mb: useCompactContact ? 2.2 : 3 }}>
-            <CTAButton
+          <Box sx={{ textAlign: 'center', mb: useCompactContact ? 2.5 : 3.5 }}>
+            <Link
               href={`/portfolio/contact?subject=${encodeURIComponent(CONTACT_SUBJECT_TECH_SUPPORT[locale])}#soutien-technique`}
-              variant="outline"
-              size="small"
+              underline="hover"
+              sx={{
+                fontSize: '0.875rem',
+                fontWeight: 600,
+                color: SITE_DARK.textMuted,
+                '&:hover': { color: brand },
+              }}
             >
               {t('contact.supportShortcut')}
-            </CTAButton>
+            </Link>
           </Box>
 
           <ContactForm
             compact={useCompactContact}
             textColor={textColor}
-            primary={primary}
+            primary={brand}
             onValidationError={handleValidationError}
             onSendError={handleSendError}
             onNetworkError={handleNetworkError}
@@ -141,24 +128,13 @@ export default function ContactPageClient({ showMerciDialog = false }: ContactPa
           <ContactLocationCard
             locationTitle={t('contact.location')}
             locationCity={t('contact.locationCity')}
-            primary={primary}
+            primary={brand}
             textColor={textColor}
             compact={useCompactContact}
           />
 
-          <ContactSocialSection
-            followMeTitle={t('contact.followMe')}
-            linkedInDesc={t('contact.linkedInDesc')}
-            githubDesc={t('contact.githubDesc')}
-            facebookDesc={t('contact.facebookDesc')}
-            viewProfileLabel={t('contact.viewProfile')}
-            viewReposLabel={t('contact.viewRepos')}
-            viewFacebookLabel={t('contact.viewFacebook')}
-            primary={primary}
-            textColor={textColor}
-            compact={useCompactContact}
-          />
-      </Container>
+          <ContactSocialSection followMeTitle={t('contact.followMe')} compact={useCompactContact} />
+        </Container>
       </InteractiveBackgroundSection>
 
       <ContactSuccessDialog open={merciDialogOpen} onClose={handleMerciDialogClose} />
@@ -169,11 +145,11 @@ export default function ContactPageClient({ showMerciDialog = false }: ContactPa
         onClose={handleCloseSnackbar}
         anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
       >
-        <Alert 
-          onClose={handleCloseSnackbar} 
+        <Alert
+          onClose={handleCloseSnackbar}
           severity={snackbarSeverity}
           icon={snackbarSeverity === 'success' ? <CheckCircleIcon /> : undefined}
-          sx={{ 
+          sx={{
             width: '100%',
             background:
               snackbarSeverity === 'success'
@@ -190,7 +166,7 @@ export default function ContactPageClient({ showMerciDialog = false }: ContactPa
           {snackbarMessage}
         </Alert>
       </Snackbar>
-      
+
       <Footer />
     </PageWrapper>
   )

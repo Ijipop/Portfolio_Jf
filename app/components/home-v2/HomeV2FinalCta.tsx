@@ -31,11 +31,11 @@ export default function HomeV2FinalCta() {
               borderRadius: v2.cardRadiusLg,
               background: `linear-gradient(145deg, ${v2.surface} 0%, rgba(232, 93, 4, 0.08) 100%)`,
               border: `1px solid ${v2.borderHover}`,
-              boxShadow: `0 20px 56px ${v2.brandGlow}`,
+              boxShadow: `0 12px 36px ${v2.brandGlow}`,
               transition:
                 'transform 0.45s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.45s ease',
               '&:hover': {
-                boxShadow: `0 28px 64px ${v2.brandGlowStrong}`,
+                boxShadow: `0 16px 44px ${v2.brandGlowStrong}`,
               },
             }}
           >

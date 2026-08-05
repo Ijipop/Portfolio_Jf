@@ -1,10 +1,11 @@
 import { outfit, plusJakarta, instrumentSans } from '@/fonts'
+import PortfolioFunnelChrome from './PortfolioFunnelChrome'
 
-/** Polices funnel vendeur sur toutes les pages /portfolio/*. */
+/** Polices + atmosphère funnel vendeur sur toutes les pages /portfolio/*. */
 export default function PortfolioLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className={`${outfit.variable} ${plusJakarta.variable} ${instrumentSans.variable}`}>
-      {children}
+      <PortfolioFunnelChrome>{children}</PortfolioFunnelChrome>
     </div>
   )
 }

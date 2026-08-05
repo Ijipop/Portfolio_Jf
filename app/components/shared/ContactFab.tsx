@@ -8,17 +8,21 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useLanguage } from '@/contexts/LanguageContext'
 import { DESIGN_TOKENS } from '@/design-system/constants'
-import { useThemeColors } from '@/hooks/useThemeColors'
+import { BRAND_GLITCH_GRADIENT } from '@/components/shared/IjipopGlitchTitle'
+import { SITE_DARK } from '@/design-system/siteDark'
 
-/** Pas de FAB sur gateway, contact, ni hub web (sticky CTA déjà présent). */
-const HIDDEN_PATHS = ['/', '/portfolio', '/portfolio/contact', '/portfolio/contact/merci']
+/** Masqué sur tout le funnel public (sticky estimation) + gateway. */
+function isFunnelOrHiddenPath(pathname: string): boolean {
+  if (pathname === '/') return true
+  if (pathname === '/portfolio' || pathname.startsWith('/portfolio/')) return true
+  return false
+}
 
 export default function ContactFab() {
   const pathname = usePathname()
   const { t } = useLanguage()
-  const { primary, secondary } = useThemeColors()
 
-  if (!pathname || HIDDEN_PATHS.includes(pathname)) {
+  if (!pathname || isFunnelOrHiddenPath(pathname)) {
     return null
   }
 
@@ -44,25 +48,24 @@ export default function ContactFab() {
             py: 1.35,
             borderRadius: '999px',
             textTransform: 'none',
-            fontWeight: 800,
+            fontWeight: 700,
             letterSpacing: '0.01em',
             color: '#fff',
-            background: `linear-gradient(135deg, ${primary} 0%, ${secondary} 100%)`,
-            boxShadow: `0 14px 34px ${primary}40`,
-            border: `1px solid ${primary}55`,
-            backdropFilter: 'blur(10px)',
+            background: BRAND_GLITCH_GRADIENT,
+            boxShadow: `0 8px 22px ${SITE_DARK.brandGlow}`,
+            border: 'none',
             '& .MuiButton-startIcon': {
               marginRight: 1,
               marginLeft: 0,
             },
             '&:hover': {
-              background: `linear-gradient(135deg, ${primary} 0%, ${secondary} 100%)`,
+              background: BRAND_GLITCH_GRADIENT,
               transform: 'translateY(-2px)',
-              boxShadow: `0 18px 42px ${primary}55`,
+              boxShadow: `0 12px 28px ${SITE_DARK.brandGlowStrong}`,
             },
           }}
         >
-          <Box component="span" sx={{ fontWeight: 800, fontSize: '0.95rem', lineHeight: 1 }}>
+          <Box component="span" sx={{ fontWeight: 700, fontSize: '0.95rem', lineHeight: 1 }}>
             {t('nav.contact')}
           </Box>
         </Button>

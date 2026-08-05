@@ -70,3 +70,12 @@ export async function getCpuZeDownloads(): Promise<ProductDownloadLinks> {
     github: PRODUCT_DOWNLOADS.cpuZe.github,
   }
 }
+
+/** Liens DeskDot : admin (windowsUrl) en priorité — pas de fallback release. */
+export async function getDeskDotDownloads(): Promise<ProductDownloadLinks> {
+  const project = await findSoftwareProject(['deskdot', 'desk dot', 'desk-dot', '/deskdot'])
+  return {
+    windows: pickUrl(project?.windowsUrl, project?.downloadUrl) ?? PRODUCT_DOWNLOADS.deskDot.windows,
+    github: PRODUCT_DOWNLOADS.deskDot.github,
+  }
+}
