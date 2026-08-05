@@ -7,18 +7,17 @@ import Container from '@mui/material/Container'
 import { useTheme } from '@mui/material/styles'
 import { useSiteDarkChrome } from '../../hooks/useSiteDarkChrome'
 import useMediaQuery from '@mui/material/useMediaQuery'
-import dynamic from 'next/dynamic'
 import { useRouter } from 'next/navigation'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import ContactSuccessDialog from '../../components/contact/ContactSuccessDialog'
 import ContactForm from '../../components/contact/ContactForm'
 import {
-  ContactCoffeeSection,
   ContactLocationCard,
   ContactPageHeader,
   ContactPromisesBar,
   ContactSocialSection,
 } from '../../components/contact/ContactPageSections'
+import ContactPhoneBar from '../../components/contact/ContactPhoneBar'
 import { trackContactMerciPageView } from '@/lib/gtag'
 import AppBarComponent from '../../components/appBar'
 import PageWrapper from '../../components/shared/PageWrapper'
@@ -29,8 +28,6 @@ import { useTextColor } from '../../hooks/useTextColor'
 import { useThemeColors } from '../../hooks/useThemeColors'
 import { useLanguage } from '../../contexts/LanguageContext'
 import { CONTACT_SUBJECT_TECH_SUPPORT } from '@/i18n/contactSubjects'
-
-const AiConversionTeaser = dynamic(() => import('@/components/home/AiConversionTeaser'), { ssr: false })
 
 type ContactPageClientProps = {
   /** Route /portfolio/contact/merci : popup ouverte + page_view pour Analytics. */
@@ -115,9 +112,11 @@ export default function ContactPageClient({ showMerciDialog = false }: ContactPa
           <ContactPromisesBar
             labels={promiseLabels}
             primary={primary}
-                    textColor={textColor}
+            textColor={textColor}
             compact={useCompactContact}
           />
+
+          <ContactPhoneBar primary={primary} textColor={textColor} compact={useCompactContact} />
 
           <Box sx={{ display: 'flex', justifyContent: 'center', mb: useCompactContact ? 2.2 : 3 }}>
             <CTAButton
@@ -131,7 +130,7 @@ export default function ContactPageClient({ showMerciDialog = false }: ContactPa
 
           <ContactForm
             compact={useCompactContact}
-                  textColor={textColor}
+            textColor={textColor}
             primary={primary}
             onValidationError={handleValidationError}
             onSendError={handleSendError}
@@ -139,15 +138,13 @@ export default function ContactPageClient({ showMerciDialog = false }: ContactPa
             onSuccess={handleFormSuccess}
           />
 
-          <AiConversionTeaser />
-
           <ContactLocationCard
             locationTitle={t('contact.location')}
             locationCity={t('contact.locationCity')}
             primary={primary}
-                      textColor={textColor}
-                      compact={useCompactContact}
-                    />
+            textColor={textColor}
+            compact={useCompactContact}
+          />
 
           <ContactSocialSection
             followMeTitle={t('contact.followMe')}
@@ -158,11 +155,9 @@ export default function ContactPageClient({ showMerciDialog = false }: ContactPa
             viewReposLabel={t('contact.viewRepos')}
             viewFacebookLabel={t('contact.viewFacebook')}
             primary={primary}
-                        textColor={textColor}
-                        compact={useCompactContact}
-                      />
-
-          <ContactCoffeeSection compact={useCompactContact} />
+            textColor={textColor}
+            compact={useCompactContact}
+          />
       </Container>
       </InteractiveBackgroundSection>
 

@@ -5,14 +5,14 @@ import HomeGatewayClient from '@/components/home/HomeGatewayClient'
 export const metadata: Metadata = {
   title: {
     absolute:
-      'Ijipop Solutions — sites web & soutien technique · Montréal',
+      'Ijipop Solutions — sites web, soutien tech & logiciels · Montréal',
   },
   description:
-    'Bienvenue sur Ijipop Solutions : création de sites web et soutien technique pour PME et indépendants au Québec. Choisissez votre parcours.',
+    'Ijipop Solutions : sites web, soutien informatique et logiciels sur mesure à Montréal. PME et indépendants au Québec.',
   openGraph: {
-    title: 'Ijipop Solutions — sites web & soutien technique · Montréal',
+    title: 'Ijipop Solutions — sites web, soutien tech & logiciels · Montréal',
     description:
-      'Création de sites web ou soutien technique — choisissez comment Ijipop peut vous aider. Montréal et mandats à distance.',
+      'Sites web, soutien technique et logiciels pour PME — Montréal et mandats à distance.',
     url: '/',
     locale: 'fr_CA',
     siteName: 'Jean-François Lefebvre — Ijipop',
@@ -27,9 +27,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Ijipop Solutions — sites web & soutien technique · Montréal',
+    title: 'Ijipop Solutions — sites web, soutien tech & logiciels · Montréal',
     description:
-      'Création de sites web ou soutien technique — choisissez comment Ijipop peut vous aider.',
+      'Sites web, soutien technique et logiciels — choisissez comment Ijipop peut vous aider.',
     images: ['/og-default.png'],
   },
 }

@@ -1,21 +1,22 @@
 'use client'
 
 import CheckRoundedIcon from '@mui/icons-material/CheckRounded'
-import DynamicFormOutlinedIcon from '@mui/icons-material/DynamicFormOutlined'
+import DevicesOutlinedIcon from '@mui/icons-material/DevicesOutlined'
 import LanguageOutlinedIcon from '@mui/icons-material/LanguageOutlined'
-import RefreshOutlinedIcon from '@mui/icons-material/RefreshOutlined'
+import SupportAgentOutlinedIcon from '@mui/icons-material/SupportAgentOutlined'
 import Box from '@mui/material/Box'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import type { SvgIconComponent } from '@mui/icons-material'
 import ScrollReveal from '@/components/shared/ScrollReveal'
-import { CONTACT_SUBJECT_IMPROVE_SITE } from '@/i18n/contactSubjects'
 import { useLanguage } from '@/contexts/LanguageContext'
 import HomeV2Cta from './HomeV2Cta'
 import HomeV2Section from './HomeV2Section'
 import { useHomeV2Tokens } from './homeV2Tokens'
 
 const CONTACT_PATH = '/portfolio/contact'
+const SUPPORT_PATH = '/soutien-informatique-montreal'
+const SOFTWARE_PATH = '/portfolio/projets?type=logiciel'
 
 type ServiceCard = {
   id: string
@@ -24,11 +25,10 @@ type ServiceCard = {
   leadKey: string
   bulletKeys: [string, string, string]
   ctaKey: string
-  href?: string
-  improveSubject?: boolean
+  href: string
 }
 
-/** Lane Web uniquement — pas de soutien / logiciels ici. */
+/** Trois piliers : sites web · soutien tech · logiciels. */
 const SERVICE_CARDS: ServiceCard[] = [
   {
     id: 'web',
@@ -40,36 +40,32 @@ const SERVICE_CARDS: ServiceCard[] = [
     href: CONTACT_PATH,
   },
   {
-    id: 'refonte',
-    icon: RefreshOutlinedIcon,
-    titleKey: 'homeV2.serviceRefonteTitle',
-    leadKey: 'homeV2.serviceRefonteLead',
-    bulletKeys: ['homeV2.serviceRefonteB1', 'homeV2.serviceRefonteB2', 'homeV2.serviceRefonteB3'],
-    ctaKey: 'homeV2.serviceRefonteCta',
-    improveSubject: true,
+    id: 'support',
+    icon: SupportAgentOutlinedIcon,
+    titleKey: 'homeV2.serviceSupportTitle',
+    leadKey: 'homeV2.serviceSupportLead',
+    bulletKeys: ['homeV2.serviceSupportB1', 'homeV2.serviceSupportB2', 'homeV2.serviceSupportB3'],
+    ctaKey: 'homeV2.serviceSupportCta',
+    href: SUPPORT_PATH,
   },
   {
-    id: 'forms',
-    icon: DynamicFormOutlinedIcon,
-    titleKey: 'home.servicesFormsTitle',
-    leadKey: 'home.servicesFormsLead',
-    bulletKeys: [
-      'home.servicesFormsBullet1',
-      'home.servicesFormsBullet2',
-      'home.servicesFormsBullet3',
-    ],
-    ctaKey: 'homeV2.serviceWebCta',
-    href: CONTACT_PATH,
+    id: 'software',
+    icon: DevicesOutlinedIcon,
+    titleKey: 'homeV2.serviceSoftwareTitle',
+    leadKey: 'homeV2.serviceSoftwareLead',
+    bulletKeys: ['homeV2.serviceSoftwareB1', 'homeV2.serviceSoftwareB2', 'homeV2.serviceSoftwareB3'],
+    ctaKey: 'homeV2.serviceSoftwareCta',
+    href: SOFTWARE_PATH,
   },
 ]
 
-function ServiceCardItem({ card, index, href }: { card: ServiceCard; index: number; href: string }) {
+function ServiceCardItem({ card, index }: { card: ServiceCard; index: number }) {
   const { t } = useLanguage()
   const { tokens: v2, cardSx } = useHomeV2Tokens()
   const Icon = card.icon
 
   return (
-    <ScrollReveal delay={index * 0.1} distance={28}>
+    <ScrollReveal delay={index * 0.08} distance={24}>
       <Box
         sx={{
           ...cardSx,
@@ -88,7 +84,7 @@ function ServiceCardItem({ card, index, href }: { card: ServiceCard; index: numb
             alignItems: 'center',
             justifyContent: 'center',
             background: v2.brandGlow,
-            border: `1px solid ${v2.borderHover}`,
+            border: `1px solid ${v2.border}`,
             mb: 2,
           }}
         >
@@ -97,12 +93,27 @@ function ServiceCardItem({ card, index, href }: { card: ServiceCard; index: numb
 
         <Typography
           component="h3"
-          sx={{ fontFamily: v2.fontDisplay, fontWeight: 700, fontSize: '1.125rem', color: v2.text, mb: 1 }}
+          sx={{
+            fontFamily: v2.fontDisplay,
+            fontWeight: 700,
+            fontSize: '1.15rem',
+            color: v2.text,
+            mb: 1,
+            letterSpacing: '-0.02em',
+          }}
         >
           {t(card.titleKey)}
         </Typography>
 
-        <Typography sx={{ fontFamily: v2.fontBody, fontSize: '0.9375rem', color: v2.textSecondary, lineHeight: 1.55, mb: 2 }}>
+        <Typography
+          sx={{
+            fontFamily: v2.fontBody,
+            fontSize: '0.9375rem',
+            color: v2.textSecondary,
+            lineHeight: 1.55,
+            mb: 2,
+          }}
+        >
           {t(card.leadKey)}
         </Typography>
 
@@ -110,14 +121,21 @@ function ServiceCardItem({ card, index, href }: { card: ServiceCard; index: numb
           {card.bulletKeys.map((key) => (
             <Stack key={key} direction="row" spacing={1} alignItems="flex-start">
               <CheckRoundedIcon sx={{ fontSize: 18, color: v2.brandOrange, mt: 0.15, flexShrink: 0 }} />
-              <Typography sx={{ fontFamily: v2.fontBody, fontSize: '0.875rem', color: v2.textSecondary, lineHeight: 1.45 }}>
+              <Typography
+                sx={{
+                  fontFamily: v2.fontBody,
+                  fontSize: '0.875rem',
+                  color: v2.textSecondary,
+                  lineHeight: 1.45,
+                }}
+              >
                 {t(key)}
               </Typography>
             </Stack>
           ))}
         </Stack>
 
-        <HomeV2Cta href={href} variant="outline" fullWidth>
+        <HomeV2Cta href={card.href} variant="outline" fullWidth>
           {t(card.ctaKey)}
         </HomeV2Cta>
       </Box>
@@ -126,17 +144,14 @@ function ServiceCardItem({ card, index, href }: { card: ServiceCard; index: numb
 }
 
 export default function HomeV2Services() {
-  const { t, locale } = useLanguage()
-
-  const cardHrefs = SERVICE_CARDS.map((card) => {
-    if (card.improveSubject) {
-      return `${CONTACT_PATH}?subject=${encodeURIComponent(CONTACT_SUBJECT_IMPROVE_SITE[locale])}`
-    }
-    return card.href ?? CONTACT_PATH
-  })
+  const { t } = useLanguage()
 
   return (
-    <HomeV2Section kicker={t('homeV2.servicesKicker')} title={t('homeV2.servicesTitle')} lead={t('homeV2.servicesLead')}>
+    <HomeV2Section
+      kicker={t('homeV2.servicesKicker')}
+      title={t('homeV2.servicesTitle')}
+      lead={t('homeV2.servicesLead')}
+    >
       <Box
         sx={{
           display: 'grid',
@@ -146,7 +161,7 @@ export default function HomeV2Services() {
         }}
       >
         {SERVICE_CARDS.map((card, index) => (
-          <ServiceCardItem key={card.id} card={card} index={index} href={cardHrefs[index]} />
+          <ServiceCardItem key={card.id} card={card} index={index} />
         ))}
       </Box>
     </HomeV2Section>

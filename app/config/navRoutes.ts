@@ -1,4 +1,4 @@
-export type NavRouteId = 'home' | 'projects' | 'software' | 'about' | 'support' | 'contact'
+export type NavRouteId = 'home' | 'projects' | 'about' | 'support' | 'contact'
 
 export interface NavRoute {
   id: NavRouteId
@@ -9,40 +9,20 @@ export interface NavRoute {
   isActive: (pathname: string, search?: string) => boolean
 }
 
-function hasTypeLogiciel(search?: string): boolean {
-  if (!search) return false
-  return new URLSearchParams(search).get('type') === 'logiciel'
-}
-
 export const NAV_ROUTES: NavRoute[] = [
   {
     id: 'home',
     labelKey: 'nav.home',
     path: '/',
     ariaLabel: 'accueil',
-    isActive: (pathname) => pathname === '/',
+    isActive: (pathname) => pathname === '/' || pathname === '/portfolio',
   },
   {
     id: 'projects',
     labelKey: 'nav.projects',
     path: '/portfolio/projets',
     ariaLabel: 'projets',
-    isActive: (pathname, search) =>
-      pathname === '/portfolio/projets' && !hasTypeLogiciel(search),
-  },
-  {
-    id: 'software',
-    labelKey: 'nav.software',
-    path: '/portfolio/projets?type=logiciel',
-    ariaLabel: 'logiciels',
-    isActive: (pathname, search) =>
-      (pathname === '/portfolio/projets' && hasTypeLogiciel(search)) ||
-      pathname === '/logiciel' ||
-      pathname.startsWith('/logiciel/') ||
-      pathname === '/cpu-ze' ||
-      pathname.startsWith('/cpu-ze/') ||
-      pathname === '/spacetaker' ||
-      pathname.startsWith('/spacetaker/'),
+    isActive: (pathname) => pathname === '/portfolio/projets',
   },
   {
     id: 'about',

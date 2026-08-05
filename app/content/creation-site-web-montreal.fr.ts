@@ -38,7 +38,7 @@ export const seoLandingContent = {
     {
       title: 'Développeur web à Montréal',
       description:
-        'Accompagnement direct avec un interlocuteur unique — basé à Montréal, mandats partout au Québec et à distance.',
+        'Suivi personnalisé — basé à Montréal, mandats partout au Québec et à distance.',
     },
     {
       title: 'SEO de base',

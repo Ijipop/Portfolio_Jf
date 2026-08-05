@@ -1,7 +1,6 @@
 import type { Metadata } from 'next'
 import { cookies } from 'next/headers'
 import HomeClient from '@/components/home/HomeClient'
-import { manrope, instrumentSans } from '@/fonts'
 
 const INTRO_COOKIE_KEY = 'portfolio-intro-seen'
 
@@ -45,9 +44,5 @@ export default async function PortfolioHomePage() {
   // Intro (rideau avec le nom) désactivée pour l'instant — remettre `!introSeen` pour réactiver
   const initialShowIntro = false
 
-  return (
-    <div className={`${instrumentSans.variable} ${manrope.variable}`}>
-      <HomeClient initialShowIntro={initialShowIntro} />
-    </div>
-  )
+  return <HomeClient initialShowIntro={initialShowIntro} />
 }

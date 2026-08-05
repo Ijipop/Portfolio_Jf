@@ -1,41 +1,47 @@
-/** Tokens visuels V2 sombre — source partagée thème + composants chrome. */
+/**
+ * Tokens visuels site vendeur — confiance PME Montréal.
+ * Accent ambre aligné sur le glitch Ijipop (ne pas casser la marque).
+ * Surfaces sobres, peu de glow « neon portfolio ».
+ */
 export const SITE_DARK = {
-  bg: '#08080c',
-  bgElevated: '#0f0f14',
-  surface: 'rgba(255, 255, 255, 0.04)',
-  surfaceHover: 'rgba(255, 255, 255, 0.06)',
-  border: 'rgba(255, 255, 255, 0.08)',
-  borderHover: 'rgba(234, 88, 12, 0.35)',
-  text: '#f4f4f5',
-  textSecondary: '#a1a1aa',
-  textMuted: '#71717a',
-  brandOrange: '#ea580c',
-  brandOrangeLight: '#fb923c',
+  bg: '#0c1118',
+  bgElevated: '#141b24',
+  surface: 'rgba(232, 240, 248, 0.04)',
+  surfaceHover: 'rgba(232, 240, 248, 0.07)',
+  border: 'rgba(200, 214, 230, 0.12)',
+  borderHover: 'rgba(232, 93, 4, 0.38)',
+  text: '#f4f6f8',
+  textSecondary: '#a8b2bf',
+  textMuted: '#6f7a88',
+  brandOrange: '#e85d04',
+  brandOrangeLight: '#f48c06',
   brandOrangeDeep: '#c2410c',
-  brandGlow: 'rgba(234, 88, 12, 0.12)',
-  brandGlowStrong: 'rgba(234, 88, 12, 0.22)',
-  appBarGlass: 'rgba(8, 8, 12, 0.82)',
+  brandGlow: 'rgba(232, 93, 4, 0.1)',
+  brandGlowStrong: 'rgba(232, 93, 4, 0.18)',
+  appBarGlass: 'rgba(12, 17, 24, 0.88)',
   maxWidth: 1200,
   cardRadius: '16px',
 } as const
 
-/** Tokens mode Site clair (beige latte). */
+/**
+ * Mode Site clair — papier frais (pas crème terracotta « IA »).
+ */
 export const SITE_LIGHT = {
-  bg: '#f7f3eb',
-  bgElevated: '#efe8dc',
-  surface: 'rgba(255, 254, 251, 0.82)',
-  surfaceHover: 'rgba(255, 254, 251, 0.95)',
-  border: 'rgba(92, 77, 60, 0.16)',
-  borderHover: 'rgba(234, 88, 12, 0.32)',
-  text: '#1c1917',
-  textSecondary: '#44403c',
-  textMuted: '#78716c',
-  brandOrange: '#ea580c',
-  brandOrangeLight: '#fb923c',
+  bg: '#f3f5f7',
+  bgElevated: '#ffffff',
+  surface: 'rgba(255, 255, 255, 0.92)',
+  surfaceHover: 'rgba(255, 255, 255, 1)',
+  border: 'rgba(28, 36, 48, 0.1)',
+  borderHover: 'rgba(232, 93, 4, 0.34)',
+  text: '#121820',
+  textSecondary: '#4a5563',
+  textMuted: '#6b7280',
+  brandOrange: '#e85d04',
+  brandOrangeLight: '#ea580c',
   brandOrangeDeep: '#c2410c',
-  brandGlow: 'rgba(234, 88, 12, 0.1)',
-  brandGlowStrong: 'rgba(234, 88, 12, 0.18)',
-  appBarGlass: 'rgba(247, 243, 235, 0.88)',
+  brandGlow: 'rgba(232, 93, 4, 0.08)',
+  brandGlowStrong: 'rgba(232, 93, 4, 0.14)',
+  appBarGlass: 'rgba(243, 245, 247, 0.92)',
   maxWidth: 1200,
   cardRadius: '16px',
 } as const
@@ -43,11 +49,11 @@ export const SITE_LIGHT = {
 export type SiteThemeTokens = typeof SITE_DARK | typeof SITE_LIGHT
 
 export function siteDarkPageGradient(): string {
-  return `linear-gradient(180deg, ${SITE_DARK.bg} 0%, ${SITE_DARK.bgElevated} 100%)`
+  return `linear-gradient(168deg, ${SITE_DARK.bg} 0%, #101722 45%, ${SITE_DARK.bgElevated} 100%)`
 }
 
 export function siteDarkTopologyBackground(): string {
-  const glow = `radial-gradient(ellipse at 50% -10%, ${SITE_DARK.brandGlowStrong} 0%, transparent 55%)`
+  const glow = `radial-gradient(ellipse at 50% -10%, ${SITE_DARK.brandGlow} 0%, transparent 55%)`
   const base = siteDarkPageGradient()
   return `${glow}, ${base}`
 }

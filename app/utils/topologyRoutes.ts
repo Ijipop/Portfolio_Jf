@@ -19,6 +19,12 @@ export function shouldShowTopology(pathname: string | null): boolean {
   // Gateway `/` : fond dédié (HomeV2Backdrop) — évite le halo topology collé en haut du viewport.
   if (pathname === '/') return false
 
+  // Home vente `/portfolio` : chrome plus calme (fond PageWrapper / tokens site), sans Vanta.
+  if (pathname === '/portfolio') return false
+
+  // Hub démos : fond CSS dédié.
+  if (pathname === '/demos' || pathname.startsWith('/demos/')) return false
+
   // Landings produit standalone : fond CSS dédié.
   if (
     pathname === '/cpu-ze' ||
