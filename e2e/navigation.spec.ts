@@ -29,7 +29,9 @@ test('portfolio home loads and nav works', async ({ page }) => {
   await expect(
     page.getByText(/obtenir une estimation|get an estimate/i).first()
   ).toBeVisible()
-  await expect(page.getByTestId('graphics-background-layer')).toHaveAttribute('data-graphics-mode', /light|beige-dark/)
+  // Funnel /portfolio : HomeV2Backdrop CSS (pas de topology / Vanta).
+  await expect(page.getByTestId('home-v2-backdrop')).toBeVisible()
+  await expect(page.getByTestId('graphics-background-layer')).toHaveCount(0)
   await expect(page.getByTestId('vanta-background')).toHaveCount(0)
 
   await expect(page.locator('a[href="/portfolio/projets"]').first()).toBeVisible()
@@ -66,20 +68,13 @@ test('contact form renders stable fields', async ({ page }) => {
   await expect(form.locator('button[type="submit"]')).toContainText(/Obtenir une estimation|Get an estimate/i)
 })
 
-test('static graphics fallback has no Vanta (reduced motion + forced light)', async ({ page }) => {
-  // Vanta est désactivé (vantaFeatures) ; thème sombre par défaut → data-graphics-mode « beige-dark ».
-  // Le forçage « light » reste utile pour valider l’absence de canvas WebGL.
+test('portfolio home has CSS backdrop and no Vanta (reduced motion)', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' })
-  await page.addInitScript(() => {
-    window.localStorage.setItem('portfolio-force-graphics-mode', 'light')
-  })
 
   await page.goto('/portfolio', { waitUntil: 'domcontentloaded' })
 
-  await expect(page.getByTestId('graphics-background-layer')).toHaveAttribute(
-    'data-graphics-mode',
-    /^(light|beige-dark|beige)$/,
-  )
+  await expect(page.getByTestId('home-v2-backdrop')).toBeVisible()
+  await expect(page.getByTestId('graphics-background-layer')).toHaveCount(0)
   await expect(page.getByTestId('vanta-background')).toHaveCount(0)
 })
 
@@ -111,7 +106,7 @@ test('home hero CTAs stay visible within the first viewport', async ({ page }) =
     await page.goto('/portfolio', { waitUntil: 'domcontentloaded' })
 
     const primaryCta = page.getByRole('link', { name: /Obtenir une estimation|Get an estimate/i }).first()
-    const secondaryCta = page.getByRole('link', { name: /Voir les forfaits|View packages/i }).first()
+    const secondaryCta = page.getByRole('link', { name: /Voir les démos|See demos/i }).first()
 
     await expect(primaryCta).toBeVisible()
     await expect(secondaryCta).toBeVisible()

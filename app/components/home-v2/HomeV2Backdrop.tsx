@@ -30,6 +30,7 @@ export default function HomeV2Backdrop({ glowPlacement = 'top' }: HomeV2Backdrop
   return (
     <Box
       aria-hidden
+      data-testid="home-v2-backdrop"
       sx={{
         position: 'fixed',
         inset: 0,
