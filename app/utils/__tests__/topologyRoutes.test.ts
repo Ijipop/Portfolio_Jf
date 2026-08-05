@@ -11,7 +11,8 @@ describe('shouldShowTopology', () => {
   })
 
   it('returns true for allowed roots', () => {
-    expect(shouldShowTopology('/portfolio')).toBe(true)
+    // `/portfolio` exact = home vente avec fond dédié (pas de topology).
+    expect(shouldShowTopology('/portfolio')).toBe(false)
     expect(shouldShowTopology('/logiciel')).toBe(true)
   })
 
@@ -21,6 +22,16 @@ describe('shouldShowTopology', () => {
     expect(shouldShowTopology('/portfolio/pageweb')).toBe(true)
     expect(shouldShowTopology('/logiciel/timelendr')).toBe(true)
     expect(shouldShowTopology('/logiciel/timelendr/merci')).toBe(true)
+  })
+
+  it('disables topology on /portfolio sales home and /demos hub', () => {
+    vi.stubEnv('NEXT_PUBLIC_TOPOLOGY_SCOPE', 'global')
+    expect(shouldShowTopology('/portfolio')).toBe(false)
+    expect(shouldShowTopology('/demos')).toBe(false)
+    expect(shouldShowTopology('/demos/restaurant')).toBe(false)
+    vi.stubEnv('NEXT_PUBLIC_TOPOLOGY_SCOPE', 'targeted')
+    expect(shouldShowTopology('/portfolio')).toBe(false)
+    expect(shouldShowTopology('/demos')).toBe(false)
   })
 
   it('returns false for non-target routes', () => {
