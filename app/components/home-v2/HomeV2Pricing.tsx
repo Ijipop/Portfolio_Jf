@@ -11,7 +11,6 @@ import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import type { SvgIconComponent } from '@mui/icons-material'
 import ScrollReveal from '@/components/shared/ScrollReveal'
-import { BorderBeam } from '@/components/ui/border-beam'
 import { BRAND_GLITCH_GRADIENT } from '@/components/shared/IjipopGlitchTitle'
 import { useLanguage } from '@/contexts/LanguageContext'
 import HomeV2Cta from './HomeV2Cta'
@@ -115,9 +114,6 @@ function PricingCard({ offer, index }: { offer: PackOffer; index: number }) {
           gridColumn: featured ? { md: 'span 2' } : undefined,
         }}
       >
-        {featured ? (
-          <BorderBeam size={90} duration={8} borderWidth={1.5} colorFrom="#ea580c" colorTo="#fb923c" />
-        ) : null}
         <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ mb: 2 }}>
           <Box
             sx={{

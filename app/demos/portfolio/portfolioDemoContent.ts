@@ -62,7 +62,7 @@ export const WORK = {
   featured: {
     title: 'Thermo-Trappeur',
     tag: 'PME · services · site vitrine',
-    body: 'Site vitrine pour une entreprise de thermopompe au Québec : services mis en avant, formulaire de contact et structure pensée pour rassurer et convertir.',
+    body: 'Site vitrine pour Thermo-Trap — évents de ventilation étanches et isolants au Québec : bénéfices produits, formulaire de contact et structure pensée pour rassurer et convertir.',
     previewTone: 'thermo' as WorkPreviewTone,
     previewLabel: 'Accueil · services · contact',
   },

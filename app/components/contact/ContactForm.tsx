@@ -14,8 +14,8 @@ import Typography from '@mui/material/Typography'
 import { styled, useTheme } from '@mui/material/styles'
 import { useSearchParams } from 'next/navigation'
 import { Suspense, memo, useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
-import ThreeDCardComponent from '@/components/ThreeDCard'
 import CTAButton from '@/components/shared/CTAButton'
+import { SITE_DARK } from '@/design-system/siteDark'
 import ProjectWebBriefSection, {
   emptyProjectWebBrief,
   type ProjectWebBriefState,
@@ -53,7 +53,7 @@ function scrollToContactForm(): void {
 
 const StyledTextField = styled(TextField, {
   shouldForwardProp: (prop) => prop !== 'textColor' && prop !== 'helperTextColor',
-})<{ textColor?: string; helperTextColor?: string }>(({ theme, textColor, helperTextColor }) => ({
+})<{ textColor?: string; helperTextColor?: string }>(({ textColor, helperTextColor }) => ({
   '& .MuiOutlinedInput-root': {
     borderRadius: DESIGN_TOKENS.borderRadius.small,
     transition: DESIGN_TOKENS.transitions.normal,
@@ -63,20 +63,20 @@ const StyledTextField = styled(TextField, {
     },
     '&:hover': {
       '& .MuiOutlinedInput-notchedOutline': {
-        borderColor: theme.palette.primary.main,
+        borderColor: SITE_DARK.brandOrange,
       },
     },
     '&.Mui-focused': {
       '& .MuiOutlinedInput-notchedOutline': {
         borderWidth: '2px',
-        borderColor: theme.palette.primary.main,
+        borderColor: SITE_DARK.brandOrange,
       },
     },
   },
   '& .MuiInputLabel-root': {
     color: textColor || '#ffffff',
     '&.Mui-focused': {
-      color: theme.palette.primary.main,
+      color: SITE_DARK.brandOrange,
     },
   },
   '& .MuiFormHelperText-root': {
@@ -298,22 +298,21 @@ function ContactForm({
       <Suspense fallback={null}>
         <ContactSubjectFromQuery setFormData={setFormData} />
       </Suspense>
-      <ThreeDCardComponent
-        floatingElements={2}
-        sx={{ padding: { xs: 2, sm: 3 } }}
-        borderBeam={{
-          duration: 45,
-          size: 220,
-          colorFrom: primary,
-          colorTo: '#948c82',
+      <Box
+        sx={{
+          padding: { xs: 2.25, sm: 3 },
+          borderRadius: SITE_DARK.cardRadius,
+          border: `1px solid ${SITE_DARK.border}`,
+          background: SITE_DARK.surface,
+          boxShadow: `0 12px 36px rgba(0,0,0,0.2)`,
         }}
       >
-        <Box sx={{ textAlign: 'center', mb: compact ? 2 : 3 }}>
-          <EmailIcon sx={{ fontSize: 48, color: primary, mb: 1.5 }} />
-          <Typography variant="h4" gutterBottom sx={{ fontWeight: 700, color: primary }}>
+        <Box sx={{ textAlign: 'center', mb: compact ? 2 : 2.5 }}>
+          <EmailIcon sx={{ fontSize: 40, color: primary, mb: 1 }} />
+          <Typography variant="h5" gutterBottom sx={{ fontWeight: 700, color: textColor, letterSpacing: '-0.02em' }}>
             {t('contact.sendMessage')}
           </Typography>
-          <Typography variant="body1" sx={{ color: textColor, opacity: 0.9, mb: 1.5 }}>
+          <Typography variant="body2" sx={{ color: textColor, opacity: 0.8 }}>
             {t('contact.sendMessageDesc')}
           </Typography>
         </Box>
@@ -489,7 +488,7 @@ function ContactForm({
             </CTAButton>
           </Box>
         </Box>
-      </ThreeDCardComponent>
+      </Box>
     </Box>
   )
 }

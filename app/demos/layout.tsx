@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { outfit, plusJakarta } from '@/fonts'
 
 export const metadata: Metadata = {
   title: 'Démos vitrines',
@@ -8,5 +9,5 @@ export const metadata: Metadata = {
 }
 
 export default function DemosLayout({ children }: { children: React.ReactNode }) {
-  return children
+  return <div className={`${outfit.variable} ${plusJakarta.variable}`}>{children}</div>
 }

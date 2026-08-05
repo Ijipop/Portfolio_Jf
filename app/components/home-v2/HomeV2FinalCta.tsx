@@ -22,23 +22,28 @@ export default function HomeV2FinalCta() {
       }}
     >
       <Box sx={{ maxWidth: v2.maxWidth, mx: 'auto' }}>
-        <ScrollReveal distance={24}>
+        <ScrollReveal distance={28} duration={0.7}>
           <Box
             sx={{
               textAlign: 'center',
               py: { xs: 5, md: 7 },
               px: { xs: 2.5, md: 4 },
               borderRadius: v2.cardRadiusLg,
-              background: `linear-gradient(145deg, ${v2.surface} 0%, rgba(234, 88, 12, 0.06) 100%)`,
+              background: `linear-gradient(145deg, ${v2.surface} 0%, rgba(232, 93, 4, 0.08) 100%)`,
               border: `1px solid ${v2.borderHover}`,
-              boxShadow: `0 16px 48px ${v2.brandGlow}`,
+              boxShadow: `0 12px 36px ${v2.brandGlow}`,
+              transition:
+                'transform 0.45s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.45s ease',
+              '&:hover': {
+                boxShadow: `0 16px 44px ${v2.brandGlowStrong}`,
+              },
             }}
           >
             <Typography
               component="h2"
               sx={{
                 fontFamily: v2.fontDisplay,
-                fontSize: { xs: '1.5rem', md: '2rem' },
+                fontSize: { xs: '1.5rem', md: '2.1rem' },
                 fontWeight: 700,
                 letterSpacing: '-0.03em',
                 color: v2.text,
@@ -55,8 +60,9 @@ export default function HomeV2FinalCta() {
                 fontSize: '0.9375rem',
                 color: v2.textSecondary,
                 mb: 3,
-                maxWidth: 480,
+                maxWidth: 520,
                 mx: 'auto',
+                lineHeight: 1.5,
               }}
             >
               {t('homeV2.finalCtaSubtitle')}

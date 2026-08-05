@@ -105,7 +105,7 @@ export default function PagewebPage() {
           </Container>
         </Box>
       </InteractiveBackgroundSection>
-      <Footer />
+      <Footer mobileBottomClearance />
     </PageWrapper>
   )
 }

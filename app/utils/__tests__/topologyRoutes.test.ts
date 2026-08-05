@@ -11,16 +11,27 @@ describe('shouldShowTopology', () => {
   })
 
   it('returns true for allowed roots', () => {
-    expect(shouldShowTopology('/portfolio')).toBe(true)
+    expect(shouldShowTopology('/portfolio')).toBe(false)
     expect(shouldShowTopology('/logiciel')).toBe(true)
   })
 
-  it('returns true for allowed nested routes', () => {
-    expect(shouldShowTopology('/portfolio/projets')).toBe(true)
-    expect(shouldShowTopology('/portfolio/contact')).toBe(true)
-    expect(shouldShowTopology('/portfolio/pageweb')).toBe(true)
+  it('disables topology on all funnel /portfolio/* routes', () => {
+    expect(shouldShowTopology('/portfolio/projets')).toBe(false)
+    expect(shouldShowTopology('/portfolio/contact')).toBe(false)
+    expect(shouldShowTopology('/portfolio/a-propos')).toBe(false)
+    expect(shouldShowTopology('/portfolio/pageweb')).toBe(false)
     expect(shouldShowTopology('/logiciel/timelendr')).toBe(true)
     expect(shouldShowTopology('/logiciel/timelendr/merci')).toBe(true)
+  })
+
+  it('disables topology on /portfolio sales home and /demos hub', () => {
+    vi.stubEnv('NEXT_PUBLIC_TOPOLOGY_SCOPE', 'global')
+    expect(shouldShowTopology('/portfolio')).toBe(false)
+    expect(shouldShowTopology('/demos')).toBe(false)
+    expect(shouldShowTopology('/demos/restaurant')).toBe(false)
+    vi.stubEnv('NEXT_PUBLIC_TOPOLOGY_SCOPE', 'targeted')
+    expect(shouldShowTopology('/portfolio')).toBe(false)
+    expect(shouldShowTopology('/demos')).toBe(false)
   })
 
   it('returns false for non-target routes', () => {
@@ -51,4 +62,3 @@ describe('shouldShowTopology', () => {
     expect(shouldShowTopology('/accueil-v2')).toBe(false)
   })
 })
-

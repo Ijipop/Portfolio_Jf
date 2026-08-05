@@ -20,15 +20,14 @@ import React from 'react'
 import AppBarComponent from '../../components/appBar'
 import ProjectsLoadingFrameSection from './ProjectsLoadingFrameSection'
 import HeaderSection from '../../components/shared/HeaderSection'
-import IjipopGlitchTitle from '../../components/shared/IjipopGlitchTitle'
 import PageWrapper from '../../components/shared/PageWrapper'
 import InteractiveBackgroundSection from '../../components/shared/InteractiveBackgroundSection'
 import Footer from '../../components/Footer'
 import SeoInternalLinkCta from '../../components/seo/SeoInternalLinkCta'
 import { DESIGN_TOKENS } from '../../design-system/constants'
+import { SITE_DARK } from '../../design-system/siteDark'
 import { useLanguage } from '../../contexts/LanguageContext'
 import { CONTACT_SUBJECT_SOFTWARE } from '@/i18n/contactSubjects'
-import { useThemeColors } from '../../hooks/useThemeColors'
 import { useTextColor } from '../../hooks/useTextColor'
 import type { Project, TimelendrLatestLinks } from './projectTypes'
 import { ProjectsGrid } from './components/projectsGrid'
@@ -44,10 +43,10 @@ const AnimatedBox = styled(Box)({
 export default function Projets() {
   const router = useRouter()
   const pathname = usePathname()
-  const { primary } = useThemeColors()
+  const brand = SITE_DARK.brandOrange
   const textColor = useTextColor()
   const { t, locale } = useLanguage()
-  /** Couleurs de section alignées sur la palette / thème courant (Créa et Site). */
+  /** Couleurs de section alignées sur SITE (ambre marque). */
   const projetsSectionText = textColor
   const [projects, setProjects] = useState<Project[]>([])
   const [loading, setLoading] = useState(true)
@@ -171,6 +170,10 @@ export default function Projets() {
         void router.push('/spacetaker')
         return
       }
+      if (normalized.includes('/deskdot') || normalized.includes('deskdot') || normalized.includes('desk-dot')) {
+        void router.push('/deskdot')
+        return
+      }
       navigateProjectUrl(url, router)
     },
     [router],
@@ -222,7 +225,7 @@ export default function Projets() {
     <PageWrapper backgroundVariant="default" overlayVariant="light" overflowX="hidden" overflowY="auto">
       <AppBarComponent />
 
-      <HeaderSection title={<IjipopGlitchTitle text={t('projects.title')} />} subtitle={t('projects.subtitle')} />
+      <HeaderSection title={t('projects.title')} subtitle={t('projects.subtitle')} />
 
       <InteractiveBackgroundSection>
         <Container
@@ -231,6 +234,7 @@ export default function Projets() {
             py: { xs: 3, sm: 4, md: 5, xl: 5 },
             position: 'relative',
             zIndex: 2,
+            fontFamily: 'var(--font-body), "Plus Jakarta Sans", sans-serif',
           }}
         >
           {error && (
@@ -244,37 +248,40 @@ export default function Projets() {
           <Box sx={{ display: 'flex', justifyContent: 'center', mb: { xs: 3, md: 4 } }}>
             <ToggleButtonGroup
               exclusive
-              size="medium"
+              size="small"
               value={selectedProjectType}
               onChange={handleProjectTypeChange}
               aria-label={t('projects.title')}
               sx={{
-                p: 0.5,
-                borderRadius: '999px',
-                border: `1px solid ${alpha(primary, 0.28)}`,
-                bgcolor: alpha(primary, 0.06),
+                p: 0.35,
+                borderRadius: '12px',
+                border: `1px solid ${alpha(projetsSectionText, 0.14)}`,
+                bgcolor: alpha(projetsSectionText, 0.04),
+                fontFamily: 'var(--font-body), "Plus Jakarta Sans", sans-serif',
                 '& .MuiToggleButtonGroup-grouped': {
                   border: 'none !important',
-                  borderRadius: '999px !important',
-                  mx: 0.25,
+                  borderRadius: '10px !important',
+                  mx: 0.15,
                 },
                 '& .MuiToggleButton-root': {
-                  px: { xs: 2.25, sm: 3 },
-                  py: 1.1,
-                  fontWeight: 700,
+                  px: { xs: 2, sm: 2.5 },
+                  py: 0.85,
+                  fontWeight: 600,
+                  fontSize: '0.9rem',
                   textTransform: 'none',
-                  color: projetsSectionText,
+                  letterSpacing: '-0.01em',
+                  color: alpha(projetsSectionText, 0.72),
                   transition: 'background-color 0.2s ease, color 0.2s ease',
                   '&.Mui-selected': {
-                    bgcolor: primary,
-                    color: '#fff',
-                    boxShadow: `0 8px 22px ${alpha(primary, 0.35)}`,
+                    bgcolor: alpha(brand, 0.16),
+                    color: brand,
+                    boxShadow: 'none',
                     '&:hover': {
-                      bgcolor: primary,
+                      bgcolor: alpha(brand, 0.2),
                     },
                   },
                   '&:hover': {
-                    bgcolor: alpha(primary, 0.12),
+                    bgcolor: alpha(brand, 0.08),
                   },
                 },
               }}
@@ -297,32 +304,33 @@ export default function Projets() {
                   }}
                   aria-label={t('projects.webSectionPersonalTitle')}
                   sx={{
-                    p: 0.4,
-                    borderRadius: '999px',
-                    border: `1px solid ${alpha(primary, 0.22)}`,
-                    bgcolor: alpha(primary, 0.04),
+                    p: 0.3,
+                    borderRadius: '10px',
+                    border: `1px solid ${alpha(projetsSectionText, 0.12)}`,
+                    bgcolor: 'transparent',
+                    fontFamily: 'var(--font-body), "Plus Jakarta Sans", sans-serif',
                     '& .MuiToggleButtonGroup-grouped': {
                       border: 'none !important',
-                      borderRadius: '999px !important',
-                      mx: 0.2,
+                      borderRadius: '8px !important',
+                      mx: 0.15,
                     },
                     '& .MuiToggleButton-root': {
-                      px: { xs: 1.75, sm: 2.25 },
-                      py: 0.85,
-                      fontWeight: 700,
+                      px: { xs: 1.5, sm: 2 },
+                      py: 0.7,
+                      fontWeight: 600,
                       textTransform: 'none',
-                      fontSize: '0.85rem',
-                      color: alpha(projetsSectionText, 0.78),
+                      fontSize: '0.82rem',
+                      color: alpha(projetsSectionText, 0.7),
                       '&.Mui-selected': {
-                        bgcolor: alpha(primary, 0.2),
-                        color: primary,
-                        '&:hover': { bgcolor: alpha(primary, 0.24) },
+                        bgcolor: alpha(brand, 0.14),
+                        color: brand,
+                        '&:hover': { bgcolor: alpha(brand, 0.18) },
                       },
                     },
                   }}
                 >
-                  <ToggleButton value="personal">{t('projects.webSectionPersonalTitle')}</ToggleButton>
                   <ToggleButton value="professional">{t('projects.webSectionProfessionalTitle')}</ToggleButton>
+                  <ToggleButton value="personal">{t('projects.webSectionPersonalTitle')}</ToggleButton>
                 </ToggleButtonGroup>
               </Box>
 
@@ -491,7 +499,7 @@ export default function Projets() {
         </Container>
       </InteractiveBackgroundSection>
 
-      <Footer />
+      <Footer mobileBottomClearance />
     </PageWrapper>
   )
 }

@@ -2,10 +2,8 @@
 
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
-import { usePathname } from 'next/navigation'
-import { DESIGN_TOKENS } from '@/design-system/constants'
-import { getCardSurfaceSx } from '@/components/shared/cardSurface'
-import { shouldShowTopology } from '@/utils/topologyRoutes'
+import { SITE_DARK, SITE_LIGHT } from '@/design-system/siteDark'
+import { useSiteDarkChrome } from '@/hooks/useSiteDarkChrome'
 import AboutPortraitLoop from './AboutPortraitLoop'
 
 type TFn = (key: string) => string
@@ -15,36 +13,23 @@ type AboutPersonalStorySectionProps = {
   textColor: string
 }
 
+/** Récit À propos — restyle confiance ; contenu inchangé. */
 export default function AboutPersonalStorySection({ t, textColor }: AboutPersonalStorySectionProps) {
-  const pathname = usePathname()
-  const isTopologyRoute = shouldShowTopology(pathname)
+  const siteDark = useSiteDarkChrome()
+  const tokens = siteDark ? SITE_DARK : SITE_LIGHT
 
   return (
     <Box
       sx={{
-        ...getCardSurfaceSx({ isTopologyRoute, variant: 'flat', level: 'soft', interactive: false }),
-        borderRadius: DESIGN_TOKENS.borderRadius.large,
+        borderRadius: tokens.cardRadius,
         padding: { xs: 3, sm: 4 },
         textAlign: 'center',
         mb: 8,
         position: 'relative',
         overflow: 'hidden',
-        ...(!isTopologyRoute && {
-          background: 'var(--card-background, linear-gradient(145deg, #e2e8f0 0%, #cbd5e1 50%, #e2e8f0 100%))',
-          border: '1px solid var(--card-primary, rgba(0,0,0,0.08))',
-          boxShadow: '0 8px 32px var(--card-primary, rgba(0,0,0,0.1))',
-          '&::before': {
-            content: '""',
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            background: `linear-gradient(135deg, var(--card-primary, rgba(30, 58, 138, 0.1)) 0%, var(--card-secondary, rgba(5, 150, 105, 0.1)) 50%, var(--card-primary, rgba(30, 58, 138, 0.05)) 100%)`,
-            opacity: 'var(--card-overlay-opacity, 0.3)',
-            pointerEvents: 'none',
-          },
-        }),
+        background: tokens.surface,
+        border: `1px solid ${tokens.border}`,
+        boxShadow: siteDark ? '0 10px 32px rgba(0,0,0,0.22)' : '0 8px 28px rgba(18,24,32,0.06)',
       }}
     >
       <Box
@@ -60,47 +45,26 @@ export default function AboutPersonalStorySection({ t, textColor }: AboutPersona
       </Box>
 
       <Box sx={{ position: 'relative', zIndex: 1, maxWidth: 720, mx: 'auto' }}>
-        <Typography
-          variant="body1"
-          sx={{
-            ...DESIGN_TOKENS.typography.body1,
-            color: textColor,
-            opacity: 0.95,
-            lineHeight: 1.65,
-            mb: 2.5,
-            textAlign: 'center',
-            whiteSpace: 'pre-line',
-          }}
-        >
-          {t('about.personalStoryP1')}
-        </Typography>
-        <Typography
-          variant="body1"
-          sx={{
-            ...DESIGN_TOKENS.typography.body1,
-            color: textColor,
-            opacity: 0.95,
-            lineHeight: 1.65,
-            mb: 2.5,
-            textAlign: 'center',
-            whiteSpace: 'pre-line',
-          }}
-        >
-          {t('about.personalStoryP2')}
-        </Typography>
-        <Typography
-          variant="body1"
-          sx={{
-            ...DESIGN_TOKENS.typography.body1,
-            color: textColor,
-            opacity: 0.95,
-            lineHeight: 1.65,
-            textAlign: 'center',
-            whiteSpace: 'pre-line',
-          }}
-        >
-          {t('about.personalStoryP3')}
-        </Typography>
+        {[t('about.personalStoryP1'), t('about.personalStoryP2'), t('about.personalStoryP3')].map(
+          (paragraph, index, arr) => (
+            <Typography
+              key={index}
+              variant="body1"
+              sx={{
+                fontFamily: 'var(--font-body), "Plus Jakarta Sans", sans-serif',
+                fontSize: { xs: '0.98rem', sm: '1.05rem' },
+                color: textColor || tokens.text,
+                opacity: 0.95,
+                lineHeight: 1.65,
+                mb: index < arr.length - 1 ? 2.5 : 0,
+                textAlign: 'center',
+                whiteSpace: 'pre-line',
+              }}
+            >
+              {paragraph}
+            </Typography>
+          ),
+        )}
       </Box>
     </Box>
   )

@@ -196,6 +196,34 @@ function Footer({ mobileBottomClearance = false }: FooterProps) {
                   {t('home.cardProjects')}
                 </Typography>
               </Link>
+              <Link href="/portfolio/projets?type=logiciel" style={{ textDecoration: 'none' }}>
+                <Typography
+                  variant="body2"
+                  sx={{
+                    opacity: 0.8,
+                    cursor: 'pointer',
+                    transition: DESIGN_TOKENS.transitions.normal,
+                    color: textColor,
+                    '&:hover': { opacity: 1, transform: 'translateX(4px)' }
+                  }}
+                >
+                  {t('nav.software')}
+                </Typography>
+              </Link>
+              <Link href="/soutien-informatique-montreal" style={{ textDecoration: 'none' }}>
+                <Typography
+                  variant="body2"
+                  sx={{
+                    opacity: 0.8,
+                    cursor: 'pointer',
+                    transition: DESIGN_TOKENS.transitions.normal,
+                    color: textColor,
+                    '&:hover': { opacity: 1, transform: 'translateX(4px)' }
+                  }}
+                >
+                  {t('nav.support')}
+                </Typography>
+              </Link>
               <Link href="/portfolio/a-propos" style={{ textDecoration: 'none' }}>
                 <Typography
                   variant="body2"

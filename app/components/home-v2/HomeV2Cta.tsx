@@ -35,10 +35,10 @@ export default function HomeV2Cta({
           background: BRAND_GLITCH_GRADIENT,
           color: '#fff',
           border: 'none',
-          boxShadow: `0 4px 24px ${v2.brandGlowStrong}`,
+          boxShadow: `0 2px 12px ${v2.brandGlow}`,
           '&:hover': {
-            boxShadow: `0 12px 40px ${v2.brandGlowStrong}`,
-            transform: 'translateY(-2px) scale(1.01)',
+            boxShadow: `0 6px 20px ${v2.brandGlowStrong}`,
+            transform: 'translateY(-2px)',
             background: BRAND_GLITCH_GRADIENT,
           },
         }

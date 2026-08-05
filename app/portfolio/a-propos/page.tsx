@@ -12,7 +12,6 @@ import { useRouter, usePathname } from 'next/navigation'
 import { useState, useEffect } from 'react'
 import { shouldShowTopology } from '@/utils/topologyRoutes'
 import HeaderSection from '../../components/shared/HeaderSection'
-import IjipopGlitchTitle from '../../components/shared/IjipopGlitchTitle'
 import AppBarComponent from '../../components/appBar'
 import PageWrapper from '../../components/shared/PageWrapper'
 import InteractiveBackgroundSection from '../../components/shared/InteractiveBackgroundSection'
@@ -252,13 +251,21 @@ export default function About() {
       <AppBarComponent />
       
       {/* Hero Section */}
-      <HeaderSection 
-        title={<IjipopGlitchTitle text={t('about.title')} />}
-        subtitle={t('about.subtitle')}
-      />
+      <HeaderSection title={t('about.title')} subtitle={t('about.subtitle')} />
 
       <InteractiveBackgroundSection>
-      <Container maxWidth="lg" sx={{ py: 6, position: 'relative', zIndex: 2 }}>
+      <Container
+        maxWidth="lg"
+        sx={{
+          py: 6,
+          position: 'relative',
+          zIndex: 2,
+          fontFamily: 'var(--font-body), "Plus Jakarta Sans", sans-serif',
+          '& h1, & h2, & h3, & h4': {
+            fontFamily: 'var(--font-display), Outfit, sans-serif',
+          },
+        }}
+      >
         <ScrollReveal direction="up" delay={0.05}>
         <Box sx={{ 
           display: 'grid', 
@@ -686,7 +693,7 @@ export default function About() {
       </Container>
       </InteractiveBackgroundSection>
       
-      <Footer />
+      <Footer mobileBottomClearance />
     </PageWrapper>
   )
 }

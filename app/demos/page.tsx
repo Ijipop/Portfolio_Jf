@@ -68,10 +68,11 @@ export default function DemosIndexPage() {
     <DemosIndexShell>
       <div className={styles.page}>
         <div className={styles.inner}>
-        <span className={styles.kicker}>Exemples de styles</span>
+        <span className={styles.kicker}>Exemples de style — pas des sites clients</span>
         <h1 className={styles.title}>Huit directions créatives pour votre prochain site</h1>
         <p className={styles.lead}>
-          Chaque page illustre une direction graphique et un secteur différents. Ouvrez celles qui vous parlent.
+          Maquettes de démonstration pour montrer des ambiances et secteurs différents — pas des mandats livrés.
+          Ouvrez celles qui vous parlent.
         </p>
         <DemosAiVideoShowcase />
         <DemosIndexAnimatedGrid cards={cards} />
