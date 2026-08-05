@@ -693,7 +693,7 @@ export default function About() {
       </Container>
       </InteractiveBackgroundSection>
       
-      <Footer />
+      <Footer mobileBottomClearance />
     </PageWrapper>
   )
 }

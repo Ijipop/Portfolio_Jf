@@ -499,7 +499,7 @@ export default function Projets() {
         </Container>
       </InteractiveBackgroundSection>
 
-      <Footer />
+      <Footer mobileBottomClearance />
     </PageWrapper>
   )
 }

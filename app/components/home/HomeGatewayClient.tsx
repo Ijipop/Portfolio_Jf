@@ -83,9 +83,14 @@ export default function HomeGatewayClient() {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        justifyContent: 'center',
+        justifyContent: { xs: 'flex-start', sm: 'center' },
         px: { xs: 2, sm: 3, md: 4 },
-        py: { xs: 2, sm: 3, md: 4 },
+        pt: {
+          xs: 'max(1.25rem, env(safe-area-inset-top, 0px))',
+          sm: 3,
+          md: 4,
+        },
+        pb: { xs: 2.5, sm: 3, md: 4 },
         color: SITE_DARK.text,
         overflow: 'visible',
       }}
