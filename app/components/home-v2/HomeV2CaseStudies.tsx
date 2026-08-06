@@ -68,27 +68,38 @@ function CaseField({
   value,
   fontBody,
   textSecondary,
-  textMuted,
+  text,
 }: {
   label: string
   value: string
   fontBody: string
   textSecondary: string
-  textMuted: string
+  text: string
 }) {
   return (
     <Typography
+      component="p"
       sx={{
         fontFamily: fontBody,
         fontSize: '0.88rem',
+        fontWeight: 400,
         color: textSecondary,
         lineHeight: 1.5,
         minHeight: FIELD_MIN_HEIGHT,
+        m: 0,
       }}
     >
-      <Box component="span" sx={{ color: textMuted, fontWeight: 600 }}>
-        {label}{' '}
-      </Box>
+      <Box
+        component="strong"
+        sx={{
+          fontFamily: fontBody,
+          fontWeight: 800,
+          color: text,
+          letterSpacing: '0.01em',
+        }}
+      >
+        {label}
+      </Box>{' '}
       {value}
     </Typography>
   )
@@ -170,21 +181,21 @@ function CaseStudyCard({ study, index }: { study: CaseStudy; index: number }) {
             value={t(study.contextKey)}
             fontBody={v2.fontBody}
             textSecondary={v2.textSecondary}
-            textMuted={v2.textMuted}
+            text={v2.text}
           />
           <CaseField
             label={t('homeV2.caseLabelDeliverable')}
             value={t(study.deliverableKey)}
             fontBody={v2.fontBody}
             textSecondary={v2.textSecondary}
-            textMuted={v2.textMuted}
+            text={v2.text}
           />
           <CaseField
             label={t('homeV2.caseLabelResult')}
             value={t(study.resultKey)}
             fontBody={v2.fontBody}
             textSecondary={v2.textSecondary}
-            textMuted={v2.textMuted}
+            text={v2.text}
           />
           <Typography
             sx={{
