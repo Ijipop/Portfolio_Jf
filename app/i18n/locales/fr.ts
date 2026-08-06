@@ -693,6 +693,15 @@ export const fr = {
     deskDot: {
       title: 'DeskDot',
       lead: 'Lanceur radial pour Windows. Survole, clique, c’est lancé.',
+      pitchAria:
+        'Mets-en partout. Empile-les. Fais-les disparaître. Au survol… magie : elles reviennent.',
+      pitchLine1: 'Mets-en partout.',
+      pitchLine2: 'Empile-les.',
+      pitchLine3: 'Fais-les disparaître.',
+      pitchLine4: 'Au survol… magie : elles reviennent.',
+      pitchLine4Before: 'Au survol… ',
+      pitchMagic: 'magie',
+      pitchLine4After: ' : elles reviennent.',
       downloadWindows: 'Télécharger pour Windows',
       downloadSoon: 'Bientôt disponible',
       galleryTitle: 'Aperçu',

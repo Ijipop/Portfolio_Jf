@@ -96,6 +96,7 @@
   border-radius: 14px;
   object-fit: contain;
   flex-shrink: 0;
+  background: rgba(255, 255, 255, 0.06);
   box-shadow: 0 8px 28px rgba(167, 139, 250, 0.22);
 }
 
@@ -116,6 +117,45 @@
   font-size: clamp(1.1rem, 2.6vw, 1.3rem);
   line-height: 1.5;
   color: var(--dd-muted);
+}
+
+.pitchTitle {
+  display: grid;
+  gap: 0.28em;
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(1.45rem, 4.2vw, 2.15rem);
+  letter-spacing: -0.035em;
+  line-height: 1.18;
+  color: var(--dd-text);
+  max-width: 22ch;
+}
+
+.pitchLine {
+  display: block;
+}
+
+.pitchMagic {
+  display: inline-block;
+  background: linear-gradient(120deg, #e9d5ff 0%, #c4b5fd 35%, #a78bfa 70%, #ddd6fe 100%);
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  animation: pitchMagicShimmer 3.6s ease-in-out infinite;
+  filter: drop-shadow(0 0 18px rgba(167, 139, 250, 0.45));
+}
+
+@keyframes pitchMagicShimmer {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
 }
 
 .section {
@@ -178,5 +218,10 @@
 @media (prefers-reduced-motion: reduce) {
   .rings {
     opacity: 0.2;
+  }
+
+  .pitchMagic {
+    animation: none;
+    background-position: 50% 50%;
   }
 }

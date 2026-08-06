@@ -693,6 +693,15 @@ export const en = {
     deskDot: {
       title: 'DeskDot',
       lead: 'Radial launcher for Windows. Hover, click, it’s launched.',
+      pitchAria:
+        'Scatter them. Stack them. Make them vanish. On hover… magic: they’re back.',
+      pitchLine1: 'Scatter them.',
+      pitchLine2: 'Stack them.',
+      pitchLine3: 'Make them vanish.',
+      pitchLine4: 'On hover… magic: they’re back.',
+      pitchLine4Before: 'On hover… ',
+      pitchMagic: 'magic',
+      pitchLine4After: ': they’re back.',
       downloadWindows: 'Download for Windows',
       downloadSoon: 'Coming soon',
       galleryTitle: 'Preview',

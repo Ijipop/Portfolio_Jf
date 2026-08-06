@@ -159,6 +159,15 @@ const nextConfig = {
         ]
       },
       {
+        source: '/img/:path*.json',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=0, must-revalidate',
+          },
+        ],
+      },
+      {
         source: '/img/:path*',
         headers: [
           {

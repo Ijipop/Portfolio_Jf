@@ -8,7 +8,6 @@ import Dialog from '@mui/material/Dialog'
 import IconButton from '@mui/material/IconButton'
 import Typography from '@mui/material/Typography'
 import { AnimatePresence, motion } from 'framer-motion'
-import Image from 'next/image'
 import { useCallback, useEffect, useRef, useState } from 'react'
 
 const AUTOPLAY_MS = 4500
@@ -16,19 +15,35 @@ const AUTOPLAY_MS = 4500
 type ProductImageCarouselProps = {
   /** Ex. `/img/cpu-ze` — charge `gallery.json` dans ce dossier. */
   galleryBasePath: string
+  /** Slides déjà connus (évite un flash vide si le fetch échoue ou est lent). */
+  initialSlides?: readonly string[]
   emptyMessage: string
   /** fade = CPU-ZE ; slide = Space Taker */
   motionStyle?: 'fade' | 'slide'
   accent: string
 }
 
+function normalizeGalleryUrls(base: string, data: unknown): string[] {
+  if (!Array.isArray(data)) return []
+  return data
+    .filter((f: unknown) => typeof f === 'string')
+    .map((f: string) => {
+      const name = f.replace(/^\/+/, '')
+      return name.startsWith('http') || name.startsWith('/') ? name : `${base}/${name}`
+    })
+    .filter((u: string) => /\.(png|jpe?g|webp|gif)$/i.test(u))
+}
+
 export default function ProductImageCarousel({
   galleryBasePath,
+  initialSlides,
   emptyMessage,
   motionStyle = 'fade',
   accent,
 }: ProductImageCarouselProps) {
-  const [slides, setSlides] = useState<string[]>([])
+  const [slides, setSlides] = useState<string[]>(() =>
+    initialSlides?.length ? [...initialSlides] : [],
+  )
   const [index, setIndex] = useState(0)
   const [direction, setDirection] = useState(1)
   const [lightboxOpen, setLightboxOpen] = useState(false)
@@ -39,23 +54,19 @@ export default function ProductImageCarousel({
   useEffect(() => {
     let cancelled = false
     const base = galleryBasePath.replace(/\/$/, '')
-    fetch(`${base}/gallery.json`)
-      .then((r) => (r.ok ? r.json() : []))
+    fetch(`${base}/gallery.json`, { cache: 'no-store' })
+      .then((r) => (r.ok ? r.json() : null))
       .then((data) => {
-        if (cancelled || !Array.isArray(data)) return
-        const urls = data
-          .filter((f: unknown) => typeof f === 'string')
-          .map((f: string) => {
-            const name = f.replace(/^\/+/, '')
-            return name.startsWith('http') || name.startsWith('/') ? name : `${base}/${name}`
-          })
-          .filter((u: string) => /\.(png|jpe?g|webp|gif)$/i.test(u))
-        setSlides(urls)
-        setIndex(0)
-        setFailedSrc(null)
+        if (cancelled) return
+        const urls = normalizeGalleryUrls(base, data)
+        if (urls.length > 0) {
+          setSlides(urls)
+          setIndex(0)
+          setFailedSrc(null)
+        }
       })
       .catch(() => {
-        if (!cancelled) setSlides([])
+        /* garder initialSlides si présents */
       })
     return () => {
       cancelled = true
@@ -82,10 +93,13 @@ export default function ProductImageCarousel({
     [slides.length],
   )
 
-  const goTo = useCallback((next: number) => {
-    setDirection(next > index ? 1 : -1)
-    setIndex(next)
-  }, [index])
+  const goTo = useCallback(
+    (next: number) => {
+      setDirection(next > index ? 1 : -1)
+      setIndex(next)
+    },
+    [index],
+  )
 
   useEffect(() => {
     if (slides.length < 2 || lightboxOpen || paused || reducedMotionRef.current) return
@@ -94,7 +108,7 @@ export default function ProductImageCarousel({
   }, [slides.length, lightboxOpen, paused, go])
 
   const current = slides[index]
-  const showImage = current && current !== failedSrc
+  const showImage = Boolean(current && current !== failedSrc)
 
   if (slides.length === 0) {
     return (
@@ -172,14 +186,19 @@ export default function ProductImageCarousel({
               transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
               style={{ position: 'absolute', inset: 0 }}
             >
-              <Image
+              {/* Native img : évite les 500 next/image (sharp) qui vidaient la galerie. */}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
                 src={current}
                 alt=""
-                fill
-                sizes="(max-width: 900px) 100vw, 720px"
-                style={{ objectFit: 'contain', objectPosition: 'center' }}
                 onError={() => setFailedSrc(current)}
-                unoptimized={current.endsWith('.gif')}
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'contain',
+                  objectPosition: 'center',
+                  display: 'block',
+                }}
               />
             </motion.div>
           ) : (
@@ -257,7 +276,12 @@ export default function ProductImageCarousel({
         </IconButton>
         {showImage ? (
           <Box sx={{ position: 'relative', width: '100%', aspectRatio: '16 / 10' }}>
-            <Image src={current} alt="" fill sizes="100vw" style={{ objectFit: 'contain' }} />
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={current}
+              alt=""
+              style={{ width: '100%', height: '100%', objectFit: 'contain', display: 'block' }}
+            />
           </Box>
         ) : null}
       </Dialog>
