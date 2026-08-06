@@ -2,13 +2,16 @@
 
 import Link from 'next/link'
 import ProductDownloadRow from '@/components/product-landings/ProductDownloadRow'
-import ProductImageCarousel from '@/components/product-landings/ProductImageCarousel'
 import ProductLandingShell from '@/components/product-landings/ProductLandingShell'
 import ProductSecurityNotice from '@/components/product-landings/ProductSecurityNotice'
 import type { ProductDownloadLinks } from '@/components/product-landings/productDownloads'
+import AutoplayLoopVideo from '@/components/shared/AutoplayLoopVideo'
 import { useLanguage } from '@/contexts/LanguageContext'
+import DeskDotPhotoStack from './DeskDotPhotoStack'
 import DeskDotPitchTitle from './DeskDotPitchTitle'
 import styles from './DeskDotLanding.module.css'
+
+const DESKDOT_DEMO_SRC = '/img/deskdot/DeskDot_Final.mp4'
 
 const BENEFIT_KEYS = [
   'deskDot.b1',
@@ -81,14 +84,23 @@ export default function DeskDotLandingClient({ downloads }: DeskDotLandingClient
           />
         </header>
 
-        <section className={styles.section} aria-label={t('deskDot.galleryTitle')}>
-          <h2 className={styles.sectionTitle}>{t('deskDot.galleryTitle')}</h2>
-          <ProductImageCarousel
-            galleryBasePath="/img/deskdot"
-            initialSlides={[...DESKDOT_GALLERY_FALLBACK]}
-            emptyMessage={t('deskDot.galleryEmpty')}
-            motionStyle="fade"
-            accent={ACCENT}
+        <section className={styles.section} aria-labelledby="deskdot-demo-title">
+          <h2 id="deskdot-demo-title" className={styles.sectionTitle}>
+            {t('deskDot.demoTitle')}
+          </h2>
+          <div className={styles.demoFrame}>
+            <AutoplayLoopVideo src={DESKDOT_DEMO_SRC} ariaLabel={t('deskDot.demoAria')} />
+          </div>
+        </section>
+
+        <section className={styles.section} aria-labelledby="deskdot-gallery-title">
+          <h2 id="deskdot-gallery-title" className={styles.sectionTitle}>
+            {t('deskDot.galleryTitle')}
+          </h2>
+          <DeskDotPhotoStack
+            images={DESKDOT_GALLERY_FALLBACK}
+            ariaLabel={t('deskDot.galleryTitle')}
+            hint={t('deskDot.stackHint')}
           />
         </section>
 
