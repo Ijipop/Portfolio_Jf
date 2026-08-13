@@ -12,6 +12,8 @@ type HomeV2BackdropProps = {
   glowPlacement?: 'top' | 'center'
   /** `spectacle` = halos pulsés + dérive (gateway). */
   intensity?: 'default' | 'spectacle'
+  /** Délai flash glitch session — après l’intro Tetris gateway. */
+  glitchDelayMs?: number
 }
 
 const GRAIN_URL = `url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.15' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.032'/%3E%3C/svg%3E")`
@@ -20,6 +22,7 @@ const GRAIN_URL = `url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='h
 export default function HomeV2Backdrop({
   glowPlacement = 'top',
   intensity = 'default',
+  glitchDelayMs,
 }: HomeV2BackdropProps) {
   const centered = glowPlacement === 'center'
   const spectacle = intensity === 'spectacle'
@@ -27,6 +30,7 @@ export default function HomeV2Backdrop({
   const { effectsEnabled, glitchActive, haloRef } = useBackdropPresence({
     centered,
     baseOpacity: baseHaloOpacity,
+    glitchDelayMs: glitchDelayMs ?? (spectacle ? 750 : 180),
   })
 
   const initialHaloTransform = centered
