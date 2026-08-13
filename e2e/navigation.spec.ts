@@ -132,6 +132,8 @@ test('gateway choice CTAs stay visible within the first viewport', async ({ page
 
   const viewports = [
     { width: 390, height: 844 },
+    { width: 844, height: 390 },
+    { width: 768, height: 1024 },
     { width: 1280, height: 800 },
   ]
 
@@ -201,9 +203,10 @@ test('site light mode uses dark text on home and contact', async ({ page }) => {
 test('demos index and demo routes', async ({ page }) => {
   await page.goto('/demos', { waitUntil: 'domcontentloaded' })
   await expect(page).toHaveURL(/\/demos\/?$/)
-  await expect(page.locator('h1').first()).toContainText(/Huit directions créatives/)
+  await expect(page.locator('h1').first()).toContainText(/Neuf directions créatives/)
   await expect(page.locator('a[href="/demos/studio"]').first()).toBeVisible()
   await expect(page.locator('a[href="/demos/spectacle"]').first()).toBeVisible()
+  await expect(page.locator('a[href="/demos/volt"]').first()).toBeVisible()
   await expect(page.getByTestId('demos-grid-ready')).toBeVisible()
 
   const constructionLink = page.getByTestId('demo-link-construction')
@@ -227,5 +230,9 @@ test('demos index and demo routes', async ({ page }) => {
   await page.goto('/demos/galerie', { waitUntil: 'domcontentloaded' })
   await expect(page.getByRole('link', { name: 'Ligne claire' })).toBeVisible()
   await expect(page.getByRole('link', { name: /Maison Nord/ })).toBeVisible()
+
+  await page.goto('/demos/volt', { waitUntil: 'domcontentloaded' })
+  await expect(page.locator('h1').filter({ hasText: /Trop loud/ })).toBeVisible()
+  await expect(page.getByRole('link', { name: /Voir le drop/i })).toBeVisible()
 })
 

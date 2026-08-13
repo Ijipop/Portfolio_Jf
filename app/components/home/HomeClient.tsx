@@ -8,6 +8,7 @@ import PageWrapper from '@/components/shared/PageWrapper'
 import InteractiveBackgroundSection from '@/components/shared/InteractiveBackgroundSection'
 import HomeV2Hero from '@/components/home-v2/HomeV2Hero'
 import HomeV2CaseStudies from '@/components/home-v2/HomeV2CaseStudies'
+import HomeV2ProofRail from '@/components/home-v2/HomeV2ProofRail'
 import HomeV2Services from '@/components/home-v2/HomeV2Services'
 import HomeV2Pricing from '@/components/home-v2/HomeV2Pricing'
 import HomeV2Credibility from '@/components/home-v2/HomeV2Credibility'
@@ -86,6 +87,7 @@ export default function HomeClient({ initialShowIntro }: { initialShowIntro: boo
           >
             <Box
               component="header"
+              data-testid="portfolio-hero-stage"
               sx={{
                 display: 'flex',
                 flexDirection: 'column',
@@ -93,10 +95,24 @@ export default function HomeClient({ initialShowIntro }: { initialShowIntro: boo
                 m: 0,
                 p: 0,
                 flexShrink: 0,
+                minHeight: '100dvh',
+                boxSizing: 'border-box',
+                '@media (max-height: 480px)': {
+                  minHeight: 'auto',
+                },
               }}
             >
               <AppBarComponent />
-              <Container maxWidth="lg" sx={{ px: { xs: 1.5, sm: 3, md: 4 } }}>
+              <Container
+                maxWidth="lg"
+                sx={{
+                  flex: 1,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  minHeight: 0,
+                  px: { xs: 1.5, sm: 3, md: 4 },
+                }}
+              >
                 <HomeV2Hero />
               </Container>
             </Box>
@@ -104,15 +120,18 @@ export default function HomeClient({ initialShowIntro }: { initialShowIntro: boo
             <InteractiveBackgroundSection>
               <Container
                 maxWidth="lg"
+                id="portfolio-after-hero"
                 sx={{
                   pt: { xs: 2, sm: 3 },
                   pb: { xs: 10, sm: 4, md: 8 },
                   px: { xs: 1.5, sm: 3, md: 4 },
                   position: 'relative',
                   zIndex: 2,
+                  scrollMarginTop: 'calc(var(--app-bar-height, 64px) + 8px)',
                 }}
               >
                 <HomeV2CaseStudies />
+                <HomeV2ProofRail />
                 <HomeV2Services />
                 <HomeV2Pricing />
                 <HomeV2Credibility />

@@ -47,6 +47,14 @@ export default function TechDemoPage() {
             </div>
           </div>
           <div className={styles.panel} aria-hidden>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/demos/tech/dashboard.jpg"
+              alt=""
+              className={styles.panelPhoto}
+              loading="eager"
+              decoding="async"
+            />
             <div className={styles.panelGlow} />
             <div className={styles.panelGrid}>
               <div className={styles.metric}>

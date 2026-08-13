@@ -11,10 +11,11 @@ import { DESIGN_TOKENS } from '@/design-system/constants'
 import { BRAND_GLITCH_GRADIENT } from '@/components/shared/IjipopGlitchTitle'
 import { SITE_DARK } from '@/design-system/siteDark'
 
-/** Masqué sur tout le funnel public (sticky estimation) + gateway. */
+/** Masqué sur funnel public, gateway, et vitrines /demos (immersives). */
 function isFunnelOrHiddenPath(pathname: string): boolean {
   if (pathname === '/') return true
   if (pathname === '/portfolio' || pathname.startsWith('/portfolio/')) return true
+  if (pathname === '/demos' || pathname.startsWith('/demos/')) return true
   return false
 }
 

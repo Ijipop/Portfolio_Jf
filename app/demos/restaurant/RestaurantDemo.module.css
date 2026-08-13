@@ -151,6 +151,8 @@
   border-radius: 14px;
   background: linear-gradient(160deg, #7f1d1d 0%, #ea580c 100%);
   min-width: 0;
+  position: relative;
+  overflow: hidden;
 }
 
 @media (max-width: 720px) {
@@ -186,6 +188,8 @@
   border-radius: 14px;
   background: linear-gradient(200deg, #fdba74 0%, #fff7ed 100%);
   min-width: 0;
+  position: relative;
+  overflow: hidden;
 }
 
 .g3 {
@@ -193,6 +197,8 @@
   border-radius: 14px;
   background: linear-gradient(120deg, #431407 0%, #9a3412 100%);
   min-width: 0;
+  position: relative;
+  overflow: hidden;
 }
 
 .g4 {
@@ -201,6 +207,17 @@
   border-radius: 14px;
   background: linear-gradient(135deg, #fef3c7 0%, #fdba74 45%, #7f1d1d 100%);
   min-width: 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.galleryImg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
 }
 
 .storyBand,

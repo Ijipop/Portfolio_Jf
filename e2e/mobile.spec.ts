@@ -11,17 +11,27 @@ const MOBILE_ROUTES = [
   '/logiciel/timelendr',
 ] as const
 
+const OVERFLOW_VIEWPORTS = [
+  { width: 390, height: 844 },
+  { width: 768, height: 1024 },
+] as const
+
 test.describe('mobile baseline', () => {
-  for (const route of MOBILE_ROUTES) {
-    test(`no horizontal overflow on ${route}`, async ({ page }) => {
-      await page.goto(route, { waitUntil: 'domcontentloaded' })
+  for (const viewport of OVERFLOW_VIEWPORTS) {
+    for (const route of MOBILE_ROUTES) {
+      test(`no horizontal overflow on ${route} @ ${viewport.width}x${viewport.height}`, async ({
+        page,
+      }) => {
+        await page.setViewportSize(viewport)
+        await page.goto(route, { waitUntil: 'domcontentloaded' })
 
-      const hasOverflow = await page.evaluate(() => {
-        return document.documentElement.scrollWidth > window.innerWidth + 1
+        const hasOverflow = await page.evaluate(() => {
+          return document.documentElement.scrollWidth > window.innerWidth + 1
+        })
+
+        expect(hasOverflow).toBe(false)
       })
-
-      expect(hasOverflow).toBe(false)
-    })
+    }
   }
 
   test('contact form is fully usable on mobile', async ({ page }) => {

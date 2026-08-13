@@ -54,6 +54,12 @@ const demos = [
     desc: 'Créatif punchy — grille serrée, overlay sombre, projets cliquables.',
     thumb: styles.thumbGalerie,
   },
+  {
+    href: '/demos/volt',
+    title: 'Streetwear VOLT',
+    desc: 'Over-the-top — hero sticky, photos qui glissent, marquee et lookbook cinéma.',
+    thumb: styles.thumbVolt,
+  },
 ] as const
 
 export default function DemosIndexPage() {
@@ -69,7 +75,7 @@ export default function DemosIndexPage() {
       <div className={styles.page}>
         <div className={styles.inner}>
         <span className={styles.kicker}>Exemples de style — pas des sites clients</span>
-        <h1 className={styles.title}>Huit directions créatives pour votre prochain site</h1>
+        <h1 className={styles.title}>Neuf directions créatives pour votre prochain site</h1>
         <p className={styles.lead}>
           Maquettes de démonstration pour montrer des ambiances et secteurs différents — pas des mandats livrés.
           Ouvrez celles qui vous parlent.

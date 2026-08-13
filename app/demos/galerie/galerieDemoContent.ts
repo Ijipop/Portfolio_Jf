@@ -13,6 +13,7 @@ export type GalerieProject = {
   category: string
   href: string
   tone: 'sage' | 'clay' | 'ink' | 'mist' | 'sand' | 'slate' | 'dusk' | 'fern' | 'rose' | 'ocean' | 'amber'
+  src: string
 }
 
 /** Mandats fictifs — liens .demo, vitrine illustrative uniquement. */
@@ -23,6 +24,7 @@ export const PROJECTS: GalerieProject[] = [
     category: 'Identité · éditorial',
     href: 'https://maison-nord.demo',
     tone: 'sage',
+    src: '/demos/galerie/tile-01.jpg',
   },
   {
     id: 'atelier-lumiere',
@@ -30,6 +32,7 @@ export const PROJECTS: GalerieProject[] = [
     category: 'Site vitrine',
     href: 'https://atelier-lumiere.demo',
     tone: 'clay',
+    src: '/demos/galerie/tile-02.jpg',
   },
   {
     id: 'collectif-rivage',
@@ -37,6 +40,7 @@ export const PROJECTS: GalerieProject[] = [
     category: 'Campagne print',
     href: 'https://collectif-rivage.demo',
     tone: 'ink',
+    src: '/demos/galerie/tile-03.jpg',
   },
   {
     id: 'studio-forme',
@@ -44,6 +48,7 @@ export const PROJECTS: GalerieProject[] = [
     category: 'Direction artistique',
     href: 'https://studio-forme.demo',
     tone: 'mist',
+    src: '/demos/galerie/tile-04.jpg',
   },
   {
     id: 'cabinet-ora',
@@ -51,6 +56,7 @@ export const PROJECTS: GalerieProject[] = [
     category: 'Refonte web',
     href: 'https://cabinet-ora.demo',
     tone: 'sand',
+    src: '/demos/galerie/tile-05.jpg',
   },
   {
     id: 'festival-allee',
@@ -58,6 +64,7 @@ export const PROJECTS: GalerieProject[] = [
     category: 'Affichage · signalétique',
     href: 'https://festival-allee.demo',
     tone: 'slate',
+    src: '/demos/galerie/tile-06.jpg',
   },
   {
     id: 'boulangerie-mur',
@@ -65,6 +72,7 @@ export const PROJECTS: GalerieProject[] = [
     category: 'Packaging',
     href: 'https://boulangerie-mur.demo',
     tone: 'dusk',
+    src: '/demos/galerie/tile-07.jpg',
   },
   {
     id: 'terre-vive',
@@ -72,6 +80,7 @@ export const PROJECTS: GalerieProject[] = [
     category: 'Branding',
     href: 'https://terre-vive.demo',
     tone: 'fern',
+    src: '/demos/galerie/tile-08.jpg',
   },
   {
     id: 'galerie-sable',
@@ -79,6 +88,7 @@ export const PROJECTS: GalerieProject[] = [
     category: 'Exposition',
     href: 'https://galerie-sable.demo',
     tone: 'rose',
+    src: '/demos/galerie/tile-09.jpg',
   },
   {
     id: 'accord-type',
@@ -86,6 +96,7 @@ export const PROJECTS: GalerieProject[] = [
     category: 'Typographie',
     href: 'https://accord-type.demo',
     tone: 'ocean',
+    src: '/demos/galerie/tile-10.jpg',
   },
   {
     id: 'hauteur-studio',
@@ -93,6 +104,7 @@ export const PROJECTS: GalerieProject[] = [
     category: 'Identité locale',
     href: 'https://hauteur-studio.demo',
     tone: 'amber',
+    src: '/demos/galerie/tile-11.jpg',
   },
 ]
 

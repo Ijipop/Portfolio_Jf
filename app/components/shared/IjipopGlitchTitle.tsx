@@ -73,11 +73,11 @@ export default function IjipopGlitchTitle({ text, variant = 'page', sx }: Ijipop
   const fontSize =
     variant === 'hero'
       ? {
-          xs: 'clamp(4.35rem, 18vw, 5.25rem)',
-          sm: 'clamp(6.7rem, 15vw, 9.2rem)',
-          md: 'clamp(9.25rem, 13vw, 12.25rem)',
-          lg: 'clamp(10.5rem, 13vw, 14.25rem)',
-          xl: 'clamp(12rem, 12vw, 15.75rem)',
+          xs: 'clamp(2.8rem, 12vw, 3.6rem)',
+          sm: 'clamp(3.2rem, 8vw, 4.2rem)',
+          md: 'clamp(3.4rem, 5vw, 4.6rem)',
+          lg: 'clamp(3.6rem, 4.2vw, 5rem)',
+          xl: 'clamp(3.8rem, 3.6vw, 5.2rem)',
         }
       : variant === 'gateway'
         ? {
@@ -111,23 +111,22 @@ export default function IjipopGlitchTitle({ text, variant = 'page', sx }: Ijipop
         mx: variant === 'hero' ? 'auto' : undefined,
         ...(variant === 'hero' && {
           '@media (max-width: 599.95px) and (max-height: 760px)': {
-            fontSize: 'clamp(4rem, 16vw, 4.8rem)',
+            fontSize: 'clamp(2.4rem, 12vw, 3.2rem)',
           },
           '@media (max-height: 680px)': {
-            fontSize: 'clamp(4.5rem, 14vw, 6.5rem)',
+            fontSize: 'clamp(2.4rem, 8vw, 3.4rem)',
           },
           '@media (max-height: 500px)': {
-            fontSize: 'clamp(3.25rem, 12vw, 4rem)',
+            fontSize: 'clamp(2.1rem, 8vh, 2.8rem)',
           },
-          /** Laptops ~15" : l’ancien scale (~9–11rem) faisait chevaucher texte et CTAs. */
           '@media (min-width: 900px) and (max-height: 920px)': {
-            fontSize: 'clamp(5.2rem, 7.5vw, 6.75rem)',
+            fontSize: 'clamp(3.1rem, 4.6vw, 4.2rem)',
           },
           '@media (min-width: 900px) and (max-height: 800px)': {
-            fontSize: 'clamp(4.4rem, 6.5vw, 5.6rem)',
+            fontSize: 'clamp(2.8rem, 4.2vw, 3.6rem)',
           },
           '@media (min-width: 900px) and (max-height: 700px)': {
-            fontSize: 'clamp(3.6rem, 5.5vw, 4.6rem)',
+            fontSize: 'clamp(2.4rem, 3.8vw, 3.2rem)',
           },
         }),
         ...(variant === 'gateway' && {

@@ -191,6 +191,14 @@
 .tileVisual {
   position: absolute;
   inset: 0;
+  overflow: hidden;
+}
+
+.tileImg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
   transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
@@ -198,7 +206,7 @@
   content: '';
   position: absolute;
   inset: 0;
-  background: radial-gradient(circle at 28% 22%, rgba(255, 255, 255, 0.42) 0%, transparent 48%);
+  background: radial-gradient(circle at 28% 22%, rgba(255, 255, 255, 0.22) 0%, transparent 48%);
   mix-blend-mode: soft-light;
   pointer-events: none;
 }
@@ -306,8 +314,8 @@
     box-shadow: 0 16px 36px rgba(18, 17, 16, 0.18);
   }
 
-  .tile:hover .tileVisual,
-  .tile:focus-visible .tileVisual {
+  .tile:hover .tileImg,
+  .tile:focus-visible .tileImg {
     transform: scale(1.07);
   }
 

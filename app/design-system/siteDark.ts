@@ -1,24 +1,25 @@
 /**
  * Tokens visuels site vendeur — confiance PME Montréal.
  * Accent ambre aligné sur le glitch Ijipop (ne pas casser la marque).
- * Surfaces sobres, peu de glow « neon portfolio ».
+ * Encre chaude, surfaces papier — pas de glass « neon portfolio ».
  */
 export const SITE_DARK = {
-  bg: '#0c1118',
-  bgElevated: '#141b24',
-  surface: 'rgba(232, 240, 248, 0.04)',
-  surfaceHover: 'rgba(232, 240, 248, 0.07)',
-  border: 'rgba(200, 214, 230, 0.12)',
-  borderHover: 'rgba(232, 93, 4, 0.38)',
-  text: '#f4f6f8',
-  textSecondary: '#a8b2bf',
-  textMuted: '#8b95a3',
+  bg: '#181410',
+  bgMid: '#1e1914',
+  bgElevated: '#241e18',
+  surface: '#1c1814',
+  surfaceHover: '#241f1a',
+  border: 'rgba(232, 220, 200, 0.14)',
+  borderHover: 'rgba(232, 93, 4, 0.45)',
+  text: '#f7f3ee',
+  textSecondary: '#c4b8aa',
+  textMuted: '#9a8f84',
   brandOrange: '#e85d04',
   brandOrangeLight: '#f48c06',
   brandOrangeDeep: '#c2410c',
-  brandGlow: 'rgba(232, 93, 4, 0.07)',
-  brandGlowStrong: 'rgba(232, 93, 4, 0.12)',
-  appBarGlass: 'rgba(12, 17, 24, 0.88)',
+  brandGlow: 'rgba(232, 93, 4, 0.16)',
+  brandGlowStrong: 'rgba(232, 93, 4, 0.22)',
+  appBarGlass: 'rgba(18, 16, 14, 0.9)',
   maxWidth: 1200,
   cardRadius: '16px',
 } as const
@@ -28,6 +29,7 @@ export const SITE_DARK = {
  */
 export const SITE_LIGHT = {
   bg: '#f3f5f7',
+  bgMid: '#eef1f4',
   bgElevated: '#ffffff',
   surface: 'rgba(255, 255, 255, 0.92)',
   surfaceHover: 'rgba(255, 255, 255, 1)',
@@ -49,7 +51,7 @@ export const SITE_LIGHT = {
 export type SiteThemeTokens = typeof SITE_DARK | typeof SITE_LIGHT
 
 export function siteDarkPageGradient(): string {
-  return `linear-gradient(168deg, ${SITE_DARK.bg} 0%, #101722 45%, ${SITE_DARK.bgElevated} 100%)`
+  return `linear-gradient(168deg, ${SITE_DARK.bg} 0%, ${SITE_DARK.bgMid} 45%, ${SITE_DARK.bgElevated} 100%)`
 }
 
 export function siteDarkTopologyBackground(): string {

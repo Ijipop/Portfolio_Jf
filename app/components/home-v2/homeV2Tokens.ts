@@ -28,17 +28,12 @@ export const HOME_V2 = HOME_V2_DARK
 export function buildHomeV2CardSx(tokens: HomeV2Tokens) {
   return {
     background: tokens.surface,
-    backdropFilter: 'blur(10px)',
-    WebkitBackdropFilter: 'blur(10px)',
     border: `1px solid ${tokens.border}`,
     borderRadius: tokens.cardRadius,
-    transition:
-      'border-color 0.3s ease, box-shadow 0.35s ease, transform 0.35s cubic-bezier(0.22, 1, 0.36, 1)',
-    willChange: 'transform',
+    transition: 'border-color 0.25s ease, background-color 0.25s ease',
     '&:hover': {
       borderColor: tokens.borderHover,
-      boxShadow: `0 12px 32px rgba(0,0,0,0.22), 0 0 0 1px ${tokens.brandGlow}`,
-      transform: 'translateY(-3px)',
+      background: tokens.surfaceHover,
     },
   } as const
 }
@@ -50,11 +45,9 @@ export function buildHomeV2FeaturedCardSx(tokens: HomeV2Tokens) {
     position: 'relative' as const,
     overflow: 'hidden' as const,
     border: `1px solid ${tokens.borderHover}`,
-    boxShadow: `0 10px 28px ${tokens.brandGlow}`,
     '&:hover': {
       borderColor: tokens.brandOrange,
-      boxShadow: `0 14px 36px ${tokens.brandGlowStrong}`,
-      transform: 'translateY(-3px)',
+      background: tokens.surfaceHover,
     },
   } as const
 }

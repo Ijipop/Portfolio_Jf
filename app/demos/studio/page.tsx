@@ -84,15 +84,33 @@ export default function StudioDemoPage() {
               </div>
               <div className={styles.workGrid}>
                 <div className={styles.workLarge}>
-                  <h3>Saison 2026</h3>
-                  <p>Identité visuelle pour un festival de musique actuelle.</p>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src="/demos/studio/featured.jpg"
+                    alt=""
+                    className={styles.workMedia}
+                    loading="lazy"
+                    decoding="async"
+                  />
+                  <div className={styles.workLargeCopy}>
+                    <h3>Saison 2026</h3>
+                    <p>Identité visuelle pour un festival de musique actuelle.</p>
+                  </div>
                 </div>
                 <div className={styles.workStack}>
                   <article className={styles.workCard}>
+                    <div className={styles.workCardMedia} aria-hidden>
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src="/demos/studio/work-01.jpg" alt="" loading="lazy" decoding="async" />
+                    </div>
                     <h3>Maison d’édition</h3>
                     <p>Collection « Terrain sec » : couvertures, choix de papier et repères de foliotage.</p>
                   </article>
                   <article className={styles.workCard}>
+                    <div className={styles.workCardMedia} aria-hidden>
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src="/demos/studio/work-02.jpg" alt="" loading="lazy" decoding="async" />
+                    </div>
                     <h3>Musée régional</h3>
                     <p>Exposition itinérante : affiches, panneaux et guide de salle bilingue.</p>
                   </article>

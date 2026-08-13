@@ -160,8 +160,8 @@ export const THEMES = {
     primary: '#ea580c',
     secondary: '#c2410c',
     accent: '#fb923c',
-    bg: '#08080c',
-    bg2: '#0f0f14',
+    bg: '#181410',
+    bg2: '#1e1914',
     moodHint: 'sombre premium, orange ijipop, crédible et vendeur',
   },
 } as const

@@ -7,6 +7,12 @@ type Props = {
   featured?: boolean
 }
 
+const PREVIEW_SRC: Record<WorkPreviewTone, string> = {
+  thermo: '/demos/portfolio/preview-01.jpg',
+  cabinet: '/demos/portfolio/preview-02.jpg',
+  atelier: '/demos/portfolio/preview-03.jpg',
+}
+
 export default function PortfolioDemoWorkPreview({ tone, label, featured = false }: Props) {
   return (
     <div
@@ -20,12 +26,14 @@ export default function PortfolioDemoWorkPreview({ tone, label, featured = false
         <span />
       </div>
       <div className={styles.previewScreen}>
-        <div className={styles.previewBlock} />
-        <div className={styles.previewBlockShort} />
-        <div className={styles.previewRow}>
-          <div className={styles.previewChip} />
-          <div className={styles.previewChip} />
-        </div>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={PREVIEW_SRC[tone]}
+          alt=""
+          className={styles.previewPhoto}
+          loading="lazy"
+          decoding="async"
+        />
       </div>
       <p className={styles.previewLabel}>{label}</p>
     </div>
