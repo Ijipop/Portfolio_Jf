@@ -8,8 +8,8 @@ import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
-import useMediaQuery from '@mui/material/useMediaQuery'
 import Link from 'next/link'
+import { useEffect, useState } from 'react'
 import IjipopGlitchTitle from '@/components/shared/IjipopGlitchTitle'
 import SiteBrowserMockup from '@/components/shared/SiteBrowserMockup'
 import { useLanguage } from '@/contexts/LanguageContext'
@@ -43,8 +43,34 @@ type LaneChoice = {
 
 export default function HomeGatewayClient() {
   const { locale, setLocale } = useLanguage()
-  const reducedMotion = useMediaQuery('(prefers-reduced-motion: reduce)', { noSsr: true })
   const copy = homeGatewayCopy[locale === 'en' ? 'en' : 'fr']
+  /**
+   * pending → opaque final off-screen (évite SSR/hydratation qui rejoue les keyframes)
+   * animate → Tetris une seule fois post-mount
+   * static → prefers-reduced-motion / E2E
+   */
+  const [introMode, setIntroMode] = useState<'pending' | 'animate' | 'static'>('pending')
+
+  useEffect(() => {
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    if (reduced) {
+      setIntroMode('static')
+      return
+    }
+    let cancelled = false
+    const id = window.requestAnimationFrame(() => {
+      if (cancelled) return
+      setIntroMode('animate')
+    })
+    return () => {
+      cancelled = true
+      window.cancelAnimationFrame(id)
+    }
+  }, [])
+
+  const playIntro = introMode === 'animate'
+  const showStatic = introMode === 'static'
+  const hideUntilIntro = introMode === 'pending'
 
   const lanes: LaneChoice[] = [
     {
@@ -179,7 +205,7 @@ export default function HomeGatewayClient() {
         },
       }}
     >
-      <HomeV2Backdrop glowPlacement="center" intensity="spectacle" />
+      <HomeV2Backdrop glowPlacement="center" intensity="spectacle" glitchDelayMs={750} />
 
       <Button
         size="small"
@@ -257,9 +283,10 @@ export default function HomeGatewayClient() {
               flexDirection: 'column',
               alignItems: 'center',
               textAlign: 'center',
-              animation: reducedMotion
-                ? 'none'
-                : 'gatewayBrandIn 0.75s cubic-bezier(0.22, 1, 0.36, 1) both',
+              animation: playIntro
+                ? 'gatewayBrandIn 0.75s cubic-bezier(0.22, 1, 0.36, 1) both'
+                : 'none',
+              opacity: hideUntilIntro ? 0 : showStatic ? 1 : undefined,
               [tabletSplit]: {
                 alignItems: 'flex-start',
                 textAlign: 'left',
@@ -385,9 +412,10 @@ export default function HomeGatewayClient() {
                 letterSpacing: '-0.03em',
                 lineHeight: 1.22,
                 color: SITE_DARK.text,
-                animation: reducedMotion
-                  ? 'none'
-                  : 'gatewayFadeUp 0.55s cubic-bezier(0.22, 1, 0.36, 1) 0.1s both',
+                animation: playIntro
+                  ? 'gatewayFadeUp 0.55s cubic-bezier(0.22, 1, 0.36, 1) 0.1s both'
+                  : 'none',
+                opacity: hideUntilIntro ? 0 : showStatic ? 1 : undefined,
                 [landscapeCompact]: {
                   mt: 0.4,
                   fontSize: '0.95rem',
@@ -408,16 +436,17 @@ export default function HomeGatewayClient() {
               display: 'none',
               [tabletSplit]: { display: 'block' },
               [landscapeCompact]: { display: 'none' },
-              animation: reducedMotion
-                ? 'none'
-                : 'gatewayMockupDrop 0.85s cubic-bezier(0.22, 1.2, 0.36, 1) 0.18s both',
+              animation: playIntro
+                ? 'gatewayMockupDrop 0.85s cubic-bezier(0.22, 1.2, 0.36, 1) 0.18s both'
+                : 'none',
+              opacity: hideUntilIntro ? 0 : showStatic ? 1 : undefined,
             }}
           >
             <SiteBrowserMockup
               alt={copy.proofAlt}
               caption={copy.proofCaption}
               compact
-              breathe
+              breathe={playIntro || showStatic}
             />
           </Box>
         </Box>
@@ -431,9 +460,10 @@ export default function HomeGatewayClient() {
             fontSize: { xs: '0.92rem', sm: '1rem' },
             fontWeight: 600,
             color: SITE_DARK.text,
-            animation: reducedMotion
-              ? 'none'
-              : 'gatewayFadeUp 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0.16s both',
+            animation: playIntro
+              ? 'gatewayFadeUp 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0.16s both'
+              : 'none',
+            opacity: hideUntilIntro ? 0 : showStatic ? 1 : undefined,
             [tabletSplit]: { textAlign: 'left' },
             [landscapeCompact]: {
               textAlign: 'left',
@@ -462,12 +492,12 @@ export default function HomeGatewayClient() {
         >
           {lanes.map((lane) => {
             const Icon = lane.icon
-            const dropAnim = reducedMotion
-              ? 'none'
-              : `gatewayTetrisDrop 0.9s cubic-bezier(0.22, 1.15, 0.36, 1) ${lane.delayMs}ms both`
-            const dropAnimShort = reducedMotion
-              ? 'none'
-              : `gatewayTetrisDropShort 0.55s cubic-bezier(0.22, 1.1, 0.36, 1) ${Math.max(0, lane.delayMs - 120)}ms both`
+            const dropAnim = playIntro
+              ? `gatewayTetrisDrop 0.9s cubic-bezier(0.22, 1.15, 0.36, 1) ${lane.delayMs}ms both`
+              : 'none'
+            const dropAnimShort = playIntro
+              ? `gatewayTetrisDropShort 0.55s cubic-bezier(0.22, 1.1, 0.36, 1) ${Math.max(0, lane.delayMs - 120)}ms both`
+              : 'none'
 
             return (
               <Box
@@ -495,6 +525,7 @@ export default function HomeGatewayClient() {
                   transition:
                     'border-color 0.25s ease, background-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease',
                   animation: dropAnim,
+                  opacity: hideUntilIntro ? 0 : showStatic ? 1 : undefined,
                   [landscapeCompact]: {
                     p: 1,
                     minHeight: 0,
@@ -652,9 +683,10 @@ export default function HomeGatewayClient() {
           sx={{
             width: '100%',
             pt: 0.15,
-            animation: reducedMotion
-              ? 'none'
-              : 'gatewayFadeUp 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0.72s both',
+            animation: playIntro
+              ? 'gatewayFadeUp 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0.72s both'
+              : 'none',
+            opacity: hideUntilIntro ? 0 : showStatic ? 1 : undefined,
             [landscapeCompact]: {
               flexDirection: 'row',
               justifyContent: 'center',

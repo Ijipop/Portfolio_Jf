@@ -19,6 +19,8 @@ export type BackdropPresence = {
 export type HaloScrollConfig = {
   centered: boolean
   baseOpacity: number
+  /** Délai avant le flash glitch de session (ms). Défaut 180. */
+  glitchDelayMs?: number
 }
 
 function readMedia(query: string): boolean {
@@ -112,6 +114,7 @@ export function useBackdropPresence(haloConfig: HaloScrollConfig): BackdropPrese
       // private mode — play once this mount
     }
 
+    const delay = Math.max(0, haloConfigRef.current.glitchDelayMs ?? 180)
     let cancelled = false
     const start = window.setTimeout(() => {
       if (cancelled) return
@@ -121,11 +124,11 @@ export function useBackdropPresence(haloConfig: HaloScrollConfig): BackdropPrese
       } catch {
         // ignore
       }
-    }, 180)
+    }, delay)
 
     const end = window.setTimeout(() => {
       if (!cancelled) setGlitchActive(false)
-    }, 180 + 300)
+    }, delay + 300)
 
     return () => {
       cancelled = true
