@@ -14,7 +14,10 @@ export default function GalerieDemoGrid() {
           rel="noopener noreferrer"
           aria-label={`${project.title} — ${project.category}, ouvrir le projet`}
         >
-          <span className={styles.tileVisual} aria-hidden="true" />
+          <span className={styles.tileVisual} aria-hidden="true">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={project.src} alt="" className={styles.tileImg} loading="lazy" decoding="async" />
+          </span>
           <span className={styles.tileOverlay}>
             <span className={styles.tileOverlayInner}>
               <span className={styles.tileTitle}>{project.title}</span>

@@ -94,11 +94,28 @@
 .heroVisual {
   border-radius: 12px;
   min-height: 260px;
+  position: relative;
+  overflow: hidden;
   background:
     linear-gradient(145deg, rgba(180, 83, 9, 0.15) 0%, transparent 50%),
-    repeating-linear-gradient(-45deg, #d6d3d1 0, #d6d3d1 1px, transparent 1px, transparent 10px),
     linear-gradient(160deg, #292524 0%, #44403c 100%);
   box-shadow: 0 24px 60px rgba(28, 25, 23, 0.18);
+}
+
+.mediaFill {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.mediaCard {
+  position: relative;
+  min-height: 140px;
+  overflow: hidden;
+  padding: 0;
 }
 
 .heroEyebrow {

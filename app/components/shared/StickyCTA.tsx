@@ -29,7 +29,7 @@ export default function StickyCTA({
         right: embedded ? { xs: 'auto', md: 24 } : { xs: 0, md: 24 },
         zIndex: DESIGN_TOKENS.zIndex.stickyBar,
         background: siteDarkChrome
-          ? `linear-gradient(to top, ${SITE_DARK.appBarGlass} 0%, rgba(12, 17, 24, 0.95) 100%)`
+          ? `linear-gradient(to top, ${SITE_DARK.appBarGlass} 0%, ${SITE_DARK.bg} 100%)`
           : 'linear-gradient(to top, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.9) 100%)',
         backdropFilter: 'blur(10px)',
         borderTop: siteDarkChrome ? `1px solid ${SITE_DARK.border}` : '1px solid rgba(0, 0, 0, 0.1)',

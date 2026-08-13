@@ -8,6 +8,7 @@ import HomeV2Footer from './HomeV2Footer'
 import HomeV2Header from './HomeV2Header'
 import HomeV2Hero from './HomeV2Hero'
 import HomeV2Pricing from './HomeV2Pricing'
+import HomeV2ProofRail from './HomeV2ProofRail'
 import HomeV2Services from './HomeV2Services'
 import HomeV2ToolsBand from './HomeV2ToolsBand'
 import ScrollTriggeredStickyCTA from '@/components/shared/ScrollTriggeredStickyCTA'
@@ -32,12 +33,15 @@ export default function HomeV2Client() {
 
       <Box component="main" sx={{ position: 'relative', zIndex: 1 }}>
         <HomeV2Hero />
-        <HomeV2Services />
-        <HomeV2Pricing />
-        <HomeV2ToolsBand />
-        <HomeV2Credibility />
-        <HomeV2FinalCta />
-        <HomeV2Footer />
+        <Box id="portfolio-after-hero" sx={{ scrollMarginTop: 'calc(var(--app-bar-height, 64px) + 8px)' }}>
+          <HomeV2ProofRail />
+          <HomeV2Services />
+          <HomeV2Pricing />
+          <HomeV2ToolsBand />
+          <HomeV2Credibility />
+          <HomeV2FinalCta />
+          <HomeV2Footer />
+        </Box>
       </Box>
 
       <ScrollTriggeredStickyCTA

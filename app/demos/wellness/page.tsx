@@ -48,17 +48,26 @@ export default function WellnessDemoPage() {
 
         <section id="offres" className={styles.cards} aria-label="Offres">
           <article className={styles.card}>
-            <div className={styles.cardIcon} aria-hidden />
+            <div className={styles.cardIcon} aria-hidden>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/demos/wellness/ritual-01.jpg" alt="" loading="lazy" decoding="async" />
+            </div>
             <h3>Rituel 90 minutes</h3>
             <p>Gommage doux, enveloppement algues, massage aux pierres tièdes.</p>
           </article>
           <article className={styles.card}>
-            <div className={styles.cardIcon} aria-hidden />
+            <div className={styles.cardIcon} aria-hidden>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/demos/wellness/ritual-02.jpg" alt="" loading="lazy" decoding="async" />
+            </div>
             <h3>Forfait semaine zen</h3>
             <p>Trois séances guidées, accès espace détente, tisane personnalisée.</p>
           </article>
           <article className={styles.card}>
-            <div className={styles.cardIcon} aria-hidden />
+            <div className={styles.cardIcon} aria-hidden>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/demos/wellness/ritual-03.jpg" alt="" loading="lazy" decoding="async" />
+            </div>
             <h3>Coaching respiration</h3>
             <p>Ateliers petits groupes, fiche d’exercices à ramener chez soi.</p>
           </article>

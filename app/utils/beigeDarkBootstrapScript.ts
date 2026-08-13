@@ -15,12 +15,12 @@ if((raw==='0'||raw==='false')&&theme==='siteDark'&&!localStorage.getItem(C)){
 var root=document.documentElement;
 if(dark){
   root.classList.add('dark');
-  root.style.setProperty('--theme-bg','#08080c');
-  root.style.setProperty('--theme-bg2','#0f0f14');
+  root.style.setProperty('--theme-bg','#181410');
+  root.style.setProperty('--theme-bg2','#1e1914');
   root.style.setProperty('--primary-color','#ea580c');
   root.style.setProperty('--secondary-color','#c2410c');
   root.style.setProperty('--accent-color','#fb923c');
-  var g='linear-gradient(180deg,#08080c 0%,#0f0f14 100%)';
+  var g='linear-gradient(180deg,#181410 0%,#1e1914 100%)';
   root.style.setProperty('background',g,'important');
   document.body.style.setProperty('background',g,'important');
 }else{

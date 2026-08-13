@@ -24,7 +24,7 @@ export default function HomeV2Cta({
   sx,
 }: HomeV2CtaProps) {
   const { tokens: v2 } = useHomeV2Tokens()
-  const minHeight = size === 'large' ? 52 : size === 'small' ? 36 : 44
+  const minHeight = size === 'large' ? 52 : 44
   const fontSize = size === 'large' ? '1rem' : size === 'small' ? '0.8125rem' : '0.9375rem'
   const px = size === 'large' ? 3 : size === 'small' ? 2 : 2.5
   const py = size === 'small' ? 0.75 : 1.25
@@ -38,7 +38,6 @@ export default function HomeV2Cta({
           boxShadow: `0 2px 12px ${v2.brandGlow}`,
           '&:hover': {
             boxShadow: `0 6px 20px ${v2.brandGlowStrong}`,
-            transform: 'translateY(-2px)',
             background: BRAND_GLITCH_GRADIENT,
           },
         }
@@ -47,11 +46,9 @@ export default function HomeV2Cta({
             background: v2.surface,
             color: v2.text,
             border: `1px solid ${v2.border}`,
-            backdropFilter: 'blur(8px)',
             '&:hover': {
               background: v2.surfaceHover,
               borderColor: v2.borderHover,
-              transform: 'translateY(-2px)',
             },
           }
         : {
@@ -62,7 +59,6 @@ export default function HomeV2Cta({
               color: v2.text,
               borderColor: v2.borderHover,
               background: v2.surface,
-              transform: 'translateY(-1px)',
             },
           }
 
@@ -75,8 +71,7 @@ export default function HomeV2Cta({
     fontFamily: v2.fontBody,
     textTransform: 'none',
     borderRadius: '999px',
-    transition:
-      'transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.35s ease, border-color 0.25s ease, background 0.25s ease',
+    transition: 'box-shadow 0.25s ease, border-color 0.25s ease, background 0.25s ease, color 0.25s ease',
     width: fullWidth ? '100%' : 'auto',
     ...variantSx,
     ...sx,

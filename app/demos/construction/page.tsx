@@ -55,7 +55,16 @@ export default function ConstructionDemoPage() {
             </div>
             <p className={styles.statsDisclaimer}>Chiffres illustratifs pour cette vitrine d’exemple.</p>
           </div>
-          <div className={styles.heroVisual} role="presentation" />
+          <div className={styles.heroVisual} role="presentation">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/demos/construction/hero.jpg"
+              alt=""
+              className={styles.mediaFill}
+              loading="eager"
+              decoding="async"
+            />
+          </div>
         </section>
 
         <section id="services" className={styles.section}>
@@ -83,9 +92,18 @@ export default function ConstructionDemoPage() {
           <h2 className={styles.sectionTitle}>Réalisations récentes</h2>
           <p className={styles.sectionLead}>Aperçu de chantiers et finitions — sous toutes les saisons.</p>
           <div className={styles.grid3}>
-            <div className={styles.card} style={{ minHeight: 120, background: 'linear-gradient(120deg,#44403c,#78716c)' }} />
-            <div className={styles.card} style={{ minHeight: 120, background: 'linear-gradient(120deg,#b45309,#d97706)' }} />
-            <div className={styles.card} style={{ minHeight: 120, background: 'linear-gradient(120deg,#57534e,#a8a29e)' }} />
+            <div className={`${styles.card} ${styles.mediaCard}`}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/demos/construction/realisation-01.jpg" alt="" className={styles.mediaFill} loading="lazy" decoding="async" />
+            </div>
+            <div className={`${styles.card} ${styles.mediaCard}`}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/demos/construction/realisation-02.jpg" alt="" className={styles.mediaFill} loading="lazy" decoding="async" />
+            </div>
+            <div className={`${styles.card} ${styles.mediaCard}`}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/demos/construction/hero.jpg" alt="" className={styles.mediaFill} loading="lazy" decoding="async" />
+            </div>
           </div>
         </section>
 

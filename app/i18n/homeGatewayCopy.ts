@@ -20,6 +20,9 @@ export const homeGatewayCopy = {
     softwareDesc: 'Applications et outils sur mesure — Timelendr, Space Taker, CPU-ZE et plus.',
     softwareCta: 'Voir les logiciels',
     demosHint: 'Voir des exemples de sites',
+    proofCaption: 'Site livré — Thermo-Trappeur',
+    proofAlt: 'Maquette du site Thermo-Trappeur',
+    webBadge: 'Sur mesure',
     alsoSoftware: 'Aussi disponible :',
   },
   en: {
@@ -41,6 +44,9 @@ export const homeGatewayCopy = {
     softwareDesc: 'Custom apps and tools — Timelendr, Space Taker, CPU-ZE and more.',
     softwareCta: 'See the software',
     demosHint: 'Browse sample websites',
+    proofCaption: 'Delivered site — Thermo-Trappeur',
+    proofAlt: 'Thermo-Trappeur website mockup',
+    webBadge: 'Custom',
     alsoSoftware: 'Also available:',
   },
 } as const

@@ -19,9 +19,12 @@ type CaseStudy = {
   ctaKey: string
   href: string
   external?: boolean
+  featured?: boolean
+  demo?: boolean
+  software?: boolean
 }
 
-const CASE_STUDIES: CaseStudy[] = [
+const WEB_STUDIES: CaseStudy[] = [
   {
     id: 'thermo',
     image: '/imgs/projets/1776087415283_Thermo.png',
@@ -31,9 +34,37 @@ const CASE_STUDIES: CaseStudy[] = [
     deliverableKey: 'homeV2.caseThermoDeliverable',
     resultKey: 'homeV2.caseThermoResult',
     ctaKey: 'homeV2.caseThermoCta',
-    href: 'https://thermo-trappeur.vercel.app/',
+    href: 'https://www.thermo-trappeur.ca/fr',
     external: true,
+    featured: true,
   },
+  {
+    id: 'restaurant',
+    image: '/img/studio/demo-restaurant.png',
+    imageAlt: 'Démo restaurant',
+    titleKey: 'homeV2.caseRestaurantTitle',
+    contextKey: 'homeV2.caseRestaurantContext',
+    deliverableKey: 'homeV2.caseRestaurantDeliverable',
+    resultKey: 'homeV2.caseRestaurantResult',
+    ctaKey: 'homeV2.caseRestaurantCta',
+    href: '/demos/restaurant',
+    demo: true,
+  },
+  {
+    id: 'volt',
+    image: '/demos/volt/volt-look-01.jpg',
+    imageAlt: 'Démo VOLT streetwear',
+    titleKey: 'homeV2.caseVoltTitle',
+    contextKey: 'homeV2.caseVoltContext',
+    deliverableKey: 'homeV2.caseVoltDeliverable',
+    resultKey: 'homeV2.caseVoltResult',
+    ctaKey: 'homeV2.caseVoltCta',
+    href: '/demos/volt',
+    demo: true,
+  },
+]
+
+const SOFTWARE_STUDIES: CaseStudy[] = [
   {
     id: 'timelendr',
     image: '/imgs/images/timelendrpro.svg',
@@ -44,6 +75,7 @@ const CASE_STUDIES: CaseStudy[] = [
     resultKey: 'homeV2.caseTimelendrResult',
     ctaKey: 'homeV2.caseTimelendrCta',
     href: '/logiciel/timelendr',
+    software: true,
   },
   {
     id: 'spacetaker',
@@ -55,13 +87,21 @@ const CASE_STUDIES: CaseStudy[] = [
     resultKey: 'homeV2.caseSpaceTakerResult',
     ctaKey: 'homeV2.caseSpaceTakerCta',
     href: '/spacetaker',
+    software: true,
+  },
+  {
+    id: 'deskdot',
+    image: '/imgs/images/DeskDot_icon.png',
+    imageAlt: 'DeskDot',
+    titleKey: 'homeV2.caseDeskDotTitle',
+    contextKey: 'homeV2.caseDeskDotContext',
+    deliverableKey: 'homeV2.caseDeskDotDeliverable',
+    resultKey: 'homeV2.caseDeskDotResult',
+    ctaKey: 'homeV2.caseDeskDotCta',
+    href: '/deskdot',
+    software: true,
   },
 ]
-
-const MEDIA_HEIGHT = { xs: 160, md: 176 }
-const TITLE_MIN_HEIGHT = '1.35em'
-/** ~2 lignes à 0.88rem × 1.5 — aligne Contexte / Livrable / Résultat entre cartes. */
-const FIELD_MIN_HEIGHT = '2.7em'
 
 function CaseField({
   label,
@@ -85,7 +125,7 @@ function CaseField({
         fontWeight: 400,
         color: textSecondary,
         lineHeight: 1.5,
-        minHeight: FIELD_MIN_HEIGHT,
+        minHeight: '4.05em',
         m: 0,
       }}
     >
@@ -105,9 +145,18 @@ function CaseField({
   )
 }
 
-function CaseStudyCard({ study, index }: { study: CaseStudy; index: number }) {
+function CaseStudyCard({
+  study,
+  index,
+  compact,
+}: {
+  study: CaseStudy
+  index: number
+  compact?: boolean
+}) {
   const { t } = useLanguage()
-  const { tokens: v2, cardSx } = useHomeV2Tokens()
+  const { tokens: v2, cardSx, featuredCardSx } = useHomeV2Tokens()
+  const mediaHeight = compact ? { xs: 88, md: 96 } : { xs: 160, md: 176 }
 
   return (
     <ScrollReveal delay={index * 0.08} distance={24} fillHeight>
@@ -116,7 +165,7 @@ function CaseStudyCard({ study, index }: { study: CaseStudy; index: number }) {
         href={study.href}
         {...(study.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
         sx={{
-          ...cardSx,
+          ...(study.featured ? featuredCardSx : cardSx),
           display: 'flex',
           flexDirection: 'column',
           height: '100%',
@@ -130,15 +179,37 @@ function CaseStudyCard({ study, index }: { study: CaseStudy; index: number }) {
           sx={{
             position: 'relative',
             flexShrink: 0,
-            height: MEDIA_HEIGHT,
+            height: mediaHeight,
             bgcolor: v2.bgElevated,
             borderBottom: `1px solid ${v2.border}`,
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            p: study.id === 'thermo' ? 0 : 2.5,
+            p: study.software ? 2 : 0,
           }}
         >
+          {study.demo ? (
+            <Box
+              sx={{
+                position: 'absolute',
+                top: 10,
+                left: 10,
+                zIndex: 1,
+                px: 1,
+                py: 0.35,
+                borderRadius: 999,
+                fontSize: '0.65rem',
+                fontWeight: 700,
+                letterSpacing: '0.08em',
+                textTransform: 'uppercase',
+                background: 'rgba(18, 16, 14, 0.78)',
+                color: v2.text,
+                border: `1px solid ${v2.border}`,
+              }}
+            >
+              {t('homeV2.caseDemoBadge')}
+            </Box>
+          ) : null}
           <Box
             component="img"
             src={study.image}
@@ -146,7 +217,7 @@ function CaseStudyCard({ study, index }: { study: CaseStudy; index: number }) {
             sx={{
               width: '100%',
               height: '100%',
-              objectFit: study.id === 'thermo' ? 'cover' : 'contain',
+              objectFit: study.software ? 'contain' : 'cover',
               objectPosition: 'center',
               display: 'block',
             }}
@@ -154,11 +225,11 @@ function CaseStudyCard({ study, index }: { study: CaseStudy; index: number }) {
         </Box>
         <Box
           sx={{
-            p: { xs: 2, md: 2.5 },
+            p: { xs: 2, md: compact ? 2 : 2.5 },
             display: 'flex',
             flexDirection: 'column',
             flex: 1,
-            gap: 1,
+            gap: compact ? 0.65 : 1,
             minHeight: 0,
           }}
         >
@@ -167,36 +238,52 @@ function CaseStudyCard({ study, index }: { study: CaseStudy; index: number }) {
             sx={{
               fontFamily: v2.fontDisplay,
               fontWeight: 700,
-              fontSize: '1.15rem',
+              fontSize: compact ? '1.02rem' : '1.15rem',
               letterSpacing: '-0.02em',
               lineHeight: 1.2,
               color: v2.text,
-              minHeight: TITLE_MIN_HEIGHT,
+              minHeight: '1.35em',
             }}
           >
             {t(study.titleKey)}
           </Typography>
-          <CaseField
-            label={t('homeV2.caseLabelContext')}
-            value={t(study.contextKey)}
-            fontBody={v2.fontBody}
-            textSecondary={v2.textSecondary}
-            text={v2.text}
-          />
-          <CaseField
-            label={t('homeV2.caseLabelDeliverable')}
-            value={t(study.deliverableKey)}
-            fontBody={v2.fontBody}
-            textSecondary={v2.textSecondary}
-            text={v2.text}
-          />
-          <CaseField
-            label={t('homeV2.caseLabelResult')}
-            value={t(study.resultKey)}
-            fontBody={v2.fontBody}
-            textSecondary={v2.textSecondary}
-            text={v2.text}
-          />
+          {!compact ? (
+            <>
+              <CaseField
+                label={t('homeV2.caseLabelContext')}
+                value={t(study.contextKey)}
+                fontBody={v2.fontBody}
+                textSecondary={v2.textSecondary}
+                text={v2.text}
+              />
+              <CaseField
+                label={t('homeV2.caseLabelDeliverable')}
+                value={t(study.deliverableKey)}
+                fontBody={v2.fontBody}
+                textSecondary={v2.textSecondary}
+                text={v2.text}
+              />
+              <CaseField
+                label={t('homeV2.caseLabelResult')}
+                value={t(study.resultKey)}
+                fontBody={v2.fontBody}
+                textSecondary={v2.textSecondary}
+                text={v2.text}
+              />
+            </>
+          ) : (
+            <Typography
+              sx={{
+                fontFamily: v2.fontBody,
+                fontSize: '0.86rem',
+                color: v2.textSecondary,
+                lineHeight: 1.45,
+                minHeight: '2.9em',
+              }}
+            >
+              {t(study.resultKey)}
+            </Typography>
+          )}
           <Typography
             sx={{
               mt: 'auto',
@@ -215,7 +302,7 @@ function CaseStudyCard({ study, index }: { study: CaseStudy; index: number }) {
   )
 }
 
-/** Sélection pro — contexte → livrable → résultat (remplace le bandeau Thermo seul). */
+/** Sites en grand, logiciels en second. */
 export default function HomeV2CaseStudies() {
   const { t } = useLanguage()
 
@@ -231,10 +318,41 @@ export default function HomeV2CaseStudies() {
           gridTemplateColumns: { xs: '1fr', md: 'repeat(3, 1fr)' },
           gap: { xs: 2, md: 2.5 },
           alignItems: 'stretch',
+          mb: { xs: 3, md: 4 },
+          '@media (min-width: 768px)': {
+            gridTemplateColumns: 'repeat(3, 1fr)',
+          },
         }}
       >
-        {CASE_STUDIES.map((study, index) => (
+        {WEB_STUDIES.map((study, index) => (
           <CaseStudyCard key={study.id} study={study} index={index} />
+        ))}
+      </Box>
+
+      <Typography
+        sx={{
+          fontFamily: 'var(--font-display), Outfit, sans-serif',
+          fontSize: '0.78rem',
+          fontWeight: 700,
+          letterSpacing: '0.14em',
+          textTransform: 'uppercase',
+          color: 'inherit',
+          opacity: 0.7,
+          mb: 1.5,
+        }}
+      >
+        {t('homeV2.caseSoftwareKicker')}
+      </Typography>
+      <Box
+        sx={{
+          display: 'grid',
+          gridTemplateColumns: { xs: '1fr', sm: 'repeat(3, 1fr)' },
+          gap: { xs: 2, md: 2.5 },
+          alignItems: 'stretch',
+        }}
+      >
+        {SOFTWARE_STUDIES.map((study, index) => (
+          <CaseStudyCard key={study.id} study={study} index={index + 3} compact />
         ))}
       </Box>
     </HomeV2Section>

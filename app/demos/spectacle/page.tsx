@@ -27,8 +27,12 @@ export default function SpectacleDemoPage() {
         </header>
 
         <section className={styles.hero}>
+          <div className={styles.heroMedia} aria-hidden>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/demos/spectacle/hero.jpg" alt="" loading="eager" decoding="async" />
+          </div>
           <ScrollReveal direction="up" distance={34}>
-            <div>
+            <div className={styles.heroInner}>
               <p className={styles.season}>Saison 2025–2026 · vitrine fictive</p>
               <h1 className={styles.title}>Une scène pour les voix qui prennent le temps.</h1>
               <p className={styles.lead}>
@@ -54,17 +58,29 @@ export default function SpectacleDemoPage() {
               <div className={styles.list}>
                 <article className={styles.row}>
                   <span className={styles.date}>14 nov.</span>
-                  <div>
-                    <p className={styles.show}>Les Heures creuses</p>
-                    <p className={styles.detail}>Création québécoise · mise en scène A. Lefrançois</p>
+                  <div className={styles.rowBody}>
+                    <div className={styles.rowThumb} aria-hidden>
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src="/demos/spectacle/show-01.jpg" alt="" loading="lazy" decoding="async" />
+                    </div>
+                    <div>
+                      <p className={styles.show}>Les Heures creuses</p>
+                      <p className={styles.detail}>Création québécoise · mise en scène A. Lefrançois</p>
+                    </div>
                   </div>
                   <span className={styles.tag}>Théâtre</span>
                 </article>
                 <article className={styles.row}>
                   <span className={styles.date}>22 nov.</span>
-                  <div>
-                    <p className={styles.show}>Quatuor Mélilot</p>
-                    <p className={styles.detail}>Haydn · Bartók · une œuvre commande locale</p>
+                  <div className={styles.rowBody}>
+                    <div className={styles.rowThumb} aria-hidden>
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src="/demos/spectacle/show-02.jpg" alt="" loading="lazy" decoding="async" />
+                    </div>
+                    <div>
+                      <p className={styles.show}>Quatuor Mélilot</p>
+                      <p className={styles.detail}>Haydn · Bartók · une œuvre commande locale</p>
+                    </div>
                   </div>
                   <span className={styles.tag}>Musique</span>
                 </article>
@@ -113,7 +129,7 @@ export default function SpectacleDemoPage() {
               <h2 id="billets-heading">Billetterie</h2>
               <p>Écrivez-nous pour choisir une date ou un forfait saison — confirmation par courriel sous 48 h (exemple).</p>
               <a className={`${styles.btn} ${styles.btnPrimary}`} href="mailto:billets@hautes-lumieres.demo?subject=R%C3%A9servation">
-                Contacter la caisse
+                Acheter des billets
               </a>
             </div>
           </ScrollReveal>

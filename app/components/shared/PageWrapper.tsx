@@ -100,7 +100,7 @@ export default function PageWrapper({
 
     return overlayVariant === 'dark' || siteDarkChrome
       ? siteDarkChrome
-        ? `radial-gradient(ellipse at 50% -5%, ${SITE_DARK.brandGlowStrong} 0%, transparent 55%)`
+        ? `radial-gradient(ellipse at 50% -8%, ${SITE_DARK.brandGlowStrong} 0%, transparent 58%)`
         : GRADIENTS.overlays.darkRadial
       : GRADIENTS.overlays.lightRadial
   }
