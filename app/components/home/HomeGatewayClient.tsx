@@ -100,37 +100,44 @@ export default function HomeGatewayClient() {
         },
         pb: { xs: 2.5, sm: 3, md: 4 },
         color: SITE_DARK.text,
-        overflow: 'hidden',
+        /* Clip horizontal Tetris sans bloquer le scroll sur téléphones courts. */
+        overflowX: 'hidden',
+        overflowY: 'auto',
         boxSizing: 'border-box',
+        '@media (max-height: 700px)': {
+          overflowY: 'auto',
+          justifyContent: 'flex-start',
+        },
         [landscapeCompact]: {
           minHeight: 'auto',
           justifyContent: 'flex-start',
           pt: 1,
           pb: 1,
           px: 2,
-          overflow: 'visible',
+          overflowX: 'hidden',
+          overflowY: 'visible',
         },
         '@keyframes gatewayBrandIn': {
-          from: { opacity: 0, transform: 'translateY(18px) scale(0.96)', filter: 'blur(8px)' },
+          from: { opacity: 0, transform: 'translateY(14px) scale(0.98)', filter: 'blur(4px)' },
           to: { opacity: 1, transform: 'translateY(0) scale(1)', filter: 'blur(0)' },
         },
         '@keyframes gatewayFadeUp': {
           from: { opacity: 0, transform: 'translateY(12px)' },
           to: { opacity: 1, transform: 'translateY(0)' },
         },
-        /* Chute type Tetris + bounce lock */
+        /* Chute type Tetris + bounce lock (offsets modérés pour Safari / petits vh). */
         '@keyframes gatewayTetrisDrop': {
           '0%': {
             opacity: 0,
-            transform: 'translateY(-42vh) rotate(-2.5deg)',
+            transform: 'translateY(-24vh) rotate(-2deg)',
             boxShadow: 'none',
           },
           '62%': {
             opacity: 1,
-            transform: 'translateY(10px) rotate(0.6deg)',
+            transform: 'translateY(8px) rotate(0.5deg)',
           },
           '78%': {
-            transform: 'translateY(-5px) rotate(-0.3deg)',
+            transform: 'translateY(-4px) rotate(-0.25deg)',
             boxShadow: `0 0 0 1px ${SITE_DARK.brandOrange}66, 0 0 28px ${SITE_DARK.brandOrange}44`,
           },
           '100%': {
@@ -142,11 +149,11 @@ export default function HomeGatewayClient() {
         '@keyframes gatewayTetrisDropShort': {
           '0%': {
             opacity: 0,
-            transform: 'translateY(-18vh)',
+            transform: 'translateY(-12vh)',
           },
           '70%': {
             opacity: 1,
-            transform: 'translateY(4px)',
+            transform: 'translateY(3px)',
           },
           '100%': {
             opacity: 1,
@@ -156,14 +163,14 @@ export default function HomeGatewayClient() {
         '@keyframes gatewayMockupDrop': {
           '0%': {
             opacity: 0,
-            transform: 'translateY(-36vh) scale(0.94)',
+            transform: 'translateY(-22vh) scale(0.96)',
           },
           '65%': {
             opacity: 1,
-            transform: 'translateY(8px) scale(1.01)',
+            transform: 'translateY(6px) scale(1.01)',
           },
           '82%': {
-            transform: 'translateY(-4px) scale(1)',
+            transform: 'translateY(-3px) scale(1)',
           },
           '100%': {
             opacity: 1,
