@@ -974,6 +974,31 @@
     display: none;
   }
 
+  /* CTAs + scroll cue : pas d’overlap — cue centré sous les boutons. */
+  .heroSticky {
+    padding-bottom: max(5.25rem, calc(env(safe-area-inset-bottom, 0px) + 4.5rem));
+  }
+
+  .heroCtas {
+    position: relative;
+    z-index: 3;
+    margin-bottom: 0.35rem;
+    padding-right: 0;
+    max-width: 100%;
+  }
+
+  .heroScrollHint {
+    left: 50%;
+    right: auto;
+    bottom: max(0.65rem, env(safe-area-inset-bottom, 0px));
+    transform: translateX(-50%);
+    z-index: 2;
+  }
+
+  .heroScrollBar {
+    height: 32px;
+  }
+
   .dropGrid {
     grid-template-columns: 1fr;
   }
