@@ -9,7 +9,7 @@ import styles from './TraducteurLanding.module.css'
 
 const ACCENT = '#10b981'
 const ACCENT_HOVER = '#34d399'
-const SCREENSHOT = '/img/traducteur/le-traducteur.png'
+const SCREENSHOT = '/imgs/images/LeTraducteur.png'
 
 const STEP_KEYS = [
   { title: 'traducteur.step1Title', body: 'traducteur.step1Body' },
