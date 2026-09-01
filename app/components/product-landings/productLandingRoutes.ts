@@ -1,7 +1,7 @@
 /** Landings produit standalone — hors look portfolio V2. */
 import { isTimelendrRoute } from '@/utils/isTimelendrRoute'
 
-const PRODUCT_ROOTS = ['/cpu-ze', '/spacetaker', '/deskdot'] as const
+const PRODUCT_ROOTS = ['/cpu-ze', '/spacetaker', '/deskdot', '/traducteur'] as const
 
 export function isProductLandingRoute(pathname: string | null | undefined): boolean {
   if (!pathname) return false

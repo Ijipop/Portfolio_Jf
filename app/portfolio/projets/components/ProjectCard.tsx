@@ -24,6 +24,7 @@ import { useCardSurfaceOptions } from '@/hooks/useCardSurfaceOptions'
 import { useThemeColors } from '@/hooks/useThemeColors'
 import { useTextColor } from '@/hooks/useTextColor'
 import { shouldShowTopology } from '@/utils/topologyRoutes'
+import { SPACE_TAKER_LANDING_HREF } from '@/components/product-landings/productDownloads'
 import type { Project } from '../projectTypes'
 import {
   getProjectCardActionsSx,
@@ -75,6 +76,18 @@ type SecondaryAction = {
   withDownloadIcon?: boolean
 }
 
+function isSpaceTakerProject(project: Project): boolean {
+  const n = project.name.toLowerCase()
+  const u = `${project.url ?? ''} ${project.siteUrl ?? ''}`.toLowerCase()
+  return (
+    n.includes('space taker') ||
+    n.includes('spacetaker') ||
+    n.includes('space-taker') ||
+    u.includes('/spacetaker') ||
+    u.includes('/space-taker')
+  )
+}
+
 /** Icônes vitrine : priorité sur l’ancien upload screenshot admin. */
 function resolveBrandIcon(project: Project): string | undefined {
   const n = project.name.toLowerCase()
@@ -96,7 +109,7 @@ function resolveBrandIcon(project: Project): string | undefined {
   ) {
     return '/imgs/images/Overstamp_icon.svg'
   }
-  if (n.includes('space taker') || n.includes('spacetaker') || n.includes('space-taker')) {
+  if (isSpaceTakerProject(project)) {
     return '/imgs/images/SpaceTaker_icon.png'
   }
   if (n.includes('cpu-ze') || n.includes('cpu ze') || n.includes('cpuze') || u.includes('/cpu-ze')) {
@@ -104,6 +117,9 @@ function resolveBrandIcon(project: Project): string | undefined {
   }
   if (n.includes('deskdot') || n.includes('desk dot') || n.includes('desk-dot') || u.includes('/deskdot')) {
     return '/imgs/images/DeskDot_icon.png'
+  }
+  if (n.includes('traducteur') || n.includes('le traducteur') || u.includes('/traducteur')) {
+    return '/img/traducteur/le-traducteur.png'
   }
   return undefined
 }
@@ -255,6 +271,7 @@ export default function ProjectCard({
     lowerName.includes('timelendar') ||
     lowerUrl.includes('/logiciel/timelendr') ||
     lowerUrl.includes('/logiciel/timelendar')
+  const isSpaceTaker = isSpaceTakerProject(project)
   const isOwnPortfolioSite = isPortfolioOwnSiteProject(project)
   const isBrowserApp = isBrowserSoftwareApp(project)
   const isWebCard = cardVariant === 'web'
@@ -272,6 +289,7 @@ export default function ProjectCard({
           (!isBrowserApp &&
             (project.url?.trim() ||
               project.siteUrl?.trim() ||
+              isSpaceTaker ||
               (!isTimelendrProject && project.downloadUrl?.trim()) ||
               (!isTimelendrProject && (projectWindowsUrl || projectMacosUrl)) ||
               (isTimelendrProject && (timelendrWindowsUrl || timelendrMacosUrl)))),
@@ -347,6 +365,7 @@ export default function ProjectCard({
     if (isWebCard && webViewSiteHref) handleProjectClick(webViewSiteHref)
     else if (isOwnPortfolioSite) handleProjectClick('/portfolio')
     else if (isBrowserApp && launchableSiteHref) handleProjectClick(launchableSiteHref)
+    else if (isSpaceTaker) handleProjectClick(SPACE_TAKER_LANDING_HREF)
     else if (!isBrowserApp && project.url?.trim()) handleProjectClick(project.url)
     else if (!isBrowserApp && project.siteUrl?.trim()) handleProjectClick(project.siteUrl)
     else if (!isTimelendrProject && !isBrowserApp && project.downloadUrl?.trim()) {
@@ -359,8 +378,16 @@ export default function ProjectCard({
     else if (isTimelendrProject && timelendrMacosUrl) handleProjectClick(timelendrMacosUrl)
   }
 
-  const platformWindowsHref = isTimelendrProject ? timelendrWindowsUrl : projectWindowsUrl
-  const platformMacosHref = isTimelendrProject ? timelendrMacosUrl : projectMacosUrl
+  const platformWindowsHref = isTimelendrProject
+    ? timelendrWindowsUrl
+    : isSpaceTaker
+      ? SPACE_TAKER_LANDING_HREF
+      : projectWindowsUrl
+  const platformMacosHref = isTimelendrProject
+    ? timelendrMacosUrl
+    : isSpaceTaker
+      ? SPACE_TAKER_LANDING_HREF
+      : projectMacosUrl
   const downloadWindowsAria = isTimelendrProject ? downloadTimelendrPcLabel : t('projects.downloadWindows')
   const downloadMacosAria = isTimelendrProject ? downloadTimelendrMacosLabel : t('projects.downloadMacos')
 
@@ -727,7 +754,7 @@ export default function ProjectCard({
                 <Box sx={getProjectCardDownloadGridSx(secondaryActions.length)}>
                   {secondaryActions.map((action) => (
                     <Button
-                      key={action.href}
+                      key={`${action.label}:${action.href}`}
                       variant="text"
                       size="small"
                       aria-label={action.ariaLabel}

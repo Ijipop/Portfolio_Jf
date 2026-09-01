@@ -7,9 +7,9 @@ const { PrismaClient } = require('@prisma/client')
 const prisma = new PrismaClient()
 
 const SPACE_TAKER_WINDOWS_EXE =
-  'https://github.com/Ijipop/Space-Taker/releases/download/v0.2.23/SpaceTaker_0.2.23_x64-setup.exe'
+  'https://github.com/Ijipop/Space-Taker-releases/releases/download/v0.3.7/SpaceTaker_0.3.7_x64-setup.exe'
 const SPACE_TAKER_MACOS_DMG =
-  'https://github.com/Ijipop/Space-Taker/releases/download/v0.2.0/SpaceTaker_0.2.0_aarch64.dmg'
+  'https://github.com/Ijipop/Space-Taker-releases/releases/download/v0.3.7/SpaceTaker_0.3.7_universal.dmg'
 const CPU_ZE_WINDOWS_EXE =
   'https://github.com/Ijipop/CPU-ZE/releases/download/v0.3.13/CPU-ZE_0.3.13_x64-setup.exe'
 
@@ -62,7 +62,7 @@ const SHOWCASE = [
       url: '/spacetaker',
       siteUrl: null,
       downloadUrl: null,
-      /** Défaut création uniquement — ne pas écraser les URLs admin à l’update. */
+      /** Binaires publics (repo Space-Taker-releases, comme Deskdot-releases). */
       windowsUrl: SPACE_TAKER_WINDOWS_EXE,
       macosUrl: SPACE_TAKER_MACOS_DMG,
       imageUrl: '/imgs/images/SpaceTaker_icon.png',

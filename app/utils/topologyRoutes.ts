@@ -32,7 +32,9 @@ export function shouldShowTopology(pathname: string | null): boolean {
     pathname === '/spacetaker' ||
     pathname.startsWith('/spacetaker/') ||
     pathname === '/deskdot' ||
-    pathname.startsWith('/deskdot/')
+    pathname.startsWith('/deskdot/') ||
+    pathname === '/traducteur' ||
+    pathname.startsWith('/traducteur/')
   ) {
     return false
   }

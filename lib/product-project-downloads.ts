@@ -1,5 +1,6 @@
 import {
   PRODUCT_DOWNLOADS,
+  toSpaceTakerPublicDownloadUrl,
   type ProductDownloadLinks,
 } from '@/components/product-landings/productDownloads'
 import { prisma } from '@/lib/prisma'
@@ -51,13 +52,18 @@ async function findSoftwareProject(keys: string[]): Promise<ProjectDownloadRow |
   }
 }
 
-/** Liens Space Taker : admin (windowsUrl / macosUrl) en priorité, fallback hardcodé. */
+/** Liens Space Taker : admin (windowsUrl / macosUrl) en priorité, fallback page Releases. */
 export async function getSpaceTakerDownloads(): Promise<ProductDownloadLinks> {
   const project = await findSoftwareProject(['space taker', 'spacetaker', 'space-taker', '/spacetaker'])
   return {
-    windows:
+    windows: toSpaceTakerPublicDownloadUrl(
       pickUrl(project?.windowsUrl, project?.downloadUrl) ?? PRODUCT_DOWNLOADS.spaceTaker.windows,
-    macos: pickUrl(project?.macosUrl) ?? PRODUCT_DOWNLOADS.spaceTaker.macos,
+      'windows',
+    ),
+    macos: toSpaceTakerPublicDownloadUrl(
+      pickUrl(project?.macosUrl) ?? PRODUCT_DOWNLOADS.spaceTaker.macos,
+      'macos',
+    ),
     github: PRODUCT_DOWNLOADS.spaceTaker.github,
   }
 }
