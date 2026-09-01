@@ -14,7 +14,7 @@ import Typography from '@mui/material/Typography'
 import { styled, alpha } from '@mui/material/styles'
 import { useCallback, useEffect, useState } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
-import { navigateProjectUrl } from '@/lib/navigateProjectUrl'
+import { navigateProjectUrl, resolveProductLandingHref } from '@/lib/navigateProjectUrl'
 import { getImageUrl } from '@/lib/getImageUrl'
 import React from 'react'
 import AppBarComponent from '../../components/appBar'
@@ -157,21 +157,9 @@ export default function Projets() {
 
   const handleProjectClick = useCallback(
     (url: string) => {
-      const normalized = url.trim().toLowerCase()
-      if (normalized.includes('/logiciel/timelendr') || normalized.includes('/logiciel/timelendar')) {
-        void router.push('/logiciel/timelendr')
-        return
-      }
-      if (normalized.includes('/cpu-ze')) {
-        void router.push('/cpu-ze')
-        return
-      }
-      if (normalized.includes('/spacetaker') || normalized.includes('/space-taker')) {
-        void router.push('/spacetaker')
-        return
-      }
-      if (normalized.includes('/deskdot') || normalized.includes('deskdot') || normalized.includes('desk-dot')) {
-        void router.push('/deskdot')
+      const landingHref = resolveProductLandingHref(url)
+      if (landingHref) {
+        void router.push(landingHref)
         return
       }
       navigateProjectUrl(url, router)

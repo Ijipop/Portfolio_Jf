@@ -14,6 +14,53 @@ function isOwnSiteHost(hostname: string): boolean {
   return false
 }
 
+/** Pathname du site uniquement — jamais github.com ni un autre domaine externe. */
+export function getOwnSitePathname(url: string): string | null {
+  const trimmed = url.trim()
+  if (!trimmed) return null
+
+  if (trimmed.startsWith('/')) {
+    return trimmed.split(/[?#]/)[0]
+  }
+
+  try {
+    const parsed = trimmed.startsWith('//')
+      ? new URL(trimmed, 'https://ijipop.com')
+      : new URL(trimmed)
+    if (parsed.hostname.toLowerCase().includes('github.com')) return null
+    if (isOwnSiteHost(parsed.hostname)) return parsed.pathname
+    return null
+  } catch {
+    return null
+  }
+}
+
+/** Landing produit interne, ou null si l’URL doit s’ouvrir telle quelle (ex. GitHub). */
+export function resolveProductLandingHref(url: string): string | null {
+  const path = getOwnSitePathname(url)?.toLowerCase()
+  if (!path) return null
+  if (
+    path === '/logiciel/timelendr' ||
+    path.startsWith('/logiciel/timelendr/') ||
+    path === '/logiciel/timelendar' ||
+    path.startsWith('/logiciel/timelendar/')
+  ) {
+    return '/logiciel/timelendr'
+  }
+  if (path === '/cpu-ze' || path.startsWith('/cpu-ze/')) return '/cpu-ze'
+  if (
+    path === '/spacetaker' ||
+    path.startsWith('/spacetaker/') ||
+    path === '/space-taker' ||
+    path.startsWith('/space-taker/')
+  ) {
+    return '/spacetaker'
+  }
+  if (path === '/deskdot' || path.startsWith('/deskdot/')) return '/deskdot'
+  if (path === '/traducteur' || path.startsWith('/traducteur/')) return '/traducteur'
+  return null
+}
+
 export function navigateProjectUrl(
   url: string,
   router: { push: (href: string) => void | Promise<void> }

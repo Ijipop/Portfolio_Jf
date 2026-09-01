@@ -41,6 +41,11 @@ const SOFTWARE_CARDS: SoftwareCard[] = [
     descKey: 'logiciel.spaceTakerCardDesc',
     href: '/spacetaker',
   },
+  {
+    titleKey: 'logiciel.traducteurCardTitle',
+    descKey: 'logiciel.traducteurCardDesc',
+    href: '/traducteur',
+  },
 ]
 
 export default function LogicielPage() {

@@ -1,0 +1,244 @@
+.page {
+  --tr-bg: #f6f1e8;
+  --tr-surface: rgba(255, 255, 255, 0.72);
+  --tr-border: rgba(5, 150, 105, 0.18);
+  --tr-emerald: #059669;
+  --tr-emeraldSoft: #10b981;
+  --tr-teal: #0d9488;
+  --tr-text: #1c2e28;
+  --tr-muted: #4a635c;
+  --font-display: var(--font-tr-display), Georgia, serif;
+  --font-body: var(--font-tr-body), system-ui, sans-serif;
+
+  position: relative;
+  min-height: 100dvh;
+  color: var(--tr-text);
+  font-family: var(--font-body);
+  background:
+    radial-gradient(ellipse 70% 50% at 10% 0%, rgba(16, 185, 129, 0.12) 0%, transparent 55%),
+    radial-gradient(ellipse 50% 40% at 95% 15%, rgba(13, 148, 136, 0.1) 0%, transparent 50%),
+    var(--tr-bg);
+  overflow: hidden;
+}
+
+.page::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.4;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+}
+
+.inner {
+  position: relative;
+  z-index: 1;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 4.5rem 1.25rem 5rem;
+}
+
+.hero {
+  display: grid;
+  gap: 2rem;
+  margin-bottom: 3.5rem;
+}
+
+@media (min-width: 768px) {
+  .hero {
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    gap: 2.5rem;
+  }
+}
+
+.heroCopy {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.brand {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(2.5rem, 8vw, 3.75rem);
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+  color: var(--tr-text);
+  margin: 0;
+}
+
+.lead {
+  font-size: clamp(1.05rem, 2.5vw, 1.25rem);
+  line-height: 1.55;
+  color: var(--tr-muted);
+  max-width: 32rem;
+  margin: 0;
+}
+
+.heroVisual {
+  margin: 0;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid var(--tr-border);
+  background: var(--tr-surface);
+  box-shadow:
+    0 4px 24px rgba(28, 46, 40, 0.08),
+    0 1px 3px rgba(28, 46, 40, 0.04);
+}
+
+.heroVisual img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.section {
+  margin-top: 3.25rem;
+}
+
+.sectionTitle {
+  font-family: var(--font-display);
+  font-size: clamp(1.35rem, 3vw, 1.65rem);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--tr-emerald);
+  margin: 0 0 1.25rem;
+}
+
+.steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 1.5rem;
+}
+
+.step {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 1rem;
+  align-items: start;
+}
+
+.stepNum {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--tr-emeraldSoft);
+  line-height: 1;
+  min-width: 2rem;
+}
+
+.stepTitle {
+  font-weight: 600;
+  font-size: 1.05rem;
+  margin: 0 0 0.35rem;
+  color: var(--tr-text);
+}
+
+.stepBody {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.55;
+  color: var(--tr-muted);
+}
+
+.plainList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.85rem;
+}
+
+.plainList li {
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
+  font-size: 1.02rem;
+  line-height: 1.5;
+  color: var(--tr-text);
+}
+
+.dot {
+  width: 7px;
+  height: 7px;
+  margin-top: 0.5rem;
+  border-radius: 50%;
+  background: var(--tr-emeraldSoft);
+  flex-shrink: 0;
+}
+
+.limits {
+  margin-top: 3.25rem;
+  padding: 1.35rem 1.4rem;
+  border-radius: 14px;
+  border: 1px solid var(--tr-border);
+  border-left: 3px solid var(--tr-emerald);
+  background: var(--tr-surface);
+}
+
+.limitsTitle {
+  margin: 0 0 1rem;
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--tr-text);
+}
+
+.limitsList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.75rem;
+}
+
+.limitsList li {
+  font-size: 0.95rem;
+  line-height: 1.55;
+  color: var(--tr-muted);
+  padding-left: 1rem;
+  position: relative;
+}
+
+.limitsList li::before {
+  content: '—';
+  position: absolute;
+  left: 0;
+  color: var(--tr-emerald);
+}
+
+.downloadSection {
+  margin-top: 3.5rem;
+  padding-top: 2.5rem;
+  border-top: 1px solid var(--tr-border);
+  display: grid;
+  gap: 1.25rem;
+}
+
+.footerLinks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.25rem;
+  font-size: 0.9rem;
+}
+
+.footerLinks a {
+  color: var(--tr-muted);
+  text-decoration: none;
+}
+
+.footerLinks a:hover {
+  color: var(--tr-emerald);
+}
+
+@media (max-width: 767px) {
+  .inner {
+    padding-top: 3.5rem;
+  }
+
+  .heroVisual {
+    order: -1;
+  }
+}
