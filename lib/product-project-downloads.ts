@@ -85,3 +85,18 @@ export async function getDeskDotDownloads(): Promise<ProductDownloadLinks> {
     github: PRODUCT_DOWNLOADS.deskDot.github,
   }
 }
+
+/** Liens Le Traducteur : admin (windowsUrl) en priorité, fallback Releases. */
+export async function getTraducteurDownloads(): Promise<ProductDownloadLinks> {
+  const project = await findSoftwareProject([
+    'traducteur',
+    'le traducteur',
+    'traducteurio',
+    '/traducteur',
+  ])
+  return {
+    windows:
+      pickUrl(project?.windowsUrl, project?.downloadUrl) ?? PRODUCT_DOWNLOADS.traducteur.windows,
+    github: PRODUCT_DOWNLOADS.traducteur.github,
+  }
+}

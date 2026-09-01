@@ -88,6 +88,16 @@ function isSpaceTakerProject(project: Project): boolean {
   )
 }
 
+function isTraducteurProject(project: Project): boolean {
+  const n = project.name.toLowerCase()
+  const u = `${project.url ?? ''} ${project.siteUrl ?? ''}`.toLowerCase()
+  return (
+    n.includes('traducteur') ||
+    n.includes('traducteurio') ||
+    u.includes('/traducteur')
+  )
+}
+
 /** Icônes vitrine : priorité sur l’ancien upload screenshot admin. */
 function resolveBrandIcon(project: Project): string | undefined {
   const n = project.name.toLowerCase()
@@ -118,8 +128,10 @@ function resolveBrandIcon(project: Project): string | undefined {
   if (n.includes('deskdot') || n.includes('desk dot') || n.includes('desk-dot') || u.includes('/deskdot')) {
     return '/imgs/images/DeskDot_icon.png'
   }
-  if (n.includes('traducteur') || n.includes('le traducteur') || u.includes('/traducteur')) {
-    return '/img/traducteur/le-traducteur.png'
+  if (
+    isTraducteurProject(project)
+  ) {
+    return '/imgs/images/LeTraducteur.png'
   }
   return undefined
 }
@@ -128,6 +140,10 @@ function resolveBrandIcon(project: Project): string | undefined {
 const MAX_INLINE_IMAGE_CHARS = 120_000
 
 function resolveProjectCardImage(project: Project): string | undefined {
+  const brandIcon = resolveBrandIcon(project)
+  /** Vitrine logiciel : icône locale fiable (évite chemins admin obsolètes / casse Linux). */
+  if (isTraducteurProject(project) && brandIcon) return brandIcon
+
   /** Image admin d’abord — les icônes marque locales ne sont qu’un fallback. */
   const uploaded = project.imageUrl?.trim()
   if (uploaded) {
@@ -135,7 +151,6 @@ function resolveProjectCardImage(project: Project): string | undefined {
     if (!isHugeDataUrl) return uploaded
   }
 
-  const brandIcon = resolveBrandIcon(project)
   if (brandIcon) return brandIcon
 
   const n = project.name.toLowerCase()

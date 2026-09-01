@@ -1,6 +1,9 @@
-import { PRODUCT_DOWNLOADS } from '@/components/product-landings/productDownloads'
+import { getTraducteurDownloads } from '@/lib/product-project-downloads'
 import TraducteurLandingClient from './TraducteurLandingClient'
 
-export default function TraducteurPage() {
-  return <TraducteurLandingClient downloads={PRODUCT_DOWNLOADS.traducteur} />
+export const dynamic = 'force-dynamic'
+
+export default async function TraducteurPage() {
+  const downloads = await getTraducteurDownloads()
+  return <TraducteurLandingClient downloads={downloads} />
 }
