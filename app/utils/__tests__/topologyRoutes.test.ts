@@ -55,6 +55,14 @@ describe('shouldShowTopology', () => {
     expect(shouldShowTopology('/test/vanta-birds')).toBe(false)
   })
 
+  it('excludes standalone product landings', () => {
+    vi.stubEnv('NEXT_PUBLIC_TOPOLOGY_SCOPE', 'global')
+    expect(shouldShowTopology('/cpu-ze')).toBe(false)
+    expect(shouldShowTopology('/spacetaker')).toBe(false)
+    expect(shouldShowTopology('/deskdot')).toBe(false)
+    expect(shouldShowTopology('/traducteur')).toBe(false)
+  })
+
   it('excludes /accueil-v2 preview route for dedicated dark background', () => {
     vi.stubEnv('NEXT_PUBLIC_TOPOLOGY_SCOPE', 'global')
     expect(shouldShowTopology('/accueil-v2')).toBe(false)
