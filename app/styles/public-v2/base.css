@@ -1,0 +1,50 @@
+/**
+ * Base styles — scoped exclusively under [data-public-theme="pop-atelier"].
+ */
+
+[data-public-theme='pop-atelier'] {
+  box-sizing: border-box;
+  background: var(--color-bg);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+[data-public-theme='pop-atelier'] *,
+[data-public-theme='pop-atelier'] *::before,
+[data-public-theme='pop-atelier'] *::after {
+  box-sizing: border-box;
+}
+
+[data-public-theme='pop-atelier'] img {
+  max-width: 100%;
+  display: block;
+}
+
+[data-public-theme='pop-atelier'] a {
+  color: inherit;
+}
+
+[data-public-theme='pop-atelier'] :focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+[data-public-theme='pop-atelier'] .pv2-skip {
+  position: absolute;
+  left: var(--space-4);
+  top: -4rem;
+  z-index: 1000;
+  padding: var(--space-3) var(--space-4);
+  background: var(--color-ink);
+  color: var(--color-on-ink);
+  border-radius: var(--radius-sm);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+[data-public-theme='pop-atelier'] .pv2-skip:focus {
+  top: var(--space-4);
+}

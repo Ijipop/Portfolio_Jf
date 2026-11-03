@@ -1,0 +1,51 @@
+/**
+ * Motion utilities — scoped to public V2 theme.
+ * Progressive: content visible without JS; reduced-motion collapses durations via tokens.
+ */
+
+[data-public-theme='pop-atelier'] .pv2-reveal {
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity var(--dur-reveal) var(--ease-out),
+    transform var(--dur-reveal) var(--ease-out);
+  transition-delay: calc(var(--reveal-delay, 0) * var(--stagger));
+}
+
+/* Only hide pending reveals when JS marks the document as enhanced */
+.js [data-public-theme='pop-atelier'] .pv2-reveal:not(.is-in) {
+  opacity: 0;
+  transform: translateY(var(--motion-reveal-y));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .js [data-public-theme='pop-atelier'] .pv2-reveal:not(.is-in),
+  [data-public-theme='pop-atelier'] .pv2-reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+[data-public-theme='pop-atelier'] .pv2-interactive {
+  transition:
+    transform var(--dur-med) var(--ease-spring),
+    box-shadow var(--dur-med) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out),
+    background-color var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  [data-public-theme='pop-atelier'] .pv2-interactive:hover:not(:disabled) {
+    transform: translateY(calc(var(--motion-lift) * -0.5));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-public-theme='pop-atelier'] .pv2-interactive,
+  [data-public-theme='pop-atelier'] .pv2-interactive:hover:not(:disabled) {
+    transition: none;
+    transform: none;
+  }
+}

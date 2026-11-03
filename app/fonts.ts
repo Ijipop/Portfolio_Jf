@@ -1,4 +1,4 @@
-import { Instrument_Sans, Inter, Outfit, Plus_Jakarta_Sans } from 'next/font/google'
+import { Fraunces, Instrument_Sans, Inter, Outfit, Plus_Jakarta_Sans } from 'next/font/google'
 
 /**
  * Typographie du site :
@@ -6,6 +6,7 @@ import { Instrument_Sans, Inter, Outfit, Plus_Jakarta_Sans } from 'next/font/goo
  * - Funnel vendeur (home-v2, gateway) : Outfit (display) + Plus Jakarta Sans (corps)
  *   → lisibles, modernes, appréciées des clients PME
  * - Instrument Sans conservé pour compat scoped existante
+ * - Public V2 (Pop Atelier) : Fraunces (titres) + Outfit (corps) — variables `--font-v2-*` uniquement
  */
 
 /** Police variable : une requête, graisses 100–900 pour MUI / sx. */
@@ -44,3 +45,19 @@ export const plusJakarta = Plus_Jakarta_Sans({
 
 /** @deprecated Alias → plusJakarta (CSS var --font-body). */
 export const manrope = plusJakarta
+
+/** Display public V2 — Pop Atelier (Concept D). Ne pas appliquer hors `PublicThemeRoot`. */
+export const fraunces = Fraunces({
+  subsets: ['latin'],
+  variable: '--font-v2-display',
+  display: 'swap',
+  weight: ['500', '600', '700'],
+})
+
+/** Corps public V2 — variables dédiées pour ne pas écraser le funnel (`--font-display`). */
+export const outfitV2 = Outfit({
+  subsets: ['latin'],
+  variable: '--font-v2-body',
+  display: 'swap',
+  weight: ['400', '500', '600', '700'],
+})
