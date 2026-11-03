@@ -41,19 +41,20 @@
   font-size: 0.95rem;
 }
 
-.primary {
+/* `.root.variant` : battre `[data-public-theme] a { color: inherit }` (spécificité). */
+.root.primary {
   background: var(--color-ink);
   color: var(--color-on-ink);
   border-color: var(--color-ink);
 }
 
-.ghost {
+.root.ghost {
   background: transparent;
   color: var(--color-ink);
   border-color: var(--color-line-strong);
 }
 
-.emphasis {
+.root.emphasis {
   /* Coral on cream-adjacent ink text — verified contrast via --color-on-emphasis */
   background: var(--color-emphasis);
   color: var(--color-on-emphasis);
@@ -61,18 +62,18 @@
 }
 
 @media (hover: hover) and (pointer: fine) {
-  .primary:hover:not(:disabled) {
+  .root.primary:hover:not(:disabled) {
     filter: brightness(1.08);
     transform: translateY(calc(var(--motion-lift) * -0.35));
   }
 
-  .ghost:hover:not(:disabled) {
+  .root.ghost:hover:not(:disabled) {
     border-color: var(--color-ink);
     background: color-mix(in srgb, var(--color-ink) 4%, transparent);
     transform: translateY(calc(var(--motion-lift) * -0.35));
   }
 
-  .emphasis:hover:not(:disabled) {
+  .root.emphasis:hover:not(:disabled) {
     filter: brightness(1.04);
     transform: translateY(calc(var(--motion-lift) * -0.35));
   }
@@ -80,9 +81,9 @@
 
 @media (prefers-reduced-motion: reduce) {
   .root,
-  .primary:hover:not(:disabled),
-  .ghost:hover:not(:disabled),
-  .emphasis:hover:not(:disabled) {
+  .root.primary:hover:not(:disabled),
+  .root.ghost:hover:not(:disabled),
+  .root.emphasis:hover:not(:disabled) {
     transition: none;
     transform: none;
   }

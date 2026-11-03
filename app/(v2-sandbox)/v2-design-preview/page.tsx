@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import PublicThemeRoot from '@/components/public-v2/theme/PublicThemeRoot'
 import { PublicFooter, PublicHeader } from '@/components/public-v2/chrome'
 import { Badge, Button, Container, Heading, Section } from '@/components/public-v2/primitives'
+import { Hero } from '@/components/public-v2/sections/Hero'
 import { PUBLIC_V2_PREVIEW_PATH } from '@/lib/public-v2/nav'
 import styles from './preview.module.css'
 
@@ -19,7 +20,7 @@ const PALETTE = [
 ] as const
 
 /**
- * Temporary isolated sandbox for Pop Atelier foundations + chrome V2.
+ * Temporary isolated sandbox for Pop Atelier Hero + foundations + chrome V2.
  * Not linked in nav/sitemap — development only.
  */
 export default function V2DesignPreviewPage() {
@@ -32,10 +33,12 @@ export default function V2DesignPreviewPage() {
       </a>
       <PublicHeader pathname={pathname} />
       <main id="pv2-preview-main">
-        <Section variant="default">
+        <Hero />
+
+        <Section variant="default" aria-labelledby="pv2-lab-foundations">
           <Container variant="content">
             <p className={styles.eyebrow}>Laboratoire · temporaire · noindex</p>
-            <Heading as="h1" variant="display">
+            <Heading as="h2" id="pv2-lab-foundations" variant="display">
               Pop Atelier — fondations
             </Heading>
             <p className={styles.lede}>

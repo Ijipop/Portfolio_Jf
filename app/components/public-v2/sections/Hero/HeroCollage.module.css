@@ -1,0 +1,203 @@
+.stage {
+  position: relative;
+  min-height: 16rem;
+  perspective: 1200px;
+}
+
+@media (min-width: 960px) {
+  .stage {
+    min-height: 26rem;
+  }
+}
+
+@media (max-width: 959px) {
+  .stage {
+    min-height: 14rem;
+    order: 2;
+  }
+}
+
+/* Couche parallaxe uniquement — pas de drift sur les captures */
+.float {
+  --px: 0px;
+  --py: 0px;
+  --rot: 0deg;
+  position: absolute;
+  margin: 0;
+  transform: translate3d(var(--px), var(--py), 0) rotate(var(--rot));
+  will-change: transform;
+}
+
+/* Retour doux uniquement hors tracking pointeur */
+.floatReturning {
+  transition: transform var(--dur-med) var(--ease-out);
+}
+
+.floatEnter {
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity var(--dur-reveal) var(--ease-out),
+    transform var(--dur-reveal) var(--ease-out);
+  transition-delay: var(--enter-delay, 0ms);
+  width: 100%;
+  height: 100%;
+}
+
+.floatSurface {
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-lift);
+  border: 1px solid var(--color-line);
+  background: var(--color-surface);
+  width: 100%;
+  height: 100%;
+}
+
+.floatSurface img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+}
+
+.enhance .floatEnter:not(.isIn) {
+  opacity: 0;
+  transform: translateY(var(--motion-reveal-y));
+}
+
+.enhance .floatEnter.isIn {
+  opacity: 1;
+  transform: none;
+}
+
+/* Expression — dominant (Concept D) */
+.slotA {
+  width: 76%;
+  height: 12.5rem;
+  left: 0;
+  top: 6%;
+  z-index: 2;
+  --rot: -2.2deg;
+  --enter-delay: 0ms;
+}
+
+/* Thermo — secondaire */
+.slotB {
+  width: 58%;
+  height: 9.5rem;
+  right: 0;
+  top: 40%;
+  z-index: 3;
+  --rot: 2.6deg;
+  --enter-delay: 120ms;
+}
+
+/* DeskDot — tertiaire */
+.slotC {
+  width: 44%;
+  height: 7.25rem;
+  left: 20%;
+  bottom: 2%;
+  z-index: 1;
+  --rot: -1deg;
+  --enter-delay: 220ms;
+}
+
+.slotC .floatSurface img {
+  object-position: center center;
+}
+
+@media (min-width: 960px) {
+  .slotA {
+    height: 15.5rem;
+  }
+  .slotB {
+    height: 11.5rem;
+  }
+  .slotC {
+    height: 9rem;
+  }
+}
+
+@media (max-width: 959px) {
+  .slotA {
+    width: 82%;
+    height: 9.5rem;
+  }
+  .slotB {
+    width: 64%;
+    height: 7.5rem;
+  }
+  .slotC {
+    display: none;
+  }
+}
+
+.blob {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Mauve — coin haut-droit, hors du gros float A */
+.blobViolet {
+  width: 8rem;
+  height: 8rem;
+  right: 4%;
+  top: -0.35rem;
+  opacity: 0.62;
+  background: var(--color-accent);
+  filter: blur(2px);
+}
+
+/*
+ * Corail — position Concept D (bas-gauche), peeker sous Expression / à côté de DeskDot.
+ * Derrière les floats (z-index 0), silhouette bien visible + drift autonome.
+ */
+.blobCoral {
+  width: 5.25rem;
+  height: 5.25rem;
+  left: 3%;
+  bottom: 8%;
+  opacity: 0.78;
+  background: var(--color-emphasis);
+}
+
+.blobFloating {
+  animation: heroBlobDrift 8s var(--ease-out) infinite alternate;
+}
+
+.blobCoral.blobFloating {
+  animation-delay: 1.2s;
+  animation-duration: 10s;
+}
+
+@keyframes heroBlobDrift {
+  from {
+    transform: translate(0, 0);
+  }
+  to {
+    transform: translate(10px, -14px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .enhance .floatEnter:not(.isIn),
+  .enhance .floatEnter.isIn,
+  .floatEnter {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .blobFloating {
+    animation: none;
+  }
+
+  .floatReturning {
+    transition: none;
+  }
+}
