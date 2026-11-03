@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import type { ButtonHTMLAttributes, ReactNode } from 'react'
+import type { AnchorHTMLAttributes, ButtonHTMLAttributes, ReactNode } from 'react'
 import styles from './Button.module.css'
 
 export type ButtonVariant = 'primary' | 'ghost' | 'emphasis'
@@ -17,12 +17,13 @@ type ButtonAsButton = CommonProps &
     href?: undefined
   }
 
-type ButtonAsLink = CommonProps & {
-  href: string
-  target?: string
-  rel?: string
-  'aria-label'?: string
-}
+type ButtonAsLink = CommonProps &
+  Pick<
+    AnchorHTMLAttributes<HTMLAnchorElement>,
+    'href' | 'target' | 'rel' | 'aria-label' | 'onClick'
+  > & {
+    href: string
+  }
 
 export type ButtonProps = ButtonAsButton | ButtonAsLink
 

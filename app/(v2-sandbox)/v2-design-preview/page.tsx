@@ -1,6 +1,8 @@
 import type { Metadata } from 'next'
 import PublicThemeRoot from '@/components/public-v2/theme/PublicThemeRoot'
+import { PublicFooter, PublicHeader } from '@/components/public-v2/chrome'
 import { Badge, Button, Container, Heading, Section } from '@/components/public-v2/primitives'
+import { PUBLIC_V2_PREVIEW_PATH } from '@/lib/public-v2/nav'
 import styles from './preview.module.css'
 
 export const metadata: Metadata = {
@@ -17,15 +19,18 @@ const PALETTE = [
 ] as const
 
 /**
- * Temporary isolated sandbox for Pop Atelier foundations.
+ * Temporary isolated sandbox for Pop Atelier foundations + chrome V2.
  * Not linked in nav/sitemap — development only.
  */
 export default function V2DesignPreviewPage() {
+  const pathname = PUBLIC_V2_PREVIEW_PATH
+
   return (
     <PublicThemeRoot>
       <a className="pv2-skip" href="#pv2-preview-main">
         Aller au contenu
       </a>
+      <PublicHeader pathname={pathname} />
       <main id="pv2-preview-main">
         <Section variant="default">
           <Container variant="content">
@@ -40,7 +45,19 @@ export default function V2DesignPreviewPage() {
           </Container>
         </Section>
 
-        <Section variant="wash" aria-labelledby="pv2-palette">
+        <Section id="pv2-services" variant="wash" aria-labelledby="pv2-services-title">
+          <Container>
+            <Heading as="h2" id="pv2-services-title" variant="section">
+              Services
+            </Heading>
+            <p className={styles.lede}>
+              Ancre locale pour la navigation sandbox (`#pv2-services`). Les offres définitives
+              seront présentées sur l’accueil V2.
+            </p>
+          </Container>
+        </Section>
+
+        <Section variant="default" aria-labelledby="pv2-palette">
           <Container>
             <Heading as="h2" id="pv2-palette" variant="section">
               Palette
@@ -206,6 +223,7 @@ export default function V2DesignPreviewPage() {
           </Container>
         </Section>
       </main>
+      <PublicFooter pathname={pathname} />
     </PublicThemeRoot>
   )
 }

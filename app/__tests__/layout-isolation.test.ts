@@ -53,6 +53,20 @@ describe('layout isolation (public vs admin)', () => {
     expect(existsSync(path.join(appRoot, 'portfolio'))).toBe(false)
   })
 
+  it('isole la sandbox V2 hors layout public (pas de ThemeWrapper / Prisma beige)', () => {
+    expect(existsSync(path.join(appRoot, '(v2-sandbox)', 'v2-design-preview', 'page.tsx'))).toBe(true)
+    expect(existsSync(path.join(appRoot, '(public)', 'v2-design-preview'))).toBe(false)
+    const sandboxLayout = readAppFile('(v2-sandbox)', 'layout.tsx')
+    expect(sandboxLayout).not.toMatch(/from ['"]@\/components\/ThemeWrapper['"]/)
+    expect(sandboxLayout).not.toMatch(/FullPageTopologyWrapper/)
+    expect(sandboxLayout).not.toMatch(/ContactFab/)
+    expect(sandboxLayout).not.toMatch(/getCachedBeigePresentationBgUrl/)
+    expect(sandboxLayout).not.toMatch(/from ['"]@\/lib\/prisma['"]/)
+    const publicLayout = readAppFile('(public)', 'layout.tsx')
+    expect(publicLayout).toMatch(/getCachedBeigePresentationBgUrl/)
+  })
+
+
   it('conserve la protection JWT du dashboard', () => {
     const src = readAppFile('admin', 'dashboard', 'layout.tsx')
     expect(src).toMatch(/adminToken/)
