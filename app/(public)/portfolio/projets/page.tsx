@@ -17,18 +17,18 @@ import { usePathname, useRouter } from 'next/navigation'
 import { navigateProjectUrl, resolveProductLandingHref } from '@/lib/navigateProjectUrl'
 import { getImageUrl } from '@/lib/getImageUrl'
 import React from 'react'
-import AppBarComponent from '../../components/appBar'
+import AppBarComponent from '@/components/appBar'
 import ProjectsLoadingFrameSection from './ProjectsLoadingFrameSection'
-import HeaderSection from '../../components/shared/HeaderSection'
-import PageWrapper from '../../components/shared/PageWrapper'
-import InteractiveBackgroundSection from '../../components/shared/InteractiveBackgroundSection'
-import Footer from '../../components/Footer'
-import SeoInternalLinkCta from '../../components/seo/SeoInternalLinkCta'
-import { DESIGN_TOKENS } from '../../design-system/constants'
-import { SITE_DARK } from '../../design-system/siteDark'
-import { useLanguage } from '../../contexts/LanguageContext'
+import HeaderSection from '@/components/shared/HeaderSection'
+import PageWrapper from '@/components/shared/PageWrapper'
+import InteractiveBackgroundSection from '@/components/shared/InteractiveBackgroundSection'
+import Footer from '@/components/Footer'
+import SeoInternalLinkCta from '@/components/seo/SeoInternalLinkCta'
+import { DESIGN_TOKENS } from '@/design-system/constants'
+import { SITE_DARK } from '@/design-system/siteDark'
+import { useLanguage } from '@/contexts/LanguageContext'
 import { CONTACT_SUBJECT_SOFTWARE } from '@/i18n/contactSubjects'
-import { useTextColor } from '../../hooks/useTextColor'
+import { useTextColor } from '@/hooks/useTextColor'
 import type { Project, TimelendrLatestLinks } from './projectTypes'
 import { ProjectsGrid } from './components/projectsGrid'
 import ProjectCard from './components/ProjectCard'
@@ -46,7 +46,7 @@ export default function Projets() {
   const brand = SITE_DARK.brandOrange
   const textColor = useTextColor()
   const { t, locale } = useLanguage()
-  /** Couleurs de section alignÃ©es sur SITE (ambre marque). */
+  /** Couleurs de section alignées sur SITE (ambre marque). */
   const projetsSectionText = textColor
   const [projects, setProjects] = useState<Project[]>([])
   const [loading, setLoading] = useState(true)
@@ -54,7 +54,7 @@ export default function Projets() {
   const [selectedProjectType, setSelectedProjectType] = useState<'logiciel' | 'web'>('web')
   const [timelendrWindowsUrl, setTimelendrWindowsUrl] = useState<string | null>(null)
   const [timelendrMacosUrl, setTimelendrMacosUrl] = useState<string | null>(null)
-  /** 0 = perso, 1 = pro â€” dÃ©faut pro comme lâ€™ancien accordÃ©on Â« RÃ©alisations professionnelles Â» ouvert. */
+  /** 0 = perso, 1 = pro — défaut pro comme l’ancien accordéon « Réalisations professionnelles » ouvert. */
   const [webAudienceTab, setWebAudienceTab] = useState(1)
 
   useEffect(() => {
@@ -115,18 +115,18 @@ export default function Projets() {
     switch (status.toLowerCase()) {
       case 'terminee':
       case 'fini':
-      case 'terminÃ©':
+      case 'terminé':
         return 'success' as const
       case 'wip':
       case 'en cours':
-      case 'en cours de dÃ©veloppement':
+      case 'en cours de développement':
         return 'warning' as const
       case 'planifiee':
-      case 'planifiÃ©':
-      case 'planifiÃ©e':
+      case 'planifié':
+      case 'planifiée':
         return 'info' as const
       case 'non':
-      case 'non dÃ©fini':
+      case 'non défini':
         return 'error' as const
       default:
         return 'default' as const
@@ -137,18 +137,18 @@ export default function Projets() {
     switch (status.toLowerCase()) {
       case 'terminee':
       case 'fini':
-      case 'terminÃ©':
+      case 'terminé':
         return <CheckCircleIcon />
       case 'wip':
       case 'en cours':
-      case 'en cours de dÃ©veloppement':
+      case 'en cours de développement':
         return <TrendingUpIcon />
       case 'planifiee':
-      case 'planifiÃ©':
-      case 'planifiÃ©e':
+      case 'planifié':
+      case 'planifiée':
         return <ScheduleIcon />
       case 'non':
-      case 'non dÃ©fini':
+      case 'non défini':
         return <ErrorIcon />
       default:
         return <CodeIcon />

@@ -2,7 +2,7 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
-import { useLanguage } from '../../contexts/LanguageContext'
+import { useLanguage } from '@/contexts/LanguageContext'
 import './promo-one-pager.css'
 
 const p = (key: string) => `promo.onePager.${key}`
@@ -52,7 +52,7 @@ export default function PromoOnePagerPage() {
                 <div className="step-body"><strong>{t(p('step3Title'))}</strong> {t(p('step3Body'))}</div>
               </div>
             </div>
-            <h2 style={{ marginTop: '8px' }}><span className="icon">⚙</span>{t(p('optionalPhotoBooth'))}</h2>
+            <h2 style={{ marginTop: '8px' }}><span className="icon">?</span>{t(p('optionalPhotoBooth'))}</h2>
             <p>{t(p('autoUploadDesc'))} <span className="mini-tag">{t(p('included'))}</span></p>
             <ul className="list">
               <li>{t(p('autoUploadLi1'))}</li>
@@ -63,7 +63,7 @@ export default function PromoOnePagerPage() {
           </div>
           <aside className="side-block">
             <div className="block">
-              <h2><span className="icon">★</span>{t(p('whyGuestsLove'))}</h2>
+              <h2><span className="icon">?</span>{t(p('whyGuestsLove'))}</h2>
               <ul className="list">
                 <li>{t(p('whyLi1'))}</li>
                 <li>{t(p('whyLi2'))}</li>
@@ -78,7 +78,7 @@ export default function PromoOnePagerPage() {
               </div>
             </div>
             <div className="block">
-              <h2><span className="icon">ℹ</span>{t(p('contactInfo'))}</h2>
+              <h2><span className="icon">?</span>{t(p('contactInfo'))}</h2>
               <p>{t(p('contactVisit'))}</p>
               <p style={{ marginTop: '4px' }}>{t(p('contactReach'))}</p>
               <ul className="list">
@@ -89,7 +89,7 @@ export default function PromoOnePagerPage() {
           </aside>
         </section>
         <footer className="footer">
-          <div><strong>EvePics.eu</strong> — {t(p('footerTagline'))}</div>
+          <div><strong>EvePics.eu</strong> � {t(p('footerTagline'))}</div>
           <div>{t(p('footerContact'))}</div>
           <div style={{ marginTop: '8px' }}>
             <Link href="/portfolio/contact" style={{ color: 'inherit', fontWeight: 700, textDecoration: 'underline' }}>

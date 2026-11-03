@@ -13,6 +13,9 @@ export function shouldShowTopology(pathname: string | null): boolean {
   // Labs / pages de test : pas de fond Vanta plein écran (évite 2 contextes WebGL + masque le canvas du lab).
   if (pathname.startsWith('/test')) return false
 
+  // Administration : hors chrome marketing (Vanta / topology publique).
+  if (pathname === '/admin' || pathname.startsWith('/admin/')) return false
+
   // Preview accueil v2 : fond sombre dédié, sans topology globale.
   if (pathname.startsWith('/accueil-v2')) return false
 

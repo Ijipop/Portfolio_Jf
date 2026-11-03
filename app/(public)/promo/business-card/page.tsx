@@ -2,7 +2,7 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
-import { useLanguage } from '../../contexts/LanguageContext'
+import { useLanguage } from '@/contexts/LanguageContext'
 import './promo-business-card.css'
 
 const p = (key: string) => `promo.businessCard.${key}`
@@ -32,7 +32,7 @@ export default function PromoBusinessCardPage() {
           </div>
           <div className="right-info">
             support@evepics.eu<br />
-            Luxembourg Â· EU
+            Luxembourg · EU
             <div className="pill">
               <span className="dot" />
               {t(p('noApp'))}

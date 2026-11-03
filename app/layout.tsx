@@ -1,13 +1,8 @@
 import type { Metadata } from 'next'
 import { Analytics } from '@vercel/analytics/next'
 import Script from 'next/script'
-import WebVitalsReporter from './components/WebVitalsReporter'
-import ContactFab from './components/shared/ContactFab'
 import SeoJsonLd from './components/SeoJsonLd'
-import ThemeWrapper from './components/ThemeWrapper'
-import FullPageTopologyWrapper from './components/FullPageTopologyWrapper'
 import './globals.css'
-import { getCachedBeigePresentationBgUrl } from '@/lib/cached-site-appearance'
 import { beigeDarkBootstrapScript } from '@/utils/beigeDarkBootstrapScript'
 import { inter } from './fonts'
 
@@ -62,9 +57,8 @@ export const viewport = {
   viewportFit: 'cover',
 }
 
-export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  const initialBeigePresentationBgUrl = await getCachedBeigePresentationBgUrl()
-
+/** Layout racine mince : html/body, fonts, globals, analytics. Chrome public → (public)/layout. */
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="fr" className={`${inter.variable} dark`} suppressHydrationWarning>
       <head>
@@ -72,13 +66,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       </head>
       <body>
         <SeoJsonLd />
-        <ThemeWrapper initialBeigePresentationBgUrl={initialBeigePresentationBgUrl}>
-          <WebVitalsReporter />
-          <FullPageTopologyWrapper>
-            {children}
-          </FullPageTopologyWrapper>
-          <ContactFab />
-        </ThemeWrapper>
+        {children}
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=AW-18192980748"
           strategy="lazyOnload"

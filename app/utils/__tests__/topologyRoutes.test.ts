@@ -41,6 +41,12 @@ describe('shouldShowTopology', () => {
     expect(shouldShowTopology(null)).toBe(false)
   })
 
+  it('excludes administration even in global topology scope', () => {
+    vi.stubEnv('NEXT_PUBLIC_TOPOLOGY_SCOPE', 'global')
+    expect(shouldShowTopology('/admin')).toBe(false)
+    expect(shouldShowTopology('/admin/dashboard')).toBe(false)
+  })
+
   it('disables topology on gateway landing (dedicated HomeV2Backdrop)', () => {
     vi.stubEnv('NEXT_PUBLIC_TOPOLOGY_SCOPE', 'global')
     expect(shouldShowTopology('/')).toBe(false)

@@ -11,27 +11,27 @@ import { styled } from '@mui/material/styles'
 import { useRouter, usePathname } from 'next/navigation'
 import { useState, useEffect } from 'react'
 import { shouldShowTopology } from '@/utils/topologyRoutes'
-import HeaderSection from '../../components/shared/HeaderSection'
-import AppBarComponent from '../../components/appBar'
-import PageWrapper from '../../components/shared/PageWrapper'
-import InteractiveBackgroundSection from '../../components/shared/InteractiveBackgroundSection'
-import Footer from '../../components/Footer'
-import { useAdvancedTheme } from '../../contexts/AdvancedThemeContext'
-import { GRADIENTS, DESIGN_TOKENS } from '../../design-system/constants'
-import { useThemeColors } from '../../hooks/useThemeColors'
-import { useTextColor } from '../../hooks/useTextColor'
-import { useLanguage } from '../../contexts/LanguageContext'
+import HeaderSection from '@/components/shared/HeaderSection'
+import AppBarComponent from '@/components/appBar'
+import PageWrapper from '@/components/shared/PageWrapper'
+import InteractiveBackgroundSection from '@/components/shared/InteractiveBackgroundSection'
+import Footer from '@/components/Footer'
+import { useAdvancedTheme } from '@/contexts/AdvancedThemeContext'
+import { GRADIENTS, DESIGN_TOKENS } from '@/design-system/constants'
+import { useThemeColors } from '@/hooks/useThemeColors'
+import { useTextColor } from '@/hooks/useTextColor'
+import { useLanguage } from '@/contexts/LanguageContext'
 import { useTheme } from '@mui/material/styles'
-import { getTextColorForBackground } from '../../utils/colorUtils'
+import { getTextColorForBackground } from '@/utils/colorUtils'
 import { getCardSurfaceSx } from '@/components/shared/cardSurface'
-import ScrollReveal from '../../components/shared/ScrollReveal'
+import ScrollReveal from '@/components/shared/ScrollReveal'
 import SoftSkillsSection from './components/SoftSkillsSection'
 import AboutCtaSection from './components/AboutCtaSection'
 import AboutPersonalStorySection from './components/AboutPersonalStorySection'
 
 const TECH_SKILLS = ['Python', 'Java', 'React', 'Next.js', 'TypeScript', 'JavaScript', 'SQL', 'CSS3', 'HTML5', 'Git']
 
-// FlipCard components spÃ©cifiques Ã  cette page (logique complexe)
+// FlipCard components spécifiques à cette page (logique complexe)
 const FlipCard = styled(Box)(({ theme }) => ({
   backgroundColor: 'transparent',
   width: '100%',
@@ -70,7 +70,7 @@ const FlipCardInner = styled(Box, {
   WebkitTransform: flipped ? 'rotateY(180deg)' : 'rotateY(0deg)',
 }))
 
-// Composant FlipCardFront fonctionnel pour utiliser les couleurs du thÃ¨me
+// Composant FlipCardFront fonctionnel pour utiliser les couleurs du thème
 const FlipCardFront = ({ children, sx }: { children: React.ReactNode; sx?: any }) => {
   const theme = useTheme()
   const pathname = usePathname()
@@ -153,7 +153,7 @@ const FlipCardFront = ({ children, sx }: { children: React.ReactNode; sx?: any }
   )
 }
 
-// Animation d'entrÃ©e discrÃ¨te pour l'endos des cartes (relax, professionnel)
+// Animation d'entrée discrète pour l'endos des cartes (relax, professionnel)
 const BackContentAnimated = styled(Box)({
   '@keyframes backEntrance': {
     '0%': { opacity: 0, transform: 'translateY(6px)' },
@@ -170,7 +170,7 @@ const BackContentAnimated = styled(Box)({
   zIndex: 1,
 })
 
-// Composant FlipCardBack fonctionnel pour utiliser les couleurs du thÃ¨me
+// Composant FlipCardBack fonctionnel pour utiliser les couleurs du thème
 const FlipCardBack = ({ children, sx }: { children: React.ReactNode; sx?: any }) => {
   const theme = useTheme()
   const pathname = usePathname()
@@ -357,7 +357,7 @@ export default function About() {
                     textShadow: `0 2px 4px ${primary}40`
                   }}
                 >
-                  Jean-FranÃ§ois Lefebvre
+                  Jean-François Lefebvre
                 </Typography>
                 <Typography variant="body1" sx={{ 
                   mb: 2, 
@@ -473,7 +473,7 @@ export default function About() {
                   color: textColor,
                   opacity: 0.9
                 }}>
-                  {"â€¢ DEP en soutien informatique Ã  l'Ã‰MICA (2023-2024)"}
+                  {"• DEP en soutien informatique à l'ÉMICA (2023-2024)"}
                 </Typography>
                 <Typography variant="body1" sx={{ 
                   mb: 1, 
@@ -482,13 +482,13 @@ export default function About() {
                   color: textColor,
                   opacity: 0.9
                 }}>
-                  {"â€¢ AEC DÃ©veloppement de logiciels, sÃ©curitÃ© d'applications de bureau, mobiles et Web au CÃ©gep De Maisonneuve (2024-2026)"}
+                  {"• AEC Développement de logiciels, sécurité d'applications de bureau, mobiles et Web au Cégep De Maisonneuve (2024-2026)"}
                 </Typography>
               </FlipCardBack>
             </FlipCardInner>
           </FlipCard>
 
-          {/* Carte ExpÃ©rience */}
+          {/* Carte Expérience */}
           <FlipCard data-testid="about-flip-card-experience" onClick={() => handleCardFlip('experience')}>
             <FlipCardInner 
               flipped={flippedCards.experience}
@@ -572,7 +572,7 @@ export default function About() {
                     textShadow: `0 2px 4px ${primary}40`
                   }}
                 >
-                  ExpÃ©rience
+                  Expérience
                 </Typography>
                 <Typography 
                   variant="body1" 
