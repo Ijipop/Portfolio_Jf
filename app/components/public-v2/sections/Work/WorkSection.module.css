@@ -1,0 +1,57 @@
+.head {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: var(--space-4);
+  margin-bottom: var(--space-5);
+}
+
+.eyebrow {
+  margin: 0 0 var(--space-3);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-ink-soft);
+}
+
+.title {
+  margin: 0 0 var(--space-3);
+  max-width: 18ch;
+}
+
+.lead {
+  margin: 0;
+  max-width: 36rem;
+  color: var(--color-ink-soft);
+  font-size: clamp(1.02rem, 1.6vw, 1.12rem);
+  line-height: 1.55;
+}
+
+.catalogLink {
+  color: var(--color-accent);
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.catalogLink:hover,
+.catalogLink:focus-visible {
+  text-decoration: underline;
+}
+
+.selectionNote {
+  margin: 0 0 var(--space-4);
+  font-size: 0.82rem;
+  color: var(--color-ink-faint);
+  max-width: 40rem;
+}
+
+.list {
+  display: grid;
+  gap: var(--space-6);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}

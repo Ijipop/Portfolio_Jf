@@ -1,0 +1,184 @@
+.feature {
+  display: grid;
+  gap: var(--space-5);
+  background: var(--color-surface);
+  border: 1px solid var(--color-line);
+  border-radius: calc(var(--radius-xl) + 0.15rem);
+  padding: var(--space-5);
+  transition:
+    transform var(--dur-med) var(--ease-out),
+    box-shadow var(--dur-med);
+}
+
+.feature:hover,
+.feature:focus-within {
+  box-shadow: var(--shadow-soft);
+  transform: translateY(-3px);
+}
+
+@media (min-width: 900px) {
+  .primary {
+    grid-template-columns: 1.4fr 1fr;
+    padding: var(--space-6);
+    gap: var(--space-6);
+  }
+
+  .secondary {
+    grid-template-columns: 1fr 1.15fr;
+  }
+
+  .secondary .body {
+    order: -1;
+  }
+
+  .soft {
+    grid-template-columns: 0.9fr 1.1fr;
+    max-width: 52rem;
+    margin-inline: auto;
+    width: 100%;
+  }
+}
+
+.media {
+  position: relative;
+  min-height: 14rem;
+  padding-bottom: 1.25rem;
+}
+
+.desk {
+  display: block;
+  width: 100%;
+  height: clamp(13rem, 30vw, 21rem);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-line);
+  background: color-mix(in srgb, var(--color-ink) 4%, var(--color-bg));
+  object-fit: cover;
+  object-position: top center;
+}
+
+.productShot {
+  display: block;
+  width: 100%;
+  height: clamp(11rem, 24vw, 16rem);
+  object-fit: contain;
+  object-position: center;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-line);
+  background: color-mix(in srgb, var(--color-ink) 6%, var(--color-bg));
+  padding: var(--space-4);
+}
+
+.phone {
+  --phone-w: clamp(7.75rem, 22vw, 10.5rem);
+  --phone-radius: 1.15rem;
+
+  position: absolute;
+  right: 4%;
+  bottom: -4%;
+  z-index: 3;
+  width: var(--phone-w);
+  margin: 0;
+  padding: 0.42rem;
+  border-radius: calc(var(--phone-radius) + 0.35rem);
+  background: linear-gradient(160deg, #2a3348, #121826);
+  box-shadow: var(--shadow-lift);
+  border: 1px solid color-mix(in srgb, #fff 12%, transparent);
+}
+
+.phone::before {
+  content: '';
+  position: absolute;
+  top: 0.55rem;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 28%;
+  height: 0.28rem;
+  border-radius: var(--radius-pill);
+  background: color-mix(in srgb, #fff 18%, transparent);
+  z-index: 2;
+}
+
+.phone img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: var(--phone-radius);
+  background: #0b1020;
+}
+
+.expressionPhone {
+  --phone-w: clamp(8rem, 23vw, 10.75rem);
+}
+
+.thermoPhone {
+  --phone-w: clamp(7.35rem, 19.5vw, 9.5rem);
+  right: auto;
+  left: 5%;
+  padding: 0.38rem;
+}
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-bottom: var(--space-3);
+}
+
+.title {
+  margin: 0 0 var(--space-2);
+  font-family: var(--font-display);
+  font-size: clamp(1.55rem, 2.8vw, 2.05rem);
+  font-weight: 650;
+  letter-spacing: -0.03em;
+  color: var(--color-ink);
+}
+
+.tags {
+  margin: 0 0 var(--space-3);
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--color-accent);
+}
+
+.description {
+  margin: 0 0 var(--space-4);
+  color: var(--color-ink-soft);
+  max-width: 36rem;
+  line-height: 1.55;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+.legal {
+  margin: var(--space-4) 0 0;
+  font-size: 0.78rem;
+  color: var(--color-ink-faint);
+  max-width: 34rem;
+  line-height: 1.45;
+}
+
+@media (max-width: 899px) {
+  .phone {
+    display: none;
+  }
+
+  .media {
+    min-height: 0;
+    padding-bottom: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .feature {
+    transition: none;
+  }
+
+  .feature:hover,
+  .feature:focus-within {
+    transform: none;
+  }
+}

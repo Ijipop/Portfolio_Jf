@@ -3,6 +3,8 @@ import PublicThemeRoot from '@/components/public-v2/theme/PublicThemeRoot'
 import { PublicFooter, PublicHeader } from '@/components/public-v2/chrome'
 import { Badge, Button, Container, Heading, Section } from '@/components/public-v2/primitives'
 import { Hero } from '@/components/public-v2/sections/Hero'
+import { ServicesSection } from '@/components/public-v2/sections/Services'
+import { WorkSection } from '@/components/public-v2/sections/Work'
 import { PUBLIC_V2_PREVIEW_PATH } from '@/lib/public-v2/nav'
 import styles from './preview.module.css'
 
@@ -34,6 +36,8 @@ export default function V2DesignPreviewPage() {
       <PublicHeader pathname={pathname} />
       <main id="pv2-preview-main">
         <Hero />
+        <ServicesSection />
+        <WorkSection />
 
         <Section variant="default" aria-labelledby="pv2-lab-foundations">
           <Container variant="content">
@@ -44,18 +48,6 @@ export default function V2DesignPreviewPage() {
             <p className={styles.lede}>
               Page de développement du design system public V2. Aucune logique métier. Les autres
               routes du site restent inchangées.
-            </p>
-          </Container>
-        </Section>
-
-        <Section id="pv2-services" variant="wash" aria-labelledby="pv2-services-title">
-          <Container>
-            <Heading as="h2" id="pv2-services-title" variant="section">
-              Services
-            </Heading>
-            <p className={styles.lede}>
-              Ancre locale pour la navigation sandbox (`#pv2-services`). Les offres définitives
-              seront présentées sur l’accueil V2.
             </p>
           </Container>
         </Section>
