@@ -34,6 +34,17 @@ Chantiers reportés — ne pas implémenter tant qu’ils ne sont pas explicitem
 | Hors scope immédiat | Nouveau système bilingue improvisé sur le design system V2 ; ne pas réintroduire le gateway |
 | Suite | Décision éditoriale ultérieure : FR-only assumé, ou bascule langue V2 soignée |
 
+## Catalogue Réalisations V2 — FR seulement (6B2)
+
+| Champ | Détail |
+|-------|--------|
+| État | Différence fonctionnelle acceptée **temporairement** (Phase 6B2) |
+| Contexte | L’ancien `/portfolio/projets` V1 utilisait `useLanguage()` / `t('projects.*')` (FR/EN) |
+| Catalogue V2 | Copy fixe français québécois (`PROJECTS_COPY`) — aligné avec l’accueil Pop Atelier |
+| Ce que ce n’est pas | Une absence totale de régression i18n sur tout le site ; perte **locale** au catalogue V2 uniquement |
+| Préservé | Pages historiques hors `(site-pages)` conservent `LanguageContext` |
+| Hors scope immédiat | Nouveau système bilingue sur le design system V2 |
+
 ## Autres éléments du gateway (inventaire 6B1)
 
 | Élément | Statut |

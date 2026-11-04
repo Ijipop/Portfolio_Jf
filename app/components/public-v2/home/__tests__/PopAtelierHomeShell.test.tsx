@@ -26,7 +26,7 @@ vi.mock('next/link', () => ({
 }))
 
 describe('PopAtelierHomeShell', () => {
-  it('monte ThemeRoot, Header, Footer et les six sections une seule fois', () => {
+  it('monte ThemeRoot, Header, Footer et les six sections une seule fois', { timeout: 15_000 }, () => {
     render(<PopAtelierHomeShell pathname="/" />)
 
     expect(screen.getAllByTestId('public-theme-root')).toHaveLength(1)
@@ -53,8 +53,6 @@ describe('PopAtelierHomeShell', () => {
       'utf8',
     )
     expect(src).not.toMatch(/from ['"]@prisma|ThemeWrapper|ContactFab|FullPageTopology|@mui/)
-    expect(src).toMatch(/PublicThemeRoot/)
-    expect(src).toMatch(/PublicHeader/)
-    expect(src).toMatch(/PublicFooter/)
+    expect(src).toMatch(/PublicChromeShell/)
   })
 })

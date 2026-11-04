@@ -1,8 +1,12 @@
 import type { Metadata } from 'next'
+import { Suspense } from 'react'
 import PublicThemeRoot from '@/components/public-v2/theme/PublicThemeRoot'
 import { PopAtelierHomeShell } from '@/components/public-v2/home'
+import { ProjectsCatalog } from '@/components/public-v2/projects'
 import { Badge, Button, Container, Heading, Section } from '@/components/public-v2/primitives'
 import { PUBLIC_V2_PREVIEW_PATH } from '@/lib/public-v2/nav'
+import { PROJECTS_COPY } from '@/lib/public-v2/projectsContent'
+import { PROJECTS_FIXTURES, TIMELENDR_FIXTURES } from '@/lib/public-v2/projectsFixtures'
 import styles from './preview.module.css'
 
 export const metadata: Metadata = {
@@ -38,6 +42,11 @@ export default function V2DesignPreviewPage() {
               <p className={styles.lede}>
                 Page de développement du design system public V2. Aucune logique métier. Les autres
                 routes du site restent inchangées.
+              </p>
+              <p className={styles.lede}>
+                <Button href="#pv2-projects-fixtures-preview" variant="ghost" size="sm">
+                  Aller au catalogue fixtures
+                </Button>
               </p>
             </Container>
           </Section>
@@ -208,6 +217,27 @@ export default function V2DesignPreviewPage() {
                 </Button>
               </div>
             </Container>
+          </Section>
+
+          <Section aria-labelledby="pv2-projects-fixture-title">
+            <Container>
+              <p className={styles.eyebrow}>Aperçu développement · fixtures · noindex</p>
+              <Heading as="h2" id="pv2-projects-fixture-title" variant="section">
+                Catalogue Réalisations (fixtures)
+              </Heading>
+              <p className={styles.lede}>
+                Données synthétiques uniquement — la route publique `/portfolio/projets` continue
+                d’appeler `GET /api/projects`. Sous DB inerte, l’API réelle n’est pas validée ici.
+              </p>
+            </Container>
+            <div id="pv2-projects-fixtures-preview" data-testid="pv2-projects-fixtures-preview">
+              <Suspense fallback={<p aria-busy="true">{PROJECTS_COPY.loading}</p>}>
+                <ProjectsCatalog
+                  initialProjects={PROJECTS_FIXTURES}
+                  initialTimelendr={TIMELENDR_FIXTURES}
+                />
+              </Suspense>
+            </div>
           </Section>
         </div>
       </PublicThemeRoot>
