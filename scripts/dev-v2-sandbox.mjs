@@ -60,8 +60,11 @@ env.IJIPOP_V2_SANDBOX_DEV = '1'
 
 console.log('[dev-v2-sandbox] DATABASE_URL forcée vers 127.0.0.1:59999 (inerte)')
 console.log('[dev-v2-sandbox] Variables de connexion alternatives retirées du process Next.js')
-console.log('[dev-v2-sandbox] URL sandbox : http://127.0.0.1:3000/v2-design-preview')
-console.log('[dev-v2-sandbox] Ne pas ouvrir /, /admin ni les API métier dans cette session.')
+console.log('[dev-v2-sandbox] Accueil V2 : http://localhost:3000/')
+console.log('[dev-v2-sandbox] Sandbox design : http://localhost:3000/v2-design-preview')
+console.log(
+  '[dev-v2-sandbox] Ne pas ouvrir /admin, /portfolio ni les API métier (layout Prisma / DB inerte).',
+)
 
 const child = spawn('npx', ['next', 'dev', '--port', '3000'], {
   cwd: root,

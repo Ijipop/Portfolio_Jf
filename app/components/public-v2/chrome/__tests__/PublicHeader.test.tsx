@@ -47,7 +47,7 @@ describe('public-v2 chrome', () => {
     expect(screen.getAllByRole('link', { name: 'Me contacter' }).length).toBeGreaterThanOrEqual(1)
     const brandLinks = screen.getAllByRole('link', { name: /Jean-François Lefebvre/i })
     expect(brandLinks.length).toBeGreaterThanOrEqual(1)
-    expect(brandLinks.every((l) => l.getAttribute('href') === '#pv2-preview-main')).toBe(true)
+    expect(brandLinks.every((l) => l.getAttribute('href') === '#pv2-main')).toBe(true)
   })
 
   it('ferme le menu mobile avec Échap et restaure le focus', async () => {

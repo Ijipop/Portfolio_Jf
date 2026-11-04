@@ -1,7 +1,10 @@
 import type { Metadata } from 'next'
-import HomeGatewayClient from '@/components/home/HomeGatewayClient'
+import { PopAtelierHomeShell } from '@/components/public-v2/home'
 
-/** Titre absolu : ignore le template du layout racine. */
+/**
+ * Métadonnées reportées depuis l’ancien `app/(public)/page.tsx`.
+ * `alternates.canonical` rendu explicite (openGraph.url ne le génère pas).
+ */
 export const metadata: Metadata = {
   title: {
     absolute:
@@ -9,6 +12,9 @@ export const metadata: Metadata = {
   },
   description:
     'Ijipop Solutions : sites web, soutien informatique et logiciels sur mesure à Montréal. PME et indépendants au Québec.',
+  alternates: {
+    canonical: '/',
+  },
   openGraph: {
     title: 'Ijipop Solutions — sites web, soutien tech & logiciels · Montréal',
     description:
@@ -35,5 +41,5 @@ export const metadata: Metadata = {
 }
 
 export default function HomePage() {
-  return <HomeGatewayClient />
+  return <PopAtelierHomeShell pathname="/" />
 }

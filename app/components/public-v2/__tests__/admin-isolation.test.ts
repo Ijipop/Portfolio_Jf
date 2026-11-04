@@ -43,11 +43,13 @@ describe('public-v2 isolation from admin', () => {
     expect(src).not.toMatch(/data-public-theme/)
   })
 
-  it('l’accueil / n’importe pas le chrome V2', () => {
-    const src = readFileSync(path.join(appRoot, '(public)', 'page.tsx'), 'utf8')
-    expect(src).not.toMatch(/PublicHeader/)
-    expect(src).not.toMatch(/PublicFooter/)
-    expect(src).not.toMatch(/PublicThemeRoot/)
+  it('l’accueil / utilise le shell V2 hors layout public / Prisma', () => {
+    const page = readFileSync(path.join(appRoot, '(site-home)', 'page.tsx'), 'utf8')
+    const layout = readFileSync(path.join(appRoot, '(site-home)', 'layout.tsx'), 'utf8')
+    expect(page).toMatch(/PopAtelierHomeShell/)
+    expect(page).not.toMatch(/HomeGatewayClient/)
+    expect(page).not.toMatch(/getCachedBeigePresentationBgUrl|from ['"]@prisma/)
+    expect(layout).not.toMatch(/ThemeWrapper|ContactFab|getCachedBeigePresentationBgUrl/)
   })
 
   it('la sandbox V2 n’utilise pas le layout public ni Prisma', () => {
@@ -59,8 +61,8 @@ describe('public-v2 isolation from admin', () => {
     expect(layout).not.toMatch(/from ['"]@\/components\/ThemeWrapper['"]/)
     expect(layout).not.toMatch(/getCachedBeigePresentationBgUrl/)
     expect(layout).not.toMatch(/from ['"]@\/lib\/prisma['"]/)
-    expect(page).toMatch(/PublicHeader/)
-    expect(page).toMatch(/PublicFooter/)
+    expect(page).toMatch(/PopAtelierHomeShell/)
+    expect(page).toMatch(/pv2-foundations-lab|pv2-lab-foundations/)
     expect(page).not.toMatch(/from ['"]@\/lib\/prisma['"]/)
   })
 })

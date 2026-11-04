@@ -3,13 +3,24 @@ import path from 'node:path'
 import { describe, expect, it } from 'vitest'
 
 describe('Hero isolation', () => {
-  it('n’est monté que depuis la sandbox v2-design-preview', () => {
+  it('est monté uniquement via PopAtelierHomeShell (accueil + sandbox)', () => {
+    const shell = readFileSync(
+      path.join(process.cwd(), 'app/components/public-v2/home/PopAtelierHomeShell.tsx'),
+      'utf8',
+    )
+    expect(shell).toMatch(/from ['"]@\/components\/public-v2\/sections\/Hero['"]/)
+    expect(shell).toMatch(/<Hero\s*\/>/)
+
+    const home = readFileSync(path.join(process.cwd(), 'app/(site-home)/page.tsx'), 'utf8')
+    expect(home).toMatch(/PopAtelierHomeShell/)
+    expect(home).not.toMatch(/sections\/Hero/)
+
     const preview = readFileSync(
       path.join(process.cwd(), 'app/(v2-sandbox)/v2-design-preview/page.tsx'),
       'utf8',
     )
-    expect(preview).toMatch(/from ['"]@\/components\/public-v2\/sections\/Hero['"]/)
-    expect(preview).toMatch(/<Hero\s*\/>/)
+    expect(preview).toMatch(/PopAtelierHomeShell/)
+    expect(preview).not.toMatch(/sections\/Hero/)
 
     const publicRoot = path.join(process.cwd(), 'app/(public)')
     const stack = [publicRoot]

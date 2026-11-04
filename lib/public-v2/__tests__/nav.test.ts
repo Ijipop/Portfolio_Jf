@@ -1,7 +1,10 @@
 import { describe, expect, it } from 'vitest'
 import {
   PUBLIC_V2_CTA,
+  PUBLIC_V2_MAIN_ID,
   PUBLIC_V2_NAV_ITEMS,
+  PUBLIC_V2_SERVICES_HASH,
+  PUBLIC_V2_SERVICES_HREF,
   getPublicV2Cta,
   getPublicV2NavItems,
   resolvePublicV2Href,
@@ -16,15 +19,24 @@ describe('public-v2 nav config', () => {
       'contact',
     ])
     expect(PUBLIC_V2_CTA.label).toBe('Me contacter')
+    expect(PUBLIC_V2_NAV_ITEMS.find((i) => i.id === 'services')?.href).toBe(
+      PUBLIC_V2_SERVICES_HREF,
+    )
+  })
+
+  it('pointe Services vers l’ancre pv2-services réelle', () => {
+    expect(PUBLIC_V2_SERVICES_HREF).toBe('/#pv2-services')
+    expect(PUBLIC_V2_SERVICES_HASH).toBe('#pv2-services')
   })
 
   it('réécrit Services et home sur la sandbox preview', () => {
+    expect(resolvePublicV2Href('/#pv2-services', '/v2-design-preview')).toBe('#pv2-services')
     expect(resolvePublicV2Href('/#services', '/v2-design-preview')).toBe('#pv2-services')
-    expect(resolvePublicV2Href('/', '/v2-design-preview')).toBe('#pv2-preview-main')
+    expect(resolvePublicV2Href('/', '/v2-design-preview')).toBe(`#${PUBLIC_V2_MAIN_ID}`)
   })
 
   it('conserve les hrefs canoniques hors preview', () => {
-    expect(resolvePublicV2Href('/#services', '/')).toBe('/#services')
+    expect(resolvePublicV2Href('/#pv2-services', '/')).toBe('/#pv2-services')
     expect(resolvePublicV2Href('/portfolio/projets', '/v2-design-preview')).toBe(
       '/portfolio/projets',
     )
