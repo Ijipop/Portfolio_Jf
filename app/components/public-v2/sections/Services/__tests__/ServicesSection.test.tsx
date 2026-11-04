@@ -21,6 +21,9 @@ describe('ServicesSection V2', () => {
 
     expect(document.getElementById('pv2-services')).toBeTruthy()
     expect(screen.getByRole('heading', { level: 2 })).toHaveTextContent(SERVICES_COPY.title)
+    expect(
+      screen.queryByText(/Des offres claires/i),
+    ).not.toBeInTheDocument()
     expect(SERVICE_OFFERS).toHaveLength(3)
 
     for (const offer of SERVICE_OFFERS) {

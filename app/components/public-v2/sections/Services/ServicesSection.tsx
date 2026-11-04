@@ -35,14 +35,11 @@ export default function ServicesSection({
         <Heading as="h2" id="pv2-services-title" variant="section" className={styles.title}>
           {copy.title}
         </Heading>
-        <p className={styles.lead}>{copy.lead}</p>
         <div className={styles.band}>
           {offers.map((offer) => (
-            <ServiceCard
-              key={offer.id}
-              offer={offer}
-              className={offer.variant === 'support' ? styles.supportOffset : undefined}
-            />
+            <div key={offer.id} className={styles.bandItem}>
+              <ServiceCard offer={offer} />
+            </div>
           ))}
         </div>
       </Container>

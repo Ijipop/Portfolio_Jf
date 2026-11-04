@@ -3,6 +3,7 @@ import PublicThemeRoot from '@/components/public-v2/theme/PublicThemeRoot'
 import { PublicFooter, PublicHeader } from '@/components/public-v2/chrome'
 import { Badge, Button, Container, Heading, Section } from '@/components/public-v2/primitives'
 import { Hero } from '@/components/public-v2/sections/Hero'
+import { LaboratorySection } from '@/components/public-v2/sections/Laboratory'
 import { ServicesSection } from '@/components/public-v2/sections/Services'
 import { WorkSection } from '@/components/public-v2/sections/Work'
 import { PUBLIC_V2_PREVIEW_PATH } from '@/lib/public-v2/nav'
@@ -38,10 +39,11 @@ export default function V2DesignPreviewPage() {
         <Hero />
         <ServicesSection />
         <WorkSection />
+        <LaboratorySection />
 
         <Section variant="default" aria-labelledby="pv2-lab-foundations">
           <Container variant="content">
-            <p className={styles.eyebrow}>Laboratoire · temporaire · noindex</p>
+            <p className={styles.eyebrow}>Outils de développement · temporaire · noindex</p>
             <Heading as="h2" id="pv2-lab-foundations" variant="display">
               Pop Atelier — fondations
             </Heading>

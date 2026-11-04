@@ -19,7 +19,6 @@ export type ServiceOffer = {
 export const SERVICES_COPY = {
   eyebrow: 'Services',
   title: 'Ce que je fais',
-  lead: 'Des offres claires — du site web à l’outil sur mesure, en passant par le soutien du quotidien.',
 } as const
 
 export const SERVICE_OFFERS: readonly ServiceOffer[] = [

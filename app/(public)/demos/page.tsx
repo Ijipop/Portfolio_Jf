@@ -1,91 +1,48 @@
 import Link from 'next/link'
+import { DEMOS_CATALOG, type DemoThumbToken } from '@/lib/content/demos-catalog'
 import DemosAiVideoShowcase from './DemosAiVideoShowcase'
 import DemosIndexAnimatedGrid from './DemosIndexAnimatedGrid'
 import DemosIndexShell from './DemosIndexShell'
 import DemosSeoCta from './DemosSeoCta'
 import styles from './DemosIndex.module.css'
 
-const demos = [
-  {
-    href: '/demos/construction',
-    title: 'Construction & rénovation',
-    desc: 'Ton industriel, preuves terrain, devis clair — chantiers mis en avant.',
-    thumb: styles.thumbConstruction,
-  },
-  {
-    href: '/demos/restaurant',
-    title: 'Restaurant & chef',
-    desc: 'Chaleur, menu, réservation — ambiance « carte postale ».',
-    thumb: styles.thumbRestaurant,
-  },
-  {
-    href: '/demos/tech',
-    title: 'Produit SaaS tech',
-    desc: 'Sombre, contraste fort, sections produit et confiance.',
-    thumb: styles.thumbTech,
-  },
-  {
-    href: '/demos/wellness',
-    title: 'Bien-être & spa',
-    desc: 'Ambiance douce et aérée — spa, yoga ou coaching.',
-    thumb: styles.thumbWellness,
-  },
-  {
-    href: '/demos/studio',
-    title: 'Studio créatif',
-    desc: 'Éditorial fort, serif & contrastes — direction artistique et édition.',
-    thumb: styles.thumbStudio,
-  },
-  {
-    href: '/demos/spectacle',
-    title: 'Saison & spectacle',
-    desc: 'Salle culturelle, affiche et or — programmation et billetterie.',
-    thumb: styles.thumbSpectacle,
-  },
-  {
-    href: '/demos/portfolio',
-    title: 'Portfolio créateur',
-    desc: 'Sobre, premium, bento — vitrine développeur web à Montréal.',
-    thumb: styles.thumbPortfolio,
-  },
-  {
-    href: '/demos/galerie',
-    title: 'Galerie minimaliste',
-    desc: 'Créatif punchy — grille serrée, overlay sombre, projets cliquables.',
-    thumb: styles.thumbGalerie,
-  },
-  {
-    href: '/demos/volt',
-    title: 'Streetwear VOLT',
-    desc: 'Over-the-top — hero sticky, photos qui glissent, marquee et lookbook cinéma.',
-    thumb: styles.thumbVolt,
-  },
-] as const
+/** Mapping explicite et typé thumbToken → classes CSS du hub (identité visuelle préservée). */
+const THUMB_CLASS_BY_TOKEN: Record<DemoThumbToken, string> = {
+  construction: styles.thumbConstruction,
+  restaurant: styles.thumbRestaurant,
+  tech: styles.thumbTech,
+  wellness: styles.thumbWellness,
+  studio: styles.thumbStudio,
+  spectacle: styles.thumbSpectacle,
+  portfolio: styles.thumbPortfolio,
+  galerie: styles.thumbGalerie,
+  volt: styles.thumbVolt,
+}
 
 export default function DemosIndexPage() {
-  const cards = demos.map((d) => ({
+  const cards = DEMOS_CATALOG.map((d) => ({
     href: d.href,
     title: d.title,
-    desc: d.desc,
-    thumbClass: `${styles.thumb} ${d.thumb}`,
+    desc: d.description,
+    thumbClass: `${styles.thumb} ${THUMB_CLASS_BY_TOKEN[d.thumbToken]}`,
   }))
 
   return (
     <DemosIndexShell>
       <div className={styles.page}>
         <div className={styles.inner}>
-        <span className={styles.kicker}>Exemples de style — pas des sites clients</span>
-        <h1 className={styles.title}>Neuf directions créatives pour votre prochain site</h1>
-        <p className={styles.lead}>
-          Maquettes de démonstration pour montrer des ambiances et secteurs différents — pas des mandats livrés.
-          Ouvrez celles qui vous parlent.
-        </p>
-        <DemosAiVideoShowcase />
-        <DemosIndexAnimatedGrid cards={cards} />
-        <DemosSeoCta />
-        <Link href="/" className={styles.back}>
-          ← Retour à l’accueil
-        </Link>
+          <span className={styles.kicker}>Exemples de style — pas des sites clients</span>
+          <h1 className={styles.title}>Neuf directions créatives pour votre prochain site</h1>
+          <p className={styles.lead}>
+            Maquettes de démonstration pour montrer des ambiances et secteurs différents — pas des
+            mandats livrés. Ouvrez celles qui vous parlent.
+          </p>
+          <DemosAiVideoShowcase />
+          <DemosIndexAnimatedGrid cards={cards} />
+          <DemosSeoCta />
+          <Link href="/" className={styles.back}>
+            ← Retour à l’accueil
+          </Link>
         </div>
       </div>
     </DemosIndexShell>
