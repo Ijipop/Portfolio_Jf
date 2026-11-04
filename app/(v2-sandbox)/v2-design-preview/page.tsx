@@ -2,6 +2,8 @@ import type { Metadata } from 'next'
 import PublicThemeRoot from '@/components/public-v2/theme/PublicThemeRoot'
 import { PublicFooter, PublicHeader } from '@/components/public-v2/chrome'
 import { Badge, Button, Container, Heading, Section } from '@/components/public-v2/primitives'
+import { AboutSection } from '@/components/public-v2/sections/About'
+import { ContactSection } from '@/components/public-v2/sections/Contact'
 import { Hero } from '@/components/public-v2/sections/Hero'
 import { LaboratorySection } from '@/components/public-v2/sections/Laboratory'
 import { ServicesSection } from '@/components/public-v2/sections/Services'
@@ -40,6 +42,8 @@ export default function V2DesignPreviewPage() {
         <ServicesSection />
         <WorkSection />
         <LaboratorySection />
+        <AboutSection />
+        <ContactSection />
 
         <Section variant="default" aria-labelledby="pv2-lab-foundations">
           <Container variant="content">

@@ -53,7 +53,6 @@ export default function LaboratorySection({
           <a className={styles.catalogLink} href={copy.catalogHref}>
             {copy.catalogLinkLabel}
           </a>
-          <span className={styles.hint}>{copy.hint}</span>
         </div>
       </Container>
     </Section>

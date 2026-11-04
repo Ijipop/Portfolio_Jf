@@ -17,7 +17,6 @@ export const LABORATORY_COPY = {
   ctaLabel: 'Explorer la démo',
   catalogLinkLabel: 'Voir toutes les démos',
   catalogHref: '/demos',
-  hint: 'Aperçus légers — les boutons ouvrent les vraies pages /demos du site.',
 } as const
 
 export type LaboratoryFeature = {

@@ -80,8 +80,3 @@
 .catalogLink:focus-visible {
   text-decoration: underline;
 }
-
-.hint {
-  font-size: 0.82rem;
-  color: var(--color-ink-faint);
-}
