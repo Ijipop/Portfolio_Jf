@@ -2,11 +2,10 @@
 
 import Link from 'next/link'
 import ProductDownloadRow from '@/components/product-landings/ProductDownloadRow'
-import ProductLandingShell from '@/components/product-landings/ProductLandingShell'
 import ProductSecurityNotice from '@/components/product-landings/ProductSecurityNotice'
 import type { ProductDownloadLinks } from '@/components/product-landings/productDownloads'
 import AutoplayLoopVideo from '@/components/shared/AutoplayLoopVideo'
-import { useLanguage } from '@/contexts/LanguageContext'
+import { LanguageProvider, useLanguage } from '@/contexts/LanguageContext'
 import DeskDotPhotoStack from './DeskDotPhotoStack'
 import DeskDotPitchTitle from './DeskDotPitchTitle'
 import styles from './DeskDotLanding.module.css'
@@ -39,12 +38,12 @@ type DeskDotLandingClientProps = {
   downloads: ProductDownloadLinks
 }
 
-export default function DeskDotLandingClient({ downloads }: DeskDotLandingClientProps) {
+function DeskDotLandingBody({ downloads }: DeskDotLandingClientProps) {
   const { t } = useLanguage()
   const hasWindows = Boolean(downloads.windows?.trim())
 
   return (
-    <ProductLandingShell mainClassName={styles.page}>
+    <div className={styles.page} data-testid="deskdot-landing">
       <div className={styles.rings} aria-hidden>
         <div className={styles.ring} />
         <div className={styles.ring} />
@@ -122,6 +121,18 @@ export default function DeskDotLandingClient({ downloads }: DeskDotLandingClient
           <Link href="/portfolio/projets?type=logiciel">{t('deskDot.otherSoftware')}</Link>
         </nav>
       </div>
-    </ProductLandingShell>
+    </div>
+  )
+}
+
+/**
+ * Contenu DeskDot — chrome Pop Atelier fourni par la page.
+ * MUI limité à useMediaQuery dans DeskDotPitchTitle (pas de ThemeProvider / backdrop).
+ */
+export default function DeskDotLandingClient({ downloads }: DeskDotLandingClientProps) {
+  return (
+    <LanguageProvider>
+      <DeskDotLandingBody downloads={downloads} />
+    </LanguageProvider>
   )
 }

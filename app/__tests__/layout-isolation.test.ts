@@ -79,7 +79,8 @@ describe('layout isolation (public vs admin)', () => {
     expect(existsSync(path.join(appRoot, '(public)', 'cpu-ze', 'page.tsx'))).toBe(false)
     expect(existsSync(path.join(appRoot, '(site-pages)', 'spacetaker', 'page.tsx'))).toBe(true)
     expect(existsSync(path.join(appRoot, '(public)', 'spacetaker', 'page.tsx'))).toBe(false)
-    expect(existsSync(path.join(appRoot, '(public)', 'deskdot', 'page.tsx'))).toBe(true)
+    expect(existsSync(path.join(appRoot, '(site-pages)', 'deskdot', 'page.tsx'))).toBe(true)
+    expect(existsSync(path.join(appRoot, '(public)', 'deskdot', 'page.tsx'))).toBe(false)
     expect(existsSync(path.join(appRoot, '(site-pages)', 'traducteur', 'page.tsx'))).toBe(true)
     expect(existsSync(path.join(appRoot, '(public)', 'traducteur', 'page.tsx'))).toBe(false)
     expect(existsSync(path.join(appRoot, '(public)', 'logiciel', 'timelendr', 'page.tsx'))).toBe(true)
@@ -136,6 +137,11 @@ describe('layout isolation (public vs admin)', () => {
     expect(traducteurPage).toMatch(/PublicChromeShell/)
     expect(traducteurPage).toMatch(/getTraducteurDownloads/)
     expect(traducteurPage).not.toMatch(/ThemeWrapper|ProductLandingShell/)
+
+    const deskDotPage = readAppFile('(site-pages)', 'deskdot', 'page.tsx')
+    expect(deskDotPage).toMatch(/PublicChromeShell/)
+    expect(deskDotPage).toMatch(/getDeskDotDownloads/)
+    expect(deskDotPage).not.toMatch(/ThemeWrapper|ProductLandingShell/)
   })
 
 
