@@ -78,9 +78,9 @@ test('portfolio home has CSS backdrop and no Vanta (reduced motion)', async ({ p
   await expect(page.getByTestId('vanta-background')).toHaveCount(0)
 })
 
-test('logiciel and SEO landing routes are reachable', async ({ page }) => {
+test('legacy hub and SEO landing routes redirect to catalog', async ({ page }) => {
   await page.goto('/logiciel', { waitUntil: 'domcontentloaded' })
-  await expect(page).toHaveURL(/\/logiciel/)
+  await expect(page).toHaveURL(/\/portfolio\/projets\?type=logiciel/)
 
   await page.goto('/creation-site-web-montreal', { waitUntil: 'domcontentloaded' })
   await expect(page).toHaveURL(/\/portfolio\/projets\?type=web/)

@@ -49,7 +49,7 @@ export const SERVICE_OFFERS: readonly ServiceOffer[] = [
     title: 'Développement de logiciels',
     description:
       'Des outils et des applications conçus pour des besoins particuliers. Quand les logiciels existants ne conviennent pas, je peux développer quelque chose de plus adapté à votre façon de travailler.',
-    href: '/logiciel',
+    href: '/portfolio/projets?type=logiciel',
     ctaLabel: 'En savoir plus →',
   },
 ] as const

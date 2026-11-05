@@ -14,7 +14,7 @@ describe('Homepage + catalog read-only during Phase 6B3', () => {
       .split(/\r?\n/)
       .filter(Boolean)
 
-    /** Exception glyph Hero + retarget href Services web (6B5). */
+    /** Exception glyph Hero + retarget href Services (6B5/6B6). */
     const allowed = new Set([
       'app/components/public-v2/sections/Hero/Hero.module.css',
       'lib/public-v2/servicesContent.ts',

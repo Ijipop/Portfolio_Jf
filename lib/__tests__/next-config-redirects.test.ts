@@ -46,8 +46,14 @@ describe('next.config redirects', () => {
           destination: '/portfolio/projets?type=web',
           permanent: true,
         }),
+        expect.objectContaining({
+          source: '/logiciel',
+          destination: '/portfolio/projets?type=logiciel',
+          permanent: true,
+        }),
       ]),
     )
+    expect(redirects.some((item) => item.source === '/logiciel/:path*')).toBe(false)
   })
 
   it('n’ajoute pas de redirect CPU-ZE auto-référent', async () => {

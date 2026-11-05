@@ -129,6 +129,12 @@ const nextConfig = {
         destination: '/portfolio/projets?type=web',
         permanent: true,
       },
+      /** Hub /logiciel redondant avec le catalogue — ne pas matcher /logiciel/timelendr */
+      {
+        source: '/logiciel',
+        destination: '/portfolio/projets?type=logiciel',
+        permanent: true,
+      },
       // Ne pas ajouter de redirects « CPU-ZE → cpu-ze » / « SpaceTaker → spacetaker » :
       // sur Vercel le matching est case-insensitive, donc /cpu-ze matchait /CPU-ZE et
       // redirigeait vers lui-même (boucle 308 → page morte).

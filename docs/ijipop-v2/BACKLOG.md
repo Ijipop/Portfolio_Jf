@@ -74,11 +74,19 @@ Chantiers reportés — ne pas implémenter tant qu’ils ne sont pas explicitem
 
 | Champ | Détail |
 |-------|--------|
-| État | Non commitée — validation visuelle avant commit |
-| Création web | Landing SEO retirée ; redirect → `/portfolio/projets?type=web` ; carte Services retargetée |
+| État | Commitée (`feat: finalize Pop Atelier support page…`) |
+| Création web | Landing SEO retirée ; redirect → `/portfolio/projets?type=web` |
 | Soutien | `/soutien-informatique-montreal` Pop Atelier ; îlot MUI sans SiteDarkBackdrop |
-| Hub logiciels | `/logiciel` **hors scope** 6B5 |
-| Hors scope immédiat | Restyle MUI du formulaire soutien ; bilingue landings |
+| Hub logiciels | Traité en 6B6 |
+
+## Hub /logiciel (6B6)
+
+| Champ | Détail |
+|-------|--------|
+| Décision | Hub redondant — redirect permanent → `/portfolio/projets?type=logiciel` |
+| Contenu unique | Aucun (titre + intro + 4 cartes = résumé des fiches) |
+| Préservé | `/logiciel/timelendr`, autres fiches produit, téléchargements, API |
+| CTA Services | Accueil → `/portfolio/projets?type=logiciel` |
 
 ## Autres éléments du gateway (inventaire 6B1)
 

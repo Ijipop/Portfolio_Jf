@@ -16,7 +16,7 @@ describe('Validated sections read-only during Phase 5D', () => {
 
     const allowed = new Set([
       'app/components/public-v2/sections/Hero/Hero.module.css',
-      /** 6B5 : retarget href Création web uniquement */
+      /** 6B5/6B6 : retarget href Services web + logiciels */
       'lib/public-v2/servicesContent.ts',
       'app/components/public-v2/sections/Services/__tests__/ServicesSection.test.tsx',
     ])
