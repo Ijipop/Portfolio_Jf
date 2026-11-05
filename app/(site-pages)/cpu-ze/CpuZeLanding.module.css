@@ -9,8 +9,9 @@
   --font-display: var(--font-cpuze-display), ui-monospace, monospace;
   --font-body: var(--font-cpuze-body), system-ui, sans-serif;
 
+  /* Surface produit dans le main Pop Atelier — personnalité amber conservée. */
   position: relative;
-  min-height: 100dvh;
+  min-height: calc(100dvh - 8rem);
   color: var(--cpu-text);
   font-family: var(--font-body);
   background:

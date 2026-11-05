@@ -75,11 +75,13 @@ describe('layout isolation (public vs admin)', () => {
       existsSync(path.join(appRoot, '(public)', 'soutien-informatique-montreal', 'page.tsx')),
     ).toBe(false)
     expect(existsSync(path.join(appRoot, '(public)', 'portfolio', 'page.tsx'))).toBe(true)
-    expect(existsSync(path.join(appRoot, '(public)', 'cpu-ze', 'page.tsx'))).toBe(true)
+    expect(existsSync(path.join(appRoot, '(site-pages)', 'cpu-ze', 'page.tsx'))).toBe(true)
+    expect(existsSync(path.join(appRoot, '(public)', 'cpu-ze', 'page.tsx'))).toBe(false)
     expect(existsSync(path.join(appRoot, '(site-pages)', 'spacetaker', 'page.tsx'))).toBe(true)
     expect(existsSync(path.join(appRoot, '(public)', 'spacetaker', 'page.tsx'))).toBe(false)
     expect(existsSync(path.join(appRoot, '(public)', 'deskdot', 'page.tsx'))).toBe(true)
-    expect(existsSync(path.join(appRoot, '(public)', 'traducteur', 'page.tsx'))).toBe(true)
+    expect(existsSync(path.join(appRoot, '(site-pages)', 'traducteur', 'page.tsx'))).toBe(true)
+    expect(existsSync(path.join(appRoot, '(public)', 'traducteur', 'page.tsx'))).toBe(false)
     expect(existsSync(path.join(appRoot, '(public)', 'logiciel', 'timelendr', 'page.tsx'))).toBe(true)
     expect(existsSync(path.join(appRoot, '(public)', 'demos', 'page.tsx'))).toBe(true)
     expect(existsSync(path.join(appRoot, 'admin', 'page.tsx'))).toBe(true)
@@ -124,6 +126,16 @@ describe('layout isolation (public vs admin)', () => {
     expect(spaceTakerPage).toMatch(/PublicChromeShell/)
     expect(spaceTakerPage).toMatch(/getSpaceTakerDownloads/)
     expect(spaceTakerPage).not.toMatch(/ThemeWrapper|ProductLandingShell/)
+
+    const cpuZePage = readAppFile('(site-pages)', 'cpu-ze', 'page.tsx')
+    expect(cpuZePage).toMatch(/PublicChromeShell/)
+    expect(cpuZePage).toMatch(/getCpuZeDownloads/)
+    expect(cpuZePage).not.toMatch(/ThemeWrapper|ProductLandingShell/)
+
+    const traducteurPage = readAppFile('(site-pages)', 'traducteur', 'page.tsx')
+    expect(traducteurPage).toMatch(/PublicChromeShell/)
+    expect(traducteurPage).toMatch(/getTraducteurDownloads/)
+    expect(traducteurPage).not.toMatch(/ThemeWrapper|ProductLandingShell/)
   })
 
 

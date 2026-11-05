@@ -2,9 +2,8 @@
 
 import Link from 'next/link'
 import ProductDownloadRow from '@/components/product-landings/ProductDownloadRow'
-import ProductLandingShell from '@/components/product-landings/ProductLandingShell'
 import type { ProductDownloadLinks } from '@/components/product-landings/productDownloads'
-import { useLanguage } from '@/contexts/LanguageContext'
+import { LanguageProvider, useLanguage } from '@/contexts/LanguageContext'
 import styles from './TraducteurLanding.module.css'
 
 const ACCENT = '#10b981'
@@ -27,7 +26,7 @@ type TraducteurLandingClientProps = {
   downloads: ProductDownloadLinks
 }
 
-export default function TraducteurLandingClient({ downloads }: TraducteurLandingClientProps) {
+function TraducteurLandingBody({ downloads }: TraducteurLandingClientProps) {
   const { t } = useLanguage()
 
   const downloadButton = (
@@ -45,7 +44,7 @@ export default function TraducteurLandingClient({ downloads }: TraducteurLanding
   )
 
   return (
-    <ProductLandingShell mainClassName={styles.page}>
+    <div className={styles.page} data-testid="traducteur-landing">
       <div className={styles.inner}>
         <header className={styles.hero}>
           <div className={styles.heroCopy}>
@@ -136,6 +135,15 @@ export default function TraducteurLandingClient({ downloads }: TraducteurLanding
           </nav>
         </section>
       </div>
-    </ProductLandingShell>
+    </div>
+  )
+}
+
+/** Contenu Traducteur — chrome Pop Atelier fourni par la page ; i18n via LanguageProvider. */
+export default function TraducteurLandingClient({ downloads }: TraducteurLandingClientProps) {
+  return (
+    <LanguageProvider>
+      <TraducteurLandingBody downloads={downloads} />
+    </LanguageProvider>
   )
 }

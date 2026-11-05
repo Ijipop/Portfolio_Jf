@@ -3,10 +3,9 @@
 import Link from 'next/link'
 import ProductDownloadRow from '@/components/product-landings/ProductDownloadRow'
 import ProductImageCarousel from '@/components/product-landings/ProductImageCarousel'
-import ProductLandingShell from '@/components/product-landings/ProductLandingShell'
 import ProductSecurityNotice from '@/components/product-landings/ProductSecurityNotice'
 import type { ProductDownloadLinks } from '@/components/product-landings/productDownloads'
-import { useLanguage } from '@/contexts/LanguageContext'
+import { LanguageProvider, useLanguage } from '@/contexts/LanguageContext'
 import styles from './CpuZeLanding.module.css'
 
 const BENEFIT_KEYS = ['cpuZe.b1', 'cpuZe.b2', 'cpuZe.b3', 'cpuZe.b4'] as const
@@ -15,11 +14,11 @@ type CpuZeLandingClientProps = {
   downloads: ProductDownloadLinks
 }
 
-export default function CpuZeLandingClient({ downloads }: CpuZeLandingClientProps) {
+function CpuZeLandingBody({ downloads }: CpuZeLandingClientProps) {
   const { t } = useLanguage()
 
   return (
-    <ProductLandingShell mainClassName={styles.page}>
+    <div className={styles.page} data-testid="cpu-ze-landing">
       <div className={styles.inner}>
         <header className={styles.hero}>
           <h1 className={styles.brand}>{t('cpuZe.title')}</h1>
@@ -88,6 +87,15 @@ export default function CpuZeLandingClient({ downloads }: CpuZeLandingClientProp
           <Link href="/portfolio/projets?type=logiciel">{t('cpuZe.otherSoftware')}</Link>
         </nav>
       </div>
-    </ProductLandingShell>
+    </div>
+  )
+}
+
+/** Contenu CPU-ZE — chrome Pop Atelier fourni par la page ; i18n via LanguageProvider. */
+export default function CpuZeLandingClient({ downloads }: CpuZeLandingClientProps) {
+  return (
+    <LanguageProvider>
+      <CpuZeLandingBody downloads={downloads} />
+    </LanguageProvider>
   )
 }
