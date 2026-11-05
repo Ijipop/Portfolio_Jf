@@ -3,6 +3,7 @@ import { Suspense } from 'react'
 import PublicThemeRoot from '@/components/public-v2/theme/PublicThemeRoot'
 import { PopAtelierHomeShell } from '@/components/public-v2/home'
 import { ProjectsCatalog } from '@/components/public-v2/projects'
+import ContactSandboxPreview from '@/components/public-v2/contact/ContactSandboxPreview'
 import { Badge, Button, Container, Heading, Section } from '@/components/public-v2/primitives'
 import { PUBLIC_V2_PREVIEW_PATH } from '@/lib/public-v2/nav'
 import { PROJECTS_COPY } from '@/lib/public-v2/projectsContent'
@@ -46,6 +47,9 @@ export default function V2DesignPreviewPage() {
               <p className={styles.lede}>
                 <Button href="#pv2-projects-fixtures-preview" variant="ghost" size="sm">
                   Aller au catalogue fixtures
+                </Button>
+                <Button href="#pv2-contact-fixtures-preview" variant="ghost" size="sm">
+                  Aller au Contact mock
                 </Button>
               </p>
             </Container>
@@ -237,6 +241,22 @@ export default function V2DesignPreviewPage() {
                   initialTimelendr={TIMELENDR_FIXTURES}
                 />
               </Suspense>
+            </div>
+          </Section>
+
+          <Section aria-labelledby="pv2-contact-fixture-title">
+            <Container>
+              <p className={styles.eyebrow}>Aperçu développement · mock contact · noindex</p>
+              <Heading as="h2" id="pv2-contact-fixture-title" variant="section">
+                Contact (simulation)
+              </Heading>
+              <p className={styles.lede}>
+                Soumission mockée uniquement — aucun Resend, OpenAI ni analytics. La route publique{' '}
+                <code>/portfolio/contact</code> conserve l’API réelle.
+              </p>
+            </Container>
+            <div id="pv2-contact-fixtures-preview" data-testid="pv2-contact-fixtures-preview">
+              <ContactSandboxPreview />
             </div>
           </Section>
         </div>

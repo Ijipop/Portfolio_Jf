@@ -12,3 +12,6 @@ export type { HeadingLevel, HeadingProps, HeadingVariant } from './Heading/Headi
 
 export { default as Badge } from './Badge/Badge'
 export type { BadgeProps, BadgeVariant } from './Badge/Badge'
+
+export { TextField, TextAreaField, SwitchField, FieldShell } from './Field/Field'
+export type { TextFieldProps, TextAreaFieldProps, SwitchFieldProps } from './Field/Field'

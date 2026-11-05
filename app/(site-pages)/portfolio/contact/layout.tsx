@@ -4,6 +4,9 @@ export const metadata: Metadata = {
   title: 'Contact',
   description:
     'Demande de soumission : nouveau site web, refonte ou maintenance. Formulaire — réponse rapide, Montréal et mandats à distance.',
+  alternates: {
+    canonical: '/portfolio/contact',
+  },
   openGraph: {
     title: 'Contact | Jean-François Lefebvre',
     description:

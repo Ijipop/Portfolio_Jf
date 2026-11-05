@@ -45,6 +45,17 @@ Chantiers reportés — ne pas implémenter tant qu’ils ne sont pas explicitem
 | Préservé | Pages historiques hors `(site-pages)` conservent `LanguageContext` |
 | Hors scope immédiat | Nouveau système bilingue sur le design system V2 |
 
+## Contact / questionnaire V2 — FR seulement (6B3)
+
+| Champ | Détail |
+|-------|--------|
+| État | Différence fonctionnelle acceptée **temporairement** (Phase 6B3) |
+| Contexte | L’ancien `/portfolio/contact` V1 utilisait `useLanguage()` / `t('contact.*')` (FR/EN) |
+| Contact V2 | Copy fixe français québécois (`CONTACT_PAGE_COPY`) — aligné Pop Atelier |
+| Ce que ce n’est pas | Suppression de l’i18n global ; perte **locale** à la page Contact V2 uniquement |
+| Préservé | `LanguageContext` et locales FR/EN pour pages historiques ; `SupportContactForm` MUI inchangé |
+| Hors scope immédiat | Nouvelle architecture i18n V2 ; bascule langue sur Contact |
+
 ## Autres éléments du gateway (inventaire 6B1)
 
 | Élément | Statut |
