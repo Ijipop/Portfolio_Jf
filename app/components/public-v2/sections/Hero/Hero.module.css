@@ -88,14 +88,15 @@
   font-family: var(--font-display);
   font-weight: 650;
   font-size: clamp(2.05rem, 4.8vw, 3.55rem);
-  line-height: 1.06;
+  /* Ancien 1.06 + masque de ligne coupaient les descendantes Fraunces (g, q) */
+  line-height: 1.18;
   letter-spacing: -0.04em;
   color: var(--color-ink);
 }
 
 .titleLine {
   display: block;
-  overflow: hidden;
+  /* Masque de rise retiré : il tronquait les descendantes */
 }
 
 .titleLine span {
@@ -113,7 +114,7 @@
 @keyframes heroRise {
   from {
     opacity: 0;
-    transform: translateY(0.55em);
+    transform: translateY(0.28em);
   }
   to {
     opacity: 1;

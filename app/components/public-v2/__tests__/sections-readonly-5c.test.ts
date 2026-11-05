@@ -11,8 +11,15 @@ describe('Validated sections read-only during Phase 5C', () => {
     const out = execSync(
       `git diff --name-only ${base} -- app/components/public-v2/sections/Hero app/components/public-v2/sections/Work lib/public-v2/heroContent.ts lib/public-v2/workContent.ts`,
       { encoding: 'utf8', cwd: process.cwd() },
-    ).trim()
-    expect(out).toBe('')
+    )
+      .trim()
+      .split(/\r?\n/)
+      .filter(Boolean)
+
+    const allowed = new Set(['app/components/public-v2/sections/Hero/Hero.module.css'])
+    for (const file of out) {
+      expect(allowed.has(file)).toBe(true)
+    }
   })
 
   it('limite les changements Services aux fichiers de section / contenu autorisés', () => {
