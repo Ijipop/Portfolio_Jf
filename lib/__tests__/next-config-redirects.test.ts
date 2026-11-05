@@ -32,13 +32,18 @@ describe('next.config redirects', () => {
           permanent: true,
         }),
         expect.objectContaining({
+          source: '/creation-site-web-montreal',
+          destination: '/portfolio/projets?type=web',
+          permanent: true,
+        }),
+        expect.objectContaining({
           source: '/pageweb',
-          destination: '/creation-site-web-montreal',
+          destination: '/portfolio/projets?type=web',
           permanent: true,
         }),
         expect.objectContaining({
           source: '/portfolio/pageweb',
-          destination: '/creation-site-web-montreal',
+          destination: '/portfolio/projets?type=web',
           permanent: true,
         }),
       ]),

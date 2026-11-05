@@ -65,9 +65,20 @@ Chantiers reportés — ne pas implémenter tant qu’ils ne sont pas explicitem
 | Page V2 | Copy fixe français québécois (`ABOUT_PAGE_COPY`) — page éditoriale Pop Atelier |
 | Portrait | `/img/Jf.jpg` temporaire ; recadrage/zoom et nouvelle photo restent reportés |
 | Récit personnel | Publié avec GO utilisateur (P1–P3 issus de `about.personalStory*` V1) |
+| Formations | Libellés/années V1 — **à confirmer avant publication** |
 | Hors page V2 | Loop pixel `moi8bit.png` |
 | Préservé | Section accueil `aboutContent.ts` inchangée ; locales FR/EN pour pages historiques |
 | Hors scope immédiat | Bilingue V2 ; outil de recadrage |
+
+## Services landings V2 (6B5)
+
+| Champ | Détail |
+|-------|--------|
+| État | Non commitée — validation visuelle avant commit |
+| Création web | Landing SEO retirée ; redirect → `/portfolio/projets?type=web` ; carte Services retargetée |
+| Soutien | `/soutien-informatique-montreal` Pop Atelier ; îlot MUI sans SiteDarkBackdrop |
+| Hub logiciels | `/logiciel` **hors scope** 6B5 |
+| Hors scope immédiat | Restyle MUI du formulaire soutien ; bilingue landings |
 
 ## Autres éléments du gateway (inventaire 6B1)
 

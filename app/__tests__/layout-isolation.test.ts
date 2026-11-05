@@ -62,6 +62,18 @@ describe('layout isolation (public vs admin)', () => {
     expect(existsSync(path.join(appRoot, '(public)', 'portfolio', 'a-propos', 'page.tsx'))).toBe(
       false,
     )
+    expect(
+      existsSync(path.join(appRoot, '(site-pages)', 'creation-site-web-montreal', 'page.tsx')),
+    ).toBe(false)
+    expect(existsSync(path.join(appRoot, '(public)', 'creation-site-web-montreal', 'page.tsx'))).toBe(
+      false,
+    )
+    expect(
+      existsSync(path.join(appRoot, '(site-pages)', 'soutien-informatique-montreal', 'page.tsx')),
+    ).toBe(true)
+    expect(
+      existsSync(path.join(appRoot, '(public)', 'soutien-informatique-montreal', 'page.tsx')),
+    ).toBe(false)
     expect(existsSync(path.join(appRoot, '(public)', 'portfolio', 'page.tsx'))).toBe(true)
     expect(existsSync(path.join(appRoot, '(public)', 'cpu-ze', 'page.tsx'))).toBe(true)
     expect(existsSync(path.join(appRoot, '(public)', 'spacetaker', 'page.tsx'))).toBe(true)

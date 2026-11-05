@@ -266,7 +266,7 @@ function Footer({ mobileBottomClearance = false }: FooterProps) {
                   {t('home.servicesCtaAi')}
                 </Typography>
               </Link>
-              <Link href="/creation-site-web-montreal" style={{ textDecoration: 'none' }}>
+              <Link href="/portfolio/projets?type=web" style={{ textDecoration: 'none' }}>
                 <Typography
                   variant="body2"
                   sx={{

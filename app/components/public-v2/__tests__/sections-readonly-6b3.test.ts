@@ -14,8 +14,12 @@ describe('Homepage + catalog read-only during Phase 6B3', () => {
       .split(/\r?\n/)
       .filter(Boolean)
 
-    /** Exception glyph Hero (hors 6B3) + aucun autre fichier listé. */
-    const allowed = new Set(['app/components/public-v2/sections/Hero/Hero.module.css'])
+    /** Exception glyph Hero + retarget href Services web (6B5). */
+    const allowed = new Set([
+      'app/components/public-v2/sections/Hero/Hero.module.css',
+      'lib/public-v2/servicesContent.ts',
+      'app/components/public-v2/sections/Services/__tests__/ServicesSection.test.tsx',
+    ])
     for (const file of out) {
       expect(allowed.has(file)).toBe(true)
     }

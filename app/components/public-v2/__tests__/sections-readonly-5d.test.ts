@@ -14,7 +14,12 @@ describe('Validated sections read-only during Phase 5D', () => {
       .split(/\r?\n/)
       .filter(Boolean)
 
-    const allowed = new Set(['app/components/public-v2/sections/Hero/Hero.module.css'])
+    const allowed = new Set([
+      'app/components/public-v2/sections/Hero/Hero.module.css',
+      /** 6B5 : retarget href Création web uniquement */
+      'lib/public-v2/servicesContent.ts',
+      'app/components/public-v2/sections/Services/__tests__/ServicesSection.test.tsx',
+    ])
     for (const file of out) {
       expect(allowed.has(file)).toBe(true)
     }

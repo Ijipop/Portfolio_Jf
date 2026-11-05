@@ -12,7 +12,7 @@ export default function DemosSeoCta() {
       <SeoInternalLinkCta
         title={t('seo.demosTitle')}
         body={t('seo.demosBody')}
-        href="/creation-site-web-montreal"
+        href="/portfolio/projets?type=web"
         linkLabel={t('common.getEstimate')}
         variant="compact"
       />

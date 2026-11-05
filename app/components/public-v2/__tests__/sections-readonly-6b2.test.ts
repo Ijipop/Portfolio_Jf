@@ -14,9 +14,11 @@ describe('Homepage read-only during Phase 6B2', () => {
       .split(/\r?\n/)
       .filter(Boolean)
 
-    /** Exception glyph Hero : uniquement le CSS du masque de titre. */
+    /** Exception glyph Hero + retarget href Services web (6B5). */
     const allowedHeroGlyphFix = new Set([
       'app/components/public-v2/sections/Hero/Hero.module.css',
+      'lib/public-v2/servicesContent.ts',
+      'app/components/public-v2/sections/Services/__tests__/ServicesSection.test.tsx',
     ])
 
     for (const file of out) {

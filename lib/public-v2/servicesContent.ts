@@ -29,7 +29,7 @@ export const SERVICE_OFFERS: readonly ServiceOffer[] = [
     title: 'Création de sites web',
     description:
       'Sites vitrines, refontes et projets web plus complexes. Je m’occupe autant de l’apparence que du fonctionnement, avec le souci de créer des sites agréables à utiliser et faciles à faire évoluer.',
-    href: '/creation-site-web-montreal',
+    href: '/portfolio/projets?type=web',
     ctaLabel: 'En savoir plus →',
   },
   {

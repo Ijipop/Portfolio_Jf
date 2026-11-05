@@ -31,7 +31,7 @@ import type { SvgIconComponent } from '@mui/icons-material'
 
 const CONTACT_PATH = '/portfolio/contact'
 const TIMELENDR_PATH = '/logiciel/timelendr'
-const SEO_LANDING_PATH = '/creation-site-web-montreal'
+const SEO_LANDING_PATH = '/portfolio/projets?type=web'
 const SUPPORT_LANDING_PATH = '/soutien-informatique-montreal'
 /** Nombre de lignes « puce » — identique sur les cartes pour l’alignement visuel. */
 const PACK_BULLET_SLOTS = 4

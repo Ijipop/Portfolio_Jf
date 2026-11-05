@@ -38,14 +38,15 @@ export default function Button(props: ButtonProps) {
 
   if ('href' in props && props.href) {
     const { href, children, target, rel, className: _c, variant: _v, size: _s, ...rest } = props
-    const external = /^https?:\/\//.test(href)
-    if (external) {
+    const absoluteHttp = /^https?:\/\//i.test(href)
+    const protocolOrHash = /^(tel:|sms:|mailto:)/i.test(href) || href.startsWith('#')
+    if (absoluteHttp || protocolOrHash) {
       return (
         <a
           className={cls}
           href={href}
-          target={target ?? '_blank'}
-          rel={rel ?? 'noopener noreferrer'}
+          target={absoluteHttp ? (target ?? '_blank') : target}
+          rel={absoluteHttp ? (rel ?? 'noopener noreferrer') : rel}
           {...rest}
         >
           {children}

@@ -5,6 +5,7 @@ import { PopAtelierHomeShell } from '@/components/public-v2/home'
 import { ProjectsCatalog } from '@/components/public-v2/projects'
 import ContactSandboxPreview from '@/components/public-v2/contact/ContactSandboxPreview'
 import { AboutPageClient } from '@/components/public-v2/about'
+import { SupportPageClient } from '@/components/public-v2/services/support'
 import { Badge, Button, Container, Heading, Section } from '@/components/public-v2/primitives'
 import { PUBLIC_V2_PREVIEW_PATH } from '@/lib/public-v2/nav'
 import { PROJECTS_COPY } from '@/lib/public-v2/projectsContent'
@@ -54,6 +55,9 @@ export default function V2DesignPreviewPage() {
                 </Button>
                 <Button href="#pv2-about-preview" variant="ghost" size="sm">
                   Aller à À propos
+                </Button>
+                <Button href="#pv2-support-preview" variant="ghost" size="sm">
+                  Aller au Soutien
                 </Button>
               </p>
             </Container>
@@ -277,6 +281,22 @@ export default function V2DesignPreviewPage() {
             </Container>
             <div id="pv2-about-preview" data-testid="pv2-about-preview">
               <AboutPageClient />
+            </div>
+          </Section>
+
+          <Section aria-labelledby="pv2-support-preview-title">
+            <Container>
+              <p className={styles.eyebrow}>Aperçu développement · Soutien · noindex</p>
+              <Heading as="h2" id="pv2-support-preview-title" variant="section">
+                Soutien informatique (aperçu)
+              </Heading>
+              <p className={styles.lede}>
+                Landing Pop Atelier avec SupportContactForm historique. Sur la sandbox, ne pas
+                soumettre de vraie demande — utiliser la route publique pour un envoi réel.
+              </p>
+            </Container>
+            <div id="pv2-support-preview" data-testid="pv2-support-preview">
+              <SupportPageClient />
             </div>
           </Section>
         </div>

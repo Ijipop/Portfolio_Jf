@@ -83,11 +83,10 @@ test('logiciel and SEO landing routes are reachable', async ({ page }) => {
   await expect(page).toHaveURL(/\/logiciel/)
 
   await page.goto('/creation-site-web-montreal', { waitUntil: 'domcontentloaded' })
-  await expect(page).toHaveURL(/\/creation-site-web-montreal/)
-  await expect(page.getByRole('heading', { level: 1 })).toContainText(/Montréal et partout au Québec/)
+  await expect(page).toHaveURL(/\/portfolio\/projets\?type=web/)
 
   await page.goto('/portfolio/pageweb', { waitUntil: 'domcontentloaded' })
-  await expect(page).toHaveURL(/\/creation-site-web-montreal/)
+  await expect(page).toHaveURL(/\/portfolio\/projets\?type=web/)
 })
 
 test('home hero CTAs stay visible within the first viewport', async ({ page }) => {
