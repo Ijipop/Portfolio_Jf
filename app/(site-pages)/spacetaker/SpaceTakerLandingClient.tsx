@@ -3,10 +3,9 @@
 import Link from 'next/link'
 import ProductDownloadRow from '@/components/product-landings/ProductDownloadRow'
 import ProductImageCarousel from '@/components/product-landings/ProductImageCarousel'
-import ProductLandingShell from '@/components/product-landings/ProductLandingShell'
 import ProductSecurityNotice from '@/components/product-landings/ProductSecurityNotice'
 import type { ProductDownloadLinks } from '@/components/product-landings/productDownloads'
-import { useLanguage } from '@/contexts/LanguageContext'
+import { LanguageProvider, useLanguage } from '@/contexts/LanguageContext'
 import styles from './SpaceTakerLanding.module.css'
 
 const BENEFIT_KEYS = ['spaceTaker.b1', 'spaceTaker.b2', 'spaceTaker.b3', 'spaceTaker.b4'] as const
@@ -23,11 +22,11 @@ type SpaceTakerLandingClientProps = {
   downloads: ProductDownloadLinks
 }
 
-export default function SpaceTakerLandingClient({ downloads }: SpaceTakerLandingClientProps) {
+function SpaceTakerLandingBody({ downloads }: SpaceTakerLandingClientProps) {
   const { t } = useLanguage()
 
   return (
-    <ProductLandingShell mainClassName={styles.page}>
+    <div className={styles.page} data-testid="spacetaker-landing">
       <div className={styles.blocks} aria-hidden>
         {DECOR_BLOCKS.map((b) => (
           <div
@@ -101,6 +100,15 @@ export default function SpaceTakerLandingClient({ downloads }: SpaceTakerLanding
           <Link href="/portfolio/projets?type=logiciel">{t('spaceTaker.otherSoftware')}</Link>
         </nav>
       </div>
-    </ProductLandingShell>
+    </div>
+  )
+}
+
+/** Contenu Space Taker — chrome Pop Atelier fourni par la page ; i18n via LanguageProvider. */
+export default function SpaceTakerLandingClient({ downloads }: SpaceTakerLandingClientProps) {
+  return (
+    <LanguageProvider>
+      <SpaceTakerLandingBody downloads={downloads} />
+    </LanguageProvider>
   )
 }

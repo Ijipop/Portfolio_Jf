@@ -9,8 +9,9 @@
   --font-display: var(--font-st-display), system-ui, sans-serif;
   --font-body: var(--font-st-body), system-ui, sans-serif;
 
+  /* Surface produit dans le main Pop Atelier — personnalité cyan conservée. */
   position: relative;
-  min-height: 100dvh;
+  min-height: calc(100dvh - 8rem);
   color: var(--st-text);
   font-family: var(--font-body);
   background:

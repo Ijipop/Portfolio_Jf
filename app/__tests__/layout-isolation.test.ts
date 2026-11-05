@@ -76,7 +76,8 @@ describe('layout isolation (public vs admin)', () => {
     ).toBe(false)
     expect(existsSync(path.join(appRoot, '(public)', 'portfolio', 'page.tsx'))).toBe(true)
     expect(existsSync(path.join(appRoot, '(public)', 'cpu-ze', 'page.tsx'))).toBe(true)
-    expect(existsSync(path.join(appRoot, '(public)', 'spacetaker', 'page.tsx'))).toBe(true)
+    expect(existsSync(path.join(appRoot, '(site-pages)', 'spacetaker', 'page.tsx'))).toBe(true)
+    expect(existsSync(path.join(appRoot, '(public)', 'spacetaker', 'page.tsx'))).toBe(false)
     expect(existsSync(path.join(appRoot, '(public)', 'deskdot', 'page.tsx'))).toBe(true)
     expect(existsSync(path.join(appRoot, '(public)', 'traducteur', 'page.tsx'))).toBe(true)
     expect(existsSync(path.join(appRoot, '(public)', 'logiciel', 'timelendr', 'page.tsx'))).toBe(true)
@@ -118,6 +119,11 @@ describe('layout isolation (public vs admin)', () => {
 
     const publicLayout = readAppFile('(public)', 'layout.tsx')
     expect(publicLayout).toMatch(/getCachedBeigePresentationBgUrl/)
+
+    const spaceTakerPage = readAppFile('(site-pages)', 'spacetaker', 'page.tsx')
+    expect(spaceTakerPage).toMatch(/PublicChromeShell/)
+    expect(spaceTakerPage).toMatch(/getSpaceTakerDownloads/)
+    expect(spaceTakerPage).not.toMatch(/ThemeWrapper|ProductLandingShell/)
   })
 
 
