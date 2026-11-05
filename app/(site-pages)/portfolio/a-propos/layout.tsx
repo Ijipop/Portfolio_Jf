@@ -4,6 +4,9 @@ export const metadata: Metadata = {
   title: 'À propos',
   description:
     'Parcours Ijipop — compétences en création de sites web et logiciels, approche claire et accompagnement pour votre projet au Québec.',
+  alternates: {
+    canonical: '/portfolio/a-propos',
+  },
   openGraph: {
     title: 'À propos | Jean-François Lefebvre',
     description:

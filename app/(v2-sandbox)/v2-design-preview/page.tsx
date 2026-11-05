@@ -4,6 +4,7 @@ import PublicThemeRoot from '@/components/public-v2/theme/PublicThemeRoot'
 import { PopAtelierHomeShell } from '@/components/public-v2/home'
 import { ProjectsCatalog } from '@/components/public-v2/projects'
 import ContactSandboxPreview from '@/components/public-v2/contact/ContactSandboxPreview'
+import { AboutPageClient } from '@/components/public-v2/about'
 import { Badge, Button, Container, Heading, Section } from '@/components/public-v2/primitives'
 import { PUBLIC_V2_PREVIEW_PATH } from '@/lib/public-v2/nav'
 import { PROJECTS_COPY } from '@/lib/public-v2/projectsContent'
@@ -50,6 +51,9 @@ export default function V2DesignPreviewPage() {
                 </Button>
                 <Button href="#pv2-contact-fixtures-preview" variant="ghost" size="sm">
                   Aller au Contact mock
+                </Button>
+                <Button href="#pv2-about-preview" variant="ghost" size="sm">
+                  Aller à À propos
                 </Button>
               </p>
             </Container>
@@ -257,6 +261,22 @@ export default function V2DesignPreviewPage() {
             </Container>
             <div id="pv2-contact-fixtures-preview" data-testid="pv2-contact-fixtures-preview">
               <ContactSandboxPreview />
+            </div>
+          </Section>
+
+          <Section aria-labelledby="pv2-about-preview-title">
+            <Container>
+              <p className={styles.eyebrow}>Aperçu développement · À propos · noindex</p>
+              <Heading as="h2" id="pv2-about-preview-title" variant="section">
+                À propos (aperçu)
+              </Heading>
+              <p className={styles.lede}>
+                Contenu éditorial Pop Atelier — même composant que la route publique{' '}
+                <code>/portfolio/a-propos</code> (aucun Prisma).
+              </p>
+            </Container>
+            <div id="pv2-about-preview" data-testid="pv2-about-preview">
+              <AboutPageClient />
             </div>
           </Section>
         </div>

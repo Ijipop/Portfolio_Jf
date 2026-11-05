@@ -1,0 +1,184 @@
+.page {
+  padding-block: var(--space-6) var(--space-8);
+  background:
+    radial-gradient(
+      ellipse 55% 40% at 100% 0%,
+      color-mix(in srgb, var(--color-accent) 12%, transparent),
+      transparent 60%
+    ),
+    radial-gradient(
+      ellipse 42% 34% at 0% 18%,
+      color-mix(in srgb, var(--color-emphasis) 10%, transparent),
+      transparent 55%
+    ),
+    var(--color-bg);
+}
+
+.header {
+  text-align: center;
+  margin-bottom: var(--space-6);
+}
+
+.identity {
+  display: grid;
+  gap: var(--space-5);
+  align-items: center;
+  margin-bottom: var(--space-7);
+}
+
+@media (min-width: 768px) {
+  .identity {
+    grid-template-columns: minmax(12rem, 18rem) 1fr;
+    gap: var(--space-6);
+  }
+}
+
+.portraitFrame {
+  margin: 0 auto;
+  width: min(100%, 18rem);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  border: 1px solid var(--color-line);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-soft);
+}
+
+.portrait {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  object-position: center top;
+}
+
+.identityCopy {
+  text-align: center;
+}
+
+@media (min-width: 768px) {
+  .identityCopy {
+    text-align: left;
+  }
+}
+
+.identityName {
+  margin: 0 0 var(--space-2);
+  font-family: var(--font-display);
+  font-size: clamp(1.45rem, 2.6vw, 1.85rem);
+  font-weight: 650;
+  letter-spacing: -0.02em;
+  color: var(--color-ink);
+}
+
+.identityRole {
+  margin: 0 0 var(--space-4);
+  color: var(--color-accent-deep);
+  font-weight: 650;
+  font-size: 0.98rem;
+}
+
+.identityLead {
+  margin: 0;
+  color: var(--color-ink-soft);
+  line-height: 1.55;
+  max-width: 36rem;
+}
+
+@media (min-width: 768px) {
+  .identityLead {
+    margin-inline: 0;
+  }
+}
+
+.section {
+  margin-bottom: var(--space-7);
+  max-width: 42rem;
+}
+
+.sectionTitle {
+  margin: 0 0 var(--space-3);
+  font-family: var(--font-display);
+  font-size: clamp(1.2rem, 2.2vw, 1.45rem);
+  font-weight: 650;
+  letter-spacing: -0.02em;
+  color: var(--color-ink);
+}
+
+.sectionBody {
+  margin: 0 0 var(--space-3);
+  color: var(--color-ink-soft);
+  line-height: 1.65;
+  font-size: 1.02rem;
+}
+
+.sectionBody:last-child {
+  margin-bottom: 0;
+}
+
+.list {
+  margin: 0;
+  padding-left: 1.15rem;
+  color: var(--color-ink);
+  line-height: 1.55;
+  display: grid;
+  gap: var(--space-2);
+}
+
+/* Bloc secondaire — poids visuel réduit (pas une vitrine de badges) */
+.toolsSection {
+  margin-bottom: var(--space-7);
+  max-width: 42rem;
+}
+
+.toolsTitle {
+  margin: 0 0 var(--space-2);
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  color: var(--color-ink-soft);
+}
+
+.tools {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 0.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tool {
+  padding: 0.2rem 0.55rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-line);
+  background: transparent;
+  color: var(--color-ink-soft);
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.ctaBand {
+  margin-top: var(--space-6);
+  padding: var(--space-5);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-line);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-soft);
+  text-align: center;
+}
+
+@media (min-width: 720px) {
+  .ctaBand {
+    padding: var(--space-6);
+  }
+}
+
+.ctaActions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-3);
+  margin-top: var(--space-4);
+}

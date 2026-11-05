@@ -56,6 +56,19 @@ Chantiers reportés — ne pas implémenter tant qu’ils ne sont pas explicitem
 | Préservé | `LanguageContext` et locales FR/EN pour pages historiques ; `SupportContactForm` MUI inchangé |
 | Hors scope immédiat | Nouvelle architecture i18n V2 ; bascule langue sur Contact |
 
+## À propos V2 — FR seulement (6B4)
+
+| Champ | Détail |
+|-------|--------|
+| État | Différence fonctionnelle acceptée **temporairement** (Phase 6B4) |
+| Contexte | L’ancien `/portfolio/a-propos` V1 utilisait `useLanguage()` / `t('about.*')` (FR/EN) |
+| Page V2 | Copy fixe français québécois (`ABOUT_PAGE_COPY`) — page éditoriale Pop Atelier |
+| Portrait | `/img/Jf.jpg` temporaire ; recadrage/zoom et nouvelle photo restent reportés |
+| Récit personnel | Publié avec GO utilisateur (P1–P3 issus de `about.personalStory*` V1) |
+| Hors page V2 | Loop pixel `moi8bit.png` |
+| Préservé | Section accueil `aboutContent.ts` inchangée ; locales FR/EN pour pages historiques |
+| Hors scope immédiat | Bilingue V2 ; outil de recadrage |
+
 ## Autres éléments du gateway (inventaire 6B1)
 
 | Élément | Statut |
