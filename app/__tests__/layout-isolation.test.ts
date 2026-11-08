@@ -92,7 +92,11 @@ describe('layout isolation (public vs admin)', () => {
     expect(
       existsSync(path.join(appRoot, '(site-pages)', 'logiciel', 'timelendr', 'merci', 'page.tsx')),
     ).toBe(true)
-    expect(existsSync(path.join(appRoot, '(public)', 'demos', 'page.tsx'))).toBe(true)
+    expect(existsSync(path.join(appRoot, '(site-pages)', 'demos', 'page.tsx'))).toBe(true)
+    expect(existsSync(path.join(appRoot, '(public)', 'demos', 'page.tsx'))).toBe(false)
+    expect(existsSync(path.join(appRoot, '(public)', 'demos', 'construction', 'page.tsx'))).toBe(
+      true,
+    )
     expect(existsSync(path.join(appRoot, 'admin', 'page.tsx'))).toBe(true)
     expect(existsSync(path.join(appRoot, 'admin', 'dashboard', 'page.tsx'))).toBe(true)
     expect(existsSync(path.join(appRoot, 'api', 'projects', 'route.ts'))).toBe(true)
@@ -159,6 +163,14 @@ describe('layout isolation (public vs admin)', () => {
     const timelendrMerci = readAppFile('(site-pages)', 'logiciel', 'timelendr', 'merci', 'page.tsx')
     expect(timelendrMerci).toMatch(/PublicChromeShell/)
     expect(timelendrMerci).not.toMatch(/PageWrapper/)
+
+    const demosHub = readAppFile('(site-pages)', 'demos', 'page.tsx')
+    expect(demosHub).toMatch(/PublicChromeShell/)
+    expect(demosHub).toMatch(/DEMOS_CATALOG/)
+    expect(demosHub).not.toMatch(/PageWrapper|AppBarComponent|DemosIndexShell/)
+
+    const demosHubLayout = readAppFile('(site-pages)', 'demos', 'layout.tsx')
+    expect(demosHubLayout).toMatch(/robots:\s*\{\s*index:\s*false/)
   })
 
 
