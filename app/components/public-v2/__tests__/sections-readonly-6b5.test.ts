@@ -4,12 +4,19 @@ import { describe, expect, it } from 'vitest'
 /** HEAD après commit 6B4 À propos. */
 const BASE_6B5 = 'c22c1f548d418ffe34426d48ca0bba3570475cc6'
 
-/** Changements autorisés post-6B5 / 6B6 : href Services + hub /logiciel retiré. */
+/** Changements autorisés post-6B5 / 6B6 : href Services + hub /logiciel retiré.
+ * Timelendr migré en 6B10 (hors périmètre) — voir sections-readonly-6b10. */
 const ALLOWED_6B5 = new Set([
   'lib/public-v2/servicesContent.ts',
   'app/components/public-v2/sections/Services/__tests__/ServicesSection.test.tsx',
   'app/(public)/logiciel/page.tsx',
   'app/(public)/logiciel/layout.tsx',
+  'app/(public)/logiciel/timelendr/page.tsx',
+  'app/(public)/logiciel/timelendr/layout.tsx',
+  'app/(public)/logiciel/timelendr/TimelendrCarousel.tsx',
+  'app/(public)/logiciel/timelendr/TimelendrProduct.module.css',
+  'app/(public)/logiciel/timelendr/merci/page.tsx',
+  'app/(public)/logiciel/timelendr/merci/layout.tsx',
 ])
 
 describe('Homepage + catalog + contact + about read-only during Phase 6B5', () => {

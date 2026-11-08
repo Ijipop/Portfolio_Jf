@@ -3,9 +3,8 @@
 import Link from 'next/link'
 import { useEffect, useMemo, useState } from 'react'
 import ProductDownloadRow from '@/components/product-landings/ProductDownloadRow'
-import ProductLandingShell from '@/components/product-landings/ProductLandingShell'
 import ProductSecurityNotice from '@/components/product-landings/ProductSecurityNotice'
-import { useLanguage } from '@/contexts/LanguageContext'
+import { LanguageProvider, useLanguage } from '@/contexts/LanguageContext'
 import TimelendrCarousel from './TimelendrCarousel'
 import styles from './TimelendrProduct.module.css'
 
@@ -41,7 +40,7 @@ function pickLatest(
   )
 }
 
-export default function TimelendrPage() {
+function TimelendrLandingBody() {
   const { t } = useLanguage()
   const [releases, setReleases] = useState<TimelendrRelease[]>([])
 
@@ -77,7 +76,7 @@ export default function TimelendrPage() {
   const versionNote = windowsRelease?.version || macosRelease?.version
 
   return (
-    <ProductLandingShell mainClassName={styles.page}>
+    <div className={styles.page} data-testid="timelendr-landing">
       <div className={styles.rails} aria-hidden>
         {RAIL_WIDTHS.map((width, i) => (
           <div
@@ -136,6 +135,15 @@ export default function TimelendrPage() {
 
         <p className={styles.privateNote}>{t('timelendr.privateProject')}</p>
       </div>
-    </ProductLandingShell>
+    </div>
+  )
+}
+
+/** Contenu Timelendr — chrome Pop Atelier fourni par la page ; releases via /api/timelendr/releases. */
+export default function TimelendrLandingClient() {
+  return (
+    <LanguageProvider>
+      <TimelendrLandingBody />
+    </LanguageProvider>
   )
 }

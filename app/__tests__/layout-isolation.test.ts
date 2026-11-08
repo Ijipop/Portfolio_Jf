@@ -83,7 +83,15 @@ describe('layout isolation (public vs admin)', () => {
     expect(existsSync(path.join(appRoot, '(public)', 'deskdot', 'page.tsx'))).toBe(false)
     expect(existsSync(path.join(appRoot, '(site-pages)', 'traducteur', 'page.tsx'))).toBe(true)
     expect(existsSync(path.join(appRoot, '(public)', 'traducteur', 'page.tsx'))).toBe(false)
-    expect(existsSync(path.join(appRoot, '(public)', 'logiciel', 'timelendr', 'page.tsx'))).toBe(true)
+    expect(
+      existsSync(path.join(appRoot, '(site-pages)', 'logiciel', 'timelendr', 'page.tsx')),
+    ).toBe(true)
+    expect(
+      existsSync(path.join(appRoot, '(public)', 'logiciel', 'timelendr', 'page.tsx')),
+    ).toBe(false)
+    expect(
+      existsSync(path.join(appRoot, '(site-pages)', 'logiciel', 'timelendr', 'merci', 'page.tsx')),
+    ).toBe(true)
     expect(existsSync(path.join(appRoot, '(public)', 'demos', 'page.tsx'))).toBe(true)
     expect(existsSync(path.join(appRoot, 'admin', 'page.tsx'))).toBe(true)
     expect(existsSync(path.join(appRoot, 'admin', 'dashboard', 'page.tsx'))).toBe(true)
@@ -142,7 +150,17 @@ describe('layout isolation (public vs admin)', () => {
     expect(deskDotPage).toMatch(/PublicChromeShell/)
     expect(deskDotPage).toMatch(/getDeskDotDownloads/)
     expect(deskDotPage).not.toMatch(/ThemeWrapper|ProductLandingShell/)
+
+    const timelendrPage = readAppFile('(site-pages)', 'logiciel', 'timelendr', 'page.tsx')
+    expect(timelendrPage).toMatch(/PublicChromeShell/)
+    expect(timelendrPage).toMatch(/TimelendrLandingClient/)
+    expect(timelendrPage).not.toMatch(/ThemeWrapper|ProductLandingShell/)
+
+    const timelendrMerci = readAppFile('(site-pages)', 'logiciel', 'timelendr', 'merci', 'page.tsx')
+    expect(timelendrMerci).toMatch(/PublicChromeShell/)
+    expect(timelendrMerci).not.toMatch(/PageWrapper/)
   })
+
 
 
 
