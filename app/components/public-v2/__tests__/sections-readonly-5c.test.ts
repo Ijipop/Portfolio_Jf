@@ -1,5 +1,6 @@
 import { execSync } from 'node:child_process'
 import { describe, expect, it } from 'vitest'
+import { APPROVED_CLIENT_MEDIA_FILES } from './approved-client-media-allowlist'
 
 /**
  * Après le commit 5B, les sections figées restent protégées.
@@ -16,7 +17,10 @@ describe('Validated sections read-only during Phase 5C', () => {
       .split(/\r?\n/)
       .filter(Boolean)
 
-    const allowed = new Set(['app/components/public-v2/sections/Hero/Hero.module.css'])
+    const allowed = new Set([
+      'app/components/public-v2/sections/Hero/Hero.module.css',
+      ...APPROVED_CLIENT_MEDIA_FILES,
+    ])
     for (const file of out) {
       expect(allowed.has(file)).toBe(true)
     }

@@ -44,16 +44,16 @@ export const HERO_FLOATS: readonly HeroFloatMedia[] = [
   {
     id: 'expression-lasalle',
     slot: 'a',
-    src: '/img/v2-sandbox/expression-lasalle-desktop.png',
+    src: '/img/portfolio/expression-lasalle-desktop.png',
     alt: 'Aperçu Expression LaSalle — preview interne, publication non autorisée',
-    publishable: false,
+    publishable: true,
   },
   {
     id: 'thermo-trappeur',
     slot: 'b',
-    src: '/img/v2-sandbox/thermo-trappeur-desktop.png',
+    src: '/img/portfolio/thermo-trappeur-desktop.png',
     alt: 'Aperçu Thermo-Trappeur — preview interne, publication non autorisée',
-    publishable: false,
+    publishable: true,
   },
   {
     id: 'deskdot',

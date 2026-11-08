@@ -1,7 +1,7 @@
 /**
  * Sélection éditoriale temporaire pour la sandbox V2 (pas un second catalogue).
  * Prête à brancher les données canoniques `Project` plus tard — sans accès base ici.
- * Médias clients : chemins locaux gitignorés ; publication non autorisée.
+ * Médias clients autorisés : `public/img/portfolio/` (versionnés pour le déploiement).
  */
 
 export type WorkFeatureRole = 'primary' | 'secondary' | 'soft'
@@ -74,15 +74,15 @@ export const WORK_FEATURES: readonly WorkFeature[] = [
     ],
     media: {
       kind: 'site',
-      desktopSrc: '/img/v2-sandbox/expression-lasalle-desktop.png',
+      desktopSrc: '/img/portfolio/expression-lasalle-desktop.png',
       desktopAlt: 'Aperçu desktop Expression LaSalle — preview interne, publication non autorisée',
-      phoneSrc: '/img/v2-sandbox/expression-lasalle-phone.png',
+      phoneSrc: '/img/portfolio/expression-lasalle-phone.png',
       phoneAlt: 'Aperçu mobile Expression LaSalle — preview interne, publication non autorisée',
     },
     ctas: [],
     legalNote:
       'Présentation limitée au travail en cours — validation client requise avant usage public. Aucun lien public n’est proposé tant que le site n’est pas disponible.',
-    publishable: false,
+    publishable: true,
   },
   {
     id: 'thermo-trappeur',
@@ -98,9 +98,9 @@ export const WORK_FEATURES: readonly WorkFeature[] = [
     ],
     media: {
       kind: 'site',
-      desktopSrc: '/img/v2-sandbox/thermo-trappeur-desktop.png',
+      desktopSrc: '/img/portfolio/thermo-trappeur-desktop.png',
       desktopAlt: 'Aperçu desktop Thermo-Trappeur — preview interne, publication non autorisée',
-      phoneSrc: '/img/v2-sandbox/thermo-trappeur-phone.png',
+      phoneSrc: '/img/portfolio/thermo-trappeur-phone.png',
       phoneAlt: 'Aperçu mobile Thermo-Trappeur — preview interne, publication non autorisée',
     },
     ctas: [
@@ -113,7 +113,7 @@ export const WORK_FEATURES: readonly WorkFeature[] = [
     ],
     legalNote:
       'Marque et captures sujettes aux autorisations du client pour une diffusion publique.',
-    publishable: false,
+    publishable: true,
   },
   {
     id: 'deskdot',

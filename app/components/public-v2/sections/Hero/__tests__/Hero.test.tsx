@@ -72,11 +72,14 @@ describe('Hero V2', () => {
     expect(deskdot?.publishable).toBe(true)
     expect(deskdot?.src).toBe('/img/deskdot/deskdot2.png')
 
-    const clients = HERO_FLOATS.filter((f) => !f.publishable)
-    expect(clients).toHaveLength(2)
-    for (const client of clients) {
-      expect(client.src.startsWith('/img/v2-sandbox/')).toBe(true)
-    }
+    const expression = HERO_FLOATS.find((f) => f.id === 'expression-lasalle')
+    const thermo = HERO_FLOATS.find((f) => f.id === 'thermo-trappeur')
+    expect(expression?.publishable).toBe(true)
+    expect(thermo?.publishable).toBe(true)
+    expect(expression?.src).toBe('/img/portfolio/expression-lasalle-desktop.png')
+    expect(thermo?.src).toBe('/img/portfolio/thermo-trappeur-desktop.png')
+    expect(HERO_FLOATS.every((f) => f.publishable)).toBe(true)
+    expect(HERO_FLOATS.every((f) => !f.src.includes('/img/v2-sandbox/'))).toBe(true)
   })
 
   it('n’importe ni Prisma ni API métier', () => {

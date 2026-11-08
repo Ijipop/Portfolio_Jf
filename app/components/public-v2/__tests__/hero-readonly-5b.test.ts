@@ -1,5 +1,6 @@
 import { execSync } from 'node:child_process'
 import { describe, expect, it } from 'vitest'
+import { APPROVED_CLIENT_MEDIA_FILES } from './approved-client-media-allowlist'
 
 /**
  * Après le tag hero-v2-reference, la Phase 5B ne doit pas retoucher le Hero.
@@ -17,7 +18,10 @@ describe('Hero read-only during Phase 5B', () => {
       .split(/\r?\n/)
       .filter(Boolean)
 
-    const allowed = new Set(['app/components/public-v2/sections/Hero/Hero.module.css'])
+    const allowed = new Set([
+      'app/components/public-v2/sections/Hero/Hero.module.css',
+      ...APPROVED_CLIENT_MEDIA_FILES,
+    ])
     for (const file of out) {
       expect(allowed.has(file)).toBe(true)
     }

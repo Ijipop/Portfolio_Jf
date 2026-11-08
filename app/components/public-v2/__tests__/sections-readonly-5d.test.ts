@@ -1,5 +1,6 @@
 import { execSync } from 'node:child_process'
 import { describe, expect, it } from 'vitest'
+import { APPROVED_CLIENT_MEDIA_FILES } from './approved-client-media-allowlist'
 
 /** Commit Phase 5C — sections figées pour la Phase 5D. */
 const BASE_5C = '84cd2a51d14fc069c8f38e3ae46b15e692d8fee1'
@@ -19,6 +20,7 @@ describe('Validated sections read-only during Phase 5D', () => {
       /** 6B5/6B6 : retarget href Services web + logiciels */
       'lib/public-v2/servicesContent.ts',
       'app/components/public-v2/sections/Services/__tests__/ServicesSection.test.tsx',
+      ...APPROVED_CLIENT_MEDIA_FILES,
     ])
     for (const file of out) {
       expect(allowed.has(file)).toBe(true)

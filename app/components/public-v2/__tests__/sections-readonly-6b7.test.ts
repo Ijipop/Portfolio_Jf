@@ -1,5 +1,6 @@
 import { execSync } from 'node:child_process'
 import { describe, expect, it } from 'vitest'
+import { APPROVED_CLIENT_MEDIA_FILES } from './approved-client-media-allowlist'
 
 /**
  * Phase 6B7 clôturée (Space Taker). Baseline = commit 6B7.
@@ -16,6 +17,7 @@ describe('Approved surfaces remain frozen after Phase 6B7', () => {
       .trim()
       .split(/\r?\n/)
       .filter(Boolean)
+      .filter((f) => !APPROVED_CLIENT_MEDIA_FILES.has(f.replace(/\\/g, '/')))
 
     expect(out).toEqual([])
   })

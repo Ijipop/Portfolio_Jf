@@ -1,5 +1,6 @@
 import { execSync } from 'node:child_process'
 import { describe, expect, it } from 'vitest'
+import { APPROVED_CLIENT_MEDIA_FILES } from './approved-client-media-allowlist'
 
 /** Commit Phase 6B2 — catalogue figé pour la Phase 6B3. */
 const BASE_6B2 = '0236eab804c4b37976ee1083878dda8c2521ba30'
@@ -14,11 +15,12 @@ describe('Homepage + catalog read-only during Phase 6B3', () => {
       .split(/\r?\n/)
       .filter(Boolean)
 
-    /** Exception glyph Hero + retarget href Services (6B5/6B6). */
+    /** Exception glyph Hero + retarget href Services (6B5/6B6) + médias clients autorisés. */
     const allowed = new Set([
       'app/components/public-v2/sections/Hero/Hero.module.css',
       'lib/public-v2/servicesContent.ts',
       'app/components/public-v2/sections/Services/__tests__/ServicesSection.test.tsx',
+      ...APPROVED_CLIENT_MEDIA_FILES,
     ])
     for (const file of out) {
       expect(allowed.has(file)).toBe(true)

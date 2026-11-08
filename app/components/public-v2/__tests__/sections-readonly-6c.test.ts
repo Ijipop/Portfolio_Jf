@@ -1,5 +1,6 @@
 import { execSync } from 'node:child_process'
 import { describe, expect, it } from 'vitest'
+import { APPROVED_CLIENT_MEDIA_FILES } from './approved-client-media-allowlist'
 
 /** HEAD après commit 6B10 Timelendr. */
 const BASE_6C = 'e0a4e4cd1612ae15480df8a0e927575ce0fc67c2'
@@ -19,6 +20,7 @@ const ALLOWED_6C = new Set([
   'app/(site-pages)/demos/DemosIndex.module.css',
   'app/__tests__/layout-isolation.test.ts',
   'app/components/public-v2/__tests__/sections-readonly-6c.test.ts',
+  'app/components/public-v2/__tests__/approved-client-media-allowlist.ts',
   'app/(site-pages)/demos/__tests__/DemosHubPage.test.tsx',
 ])
 
@@ -31,7 +33,10 @@ describe('Approved surfaces read-only during Phase 6C', () => {
       .trim()
       .split(/\r?\n/)
       .filter(Boolean)
-      .filter((f) => !ALLOWED_6C.has(f.replace(/\\/g, '/')))
+      .filter((f) => {
+        const name = f.replace(/\\/g, '/')
+        return !ALLOWED_6C.has(name) && !APPROVED_CLIENT_MEDIA_FILES.has(name)
+      })
 
     expect(out).toEqual([])
   })

@@ -50,14 +50,17 @@ describe('WorkSection V2', () => {
 
     expect(screen.getByTestId('pv2-work-expression-lasalle')).toHaveAttribute(
       'data-publishable',
-      'false',
+      'true',
     )
     expect(screen.getByTestId('pv2-work-thermo-trappeur')).toHaveAttribute(
       'data-publishable',
-      'false',
+      'true',
     )
     expect(screen.getByTestId('pv2-work-deskdot')).toHaveAttribute('data-publishable', 'true')
     expect(screen.getByTestId('pv2-work-deskdot')).toHaveAttribute('data-work-role', 'soft')
+    expect(WORK_FEATURES.every((f) => !f.media.desktopSrc.includes('/img/v2-sandbox/'))).toBe(
+      true,
+    )
   })
 
   it('DeskDot est un logiciel Windows ; Expression sans faux lien public', () => {
