@@ -1,0 +1,56 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: 0.12rem;
+  text-decoration: none;
+  color: inherit;
+  min-width: 0;
+  transition: opacity var(--dur-fast) var(--ease-out);
+}
+
+.root:hover .mark,
+.root:focus-visible .mark {
+  letter-spacing: 0.18em;
+  color: color-mix(in srgb, var(--color-accent) 72%, var(--color-emphasis));
+}
+
+.root:hover .name,
+.root:focus-visible .name {
+  color: var(--color-ink);
+}
+
+.name {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  font-size: clamp(0.92rem, 2.8vw, 1.05rem);
+  max-width: 14rem;
+  line-height: 1.15;
+  color: var(--color-ink);
+  transition: color var(--dur-fast) var(--ease-out);
+}
+
+.mark {
+  font-family: var(--font-body);
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+  font-weight: 700;
+  transition:
+    color var(--dur-med) var(--ease-out),
+    letter-spacing var(--dur-med) var(--ease-out);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .root,
+  .name,
+  .mark {
+    transition: none;
+  }
+
+  .root:hover .mark,
+  .root:focus-visible .mark {
+    letter-spacing: 0.14em;
+  }
+}

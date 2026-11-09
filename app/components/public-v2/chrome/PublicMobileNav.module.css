@@ -1,0 +1,124 @@
+.details {
+  position: relative;
+}
+
+.summary {
+  list-style: none;
+  width: 2.75rem;
+  height: 2.75rem;
+  border: 1px solid var(--color-line-strong);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  cursor: pointer;
+  display: inline-grid;
+  place-items: center;
+  gap: 5px;
+  padding: 0;
+  transition:
+    border-color var(--dur-fast) var(--ease-out),
+    box-shadow var(--dur-fast) var(--ease-out),
+    background-color var(--dur-fast) var(--ease-out);
+}
+
+.summary:hover,
+.summary:focus-visible {
+  border-color: color-mix(in srgb, var(--color-accent) 35%, var(--color-line-strong));
+  box-shadow: 0 4px 14px color-mix(in srgb, var(--color-ink) 8%, transparent);
+}
+
+.summary::-webkit-details-marker {
+  display: none;
+}
+
+.bar {
+  display: block;
+  width: 1.15rem;
+  height: 2px;
+  background: var(--color-ink);
+  transition:
+    transform var(--dur-med) var(--ease-out),
+    opacity var(--dur-fast);
+}
+
+.details[open] .bar:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+
+.details[open] .bar:nth-child(2) {
+  opacity: 0;
+}
+
+.details[open] .bar:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+.panel {
+  position: absolute;
+  right: 0;
+  top: calc(100% + var(--space-2));
+  min-width: min(18rem, calc(100vw - 2rem));
+  padding: var(--space-5);
+  background: color-mix(in srgb, var(--color-surface) 94%, var(--color-bg));
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lift);
+  display: grid;
+  gap: var(--space-4);
+  transform-origin: top right;
+  animation: panelIn var(--dur-med) var(--ease-out);
+}
+
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: var(--space-2);
+}
+
+.list a {
+  display: block;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1.05rem;
+  color: var(--color-ink);
+  padding: 0.55rem 0.65rem;
+  border-radius: var(--radius-sm);
+  transition:
+    color var(--dur-fast) var(--ease-out),
+    background-color var(--dur-fast) var(--ease-out);
+}
+
+.list a:hover,
+.list a:focus-visible {
+  color: var(--color-accent);
+  background: color-mix(in srgb, var(--color-accent) 8%, transparent);
+}
+
+.linkActive {
+  color: var(--color-accent) !important;
+  background: color-mix(in srgb, var(--color-accent) 10%, transparent);
+}
+
+@keyframes panelIn {
+  from {
+    opacity: 0;
+    transform: translateY(-6px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bar,
+  .summary,
+  .list a {
+    transition: none;
+  }
+
+  .panel {
+    animation: none;
+  }
+}

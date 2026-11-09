@@ -1,0 +1,65 @@
+/**
+ * Textes provisoires du Hero V2 — source unique, facile à modifier.
+ * Pas la rédaction définitive du site. Ne pas remplacer par des slogans.
+ */
+
+export const HERO_COPY = {
+  kicker: 'Développeur indépendant · Montréal',
+  /**
+   * Titre affiché ; `titleLines` sert à l’animation d’entrée (deux lignes).
+   * Doit rester équivalent au texte provisoire approuvé.
+   */
+  title: 'Des sites web, des logiciels et du soutien informatique.',
+  titleLines: ['Des sites web, des logiciels ', 'et du soutien informatique.'] as const,
+  description:
+    'Je suis Jean-François Lefebvre. Je conçois des sites web, je développe des logiciels et j’offre du soutien informatique. Je travaille à mon compte, à Montréal.',
+  primaryCta: {
+    label: 'Voir mes réalisations',
+    href: '/portfolio/projets',
+  },
+  secondaryCta: {
+    label: 'Me contacter',
+    href: '/portfolio/contact',
+  },
+} as const
+
+export type HeroFloatSlot = 'a' | 'b' | 'c'
+
+export type HeroFloatMedia = {
+  id: string
+  slot: HeroFloatSlot
+  src: string
+  alt: string
+  /** false = capture client temporaire, non autorisée à la publication. */
+  publishable: boolean
+}
+
+/**
+ * Collage Hero — hiérarchie visuelle :
+ * Expression (dominant) → Thermo (secondaire) → DeskDot (tertiaire).
+ * SpaceTaker volontairement absent.
+ * DeskDot : deskdot1.png — anneau complet (tous les Dots visibles).
+ */
+export const HERO_FLOATS: readonly HeroFloatMedia[] = [
+  {
+    id: 'expression-lasalle',
+    slot: 'a',
+    src: '/img/portfolio/expression-lasalle-desktop.png',
+    alt: 'Aperçu du site Expression LaSalle sur ordinateur',
+    publishable: true,
+  },
+  {
+    id: 'thermo-trappeur',
+    slot: 'b',
+    src: '/img/portfolio/thermo-trappeur-desktop.png',
+    alt: 'Aperçu du site Thermo-Trappeur sur ordinateur',
+    publishable: true,
+  },
+  {
+    id: 'deskdot',
+    slot: 'c',
+    src: '/img/deskdot/deskdot1.png',
+    alt: 'Capture d’écran de DeskDot, anneau de raccourcis pour Windows',
+    publishable: true,
+  },
+] as const

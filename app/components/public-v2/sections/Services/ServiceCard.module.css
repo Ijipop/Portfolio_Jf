@@ -1,0 +1,108 @@
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: var(--space-5);
+  background: var(--color-surface);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--color-line);
+  overflow: hidden;
+  transition:
+    transform var(--dur-med) var(--ease-spring),
+    border-color var(--dur-fast),
+    background var(--dur-med);
+}
+
+/* Accents coin — géométrie unique ; opacités calibrées pour présence équivalente */
+.card::before {
+  content: '';
+  position: absolute;
+  inset: auto -18% -36% auto;
+  width: 10.75rem;
+  height: 10.75rem;
+  border-radius: 42% 58% 55% 45%;
+  opacity: 0.45;
+  transition: transform var(--dur-slow) var(--ease-out);
+  pointer-events: none;
+}
+
+.web::before {
+  background: color-mix(in srgb, var(--color-accent) 88%, var(--color-ink));
+  /* Turquoise renforcé pour égaliser la présence optique */
+  opacity: 0.58;
+}
+
+.support::before {
+  background: var(--color-emphasis);
+  opacity: 0.5;
+}
+
+.soft::before {
+  background: var(--color-ink);
+  /* Pétrole déjà contrasté → légèrement plus doux pour égaliser */
+  opacity: 0.42;
+}
+
+.card:hover,
+.card:focus-within {
+  border-color: color-mix(in srgb, var(--color-accent) 35%, transparent);
+  transform: translateY(calc(var(--motion-lift) * -0.5));
+}
+
+.card:hover::before,
+.card:focus-within::before {
+  transform: scale(1.18) rotate(16deg);
+}
+
+.index {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: var(--color-accent);
+}
+
+.title {
+  margin: var(--space-3) 0 var(--space-3);
+  font-family: var(--font-display);
+  font-size: 1.45rem;
+  font-weight: 650;
+  letter-spacing: -0.03em;
+  color: var(--color-ink);
+}
+
+.body {
+  margin: 0 0 var(--space-4);
+  color: var(--color-ink-soft);
+  max-width: 22rem;
+  line-height: 1.5;
+}
+
+.link {
+  margin-top: auto;
+  font-weight: 700;
+  color: var(--color-ink);
+  text-decoration: none;
+}
+
+.link:hover,
+.link:focus-visible {
+  color: var(--color-accent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card,
+  .card::before {
+    transition: none;
+  }
+
+  .card:hover,
+  .card:focus-within {
+    transform: none;
+  }
+
+  .card:hover::before,
+  .card:focus-within::before {
+    transform: none;
+  }
+}

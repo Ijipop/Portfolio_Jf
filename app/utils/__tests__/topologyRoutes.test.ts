@@ -41,6 +41,12 @@ describe('shouldShowTopology', () => {
     expect(shouldShowTopology(null)).toBe(false)
   })
 
+  it('excludes administration even in global topology scope', () => {
+    vi.stubEnv('NEXT_PUBLIC_TOPOLOGY_SCOPE', 'global')
+    expect(shouldShowTopology('/admin')).toBe(false)
+    expect(shouldShowTopology('/admin/dashboard')).toBe(false)
+  })
+
   it('disables topology on gateway landing (dedicated HomeV2Backdrop)', () => {
     vi.stubEnv('NEXT_PUBLIC_TOPOLOGY_SCOPE', 'global')
     expect(shouldShowTopology('/')).toBe(false)
@@ -53,6 +59,14 @@ describe('shouldShowTopology', () => {
     expect(shouldShowTopology('/test/vanta-birds')).toBe(false)
     vi.stubEnv('NEXT_PUBLIC_TOPOLOGY_SCOPE', 'targeted')
     expect(shouldShowTopology('/test/vanta-birds')).toBe(false)
+  })
+
+  it('excludes standalone product landings', () => {
+    vi.stubEnv('NEXT_PUBLIC_TOPOLOGY_SCOPE', 'global')
+    expect(shouldShowTopology('/cpu-ze')).toBe(false)
+    expect(shouldShowTopology('/spacetaker')).toBe(false)
+    expect(shouldShowTopology('/deskdot')).toBe(false)
+    expect(shouldShowTopology('/traducteur')).toBe(false)
   })
 
   it('excludes /accueil-v2 preview route for dedicated dark background', () => {

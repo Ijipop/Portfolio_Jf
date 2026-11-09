@@ -1,0 +1,91 @@
+/**
+ * IJIPOP public V2 — Atelier Atlantique (expérience True WOW).
+ * Scoped to [data-public-theme="pop-atelier"] only — never :root / html / body.
+ * Produits/demos hors ce thème conservent leur identité propre.
+ */
+
+[data-public-theme='pop-atelier'] {
+  /* Brand palette — Atelier Atlantique */
+  --color-bg: #faf7f0;
+  --color-ink: #1a3a3a;
+  --color-accent: #0f7c7c;
+  --color-emphasis: #c4a35a;
+  --color-surface: #ffffff;
+
+  /* Compat aliases (anciens noms Concept D → nouveaux rôles sémantiques) */
+  --color-violet: var(--color-accent);
+  --color-coral: var(--color-emphasis);
+
+  /* Derived */
+  --color-ink-soft: color-mix(in srgb, var(--color-ink) 68%, transparent);
+  --color-ink-faint: color-mix(in srgb, var(--color-ink) 42%, transparent);
+  --color-line: color-mix(in srgb, var(--color-ink) 12%, transparent);
+  --color-line-strong: color-mix(in srgb, var(--color-ink) 22%, transparent);
+  --color-accent-soft: color-mix(in srgb, var(--color-accent) 12%, var(--color-bg));
+  --color-emphasis-soft: color-mix(in srgb, var(--color-emphasis) 18%, var(--color-bg));
+  --color-accent-deep: color-mix(in srgb, var(--color-accent) 78%, #062222);
+  --color-warm-wash: color-mix(in srgb, var(--color-ink) 3.5%, var(--color-bg));
+  --color-success: #2f7d4a;
+  --color-success-soft: color-mix(in srgb, var(--color-success) 16%, var(--color-bg));
+  --color-on-accent: #ffffff;
+  --color-on-emphasis: #1a3a3a;
+  --color-on-ink: #faf7f0;
+
+  /* Type — next/font injects --font-v2-*; fallbacks always present */
+  --font-display-fallback: Georgia, 'Times New Roman', serif;
+  --font-sans-fallback: system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+  --font-display: var(--font-v2-display), var(--font-display-fallback);
+  --font-body: var(--font-v2-body), var(--font-sans-fallback);
+
+  /* Spacing */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+  --space-8: 4.5rem;
+  --space-9: 7rem;
+
+  /* Layout */
+  --width-content: 72rem;
+  --width-wide: 88rem;
+  --radius-sm: 0.5rem;
+  --radius-md: 1rem;
+  --radius-lg: 1.5rem;
+  --radius-xl: 2rem;
+  --radius-pill: 999px;
+
+  /* Elevation */
+  --shadow-soft:
+    0 1px 2px color-mix(in srgb, var(--color-ink) 5%, transparent),
+    0 14px 36px color-mix(in srgb, var(--color-ink) 7%, transparent);
+  --shadow-lift: 0 20px 52px color-mix(in srgb, var(--color-ink) 12%, transparent);
+
+  /* Motion knobs */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-spring: cubic-bezier(0.34, 1.4, 0.64, 1);
+  --dur-fast: 180ms;
+  --dur-med: 420ms;
+  --dur-slow: 780ms;
+  --dur-reveal: 900ms;
+  --stagger: 70ms;
+  --motion-lift: 8px;
+  --motion-reveal-y: 1rem;
+
+  /* Focus */
+  --focus-ring: 0 0 0 3px var(--color-bg), 0 0 0 5px var(--color-accent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-public-theme='pop-atelier'] {
+    --dur-fast: 1ms;
+    --dur-med: 1ms;
+    --dur-slow: 1ms;
+    --dur-reveal: 1ms;
+    --stagger: 0ms;
+    --motion-lift: 0px;
+    --motion-reveal-y: 0px;
+  }
+}

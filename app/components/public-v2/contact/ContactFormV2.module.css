@@ -1,0 +1,195 @@
+.wrap {
+  width: min(100%, 42rem);
+  margin-inline: auto;
+  scroll-margin-top: 5.5rem;
+}
+
+.card {
+  padding: var(--space-5);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-line);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-soft);
+}
+
+@media (min-width: 720px) {
+  .card {
+    padding: var(--space-6);
+  }
+}
+
+.intro {
+  text-align: center;
+  margin-bottom: var(--space-5);
+}
+
+.introTitle {
+  margin: 0 0 var(--space-2);
+  font-family: var(--font-display);
+  font-size: clamp(1.25rem, 2.4vw, 1.5rem);
+  font-weight: 650;
+  letter-spacing: -0.02em;
+  color: var(--color-ink);
+}
+
+.introDesc {
+  margin: 0;
+  color: var(--color-ink-soft);
+  font-size: 0.98rem;
+  line-height: 1.5;
+}
+
+.form {
+  position: relative;
+  display: grid;
+  gap: var(--space-4);
+}
+
+.honeypot {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+.row2 {
+  display: grid;
+  gap: var(--space-4);
+}
+
+@media (min-width: 640px) {
+  .row2 {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.optionalToggle {
+  appearance: none;
+  border: none;
+  background: transparent;
+  padding: 0;
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--color-accent-deep);
+  cursor: pointer;
+  text-align: left;
+  text-decoration: underline;
+  text-underline-offset: 0.18em;
+}
+
+.optionalToggle:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+  border-radius: var(--radius-sm);
+}
+
+.optionalPanel {
+  display: grid;
+  gap: var(--space-4);
+  margin-top: var(--space-3);
+}
+
+.briefScope {
+  /* Les briefs MUI historiques reçoivent textColor ink via props */
+  color: var(--color-ink);
+}
+
+/*
+ * Switches Contact V2 — thumb centré DANS le rail.
+ * Spécificité > Emotion sizeSmall (sinon pad 7 / track 10px restent).
+ * root 46×26, pad 0 ; thumb 20 ; switchBase pad 3 ; translateX 20.
+ */
+.briefScope :global(.MuiFormControlLabel-root) {
+  align-items: center;
+  gap: var(--space-2);
+  margin-left: 0;
+  margin-right: 0;
+  min-height: 2.75rem;
+}
+
+.briefScope :global(.MuiFormControlLabel-label) {
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  line-height: 1.4;
+  color: var(--color-ink);
+}
+
+.briefScope :global(.MuiFormControlLabel-root .MuiSwitch-root.MuiSwitch-sizeSmall) {
+  width: 46px !important;
+  height: 26px !important;
+  padding: 0 !important;
+  overflow: visible;
+  box-sizing: border-box;
+  flex-shrink: 0;
+}
+
+.briefScope :global(.MuiFormControlLabel-root .MuiSwitch-root.MuiSwitch-sizeSmall .MuiSwitch-switchBase) {
+  padding: 3px !important;
+  top: 0 !important;
+  left: 0 !important;
+  color: var(--color-surface);
+}
+
+.briefScope :global(.MuiFormControlLabel-root .MuiSwitch-root.MuiSwitch-sizeSmall .MuiSwitch-switchBase.Mui-checked) {
+  transform: translateX(20px) !important;
+  color: var(--color-surface);
+}
+
+.briefScope :global(.MuiFormControlLabel-root .MuiSwitch-root.MuiSwitch-sizeSmall .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track) {
+  background-color: var(--color-accent);
+  opacity: 1;
+}
+
+.briefScope :global(.MuiFormControlLabel-root .MuiSwitch-root.MuiSwitch-sizeSmall .MuiSwitch-thumb) {
+  width: 20px !important;
+  height: 20px !important;
+  box-sizing: border-box;
+  border: none;
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--color-ink) 14%, transparent),
+    0 1px 2px color-mix(in srgb, var(--color-ink) 18%, transparent);
+  background-color: var(--color-surface);
+}
+
+.briefScope :global(.MuiFormControlLabel-root .MuiSwitch-root.MuiSwitch-sizeSmall .MuiSwitch-switchBase.Mui-checked .MuiSwitch-thumb) {
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--color-accent) 35%, var(--color-ink)),
+    0 1px 2px color-mix(in srgb, var(--color-ink) 18%, transparent);
+}
+
+.briefScope :global(.MuiFormControlLabel-root .MuiSwitch-root.MuiSwitch-sizeSmall .MuiSwitch-track) {
+  position: absolute !important;
+  left: 0 !important;
+  right: 0 !important;
+  top: 3px !important;
+  bottom: 3px !important;
+  width: auto !important;
+  height: auto !important;
+  border-radius: var(--radius-pill);
+  border: none;
+  background-color: color-mix(in srgb, var(--color-ink) 22%, var(--color-line));
+  opacity: 1;
+}
+
+.briefScope :global(.MuiFormControlLabel-root .MuiSwitch-root .MuiSwitch-switchBase.Mui-focusVisible .MuiSwitch-thumb),
+.briefScope :global(.MuiFormControlLabel-root .Mui-focusVisible .MuiSwitch-thumb) {
+  box-shadow: var(--focus-ring);
+}
+
+.submitRow {
+  margin-top: var(--space-2);
+}
+
+.mockBanner {
+  margin: 0 0 var(--space-4);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-md);
+  border: 1px solid color-mix(in srgb, var(--color-accent) 28%, var(--color-line));
+  background: var(--color-accent-soft);
+  color: var(--color-ink);
+  font-size: 0.9rem;
+  line-height: 1.45;
+}

@@ -45,8 +45,9 @@ export default function ProductDownloadRow({ items, accent, accentHover }: Produ
                 '&:hover': { background: accentHover ?? accent, filter: 'brightness(1.06)' },
                 '&.Mui-disabled': {
                   background: accent,
-                  color: '#0a0a0c',
-                  opacity: 0.45,
+                  /* Texte clair : contraste lisible sur accent (ex. violet DeskDot). */
+                  color: '#f8fafc',
+                  opacity: 0.88,
                 },
               }
             : {

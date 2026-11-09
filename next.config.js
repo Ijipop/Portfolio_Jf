@@ -118,10 +118,21 @@ const nextConfig = {
         permanent: true,
       },
       { source: '/api/timelendar/:path*', destination: '/api/timelendr/:path*', permanent: true },
-      { source: '/pageweb', destination: '/creation-site-web-montreal', permanent: true },
+      {
+        source: '/creation-site-web-montreal',
+        destination: '/portfolio/projets?type=web',
+        permanent: true,
+      },
+      { source: '/pageweb', destination: '/portfolio/projets?type=web', permanent: true },
       {
         source: '/portfolio/pageweb',
-        destination: '/creation-site-web-montreal',
+        destination: '/portfolio/projets?type=web',
+        permanent: true,
+      },
+      /** Hub /logiciel redondant avec le catalogue — ne pas matcher /logiciel/timelendr */
+      {
+        source: '/logiciel',
+        destination: '/portfolio/projets?type=logiciel',
         permanent: true,
       },
       // Ne pas ajouter de redirects « CPU-ZE → cpu-ze » / « SpaceTaker → spacetaker » :

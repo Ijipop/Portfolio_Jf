@@ -1,0 +1,205 @@
+/*
+ * Hero Atelier Atlantique — planche éditoriale.
+ * Région turquoise ouverte (Wave 3.0) : frontière S, hors cadre.
+ */
+
+.hero {
+  --hero-header-offset: 4.25rem;
+
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding: var(--space-7) 0 var(--space-6);
+  overflow: clip;
+  background: var(--color-bg);
+}
+
+.waveLayer {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.waveSvg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.waveDesktop {
+  display: block;
+}
+
+.waveMobile {
+  display: none;
+}
+
+.inner {
+  position: relative;
+  z-index: 1;
+  width: min(100% - 2rem, var(--width-wide));
+  margin-inline: auto;
+  display: grid;
+  gap: var(--space-6);
+  align-items: center;
+}
+
+@media (min-width: 960px) {
+  .hero {
+    min-height: calc(100vh - var(--hero-header-offset));
+    min-height: calc(100svh - var(--hero-header-offset));
+    padding-block: var(--space-8);
+  }
+
+  .inner {
+    flex: 1 1 auto;
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    gap: clamp(1.25rem, 3vw, 3rem);
+    align-content: center;
+    align-items: center;
+  }
+
+  .copy {
+    max-width: 32rem;
+    padding-right: 0.5rem;
+  }
+}
+
+@media (max-width: 959px) {
+  .hero {
+    padding-top: var(--space-5);
+    padding-bottom: var(--space-7);
+  }
+
+  .waveDesktop {
+    display: none;
+  }
+
+  .waveMobile {
+    display: block;
+  }
+
+  .copy {
+    order: 1;
+  }
+
+  .stageWrap {
+    order: 2;
+  }
+}
+
+.kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin: 0 0 var(--space-4);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  color: var(--color-ink);
+}
+
+.kickerMark {
+  width: 0.55rem;
+  height: 0.55rem;
+  background: var(--color-emphasis);
+  transform: rotate(14deg);
+  flex-shrink: 0;
+}
+
+.title {
+  margin: 0;
+  max-width: 11ch;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(2.4rem, 6vw, 4.2rem);
+  line-height: 1.04;
+  letter-spacing: -0.045em;
+  color: var(--color-ink);
+}
+
+.titleLine {
+  display: block;
+}
+
+.titleLine span {
+  display: inline-block;
+}
+
+.titleAccent {
+  color: var(--color-accent-deep);
+}
+
+.isReady .titleLine span {
+  animation: heroRise var(--dur-slow) var(--ease-out) both;
+}
+
+.isReady .titleLine:nth-child(2) span {
+  animation-delay: 110ms;
+}
+
+@keyframes heroRise {
+  from {
+    opacity: 0;
+    transform: translateY(0.28em);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.lede {
+  margin: var(--space-5) 0 var(--space-5);
+  max-width: 31rem;
+  font-size: clamp(1.05rem, 1.85vw, 1.2rem);
+  color: var(--color-ink-soft);
+  line-height: 1.55;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+@media (max-width: 380px) {
+  .actions :global(a),
+  .actions :global(button) {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+.stageWrap {
+  position: relative;
+  min-width: 0;
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .isReady .titleLine span,
+  .titleLine span {
+    opacity: 1;
+    transform: none;
+    animation: none;
+  }
+}

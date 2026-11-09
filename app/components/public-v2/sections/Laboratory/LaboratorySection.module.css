@@ -1,0 +1,82 @@
+.section {
+  background:
+    radial-gradient(
+      ellipse 50% 60% at 10% 20%,
+      color-mix(in srgb, var(--color-emphasis) 12%, transparent),
+      transparent
+    ),
+    radial-gradient(
+      ellipse 45% 50% at 90% 80%,
+      color-mix(in srgb, var(--color-accent) 16%, transparent),
+      transparent
+    ),
+    color-mix(in srgb, var(--color-accent) 10%, var(--color-bg));
+  border-block: 1px solid color-mix(in srgb, var(--color-accent) 14%, transparent);
+}
+
+.eyebrow {
+  margin: 0 0 var(--space-3);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-ink-soft);
+}
+
+.title {
+  margin: 0 0 var(--space-3);
+  max-width: 22ch;
+}
+
+.lead {
+  margin: 0;
+  max-width: 38rem;
+  color: var(--color-ink-soft);
+  font-size: clamp(1.02rem, 1.6vw, 1.12rem);
+  line-height: 1.55;
+}
+
+.grid {
+  display: grid;
+  gap: var(--space-5);
+  margin-top: var(--space-5);
+  list-style: none;
+  margin-block-start: var(--space-5);
+  padding: 0;
+  align-items: stretch;
+}
+
+.gridItem {
+  display: flex;
+  min-height: 0;
+}
+
+.gridItem > * {
+  flex: 1 1 auto;
+  width: 100%;
+}
+
+@media (min-width: 800px) {
+  .grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.foot {
+  margin-top: var(--space-6);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3) var(--space-5);
+  align-items: baseline;
+}
+
+.catalogLink {
+  color: var(--color-accent);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.catalogLink:hover,
+.catalogLink:focus-visible {
+  text-decoration: underline;
+}

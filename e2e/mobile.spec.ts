@@ -6,7 +6,7 @@ const MOBILE_ROUTES = [
   '/portfolio/projets',
   '/portfolio/a-propos',
   '/portfolio/contact',
-  '/creation-site-web-montreal',
+  '/portfolio/projets?type=web',
   '/soutien-informatique-montreal',
   '/logiciel/timelendr',
 ] as const

@@ -1,0 +1,222 @@
+/*
+ * Vedettes Punch — image-first, crème, sans planches décoratives.
+ * DeskDot soft premium, secondaire.
+ */
+
+.feature {
+  display: grid;
+  gap: var(--space-5);
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  padding: 0;
+  transition: transform var(--dur-med) var(--ease-out);
+}
+
+.feature:hover,
+.feature:focus-within {
+  transform: translateY(-2px);
+}
+
+@media (min-width: 900px) {
+  .primary {
+    grid-template-columns: 1.78fr 0.82fr;
+    gap: clamp(2rem, 3.6vw, 3.5rem);
+    align-items: center;
+  }
+
+  .secondary {
+    grid-template-columns: 0.82fr 1.78fr;
+    gap: clamp(2rem, 3.6vw, 3.5rem);
+    align-items: center;
+  }
+
+  .secondary .body {
+    order: -1;
+  }
+
+  .soft {
+    grid-template-columns: 0.9fr 1.1fr;
+    max-width: 48rem;
+    margin-inline: auto;
+    width: 100%;
+    align-items: center;
+    padding: var(--space-5) var(--space-6);
+    border-radius: calc(var(--radius-lg) + 0.15rem);
+    background:
+      linear-gradient(
+        165deg,
+        color-mix(in srgb, var(--color-surface) 92%, var(--color-bg)),
+        color-mix(in srgb, var(--color-ink) 3.5%, var(--color-surface))
+      );
+    border: 1px solid var(--color-line-strong);
+    box-shadow: var(--shadow-soft);
+  }
+}
+
+.media {
+  position: relative;
+  min-height: 18rem;
+  padding-bottom: 2.35rem;
+}
+
+.desk {
+  display: block;
+  width: 100%;
+  height: clamp(17.5rem, 38vw, 28rem);
+  border-radius: calc(var(--radius-md) + 0.25rem);
+  border: 1px solid var(--color-line-strong);
+  background: color-mix(in srgb, var(--color-ink) 4%, var(--color-bg));
+  object-fit: cover;
+  object-position: top center;
+  box-shadow:
+    0 20px 48px color-mix(in srgb, var(--color-ink) 14%, transparent),
+    0 1px 0 color-mix(in srgb, #fff 35%, transparent);
+}
+
+.productShot {
+  display: block;
+  width: 100%;
+  height: clamp(11.5rem, 24vw, 15.5rem);
+  object-fit: contain;
+  object-position: center;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-line);
+  background: color-mix(in srgb, var(--color-ink) 2.5%, var(--color-bg));
+  padding: var(--space-4);
+}
+
+.phone {
+  --phone-w: clamp(9.25rem, 25vw, 13rem);
+  --phone-radius: 1.3rem;
+
+  position: absolute;
+  right: 2.5%;
+  bottom: -8%;
+  z-index: 3;
+  width: var(--phone-w);
+  margin: 0;
+  padding: 0.5rem;
+  border-radius: calc(var(--phone-radius) + 0.42rem);
+  background: linear-gradient(165deg, #2a3f3f, #102020);
+  box-shadow: var(--shadow-lift);
+  border: 1px solid color-mix(in srgb, #fff 14%, transparent);
+}
+
+.phone::before {
+  content: '';
+  position: absolute;
+  top: 0.6rem;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 30%;
+  height: 0.3rem;
+  border-radius: var(--radius-pill);
+  background: color-mix(in srgb, #fff 18%, transparent);
+  z-index: 2;
+}
+
+.phone img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: var(--phone-radius);
+  background: #0a1414;
+}
+
+.expressionPhone {
+  --phone-w: clamp(9.75rem, 26vw, 13.5rem);
+  right: 1.5%;
+  bottom: -9%;
+}
+
+.thermoPhone {
+  --phone-w: clamp(8.75rem, 22vw, 12rem);
+  right: auto;
+  left: 2%;
+  bottom: -8%;
+  padding: 0.45rem;
+}
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-bottom: var(--space-3);
+}
+
+.title {
+  margin: 0 0 var(--space-2);
+  font-family: var(--font-display);
+  font-size: clamp(1.8rem, 3.3vw, 2.5rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: var(--color-ink);
+}
+
+.tags {
+  margin: 0 0 var(--space-3);
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--color-accent-deep);
+}
+
+.description {
+  margin: 0 0 var(--space-4);
+  color: var(--color-ink-soft);
+  max-width: 30rem;
+  line-height: 1.55;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+.legal {
+  margin: var(--space-4) 0 0;
+  font-size: 0.78rem;
+  color: var(--color-ink-faint);
+  max-width: 30rem;
+  line-height: 1.45;
+}
+
+@media (max-width: 899px) {
+  .phone {
+    display: none;
+  }
+
+  .media {
+    min-height: 0;
+    padding-bottom: 0;
+  }
+
+  .desk {
+    height: clamp(14.5rem, 56vw, 20rem);
+  }
+
+  .soft {
+    padding: var(--space-4) var(--space-5);
+    border-radius: var(--radius-lg);
+    background:
+      linear-gradient(
+        165deg,
+        color-mix(in srgb, var(--color-surface) 92%, var(--color-bg)),
+        color-mix(in srgb, var(--color-ink) 3.5%, var(--color-surface))
+      );
+    border: 1px solid var(--color-line-strong);
+    box-shadow: var(--shadow-soft);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .feature {
+    transition: none;
+  }
+
+  .feature:hover,
+  .feature:focus-within {
+    transform: none;
+  }
+}

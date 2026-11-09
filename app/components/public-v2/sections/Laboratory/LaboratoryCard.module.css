@@ -1,0 +1,128 @@
+.card {
+  background: var(--color-surface);
+  border-radius: var(--radius-xl);
+  border: 1px solid color-mix(in srgb, var(--color-accent) 18%, transparent);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  transition:
+    transform var(--dur-med) var(--ease-spring),
+    box-shadow var(--dur-med);
+  box-shadow: var(--shadow-soft);
+}
+
+.card:hover,
+.card:focus-within {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lift);
+}
+
+.preview {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  background: var(--color-accent-soft);
+  isolation: isolate;
+  flex-shrink: 0;
+}
+
+.previewImg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  transition: transform var(--dur-med) var(--ease-out);
+}
+
+.card:hover .previewImg,
+.card:focus-within .previewImg {
+  transform: scale(1.04);
+}
+
+.navHint {
+  position: absolute;
+  top: 0.7rem;
+  right: 0.7rem;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: 1.85rem;
+  height: 1.85rem;
+  border-radius: var(--radius-pill);
+  background: color-mix(in srgb, var(--color-surface) 92%, transparent);
+  color: var(--color-ink);
+  box-shadow: var(--shadow-soft);
+  opacity: 0;
+  transform: translate(2px, -2px);
+  transition:
+    opacity var(--dur-fast) var(--ease-out),
+    transform var(--dur-fast) var(--ease-out);
+  pointer-events: none;
+}
+
+.navHintIcon {
+  display: block;
+  width: 0.85rem;
+  height: 0.85rem;
+}
+
+.card:hover .navHint,
+.card:focus-within .navHint {
+  opacity: 1;
+  transform: none;
+}
+
+.body {
+  padding: var(--space-5);
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  gap: var(--space-3);
+  min-height: 0;
+}
+
+.title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  font-weight: 650;
+  letter-spacing: -0.03em;
+  color: var(--color-ink);
+}
+
+.description {
+  margin: 0;
+  color: var(--color-ink-soft);
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.actions {
+  margin-top: auto;
+  padding-top: var(--space-2);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card,
+  .previewImg,
+  .navHint {
+    transition: none;
+  }
+
+  .card:hover,
+  .card:focus-within {
+    transform: none;
+  }
+
+  .card:hover .previewImg,
+  .card:focus-within .previewImg {
+    transform: none;
+  }
+
+  .card:hover .navHint,
+  .card:focus-within .navHint {
+    transform: none;
+  }
+}

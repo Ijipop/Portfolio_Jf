@@ -1,0 +1,187 @@
+/*
+ * Scène collage Atelier Atlantique — Punch.
+ * Expression dominante, Thermo présent, DeskDot intégré.
+ * Région turquoise : calque Hero (pas ici).
+ */
+
+.stage {
+  position: relative;
+  min-height: 19rem;
+  perspective: 1500px;
+  z-index: 1;
+  overflow: visible;
+}
+
+@media (min-width: 960px) {
+  .stage {
+    min-height: 34rem;
+  }
+}
+
+@media (max-width: 959px) {
+  .stage {
+    min-height: 18.5rem;
+  }
+}
+
+.float {
+  --px: 0px;
+  --py: 0px;
+  --rot: 0deg;
+  position: absolute;
+  margin: 0;
+  transform: translate3d(var(--px), var(--py), 0) rotate(var(--rot));
+  will-change: transform;
+}
+
+.floatReturning {
+  transition: transform var(--dur-med) var(--ease-out);
+}
+
+.floatEnter {
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity var(--dur-reveal) var(--ease-out),
+    transform var(--dur-reveal) var(--ease-out);
+  transition-delay: var(--enter-delay, 0ms);
+  width: 100%;
+  height: 100%;
+}
+
+.floatSurface {
+  border-radius: calc(var(--radius-md) + 0.2rem);
+  overflow: hidden;
+  box-shadow:
+    0 22px 48px color-mix(in srgb, var(--color-ink) 16%, transparent),
+    0 2px 0 color-mix(in srgb, #fff 30%, transparent);
+  border: 1px solid color-mix(in srgb, var(--color-ink) 16%, transparent);
+  background: var(--color-surface);
+  width: 100%;
+  height: 100%;
+}
+
+.floatSurface img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+}
+
+.enhance .floatEnter:not(.isIn) {
+  opacity: 0;
+  transform: translateY(var(--motion-reveal-y));
+}
+
+.enhance .floatEnter.isIn {
+  opacity: 1;
+  transform: none;
+}
+
+/* Expression — dominante */
+.slotA {
+  width: 84%;
+  height: 13.75rem;
+  left: -1%;
+  top: 0;
+  z-index: 3;
+  --rot: -2deg;
+  --enter-delay: 0ms;
+}
+
+/* Thermo — présence réelle */
+.slotB {
+  width: 58%;
+  height: 10.75rem;
+  right: -2%;
+  top: 38%;
+  z-index: 4;
+  --rot: 2.4deg;
+  --enter-delay: 120ms;
+}
+
+/* DeskDot — intégré au bas de la scène */
+.slotC {
+  width: 34%;
+  height: 9.25rem;
+  left: 26%;
+  bottom: -1%;
+  z-index: 5;
+  --rot: -1deg;
+  --enter-delay: 220ms;
+}
+
+.slotC .floatSurface {
+  border-radius: var(--radius-md);
+  box-shadow:
+    0 16px 36px color-mix(in srgb, var(--color-ink) 12%, transparent),
+    0 1px 0 color-mix(in srgb, #fff 25%, transparent);
+}
+
+.slotC .floatSurface img {
+  /* cover = zoom minimal pour remplir le cadre, sans bandes noires */
+  object-fit: cover;
+  object-position: center center;
+}
+
+@media (min-width: 960px) {
+  .slotA {
+    width: 87%;
+    height: 20rem;
+    left: -2%;
+    top: -1%;
+  }
+
+  .slotB {
+    width: 57%;
+    height: 13.75rem;
+    right: -3%;
+    top: 36%;
+  }
+
+  .slotC {
+    width: 32%;
+    height: 12.5rem;
+    left: 30%;
+    bottom: 0;
+  }
+}
+
+@media (max-width: 959px) {
+  /* Composition mobile autonome : Expression pleine largeur, Thermo ancré bas-droite */
+  .slotA {
+    width: 92%;
+    height: 11.5rem;
+    left: 0;
+    top: 2%;
+    --rot: -1.2deg;
+  }
+
+  .slotB {
+    width: 68%;
+    height: 8.75rem;
+    right: 0;
+    top: auto;
+    bottom: 6%;
+    --rot: 1.8deg;
+  }
+
+  .slotC {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .enhance .floatEnter:not(.isIn),
+  .enhance .floatEnter.isIn,
+  .floatEnter {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .floatReturning {
+    transition: none;
+  }
+}

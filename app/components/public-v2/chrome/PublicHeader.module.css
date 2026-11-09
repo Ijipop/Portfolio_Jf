@@ -1,0 +1,129 @@
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  backdrop-filter: blur(14px);
+  background: color-mix(in srgb, var(--color-bg) 86%, transparent);
+  border-bottom: 1px solid var(--color-line);
+  transition:
+    background-color var(--dur-med) var(--ease-out),
+    border-color var(--dur-med) var(--ease-out),
+    box-shadow var(--dur-med) var(--ease-out);
+}
+
+.headerScrolled {
+  background: color-mix(in srgb, var(--color-bg) 92%, transparent);
+  border-bottom-color: color-mix(in srgb, var(--color-line-strong) 70%, transparent);
+  box-shadow: 0 10px 28px color-mix(in srgb, var(--color-ink) 6%, transparent);
+}
+
+.shell {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  min-height: 4.25rem;
+}
+
+.desktopNav {
+  display: none;
+  align-items: center;
+  gap: var(--space-5);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.navLink {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--color-ink-soft);
+  padding-block: 0.35rem;
+  transition: color var(--dur-fast) var(--ease-out);
+}
+
+.navLink::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2px;
+  border-radius: 999px;
+  background: var(--color-accent);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform var(--dur-med) var(--ease-out);
+}
+
+.navLink:hover,
+.navLink:focus-visible {
+  color: var(--color-ink);
+}
+
+.navLink:hover::after,
+.navLink:focus-visible::after {
+  transform: scaleX(1);
+}
+
+.navLinkActive {
+  color: var(--color-ink);
+  font-weight: 650;
+}
+
+.navLinkActive::after {
+  transform: scaleX(1);
+}
+
+.desktopCta {
+  display: none;
+}
+
+.desktopCta:hover {
+  box-shadow: 0 8px 20px color-mix(in srgb, var(--color-ink) 16%, transparent);
+}
+
+.mobile {
+  display: block;
+}
+
+@media (min-width: 880px) {
+  .desktopNav {
+    display: flex;
+  }
+
+  .desktopCta {
+    display: inline-flex;
+  }
+
+  .mobile {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .header,
+  .navLink,
+  .navLink::after {
+    transition: none;
+  }
+
+  .navLink::after {
+    transform: none;
+    opacity: 0;
+  }
+
+  .navLinkActive::after,
+  .navLink:hover::after,
+  .navLink:focus-visible::after {
+    opacity: 1;
+  }
+
+  .desktopCta:hover {
+    box-shadow: none;
+  }
+}

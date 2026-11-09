@@ -4,9 +4,10 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "dev:v2-sandbox": "node scripts/dev-v2-sandbox.mjs",
     "dev:webpack": "next dev --webpack",
     "prebuild": "npm run favicon",
-    "build": "next build",
+    "build": "next build --webpack",
     "build:prod": "prisma migrate deploy && next build",
     "start": "next start",
     "lint": "eslint .",

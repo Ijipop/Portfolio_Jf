@@ -307,3 +307,54 @@ export function useAdvancedTheme() {
   }
   return context
 }
+
+/**
+ * Îlot MUI minimal pour formulaires embarqués hors chrome ThemeWrapper.
+ * Fournit AdvancedTheme + ThemeProvider uniquement — pas de CssBaseline,
+ * pas de SiteDarkBackdrop, pas de sync document, pas de minHeight 100vh.
+ */
+export function AdvancedThemeIslandProvider({ children }: { children: React.ReactNode }) {
+  const customTheme = THEMES[BEIGE_LIGHT_THEME]
+  const contextValue = useMemo<AdvancedThemeContextType>(
+    () => ({
+      themeName: BEIGE_LIGHT_THEME,
+      customTheme,
+      setTheme: () => undefined,
+      availableThemes: getAvailableThemes(),
+    }),
+    [customTheme],
+  )
+
+  const theme = useMemo(
+    () =>
+      createTheme({
+        palette: {
+          mode: 'light',
+          primary: {
+            main: customTheme.primary,
+            light: `${customTheme.primary}80`,
+            dark: `${customTheme.primary}CC`,
+          },
+          secondary: {
+            main: customTheme.secondary,
+            light: `${customTheme.secondary}80`,
+            dark: `${customTheme.secondary}CC`,
+          },
+          background: {
+            default: '#faf8f5',
+            paper: '#fffefb',
+          },
+        },
+        typography: {
+          fontFamily: FONT_STACK,
+        },
+      }),
+    [customTheme],
+  )
+
+  return (
+    <AdvancedThemeContext.Provider value={contextValue}>
+      <ThemeProvider theme={theme}>{children}</ThemeProvider>
+    </AdvancedThemeContext.Provider>
+  )
+}

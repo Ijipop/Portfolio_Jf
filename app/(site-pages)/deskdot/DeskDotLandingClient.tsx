@@ -1,0 +1,138 @@
+'use client'
+
+import Link from 'next/link'
+import ProductDownloadRow from '@/components/product-landings/ProductDownloadRow'
+import ProductSecurityNotice from '@/components/product-landings/ProductSecurityNotice'
+import type { ProductDownloadLinks } from '@/components/product-landings/productDownloads'
+import AutoplayLoopVideo from '@/components/shared/AutoplayLoopVideo'
+import { LanguageProvider, useLanguage } from '@/contexts/LanguageContext'
+import DeskDotPhotoStack from './DeskDotPhotoStack'
+import DeskDotPitchTitle from './DeskDotPitchTitle'
+import styles from './DeskDotLanding.module.css'
+
+const DESKDOT_DEMO_SRC = '/img/deskdot/DeskDot_Final.mp4'
+
+const BENEFIT_KEYS = [
+  'deskDot.b1',
+  'deskDot.b2',
+  'deskDot.b3',
+  'deskDot.b4',
+  'deskDot.b5',
+  'deskDot.b6',
+] as const
+
+const ACCENT = '#a78bfa'
+const ACCENT_HOVER = '#c4b5fd'
+
+/** Même asset que la carte Projets (fiable) — évite next/image sur /img/deskdot. */
+const DESKDOT_ICON = '/imgs/images/DeskDot_icon.png'
+
+const DESKDOT_GALLERY_FALLBACK = [
+  '/img/deskdot/deskdot1.png',
+  '/img/deskdot/deskdot2.png',
+  '/img/deskdot/deskdot3.png',
+  '/img/deskdot/deskdot4.png',
+] as const
+
+type DeskDotLandingClientProps = {
+  downloads: ProductDownloadLinks
+}
+
+function DeskDotLandingBody({ downloads }: DeskDotLandingClientProps) {
+  const { t } = useLanguage()
+  const hasWindows = Boolean(downloads.windows?.trim())
+
+  return (
+    <div className={styles.page} data-testid="deskdot-landing">
+      <div className={styles.rings} aria-hidden>
+        <div className={styles.ring} />
+        <div className={styles.ring} />
+        <div className={styles.ring} />
+        <div className={styles.ring} />
+      </div>
+
+      <div className={styles.inner}>
+        <header className={styles.hero}>
+          <div className={styles.brandRow}>
+            {/* eslint-disable-next-line @next/next/no-img-element -- même rendu fiable que ProjectCard showcase */}
+            <img
+              src={DESKDOT_ICON}
+              alt=""
+              width={52}
+              height={52}
+              className={styles.brandIcon}
+              decoding="async"
+            />
+            <h1 className={styles.brand}>
+              Desk<span className={styles.brandAccent}>Dot</span>
+            </h1>
+          </div>
+          <DeskDotPitchTitle />
+          <p className={styles.lead}>{t('deskDot.lead')}</p>
+          <ProductDownloadRow
+            accent={ACCENT}
+            accentHover={ACCENT_HOVER}
+            items={[
+              {
+                href: hasWindows ? downloads.windows : '#',
+                label: hasWindows ? t('deskDot.downloadWindows') : t('deskDot.downloadSoon'),
+                primary: true,
+                disabled: !hasWindows,
+              },
+            ]}
+          />
+        </header>
+
+        <section className={styles.section} aria-labelledby="deskdot-demo-title">
+          <h2 id="deskdot-demo-title" className={styles.sectionTitle}>
+            {t('deskDot.demoTitle')}
+          </h2>
+          <div className={styles.demoFrame}>
+            <AutoplayLoopVideo src={DESKDOT_DEMO_SRC} ariaLabel={t('deskDot.demoAria')} />
+          </div>
+        </section>
+
+        <section className={styles.section} aria-labelledby="deskdot-gallery-title">
+          <h2 id="deskdot-gallery-title" className={styles.sectionTitle}>
+            {t('deskDot.galleryTitle')}
+          </h2>
+          <DeskDotPhotoStack
+            images={DESKDOT_GALLERY_FALLBACK}
+            ariaLabel={t('deskDot.galleryTitle')}
+            hint={t('deskDot.stackHint')}
+          />
+        </section>
+
+        <section className={styles.section}>
+          <h2 className={styles.sectionTitle}>{t('deskDot.benefitsTitle')}</h2>
+          <ul className={styles.benefits}>
+            {BENEFIT_KEYS.map((key) => (
+              <li key={key}>
+                <span className={styles.dot} />
+                <span>{t(key)}</span>
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        <ProductSecurityNotice accent={ACCENT} />
+
+        <nav className={styles.footerLinks} aria-label={t('deskDot.moreLinks')}>
+          <Link href="/portfolio/projets?type=logiciel">{t('deskDot.otherSoftware')}</Link>
+        </nav>
+      </div>
+    </div>
+  )
+}
+
+/**
+ * Contenu DeskDot — chrome Pop Atelier fourni par la page.
+ * MUI limité à useMediaQuery dans DeskDotPitchTitle (pas de ThemeProvider / backdrop).
+ */
+export default function DeskDotLandingClient({ downloads }: DeskDotLandingClientProps) {
+  return (
+    <LanguageProvider>
+      <DeskDotLandingBody downloads={downloads} />
+    </LanguageProvider>
+  )
+}

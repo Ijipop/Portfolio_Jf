@@ -33,6 +33,12 @@ yarn-error.log*
 # vercel
 .vercel
 
+# Preview interne V2 — captures clients temporaires (non autorisées à la publication)
+/public/img/v2-sandbox/
+
+# Captures / scripts de validation design (hors release)
+/design-lab/
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts

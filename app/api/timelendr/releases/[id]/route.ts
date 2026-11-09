@@ -19,7 +19,7 @@ function parseRouteId(raw: unknown): number | null {
 // DELETE /api/timelendr/releases/[id] — supprimer une version (protégé)
 export async function DELETE(
   request: NextRequest,
-  ctx: { params?: Promise<Record<string, string | string[] | undefined>> }
+  ctx: { params: Promise<{ id: string }> },
 ) {
   const auth = authAdminToken(request)
   if (!auth.ok) {
@@ -27,8 +27,8 @@ export async function DELETE(
   }
 
   try {
-    const resolved = ctx.params != null ? await ctx.params : undefined
-    const id = parseRouteId(resolved?.id)
+    const resolved = await ctx.params
+    const id = parseRouteId(resolved.id)
     if (id === null) {
       return NextResponse.json(
         { success: false, error: 'ID invalide' },

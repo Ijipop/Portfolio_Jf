@@ -29,7 +29,16 @@ describe('resolveProductLandingHref', () => {
     expect(resolveProductLandingHref('/space-taker')).toBe('/spacetaker')
     expect(resolveProductLandingHref('/cpu-ze')).toBe('/cpu-ze')
     expect(resolveProductLandingHref('/deskdot')).toBe('/deskdot')
+    expect(resolveProductLandingHref('/traducteur')).toBe('/traducteur')
+    expect(resolveProductLandingHref('/traducteur/merci')).toBe('/traducteur')
     expect(resolveProductLandingHref('/logiciel/timelendr')).toBe('/logiciel/timelendr')
+    expect(resolveProductLandingHref('/logiciel/timelendar')).toBe('/logiciel/timelendr')
+  })
+
+  it('returns null for missing or unrelated URLs', () => {
+    expect(resolveProductLandingHref('')).toBeNull()
+    expect(resolveProductLandingHref('/portfolio/projets')).toBeNull()
+    expect(resolveProductLandingHref('https://example.com/spacetaker')).toBeNull()
   })
 
   it('does not intercept GitHub download URLs', () => {

@@ -1,0 +1,26 @@
+.inner {
+  text-align: center;
+  max-width: 40rem;
+  margin-inline: auto;
+}
+
+.title {
+  margin: 0 0 var(--space-4);
+  color: var(--color-on-ink);
+  max-width: none;
+}
+
+.lead {
+  margin: 0 auto var(--space-6);
+  max-width: 32rem;
+  font-size: clamp(1.02rem, 1.6vw, 1.12rem);
+  line-height: 1.55;
+  color: color-mix(in srgb, var(--color-on-ink) 78%, transparent);
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+}
