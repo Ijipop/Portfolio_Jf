@@ -12,9 +12,9 @@ export const ABOUT_COPY = {
   ctaLabel: 'En savoir plus sur moi',
   ctaHref: '/portfolio/a-propos',
   photo: {
-    src: '/img/jf-avatar.jpg',
+    src: '/img/Jf.jpg',
     alt: 'Portrait de Jean-François Lefebvre',
-    width: 640,
-    height: 640,
+    width: 1440,
+    height: 1920,
   },
 } as const

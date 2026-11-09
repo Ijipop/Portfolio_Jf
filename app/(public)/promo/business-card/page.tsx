@@ -32,7 +32,7 @@ export default function PromoBusinessCardPage() {
           </div>
           <div className="right-info">
             support@evepics.eu<br />
-            Luxembourg · EU
+            Luxembourg Â· EU
             <div className="pill">
               <span className="dot" />
               {t(p('noApp'))}

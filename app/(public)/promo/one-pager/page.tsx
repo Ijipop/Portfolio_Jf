@@ -89,7 +89,7 @@ export default function PromoOnePagerPage() {
           </aside>
         </section>
         <footer className="footer">
-          <div><strong>EvePics.eu</strong> — {t(p('footerTagline'))}</div>
+          <div><strong>EvePics.eu</strong> â€” {t(p('footerTagline'))}</div>
           <div>{t(p('footerContact'))}</div>
           <div style={{ marginTop: '8px' }}>
             <Link href="/portfolio/contact" style={{ color: 'inherit', fontWeight: 700, textDecoration: 'underline' }}>

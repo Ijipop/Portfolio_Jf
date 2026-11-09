@@ -28,11 +28,15 @@ describe('Hero read-only during Phase 5B', () => {
       expect(allowed.has(file)).toBe(true)
     }
 
-    if (out.includes('app/components/public-v2/sections/Hero/Hero.module.css')) {
-      const diff = execSync(
-        'git diff hero-v2-reference -- app/components/public-v2/sections/Hero/Hero.module.css',
-        { encoding: 'utf8', cwd: process.cwd() },
-      )
+    // Ancien correctif glyph (5B) : si Hero.module.css change hors Phase 8,
+    // le diff doit rester le patch line-height 1.18. Phase 8 Premium autorise
+    // une réécriture complète (True WOW / Wave 3.0).
+    const heroCss = 'app/components/public-v2/sections/Hero/Hero.module.css'
+    if (out.includes(heroCss) && !PHASE8_PREMIUM_FILES.has(heroCss)) {
+      const diff = execSync(`git diff hero-v2-reference -- ${heroCss}`, {
+        encoding: 'utf8',
+        cwd: process.cwd(),
+      })
       expect(diff).toMatch(/\.titleLine/)
       expect(diff).toMatch(/line-height:\s*1\.18/)
     }

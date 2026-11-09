@@ -55,9 +55,10 @@
   display: block;
   width: 100%;
   height: auto;
-  aspect-ratio: 1;
+  aspect-ratio: 4 / 5;
   object-fit: cover;
-  object-position: center 18%;
+  /* Jf.jpg : visage + barbe complets dans le haut du cadre */
+  object-position: center 8%;
 }
 
 @media (prefers-reduced-motion: no-preference) {

@@ -1,23 +1,29 @@
+/*
+ * Scène collage Atelier Atlantique — Punch.
+ * Expression dominante, Thermo présent, DeskDot intégré.
+ * Région turquoise : calque Hero (pas ici).
+ */
+
 .stage {
   position: relative;
-  min-height: 16rem;
-  perspective: 1200px;
+  min-height: 19rem;
+  perspective: 1500px;
+  z-index: 1;
+  overflow: visible;
 }
 
 @media (min-width: 960px) {
   .stage {
-    min-height: 26rem;
+    min-height: 34rem;
   }
 }
 
 @media (max-width: 959px) {
   .stage {
-    min-height: 14rem;
-    order: 2;
+    min-height: 18.5rem;
   }
 }
 
-/* Couche parallaxe uniquement — pas de drift sur les captures */
 .float {
   --px: 0px;
   --py: 0px;
@@ -28,7 +34,6 @@
   will-change: transform;
 }
 
-/* Retour doux uniquement hors tracking pointeur */
 .floatReturning {
   transition: transform var(--dur-med) var(--ease-out);
 }
@@ -45,10 +50,12 @@
 }
 
 .floatSurface {
-  border-radius: var(--radius-lg);
+  border-radius: calc(var(--radius-md) + 0.2rem);
   overflow: hidden;
-  box-shadow: var(--shadow-lift);
-  border: 1px solid var(--color-line);
+  box-shadow:
+    0 22px 48px color-mix(in srgb, var(--color-ink) 16%, transparent),
+    0 2px 0 color-mix(in srgb, #fff 30%, transparent);
+  border: 1px solid color-mix(in srgb, var(--color-ink) 16%, transparent);
   background: var(--color-surface);
   width: 100%;
   height: 100%;
@@ -72,115 +79,96 @@
   transform: none;
 }
 
-/* Expression — dominant (Concept D) */
+/* Expression — dominante */
 .slotA {
-  width: 76%;
-  height: 12.5rem;
-  left: 0;
-  top: 6%;
-  z-index: 2;
-  --rot: -2.2deg;
+  width: 84%;
+  height: 13.75rem;
+  left: -1%;
+  top: 0;
+  z-index: 3;
+  --rot: -2deg;
   --enter-delay: 0ms;
 }
 
-/* Thermo — secondaire */
+/* Thermo — présence réelle */
 .slotB {
   width: 58%;
-  height: 9.5rem;
-  right: 0;
-  top: 40%;
-  z-index: 3;
-  --rot: 2.6deg;
+  height: 10.75rem;
+  right: -2%;
+  top: 38%;
+  z-index: 4;
+  --rot: 2.4deg;
   --enter-delay: 120ms;
 }
 
-/* DeskDot — tertiaire */
+/* DeskDot — intégré au bas de la scène */
 .slotC {
-  width: 44%;
-  height: 7.25rem;
-  left: 20%;
-  bottom: 2%;
-  z-index: 1;
+  width: 34%;
+  height: 9.25rem;
+  left: 26%;
+  bottom: -1%;
+  z-index: 5;
   --rot: -1deg;
   --enter-delay: 220ms;
 }
 
+.slotC .floatSurface {
+  border-radius: var(--radius-md);
+  box-shadow:
+    0 16px 36px color-mix(in srgb, var(--color-ink) 12%, transparent),
+    0 1px 0 color-mix(in srgb, #fff 25%, transparent);
+}
+
 .slotC .floatSurface img {
+  /* cover = zoom minimal pour remplir le cadre, sans bandes noires */
+  object-fit: cover;
   object-position: center center;
 }
 
 @media (min-width: 960px) {
   .slotA {
-    height: 15.5rem;
+    width: 87%;
+    height: 20rem;
+    left: -2%;
+    top: -1%;
   }
+
   .slotB {
-    height: 11.5rem;
+    width: 57%;
+    height: 13.75rem;
+    right: -3%;
+    top: 36%;
   }
+
   .slotC {
-    height: 9rem;
+    width: 32%;
+    height: 12.5rem;
+    left: 30%;
+    bottom: 0;
   }
 }
 
 @media (max-width: 959px) {
+  /* Composition mobile autonome : Expression pleine largeur, Thermo ancré bas-droite */
   .slotA {
-    width: 82%;
-    height: 9.5rem;
+    width: 92%;
+    height: 11.5rem;
+    left: 0;
+    top: 2%;
+    --rot: -1.2deg;
   }
+
   .slotB {
-    width: 64%;
-    height: 7.5rem;
+    width: 68%;
+    height: 8.75rem;
+    right: 0;
+    top: auto;
+    bottom: 6%;
+    --rot: 1.8deg;
   }
+
   .slotC {
     display: none;
-  }
-}
-
-.blob {
-  position: absolute;
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 0;
-}
-
-/* Mauve — coin haut-droit, hors du gros float A */
-.blobViolet {
-  width: 8rem;
-  height: 8rem;
-  right: 4%;
-  top: -0.35rem;
-  opacity: 0.62;
-  background: var(--color-accent);
-  filter: blur(2px);
-}
-
-/*
- * Corail — position Concept D (bas-gauche), peeker sous Expression / à côté de DeskDot.
- * Derrière les floats (z-index 0), silhouette bien visible + drift autonome.
- */
-.blobCoral {
-  width: 5.25rem;
-  height: 5.25rem;
-  left: 3%;
-  bottom: 8%;
-  opacity: 0.78;
-  background: var(--color-emphasis);
-}
-
-.blobFloating {
-  animation: heroBlobDrift 8s var(--ease-out) infinite alternate;
-}
-
-.blobCoral.blobFloating {
-  animation-delay: 1.2s;
-  animation-duration: 10s;
-}
-
-@keyframes heroBlobDrift {
-  from {
-    transform: translate(0, 0);
-  }
-  to {
-    transform: translate(10px, -14px);
   }
 }
 
@@ -191,10 +179,6 @@
     opacity: 1;
     transform: none;
     transition: none;
-  }
-
-  .blobFloating {
-    animation: none;
   }
 
   .floatReturning {

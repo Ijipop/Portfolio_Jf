@@ -48,6 +48,7 @@ export const WORK_COPY = {
   lead: 'Des projets réalisés pour des clients, mais aussi des logiciels que je développe de mon côté.',
   catalogLinkLabel: 'Voir toutes les réalisations →',
   catalogHref: '/portfolio/projets',
+  /** Conservé pour contexte interne ; non affiché dans l’UI True WOW. */
   selectionNote:
     'Sélection éditoriale temporaire pour la preview V2 — pas un second catalogue permanent.',
 } as const
@@ -75,13 +76,13 @@ export const WORK_FEATURES: readonly WorkFeature[] = [
     media: {
       kind: 'site',
       desktopSrc: '/img/portfolio/expression-lasalle-desktop.png',
-      desktopAlt: 'Aperçu desktop Expression LaSalle — preview interne, publication non autorisée',
+      desktopAlt: 'Aperçu du site Expression LaSalle sur ordinateur',
       phoneSrc: '/img/portfolio/expression-lasalle-phone.png',
-      phoneAlt: 'Aperçu mobile Expression LaSalle — preview interne, publication non autorisée',
+      phoneAlt: 'Aperçu du site Expression LaSalle sur téléphone',
     },
     ctas: [],
     legalNote:
-      'Présentation limitée au travail en cours — validation client requise avant usage public. Aucun lien public n’est proposé tant que le site n’est pas disponible.',
+      'Le site web est encore en finalisation — aucun lien public n’est proposé tant qu’il n’est pas disponible.',
     publishable: true,
   },
   {
@@ -99,9 +100,9 @@ export const WORK_FEATURES: readonly WorkFeature[] = [
     media: {
       kind: 'site',
       desktopSrc: '/img/portfolio/thermo-trappeur-desktop.png',
-      desktopAlt: 'Aperçu desktop Thermo-Trappeur — preview interne, publication non autorisée',
+      desktopAlt: 'Aperçu du site Thermo-Trappeur sur ordinateur',
       phoneSrc: '/img/portfolio/thermo-trappeur-phone.png',
-      phoneAlt: 'Aperçu mobile Thermo-Trappeur — preview interne, publication non autorisée',
+      phoneAlt: 'Aperçu du site Thermo-Trappeur sur téléphone',
     },
     ctas: [
       {
@@ -111,8 +112,7 @@ export const WORK_FEATURES: readonly WorkFeature[] = [
         external: true,
       },
     ],
-    legalNote:
-      'Marque et captures sujettes aux autorisations du client pour une diffusion publique.',
+    legalNote: 'Marque Thermo-Trappeur — site public du client.',
     publishable: true,
   },
   {

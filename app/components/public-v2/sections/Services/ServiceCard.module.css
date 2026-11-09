@@ -14,28 +14,34 @@
     background var(--dur-med);
 }
 
+/* Accents coin — géométrie unique ; opacités calibrées pour présence équivalente */
 .card::before {
   content: '';
   position: absolute;
-  inset: auto -20% -40% auto;
-  width: 9rem;
-  height: 9rem;
-  border-radius: 40% 60% 55% 45%;
-  opacity: 0.32;
+  inset: auto -18% -36% auto;
+  width: 10.75rem;
+  height: 10.75rem;
+  border-radius: 42% 58% 55% 45%;
+  opacity: 0.45;
   transition: transform var(--dur-slow) var(--ease-out);
   pointer-events: none;
 }
 
 .web::before {
-  background: var(--color-accent);
+  background: color-mix(in srgb, var(--color-accent) 88%, var(--color-ink));
+  /* Turquoise renforcé pour égaliser la présence optique */
+  opacity: 0.58;
 }
 
 .support::before {
   background: var(--color-emphasis);
+  opacity: 0.5;
 }
 
 .soft::before {
   background: var(--color-ink);
+  /* Pétrole déjà contrasté → légèrement plus doux pour égaliser */
+  opacity: 0.42;
 }
 
 .card:hover,

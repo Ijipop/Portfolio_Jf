@@ -1,17 +1,18 @@
 /**
- * IJIPOP public V2 — Pop Atelier Premium tokens.
+ * IJIPOP public V2 — Atelier Atlantique (expérience True WOW).
  * Scoped to [data-public-theme="pop-atelier"] only — never :root / html / body.
+ * Produits/demos hors ce thème conservent leur identité propre.
  */
 
 [data-public-theme='pop-atelier'] {
-  /* Brand palette (semantic) */
+  /* Brand palette — Atelier Atlantique */
   --color-bg: #faf7f0;
-  --color-ink: #17243a;
-  --color-accent: #7555e8;
-  --color-emphasis: #ff8066;
+  --color-ink: #1a3a3a;
+  --color-accent: #0f7c7c;
+  --color-emphasis: #c4a35a;
   --color-surface: #ffffff;
 
-  /* Compat aliases used by Concept D naming */
+  /* Compat aliases (anciens noms Concept D → nouveaux rôles sémantiques) */
   --color-violet: var(--color-accent);
   --color-coral: var(--color-emphasis);
 
@@ -20,14 +21,14 @@
   --color-ink-faint: color-mix(in srgb, var(--color-ink) 42%, transparent);
   --color-line: color-mix(in srgb, var(--color-ink) 12%, transparent);
   --color-line-strong: color-mix(in srgb, var(--color-ink) 22%, transparent);
-  --color-accent-soft: color-mix(in srgb, var(--color-accent) 14%, var(--color-bg));
-  --color-emphasis-soft: color-mix(in srgb, var(--color-emphasis) 16%, var(--color-bg));
-  --color-accent-deep: color-mix(in srgb, var(--color-accent) 82%, #0a0618);
-  --color-warm-wash: color-mix(in srgb, var(--color-emphasis) 6%, var(--color-bg));
+  --color-accent-soft: color-mix(in srgb, var(--color-accent) 12%, var(--color-bg));
+  --color-emphasis-soft: color-mix(in srgb, var(--color-emphasis) 18%, var(--color-bg));
+  --color-accent-deep: color-mix(in srgb, var(--color-accent) 78%, #062222);
+  --color-warm-wash: color-mix(in srgb, var(--color-ink) 3.5%, var(--color-bg));
   --color-success: #2f7d4a;
   --color-success-soft: color-mix(in srgb, var(--color-success) 16%, var(--color-bg));
   --color-on-accent: #ffffff;
-  --color-on-emphasis: #17243a;
+  --color-on-emphasis: #1a3a3a;
   --color-on-ink: #faf7f0;
 
   /* Type — next/font injects --font-v2-*; fallbacks always present */
@@ -58,11 +59,11 @@
 
   /* Elevation */
   --shadow-soft:
-    0 1px 2px color-mix(in srgb, var(--color-ink) 4%, transparent),
-    0 12px 32px color-mix(in srgb, var(--color-ink) 6%, transparent);
-  --shadow-lift: 0 18px 48px color-mix(in srgb, var(--color-ink) 10%, transparent);
+    0 1px 2px color-mix(in srgb, var(--color-ink) 5%, transparent),
+    0 14px 36px color-mix(in srgb, var(--color-ink) 7%, transparent);
+  --shadow-lift: 0 20px 52px color-mix(in srgb, var(--color-ink) 12%, transparent);
 
-  /* Motion knobs (overridable via lib/public-v2/motion.ts → inline style) */
+  /* Motion knobs */
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-spring: cubic-bezier(0.34, 1.4, 0.64, 1);
   --dur-fast: 180ms;

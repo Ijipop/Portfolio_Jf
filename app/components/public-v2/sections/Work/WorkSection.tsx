@@ -14,7 +14,7 @@ export type WorkSectionProps = {
 }
 
 /**
- * Sélection éditoriale Réalisations — esprit Concept D.
+ * Réalisations Atelier Atlantique — pièces maîtresses sur crème.
  * Pas un second catalogue ; catalogue complet via `copy.catalogHref`.
  */
 export default function WorkSection({
@@ -22,12 +22,14 @@ export default function WorkSection({
   features = WORK_FEATURES,
   className,
 }: WorkSectionProps) {
+  const root = [styles.atelier, className].filter(Boolean).join(' ')
+
   return (
     <Section
       id="pv2-realisations"
       variant="default"
       aria-labelledby="pv2-work-title"
-      className={className}
+      className={root}
       data-testid="pv2-work"
     >
       <Container>
@@ -43,7 +45,6 @@ export default function WorkSection({
             {copy.catalogLinkLabel}
           </a>
         </div>
-        <p className={styles.selectionNote}>{copy.selectionNote}</p>
         <ul className={styles.list}>
           {features.map((feature) => (
             <li key={feature.id}>

@@ -29,11 +29,14 @@ describe('Homepage read-only during Phase 6B2', () => {
       expect(allowedHeroGlyphFix.has(file)).toBe(true)
     }
 
-    if (out.includes('app/components/public-v2/sections/Hero/Hero.module.css')) {
-      const diff = execSync(
-        `git diff ${BASE_6B1} -- app/components/public-v2/sections/Hero/Hero.module.css`,
-        { encoding: 'utf8', cwd: process.cwd() },
-      )
+    // Ancien correctif glyph (6B2) : hors Phase 8 uniquement.
+    // Phase 8 Premium / Atelier Atlantique autorise une réécriture Hero complète.
+    const heroCss = 'app/components/public-v2/sections/Hero/Hero.module.css'
+    if (out.includes(heroCss) && !PHASE8_PREMIUM_FILES.has(heroCss)) {
+      const diff = execSync(`git diff ${BASE_6B1} -- ${heroCss}`, {
+        encoding: 'utf8',
+        cwd: process.cwd(),
+      })
       const added = diff
         .split(/\r?\n/)
         .filter((line) => line.startsWith('+') && !line.startsWith('+++'))

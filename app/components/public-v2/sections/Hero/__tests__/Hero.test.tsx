@@ -70,7 +70,7 @@ describe('Hero V2', () => {
 
     const deskdot = HERO_FLOATS.find((f) => f.id === 'deskdot')
     expect(deskdot?.publishable).toBe(true)
-    expect(deskdot?.src).toBe('/img/deskdot/deskdot2.png')
+    expect(deskdot?.src).toBe('/img/deskdot/deskdot1.png')
 
     const expression = HERO_FLOATS.find((f) => f.id === 'expression-lasalle')
     const thermo = HERO_FLOATS.find((f) => f.id === 'thermo-trappeur')

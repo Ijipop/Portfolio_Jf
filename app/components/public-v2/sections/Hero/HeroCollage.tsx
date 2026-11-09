@@ -12,12 +12,12 @@ const SLOT_CLASS: Record<HeroFloatMedia['slot'], string> = {
 
 const SLOT_DEPTH: Record<HeroFloatMedia['slot'], number> = {
   a: 1,
-  b: 2,
-  c: 3,
+  b: 2.2,
+  c: 2.6,
 }
 
-/** Amplitude Concept D — légère. */
-const PARALLAX = 7
+/** Amplitude présente — scène d’exposition, sans dérive. */
+const PARALLAX = 9
 
 export type HeroCollageProps = {
   floats: readonly HeroFloatMedia[]
@@ -125,18 +125,6 @@ export default function HeroCollage({ floats, reduceMotion, enhance }: HeroColla
           </div>
         </figure>
       ))}
-      <span
-        className={[styles.blob, styles.blobViolet, motionOn ? styles.blobFloating : '']
-          .filter(Boolean)
-          .join(' ')}
-        data-hero-blob="violet"
-      />
-      <span
-        className={[styles.blob, styles.blobCoral, motionOn ? styles.blobFloating : '']
-          .filter(Boolean)
-          .join(' ')}
-        data-hero-blob="coral"
-      />
     </div>
   )
 }

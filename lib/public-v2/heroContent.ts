@@ -38,27 +38,27 @@ export type HeroFloatMedia = {
  * Collage Hero — hiérarchie visuelle :
  * Expression (dominant) → Thermo (secondaire) → DeskDot (tertiaire).
  * SpaceTaker volontairement absent.
- * DeskDot : deskdot2.png retenu pour lisibilité des Dots à petite taille.
+ * DeskDot : deskdot1.png — anneau complet (tous les Dots visibles).
  */
 export const HERO_FLOATS: readonly HeroFloatMedia[] = [
   {
     id: 'expression-lasalle',
     slot: 'a',
     src: '/img/portfolio/expression-lasalle-desktop.png',
-    alt: 'Aperçu Expression LaSalle — preview interne, publication non autorisée',
+    alt: 'Aperçu du site Expression LaSalle sur ordinateur',
     publishable: true,
   },
   {
     id: 'thermo-trappeur',
     slot: 'b',
     src: '/img/portfolio/thermo-trappeur-desktop.png',
-    alt: 'Aperçu Thermo-Trappeur — preview interne, publication non autorisée',
+    alt: 'Aperçu du site Thermo-Trappeur sur ordinateur',
     publishable: true,
   },
   {
     id: 'deskdot',
     slot: 'c',
-    src: '/img/deskdot/deskdot2.png',
+    src: '/img/deskdot/deskdot1.png',
     alt: 'Capture d’écran de DeskDot, anneau de raccourcis pour Windows',
     publishable: true,
   },

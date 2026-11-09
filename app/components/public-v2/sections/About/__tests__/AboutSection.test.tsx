@@ -44,7 +44,7 @@ describe('AboutSection V2', () => {
     )
 
     const photo = screen.getByRole('img', { name: ABOUT_COPY.photo.alt })
-    expect(photo).toHaveAttribute('src', '/img/jf-avatar.jpg')
+    expect(photo).toHaveAttribute('src', '/img/Jf.jpg')
 
     expect(document.getElementById('pv2-a-propos')).toBeTruthy()
     expect(document.body.textContent).not.toMatch(/sandbox|contenu provisoire|parcours contact/i)
@@ -59,6 +59,6 @@ describe('AboutSection V2', () => {
 
     expect(section).not.toMatch(/<form|from ['"]@prisma/)
     expect(content).not.toMatch(/AVC|enfants|médical|from ['"]@prisma/)
-    expect(content).toMatch(/jf-avatar\.jpg/)
+    expect(content).toMatch(/Jf\.jpg/)
   })
 })
