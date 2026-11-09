@@ -10,6 +10,13 @@ const ACCENT = '#10b981'
 const ACCENT_HOVER = '#34d399'
 const SCREENSHOT = '/imgs/images/LeTraducteur.png'
 
+const CHIP_KEYS = [
+  'traducteur.chipLocal',
+  'traducteur.chipFree',
+  'traducteur.chipNoSub',
+  'traducteur.chipPrivate',
+] as const
+
 const STEP_KEYS = [
   { title: 'traducteur.step1Title', body: 'traducteur.step1Body' },
   { title: 'traducteur.step2Title', body: 'traducteur.step2Body' },
@@ -50,17 +57,26 @@ function TraducteurLandingBody({ downloads }: TraducteurLandingClientProps) {
           <div className={styles.heroCopy}>
             <h1 className={styles.brand}>{t('traducteur.title')}</h1>
             <p className={styles.lead}>{t('traducteur.lead')}</p>
-            {downloadButton}
+            <ul className={styles.chips} aria-label={t('traducteur.title')}>
+              {CHIP_KEYS.map((key) => (
+                <li key={key} className={styles.chip}>
+                  {t(key)}
+                </li>
+              ))}
+            </ul>
+            <div className={styles.heroCta}>{downloadButton}</div>
           </div>
           <figure className={styles.heroVisual}>
-            {/* eslint-disable-next-line @next/next/no-img-element -- capture locale, même approche DeskDot */}
-            <img
-              src={SCREENSHOT}
-              alt={t('traducteur.screenshotAlt')}
-              width={640}
-              height={400}
-              decoding="async"
-            />
+            <div className={styles.heroFrame}>
+              {/* eslint-disable-next-line @next/next/no-img-element -- capture locale, même approche DeskDot */}
+              <img
+                src={SCREENSHOT}
+                alt={t('traducteur.screenshotAlt')}
+                width={640}
+                height={400}
+                decoding="async"
+              />
+            </div>
           </figure>
         </header>
 
@@ -72,9 +88,9 @@ function TraducteurLandingBody({ downloads }: TraducteurLandingClientProps) {
             {STEP_KEYS.map((key, index) => (
               <li key={key.title} className={styles.step}>
                 <span className={styles.stepNum} aria-hidden>
-                  {index + 1}
+                  {String(index + 1).padStart(2, '0')}
                 </span>
-                <div>
+                <div className={styles.stepBodyWrap}>
                   <h3 className={styles.stepTitle}>{t(key.title)}</h3>
                   <p className={styles.stepBody}>{t(key.body)}</p>
                 </div>
@@ -87,10 +103,10 @@ function TraducteurLandingBody({ downloads }: TraducteurLandingClientProps) {
           <h2 id="traducteur-audience" className={styles.sectionTitle}>
             {t('traducteur.audienceTitle')}
           </h2>
-          <ul className={styles.plainList}>
+          <ul className={styles.audienceGrid}>
             {AUDIENCE_KEYS.map((key) => (
-              <li key={key}>
-                <span className={styles.dot} aria-hidden />
+              <li key={key} className={styles.audienceCard}>
+                <span className={styles.audienceMark} aria-hidden />
                 <span>{t(key)}</span>
               </li>
             ))}
@@ -101,10 +117,10 @@ function TraducteurLandingBody({ downloads }: TraducteurLandingClientProps) {
           <h2 id="traducteur-formats" className={styles.sectionTitle}>
             {t('traducteur.formatsTitle')}
           </h2>
-          <ul className={styles.plainList}>
+          <ul className={styles.formatList}>
             {FORMAT_KEYS.map((key) => (
-              <li key={key}>
-                <span className={styles.dot} aria-hidden />
+              <li key={key} className={styles.formatItem}>
+                <span className={styles.formatDot} aria-hidden />
                 <span>{t(key)}</span>
               </li>
             ))}
@@ -123,16 +139,19 @@ function TraducteurLandingBody({ downloads }: TraducteurLandingClientProps) {
         </aside>
 
         <section className={styles.downloadSection} aria-labelledby="traducteur-download">
-          <h2 id="traducteur-download" className={styles.sectionTitle}>
-            {t('traducteur.downloadTitle')}
-          </h2>
-          {downloadButton}
-          <nav className={styles.footerLinks} aria-label={t('traducteur.moreLinks')}>
-            <Link href={downloads.github} target="_blank" rel="noopener noreferrer">
-              {t('traducteur.github')}
-            </Link>
-            <Link href="/portfolio/projets?type=logiciel">{t('traducteur.otherSoftware')}</Link>
-          </nav>
+          <div className={styles.downloadCard}>
+            <h2 id="traducteur-download" className={styles.downloadTitle}>
+              {t('traducteur.downloadTitle')}
+            </h2>
+            <p className={styles.downloadLead}>{t('traducteur.lead')}</p>
+            {downloadButton}
+            <nav className={styles.footerLinks} aria-label={t('traducteur.moreLinks')}>
+              <Link href={downloads.github} target="_blank" rel="noopener noreferrer">
+                {t('traducteur.github')}
+              </Link>
+              <Link href="/portfolio/projets?type=logiciel">{t('traducteur.otherSoftware')}</Link>
+            </nav>
+          </div>
         </section>
       </div>
     </div>

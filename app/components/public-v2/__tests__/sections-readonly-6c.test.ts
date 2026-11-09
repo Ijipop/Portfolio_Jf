@@ -1,6 +1,7 @@
 import { execSync } from 'node:child_process'
 import { describe, expect, it } from 'vitest'
 import { APPROVED_CLIENT_MEDIA_FILES } from './approved-client-media-allowlist'
+import { PHASE8_PREMIUM_FILES } from './phase8-premium-allowlist'
 
 /** HEAD après commit 6B10 Timelendr. */
 const BASE_6C = 'e0a4e4cd1612ae15480df8a0e927575ce0fc67c2'
@@ -35,7 +36,7 @@ describe('Approved surfaces read-only during Phase 6C', () => {
       .filter(Boolean)
       .filter((f) => {
         const name = f.replace(/\\/g, '/')
-        return !ALLOWED_6C.has(name) && !APPROVED_CLIENT_MEDIA_FILES.has(name)
+        return !ALLOWED_6C.has(name) && !APPROVED_CLIENT_MEDIA_FILES.has(name) && !PHASE8_PREMIUM_FILES.has(name)
       })
 
     expect(out).toEqual([])

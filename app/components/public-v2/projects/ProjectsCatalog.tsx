@@ -140,14 +140,23 @@ export default function ProjectsCatalog({
     )
   }
 
+  const resultsLabel =
+    !error && visible.length > 0
+      ? visible.length === 1
+        ? PROJECTS_COPY.resultsCountOne
+        : PROJECTS_COPY.resultsCountMany.replace('{count}', String(visible.length))
+      : null
+
   return (
     <section className={styles.section} data-testid="pv2-projects-catalog" aria-labelledby="pv2-projects-title">
       <Container>
-        <p className={styles.eyebrow}>{PROJECTS_COPY.eyebrow}</p>
-        <Heading as="h1" id="pv2-projects-title" variant="section" className={styles.title}>
-          {PROJECTS_COPY.title}
-        </Heading>
-        <p className={styles.lead}>{PROJECTS_COPY.lead}</p>
+        <header className={styles.intro}>
+          <p className={styles.eyebrow}>{PROJECTS_COPY.eyebrow}</p>
+          <Heading as="h1" id="pv2-projects-title" variant="section" className={styles.title}>
+            {PROJECTS_COPY.title}
+          </Heading>
+          <p className={styles.lead}>{PROJECTS_COPY.lead}</p>
+        </header>
 
         {error ? (
           <p className={`${styles.stateBox} ${styles.stateBoxError}`} role="alert">
@@ -155,53 +164,66 @@ export default function ProjectsCatalog({
           </p>
         ) : null}
 
-        <div className={styles.filters} role="group" aria-label={PROJECTS_COPY.title}>
-          <button
-            type="button"
-            className={styles.filterBtn}
-            aria-pressed={selectedType === 'web'}
-            onClick={() => handleTypeChange('web')}
-          >
-            {PROJECTS_COPY.typeWeb}
-          </button>
-          <button
-            type="button"
-            className={styles.filterBtn}
-            aria-pressed={selectedType === 'logiciel'}
-            onClick={() => handleTypeChange('logiciel')}
-          >
-            {PROJECTS_COPY.typeSoftware}
-          </button>
-        </div>
+        <div className={styles.filterBar}>
+          <div className={styles.filterBarRow}>
+            <div className={styles.segmentGroup} role="group" aria-label={PROJECTS_COPY.title}>
+              <button
+                type="button"
+                className={styles.segmentBtn}
+                aria-pressed={selectedType === 'web'}
+                onClick={() => handleTypeChange('web')}
+              >
+                {PROJECTS_COPY.typeWeb}
+              </button>
+              <button
+                type="button"
+                className={styles.segmentBtn}
+                aria-pressed={selectedType === 'logiciel'}
+                onClick={() => handleTypeChange('logiciel')}
+              >
+                {PROJECTS_COPY.typeSoftware}
+              </button>
+            </div>
 
-        {selectedType === 'web' ? (
-          <div className={styles.filters} role="group" aria-label={PROJECTS_COPY.audienceProfessional}>
-            <button
-              type="button"
-              className={styles.filterBtn}
-              aria-pressed={audience === 'professional'}
-              onClick={() => setAudience('professional')}
-            >
-              {PROJECTS_COPY.audienceProfessional}
-            </button>
-            <button
-              type="button"
-              className={styles.filterBtn}
-              aria-pressed={audience === 'personal'}
-              onClick={() => setAudience('personal')}
-            >
-              {PROJECTS_COPY.audiencePersonal}
-            </button>
+            {selectedType === 'web' ? (
+              <div
+                className={styles.segmentGroup}
+                role="group"
+                aria-label={PROJECTS_COPY.audienceProfessional}
+              >
+                <button
+                  type="button"
+                  className={styles.segmentBtn}
+                  aria-pressed={audience === 'professional'}
+                  onClick={() => setAudience('professional')}
+                >
+                  {PROJECTS_COPY.audienceProfessional}
+                </button>
+                <button
+                  type="button"
+                  className={styles.segmentBtn}
+                  aria-pressed={audience === 'personal'}
+                  onClick={() => setAudience('personal')}
+                >
+                  {PROJECTS_COPY.audiencePersonal}
+                </button>
+              </div>
+            ) : null}
           </div>
-        ) : null}
 
-        {selectedType === 'web' ? (
-          <p className={styles.audienceLead}>
-            {audience === 'personal'
-              ? PROJECTS_COPY.audiencePersonalLead
-              : PROJECTS_COPY.audienceProfessionalLead}
-          </p>
-        ) : null}
+          {selectedType === 'web' || resultsLabel ? (
+            <div className={styles.filterMeta}>
+              {selectedType === 'web' ? (
+                <p className={styles.audienceLead}>
+                  {audience === 'personal'
+                    ? PROJECTS_COPY.audiencePersonalLead
+                    : PROJECTS_COPY.audienceProfessionalLead}
+                </p>
+              ) : null}
+              {resultsLabel ? <p className={styles.resultsCount}>{resultsLabel}</p> : null}
+            </div>
+          ) : null}
+        </div>
 
         {!error && visible.length === 0 ? (
           <div className={styles.stateBox}>

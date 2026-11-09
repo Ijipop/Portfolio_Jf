@@ -1,6 +1,7 @@
 import { execSync } from 'node:child_process'
 import { describe, expect, it } from 'vitest'
 import { APPROVED_CLIENT_MEDIA_FILES } from './approved-client-media-allowlist'
+import { PHASE8_PREMIUM_FILES } from './phase8-premium-allowlist'
 
 /** Commit Phase 6B1 — accueil figé pour la Phase 6B2. */
 const BASE_6B1 = '0d530a36aae3344f6fcff8b5f944df074f7f2cf3'
@@ -21,6 +22,7 @@ describe('Homepage read-only during Phase 6B2', () => {
       'lib/public-v2/servicesContent.ts',
       'app/components/public-v2/sections/Services/__tests__/ServicesSection.test.tsx',
       ...APPROVED_CLIENT_MEDIA_FILES,
+      ...PHASE8_PREMIUM_FILES,
     ])
 
     for (const file of out) {

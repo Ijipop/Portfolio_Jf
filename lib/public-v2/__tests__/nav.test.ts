@@ -7,6 +7,7 @@ import {
   PUBLIC_V2_SERVICES_HREF,
   getPublicV2Cta,
   getPublicV2NavItems,
+  isPublicV2NavItemActive,
   resolvePublicV2Href,
 } from '../nav'
 
@@ -50,5 +51,15 @@ describe('public-v2 nav config', () => {
     expect(items.map((i) => i.href)).toEqual(
       getPublicV2NavItems('/v2-design-preview').map((i) => i.href),
     )
+  })
+
+  it('détecte l’entrée de nav active depuis le pathname', () => {
+    const about = PUBLIC_V2_NAV_ITEMS.find((i) => i.id === 'about')!
+    const contact = PUBLIC_V2_NAV_ITEMS.find((i) => i.id === 'contact')!
+    const services = PUBLIC_V2_NAV_ITEMS.find((i) => i.id === 'services')!
+    expect(isPublicV2NavItemActive(about, '/portfolio/a-propos')).toBe(true)
+    expect(isPublicV2NavItemActive(contact, '/portfolio/contact/merci')).toBe(true)
+    expect(isPublicV2NavItemActive(services, '/')).toBe(true)
+    expect(isPublicV2NavItemActive(about, '/portfolio/projets')).toBe(false)
   })
 })

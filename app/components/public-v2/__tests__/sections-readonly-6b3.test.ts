@@ -1,6 +1,7 @@
 import { execSync } from 'node:child_process'
 import { describe, expect, it } from 'vitest'
 import { APPROVED_CLIENT_MEDIA_FILES } from './approved-client-media-allowlist'
+import { PHASE8_PREMIUM_FILES } from './phase8-premium-allowlist'
 
 /** Commit Phase 6B2 — catalogue figé pour la Phase 6B3. */
 const BASE_6B2 = '0236eab804c4b37976ee1083878dda8c2521ba30'
@@ -21,6 +22,7 @@ describe('Homepage + catalog read-only during Phase 6B3', () => {
       'lib/public-v2/servicesContent.ts',
       'app/components/public-v2/sections/Services/__tests__/ServicesSection.test.tsx',
       ...APPROVED_CLIENT_MEDIA_FILES,
+      ...PHASE8_PREMIUM_FILES,
     ])
     for (const file of out) {
       expect(allowed.has(file)).toBe(true)

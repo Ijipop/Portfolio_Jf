@@ -97,7 +97,11 @@
   color: var(--color-ink);
 }
 
-/* Switches MUI — scoped Contact V2 only (pas Support / ThemeWrapper) */
+/*
+ * Switches Contact V2 — thumb centré DANS le rail.
+ * Spécificité > Emotion sizeSmall (sinon pad 7 / track 10px restent).
+ * root 46×26, pad 0 ; thumb 20 ; switchBase pad 3 ; translateX 20.
+ */
 .briefScope :global(.MuiFormControlLabel-root) {
   align-items: center;
   gap: var(--space-2);
@@ -113,51 +117,65 @@
   color: var(--color-ink);
 }
 
-.briefScope :global(.MuiSwitch-root) {
-  width: 52px;
-  height: 34px;
-  padding: 7px;
+.briefScope :global(.MuiFormControlLabel-root .MuiSwitch-root.MuiSwitch-sizeSmall) {
+  width: 46px !important;
+  height: 26px !important;
+  padding: 0 !important;
+  overflow: visible;
+  box-sizing: border-box;
   flex-shrink: 0;
 }
 
-.briefScope :global(.MuiSwitch-switchBase) {
-  padding: 8px;
+.briefScope :global(.MuiFormControlLabel-root .MuiSwitch-root.MuiSwitch-sizeSmall .MuiSwitch-switchBase) {
+  padding: 3px !important;
+  top: 0 !important;
+  left: 0 !important;
   color: var(--color-surface);
 }
 
-.briefScope :global(.MuiSwitch-switchBase.Mui-checked) {
-  transform: translateX(16px);
+.briefScope :global(.MuiFormControlLabel-root .MuiSwitch-root.MuiSwitch-sizeSmall .MuiSwitch-switchBase.Mui-checked) {
+  transform: translateX(20px) !important;
   color: var(--color-surface);
 }
 
-.briefScope :global(.MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track) {
+.briefScope :global(.MuiFormControlLabel-root .MuiSwitch-root.MuiSwitch-sizeSmall .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track) {
   background-color: var(--color-accent);
   opacity: 1;
-  border: 1px solid color-mix(in srgb, var(--color-accent) 55%, var(--color-ink));
 }
 
-.briefScope :global(.MuiSwitch-thumb) {
-  width: 18px;
-  height: 18px;
+.briefScope :global(.MuiFormControlLabel-root .MuiSwitch-root.MuiSwitch-sizeSmall .MuiSwitch-thumb) {
+  width: 20px !important;
+  height: 20px !important;
+  box-sizing: border-box;
+  border: none;
   box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--color-ink) 14%, transparent),
     0 1px 2px color-mix(in srgb, var(--color-ink) 18%, transparent);
   background-color: var(--color-surface);
-  border: 1px solid var(--color-line-strong);
 }
 
-.briefScope :global(.MuiSwitch-switchBase.Mui-checked .MuiSwitch-thumb) {
-  border-color: color-mix(in srgb, var(--color-accent) 40%, var(--color-ink));
+.briefScope :global(.MuiFormControlLabel-root .MuiSwitch-root.MuiSwitch-sizeSmall .MuiSwitch-switchBase.Mui-checked .MuiSwitch-thumb) {
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--color-accent) 35%, var(--color-ink)),
+    0 1px 2px color-mix(in srgb, var(--color-ink) 18%, transparent);
 }
 
-.briefScope :global(.MuiSwitch-track) {
+.briefScope :global(.MuiFormControlLabel-root .MuiSwitch-root.MuiSwitch-sizeSmall .MuiSwitch-track) {
+  position: absolute !important;
+  left: 0 !important;
+  right: 0 !important;
+  top: 3px !important;
+  bottom: 3px !important;
+  width: auto !important;
+  height: auto !important;
   border-radius: var(--radius-pill);
+  border: none;
   background-color: color-mix(in srgb, var(--color-ink) 22%, var(--color-line));
   opacity: 1;
-  border: 1px solid var(--color-line-strong);
 }
 
-.briefScope :global(.MuiSwitch-switchBase.Mui-focusVisible),
-.briefScope :global(.Mui-focusVisible .MuiSwitch-thumb) {
+.briefScope :global(.MuiFormControlLabel-root .MuiSwitch-root .MuiSwitch-switchBase.Mui-focusVisible .MuiSwitch-thumb),
+.briefScope :global(.MuiFormControlLabel-root .Mui-focusVisible .MuiSwitch-thumb) {
   box-shadow: var(--focus-ring);
 }
 

@@ -1,6 +1,7 @@
 import { execSync } from 'node:child_process'
 import { describe, expect, it } from 'vitest'
 import { APPROVED_CLIENT_MEDIA_FILES } from './approved-client-media-allowlist'
+import { PHASE8_PREMIUM_FILES } from './phase8-premium-allowlist'
 
 /** HEAD après commit 6B4 À propos. */
 const BASE_6B5 = 'c22c1f548d418ffe34426d48ca0bba3570475cc6'
@@ -31,7 +32,7 @@ describe('Homepage + catalog + contact + about read-only during Phase 6B5', () =
       .filter(Boolean)
       .filter((f) => {
         const name = f.replace(/\\/g, '/')
-        return !ALLOWED_6B5.has(name) && !APPROVED_CLIENT_MEDIA_FILES.has(name)
+        return !ALLOWED_6B5.has(name) && !APPROVED_CLIENT_MEDIA_FILES.has(name) && !PHASE8_PREMIUM_FILES.has(name)
       })
 
     expect(out).toEqual([])

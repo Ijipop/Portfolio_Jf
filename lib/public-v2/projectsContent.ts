@@ -19,6 +19,9 @@ export const PROJECTS_COPY = {
   emptyWeb: 'Aucun site web à afficher pour le moment.',
   emptySoftware: 'Aucun logiciel à afficher pour le moment.',
   comingSoon: 'D’autres réalisations s’ajouteront ici au fil des mandats.',
+  /** Compteur discret barre de filtres — `{count}` remplacé à l’affichage. */
+  resultsCountOne: '1 réalisation',
+  resultsCountMany: '{count} réalisations',
   loading: 'Chargement des projets…',
   errorLoad: 'Erreur lors du chargement des projets.',
   errorNetwork: 'Erreur de connexion.',

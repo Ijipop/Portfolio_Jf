@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, useState } from 'react'
+import { useCallback, useId, useMemo, useState } from 'react'
 import styles from './DeskDotLanding.module.css'
 
 type DeskDotPhotoStackProps = {
@@ -10,57 +10,58 @@ type DeskDotPhotoStackProps = {
 }
 
 export default function DeskDotPhotoStack({ images, ariaLabel, hint }: DeskDotPhotoStackProps) {
-  const [order, setOrder] = useState<string[]>(() => [...images])
+  const baseId = useId()
+  const gallery = useMemo(() => images.filter(Boolean), [images])
+  const [selected, setSelected] = useState(0)
 
-  const cycleFront = useCallback(() => {
-    setOrder((prev) => {
-      if (prev.length < 2) return prev
-      const [first, ...rest] = prev
-      return [...rest, first]
-    })
+  const select = useCallback((index: number) => {
+    setSelected(index)
   }, [])
 
-  if (order.length === 0) return null
+  if (gallery.length === 0) return null
 
-  const depth = order.length
-  const peekX = 8
-  const peekY = 6
-  const peekRotate = 2
-  const stackPadX = (depth - 1) * peekX
-  const stackPadY = (depth - 1) * peekY
+  const activeIndex = Math.min(selected, gallery.length - 1)
+  const heroSrc = gallery[activeIndex]
 
   return (
-    <div className={styles.photoStackWrap}>
-      <div
-        className={styles.photoStack}
-        style={{ paddingRight: stackPadX, paddingBottom: stackPadY }}
-        role="group"
-        aria-label={ariaLabel}
-      >
-        {order.map((src, i) => {
-          const isTop = i === 0
-          return (
-            <button
-              key={src}
-              type="button"
-              className={styles.photoStackCard}
-              style={{
-                zIndex: depth - i,
-                transform: `translate(${i * peekX}px, ${i * peekY}px) rotate(${i * peekRotate}deg)`,
-                pointerEvents: isTop ? 'auto' : 'none',
-              }}
-              onClick={isTop ? cycleFront : undefined}
-              tabIndex={isTop ? 0 : -1}
-              aria-hidden={!isTop}
-              aria-label={isTop ? hint : undefined}
-            >
-              {/* eslint-disable-next-line @next/next/no-img-element -- assets locaux /img/deskdot */}
-              <img src={src} alt="" decoding="async" draggable={false} />
-            </button>
-          )
-        })}
+    <div className={styles.gallery}>
+      <div className={styles.galleryLayout} role="group" aria-label={ariaLabel}>
+        <figure className={styles.galleryHero} aria-live="polite">
+          {/* eslint-disable-next-line @next/next/no-img-element -- assets locaux /img/deskdot */}
+          <img
+            src={heroSrc}
+            alt=""
+            decoding="async"
+            draggable={false}
+            id={`${baseId}-hero`}
+          />
+        </figure>
+
+        <div className={styles.galleryThumbs} role="list">
+          {gallery.map((src, index) => {
+            const isActive = index === activeIndex
+            return (
+              <button
+                key={src}
+                type="button"
+                role="listitem"
+                className={
+                  isActive ? `${styles.galleryThumb} ${styles.galleryThumbActive}` : styles.galleryThumb
+                }
+                aria-pressed={isActive}
+                aria-current={isActive ? 'true' : undefined}
+                aria-label={`${hint} (${index + 1}/${gallery.length})`}
+                aria-controls={`${baseId}-hero`}
+                onClick={() => select(index)}
+              >
+                {/* eslint-disable-next-line @next/next/no-img-element -- assets locaux /img/deskdot */}
+                <img src={src} alt="" decoding="async" draggable={false} />
+              </button>
+            )
+          })}
+        </div>
       </div>
-      <p className={styles.photoStackHint}>{hint}</p>
+      <p className={styles.galleryHint}>{hint}</p>
     </div>
   )
 }

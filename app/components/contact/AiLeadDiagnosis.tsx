@@ -3,11 +3,11 @@
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome'
 import Box from '@mui/material/Box'
 import Alert from '@mui/material/Alert'
+import Button from '@mui/material/Button'
 import Chip from '@mui/material/Chip'
 import CircularProgress from '@mui/material/CircularProgress'
 import Divider from '@mui/material/Divider'
 import Typography from '@mui/material/Typography'
-import CTAButton from '@/components/shared/CTAButton'
 import { useLanguage } from '@/contexts/LanguageContext'
 import type { ProjectWebBriefState } from './ProjectWebBriefSection'
 import { useEffect, useMemo, useState } from 'react'
@@ -194,17 +194,28 @@ export default function AiLeadDiagnosis({
         </Box>
       </Box>
 
-      <CTAButton
+      {/* Bouton MUI neutre — pas de CTAButton/AdvancedTheme (Contact V2 hors ThemeWrapper). */}
+      <Button
         type="button"
-        variant="outline"
+        variant="outlined"
         size="small"
         fullWidth
         onClick={handleAnalyze}
         disabled={!canAnalyze}
         startIcon={isLoading ? <CircularProgress size={18} color="inherit" /> : <AutoAwesomeIcon />}
+        sx={{
+          textTransform: 'none',
+          fontWeight: 700,
+          borderColor: `${textColor}55`,
+          color: textColor,
+          '&:hover': {
+            borderColor: textColor,
+            backgroundColor: `${textColor}0F`,
+          },
+        }}
       >
         {isLoading ? t('contact.ai.loading') : t('contact.ai.button')}
-      </CTAButton>
+      </Button>
 
       {disabledReason && !isLoading && (
         <Typography variant="caption" sx={{ display: 'block', color: textColor, opacity: 0.68, mt: 1 }}>

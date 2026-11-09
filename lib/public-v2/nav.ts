@@ -85,3 +85,19 @@ export function getPublicV2Cta(pathname: string) {
 export function getPublicV2BrandHomeHref(pathname: string): string {
   return resolvePublicV2Href(PUBLIC_V2_BRAND.homeHref, pathname)
 }
+
+/** État actif de nav — dérivé du pathname serveur (pas de window). */
+export function isPublicV2NavItemActive(item: PublicV2NavItem, pathname: string): boolean {
+  switch (item.id) {
+    case 'services':
+      return pathname === '/' || pathname === ''
+    case 'realisations':
+      return pathname === '/portfolio/projets' || pathname.startsWith('/portfolio/projets/')
+    case 'about':
+      return pathname === '/portfolio/a-propos' || pathname.startsWith('/portfolio/a-propos/')
+    case 'contact':
+      return pathname === '/portfolio/contact' || pathname.startsWith('/portfolio/contact/')
+    default:
+      return false
+  }
+}

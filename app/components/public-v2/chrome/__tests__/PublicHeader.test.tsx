@@ -68,4 +68,14 @@ describe('public-v2 chrome', () => {
     expect(details).not.toHaveAttribute('open')
     expect(summary).toHaveFocus()
   })
+
+  it('marque À propos comme page courante sur /portfolio/a-propos', () => {
+    render(
+      <PublicThemeRoot>
+        <PublicHeader pathname="/portfolio/a-propos" />
+      </PublicThemeRoot>,
+    )
+    const aboutLinks = screen.getAllByRole('link', { name: 'À propos' })
+    expect(aboutLinks.some((l) => l.getAttribute('aria-current') === 'page')).toBe(true)
+  })
 })

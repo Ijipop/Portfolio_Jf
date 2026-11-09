@@ -10,22 +10,26 @@ export default function AboutPageClient() {
     <div className={styles.page}>
       <Container>
         <header className={styles.header}>
-          <Heading as="h1" variant="section">
+          <p className={styles.eyebrow}>Portrait</p>
+          <Heading as="h1" variant="section" className={styles.pageTitle}>
             {c.title}
           </Heading>
         </header>
 
         <section className={styles.identity} aria-labelledby="about-identity-name">
-          <div className={styles.portraitFrame}>
-            <Image
-              className={styles.portrait}
-              src={c.portrait.src}
-              alt={c.portrait.alt}
-              width={c.portrait.width}
-              height={c.portrait.height}
-              priority
-              sizes="(max-width: 768px) 80vw, 288px"
-            />
+          <div className={styles.portraitStage}>
+            <div className={styles.portraitGlow} aria-hidden />
+            <div className={styles.portraitFrame}>
+              <Image
+                className={styles.portrait}
+                src={c.portrait.src}
+                alt={c.portrait.alt}
+                width={c.portrait.width}
+                height={c.portrait.height}
+                priority
+                sizes="(max-width: 768px) 80vw, 320px"
+              />
+            </div>
           </div>
           <div className={styles.identityCopy}>
             <h2 id="about-identity-name" className={styles.identityName}>
@@ -36,57 +40,72 @@ export default function AboutPageClient() {
           </div>
         </section>
 
-        <section className={styles.section} aria-labelledby="about-story-title">
-          <h2 id="about-story-title" className={styles.sectionTitle}>
-            {c.storyTitle}
-          </h2>
-          {c.storyParagraphs.map((paragraph) => (
-            <p key={paragraph.slice(0, 48)} className={styles.sectionBody}>
-              {paragraph}
-            </p>
-          ))}
+        <section className={styles.storySection} aria-labelledby="about-story-title">
+          <div className={styles.storyPanel}>
+            <h2 id="about-story-title" className={styles.storyTitle}>
+              {c.storyTitle}
+            </h2>
+            {c.storyParagraphs.map((paragraph, index) => (
+              <p
+                key={paragraph.slice(0, 48)}
+                className={[
+                  styles.storyBody,
+                  index === c.storyParagraphs.length - 1 ? styles.storyClosing : '',
+                ]
+                  .filter(Boolean)
+                  .join(' ')}
+              >
+                {paragraph}
+              </p>
+            ))}
+          </div>
         </section>
 
-        <section className={styles.section} aria-labelledby="about-working-title">
+        <section className={styles.workingSection} aria-labelledby="about-working-title">
           <h2 id="about-working-title" className={styles.sectionTitle}>
             {c.workingTitle}
           </h2>
-          {c.workingParagraphs.map((paragraph) => (
-            <p key={paragraph.slice(0, 48)} className={styles.sectionBody}>
-              {paragraph}
-            </p>
-          ))}
+          <div className={styles.workingGrid}>
+            {c.workingParagraphs.map((paragraph) => (
+              <p key={paragraph.slice(0, 48)} className={styles.workingBody}>
+                {paragraph}
+              </p>
+            ))}
+          </div>
         </section>
 
-        <section className={styles.section} aria-labelledby="about-formation-title">
-          <h2 id="about-formation-title" className={styles.sectionTitle}>
-            {c.formationTitle}
-          </h2>
-          <ul className={styles.list}>
-            {c.formationItems.map((item) => (
-              <li key={item}>{item}</li>
-            ))}
-          </ul>
-        </section>
+        <div className={styles.metaBlock}>
+          <section className={styles.formationCard} aria-labelledby="about-formation-title">
+            <h2 id="about-formation-title" className={styles.metaTitle}>
+              {c.formationTitle}
+            </h2>
+            <ul className={styles.list}>
+              {c.formationItems.map((item) => (
+                <li key={item}>{item}</li>
+              ))}
+            </ul>
+          </section>
 
-        <section className={styles.toolsSection} aria-labelledby="about-tools-title">
-          <h2 id="about-tools-title" className={styles.toolsTitle}>
-            {c.toolsTitle}
-          </h2>
-          <ul className={styles.tools}>
-            {ABOUT_PAGE_SKILLS.map((skill) => (
-              <li key={skill} className={styles.tool}>
-                {skill}
-              </li>
-            ))}
-          </ul>
-        </section>
+          <section className={styles.toolsCard} aria-labelledby="about-tools-title">
+            <h2 id="about-tools-title" className={styles.toolsTitle}>
+              {c.toolsTitle}
+            </h2>
+            <ul className={styles.tools}>
+              {ABOUT_PAGE_SKILLS.map((skill) => (
+                <li key={skill} className={styles.tool}>
+                  {skill}
+                </li>
+              ))}
+            </ul>
+          </section>
+        </div>
 
         <section className={styles.ctaBand} aria-labelledby="about-cta-title">
-          <h2 id="about-cta-title" className={styles.sectionTitle}>
+          <div className={styles.ctaAccent} aria-hidden />
+          <h2 id="about-cta-title" className={styles.ctaTitle}>
             {c.ctaTitle}
           </h2>
-          <p className={styles.sectionBody}>{c.ctaBody}</p>
+          <p className={styles.ctaBody}>{c.ctaBody}</p>
           <div className={styles.ctaActions}>
             <Button href={c.ctaContactHref} variant="primary">
               {c.ctaContact}
