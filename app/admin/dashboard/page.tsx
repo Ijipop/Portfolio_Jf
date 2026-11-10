@@ -409,9 +409,9 @@ export default function AdminDashboard() {
       setError('Type de fichier non autorisé. Utilisez JPEG, PNG, WEBP ou GIF');
       return;
     }
-    const maxSize = 5 * 1024 * 1024;
+    const maxSize = 4 * 1024 * 1024; // aligné sur /api/upload (Vercel ~4,5 Mo)
     if (file.size > maxSize) {
-      setError('Le fichier est trop volumineux. Taille maximale: 5MB');
+      setError('Le fichier est trop volumineux. Taille maximale: 4 Mo');
       return;
     }
     setSiteBeigeUploading(true);
@@ -527,27 +527,20 @@ export default function AdminDashboard() {
     // Vérifier le type de fichier
     const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/gif'];
     if (!allowedTypes.includes(file.type)) {
-      setError('Type de fichier non autorisé. Utilisez JPEG, PNG, WEBP ou GIF');
+      setFormError('Type de fichier non autorisé. Utilisez JPEG, PNG, WEBP ou GIF');
       return;
     }
 
-    // Vérifier la taille (max 5MB)
-    const maxSize = 5 * 1024 * 1024; // 5MB
+    // Sous la limite plateforme Vercel Function (~4,5 Mo / requête)
+    const maxSize = 4 * 1024 * 1024; // 4 Mo
     if (file.size > maxSize) {
-      setError('Le fichier est trop volumineux. Taille maximale: 5MB');
+      setFormError('Le fichier est trop volumineux. Taille maximale: 4 Mo');
       return;
     }
 
-    // Afficher la preview
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      setPreviewImage(reader.result as string);
-    };
-    reader.readAsDataURL(file);
-
-    // Uploader le fichier
+    // L’échec laisse imageUrl et previewImage exactement comme avant cet essai.
     setUploading(true);
-    setError('');
+    setFormError('');
 
     try {
       const uploadFormData = new FormData();
@@ -568,32 +561,35 @@ export default function AdminDashboard() {
         );
 
         if (response.status === 401) {
-          setError('❌ Session expirée. Redirection vers la page d\'accueil...');
+          setFormError('Session expirée. Redirection vers la page d\'accueil...');
           redirectToAdminLogin();
         } else {
-          setError(errorData.error || `Erreur ${response.status}: ${errorData.message || 'Erreur lors de l\'upload'}`);
+          setFormError(
+            (typeof errorData.error === 'string' && errorData.error) ||
+              `Erreur ${response.status}: ${errorData.message || 'Erreur lors de l\'upload'}`
+          );
         }
-        setPreviewImage(null);
         return;
       }
 
       const data = await response.json();
 
-      if (data.success) {
-        const url = data.data.url as string;
+      const url = data.data?.url;
+      if (data.success && typeof url === 'string' && url.length > 0) {
         setFormData((prev) => ({ ...prev, imageUrl: url }));
         setPreviewImage(getImageUrl(url));
-        setError('');
+        setFormError('');
       } else {
-        setError(data.error || 'Erreur lors de l\'upload de l\'image');
-        setPreviewImage(null);
+        setFormError(data.error || 'Erreur lors de l\'upload de l\'image');
       }
     } catch (error) {
       console.error('Erreur:', error);
-      setError('Erreur de connexion lors de l\'upload. Vérifiez votre connexion internet.');
-      setPreviewImage(null);
+      setFormError('Erreur de connexion lors de l\'upload. Vérifiez votre connexion internet.');
     } finally {
       setUploading(false);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
     }
   };
 
@@ -603,18 +599,18 @@ export default function AdminDashboard() {
 
     const name = file.name.toLowerCase();
     if (!name.endsWith('.zip') && !name.endsWith('.exe')) {
-      setError('Extension non autorisée. Utilisez .zip ou .exe');
+      setFormError('Extension non autorisée. Utilisez .zip ou .exe');
       return;
     }
 
     const maxSize = 50 * 1024 * 1024;
     if (file.size > maxSize) {
-      setError('Le fichier est trop volumineux. Taille maximale: 50 Mo');
+      setFormError('Le fichier est trop volumineux. Taille maximale: 50 Mo');
       return;
     }
 
     setUploadingDownload(true);
-    setError('');
+    setFormError('');
 
     try {
       const uploadFormData = new FormData();
@@ -634,10 +630,13 @@ export default function AdminDashboard() {
           typeof errorData?.error === 'string' ? errorData.error : JSON.stringify(errorData)
         );
         if (response.status === 401) {
-          setError('❌ Session expirée. Redirection vers la page d\'accueil...');
+          setFormError('Session expirée. Redirection vers la page d\'accueil...');
           redirectToAdminLogin();
         } else {
-          setError(errorData.error || `Erreur ${response.status}: ${errorData.message || 'Erreur lors de l\'upload'}`);
+          setFormError(
+            (typeof errorData.error === 'string' && errorData.error) ||
+              `Erreur ${response.status}: ${errorData.message || 'Erreur lors de l\'upload'}`
+          );
         }
         return;
       }
@@ -646,15 +645,18 @@ export default function AdminDashboard() {
 
       if (data.success) {
         setFormData((prev) => ({ ...prev, downloadUrl: data.data.url }));
-        setError('');
+        setFormError('');
       } else {
-        setError(data.error || 'Erreur lors de l\'upload du fichier');
+        setFormError(data.error || 'Erreur lors de l\'upload du fichier');
       }
     } catch (err) {
       console.error('Erreur:', err);
-      setError('Erreur de connexion lors de l\'upload. Vérifiez votre connexion internet.');
+      setFormError('Erreur de connexion lors de l\'upload. Vérifiez votre connexion internet.');
     } finally {
       setUploadingDownload(false);
+      if (downloadFileInputRef.current) {
+        downloadFileInputRef.current.value = '';
+      }
     }
   };
 
@@ -913,7 +915,7 @@ export default function AdminDashboard() {
             <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
               Remplace l’image affichée derrière le contenu en mode présentation Site (beige). URL https, chemin
               commençant par /, image encodée en base (data URL) sans stockage fichier serveur, ou import classique
-              sous <code>public/</code> (max 5 Mo).
+              sous <code>public/</code> ou Blob (max 4 Mo).
             </Typography>
             <TextField
               fullWidth
@@ -1256,11 +1258,9 @@ export default function AdminDashboard() {
               </Alert>
             ) : null}
             <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-              Par défaut, les fichiers vont dans <code>public/</code> sur la machine qui exécute Node — comme avant
-              (développement local, VPS, etc.). Le stockage <strong>Vercel Blob</strong> reste{' '}
-              <strong>optionnel</strong> : si vous définissez <code>BLOB_READ_WRITE_TOKEN</code>, les uploads passent
-              par Blob au lieu du disque (pratique quand le serveur ne peut pas écrire dans <code>public/</code>).
-              Timelendr utilise sa propre entrée (page Timelendr).
+              Image projet : préférez <strong>Serveur (Blob)</strong> pour une URL durable (Vercel Blob en Production).
+              <strong> Bureau → data URL</strong> reste disponible sans service de stockage (peut alourdir l’enregistrement).
+              En local sans token Blob, l’upload serveur écrit encore sous <code>public/</code>. Timelendr a sa propre entrée.
             </Typography>
             <TextField
               autoFocus
@@ -1433,7 +1433,7 @@ export default function AdminDashboard() {
               </Typography>
               <input
                 ref={fileInputRef}
-                accept="image/*"
+                accept="image/jpeg,image/jpg,image/png,image/webp,image/gif,.jpg,.jpeg,.png,.webp,.gif"
                 style={{ display: 'none' }}
                 id="image-upload"
                 type="file"
@@ -1448,18 +1448,18 @@ export default function AdminDashboard() {
                     disabled={uploading}
                     size="small"
                   >
-                    {uploading ? 'Upload…' : 'Serveur (public/)'}
+                    {uploading ? 'Upload…' : 'Serveur (Blob)'}
                   </Button>
                 </label>
                 <AdminDesktopImageToDataUrl
                   disabled={uploading}
                   buttonLabel="Bureau → data URL"
                   onBusy={(b) => setUploading(b)}
-                  onError={(msg) => setError(msg)}
+                  onError={(msg) => setFormError(msg)}
                   onDataUrl={(dataUrl) => {
                     setFormData((prev) => ({ ...prev, imageUrl: dataUrl }));
                     setPreviewImage(dataUrl);
-                    setError('');
+                    setFormError('');
                     if (fileInputRef.current) fileInputRef.current.value = '';
                   }}
                 />
@@ -1503,7 +1503,7 @@ export default function AdminDashboard() {
                   const t = v.trim();
                   setPreviewImage(t ? getImageUrl(t) : null);
                 }}
-                helperText="URL https, chemin /…, data URL (bureau), ou upload sous public/"
+                helperText="URL https (Blob), chemin /…, ou data URL (Bureau → data URL)"
               />
             </Box>
           </DialogContent>
