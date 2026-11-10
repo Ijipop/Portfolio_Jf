@@ -20,8 +20,32 @@ function getUploadBlobName(entry: Blob): string {
   return 'upload.bin'
 }
 
+function isUploadBlob(value: unknown): value is Blob {
+  if (typeof value !== 'object' || value === null) return false
+  const candidate = value as Partial<Blob>
+  return typeof candidate.arrayBuffer === 'function' && typeof candidate.size === 'number' && typeof candidate.type === 'string'
+}
+
 function normalizedMime(mime: string): string {
   return (mime || '').split(';')[0].trim().toLowerCase()
+}
+
+function matchesImageSignature(mime: string, buffer: Buffer): boolean {
+  if (buffer.length < 12) return false
+  if (mime === 'image/png') {
+    return buffer[0] === 0x89 && buffer[1] === 0x50 && buffer[2] === 0x4e && buffer[3] === 0x47
+  }
+  if (mime === 'image/jpeg' || mime === 'image/jpg') {
+    return buffer[0] === 0xff && buffer[1] === 0xd8 && buffer[2] === 0xff
+  }
+  if (mime === 'image/gif') {
+    const head = buffer.subarray(0, 6).toString('ascii')
+    return head === 'GIF87a' || head === 'GIF89a'
+  }
+  if (mime === 'image/webp') {
+    return buffer.subarray(0, 4).toString('ascii') === 'RIFF' && buffer.subarray(8, 12).toString('ascii') === 'WEBP'
+  }
+  return false
 }
 
 function isAllowedDownloadMime(ext: string, mime: string): boolean {
@@ -57,8 +81,9 @@ async function writePublicFile(diskSubdir: string[], fileName: string, buffer: B
 }
 
 /**
- * Par défaut (pas de token) : écriture dans `public/` — même comportement qu’avant (local, VPS, etc.).
- * Si `BLOB_READ_WRITE_TOKEN` est défini : envoi vers Vercel Blob (URL absolue), optionnel pour les hébergeurs sans disque inscriptible.
+ * Si `BLOB_READ_WRITE_TOKEN` est défini : Vercel Blob (URL absolue) — chemin préféré en Production.
+ * Sinon en local / VPS : écriture dans `public/`.
+ * Sur Vercel sans token : erreur explicite (FS non durable).
  */
 async function persistUploadedFile(
   blobPathname: string,
@@ -75,6 +100,14 @@ async function persistUploadedFile(
       contentType: contentType || undefined,
     })
     return blob.url
+  }
+  if (process.env.VERCEL === '1') {
+    throw Object.assign(
+      new Error(
+        'Upload serveur indisponible : BLOB_READ_WRITE_TOKEN manquant sur Vercel. Configurez Vercel Blob, ou utilisez « Bureau → data URL ».'
+      ),
+      { code: 'BLOB_TOKEN_MISSING' as const }
+    )
   }
   return writePublicFile(diskSubdir, fileName, buffer)
 }
@@ -98,7 +131,7 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    if (!(raw instanceof Blob)) {
+    if (!isUploadBlob(raw)) {
       return NextResponse.json(
         { success: false, error: 'Format de fichier invalide' },
         { status: 400 }
@@ -165,10 +198,11 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const maxSize = 5 * 1024 * 1024 // 5MB
+    // Sous la limite plateforme Vercel Function (~4,5 Mo / requête)
+    const maxSize = 4 * 1024 * 1024 // 4 Mo
     if (file.size > maxSize) {
       return NextResponse.json(
-        { success: false, error: 'Le fichier est trop volumineux. Taille maximale: 5MB' },
+        { success: false, error: 'Le fichier est trop volumineux. Taille maximale: 4 Mo' },
         { status: 400 }
       )
     }
@@ -179,6 +213,13 @@ export async function POST(request: NextRequest) {
 
     const bytes = await file.arrayBuffer()
     const buffer = Buffer.from(bytes)
+    if (!matchesImageSignature(imageMime, buffer)) {
+      return NextResponse.json(
+        { success: false, error: 'Le contenu du fichier ne correspond pas à une image JPEG, PNG, WEBP ou GIF' },
+        { status: 400 }
+      )
+    }
+
     const isSiteBeigeBg = kind === 'site-beige-bg'
     const imageUrl = await persistUploadedFile(
       isSiteBeigeBg ? `portfolio/site-beige/${fileName}` : `portfolio/projets-images/${fileName}`,
@@ -204,11 +245,15 @@ export async function POST(request: NextRequest) {
 
     const code = err?.code
     let message = 'Erreur lors de l\'upload du fichier'
-    if (code === 'EROFS' || code === 'EACCES' || code === 'EPERM') {
+    let status = 500
+    if (code === 'BLOB_TOKEN_MISSING') {
+      message = err.message
+      status = 503
+    } else if (code === 'EROFS' || code === 'EACCES' || code === 'EPERM') {
       message = process.env.BLOB_READ_WRITE_TOKEN
         ? 'Écriture refusée malgré le token Blob — vérifiez BLOB_READ_WRITE_TOKEN et les logs serveur.'
-        : 'Impossible d’écrire sur le disque du serveur (fréquent sur certains clouds sans stockage local). En local ou sur un VPS, les fichiers vont dans public/ comme avant. Sur un hébergement sans disque inscriptible : collez une URL pour l’image ou le téléchargement, ou ajoutez optionnellement BLOB_READ_WRITE_TOKEN (Vercel Blob).'
-    } else if (process.env.NODE_ENV === 'development' && err?.message) {
+        : 'Impossible d’écrire sur le disque du serveur. Configurez BLOB_READ_WRITE_TOKEN (Vercel Blob) ou utilisez « Bureau → data URL ».'
+    } else if (err?.message && (process.env.NODE_ENV === 'development' || code)) {
       message = `Upload: ${err.message}`
     }
 
@@ -218,7 +263,7 @@ export async function POST(request: NextRequest) {
         error: message
       },
       {
-        status: 500
+        status
       }
     )
   }
