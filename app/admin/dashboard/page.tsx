@@ -46,6 +46,7 @@ import { useBeigePresentationBg } from '@/contexts/BeigePresentationBgContext';
 import { getBeigePresentationTopologyBackground } from '@/utils/syncPortfolioThemeToDocument';
 import AdminDesktopImageToDataUrl from '@/admin/components/AdminDesktopImageToDataUrl';
 import { getImageUrl } from '@/lib/getImageUrl';
+import { normalizeUploadedImageFile } from '@/lib/normalize-uploaded-image-file';
 import { parseBeigePresentationBgUrl } from '@/lib/stored-image-value';
 import {
   isValidTimelendrReleaseUrl,
@@ -520,21 +521,28 @@ export default function AdminDashboard() {
     }
   };
 
-  const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
+  const resetProjectImageFileInput = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  };
 
-    // Vérifier le type de fichier
-    const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/gif'];
-    if (!allowedTypes.includes(file.type)) {
-      setFormError('Type de fichier non autorisé. Utilisez JPEG, PNG, WEBP ou GIF');
+  const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const selected = e.target.files?.[0];
+    if (!selected) return;
+
+    const normalized = normalizeUploadedImageFile(selected);
+    if (!normalized.ok) {
+      setFormError(normalized.error);
+      resetProjectImageFileInput();
       return;
     }
 
     // Sous la limite plateforme Vercel Function (~4,5 Mo / requête)
     const maxSize = 4 * 1024 * 1024; // 4 Mo
-    if (file.size > maxSize) {
+    if (normalized.file.size > maxSize) {
       setFormError('Le fichier est trop volumineux. Taille maximale: 4 Mo');
+      resetProjectImageFileInput();
       return;
     }
 
@@ -544,7 +552,7 @@ export default function AdminDashboard() {
 
     try {
       const uploadFormData = new FormData();
-      uploadFormData.append('file', file);
+      uploadFormData.append('file', normalized.file);
 
       const response = await fetch('/api/upload', {
         method: 'POST',
@@ -575,21 +583,22 @@ export default function AdminDashboard() {
       const data = await response.json();
 
       const url = data.data?.url;
-      if (data.success && typeof url === 'string' && url.length > 0) {
+      if (data.success && typeof url === 'string' && url.startsWith('https://')) {
         setFormData((prev) => ({ ...prev, imageUrl: url }));
         setPreviewImage(getImageUrl(url));
         setFormError('');
       } else {
-        setFormError(data.error || 'Erreur lors de l\'upload de l\'image');
+        setFormError(
+          data.error ||
+            'Upload serveur: URL Blob HTTPS attendue. Réessayez ou utilisez « Bureau → data URL ».'
+        );
       }
     } catch (error) {
       console.error('Erreur:', error);
       setFormError('Erreur de connexion lors de l\'upload. Vérifiez votre connexion internet.');
     } finally {
       setUploading(false);
-      if (fileInputRef.current) {
-        fileInputRef.current.value = '';
-      }
+      resetProjectImageFileInput();
     }
   };
 
@@ -1440,17 +1449,16 @@ export default function AdminDashboard() {
                 onChange={handleFileSelect}
               />
               <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mb: 1 }}>
-                <label htmlFor="image-upload">
-                  <Button
-                    variant="outlined"
-                    component="span"
-                    startIcon={uploading ? <CircularProgress size={20} /> : <CloudUploadIcon />}
-                    disabled={uploading}
-                    size="small"
-                  >
-                    {uploading ? 'Upload…' : 'Serveur (Blob)'}
-                  </Button>
-                </label>
+                <Button
+                  type="button"
+                  variant="outlined"
+                  startIcon={uploading ? <CircularProgress size={20} /> : <CloudUploadIcon />}
+                  disabled={uploading}
+                  size="small"
+                  onClick={() => fileInputRef.current?.click()}
+                >
+                  {uploading ? 'Upload…' : 'Serveur (Blob)'}
+                </Button>
                 <AdminDesktopImageToDataUrl
                   disabled={uploading}
                   buttonLabel="Bureau → data URL"
@@ -1460,7 +1468,7 @@ export default function AdminDashboard() {
                     setFormData((prev) => ({ ...prev, imageUrl: dataUrl }));
                     setPreviewImage(dataUrl);
                     setFormError('');
-                    if (fileInputRef.current) fileInputRef.current.value = '';
+                    resetProjectImageFileInput();
                   }}
                 />
               </Box>
