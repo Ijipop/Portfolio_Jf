@@ -2,15 +2,20 @@
  * Ouvre une URL projet : même onglet pour chemins internes / même origine,
  * nouvel onglet pour les domaines externes.
  *
- * Les liens absolus vers ijipop.com sont traités comme routes internes
- * (évite d’ouvrir prod depuis localhost quand la landing n’est pas encore déployée).
+ * Les liens absolus vers ijipop.com (et alias Preview/Prod du projet portfolio)
+ * sont traités comme routes internes. Les apps Vercel tierces
+ * (ex. frigopop.vercel.app) s’ouvrent en nouvel onglet.
  */
 const SITE_HOSTS = new Set(['ijipop.com', 'www.ijipop.com', 'localhost'])
 
-function isOwnSiteHost(hostname: string): boolean {
+/** Déploiements hash + alias git du projet Vercel portfolio-jf uniquement. */
+const PORTFOLIO_VERCEL_HOST_RE =
+  /^portfolio-(?:jf-git-)?[a-z0-9-]+-jean-francois-lefebvres-projects\.vercel\.app$/
+
+export function isOwnSiteHost(hostname: string): boolean {
   const host = hostname.toLowerCase()
   if (SITE_HOSTS.has(host)) return true
-  if (host.endsWith('.vercel.app')) return true
+  if (PORTFOLIO_VERCEL_HOST_RE.test(host)) return true
   return false
 }
 
