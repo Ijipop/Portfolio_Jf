@@ -73,7 +73,13 @@ export default function WorkFeature({ feature, className }: WorkFeatureProps) {
         {feature.ctas.length > 0 ? (
           <div className={styles.actions}>
             {feature.ctas.map((cta) => (
-              <Button key={cta.href + cta.label} href={cta.href} variant={cta.variant} size="sm">
+              <Button
+                key={cta.href + cta.label}
+                href={cta.href}
+                variant={cta.variant}
+                size="sm"
+                className={cta.accent === 'expression' ? styles.expressionCta : undefined}
+              >
                 {cta.label}
               </Button>
             ))}

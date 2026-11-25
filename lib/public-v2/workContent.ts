@@ -16,6 +16,8 @@ export type WorkCta = {
   href: string
   variant: 'primary' | 'ghost'
   external?: boolean
+  /** Accent CTA local (ex. bleu Expression LaSalle) — sans toucher aux autres boutons. */
+  accent?: 'expression'
 }
 
 export type WorkFeature = {
@@ -68,10 +70,10 @@ export const WORK_FEATURES: readonly WorkFeature[] = [
     title: 'Expression LaSalle',
     tags: 'Développement web · Microsoft 365 · Modernisation informatique',
     description:
-      'Refonte du site web bilingue et modernisation de l’environnement numérique de l’organisme, incluant la migration vers Microsoft 365 et des services de messagerie. Le site web est encore en finalisation.',
+      'Refonte du site web bilingue désormais en ligne, avec une nouvelle identité web pour l’organisme. Mandat incluant aussi la modernisation de l’environnement numérique (migration vers Microsoft 365 et services de messagerie).',
     badges: [
       { label: 'Projet client', variant: 'accent' },
-      { label: 'En finalisation', variant: 'neutral' },
+      { label: 'Site en ligne', variant: 'success' },
     ],
     media: {
       kind: 'site',
@@ -80,9 +82,16 @@ export const WORK_FEATURES: readonly WorkFeature[] = [
       phoneSrc: '/img/portfolio/expression-lasalle-phone.png',
       phoneAlt: 'Aperçu du site Expression LaSalle sur téléphone',
     },
-    ctas: [],
-    legalNote:
-      'Le site web est encore en finalisation — aucun lien public n’est proposé tant qu’il n’est pas disponible.',
+    ctas: [
+      {
+        label: 'Visiter le site ↗',
+        href: 'https://www.expressionlasalletherapies.ca/fr',
+        variant: 'primary',
+        external: true,
+        accent: 'expression',
+      },
+    ],
+    legalNote: 'Expression LaSalle — site public du client.',
     publishable: true,
   },
   {

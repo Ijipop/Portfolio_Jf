@@ -63,7 +63,7 @@ describe('WorkSection V2', () => {
     )
   })
 
-  it('DeskDot est un logiciel Windows ; Expression sans faux lien public', () => {
+  it('DeskDot est un logiciel Windows ; Expression publie un lien client externe', () => {
     render(
       <PublicThemeRoot>
         <WorkSection />
@@ -79,7 +79,22 @@ describe('WorkSection V2', () => {
     )
 
     const expression = WORK_FEATURES.find((f) => f.id === 'expression-lasalle')!
-    expect(expression.ctas).toHaveLength(0)
+    expect(expression.ctas[0]?.href).toBe('https://www.expressionlasalletherapies.ca/fr')
+    expect(expression.ctas[0]?.accent).toBe('expression')
+    expect(screen.getByRole('link', { name: 'Visiter le site ↗' })).toHaveAttribute(
+      'href',
+      'https://www.expressionlasalletherapies.ca/fr',
+    )
+    expect(screen.getByRole('link', { name: 'Visiter le site ↗' })).toHaveAttribute(
+      'target',
+      '_blank',
+    )
+    expect(screen.getByRole('link', { name: 'Visiter le site ↗' })).toHaveAttribute(
+      'rel',
+      'noopener noreferrer',
+    )
+    expect(screen.queryByText(/encore en finalisation/i)).not.toBeInTheDocument()
+    expect(screen.getByText('Site en ligne')).toBeInTheDocument()
 
     const thermo = WORK_FEATURES.find((f) => f.id === 'thermo-trappeur')!
     expect(thermo.ctas[0]?.href).toBe('https://www.thermo-trappeur.ca/fr')
