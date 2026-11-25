@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { Button, Container, Heading } from '@/components/public-v2/primitives'
 import ContactFormV2 from '@/components/public-v2/contact/ContactFormV2'
 import { CONTACT_PAGE_COPY, type ContactMockScenario } from '@/lib/public-v2/contactPageContent'
+import { SMS_CONTACT_ENABLED } from '@/lib/publicContactFlags'
 import { trackContactMerciPageView } from '@/lib/gtag'
 import { LanguageProvider } from '@/contexts/LanguageContext'
 import styles from './ContactPage.module.css'
@@ -79,9 +80,15 @@ export default function ContactPageClient({
             <a className={styles.phoneChip} href={CONTACT_PAGE_COPY.phoneHref}>
               {CONTACT_PAGE_COPY.phoneCta} {CONTACT_PAGE_COPY.phoneDisplay}
             </a>
-            <a className={styles.phoneChip} href={CONTACT_PAGE_COPY.smsHref}>
-              {CONTACT_PAGE_COPY.smsCta}
-            </a>
+            {SMS_CONTACT_ENABLED ? (
+              <a className={styles.phoneChip} href={CONTACT_PAGE_COPY.smsHref}>
+                {CONTACT_PAGE_COPY.smsCta}
+              </a>
+            ) : (
+              <a className={styles.phoneChip} href={CONTACT_PAGE_COPY.writeCtaHref}>
+                {CONTACT_PAGE_COPY.writeCta}
+              </a>
+            )}
           </div>
 
           <p className={styles.supportShortcut}>

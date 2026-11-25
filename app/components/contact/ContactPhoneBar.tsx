@@ -10,6 +10,7 @@ import {
   SUPPORT_SMS_HREF,
 } from '@/content/soutien-informatique-montreal.fr'
 import { useLanguage } from '@/contexts/LanguageContext'
+import { SMS_CONTACT_ENABLED } from '@/lib/publicContactFlags'
 
 type ContactPhoneBarProps = {
   primary: string
@@ -56,10 +57,12 @@ export default function ContactPhoneBar({ primary, textColor, compact = false }:
           <PhoneOutlinedIcon sx={{ fontSize: 18, color: primary }} />
           {t('contact.phoneCta')} {SUPPORT_PHONE_DISPLAY}
         </Box>
-        <Box component="a" href={SUPPORT_SMS_HREF} sx={chipSx}>
-          <SmsOutlinedIcon sx={{ fontSize: 18, color: primary }} />
-          {t('contact.smsCta')}
-        </Box>
+        {SMS_CONTACT_ENABLED ? (
+          <Box component="a" href={SUPPORT_SMS_HREF} sx={chipSx}>
+            <SmsOutlinedIcon sx={{ fontSize: 18, color: primary }} />
+            {t('contact.smsCta')}
+          </Box>
+        ) : null}
       </Stack>
     </Box>
   )

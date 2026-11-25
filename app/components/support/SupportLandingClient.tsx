@@ -30,6 +30,7 @@ import {
   getSupportLandingContent,
 } from '@/content/soutien-informatique-montreal.fr'
 import { useLanguage } from '@/contexts/LanguageContext'
+import { SMS_CONTACT_ENABLED } from '@/lib/publicContactFlags'
 import { useTextColor } from '@/hooks/useTextColor'
 import { useThemeColors } from '@/hooks/useThemeColors'
 import { useSiteDarkChrome } from '@/hooks/useSiteDarkChrome'
@@ -258,23 +259,25 @@ export default function SupportLandingClient() {
                       flexWrap="wrap"
                       useFlexGap
                     >
-                      <Box
-                        component="a"
-                        href={SUPPORT_SMS_HREF}
-                        sx={{
-                          display: 'inline-flex',
-                          alignItems: 'center',
-                          gap: 0.75,
-                          fontSize: '0.9rem',
-                          fontWeight: 700,
-                          color: SITE_DARK.brandOrangeDeep,
-                          textDecoration: 'none',
-                          '&:hover': { color: SITE_DARK.brandOrange },
-                        }}
-                      >
-                        <SmsOutlinedIcon sx={{ fontSize: 18 }} aria-hidden />
-                        {copy.ctaText} {SUPPORT_PHONE_DISPLAY}
-                      </Box>
+                      {SMS_CONTACT_ENABLED ? (
+                        <Box
+                          component="a"
+                          href={SUPPORT_SMS_HREF}
+                          sx={{
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: 0.75,
+                            fontSize: '0.9rem',
+                            fontWeight: 700,
+                            color: SITE_DARK.brandOrangeDeep,
+                            textDecoration: 'none',
+                            '&:hover': { color: SITE_DARK.brandOrange },
+                          }}
+                        >
+                          <SmsOutlinedIcon sx={{ fontSize: 18 }} aria-hidden />
+                          {copy.ctaText} {SUPPORT_PHONE_DISPLAY}
+                        </Box>
+                      ) : null}
                       <Typography sx={{ fontSize: '0.85rem', color: heroPanel.muted, alignSelf: 'center' }}>
                         {copy.phoneHint}
                       </Typography>
