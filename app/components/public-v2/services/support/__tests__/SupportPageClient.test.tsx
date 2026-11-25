@@ -33,7 +33,7 @@ describe('SupportPageClient', () => {
     expect(document.getElementById(SUPPORT_FORM_ANCHOR)).toBeTruthy()
   })
 
-  it('expose téléphone, SMS et CTA vers #demande-soutien', () => {
+  it('expose téléphone et CTA vers #demande-soutien sans lien SMS public', () => {
     render(<SupportPageClient />)
     const call = screen.getAllByRole('link', {
       name: new RegExp(`${SUPPORT_PAGE_COPY.ctaCall}.*${SUPPORT_PHONE_DISPLAY.replace(/[()]/g, '\\$&')}`),
@@ -43,5 +43,7 @@ describe('SupportPageClient', () => {
       'href',
       `#${SUPPORT_FORM_ANCHOR}`,
     )
+    expect(screen.queryByRole('link', { name: new RegExp(SUPPORT_PAGE_COPY.ctaText) })).not.toBeInTheDocument()
+    expect(document.querySelector('a[href^="sms:"]')).toBeNull()
   })
 })

@@ -33,6 +33,8 @@ export const CONTACT_PAGE_COPY = {
   rateLimitError: 'Trop de messages envoyés depuis cette adresse. Réessayez plus tard.',
   phoneCta: 'Appeler',
   smsCta: 'Texter',
+  writeCta: 'M’écrire',
+  writeCtaHref: '#contact-form',
   phoneDisplay: SUPPORT_PHONE_DISPLAY,
   phoneHref: SUPPORT_PHONE_HREF,
   smsHref: SUPPORT_SMS_HREF,

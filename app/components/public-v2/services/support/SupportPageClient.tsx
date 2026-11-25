@@ -12,6 +12,7 @@ import {
   SUPPORT_PORTRAIT_SRC,
   SUPPORT_SMS_HREF,
 } from '@/lib/public-v2/supportPageContent'
+import { SMS_CONTACT_ENABLED } from '@/lib/publicContactFlags'
 import SupportFormMuiIsland from './SupportFormMuiIsland'
 import styles from './SupportPage.module.css'
 
@@ -59,9 +60,11 @@ export default function SupportPageClient() {
                 </Button>
               </div>
               <div className={styles.smsRow}>
-                <a className={styles.smsLink} href={SUPPORT_SMS_HREF}>
-                  {c.ctaText} {SUPPORT_PHONE_DISPLAY}
-                </a>
+                {SMS_CONTACT_ENABLED ? (
+                  <a className={styles.smsLink} href={SUPPORT_SMS_HREF}>
+                    {c.ctaText} {SUPPORT_PHONE_DISPLAY}
+                  </a>
+                ) : null}
                 <span className={styles.phoneHint}>{c.phoneHint}</span>
               </div>
               <ul className={styles.trust}>
