@@ -13,7 +13,7 @@ import { LanguageProvider } from '@/contexts/LanguageContext'
 export default function SupportFormMuiIsland({ children }: { children: ReactNode }) {
   return (
     <AppRouterCacheProvider options={{ key: 'mui-support-island' }}>
-      <LanguageProvider>
+      <LanguageProvider fixedLocale="fr">
         <AdvancedThemeIslandProvider>{children}</AdvancedThemeIslandProvider>
       </LanguageProvider>
     </AppRouterCacheProvider>

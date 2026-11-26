@@ -11,7 +11,7 @@ import {
   RadioGroup,
   TextField,
 } from '@mui/material'
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import CTAButton from '@/components/shared/CTAButton'
 import {
   EMPTY_CONTACT_FORM_ERRORS,
@@ -40,8 +40,36 @@ type FieldErrors = ContactFormErrors & { mode: string; need: string }
 
 const EMPTY_FIELD_ERRORS: FieldErrors = { ...EMPTY_CONTACT_FORM_ERRORS, mode: '', need: '' }
 
+const FORM_VALIDATION_SUMMARY_FR =
+  'Veuillez corriger les champs indiqués ci-dessous avant d’envoyer.'
+const FORM_VALIDATION_SUMMARY_EN = 'Please fix the highlighted fields before sending.'
+
+function focusFirstInvalidField(form: HTMLFormElement | null, nextErrors: FieldErrors) {
+  const order: { key: keyof FieldErrors; name: string }[] = [
+    { key: 'name', name: 'name' },
+    { key: 'email', name: 'email' },
+    { key: 'phone', name: 'phone' },
+    { key: 'need', name: 'needType' },
+    { key: 'mode', name: 'supportMode' },
+    { key: 'message', name: 'message' },
+  ]
+  for (const { key, name } of order) {
+    if (!nextErrors[key]) continue
+    const target =
+      form?.querySelector<HTMLElement>(`[name="${name}"]`) ??
+      form?.querySelector<HTMLElement>(`#${name}`)
+    if (target) {
+      target.focus()
+      target.scrollIntoView({ behavior: 'smooth', block: 'center' })
+      return
+    }
+  }
+  document.getElementById(SUPPORT_FORM_ANCHOR)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+}
+
 export default function SupportContactForm() {
   const { locale, t } = useLanguage()
+  const validationLocale = locale === 'en' ? 'en' : 'fr'
   const siteDarkChrome = useSiteDarkChrome()
   const copy = getSupportLandingContent(locale)
   const subject = CONTACT_SUBJECT_TECH_SUPPORT[locale] ?? copy.contactSubject
@@ -74,6 +102,21 @@ export default function SupportContactForm() {
   const [submitError, setSubmitError] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitted, setSubmitted] = useState(false)
+  const [validationSummary, setValidationSummary] = useState('')
+  const [formReady, setFormReady] = useState(false)
+  const formRef = useRef<HTMLFormElement>(null)
+  const statusRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    setFormReady(true)
+  }, [])
+
+  useEffect(() => {
+    if (!submitted) return
+    const node = document.getElementById(SUPPORT_FORM_ANCHOR)
+    node?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    statusRef.current?.focus()
+  }, [submitted])
 
   const messagePlaceholder =
     needType === 'computerBasics' ? copy.formMessagePlaceholderLearn : copy.formMessagePlaceholder
@@ -90,6 +133,7 @@ export default function SupportContactForm() {
     setErrors(EMPTY_FIELD_ERRORS)
     setSubmitError('')
     setSubmitted(false)
+    setValidationSummary('')
   }
 
   const fieldSx = {
@@ -105,22 +149,37 @@ export default function SupportContactForm() {
   const validate = (): FieldErrors => {
     const phoneTrim = phone.trim()
     return {
-      name: validateContactField('name', name),
-      email: validateContactField('email', email),
-      phone: !phoneTrim ? copy.formPhoneRequired : validateContactField('phone', phone),
+      name: validateContactField('name', name, validationLocale),
+      email: validateContactField('email', email, validationLocale),
+      phone: !phoneTrim
+        ? copy.formPhoneRequired
+        : validateContactField('phone', phone, validationLocale),
       subject: '',
-      message: validateContactField('message', message),
+      message: validateContactField('message', message, validationLocale),
       mode: supportMode ? '' : copy.formModeRequired,
       need: needType ? '' : copy.formNeedRequired,
     }
   }
 
+  const onFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    if (!formReady) return
+    void handleSubmit(e)
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setSubmitError('')
+    setValidationSummary('')
     const nextErrors = validate()
     setErrors(nextErrors)
-    if (Object.values(nextErrors).some((v) => v !== '')) return
+    if (Object.values(nextErrors).some((v) => v !== '')) {
+      setValidationSummary(
+        validationLocale === 'en' ? FORM_VALIDATION_SUMMARY_EN : FORM_VALIDATION_SUMMARY_FR,
+      )
+      focusFirstInvalidField(formRef.current, nextErrors)
+      return
+    }
 
     setIsSubmitting(true)
     const technicalSupport = {
@@ -158,7 +217,9 @@ export default function SupportContactForm() {
       setSubmitted(true)
       return
     }
-    setSubmitError(result.kind === 'network' ? t('contact.networkError') : result.error)
+    const errMsg = result.kind === 'network' ? t('contact.networkError') : result.error
+    setSubmitError(errMsg)
+    statusRef.current?.focus()
   }
 
   return (
@@ -174,6 +235,14 @@ export default function SupportContactForm() {
         boxShadow: '0 16px 40px rgba(0, 0, 0, 0.12)',
       }}
     >
+      <Box
+        ref={statusRef}
+        tabIndex={-1}
+        aria-live="polite"
+        aria-atomic="true"
+        sx={{ outline: 'none' }}
+      />
+
       {submitted ? (
         <Box sx={{ textAlign: 'center', py: { xs: 2, sm: 3 } }}>
           <Alert
@@ -219,11 +288,19 @@ export default function SupportContactForm() {
 
           <Box
             component="form"
+            ref={formRef}
             data-testid="support-contact-form"
-            onSubmit={handleSubmit}
+            data-form-ready={formReady ? 'true' : 'false'}
+            onSubmit={onFormSubmit}
             noValidate
             sx={{ position: 'relative', display: 'flex', flexDirection: 'column', gap: 1.75 }}
           >
+            {validationSummary ? (
+              <Alert severity="warning" role="alert" sx={{ borderRadius: 2 }}>
+                {validationSummary}
+              </Alert>
+            ) : null}
+
             <TextField
               label={copy.formName}
               name="name"
@@ -365,7 +442,13 @@ export default function SupportContactForm() {
               </Alert>
             ) : null}
 
-            <CTAButton type="submit" variant="primary" size="large" disabled={isSubmitting} fullWidth>
+            <CTAButton
+              type="submit"
+              variant="primary"
+              size="large"
+              disabled={!formReady || isSubmitting}
+              fullWidth
+            >
               {isSubmitting ? copy.formSending : copy.formSubmit}
             </CTAButton>
           </Box>

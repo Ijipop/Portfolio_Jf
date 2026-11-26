@@ -32,21 +32,35 @@ const LanguageContext = createContext<LanguageContextType | undefined>(undefined
 
 const STORAGE_KEY = 'portfolio-locale'
 
-export function LanguageProvider({ children }: { children: React.ReactNode }) {
-  const [locale, setLocaleState] = useState<Locale>('fr')
+export type LanguageProviderProps = {
+  children: React.ReactNode
+  /** Verrouille la locale (ex. formulaire Soutien FR tant que la page V2 n’est pas bilingue). */
+  fixedLocale?: Locale
+}
+
+export function LanguageProvider({ children, fixedLocale }: LanguageProviderProps) {
+  const [locale, setLocaleState] = useState<Locale>(fixedLocale ?? 'fr')
   const [mounted, setMounted] = useState(false)
   const [dict, setDict] = useState<TranslationDict>(fr as TranslationDict)
 
   const applyLocale = useCallback(async (next: Locale) => {
     setLocaleState(next)
-    if (typeof window !== 'undefined') {
+    if (typeof window !== 'undefined' && !fixedLocale) {
       localStorage.setItem(STORAGE_KEY, next)
     }
     const loaded = await loadTranslationDict(next)
     setDict(loaded)
-  }, [])
+  }, [fixedLocale])
 
   useEffect(() => {
+    if (fixedLocale) {
+      setLocaleState(fixedLocale)
+      if (fixedLocale === 'en') {
+        void loadTranslationDict('en').then(setDict)
+      }
+      setMounted(true)
+      return
+    }
     const saved = localStorage.getItem(STORAGE_KEY) as Locale | null
     const initial: Locale = saved === 'en' ? 'en' : 'fr'
     if (initial === 'en') {
@@ -54,17 +68,19 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
       setLocaleState('en')
     }
     setMounted(true)
-  }, [])
+  }, [fixedLocale])
 
   const setLocale = useCallback(
     (newLocale: Locale) => {
+      if (fixedLocale) return
       void applyLocale(newLocale)
     },
-    [applyLocale],
+    [applyLocale, fixedLocale],
   )
 
   const isServer = typeof window === 'undefined'
-  const resolvedLocale: Locale = isServer || !mounted ? 'fr' : locale
+  const resolvedLocale: Locale =
+    fixedLocale ?? (isServer || !mounted ? 'fr' : locale)
 
   // FR: toujours le module importé (évite un dict state périmé après HMR de locales/fr.ts).
   // EN: dict chargé à la demande.
