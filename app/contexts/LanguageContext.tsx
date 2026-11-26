@@ -82,6 +82,12 @@ export function LanguageProvider({ children, fixedLocale }: LanguageProviderProp
   const resolvedLocale: Locale =
     fixedLocale ?? (isServer || !mounted ? 'fr' : locale)
 
+  // Sync document language for a11y (SSR metadata stays FR — Architecture C).
+  useEffect(() => {
+    if (typeof document === 'undefined') return
+    document.documentElement.lang = resolvedLocale
+  }, [resolvedLocale])
+
   // FR: toujours le module importé (évite un dict state périmé après HMR de locales/fr.ts).
   // EN: dict chargé à la demande.
   const activeDict: TranslationDict =
@@ -109,4 +115,9 @@ export function useLanguage() {
     throw new Error('useLanguage must be used within a LanguageProvider')
   }
   return context
+}
+
+/** Pour sections V2 testables hors provider — retourne undefined hors LanguageProvider. */
+export function useLanguageOptional(): LanguageContextType | undefined {
+  return useContext(LanguageContext)
 }

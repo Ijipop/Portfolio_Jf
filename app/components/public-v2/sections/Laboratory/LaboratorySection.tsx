@@ -1,14 +1,18 @@
+'use client'
+
 import { Container, Heading, Section } from '@/components/public-v2/primitives'
 import {
-  LABORATORY_COPY,
+  getLaboratoryCopy,
   getLaboratoryFeatures,
+  type LaboratoryCopy,
   type LaboratoryFeature,
 } from '@/lib/public-v2/laboratoryContent'
+import { usePublicV2Locale } from '@/lib/public-v2/usePublicV2Locale'
 import LaboratoryCard from './LaboratoryCard'
 import styles from './LaboratorySection.module.css'
 
 export type LaboratorySectionProps = {
-  copy?: typeof LABORATORY_COPY
+  copy?: LaboratoryCopy
   features?: LaboratoryFeature[]
   className?: string
 }
@@ -18,10 +22,13 @@ export type LaboratorySectionProps = {
  * Données = sélection du catalogue partagé, pas un second inventaire.
  */
 export default function LaboratorySection({
-  copy = LABORATORY_COPY,
-  features = getLaboratoryFeatures(),
+  copy,
+  features,
   className,
 }: LaboratorySectionProps) {
+  const locale = usePublicV2Locale()
+  const resolvedCopy = copy ?? getLaboratoryCopy(locale)
+  const resolvedFeatures = features ?? getLaboratoryFeatures(locale)
   const sectionClass = [styles.section, className].filter(Boolean).join(' ')
 
   return (
@@ -33,25 +40,25 @@ export default function LaboratorySection({
       data-testid="pv2-laboratory"
     >
       <Container>
-        <p className={styles.eyebrow}>{copy.eyebrow}</p>
+        <p className={styles.eyebrow}>{resolvedCopy.eyebrow}</p>
         <Heading as="h2" id="pv2-lab-title" variant="section" className={styles.title}>
-          {copy.title}
+          {resolvedCopy.title}
         </Heading>
-        <p className={styles.lead}>{copy.lead}</p>
+        <p className={styles.lead}>{resolvedCopy.lead}</p>
         <ul className={styles.grid}>
-          {features.map((feature) => (
+          {resolvedFeatures.map((feature) => (
             <li key={feature.id} className={styles.gridItem}>
               <LaboratoryCard
                 feature={feature}
-                badgeLabel={copy.badge}
-                ctaLabel={copy.ctaLabel}
+                badgeLabel={resolvedCopy.badge}
+                ctaLabel={resolvedCopy.ctaLabel}
               />
             </li>
           ))}
         </ul>
         <div className={styles.foot}>
-          <a className={styles.catalogLink} href={copy.catalogHref}>
-            {copy.catalogLinkLabel}
+          <a className={styles.catalogLink} href={resolvedCopy.catalogHref}>
+            {resolvedCopy.catalogLinkLabel}
           </a>
         </div>
       </Container>

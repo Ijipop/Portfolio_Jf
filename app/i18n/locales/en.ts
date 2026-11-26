@@ -455,6 +455,7 @@ export const en = {
       merciClose: 'Close',
       sendError: 'Error sending message',
       networkError: 'Connection error. Please try again.',
+      rateLimitError: 'Too many messages from this address. Try again later.',
       promiseResponse: 'Reply < 24h',
       promiseCall: 'First call included',
       promiseEstimate: 'Estimate within 48h',

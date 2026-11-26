@@ -19,6 +19,7 @@ import {
   validateContactField,
 } from '@/components/contact/contactFormValidation'
 import { submitContactRequest } from '@/components/contact/submitContactRequest'
+import { localizeContactApiError } from '@/lib/public-v2/localizeContactApiError'
 import {
   emptyTechnicalSupportBrief,
   type SupportModeKey,
@@ -217,7 +218,15 @@ export default function SupportContactForm() {
       setSubmitted(true)
       return
     }
-    const errMsg = result.kind === 'network' ? t('contact.networkError') : result.error
+    const errMsg = localizeContactApiError(
+      result,
+      {
+        sendError: t('contact.sendError'),
+        networkError: t('contact.networkError'),
+        rateLimitError: t('contact.rateLimitError'),
+      },
+      locale,
+    )
     setSubmitError(errMsg)
     statusRef.current?.focus()
   }

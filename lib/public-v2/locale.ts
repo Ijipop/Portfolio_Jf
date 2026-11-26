@@ -1,0 +1,1 @@
+export type PublicV2Locale = 'fr' | 'en'

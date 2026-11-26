@@ -3,19 +3,17 @@
 import type { ReactNode } from 'react'
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v16-appRouter'
 import { AdvancedThemeIslandProvider } from '@/contexts/AdvancedThemeContext'
-import { LanguageProvider } from '@/contexts/LanguageContext'
 
 /**
- * Îlot providers pour SupportContactForm sur la landing Pop Atelier.
- * Dépendances vérifiées : useLanguage, useThemeColors → useAdvancedTheme, Emotion cache.
- * useSiteDarkChrome lit le store beigeDark (pas de provider requis).
+ * Îlot MUI/thème pour SupportContactForm sur la landing Pop Atelier.
+ * La locale vient uniquement de PublicChromeI18n (LanguageProvider parent) :
+ * flag off → fixedLocale=fr ; flag on → portfolio-locale.
+ * Pas de LanguageProvider imbriqué (une seule source de vérité).
  */
 export default function SupportFormMuiIsland({ children }: { children: ReactNode }) {
   return (
     <AppRouterCacheProvider options={{ key: 'mui-support-island' }}>
-      <LanguageProvider fixedLocale="fr">
-        <AdvancedThemeIslandProvider>{children}</AdvancedThemeIslandProvider>
-      </LanguageProvider>
+      <AdvancedThemeIslandProvider>{children}</AdvancedThemeIslandProvider>
     </AppRouterCacheProvider>
   )
 }

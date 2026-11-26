@@ -2,13 +2,19 @@
 
 import { useEffect, useState } from 'react'
 import { Button, Heading } from '@/components/public-v2/primitives'
-import { HERO_COPY, HERO_FLOATS, type HeroFloatMedia } from '@/lib/public-v2/heroContent'
+import {
+  getHeroCopy,
+  getHeroFloats,
+  type HeroCopy,
+  type HeroFloatMedia,
+} from '@/lib/public-v2/heroContent'
+import { usePublicV2Locale } from '@/lib/public-v2/usePublicV2Locale'
 import HeroCollage from './HeroCollage'
 import styles from './Hero.module.css'
 
 export type HeroProps = {
   /** Override copy for tests or future variants. */
-  copy?: typeof HERO_COPY
+  copy?: HeroCopy
   floats?: readonly HeroFloatMedia[]
   className?: string
 }
@@ -17,11 +23,10 @@ export type HeroProps = {
  * Hero Atelier Atlantique — planche éditoriale (True WOW).
  * Contenu éditorial : `lib/public-v2/heroContent.ts`.
  */
-export default function Hero({
-  copy = HERO_COPY,
-  floats = HERO_FLOATS,
-  className,
-}: HeroProps) {
+export default function Hero({ copy, floats, className }: HeroProps) {
+  const locale = usePublicV2Locale()
+  const resolvedCopy = copy ?? getHeroCopy(locale)
+  const resolvedFloats = floats ?? getHeroFloats(locale)
   const [enhance, setEnhance] = useState(false)
   const [reduceMotion, setReduceMotion] = useState(false)
 
@@ -90,10 +95,10 @@ export default function Hero({
               .join(' ')}
           >
             <span className={styles.kickerMark} aria-hidden="true" />
-            {copy.kicker}
+            {resolvedCopy.kicker}
           </p>
           <Heading as="h1" id="pv2-hero-title" variant="display" className={styles.title}>
-            {copy.titleLines.map((line, index) => (
+            {resolvedCopy.titleLines.map((line, index) => (
               <span key={line} className={styles.titleLine}>
                 <span className={index === 1 ? styles.titleAccent : undefined}>{line}</span>
               </span>
@@ -105,7 +110,7 @@ export default function Hero({
               .join(' ')}
             style={{ ['--reveal-delay' as string]: 1 }}
           >
-            {copy.description}
+            {resolvedCopy.description}
           </p>
           <div
             className={[styles.actions, 'pv2-reveal', enhance ? 'is-in' : '']
@@ -113,20 +118,20 @@ export default function Hero({
               .join(' ')}
             style={{ ['--reveal-delay' as string]: 2 }}
           >
-            <Button href={copy.primaryCta.href} variant="primary">
-              {copy.primaryCta.label}
+            <Button href={resolvedCopy.primaryCta.href} variant="primary">
+              {resolvedCopy.primaryCta.label}
             </Button>
-            <Button href={copy.secondaryCta.href} variant="ghost">
-              {copy.secondaryCta.label}
+            <Button href={resolvedCopy.secondaryCta.href} variant="ghost">
+              {resolvedCopy.secondaryCta.label}
             </Button>
           </div>
         </div>
         <div className={styles.stageWrap}>
-          <HeroCollage floats={floats} reduceMotion={reduceMotion} enhance={enhance} />
+          <HeroCollage floats={resolvedFloats} reduceMotion={reduceMotion} enhance={enhance} />
         </div>
       </div>
       <ul className={styles.srOnly}>
-        {floats.map((float) => (
+        {resolvedFloats.map((float) => (
           <li key={float.id}>{float.alt}</li>
         ))}
       </ul>

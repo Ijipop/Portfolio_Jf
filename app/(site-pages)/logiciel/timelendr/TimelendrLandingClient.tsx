@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { useEffect, useMemo, useState } from 'react'
 import ProductDownloadRow from '@/components/product-landings/ProductDownloadRow'
 import ProductSecurityNotice from '@/components/product-landings/ProductSecurityNotice'
-import { LanguageProvider, useLanguage } from '@/contexts/LanguageContext'
+import { useLanguage } from '@/contexts/LanguageContext'
 import TimelendrCarousel from './TimelendrCarousel'
 import styles from './TimelendrProduct.module.css'
 
@@ -139,11 +139,7 @@ function TimelendrLandingBody() {
   )
 }
 
-/** Contenu Timelendr — chrome Pop Atelier fourni par la page ; releases via /api/timelendr/releases. */
+/** LanguageProvider fourni par PublicChromeShell (fixedLocale=fr si flag off). */
 export default function TimelendrLandingClient() {
-  return (
-    <LanguageProvider>
-      <TimelendrLandingBody />
-    </LanguageProvider>
-  )
+  return <TimelendrLandingBody />
 }

@@ -458,6 +458,7 @@ export const fr = {
       merciClose: 'Fermer',
       sendError: 'Erreur lors de l\'envoi du message',
       networkError: 'Erreur de connexion. Veuillez réessayer.',
+      rateLimitError: 'Trop de messages envoyés depuis cette adresse. Réessayez plus tard.',
       promiseResponse: 'Réponse < 24 h',
       promiseCall: 'Premier appel offert',
       promiseEstimate: 'Devis sous 48 h',

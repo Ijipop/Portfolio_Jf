@@ -5,7 +5,7 @@ import ProductDownloadRow from '@/components/product-landings/ProductDownloadRow
 import ProductSecurityNotice from '@/components/product-landings/ProductSecurityNotice'
 import type { ProductDownloadLinks } from '@/components/product-landings/productDownloads'
 import AutoplayLoopVideo from '@/components/shared/AutoplayLoopVideo'
-import { LanguageProvider, useLanguage } from '@/contexts/LanguageContext'
+import { useLanguage } from '@/contexts/LanguageContext'
 import DeskDotPhotoStack from './DeskDotPhotoStack'
 import DeskDotPitchTitle from './DeskDotPitchTitle'
 import styles from './DeskDotLanding.module.css'
@@ -129,10 +129,7 @@ function DeskDotLandingBody({ downloads }: DeskDotLandingClientProps) {
  * Contenu DeskDot — chrome Pop Atelier fourni par la page.
  * MUI limité à useMediaQuery dans DeskDotPitchTitle (pas de ThemeProvider / backdrop).
  */
+/** LanguageProvider fourni par PublicChromeShell (fixedLocale=fr si flag off). */
 export default function DeskDotLandingClient({ downloads }: DeskDotLandingClientProps) {
-  return (
-    <LanguageProvider>
-      <DeskDotLandingBody downloads={downloads} />
-    </LanguageProvider>
-  )
+  return <DeskDotLandingBody downloads={downloads} />
 }

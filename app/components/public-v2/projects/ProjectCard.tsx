@@ -5,13 +5,14 @@ import { Button } from '@/components/public-v2/primitives'
 import { SPACE_TAKER_LANDING_HREF } from '@/components/product-landings/productDownloads'
 import { getImageUrl } from '@/lib/getImageUrl'
 import {
-  PROJECTS_COPY,
+  getProjectsCopy,
   PROJECT_DESCRIPTION_EXPAND_CHARS,
   isPlannedStatus,
   normalizeStatusLabel,
   sameDestination,
   type CatalogProject,
 } from '@/lib/public-v2/projectsContent'
+import { usePublicV2Locale } from '@/lib/public-v2/usePublicV2Locale'
 import styles from './ProjectCard.module.css'
 
 export type ProjectCardProps = {
@@ -46,6 +47,8 @@ export default function ProjectCard({
   timelendrWindowsUrl,
   timelendrMacosUrl,
 }: ProjectCardProps) {
+  const locale = usePublicV2Locale()
+  const copy = getProjectsCopy(locale)
   const isWeb = variant === 'web'
   const timelendr = isTimelendr(project)
   const spaceTaker = isSpaceTaker(project)
@@ -60,7 +63,7 @@ export default function ProjectCard({
     .slice(0, isWeb ? 2 : 3)
 
   const imageSrc = project.imageUrl ? getImageUrl(project.imageUrl) : ''
-  const statusLabel = normalizeStatusLabel(project.status)
+  const statusLabel = normalizeStatusLabel(project.status, locale)
   const description = project.description?.trim() ?? ''
   const canExpand = description.length > PROJECT_DESCRIPTION_EXPAND_CHARS
 
@@ -92,12 +95,12 @@ export default function ProjectCard({
       sameDestination(primaryHref, project.macosUrl))
 
   const primaryLabel = isWeb
-    ? PROJECTS_COPY.viewSite
+    ? copy.viewSite
     : browserApp
-      ? PROJECTS_COPY.openApp
+      ? copy.openApp
       : primaryIsDownload
-        ? PROJECTS_COPY.downloadProject
-        : PROJECTS_COPY.viewProject
+        ? copy.downloadProject
+        : copy.viewProject
 
   const rawWindowsHref = timelendr
     ? timelendrWindowsUrl
@@ -127,10 +130,10 @@ export default function ProjectCard({
       : null
 
   const role = isWeb
-    ? PROJECTS_COPY.metaRoleWeb
+    ? copy.metaRoleWeb
     : browserApp
-      ? PROJECTS_COPY.metaRoleBrowserApp
-      : PROJECTS_COPY.metaRoleSoftware
+      ? copy.metaRoleBrowserApp
+      : copy.metaRoleSoftware
 
   const interactive = Boolean(primaryHref)
 
@@ -203,7 +206,7 @@ export default function ProjectCard({
                 setExpanded((v) => !v)
               }}
             >
-              {expanded ? PROJECTS_COPY.readLess : PROJECTS_COPY.readMore}
+              {expanded ? copy.readLess : copy.readMore}
             </button>
           ) : null}
         </div>
@@ -234,7 +237,7 @@ export default function ProjectCard({
               href={windowsHref}
               variant="ghost"
               size="sm"
-              aria-label={timelendr ? PROJECTS_COPY.downloadTimelendrPc : PROJECTS_COPY.downloadWindows}
+              aria-label={timelendr ? copy.downloadTimelendrPc : copy.downloadWindows}
               onClick={(e) => {
                 e.preventDefault()
                 e.stopPropagation()
@@ -249,7 +252,7 @@ export default function ProjectCard({
               href={macosHref}
               variant="ghost"
               size="sm"
-              aria-label={timelendr ? PROJECTS_COPY.downloadTimelendrMacos : PROJECTS_COPY.downloadMacos}
+              aria-label={timelendr ? copy.downloadTimelendrMacos : copy.downloadMacos}
               onClick={(e) => {
                 e.preventDefault()
                 e.stopPropagation()

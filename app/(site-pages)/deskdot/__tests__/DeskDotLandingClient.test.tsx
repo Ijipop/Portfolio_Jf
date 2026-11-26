@@ -1,5 +1,6 @@
 import { render, screen } from '@testing-library/react'
 import { describe, expect, it, vi } from 'vitest'
+import PublicChromeI18n from '@/components/public-v2/chrome/PublicChromeI18n'
 import DeskDotLandingClient from '../DeskDotLandingClient'
 
 vi.mock('next/link', () => ({
@@ -56,12 +57,14 @@ vi.mock('@/components/product-landings/ProductDownloadRow', () => ({
 describe('DeskDotLandingClient (6B9)', () => {
   it('conserve marque, stack, démo et lien catalogue sans shell MUI', () => {
     render(
-      <DeskDotLandingClient
-        downloads={{
-          windows: 'https://example.com/deskdot.exe',
-          github: '',
-        }}
-      />,
+      <PublicChromeI18n>
+        <DeskDotLandingClient
+          downloads={{
+            windows: 'https://example.com/deskdot.exe',
+            github: '',
+          }}
+        />
+      </PublicChromeI18n>,
     )
 
     expect(screen.getByTestId('deskdot-landing')).toBeTruthy()
@@ -80,12 +83,14 @@ describe('DeskDotLandingClient (6B9)', () => {
 
   it('affiche downloadSoon quand aucun lien Windows', () => {
     render(
-      <DeskDotLandingClient
-        downloads={{
-          windows: '',
-          github: '',
-        }}
-      />,
+      <PublicChromeI18n>
+        <DeskDotLandingClient
+          downloads={{
+            windows: '',
+            github: '',
+          }}
+        />
+      </PublicChromeI18n>,
     )
 
     const soon = screen.getByRole('link', { name: /Bientôt disponible|Coming soon/i })

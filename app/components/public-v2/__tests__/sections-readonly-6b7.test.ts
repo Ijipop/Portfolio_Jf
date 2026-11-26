@@ -4,6 +4,7 @@ import { CONTACT_SMS_DISABLE_FILES } from './approved-contact-sms-disable-allowl
 import { SUPPORT_FORM_P0_FILES } from './approved-support-form-p0-allowlist'
 import { gitDiffNameOnly } from './gitDiffPortable'
 import { PHASE8_PREMIUM_FILES } from './phase8-premium-allowlist'
+import { I18N_V2_FILES } from './approved-i18n-v2-allowlist'
 
 /**
  * Phase 6B7 clôturée (Space Taker). Baseline = commit 6B7.
@@ -47,7 +48,8 @@ describe('Approved surfaces remain frozen after Phase 6B7', () => {
         !APPROVED_CLIENT_MEDIA_FILES.has(name) &&
         !PHASE8_PREMIUM_FILES.has(name) &&
         !SUPPORT_FORM_P0_FILES.has(name) &&
-        !CONTACT_SMS_DISABLE_FILES.has(name),
+        !CONTACT_SMS_DISABLE_FILES.has(name) &&
+        !I18N_V2_FILES.has(name),
     )
 
     expect(out).toEqual([])

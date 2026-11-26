@@ -1,11 +1,17 @@
+'use client'
+
 import { Container, Button } from '@/components/public-v2/primitives'
+import { useLanguage } from '@/contexts/LanguageContext'
 import {
+  getPublicV2ChromeCopy,
   getPublicV2Cta,
   getPublicV2NavItems,
   isPublicV2NavItemActive,
+  type PublicV2Locale,
 } from '@/lib/public-v2/nav'
 import BrandLockup from './BrandLockup'
 import HeaderScrollShell from './HeaderScrollShell'
+import PublicLocaleToggle from './PublicLocaleToggle'
 import PublicMobileNav from './PublicMobileNav'
 import styles from './PublicHeader.module.css'
 
@@ -14,14 +20,17 @@ export type PublicHeaderProps = {
 }
 
 export default function PublicHeader({ pathname }: PublicHeaderProps) {
-  const items = getPublicV2NavItems(pathname)
-  const cta = getPublicV2Cta(pathname)
+  const { locale } = useLanguage()
+  const loc = locale as PublicV2Locale
+  const items = getPublicV2NavItems(pathname, loc)
+  const cta = getPublicV2Cta(pathname, loc)
+  const chrome = getPublicV2ChromeCopy(loc)
 
   return (
     <HeaderScrollShell>
       <Container className={styles.shell}>
         <BrandLockup pathname={pathname} />
-        <nav aria-label="Principale">
+        <nav aria-label={chrome.primaryNav}>
           <ul className={styles.desktopNav}>
             {items.map((item) => {
               const active = isPublicV2NavItemActive(item, pathname)
@@ -41,11 +50,19 @@ export default function PublicHeader({ pathname }: PublicHeaderProps) {
             })}
           </ul>
         </nav>
-        <Button href={cta.href} variant="primary" size="sm" className={styles.desktopCta}>
-          {cta.label}
-        </Button>
-        <div className={styles.mobile}>
-          <PublicMobileNav items={items} cta={cta} pathname={pathname} />
+        <div className={styles.trailing}>
+          <PublicLocaleToggle />
+          <Button href={cta.href} variant="primary" size="sm" className={styles.desktopCta}>
+            {cta.label}
+          </Button>
+          <div className={styles.mobile}>
+            <PublicMobileNav
+              items={items}
+              cta={cta}
+              pathname={pathname}
+              menuLabel={chrome.mobileMenu}
+            />
+          </div>
         </div>
       </Container>
     </HeaderScrollShell>

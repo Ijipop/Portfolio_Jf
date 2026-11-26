@@ -5,13 +5,14 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { Button, Container, Heading } from '@/components/public-v2/primitives'
 import { navigateProjectUrl, resolveProductLandingHref } from '@/lib/navigateProjectUrl'
 import {
-  PROJECTS_COPY,
+  getProjectsCopy,
   sortCatalogProjects,
   type CatalogProject,
   type ProjectTypeFilter,
   type TimelendrLatestLinks,
   type WebAudienceTab,
 } from '@/lib/public-v2/projectsContent'
+import { usePublicV2Locale } from '@/lib/public-v2/usePublicV2Locale'
 import ProjectCard from './ProjectCard'
 import styles from './ProjectsCatalog.module.css'
 
@@ -36,6 +37,8 @@ export default function ProjectsCatalog({
   forceError = null,
   skipFetch = false,
 }: ProjectsCatalogProps) {
+  const locale = usePublicV2Locale()
+  const copy = getProjectsCopy(locale)
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
@@ -75,10 +78,10 @@ export default function ProjectsCatalog({
         if (data.success) {
           setProjects(data.data as CatalogProject[])
         } else {
-          setError(PROJECTS_COPY.errorLoad)
+          setError(copy.errorLoad)
         }
       } catch {
-        if (!cancelled) setError(PROJECTS_COPY.errorNetwork)
+        if (!cancelled) setError(copy.errorNetwork)
       } finally {
         if (!cancelled) setLoading(false)
       }
@@ -98,7 +101,7 @@ export default function ProjectsCatalog({
     return () => {
       cancelled = true
     }
-  }, [initialProjects, forceError, skipFetch])
+  }, [initialProjects, forceError, skipFetch, copy.errorLoad, copy.errorNetwork])
 
   const handleTypeChange = (next: ProjectTypeFilter) => {
     if (next === selectedType) return
@@ -134,7 +137,7 @@ export default function ProjectsCatalog({
     return (
       <section className={styles.section} data-testid="pv2-projects-catalog" aria-busy="true">
         <Container>
-          <p className={styles.stateBox}>{PROJECTS_COPY.loading}</p>
+          <p className={styles.stateBox}>{copy.loading}</p>
         </Container>
       </section>
     )
@@ -143,19 +146,19 @@ export default function ProjectsCatalog({
   const resultsLabel =
     !error && visible.length > 0
       ? visible.length === 1
-        ? PROJECTS_COPY.resultsCountOne
-        : PROJECTS_COPY.resultsCountMany.replace('{count}', String(visible.length))
+        ? copy.resultsCountOne
+        : copy.resultsCountMany.replace('{count}', String(visible.length))
       : null
 
   return (
     <section className={styles.section} data-testid="pv2-projects-catalog" aria-labelledby="pv2-projects-title">
       <Container>
         <header className={styles.intro}>
-          <p className={styles.eyebrow}>{PROJECTS_COPY.eyebrow}</p>
+          <p className={styles.eyebrow}>{copy.eyebrow}</p>
           <Heading as="h1" id="pv2-projects-title" variant="section" className={styles.title}>
-            {PROJECTS_COPY.title}
+            {copy.title}
           </Heading>
-          <p className={styles.lead}>{PROJECTS_COPY.lead}</p>
+          <p className={styles.lead}>{copy.lead}</p>
         </header>
 
         {error ? (
@@ -166,14 +169,14 @@ export default function ProjectsCatalog({
 
         <div className={styles.filterBar}>
           <div className={styles.filterBarRow}>
-            <div className={styles.segmentGroup} role="group" aria-label={PROJECTS_COPY.title}>
+            <div className={styles.segmentGroup} role="group" aria-label={copy.title}>
               <button
                 type="button"
                 className={styles.segmentBtn}
                 aria-pressed={selectedType === 'web'}
                 onClick={() => handleTypeChange('web')}
               >
-                {PROJECTS_COPY.typeWeb}
+                {copy.typeWeb}
               </button>
               <button
                 type="button"
@@ -181,7 +184,7 @@ export default function ProjectsCatalog({
                 aria-pressed={selectedType === 'logiciel'}
                 onClick={() => handleTypeChange('logiciel')}
               >
-                {PROJECTS_COPY.typeSoftware}
+                {copy.typeSoftware}
               </button>
             </div>
 
@@ -189,7 +192,7 @@ export default function ProjectsCatalog({
               <div
                 className={styles.segmentGroup}
                 role="group"
-                aria-label={PROJECTS_COPY.audienceProfessional}
+                aria-label={copy.audienceProfessional}
               >
                 <button
                   type="button"
@@ -197,7 +200,7 @@ export default function ProjectsCatalog({
                   aria-pressed={audience === 'professional'}
                   onClick={() => setAudience('professional')}
                 >
-                  {PROJECTS_COPY.audienceProfessional}
+                  {copy.audienceProfessional}
                 </button>
                 <button
                   type="button"
@@ -205,7 +208,7 @@ export default function ProjectsCatalog({
                   aria-pressed={audience === 'personal'}
                   onClick={() => setAudience('personal')}
                 >
-                  {PROJECTS_COPY.audiencePersonal}
+                  {copy.audiencePersonal}
                 </button>
               </div>
             ) : null}
@@ -216,8 +219,8 @@ export default function ProjectsCatalog({
               {selectedType === 'web' ? (
                 <p className={styles.audienceLead}>
                   {audience === 'personal'
-                    ? PROJECTS_COPY.audiencePersonalLead
-                    : PROJECTS_COPY.audienceProfessionalLead}
+                    ? copy.audiencePersonalLead
+                    : copy.audienceProfessionalLead}
                 </p>
               ) : null}
               {resultsLabel ? <p className={styles.resultsCount}>{resultsLabel}</p> : null}
@@ -229,12 +232,12 @@ export default function ProjectsCatalog({
           <div className={styles.stateBox}>
             <p>
               {selectedType === 'logiciel'
-                ? PROJECTS_COPY.emptySoftware
+                ? copy.emptySoftware
                 : selectedType === 'web'
-                  ? PROJECTS_COPY.audienceEmpty
-                  : PROJECTS_COPY.emptyWeb}
+                  ? copy.audienceEmpty
+                  : copy.emptyWeb}
             </p>
-            <p>{PROJECTS_COPY.comingSoon}</p>
+            <p>{copy.comingSoon}</p>
           </div>
         ) : null}
 
@@ -256,18 +259,18 @@ export default function ProjectsCatalog({
 
         {selectedType === 'web' ? (
           <div className={styles.footCta}>
-            <h2 className={styles.footCtaTitle}>{PROJECTS_COPY.demosCtaTitle}</h2>
-            <p className={styles.footCtaBody}>{PROJECTS_COPY.demosCtaBody}</p>
-            <Button href={PROJECTS_COPY.demosHref} variant="ghost" size="sm">
-              {PROJECTS_COPY.demosCtaLabel}
+            <h2 className={styles.footCtaTitle}>{copy.demosCtaTitle}</h2>
+            <p className={styles.footCtaBody}>{copy.demosCtaBody}</p>
+            <Button href={copy.demosHref} variant="ghost" size="sm">
+              {copy.demosCtaLabel}
             </Button>
           </div>
         ) : (
           <div className={styles.footCta}>
-            <h2 className={styles.footCtaTitle}>{PROJECTS_COPY.softwareCtaTitle}</h2>
-            <p className={styles.footCtaBody}>{PROJECTS_COPY.softwareCtaBody}</p>
-            <Button href={PROJECTS_COPY.softwareCtaHref} variant="primary" size="sm">
-              {PROJECTS_COPY.softwareCtaLabel}
+            <h2 className={styles.footCtaTitle}>{copy.softwareCtaTitle}</h2>
+            <p className={styles.footCtaBody}>{copy.softwareCtaBody}</p>
+            <Button href={copy.softwareCtaHref} variant="primary" size="sm">
+              {copy.softwareCtaLabel}
             </Button>
           </div>
         )}

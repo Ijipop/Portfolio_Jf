@@ -4,6 +4,8 @@
  * Médias clients autorisés : `public/img/portfolio/` (versionnés pour le déploiement).
  */
 
+import type { PublicV2Locale } from './locale'
+
 export type WorkFeatureRole = 'primary' | 'secondary' | 'soft'
 
 export type WorkBadge = {
@@ -55,12 +57,31 @@ export const WORK_COPY = {
     'Sélection éditoriale temporaire pour la preview V2 — pas un second catalogue permanent.',
 } as const
 
+export const WORK_COPY_EN = {
+  eyebrow: 'Work',
+  title: 'Selected projects',
+  lead: 'Client work and software I build on my own.',
+  catalogLinkLabel: 'View all projects →',
+  catalogHref: '/portfolio/projets',
+  selectionNote:
+    'Temporary editorial selection for the V2 preview — not a second permanent catalogue.',
+}
+
+export type WorkCopy = { [K in keyof typeof WORK_COPY]: string }
+
+export function getWorkCopy(locale: PublicV2Locale = 'fr'): WorkCopy {
+  return locale === 'en' ? WORK_COPY_EN : WORK_COPY
+}
+
 /**
  * DeskDot — descriptions alignées sur la page produit / i18n existants.
  * Pas d’affirmation de téléchargement stable (statut « bientôt » côté produit).
  */
 const DESKDOT_LEAD =
   'Lanceur radial pour Windows. Survole, clique, c’est lancé. Instantané, personnalisable, local sur ta machine.'
+
+const DESKDOT_LEAD_EN =
+  'Radial launcher for Windows. Hover, click, it’s launched. Fast, customizable, and stays local on your machine.'
 
 export const WORK_FEATURES: readonly WorkFeature[] = [
   {
@@ -150,3 +171,96 @@ export const WORK_FEATURES: readonly WorkFeature[] = [
     publishable: true,
   },
 ] as const
+
+const WORK_FEATURES_EN: readonly WorkFeature[] = [
+  {
+    id: 'expression-lasalle',
+    catalogKey: 'expression-lasalle',
+    role: 'primary',
+    title: 'Expression LaSalle',
+    tags: 'Web development · Microsoft 365 · IT modernization',
+    description:
+      'Redesign of the bilingual website, now live, with a refreshed web presence for the organization. The mandate also included modernizing their digital environment (Microsoft 365 migration and messaging).',
+    badges: [
+      { label: 'Client project', variant: 'accent' },
+      { label: 'Live site', variant: 'success' },
+    ],
+    media: {
+      kind: 'site',
+      desktopSrc: '/img/portfolio/expression-lasalle-desktop.png',
+      desktopAlt: 'Desktop preview of the Expression LaSalle website',
+      phoneSrc: '/img/portfolio/expression-lasalle-phone.png',
+      phoneAlt: 'Mobile preview of the Expression LaSalle website',
+    },
+    ctas: [
+      {
+        label: 'Visit the site ↗',
+        href: 'https://www.expressionlasalletherapies.ca/fr',
+        variant: 'primary',
+        external: true,
+        accent: 'expression',
+      },
+    ],
+    legalNote: 'Expression LaSalle — client’s public website.',
+    publishable: true,
+  },
+  {
+    id: 'thermo-trappeur',
+    catalogKey: 'thermo-trappeur',
+    role: 'secondary',
+    title: 'Thermo-Trappeur',
+    tags: 'Commercial website · Web development',
+    description:
+      'A commercial website showcasing Thermo-Trappeur’s products and services, with navigation tailored to what visitors need.',
+    badges: [
+      { label: 'Client project', variant: 'accent' },
+      { label: 'Project delivered', variant: 'success' },
+    ],
+    media: {
+      kind: 'site',
+      desktopSrc: '/img/portfolio/thermo-trappeur-desktop.png',
+      desktopAlt: 'Desktop preview of the Thermo-Trappeur website',
+      phoneSrc: '/img/portfolio/thermo-trappeur-phone.png',
+      phoneAlt: 'Mobile preview of the Thermo-Trappeur website',
+    },
+    ctas: [
+      {
+        label: 'View the site',
+        href: 'https://www.thermo-trappeur.ca/fr',
+        variant: 'primary',
+        external: true,
+      },
+    ],
+    legalNote: 'Thermo-Trappeur brand — client’s public website.',
+    publishable: true,
+  },
+  {
+    id: 'deskdot',
+    catalogKey: 'deskdot',
+    role: 'soft',
+    title: 'DeskDot',
+    tags: 'Windows software · Radial launcher',
+    description: DESKDOT_LEAD_EN,
+    badges: [
+      { label: 'Personal project', variant: 'personal' },
+      { label: 'Windows software', variant: 'neutral' },
+    ],
+    media: {
+      kind: 'product',
+      desktopSrc: '/img/deskdot/deskdot2.png',
+      desktopAlt: 'Screenshot of DeskDot, a radial shortcut launcher for Windows',
+    },
+    ctas: [
+      {
+        label: 'View product page',
+        href: '/deskdot',
+        variant: 'primary',
+      },
+    ],
+    publishable: true,
+  },
+]
+
+export function getWorkFeatures(locale: PublicV2Locale = 'fr'): readonly WorkFeature[] {
+  return locale === 'en' ? WORK_FEATURES_EN : WORK_FEATURES
+}

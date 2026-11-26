@@ -1,5 +1,5 @@
 import { Suspense } from 'react'
-import { PublicChromeShell } from '@/components/public-v2/chrome'
+import { LocalizedBusy, PublicChromeShell } from '@/components/public-v2/chrome'
 import { ContactPageClient } from '@/components/public-v2/contact'
 
 /**
@@ -12,7 +12,7 @@ export default function ContactMerciPage() {
       mainId="pv2-contact-merci-main"
       mainTestId="pv2-contact-merci-main"
     >
-      <Suspense fallback={<p aria-busy="true">Confirmation…</p>}>
+      <Suspense fallback={<LocalizedBusy kind="contactMerci" />}>
         <ContactPageClient showMerciDialog />
       </Suspense>
     </PublicChromeShell>

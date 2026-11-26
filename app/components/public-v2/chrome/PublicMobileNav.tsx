@@ -11,13 +11,19 @@ export type PublicMobileNavProps = {
   items: PublicV2NavItem[]
   cta: { label: string; href: string }
   pathname: string
+  menuLabel?: string
 }
 
 /**
  * Menu mobile natif `<details>` — utilisable sans JS.
  * Enrichissement : Échap, focus retour, fermeture après sélection.
  */
-export default function PublicMobileNav({ items, cta, pathname }: PublicMobileNavProps) {
+export default function PublicMobileNav({
+  items,
+  cta,
+  pathname,
+  menuLabel = 'Menu de navigation',
+}: PublicMobileNavProps) {
   const detailsRef = useRef<HTMLDetailsElement>(null)
   const summaryRef = useRef<HTMLElement>(null)
   const panelId = useId()
@@ -50,7 +56,7 @@ export default function PublicMobileNav({ items, cta, pathname }: PublicMobileNa
         ref={summaryRef}
         className={styles.summary}
         aria-controls={panelId}
-        aria-label="Menu de navigation"
+        aria-label={menuLabel}
       >
         <span className={styles.bar} aria-hidden />
         <span className={styles.bar} aria-hidden />

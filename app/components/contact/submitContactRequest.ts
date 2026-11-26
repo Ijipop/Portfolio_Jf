@@ -3,7 +3,7 @@
  */
 export type SubmitContactResult =
   | { ok: true }
-  | { ok: false; error: string; kind: 'api' | 'network' }
+  | { ok: false; error: string; kind: 'api' | 'network'; status?: number }
 
 export async function submitContactRequest(
   body: Record<string, unknown>,
@@ -22,7 +22,7 @@ export async function submitContactRequest(
         data = JSON.parse(raw) as { success?: boolean; error?: string }
       } catch {
         if (!response.ok) {
-          return { ok: false, error: fallbackError, kind: 'api' }
+          return { ok: false, error: fallbackError, kind: 'api', status: response.status }
         }
       }
     }
@@ -32,10 +32,11 @@ export async function submitContactRequest(
         ok: false,
         error: typeof data.error === 'string' ? data.error : fallbackError,
         kind: 'api',
+        status: response.status,
       }
     }
     if (response.ok) return { ok: true }
-    return { ok: false, error: fallbackError, kind: 'api' }
+    return { ok: false, error: fallbackError, kind: 'api', status: response.status }
   } catch (error) {
     console.error('Erreur envoi contact:', error)
     return { ok: false, error: fallbackError, kind: 'network' }

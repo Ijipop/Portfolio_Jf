@@ -1,5 +1,6 @@
 import { render, screen, waitFor } from '@testing-library/react'
 import { describe, expect, it, vi, beforeEach } from 'vitest'
+import PublicChromeI18n from '@/components/public-v2/chrome/PublicChromeI18n'
 import TimelendrLandingClient from '../TimelendrLandingClient'
 
 vi.mock('next/link', () => ({
@@ -72,7 +73,11 @@ describe('TimelendrLandingClient (6B10)', () => {
   })
 
   it('conserve marque, releases mockées et lien catalogue sans shell MUI', async () => {
-    render(<TimelendrLandingClient />)
+    render(
+      <PublicChromeI18n>
+        <TimelendrLandingClient />
+      </PublicChromeI18n>,
+    )
 
     expect(screen.getByTestId('timelendr-landing')).toBeTruthy()
     expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(/Time/)
@@ -99,7 +104,11 @@ describe('TimelendrLandingClient (6B10)', () => {
       vi.fn().mockRejectedValue(new Error('offline')),
     )
 
-    render(<TimelendrLandingClient />)
+    render(
+      <PublicChromeI18n>
+        <TimelendrLandingClient />
+      </PublicChromeI18n>,
+    )
 
     await waitFor(() => {
       expect(screen.queryByTestId('timelendr-downloads-mock')).toBeNull()

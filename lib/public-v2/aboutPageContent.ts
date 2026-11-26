@@ -6,6 +6,8 @@
  * Formations reprises de la V1 — à confirmer avant publication.
  */
 
+import type { PublicV2Locale } from './locale'
+
 export const ABOUT_PAGE_SKILLS = [
   'Python',
   'Java',
@@ -21,6 +23,7 @@ export const ABOUT_PAGE_SKILLS = [
 
 export const ABOUT_PAGE_COPY = {
   title: 'À propos',
+  portraitEyebrow: 'Portrait',
   identityName: 'Jean-François Lefebvre',
   identityRole: 'Développeur indépendant à Montréal',
   lead:
@@ -57,3 +60,64 @@ export const ABOUT_PAGE_COPY = {
   ctaProjects: 'Voir mes réalisations',
   ctaProjectsHref: '/portfolio/projets',
 } as const
+
+const ABOUT_PAGE_COPY_EN = {
+  title: 'About',
+  portraitEyebrow: 'Portrait',
+  identityName: 'Jean-François Lefebvre',
+  identityRole: 'Independent developer in Montreal',
+  lead: 'I build websites, develop software, and offer IT support.',
+  portrait: {
+    src: '/img/Jf.jpg',
+    alt: 'Portrait of Jean-François Lefebvre',
+    width: 640,
+    height: 800,
+  },
+  storyTitle: 'My path',
+  storyParagraphs: [
+    'A stroke survivor at age 38 and father of two, I had to reinvent my career path to build a future that lets me work from home, close to the people who matter most.',
+    'What began as a career change quickly became a real passion. Today I put that passion to work for others by building custom websites and software—crafted with care, humanity, and attention to detail.',
+    "Every project I take on is far more than a job to me: it's a chance to create something useful, beautiful, and lasting that truly reflects my clients' needs and vision.",
+  ] as const,
+  workingTitle: 'How I work',
+  workingParagraphs: [
+    'I start by understanding what you need. Then we look together at what is worth building and how to keep the result simple to use and easy to evolve.',
+    'I pay attention to detail and favour practical solutions over unnecessary complexity. I also stay available after delivery for tweaks, updates, and support.',
+  ] as const,
+  formationTitle: 'Education',
+  formationItems: ABOUT_PAGE_COPY.formationItems,
+  toolsTitle: 'Tools and technologies',
+  ctaTitle: 'A project or a question?',
+  ctaBody:
+    'Need a website, a piece of software, or hands-on IT help? Write and tell me what you are looking for.',
+  ctaContact: 'Contact me',
+  ctaContactHref: '/portfolio/contact',
+  ctaProjects: 'See my work',
+  ctaProjectsHref: '/portfolio/projets',
+} as const
+
+export type AboutPageCopy = {
+  title: string
+  portraitEyebrow: string
+  identityName: string
+  identityRole: string
+  lead: string
+  portrait: { src: string; alt: string; width: number; height: number }
+  storyTitle: string
+  storyParagraphs: readonly string[]
+  workingTitle: string
+  workingParagraphs: readonly string[]
+  formationTitle: string
+  formationItems: readonly string[]
+  toolsTitle: string
+  ctaTitle: string
+  ctaBody: string
+  ctaContact: string
+  ctaContactHref: string
+  ctaProjects: string
+  ctaProjectsHref: string
+}
+
+export function getAboutPageContent(locale: PublicV2Locale = 'fr'): AboutPageCopy {
+  return locale === 'en' ? ABOUT_PAGE_COPY_EN : ABOUT_PAGE_COPY
+}

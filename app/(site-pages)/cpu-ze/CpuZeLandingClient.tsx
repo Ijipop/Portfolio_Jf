@@ -5,7 +5,7 @@ import ProductDownloadRow from '@/components/product-landings/ProductDownloadRow
 import ProductImageCarousel from '@/components/product-landings/ProductImageCarousel'
 import ProductSecurityNotice from '@/components/product-landings/ProductSecurityNotice'
 import type { ProductDownloadLinks } from '@/components/product-landings/productDownloads'
-import { LanguageProvider, useLanguage } from '@/contexts/LanguageContext'
+import { useLanguage } from '@/contexts/LanguageContext'
 import styles from './CpuZeLanding.module.css'
 
 const BENEFIT_KEYS = ['cpuZe.b1', 'cpuZe.b2', 'cpuZe.b3', 'cpuZe.b4'] as const
@@ -91,11 +91,7 @@ function CpuZeLandingBody({ downloads }: CpuZeLandingClientProps) {
   )
 }
 
-/** Contenu CPU-ZE — chrome Pop Atelier fourni par la page ; i18n via LanguageProvider. */
+/** LanguageProvider fourni par PublicChromeShell (fixedLocale=fr si flag off). */
 export default function CpuZeLandingClient({ downloads }: CpuZeLandingClientProps) {
-  return (
-    <LanguageProvider>
-      <CpuZeLandingBody downloads={downloads} />
-    </LanguageProvider>
-  )
+  return <CpuZeLandingBody downloads={downloads} />
 }

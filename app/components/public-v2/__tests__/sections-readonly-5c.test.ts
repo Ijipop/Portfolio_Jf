@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest'
 import { APPROVED_CLIENT_MEDIA_FILES } from './approved-client-media-allowlist'
 import { gitDiffNameOnly } from './gitDiffPortable'
 import { PHASE8_PREMIUM_FILES } from './phase8-premium-allowlist'
+import { I18N_V2_FILES } from './approved-i18n-v2-allowlist'
 
 /**
  * Après le commit 5B, les sections figées restent protégées.
@@ -22,6 +23,7 @@ describe('Validated sections read-only during Phase 5C', () => {
       'app/components/public-v2/sections/Hero/Hero.module.css',
       ...APPROVED_CLIENT_MEDIA_FILES,
       ...PHASE8_PREMIUM_FILES,
+      ...I18N_V2_FILES,
     ])
     for (const file of out) {
       expect(allowed.has(file)).toBe(true)
@@ -42,6 +44,7 @@ describe('Validated sections read-only during Phase 5C', () => {
       'app/components/public-v2/sections/Services/__tests__/ServicesSection.test.tsx',
       'app/components/public-v2/sections/Services/index.ts',
       'lib/public-v2/servicesContent.ts',
+      ...I18N_V2_FILES,
     ])
 
     for (const file of out) {

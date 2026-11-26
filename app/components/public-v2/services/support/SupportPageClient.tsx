@@ -3,22 +3,26 @@
 import { Button, Container } from '@/components/public-v2/primitives'
 import SupportContactForm from '@/components/support/SupportContactForm'
 import {
-  SUPPORT_CROSS_LINKS,
+  getSupportCrossLinks,
+  getSupportPageCopy,
   SUPPORT_FORM_ANCHOR,
-  SUPPORT_PAGE_COPY,
   SUPPORT_PHONE_DISPLAY,
   SUPPORT_PHONE_HREF,
 } from '@/lib/public-v2/supportPageContent'
-import { SUPPORT_EDITORIAL } from '@/lib/public-v2/supportEditorialContent'
+import { getSupportEditorialContent } from '@/lib/public-v2/supportEditorialContent'
+import { usePublicV2Locale } from '@/lib/public-v2/usePublicV2Locale'
 import SupportFormMuiIsland from './SupportFormMuiIsland'
 import SupportStickyCta from './SupportStickyCta'
 import styles from './SupportPage.module.css'
 
 const FORM_HREF = `#${SUPPORT_FORM_ANCHOR}`
-const editorial = SUPPORT_EDITORIAL
 
 export default function SupportPageClient() {
-  const formCopy = SUPPORT_PAGE_COPY
+  const locale = usePublicV2Locale()
+  const editorial = getSupportEditorialContent(locale)
+  const formCopy = getSupportPageCopy(locale)
+  const crossLinks = getSupportCrossLinks(locale)
+  const crossNavLabel = locale === 'en' ? 'Also available' : 'Aussi disponible'
 
   return (
     <div className={styles.page}>
@@ -66,7 +70,7 @@ export default function SupportPageClient() {
       >
         <Container variant="wide">
           <div className={styles.servicesIntro}>
-            <p className={styles.sectionEyebrow}>Prestations</p>
+            <p className={styles.sectionEyebrow}>{editorial.services.eyebrow}</p>
             <h2 id="support-services-title" className={styles.sectionTitle}>
               {editorial.services.title}
             </h2>
@@ -171,10 +175,10 @@ export default function SupportPageClient() {
           </div>
         </section>
 
-        <nav className={styles.crossLinks} aria-label="Aussi disponible">
-          <p className={styles.crossLabel}>Aussi disponible</p>
+        <nav className={styles.crossLinks} aria-label={crossNavLabel}>
+          <p className={styles.crossLabel}>{crossNavLabel}</p>
           <ul className={styles.crossList}>
-            {SUPPORT_CROSS_LINKS.map((link) => (
+            {crossLinks.map((link) => (
               <li key={link.href}>
                 <a href={link.href}>{link.label}</a>
               </li>

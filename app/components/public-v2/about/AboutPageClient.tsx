@@ -1,16 +1,20 @@
+'use client'
+
 import Image from 'next/image'
 import { Button, Container, Heading } from '@/components/public-v2/primitives'
-import { ABOUT_PAGE_COPY, ABOUT_PAGE_SKILLS } from '@/lib/public-v2/aboutPageContent'
+import { ABOUT_PAGE_SKILLS, getAboutPageContent } from '@/lib/public-v2/aboutPageContent'
+import { usePublicV2Locale } from '@/lib/public-v2/usePublicV2Locale'
 import styles from './AboutPage.module.css'
 
 export default function AboutPageClient() {
-  const c = ABOUT_PAGE_COPY
+  const locale = usePublicV2Locale()
+  const c = getAboutPageContent(locale)
 
   return (
     <div className={styles.page}>
       <Container>
         <header className={styles.header}>
-          <p className={styles.eyebrow}>Portrait</p>
+          <p className={styles.eyebrow}>{c.portraitEyebrow}</p>
           <Heading as="h1" variant="section" className={styles.pageTitle}>
             {c.title}
           </Heading>
