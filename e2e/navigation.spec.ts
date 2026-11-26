@@ -1,25 +1,34 @@
-import { expect, test } from '@playwright/test'
+import { expect, test, type Page } from '@playwright/test'
+
+/** Immediate retry on aborted navigations (Next/Playwright race); no sleep. */
+async function gotoStable(page: Page, url: string) {
+  try {
+    await page.goto(url, { waitUntil: 'domcontentloaded' })
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error)
+    if (!/ERR_ABORTED/.test(message)) throw error
+    await page.goto(url, { waitUntil: 'domcontentloaded' })
+  }
+}
 
 test('landing reaches portfolio and contact in two clicks max', async ({ page }) => {
   await page.goto('/', { waitUntil: 'domcontentloaded' })
 
-  await expect(page.getByTestId('gateway-choice-web')).toBeVisible()
-  await expect(page.getByTestId('gateway-choice-support')).toBeVisible()
-  await expect(page.getByTestId('gateway-choice-software')).toBeVisible()
-  const gatewayHeading = page.getByRole('heading', { level: 1 })
-  await expect(gatewayHeading).toContainText(/Bienvenue chez|Welcome to/i)
-  await expect(gatewayHeading).toContainText(/ijipop/i)
-  await expect(gatewayHeading).toContainText(/solutions/i)
-  await expect(page.getByText(/Que puis-je faire pour vous|How can I help you/i).first()).toBeVisible()
+  // Pop Atelier home (V2) : hero + trois services — plus de gateway V1.
+  await expect(page.getByTestId('pv2-hero')).toBeVisible()
+  await expect(page.getByTestId('pv2-services')).toBeVisible()
+  await expect(page.getByTestId('pv2-service-web')).toBeVisible()
+  await expect(page.getByTestId('pv2-service-support')).toBeVisible()
+  await expect(page.getByTestId('pv2-service-software')).toBeVisible()
 
-  await page.getByTestId('gateway-choice-web').click()
-  await expect(page).toHaveURL(/\/portfolio\/?$/)
+  await page.getByTestId('pv2-service-web').getByRole('link').click()
+  await expect(page).toHaveURL(/\/portfolio\/projets/)
 
-  const contactNav = page.getByRole('banner').getByRole('link', { name: /^Contact$/i })
-  await expect(contactNav).toBeVisible()
+  const contactCta = page.getByRole('banner').getByRole('link', { name: 'Me contacter' })
+  await expect(contactCta).toBeVisible()
   await Promise.all([
     page.waitForURL(/\/portfolio\/contact/),
-    contactNav.click(),
+    contactCta.click(),
   ])
   await expect(page.getByTestId('contact-form')).toBeVisible()
 })
@@ -44,13 +53,11 @@ test('portfolio home loads and nav works', async ({ page }) => {
   await expect(page).toHaveURL(/\/portfolio\/contact/)
 })
 
-test('about cards can flip without breaking layout', async ({ page }) => {
+test('about page presents identity and formation', async ({ page }) => {
+  // V2 À propos : portrait + formation en sections (plus de cartes flip V1).
   await page.goto('/portfolio/a-propos', { waitUntil: 'domcontentloaded' })
 
-  await page.getByTestId('about-flip-card-who').click()
   await expect(page.getByRole('heading', { name: 'Jean-François Lefebvre' })).toBeVisible()
-
-  await page.getByTestId('about-flip-card-formation').click()
   await expect(page.getByText(/AEC Développement de logiciels/i)).toBeVisible()
 })
 
@@ -65,7 +72,8 @@ test('contact form renders stable fields', async ({ page }) => {
   await expect(form.locator('input[name="email"]')).toBeVisible()
   await expect(form.locator('input[name="subject"]')).toBeVisible()
   await expect(form.locator('textarea[name="message"]')).toBeVisible()
-  await expect(form.locator('button[type="submit"]')).toContainText(/Obtenir une estimation|Get an estimate/i)
+  // Contact V2 : libellé éditorial « Envoyer mon message » (pas le CTA estimation funnel).
+  await expect(form.locator('button[type="submit"]')).toContainText(/Envoyer mon message|Send my message/i)
 })
 
 test('portfolio home has CSS backdrop and no Vanta (reduced motion)', async ({ page }) => {
@@ -125,56 +133,42 @@ test('home hero CTAs stay visible within the first viewport', async ({ page }) =
   }
 })
 
-test('gateway choice CTAs stay visible within the first viewport', async ({ page }) => {
-  // Évite opacity/transform transitoires qui font renvoyer null à boundingBox() en CI.
-  await page.emulateMedia({ reducedMotion: 'reduce' })
-
-  const viewports = [
-    { width: 390, height: 844 },
-    { width: 844, height: 390 },
-    { width: 768, height: 1024 },
-    { width: 1280, height: 800 },
-  ]
-
-  for (const viewport of viewports) {
-    await page.setViewportSize(viewport)
-    await page.goto('/', { waitUntil: 'load' })
-
-    const webCta = page.getByTestId('gateway-choice-web')
-    const supportCta = page.getByTestId('gateway-choice-support')
-    const softwareCta = page.getByTestId('gateway-choice-software')
-
-    await expect(webCta).toBeVisible()
-    await expect(supportCta).toBeVisible()
-    await expect(softwareCta).toBeVisible()
-
-    const isFullyInFirstViewport = (testId: string) =>
-      page.evaluate((id) => {
-        const el = document.querySelector(`[data-testid="${id}"]`)
-        if (!el) return false
-        const rect = el.getBoundingClientRect()
-        const tolerance = 8
-        return (
-          rect.width > 0 &&
-          rect.height > 0 &&
-          rect.top >= -tolerance &&
-          rect.bottom <= window.innerHeight + tolerance
-        )
-      }, testId)
-
-    await expect.poll(() => isFullyInFirstViewport('gateway-choice-web')).toBe(true)
-    await expect.poll(() => isFullyInFirstViewport('gateway-choice-support')).toBe(true)
-    await expect.poll(() => isFullyInFirstViewport('gateway-choice-software')).toBe(true)
-  }
-})
-
-test('gateway software card links to logiciels showcase', async ({ page }) => {
+test('home service lanes expose web, support and software destinations', async ({ page }) => {
+  // Remplace le gateway V1 (first viewport) : en V2 les services sont sous le hero.
   await page.emulateMedia({ reducedMotion: 'reduce' })
   await page.goto('/', { waitUntil: 'domcontentloaded' })
 
-  const softwareCta = page.getByTestId('gateway-choice-software')
-  await expect(softwareCta).toBeVisible()
-  await expect(softwareCta).toHaveAttribute('href', '/portfolio/projets?type=logiciel')
+  const web = page.getByTestId('pv2-service-web')
+  const support = page.getByTestId('pv2-service-support')
+  const software = page.getByTestId('pv2-service-software')
+
+  await web.scrollIntoViewIfNeeded()
+  await expect(web).toBeVisible()
+  await expect(support).toBeVisible()
+  await expect(software).toBeVisible()
+
+  await expect(web.getByRole('link')).toHaveAttribute('href', '/portfolio/projets?type=web')
+  await expect(support.getByRole('link')).toHaveAttribute(
+    'href',
+    '/soutien-informatique-montreal',
+  )
+  await expect(software.getByRole('link')).toHaveAttribute(
+    'href',
+    '/portfolio/projets?type=logiciel',
+  )
+})
+
+test('home software service links to logiciels showcase', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' })
+  await page.goto('/', { waitUntil: 'domcontentloaded' })
+
+  const software = page.getByTestId('pv2-service-software')
+  await software.scrollIntoViewIfNeeded()
+  await expect(software).toBeVisible()
+  await expect(software.getByRole('link')).toHaveAttribute(
+    'href',
+    '/portfolio/projets?type=logiciel',
+  )
 })
 test('site light mode uses dark text on home and contact', async ({ page }) => {
   await page.addInitScript(() => {
@@ -200,7 +194,10 @@ test('site light mode uses dark text on home and contact', async ({ page }) => {
 })
 
 test('demos index and demo routes', async ({ page }) => {
-  await page.goto('/demos', { waitUntil: 'domcontentloaded' })
+  // Long multi-route walk; allow one aborted goto retry without inflating suite timeout.
+  test.setTimeout(90_000)
+
+  await gotoStable(page, '/demos')
   await expect(page).toHaveURL(/\/demos\/?$/)
   await expect(page.locator('h1').first()).toContainText(/Neuf directions créatives/)
   await expect(page.locator('a[href="/demos/studio"]').first()).toBeVisible()
@@ -216,21 +213,23 @@ test('demos index and demo routes', async ({ page }) => {
   ])
   await expect(page.locator('h1').filter({ hasText: /On bâtit solide/ })).toBeVisible()
 
-  await page.goto('/demos/studio', { waitUntil: 'domcontentloaded' })
+  await gotoStable(page, '/demos')
+  await page.locator('a[href="/demos/studio"]').first().click()
+  await expect(page).toHaveURL(/\/demos\/studio/)
   await expect(page.locator('h1').filter({ hasText: /sans formule toute faite/ })).toBeVisible()
 
-  await page.goto('/demos/spectacle', { waitUntil: 'domcontentloaded' })
+  await gotoStable(page, '/demos/spectacle')
   await expect(page.locator('h1').filter({ hasText: /Une scène pour les voix/ })).toBeVisible()
 
-  await page.goto('/demos/portfolio', { waitUntil: 'domcontentloaded' })
+  await gotoStable(page, '/demos/portfolio')
   await expect(page.locator('h1').filter({ hasText: /pensés pour convertir/ })).toBeVisible()
   await expect(page.getByText('Jean-François Lefebvre')).toBeVisible()
 
-  await page.goto('/demos/galerie', { waitUntil: 'domcontentloaded' })
+  await gotoStable(page, '/demos/galerie')
   await expect(page.getByRole('link', { name: 'Ligne claire' })).toBeVisible()
   await expect(page.getByRole('link', { name: /Maison Nord/ })).toBeVisible()
 
-  await page.goto('/demos/volt', { waitUntil: 'domcontentloaded' })
+  await gotoStable(page, '/demos/volt')
   await expect(page.locator('h1').filter({ hasText: /Trop loud/ })).toBeVisible()
   await expect(page.getByRole('link', { name: /Voir le drop/i })).toBeVisible()
 })

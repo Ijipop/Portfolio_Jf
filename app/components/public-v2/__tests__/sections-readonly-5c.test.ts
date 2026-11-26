@@ -1,22 +1,22 @@
-import { execSync } from 'node:child_process'
 import { describe, expect, it } from 'vitest'
 import { APPROVED_CLIENT_MEDIA_FILES } from './approved-client-media-allowlist'
+import { gitDiffNameOnly } from './gitDiffPortable'
 import { PHASE8_PREMIUM_FILES } from './phase8-premium-allowlist'
 
 /**
  * Après le commit 5B, les sections figées restent protégées.
  * Services peut recevoir des corrections UX ciblées (alignement / lead).
  */
+const BASE_5B = 'b661fcf2adacc543c0d9159545ccfe18535f2093'
+
 describe('Validated sections read-only during Phase 5C', () => {
   it('ne modifie pas Hero ni Work depuis HEAD de référence 5B', () => {
-    const base = 'b661fcf2adacc543c0d9159545ccfe18535f2093'
-    const out = execSync(
-      `git diff --name-only ${base} -- app/components/public-v2/sections/Hero app/components/public-v2/sections/Work lib/public-v2/heroContent.ts lib/public-v2/workContent.ts`,
-      { encoding: 'utf8', cwd: process.cwd() },
-    )
-      .trim()
-      .split(/\r?\n/)
-      .filter(Boolean)
+    const out = gitDiffNameOnly(BASE_5B, [
+      'app/components/public-v2/sections/Hero',
+      'app/components/public-v2/sections/Work',
+      'lib/public-v2/heroContent.ts',
+      'lib/public-v2/workContent.ts',
+    ])
 
     const allowed = new Set([
       'app/components/public-v2/sections/Hero/Hero.module.css',
@@ -29,14 +29,10 @@ describe('Validated sections read-only during Phase 5C', () => {
   })
 
   it('limite les changements Services aux fichiers de section / contenu autorisés', () => {
-    const base = 'b661fcf2adacc543c0d9159545ccfe18535f2093'
-    const out = execSync(
-      `git diff --name-only ${base} -- app/components/public-v2/sections/Services lib/public-v2/servicesContent.ts`,
-      { encoding: 'utf8', cwd: process.cwd() },
-    )
-      .trim()
-      .split(/\r?\n/)
-      .filter(Boolean)
+    const out = gitDiffNameOnly(BASE_5B, [
+      'app/components/public-v2/sections/Services',
+      'lib/public-v2/servicesContent.ts',
+    ])
 
     const allowed = new Set([
       'app/components/public-v2/sections/Services/ServiceCard.module.css',
