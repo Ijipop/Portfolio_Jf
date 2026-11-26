@@ -79,6 +79,13 @@
   transform: scaleX(1);
 }
 
+.trailing {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-left: auto;
+}
+
 .desktopCta {
   display: none;
 }

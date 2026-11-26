@@ -1,8 +1,13 @@
+'use client'
+
 import { Container } from '@/components/public-v2/primitives'
+import { useLanguage } from '@/contexts/LanguageContext'
 import {
   PUBLIC_V2_BRAND,
+  getPublicV2ChromeCopy,
   getPublicV2Cta,
   getPublicV2NavItems,
+  type PublicV2Locale,
 } from '@/lib/public-v2/nav'
 import BrandLockup from './BrandLockup'
 import styles from './PublicFooter.module.css'
@@ -12,8 +17,11 @@ export type PublicFooterProps = {
 }
 
 export default function PublicFooter({ pathname }: PublicFooterProps) {
-  const items = getPublicV2NavItems(pathname)
-  const cta = getPublicV2Cta(pathname)
+  const { locale } = useLanguage()
+  const loc = locale as PublicV2Locale
+  const items = getPublicV2NavItems(pathname, loc)
+  const cta = getPublicV2Cta(pathname, loc)
+  const chrome = getPublicV2ChromeCopy(loc)
 
   return (
     <footer className={styles.footer}>
@@ -24,7 +32,7 @@ export default function PublicFooter({ pathname }: PublicFooterProps) {
             {PUBLIC_V2_BRAND.name} — {PUBLIC_V2_BRAND.mark}
           </p>
         </div>
-        <nav aria-label="Pied de page">
+        <nav aria-label={chrome.footerNav}>
           <ul className={styles.nav}>
             {items.map((item) => (
               <li key={item.id}>

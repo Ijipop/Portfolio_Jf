@@ -1,7 +1,8 @@
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { describe, expect, it, vi } from 'vitest'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 import PublicThemeRoot from '../../theme/PublicThemeRoot'
+import PublicChromeI18n from '../PublicChromeI18n'
 import PublicHeader from '../PublicHeader'
 import PublicFooter from '../PublicFooter'
 import { getPublicV2NavItems } from '@/lib/public-v2/nav'
@@ -28,14 +29,26 @@ vi.mock('next/link', () => ({
   ),
 }))
 
+function renderChrome(ui: React.ReactNode) {
+  return render(
+    <PublicThemeRoot>
+      <PublicChromeI18n>{ui}</PublicChromeI18n>
+    </PublicThemeRoot>,
+  )
+}
+
 describe('public-v2 chrome', () => {
+  afterEach(() => {
+    vi.unstubAllEnvs()
+  })
+
   it('Header et Footer partagent les mêmes destinations résolues', () => {
     const pathname = '/v2-design-preview'
-    render(
-      <PublicThemeRoot>
+    renderChrome(
+      <>
         <PublicHeader pathname={pathname} />
         <PublicFooter pathname={pathname} />
-      </PublicThemeRoot>,
+      </>,
     )
 
     const expected = getPublicV2NavItems(pathname)
@@ -52,11 +65,7 @@ describe('public-v2 chrome', () => {
 
   it('ferme le menu mobile avec Échap et restaure le focus', async () => {
     const user = userEvent.setup()
-    render(
-      <PublicThemeRoot>
-        <PublicHeader pathname="/v2-design-preview" />
-      </PublicThemeRoot>,
-    )
+    renderChrome(<PublicHeader pathname="/v2-design-preview" />)
 
     // jsdom n’expose pas toujours summary comme role=button — label accessible suffit.
     const summary = screen.getByLabelText('Menu de navigation')
@@ -70,12 +79,26 @@ describe('public-v2 chrome', () => {
   })
 
   it('marque À propos comme page courante sur /portfolio/a-propos', () => {
-    render(
-      <PublicThemeRoot>
-        <PublicHeader pathname="/portfolio/a-propos" />
-      </PublicThemeRoot>,
-    )
+    renderChrome(<PublicHeader pathname="/portfolio/a-propos" />)
     const aboutLinks = screen.getAllByRole('link', { name: 'À propos' })
     expect(aboutLinks.some((l) => l.getAttribute('aria-current') === 'page')).toBe(true)
+  })
+
+  it('n’expose pas le sélecteur FR/EN tant que le flag est off', () => {
+    vi.stubEnv('NEXT_PUBLIC_I18N_TOGGLE_ENABLED', 'false')
+    renderChrome(<PublicHeader pathname="/" />)
+    expect(screen.queryByTestId('pv2-locale-toggle')).toBeNull()
+    expect(screen.getAllByRole('link', { name: 'Réalisations' }).length).toBeGreaterThanOrEqual(1)
+  })
+
+  it('expose le sélecteur FR/EN et bascule les labels quand le flag est on', async () => {
+    vi.stubEnv('NEXT_PUBLIC_I18N_TOGGLE_ENABLED', 'true')
+    const user = userEvent.setup()
+    renderChrome(<PublicHeader pathname="/" />)
+
+    expect(screen.getByTestId('pv2-locale-toggle')).toBeTruthy()
+    await user.click(screen.getByRole('button', { name: 'EN' }))
+    expect(screen.getAllByRole('link', { name: 'Work' }).length).toBeGreaterThanOrEqual(1)
+    expect(screen.getAllByRole('link', { name: 'Contact me' }).length).toBeGreaterThanOrEqual(1)
   })
 })

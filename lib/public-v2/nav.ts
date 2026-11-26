@@ -2,8 +2,12 @@
  * Navigation publique V2 — source unique pour Header, Footer et menu mobile.
  */
 
+export type PublicV2Locale = 'fr' | 'en'
+
+export type PublicV2NavItemId = 'services' | 'realisations' | 'about' | 'contact'
+
 export type PublicV2NavItem = {
-  id: 'services' | 'realisations' | 'about' | 'contact'
+  id: PublicV2NavItemId
   label: string
   /** Destination canonique (production / futur accueil). */
   href: string
@@ -23,16 +27,71 @@ export const PUBLIC_V2_MAIN_ID = 'pv2-main'
 export const PUBLIC_V2_SERVICES_HASH = '#pv2-services'
 export const PUBLIC_V2_SERVICES_HREF = '/#pv2-services'
 
-export const PUBLIC_V2_NAV_ITEMS: readonly PublicV2NavItem[] = [
-  { id: 'services', label: 'Services', href: PUBLIC_V2_SERVICES_HREF },
-  { id: 'realisations', label: 'Réalisations', href: '/portfolio/projets' },
-  { id: 'about', label: 'À propos', href: '/portfolio/a-propos' },
-  { id: 'contact', label: 'Contact', href: '/portfolio/contact' },
-] as const
+const NAV_HREFS: Record<PublicV2NavItemId, string> = {
+  services: PUBLIC_V2_SERVICES_HREF,
+  realisations: '/portfolio/projets',
+  about: '/portfolio/a-propos',
+  contact: '/portfolio/contact',
+}
+
+const NAV_LABELS: Record<PublicV2Locale, Record<PublicV2NavItemId, string>> = {
+  fr: {
+    services: 'Services',
+    realisations: 'Réalisations',
+    about: 'À propos',
+    contact: 'Contact',
+  },
+  en: {
+    services: 'Services',
+    realisations: 'Work',
+    about: 'About',
+    contact: 'Contact',
+  },
+}
+
+const CTA_LABELS: Record<PublicV2Locale, string> = {
+  fr: 'Me contacter',
+  en: 'Contact me',
+}
+
+const CTA_HREF = '/portfolio/contact'
+
+/** Libellés chrome (skip, aria) — hors items de nav. */
+export const PUBLIC_V2_CHROME_COPY: Record<
+  PublicV2Locale,
+  {
+    skipToContent: string
+    primaryNav: string
+    footerNav: string
+    mobileMenu: string
+  }
+> = {
+  fr: {
+    skipToContent: 'Aller au contenu',
+    primaryNav: 'Principale',
+    footerNav: 'Pied de page',
+    mobileMenu: 'Menu de navigation',
+  },
+  en: {
+    skipToContent: 'Skip to content',
+    primaryNav: 'Primary',
+    footerNav: 'Footer',
+    mobileMenu: 'Navigation menu',
+  },
+}
+
+/** Items FR (rétrocompat tests / imports). */
+export const PUBLIC_V2_NAV_ITEMS: readonly PublicV2NavItem[] = (
+  Object.keys(NAV_HREFS) as PublicV2NavItemId[]
+).map((id) => ({
+  id,
+  label: NAV_LABELS.fr[id],
+  href: NAV_HREFS[id],
+}))
 
 export const PUBLIC_V2_CTA = {
-  label: 'Me contacter',
-  href: '/portfolio/contact',
+  label: CTA_LABELS.fr,
+  href: CTA_HREF,
 } as const
 
 /** Path sandbox design system. */
@@ -68,18 +127,27 @@ export function resolvePublicV2Href(href: string, pathname: string): string {
   return href
 }
 
-export function getPublicV2NavItems(pathname: string): PublicV2NavItem[] {
-  return PUBLIC_V2_NAV_ITEMS.map((item) => ({
-    ...item,
-    href: resolvePublicV2Href(item.href, pathname),
+export function getPublicV2NavItems(
+  pathname: string,
+  locale: PublicV2Locale = 'fr',
+): PublicV2NavItem[] {
+  const labels = NAV_LABELS[locale] ?? NAV_LABELS.fr
+  return (Object.keys(NAV_HREFS) as PublicV2NavItemId[]).map((id) => ({
+    id,
+    label: labels[id],
+    href: resolvePublicV2Href(NAV_HREFS[id], pathname),
   }))
 }
 
-export function getPublicV2Cta(pathname: string) {
+export function getPublicV2Cta(pathname: string, locale: PublicV2Locale = 'fr') {
   return {
-    label: PUBLIC_V2_CTA.label,
-    href: resolvePublicV2Href(PUBLIC_V2_CTA.href, pathname),
+    label: CTA_LABELS[locale] ?? CTA_LABELS.fr,
+    href: resolvePublicV2Href(CTA_HREF, pathname),
   }
+}
+
+export function getPublicV2ChromeCopy(locale: PublicV2Locale = 'fr') {
+  return PUBLIC_V2_CHROME_COPY[locale] ?? PUBLIC_V2_CHROME_COPY.fr
 }
 
 export function getPublicV2BrandHomeHref(pathname: string): string {

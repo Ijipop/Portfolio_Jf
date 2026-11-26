@@ -53,6 +53,14 @@ describe('public-v2 nav config', () => {
     )
   })
 
+  it('expose les libellés EN sans changer les hrefs', () => {
+    const itemsEn = getPublicV2NavItems('/', 'en')
+    expect(itemsEn.find((i) => i.id === 'realisations')?.label).toBe('Work')
+    expect(itemsEn.find((i) => i.id === 'about')?.label).toBe('About')
+    expect(itemsEn.find((i) => i.id === 'realisations')?.href).toBe('/portfolio/projets')
+    expect(getPublicV2Cta('/', 'en').label).toBe('Contact me')
+  })
+
   it('détecte l’entrée de nav active depuis le pathname', () => {
     const about = PUBLIC_V2_NAV_ITEMS.find((i) => i.id === 'about')!
     const contact = PUBLIC_V2_NAV_ITEMS.find((i) => i.id === 'contact')!
