@@ -11,6 +11,7 @@ import {
 } from '@/lib/public-v2/supportPageContent'
 import { SUPPORT_EDITORIAL } from '@/lib/public-v2/supportEditorialContent'
 import SupportFormMuiIsland from './SupportFormMuiIsland'
+import SupportStickyCta from './SupportStickyCta'
 import styles from './SupportPage.module.css'
 
 const FORM_HREF = `#${SUPPORT_FORM_ANCHOR}`
@@ -182,11 +183,7 @@ export default function SupportPageClient() {
         </nav>
       </Container>
 
-      <div className={styles.sticky}>
-        <Button href={FORM_HREF} variant="primary" size="sm">
-          {editorial.hero.ctaForm}
-        </Button>
-      </div>
+      <SupportStickyCta label={editorial.hero.ctaForm} />
     </div>
   )
 }

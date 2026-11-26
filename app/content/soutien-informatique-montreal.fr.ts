@@ -132,7 +132,8 @@ const fr: SupportLocaleCopy = {
   formSubmit: 'Envoyer la demande',
   formSending: 'Envoi…',
   formSuccessTitle: 'Demande envoyée',
-  formSuccessBody: 'Merci. Je vous réponds rapidement.',
+  formSuccessBody:
+    'Votre demande a bien été envoyée. Je vous répondrai dès que possible.',
   formSuccessAgain: 'Envoyer une autre demande',
   formPhoneRequired: 'Le téléphone est requis',
   formModeRequired: 'Choisissez une option',

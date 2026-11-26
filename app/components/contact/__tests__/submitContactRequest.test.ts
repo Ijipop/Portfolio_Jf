@@ -11,7 +11,10 @@ describe('submitContactRequest', () => {
     vi.stubGlobal(
       'fetch',
       vi.fn().mockResolvedValue({
-        json: async () => ({ success: true, message: 'Message envoyé avec succès !' }),
+        ok: true,
+        status: 200,
+        text: async () =>
+          JSON.stringify({ success: true, message: 'Message envoyé avec succès !' }),
       }),
     )
 
@@ -24,7 +27,9 @@ describe('submitContactRequest', () => {
     vi.stubGlobal(
       'fetch',
       vi.fn().mockResolvedValue({
-        json: async () => ({ success: false, error: 'Format d\'email invalide' }),
+        ok: false,
+        status: 400,
+        text: async () => JSON.stringify({ success: false, error: "Format d'email invalide" }),
       }),
     )
 

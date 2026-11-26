@@ -584,6 +584,12 @@
   pointer-events: none;
 }
 
+@media (max-width: 899px) {
+  .formShell {
+    padding-bottom: calc(var(--space-4) + 3.75rem);
+  }
+}
+
 /* —— Cross-links —— */
 
 .crossLinks {
@@ -634,6 +640,15 @@
   transform: translateX(-50%);
   z-index: 40;
   display: inline-flex;
+  transition:
+    opacity var(--dur-fast) var(--ease-out),
+    transform var(--dur-fast) var(--ease-out);
+}
+
+.stickyHidden {
+  opacity: 0;
+  transform: translate(-50%, 120%);
+  pointer-events: none;
 }
 
 @media (min-width: 900px) {

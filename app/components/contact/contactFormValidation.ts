@@ -35,31 +35,67 @@ export const EMPTY_CONTACT_FORM_DATA: ContactFormData = {
   bm_verify: '',
 }
 
-export function validateContactField(name: string, value: string): string {
+type ContactValidationLocale = 'fr' | 'en'
+
+const FIELD_MSG: Record<ContactValidationLocale, Record<string, string>> = {
+  fr: {
+    nameRequired: 'Le nom est requis',
+    nameShort: 'Le nom doit contenir au moins 2 caractères',
+    emailRequired: "L'email est requis",
+    emailInvalid: "Format d'email invalide",
+    phoneShort: 'Le numéro semble trop court',
+    phoneLong: 'Le numéro est trop long',
+    phoneDigit: 'Indiquez au moins un chiffre',
+    subjectRequired: 'Le sujet est requis',
+    subjectShort: 'Le sujet doit contenir au moins 3 caractères',
+    messageRequired: 'Le message est requis',
+    messageShort: 'Le message doit contenir au moins 10 caractères',
+  },
+  en: {
+    nameRequired: 'Name is required',
+    nameShort: 'Name must be at least 2 characters',
+    emailRequired: 'Email is required',
+    emailInvalid: 'Invalid email format',
+    phoneShort: 'Phone number seems too short',
+    phoneLong: 'Phone number is too long',
+    phoneDigit: 'Include at least one digit',
+    subjectRequired: 'Subject is required',
+    subjectShort: 'Subject must be at least 3 characters',
+    messageRequired: 'Message is required',
+    messageShort: 'Message must be at least 10 characters',
+  },
+}
+
+export function validateContactField(
+  name: string,
+  value: string,
+  locale: ContactValidationLocale = 'fr',
+): string {
+  const m = FIELD_MSG[locale]
   switch (name) {
     case 'name':
-      if (!value.trim()) return 'Le nom est requis'
-      if (value.trim().length < 2) return 'Le nom doit contenir au moins 2 caractères'
+      if (!value.trim()) return m.nameRequired
+      if (value.trim().length < 2) return m.nameShort
       break
     case 'email':
-      if (!value.trim()) return "L'email est requis"
-      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) return "Format d'email invalide"
+      if (!value.trim()) return m.emailRequired
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) return m.emailInvalid
       break
     case 'phone': {
       const v = value.trim()
       if (!v) break
-      if (v.length < 6) return 'Le numéro semble trop court'
-      if (v.length > 50) return 'Le numéro est trop long'
-      if (!/\d/.test(v)) return 'Indiquez au moins un chiffre'
+      if (v.length < 6) return m.phoneShort
+      if (v.length > 50) return m.phoneLong
+      if (!/\d/.test(v)) return m.phoneDigit
       break
     }
     case 'subject':
-      if (!value.trim()) return 'Le sujet est requis'
-      if (value.trim().length < 3) return 'Le sujet doit contenir au moins 3 caractères'
+      if (!value.trim()) return m.subjectRequired
+      if (value.trim().length < 3) return m.subjectShort
       break
     case 'message':
-      if (!value.trim()) return 'Le message est requis'
-      if (value.trim().length < 10) return 'Le message doit contenir au moins 10 caractères'
+      if (!value.trim()) return m.messageRequired
+      if (value.trim().length < 10) return m.messageShort
       break
     case 'bm_verify':
       break
