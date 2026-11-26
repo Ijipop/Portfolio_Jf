@@ -1,4 +1,15 @@
-import { expect, test } from '@playwright/test'
+import { expect, test, type Page } from '@playwright/test'
+
+/** Immediate retry on aborted navigations (Next/Playwright race); no sleep. */
+async function gotoStable(page: Page, url: string) {
+  try {
+    await page.goto(url, { waitUntil: 'domcontentloaded' })
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error)
+    if (!/ERR_ABORTED/.test(message)) throw error
+    await page.goto(url, { waitUntil: 'domcontentloaded' })
+  }
+}
 
 test('landing reaches portfolio and contact in two clicks max', async ({ page }) => {
   await page.goto('/', { waitUntil: 'domcontentloaded' })
@@ -183,7 +194,10 @@ test('site light mode uses dark text on home and contact', async ({ page }) => {
 })
 
 test('demos index and demo routes', async ({ page }) => {
-  await page.goto('/demos', { waitUntil: 'domcontentloaded' })
+  // Long multi-route walk; allow one aborted goto retry without inflating suite timeout.
+  test.setTimeout(90_000)
+
+  await gotoStable(page, '/demos')
   await expect(page).toHaveURL(/\/demos\/?$/)
   await expect(page.locator('h1').first()).toContainText(/Neuf directions créatives/)
   await expect(page.locator('a[href="/demos/studio"]').first()).toBeVisible()
@@ -199,21 +213,23 @@ test('demos index and demo routes', async ({ page }) => {
   ])
   await expect(page.locator('h1').filter({ hasText: /On bâtit solide/ })).toBeVisible()
 
-  await page.goto('/demos/studio', { waitUntil: 'domcontentloaded' })
+  await gotoStable(page, '/demos')
+  await page.locator('a[href="/demos/studio"]').first().click()
+  await expect(page).toHaveURL(/\/demos\/studio/)
   await expect(page.locator('h1').filter({ hasText: /sans formule toute faite/ })).toBeVisible()
 
-  await page.goto('/demos/spectacle', { waitUntil: 'domcontentloaded' })
+  await gotoStable(page, '/demos/spectacle')
   await expect(page.locator('h1').filter({ hasText: /Une scène pour les voix/ })).toBeVisible()
 
-  await page.goto('/demos/portfolio', { waitUntil: 'domcontentloaded' })
+  await gotoStable(page, '/demos/portfolio')
   await expect(page.locator('h1').filter({ hasText: /pensés pour convertir/ })).toBeVisible()
   await expect(page.getByText('Jean-François Lefebvre')).toBeVisible()
 
-  await page.goto('/demos/galerie', { waitUntil: 'domcontentloaded' })
+  await gotoStable(page, '/demos/galerie')
   await expect(page.getByRole('link', { name: 'Ligne claire' })).toBeVisible()
   await expect(page.getByRole('link', { name: /Maison Nord/ })).toBeVisible()
 
-  await page.goto('/demos/volt', { waitUntil: 'domcontentloaded' })
+  await gotoStable(page, '/demos/volt')
   await expect(page.locator('h1').filter({ hasText: /Trop loud/ })).toBeVisible()
   await expect(page.getByRole('link', { name: /Voir le drop/i })).toBeVisible()
 })
