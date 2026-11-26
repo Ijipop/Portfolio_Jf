@@ -1,5 +1,6 @@
 import { render, screen } from '@testing-library/react'
 import { describe, expect, it, vi } from 'vitest'
+import PublicChromeI18n from '@/components/public-v2/chrome/PublicChromeI18n'
 import SpaceTakerLandingClient from '../SpaceTakerLandingClient'
 
 vi.mock('next/link', () => ({
@@ -44,13 +45,15 @@ vi.mock('@/components/product-landings/ProductDownloadRow', () => ({
 describe('SpaceTakerLandingClient (6B7)', () => {
   it('conserve marque, téléchargements et lien catalogue sans shell MUI', () => {
     render(
-      <SpaceTakerLandingClient
-        downloads={{
-          windows: 'https://example.com/st-win.exe',
-          macos: 'https://example.com/st-mac.dmg',
-          github: 'https://github.com/example/spacetaker',
-        }}
-      />,
+      <PublicChromeI18n>
+        <SpaceTakerLandingClient
+          downloads={{
+            windows: 'https://example.com/st-win.exe',
+            macos: 'https://example.com/st-mac.dmg',
+            github: 'https://github.com/example/spacetaker',
+          }}
+        />
+      </PublicChromeI18n>,
     )
 
     expect(screen.getByTestId('spacetaker-landing')).toBeTruthy()

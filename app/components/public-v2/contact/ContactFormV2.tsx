@@ -13,10 +13,11 @@ import ProjectWebBriefSection from '@/components/contact/ProjectWebBriefSection'
 import TechnicalSupportBriefSection from '@/components/contact/TechnicalSupportBriefSection'
 import AiLeadDiagnosis from '@/components/contact/AiLeadDiagnosis'
 import {
-  CONTACT_PAGE_COPY,
+  getContactPageContent,
   mockSubmitContactRequest,
   type ContactMockScenario,
 } from '@/lib/public-v2/contactPageContent'
+import { usePublicV2Locale } from '@/lib/public-v2/usePublicV2Locale'
 import { submitContactRequest } from '@/components/contact/submitContactRequest'
 import { focusFirstInvalidContactField } from './focusFirstInvalidField'
 import styles from './ContactFormV2.module.css'
@@ -66,6 +67,8 @@ export default function ContactFormV2({
   disableAiFetch = false,
   className,
 }: ContactFormV2Props) {
+  const locale = usePublicV2Locale()
+  const copy = getContactPageContent(locale)
   const submitFn: ContactSubmitFn =
     submitMode === 'mock'
       ? (body, fallback) => mockSubmitContactRequest(body, mockScenario, fallback)
@@ -87,7 +90,7 @@ export default function ContactFormV2({
 
   const ctrl = useContactFormController({
     submitFn,
-    sendErrorFallback: CONTACT_PAGE_COPY.sendError,
+    sendErrorFallback: copy.sendError,
     onValidationError: handleValidationError,
     onSendError,
     onNetworkError,
@@ -100,12 +103,12 @@ export default function ContactFormV2({
 
   return (
     <div id="contact-form" className={[styles.wrap, className].filter(Boolean).join(' ')}>
-      {submitMode === 'mock' ? <p className={styles.mockBanner}>{CONTACT_PAGE_COPY.mockBanner}</p> : null}
+      {submitMode === 'mock' ? <p className={styles.mockBanner}>{copy.mockBanner}</p> : null}
 
       <div className={styles.card}>
         <div className={styles.intro}>
-          <h2 className={styles.introTitle}>{CONTACT_PAGE_COPY.sendMessage}</h2>
-          <p className={styles.introDesc}>{CONTACT_PAGE_COPY.sendMessageDesc}</p>
+          <h2 className={styles.introTitle}>{copy.sendMessage}</h2>
+          <p className={styles.introDesc}>{copy.sendMessageDesc}</p>
         </div>
 
         <Suspense fallback={null}>
@@ -134,7 +137,7 @@ export default function ContactFormV2({
             <TextField
               id="pv2-contact-name"
               name="name"
-              label={CONTACT_PAGE_COPY.formName}
+              label={copy.formName}
               value={ctrl.formData.name}
               onChange={ctrl.handleInputChange}
               onBlur={ctrl.handleInputBlur}
@@ -146,7 +149,7 @@ export default function ContactFormV2({
               id="pv2-contact-email"
               name="email"
               type="email"
-              label={CONTACT_PAGE_COPY.formEmail}
+              label={copy.formEmail}
               value={ctrl.formData.email}
               onChange={ctrl.handleInputChange}
               onBlur={ctrl.handleInputBlur}
@@ -160,7 +163,7 @@ export default function ContactFormV2({
             id="pv2-contact-phone"
             name="phone"
             type="tel"
-            label={CONTACT_PAGE_COPY.formPhoneOptional}
+            label={copy.formPhoneOptional}
             value={ctrl.formData.phone}
             onChange={ctrl.handleInputChange}
             onBlur={ctrl.handleInputBlur}
@@ -172,7 +175,7 @@ export default function ContactFormV2({
           <TextField
             id="pv2-contact-subject"
             name="subject"
-            label={CONTACT_PAGE_COPY.formSubject}
+            label={copy.formSubject}
             value={ctrl.formData.subject}
             onChange={ctrl.handleInputChange}
             onBlur={ctrl.handleInputBlur}
@@ -183,7 +186,7 @@ export default function ContactFormV2({
           <TextAreaField
             id="pv2-contact-message"
             name="message"
-            label={CONTACT_PAGE_COPY.formMessage}
+            label={copy.formMessage}
             value={ctrl.formData.message}
             onChange={ctrl.handleInputChange}
             onBlur={ctrl.handleInputBlur}
@@ -200,7 +203,7 @@ export default function ContactFormV2({
                 aria-expanded={ctrl.showOptionalSections}
                 onClick={() => ctrl.setShowOptionalSections((open) => !open)}
               >
-                {CONTACT_PAGE_COPY.optionalSectionsToggle}
+                {copy.optionalSectionsToggle}
               </button>
             ) : null}
 
@@ -247,7 +250,7 @@ export default function ContactFormV2({
 
           <div className={styles.submitRow}>
             <Button type="submit" variant="primary" disabled={ctrl.isSubmitting} style={{ width: '100%' }}>
-              {ctrl.isSubmitting ? CONTACT_PAGE_COPY.sending : CONTACT_PAGE_COPY.sendButton}
+              {ctrl.isSubmitting ? copy.sending : copy.sendButton}
             </Button>
           </div>
         </form>

@@ -6,7 +6,7 @@ import Typography from '@mui/material/Typography'
 import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded'
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v16-appRouter'
 import { AdvancedThemeIslandProvider } from '@/contexts/AdvancedThemeContext'
-import { LanguageProvider, useLanguage } from '@/contexts/LanguageContext'
+import { useLanguage } from '@/contexts/LanguageContext'
 import { DESIGN_TOKENS } from '@/design-system/constants'
 import { useThemeColors } from '@/hooks/useThemeColors'
 import { useTextColor } from '@/hooks/useTextColor'
@@ -143,14 +143,13 @@ function TimelendrMerciBody() {
   )
 }
 
+/** LanguageProvider fourni par PublicChromeShell (fixedLocale=fr si flag off). */
 export default function TimelendrMerciClient() {
   return (
     <AppRouterCacheProvider options={{ key: 'mui-timelendr-merci' }}>
-      <LanguageProvider>
-        <AdvancedThemeIslandProvider>
-          <TimelendrMerciBody />
-        </AdvancedThemeIslandProvider>
-      </LanguageProvider>
+      <AdvancedThemeIslandProvider>
+        <TimelendrMerciBody />
+      </AdvancedThemeIslandProvider>
     </AppRouterCacheProvider>
   )
 }

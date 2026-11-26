@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import ProductDownloadRow from '@/components/product-landings/ProductDownloadRow'
 import type { ProductDownloadLinks } from '@/components/product-landings/productDownloads'
-import { LanguageProvider, useLanguage } from '@/contexts/LanguageContext'
+import { useLanguage } from '@/contexts/LanguageContext'
 import styles from './TraducteurLanding.module.css'
 
 const ACCENT = '#10b981'
@@ -158,11 +158,7 @@ function TraducteurLandingBody({ downloads }: TraducteurLandingClientProps) {
   )
 }
 
-/** Contenu Traducteur — chrome Pop Atelier fourni par la page ; i18n via LanguageProvider. */
+/** LanguageProvider fourni par PublicChromeShell (fixedLocale=fr si flag off). */
 export default function TraducteurLandingClient({ downloads }: TraducteurLandingClientProps) {
-  return (
-    <LanguageProvider>
-      <TraducteurLandingBody downloads={downloads} />
-    </LanguageProvider>
-  )
+  return <TraducteurLandingBody downloads={downloads} />
 }

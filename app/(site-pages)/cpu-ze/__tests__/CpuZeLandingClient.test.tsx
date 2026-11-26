@@ -1,5 +1,6 @@
 import { render, screen } from '@testing-library/react'
 import { describe, expect, it, vi } from 'vitest'
+import PublicChromeI18n from '@/components/public-v2/chrome/PublicChromeI18n'
 import CpuZeLandingClient from '../CpuZeLandingClient'
 
 vi.mock('next/link', () => ({
@@ -44,12 +45,14 @@ vi.mock('@/components/product-landings/ProductDownloadRow', () => ({
 describe('CpuZeLandingClient (6B8)', () => {
   it('conserve marque, téléchargement Windows et lien catalogue sans shell MUI', () => {
     render(
-      <CpuZeLandingClient
-        downloads={{
-          windows: 'https://example.com/cpu-ze.exe',
-          github: 'https://github.com/example/cpu-ze',
-        }}
-      />,
+      <PublicChromeI18n>
+        <CpuZeLandingClient
+          downloads={{
+            windows: 'https://example.com/cpu-ze.exe',
+            github: 'https://github.com/example/cpu-ze',
+          }}
+        />
+      </PublicChromeI18n>,
     )
 
     expect(screen.getByTestId('cpu-ze-landing')).toBeTruthy()

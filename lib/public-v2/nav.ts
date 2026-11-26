@@ -2,7 +2,9 @@
  * Navigation publique V2 — source unique pour Header, Footer et menu mobile.
  */
 
-export type PublicV2Locale = 'fr' | 'en'
+import type { PublicV2Locale } from './locale'
+
+export type { PublicV2Locale } from './locale'
 
 export type PublicV2NavItemId = 'services' | 'realisations' | 'about' | 'contact'
 

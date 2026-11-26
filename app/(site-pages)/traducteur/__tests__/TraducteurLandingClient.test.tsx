@@ -1,5 +1,6 @@
 import { render, screen } from '@testing-library/react'
 import { describe, expect, it, vi } from 'vitest'
+import PublicChromeI18n from '@/components/public-v2/chrome/PublicChromeI18n'
 import TraducteurLandingClient from '../TraducteurLandingClient'
 
 vi.mock('next/link', () => ({
@@ -36,12 +37,14 @@ vi.mock('@/components/product-landings/ProductDownloadRow', () => ({
 describe('TraducteurLandingClient (6B8)', () => {
   it('conserve marque, téléchargement Windows et capture sans shell MUI', () => {
     render(
-      <TraducteurLandingClient
-        downloads={{
-          windows: 'https://example.com/traducteur.exe',
-          github: 'https://github.com/example/traducteur',
-        }}
-      />,
+      <PublicChromeI18n>
+        <TraducteurLandingClient
+          downloads={{
+            windows: 'https://example.com/traducteur.exe',
+            github: 'https://github.com/example/traducteur',
+          }}
+        />
+      </PublicChromeI18n>,
     )
 
     expect(screen.getByTestId('traducteur-landing')).toBeTruthy()

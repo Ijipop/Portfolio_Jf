@@ -3,6 +3,8 @@
  * Pas la rédaction définitive du site. Ne pas remplacer par des slogans.
  */
 
+import type { PublicV2Locale } from './locale'
+
 export const HERO_COPY = {
   kicker: 'Développeur indépendant · Montréal',
   /**
@@ -23,6 +25,35 @@ export const HERO_COPY = {
   },
 } as const
 
+export const HERO_COPY_EN = {
+  kicker: 'Independent developer · Montreal',
+  title: 'Websites, software, and IT support.',
+  titleLines: ['Websites, software, ', 'and IT support.'] as const,
+  description:
+    'I’m Jean-François Lefebvre. I design websites, build software, and provide IT support. I’m self-employed in Montreal.',
+  primaryCta: {
+    label: 'View my work',
+    href: '/portfolio/projets',
+  },
+  secondaryCta: {
+    label: 'Contact me',
+    href: '/portfolio/contact',
+  },
+}
+
+export type HeroCopy = {
+  kicker: string
+  title: string
+  titleLines: readonly [string, string]
+  description: string
+  primaryCta: { label: string; href: string }
+  secondaryCta: { label: string; href: string }
+}
+
+export function getHeroCopy(locale: PublicV2Locale = 'fr'): HeroCopy {
+  return locale === 'en' ? HERO_COPY_EN : HERO_COPY
+}
+
 export type HeroFloatSlot = 'a' | 'b' | 'c'
 
 export type HeroFloatMedia = {
@@ -32,6 +63,12 @@ export type HeroFloatMedia = {
   alt: string
   /** false = capture client temporaire, non autorisée à la publication. */
   publishable: boolean
+}
+
+const HERO_FLOATS_EN_ALTS: Record<string, string> = {
+  'expression-lasalle': 'Desktop preview of the Expression LaSalle website',
+  'thermo-trappeur': 'Desktop preview of the Thermo-Trappeur website',
+  deskdot: 'Screenshot of DeskDot, a radial shortcut launcher for Windows',
 }
 
 /**
@@ -63,3 +100,11 @@ export const HERO_FLOATS: readonly HeroFloatMedia[] = [
     publishable: true,
   },
 ] as const
+
+export function getHeroFloats(locale: PublicV2Locale = 'fr'): readonly HeroFloatMedia[] {
+  if (locale === 'fr') return HERO_FLOATS
+  return HERO_FLOATS.map((item) => ({
+    ...item,
+    alt: HERO_FLOATS_EN_ALTS[item.id] ?? item.alt,
+  }))
+}

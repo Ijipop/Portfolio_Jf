@@ -110,3 +110,8 @@ export function useLanguage() {
   }
   return context
 }
+
+/** Pour sections V2 testables hors provider — retourne undefined hors LanguageProvider. */
+export function useLanguageOptional(): LanguageContextType | undefined {
+  return useContext(LanguageContext)
+}
