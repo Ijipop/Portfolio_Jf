@@ -8,7 +8,8 @@ on:
 
 jobs:
   checks:
-    runs-on: ubuntu-latest
+    # ubuntu-latest may map to 26.04 before Playwright supports it; pin until deps catch up
+    runs-on: ubuntu-24.04
     timeout-minutes: 30
 
     services:
