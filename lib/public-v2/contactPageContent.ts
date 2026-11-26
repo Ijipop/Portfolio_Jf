@@ -47,6 +47,9 @@ export const CONTACT_PAGE_COPY = {
     'Merci pour votre message! Je l’ai bien reçu et je vous répondrai dès que possible à l’adresse courriel indiquée.',
   merciClose: 'Fermer',
   mockBanner: 'Prévisualisation sandbox — aucune donnée n’est envoyée (pas de Resend, OpenAI ni analytics).',
+  aiDisabledSandbox: 'Diagnostic IA désactivé en prévisualisation sandbox (aucun appel OpenAI).',
+  loadingForm: 'Chargement du formulaire…',
+  loadingMerci: 'Confirmation…',
 } as const
 
 const CONTACT_PAGE_COPY_EN = {
@@ -85,6 +88,9 @@ const CONTACT_PAGE_COPY_EN = {
   merciClose: 'Close',
   mockBanner:
     'Sandbox preview — no data is sent (no Resend, OpenAI, or analytics).',
+  aiDisabledSandbox: 'AI diagnosis disabled in sandbox preview (no OpenAI calls).',
+  loadingForm: 'Loading the form…',
+  loadingMerci: 'Confirmation…',
 } as const
 
 export type ContactPageCopy = { [K in keyof typeof CONTACT_PAGE_COPY]: string }
@@ -99,14 +105,16 @@ export async function mockSubmitContactRequest(
   _body: Record<string, unknown>,
   scenario: ContactMockScenario = 'success',
   fallbackError: string = CONTACT_PAGE_COPY.sendError,
+  locale: PublicV2Locale = 'fr',
 ): Promise<import('@/components/contact/submitContactRequest').SubmitContactResult> {
+  const copy = getContactPageContent(locale)
   const delayMs = process.env.VITEST ? 40 : 650
   await new Promise((r) => setTimeout(r, delayMs))
   switch (scenario) {
     case 'success':
       return { ok: true }
     case 'rateLimit':
-      return { ok: false, error: CONTACT_PAGE_COPY.rateLimitError, kind: 'api' }
+      return { ok: false, error: copy.rateLimitError, kind: 'api' }
     case 'network':
       return { ok: false, error: fallbackError, kind: 'network' }
     case 'server':

@@ -71,7 +71,7 @@ export default function ContactFormV2({
   const copy = getContactPageContent(locale)
   const submitFn: ContactSubmitFn =
     submitMode === 'mock'
-      ? (body, fallback) => mockSubmitContactRequest(body, mockScenario, fallback)
+      ? (body, fallback) => mockSubmitContactRequest(body, mockScenario, fallback, locale)
       : submitContactRequest
 
   const formRootRef = useRef<HTMLFormElement | null>(null)
@@ -91,6 +91,7 @@ export default function ContactFormV2({
   const ctrl = useContactFormController({
     submitFn,
     sendErrorFallback: copy.sendError,
+    validationLocale: locale,
     onValidationError: handleValidationError,
     onSendError,
     onNetworkError,
@@ -229,9 +230,7 @@ export default function ContactFormV2({
 
                 <div id={DIAGNOSTIC_IA_HASH} style={{ scrollMarginTop: '5.5rem' }}>
                   {disableAiFetch ? (
-                    <p className={styles.mockBanner}>
-                      Diagnostic IA désactivé en prévisualisation sandbox (aucun appel OpenAI).
-                    </p>
+                    <p className={styles.mockBanner}>{copy.aiDisabledSandbox}</p>
                   ) : (
                     <AiLeadDiagnosis
                       formData={ctrl.formData}

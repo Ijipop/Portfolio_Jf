@@ -48,6 +48,8 @@ export type UseContactFormControllerOptions = {
   /** Soumission réelle ou injectée (mock sandbox). Défaut : submitContactRequest. */
   submitFn?: ContactSubmitFn
   sendErrorFallback?: string
+  /** Locale des messages de validation champ (défaut FR). */
+  validationLocale?: 'fr' | 'en'
   /** Appelé uniquement après une tentative de soumission invalide (erreurs déjà posées). */
   onValidationError: (errors: ContactFormErrors) => void
   onSendError: (message: string) => void
@@ -58,6 +60,7 @@ export type UseContactFormControllerOptions = {
 export function useContactFormController({
   submitFn = submitContactRequest,
   sendErrorFallback = 'Erreur lors de l\'envoi du message',
+  validationLocale = 'fr',
   onValidationError,
   onSendError,
   onNetworkError,
@@ -121,9 +124,9 @@ export function useContactFormController({
 
   const runFieldValidation = useCallback(
     (name: ValidatableContactField, value: string) => {
-      setFieldError(name, validateContactField(name, value))
+      setFieldError(name, validateContactField(name, value, validationLocale))
     },
-    [setFieldError],
+    [setFieldError, validationLocale],
   )
 
   const scheduleFieldValidation = useCallback(
@@ -199,7 +202,7 @@ export function useContactFormController({
     })
     debounceTimers.current = {}
 
-    const errors = validateAllContactFields(formData)
+    const errors = validateAllContactFields(formData, validationLocale)
     setFormErrorsIfChanged(errors)
 
     if (Object.values(errors).some((error) => error !== '')) {

@@ -2,8 +2,11 @@
  * Copy provisoire — catalogue Réalisations V2.
  * Données projets = GET /api/projects (pas un second catalogue).
  *
- * Noms et descriptions des projets (API / Neon) restent en FR jusqu’à une stratégie
- * bilingue côté base de données.
+ * LIMITATION EN (Phase D) : `Project.name` / `Project.description` (Neon) n’ont pas
+ * de twin bilingue. En mode EN, l’UI catalogue est traduite mais les titres et
+ * descriptions dynamiques restent en FR (fallback explicite). Ce n’est **pas**
+ * une expérience EN Production-ready tant qu’une stratégie éditoriale Neon n’est
+ * pas décidée. Pas de migration ni de traduction automatique dans ce chantier.
  */
 
 import type { PublicV2Locale } from './locale'

@@ -316,12 +316,13 @@ NEXT_PUBLIC_I18N_TOGGLE_ENABLED=false  // défaut jusqu’au GO activation
 
 ### Phase D — Formulaires et dynamiques (complexité **M**, ~2–4 j)
 
-- Retirer `fixedLocale` **uniquement** quand Soutien page + chrome + formulaire partagent la même locale.
-- Mettre à jour `e2e/support-form-p0.spec.ts` (l’assertion « reste FR si storage=en » devient obsolète).
-- Validation / succès / erreur Contact + Soutien selon `locale`.
-- Resend / destinataire / sécurité serveur : **inchangés**.
-- Neon : documenter titres FR-only ; pas de migration sans GO.
-- Ne pas réactiver `SupportLandingClient` / `HomeGatewayClient` orphelins.
+**Statut (2026-11-26) : implémentée localement (non commitée).**
+
+- Une seule source de vérité : `PublicChromeI18n` ; `SupportFormMuiIsland` = MUI/thème seulement.
+- Flag off → chrome `fixedLocale=fr` → Soutien form FR malgré `portfolio-locale=en`.
+- Contact : `validationLocale` dans le controller ; Resend / API inchangés.
+- **Neon :** titres/descriptions projets FR en mode EN — limitation explicite, pas EN Production-ready.
+- E2E P0 : cas flag-off FR conservé et renommé.
 
 ### Phase E — SEO honnête + validation + **activation** (complexité **M**, ~2–4 j)
 

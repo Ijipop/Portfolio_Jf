@@ -50,7 +50,11 @@ for (const vp of VIEWPORTS) {
       await page.setViewportSize({ width: vp.width, height: vp.height })
     })
 
-    test('formulaire en français malgré portfolio-locale=en', async ({ page }) => {
+    test('flag off : formulaire FR malgré portfolio-locale=en (chrome fixedLocale)', async ({
+      page,
+    }) => {
+      // NEXT_PUBLIC_I18N_TOGGLE_ENABLED unset/false en CI → PublicChromeI18n verrouille FR.
+      // Le formulaire hérite du provider chrome (pas d’îlot LanguageProvider imbriqué).
       await page.addInitScript(() => localStorage.setItem('portfolio-locale', 'en'))
       await gotoSupport(page)
       await expect(page.getByRole('heading', { name: 'Décrivez votre problème' })).toBeVisible()

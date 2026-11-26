@@ -51,6 +51,15 @@ describe('validateContactField', () => {
       EMPTY_CONTACT_FORM_ERRORS,
     )
   })
+
+  it('retourne les messages de validation en anglais', () => {
+    expect(validateContactField('name', '', 'en')).toBe('Name is required')
+    expect(validateContactField('email', 'bad', 'en')).toBe('Invalid email format')
+    expect(validateContactField('message', 'short', 'en')).toBe(
+      'Message must be at least 10 characters',
+    )
+    expect(validateAllContactFields(EMPTY_CONTACT_FORM_DATA, 'en').name).toBe('Name is required')
+  })
 })
 
 describe('contactFormErrorsEqual', () => {

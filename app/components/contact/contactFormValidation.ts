@@ -105,13 +105,16 @@ export function validateContactField(
   return ''
 }
 
-export function validateAllContactFields(formData: ContactFormData): ContactFormErrors {
+export function validateAllContactFields(
+  formData: ContactFormData,
+  locale: ContactValidationLocale = 'fr',
+): ContactFormErrors {
   return {
-    name: validateContactField('name', formData.name),
-    email: validateContactField('email', formData.email),
-    phone: validateContactField('phone', formData.phone),
-    subject: validateContactField('subject', formData.subject),
-    message: validateContactField('message', formData.message),
+    name: validateContactField('name', formData.name, locale),
+    email: validateContactField('email', formData.email, locale),
+    phone: validateContactField('phone', formData.phone, locale),
+    subject: validateContactField('subject', formData.subject, locale),
+    message: validateContactField('message', formData.message, locale),
   }
 }
 
