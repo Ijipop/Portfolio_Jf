@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest'
 import { APPROVED_CLIENT_MEDIA_FILES } from './approved-client-media-allowlist'
 import { gitDiff, gitDiffNameOnly } from './gitDiffPortable'
 import { PHASE8_PREMIUM_FILES } from './phase8-premium-allowlist'
+import { I18N_V2_FILES } from './approved-i18n-v2-allowlist'
 
 /**
  * Après le tag local hero-v2-reference, la Phase 5B ne doit pas retoucher le Hero.
@@ -24,6 +25,7 @@ describe('Hero read-only during Phase 5B', () => {
       'app/components/public-v2/sections/Hero/Hero.module.css',
       ...APPROVED_CLIENT_MEDIA_FILES,
       ...PHASE8_PREMIUM_FILES,
+      ...I18N_V2_FILES,
     ])
     for (const file of out) {
       expect(allowed.has(file)).toBe(true)

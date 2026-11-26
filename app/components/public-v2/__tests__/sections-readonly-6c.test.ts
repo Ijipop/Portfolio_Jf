@@ -4,6 +4,7 @@ import { CONTACT_SMS_DISABLE_FILES } from './approved-contact-sms-disable-allowl
 import { SUPPORT_FORM_P0_FILES } from './approved-support-form-p0-allowlist'
 import { gitDiffNameOnly } from './gitDiffPortable'
 import { PHASE8_PREMIUM_FILES } from './phase8-premium-allowlist'
+import { I18N_V2_FILES } from './approved-i18n-v2-allowlist'
 
 /** HEAD après commit 6B10 Timelendr. */
 const BASE_6C = 'e0a4e4cd1612ae15480df8a0e927575ce0fc67c2'
@@ -87,7 +88,8 @@ describe('Approved surfaces read-only during Phase 6C', () => {
         !APPROVED_CLIENT_MEDIA_FILES.has(name) &&
         !PHASE8_PREMIUM_FILES.has(name) &&
         !SUPPORT_FORM_P0_FILES.has(name) &&
-        !CONTACT_SMS_DISABLE_FILES.has(name),
+        !CONTACT_SMS_DISABLE_FILES.has(name) &&
+        !I18N_V2_FILES.has(name),
     )
 
     expect(out).toEqual([])

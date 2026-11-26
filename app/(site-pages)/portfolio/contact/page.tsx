@@ -1,5 +1,5 @@
 import { Suspense } from 'react'
-import { PublicChromeShell } from '@/components/public-v2/chrome'
+import { LocalizedBusy, PublicChromeShell } from '@/components/public-v2/chrome'
 import { ContactPageClient } from '@/components/public-v2/contact'
 
 /**
@@ -9,7 +9,7 @@ import { ContactPageClient } from '@/components/public-v2/contact'
 export default function ContactPage() {
   return (
     <PublicChromeShell pathname="/portfolio/contact" mainId="pv2-contact-main" mainTestId="pv2-contact-main">
-      <Suspense fallback={<p aria-busy="true">Chargement du formulaire…</p>}>
+      <Suspense fallback={<LocalizedBusy kind="contactForm" />}>
         <ContactPageClient />
       </Suspense>
     </PublicChromeShell>

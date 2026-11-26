@@ -37,6 +37,7 @@ describe('submitContactRequest', () => {
       ok: false,
       error: 'Format d\'email invalide',
       kind: 'api',
+      status: 400,
     })
   })
 

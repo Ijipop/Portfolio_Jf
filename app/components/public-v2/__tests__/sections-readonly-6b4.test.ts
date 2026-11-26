@@ -3,6 +3,7 @@ import { APPROVED_CLIENT_MEDIA_FILES } from './approved-client-media-allowlist'
 import { CONTACT_SMS_DISABLE_FILES } from './approved-contact-sms-disable-allowlist'
 import { gitDiffNameOnly } from './gitDiffPortable'
 import { PHASE8_PREMIUM_FILES } from './phase8-premium-allowlist'
+import { I18N_V2_FILES } from './approved-i18n-v2-allowlist'
 
 /** HEAD après commits techniques Partie A (UTF-8 + Hero glyph). */
 const BASE_6B4 = '011aa0565f8f7a58e78219788c714094d1d119b5'
@@ -37,7 +38,8 @@ describe('Homepage + catalog + contact read-only during Phase 6B4', () => {
       ...APPROVED_CLIENT_MEDIA_FILES,
       ...PHASE8_PREMIUM_FILES,
       ...CONTACT_SMS_DISABLE_FILES,
-    ]) // 6B5/6B6 href Services + médias clients + SMS disable PR #227
+      ...I18N_V2_FILES,
+    ]) // 6B5/6B6 href Services + médias clients + SMS disable PR #227 + i18n
     const out = gitDiffNameOnly(BASE_6B4, READONLY_PATHS_6B4).filter((f) => !allowed.has(f))
 
     expect(out).toEqual([])

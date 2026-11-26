@@ -91,6 +91,11 @@ export default function ContactFormV2({
   const ctrl = useContactFormController({
     submitFn,
     sendErrorFallback: copy.sendError,
+    apiErrorCopy: {
+      sendError: copy.sendError,
+      networkError: copy.networkError,
+      rateLimitError: copy.rateLimitError,
+    },
     validationLocale: locale,
     onValidationError: handleValidationError,
     onSendError,

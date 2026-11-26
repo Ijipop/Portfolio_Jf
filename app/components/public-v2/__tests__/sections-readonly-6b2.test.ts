@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest'
 import { APPROVED_CLIENT_MEDIA_FILES } from './approved-client-media-allowlist'
 import { gitDiff, gitDiffNameOnly } from './gitDiffPortable'
 import { PHASE8_PREMIUM_FILES } from './phase8-premium-allowlist'
+import { I18N_V2_FILES } from './approved-i18n-v2-allowlist'
 
 /** Commit Phase 6B1 — accueil figé pour la Phase 6B2. */
 const BASE_6B1 = '0d530a36aae3344f6fcff8b5f944df074f7f2cf3'
@@ -33,6 +34,7 @@ describe('Homepage read-only during Phase 6B2', () => {
       'app/components/public-v2/sections/Services/__tests__/ServicesSection.test.tsx',
       ...APPROVED_CLIENT_MEDIA_FILES,
       ...PHASE8_PREMIUM_FILES,
+      ...I18N_V2_FILES,
     ])
 
     for (const file of out) {

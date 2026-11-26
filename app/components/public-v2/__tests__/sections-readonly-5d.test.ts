@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest'
 import { APPROVED_CLIENT_MEDIA_FILES } from './approved-client-media-allowlist'
 import { gitDiffNameOnly } from './gitDiffPortable'
 import { PHASE8_PREMIUM_FILES } from './phase8-premium-allowlist'
+import { I18N_V2_FILES } from './approved-i18n-v2-allowlist'
 
 /** Commit Phase 5C — sections figées pour la Phase 5D. */
 const BASE_5C = '84cd2a51d14fc069c8f38e3ae46b15e692d8fee1'
@@ -25,6 +26,7 @@ describe('Validated sections read-only during Phase 5D', () => {
       'app/components/public-v2/sections/Services/__tests__/ServicesSection.test.tsx',
       ...APPROVED_CLIENT_MEDIA_FILES,
       ...PHASE8_PREMIUM_FILES,
+      ...I18N_V2_FILES,
     ])
     for (const file of out) {
       expect(allowed.has(file)).toBe(true)
@@ -41,6 +43,7 @@ describe('Validated sections read-only during Phase 5D', () => {
       'app/components/public-v2/sections/Laboratory/LaboratorySection.tsx',
       'app/components/public-v2/sections/Laboratory/LaboratorySection.module.css',
       'lib/public-v2/laboratoryContent.ts',
+      ...I18N_V2_FILES,
     ])
 
     for (const file of out) {

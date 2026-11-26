@@ -90,7 +90,7 @@ const CONTACT_PAGE_COPY_EN = {
     'Sandbox preview — no data is sent (no Resend, OpenAI, or analytics).',
   aiDisabledSandbox: 'AI diagnosis disabled in sandbox preview (no OpenAI calls).',
   loadingForm: 'Loading the form…',
-  loadingMerci: 'Confirmation…',
+  loadingMerci: 'Confirming…',
 } as const
 
 export type ContactPageCopy = { [K in keyof typeof CONTACT_PAGE_COPY]: string }

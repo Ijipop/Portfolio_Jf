@@ -30,6 +30,7 @@ export default function PublicLocaleToggle() {
         type="button"
         className={styles.option}
         aria-pressed={locale === 'fr'}
+        aria-label="Français"
         data-active={locale === 'fr' ? 'true' : undefined}
         onClick={() => select('fr')}
       >
@@ -42,6 +43,7 @@ export default function PublicLocaleToggle() {
         type="button"
         className={styles.option}
         aria-pressed={locale === 'en'}
+        aria-label="English"
         data-active={locale === 'en' ? 'true' : undefined}
         onClick={() => select('en')}
       >

@@ -3,6 +3,7 @@ import { APPROVED_CLIENT_MEDIA_FILES } from './approved-client-media-allowlist'
 import { CONTACT_SMS_DISABLE_FILES } from './approved-contact-sms-disable-allowlist'
 import { gitDiff, gitDiffNameOnly } from './gitDiffPortable'
 import { PHASE8_PREMIUM_FILES } from './phase8-premium-allowlist'
+import { I18N_V2_FILES } from './approved-i18n-v2-allowlist'
 
 /** HEAD après commit 6B4 À propos. */
 const BASE_6B5 = 'c22c1f548d418ffe34426d48ca0bba3570475cc6'
@@ -55,7 +56,8 @@ describe('Homepage + catalog + contact + about read-only during Phase 6B5', () =
         !ALLOWED_6B5.has(name) &&
         !APPROVED_CLIENT_MEDIA_FILES.has(name) &&
         !PHASE8_PREMIUM_FILES.has(name) &&
-        !CONTACT_SMS_DISABLE_FILES.has(name),
+        !CONTACT_SMS_DISABLE_FILES.has(name) &&
+        !I18N_V2_FILES.has(name),
     )
 
     expect(out).toEqual([])
@@ -65,8 +67,11 @@ describe('Homepage + catalog + contact + about read-only during Phase 6B5', () =
     const diff = gitDiff(BASE_6B5, ['lib/public-v2/servicesContent.ts'])
     expect(diff).toMatch(/portfolio\/projets\?type=web/)
     expect(diff).toMatch(/portfolio\/projets\?type=logiciel/)
-    expect(diff).not.toMatch(/^\+.*title:/m)
-    expect(diff).not.toMatch(/^\+.*description:/m)
-    expect(diff).not.toMatch(/^\+.*ctaLabel:/m)
+    // Twins EN (I18N_V2) autorisés — hors i18n, pas de retouche éditoriale FR.
+    if (!I18N_V2_FILES.has('lib/public-v2/servicesContent.ts')) {
+      expect(diff).not.toMatch(/^\+.*title:/m)
+      expect(diff).not.toMatch(/^\+.*description:/m)
+      expect(diff).not.toMatch(/^\+.*ctaLabel:/m)
+    }
   })
 })

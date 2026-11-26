@@ -97,7 +97,7 @@ describe('public-v2 chrome', () => {
     renderChrome(<PublicHeader pathname="/" />)
 
     expect(screen.getByTestId('pv2-locale-toggle')).toBeTruthy()
-    await user.click(screen.getByRole('button', { name: 'EN' }))
+    await user.click(screen.getByRole('button', { name: 'English' }))
     expect(screen.getAllByRole('link', { name: 'Work' }).length).toBeGreaterThanOrEqual(1)
     expect(screen.getAllByRole('link', { name: 'Contact me' }).length).toBeGreaterThanOrEqual(1)
   })
