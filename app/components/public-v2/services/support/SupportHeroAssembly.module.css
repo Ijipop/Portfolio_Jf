@@ -1,0 +1,166 @@
+.stage {
+  --tower-petrol: var(--color-ink);
+  --tower-accent: var(--color-accent);
+  --tower-brass: var(--support-brass, var(--color-emphasis));
+  --tower-cream: var(--color-bg);
+  --badge-slot: 2.35rem;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 19.5rem;
+  margin-inline: auto;
+  gap: 0.45rem;
+}
+
+@media (min-width: 720px) {
+  .stage {
+    max-width: 23.5rem;
+    gap: 0.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .stage {
+    max-width: none;
+    width: 100%;
+    margin-inline: 0;
+    gap: 0.55rem;
+  }
+}
+
+/* Progress strip — above the tower, scene-integrated */
+.progressBlock {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: min(100%, 16.5rem);
+  min-height: 1.85rem;
+  pointer-events: none;
+}
+
+.progressInner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+  width: 100%;
+}
+
+.progressLabel {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: 0.68rem;
+  font-weight: 650;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--tower-accent);
+  white-space: nowrap;
+}
+
+.progressTrack {
+  width: 100%;
+  height: 1.5px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--tower-petrol) 12%, transparent);
+  overflow: hidden;
+}
+
+.progressFill {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--tower-accent) 70%, transparent),
+    var(--tower-accent)
+  );
+  transform-origin: left center;
+  transform: scaleX(0);
+}
+
+.canvas {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 0.86;
+  min-height: 14rem;
+}
+
+@media (min-width: 720px) {
+  .canvas {
+    min-height: 16.25rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .canvas {
+    /* Presence via wider column; contain height despite progress/badge slots */
+    min-height: 20rem;
+    aspect-ratio: 1 / 0.84;
+  }
+}
+
+.stageSvg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+/* Reserved slot — always present to avoid layout jump when badge appears */
+.badgeSlot {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: var(--badge-slot);
+  margin-top: 0.2rem;
+}
+
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.35rem 0.7rem;
+  border-radius: 999px;
+  font-family: var(--font-body);
+  font-size: 0.72rem;
+  font-weight: 650;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--tower-petrol);
+  background: color-mix(in srgb, var(--tower-cream) 88%, var(--tower-accent));
+  border: 1px solid color-mix(in srgb, var(--tower-accent) 28%, transparent);
+  box-shadow: 0 8px 22px color-mix(in srgb, var(--tower-petrol) 10%, transparent);
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+.statusDot {
+  width: 0.45rem;
+  height: 0.45rem;
+  border-radius: 50%;
+  background: var(--tower-accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--tower-accent) 22%, transparent);
+}
+
+.visuallyHidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .statusDot {
+    box-shadow: none;
+  }
+}

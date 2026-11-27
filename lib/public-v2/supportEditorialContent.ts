@@ -45,6 +45,11 @@ export type SupportEditorialContent = {
     signatureName: string
     signatureTitle: string
     signaturePlace: string
+    systemOperational: string
+    assemblyInProgress: string
+    checkingComponents: string
+    startingSystem: string
+    assemblyAria: string
   }
   services: {
     eyebrow: string
@@ -123,6 +128,11 @@ export function getSupportEditorialContent(locale: PublicV2Locale = 'fr'): Suppo
         signatureName: landing.identityName,
         signatureTitle: landing.identityTitle,
         signaturePlace: landing.identityPlace,
+        systemOperational: 'System operational',
+        assemblyInProgress: 'Assembly in progress',
+        checkingComponents: 'Checking components',
+        startingSystem: 'Starting system',
+        assemblyAria: 'Animated technical illustration of a desktop PC being reassembled',
       },
       services: {
         eyebrow: 'Services',
@@ -216,6 +226,11 @@ export function getSupportEditorialContent(locale: PublicV2Locale = 'fr'): Suppo
       signatureName: landing.identityName,
       signatureTitle: landing.identityTitle,
       signaturePlace: landing.identityPlace,
+      systemOperational: 'Système opérationnel',
+      assemblyInProgress: 'Assemblage en cours',
+      checkingComponents: 'Vérification des composants',
+      startingSystem: 'Démarrage du système',
+      assemblyAria: 'Illustration technique animée d’une tour d’ordinateur qui se réassemble',
     },
     services: {
       eyebrow: 'Prestations',

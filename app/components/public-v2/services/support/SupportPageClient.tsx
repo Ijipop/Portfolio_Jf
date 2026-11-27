@@ -12,6 +12,7 @@ import {
 import { getSupportEditorialContent } from '@/lib/public-v2/supportEditorialContent'
 import { usePublicV2Locale } from '@/lib/public-v2/usePublicV2Locale'
 import SupportFormMuiIsland from './SupportFormMuiIsland'
+import SupportHeroAssembly from './SupportHeroAssembly'
 import SupportStickyCta from './SupportStickyCta'
 import styles from './SupportPage.module.css'
 
@@ -28,37 +29,50 @@ export default function SupportPageClient() {
     <div className={styles.page}>
       <Container variant="wide">
         <header className={styles.hero} aria-labelledby="support-hero-title">
-          <div className={styles.heroInner}>
-            <p className={styles.eyebrow}>{editorial.hero.eyebrow}</p>
-            <h1 id="support-hero-title" className={styles.heroTitle}>
-              <span className={styles.heroTitleLine}>{editorial.hero.titleLine1}</span>
-              <span className={styles.heroTitleLineAccent}>{editorial.hero.titleLine2}</span>
-            </h1>
-            <div className={styles.heroBody}>
-              <p className={styles.heroLead}>{editorial.hero.lead}</p>
-              <div className={styles.heroActions}>
-                <Button href={FORM_HREF} variant="primary">
-                  {editorial.hero.ctaForm}
-                  <span className={styles.ctaArrow} aria-hidden>
-                    ↗
+          <div className={styles.heroGrid}>
+            <div className={styles.heroCopy}>
+              <p className={styles.eyebrow}>{editorial.hero.eyebrow}</p>
+              <h1 id="support-hero-title" className={styles.heroTitle}>
+                <span className={styles.heroTitleLine}>{editorial.hero.titleLine1}</span>
+                <span className={styles.heroTitleLineAccent}>{editorial.hero.titleLine2}</span>
+              </h1>
+              <div className={styles.heroBody}>
+                <p className={styles.heroLead}>{editorial.hero.lead}</p>
+                <div className={styles.heroActions}>
+                  <Button href={FORM_HREF} variant="primary">
+                    {editorial.hero.ctaForm}
+                    <span className={styles.ctaArrow} aria-hidden>
+                      ↗
+                    </span>
+                  </Button>
+                  <Button href={SUPPORT_PHONE_HREF} variant="ghost">
+                    {editorial.hero.ctaCall}{' '}
+                    <span className={styles.phoneInline}>{SUPPORT_PHONE_DISPLAY}</span>
+                  </Button>
+                </div>
+                <p className={styles.phoneHint}>{editorial.hero.phoneHint}</p>
+                <p className={styles.signature}>
+                  <span className={styles.signatureName}>{editorial.hero.signatureName}</span>
+                  <span className={styles.signatureMeta}>
+                    {editorial.hero.signatureTitle}
+                    <span className={styles.signatureDot} aria-hidden>
+                      ·
+                    </span>
+                    {editorial.hero.signaturePlace}
                   </span>
-                </Button>
-                <Button href={SUPPORT_PHONE_HREF} variant="ghost">
-                  {editorial.hero.ctaCall}{' '}
-                  <span className={styles.phoneInline}>{SUPPORT_PHONE_DISPLAY}</span>
-                </Button>
+                </p>
               </div>
-              <p className={styles.phoneHint}>{editorial.hero.phoneHint}</p>
-              <p className={styles.signature}>
-                <span className={styles.signatureName}>{editorial.hero.signatureName}</span>
-                <span className={styles.signatureMeta}>
-                  {editorial.hero.signatureTitle}
-                  <span className={styles.signatureDot} aria-hidden>
-                    ·
-                  </span>
-                  {editorial.hero.signaturePlace}
-                </span>
-              </p>
+            </div>
+            <div className={styles.heroVisual}>
+              <SupportHeroAssembly
+                statusLabel={editorial.hero.systemOperational}
+                labels={{
+                  assembling: editorial.hero.assemblyInProgress,
+                  diagnosing: editorial.hero.checkingComponents,
+                  booting: editorial.hero.startingSystem,
+                }}
+                ariaLabel={editorial.hero.assemblyAria}
+              />
             </div>
           </div>
         </header>

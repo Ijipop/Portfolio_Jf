@@ -11,7 +11,7 @@
     );
 }
 
-/* —— Hero typographique —— */
+/* —— Hero : message + atelier vivant —— */
 
 .hero {
   margin-bottom: var(--space-8);
@@ -20,31 +20,60 @@
 
 @media (min-width: 900px) {
   .hero {
-    padding-block: var(--space-7) var(--space-8);
+    padding-block: var(--space-6) var(--space-8);
   }
 }
 
-.heroInner {
-  width: 100%;
-  max-width: min(52rem, 100%);
+.heroGrid {
+  display: grid;
+  gap: var(--space-5);
+  align-items: center;
 }
 
-@media (min-width: 900px) {
-  .heroInner {
-    max-width: min(58rem, 92%);
+@media (min-width: 1024px) {
+  .heroGrid {
+    grid-template-columns: minmax(0, 1fr) minmax(18rem, 1.05fr);
+    gap: var(--space-6) var(--space-7);
+    align-items: center;
+  }
+}
+
+.heroCopy {
+  min-width: 0;
+  max-width: 36rem;
+}
+
+@media (min-width: 1024px) {
+  .heroCopy {
+    max-width: none;
+    padding-bottom: var(--space-2);
+  }
+}
+
+.heroVisual {
+  min-width: 0;
+  width: 100%;
+  justify-self: center;
+  /* Clear floating sticky CTA over the assembly on small screens */
+  margin-bottom: 0.5rem;
+  padding-bottom: 3.75rem;
+}
+
+@media (min-width: 1024px) {
+  .heroVisual {
+    justify-self: stretch;
+    /* ~16% wider than prior 28rem — presence without taller hero */
+    max-width: 32.5rem;
+    margin-left: auto;
+    margin-bottom: 0;
+    padding-bottom: 0;
   }
 }
 
 .heroBody {
   display: grid;
   gap: 0;
-  max-width: 40rem;
-}
-
-@media (min-width: 900px) {
-  .heroBody {
-    max-width: 36rem;
-  }
+  max-width: 34rem;
 }
 
 .eyebrow {
