@@ -9,6 +9,11 @@ describe('public-v2 projectsContent i18n', () => {
   it('returns English copy for en locale', () => {
     expect(getProjectsCopy('en').title).toBe('Projects')
     expect(getProjectsCopy('en').eyebrow).toBe('Work')
+    expect(getProjectsCopy('en').loading).toBe('Loading projects…')
+  })
+
+  it('uses réalisations wording for French loading', () => {
+    expect(getProjectsCopy('fr').loading).toBe('Chargement des réalisations…')
   })
 
   it('defaults French copy to PROJECTS_COPY', () => {

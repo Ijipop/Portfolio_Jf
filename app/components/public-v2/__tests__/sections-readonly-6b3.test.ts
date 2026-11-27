@@ -3,6 +3,7 @@ import { APPROVED_CLIENT_MEDIA_FILES } from './approved-client-media-allowlist'
 import { gitDiffNameOnly } from './gitDiffPortable'
 import { PHASE8_PREMIUM_FILES } from './phase8-premium-allowlist'
 import { I18N_V2_FILES } from './approved-i18n-v2-allowlist'
+import { PROJECTS_LOADER_FILES } from './approved-projects-loader-allowlist'
 
 /** Commit Phase 6B2 — catalogue figé pour la Phase 6B3. */
 const BASE_6B2 = '0236eab804c4b37976ee1083878dda8c2521ba30'
@@ -38,6 +39,7 @@ describe('Homepage + catalog read-only during Phase 6B3', () => {
       ...APPROVED_CLIENT_MEDIA_FILES,
       ...PHASE8_PREMIUM_FILES,
       ...I18N_V2_FILES,
+      ...PROJECTS_LOADER_FILES,
     ])
     for (const file of out) {
       expect(allowed.has(file)).toBe(true)

@@ -30,7 +30,7 @@ export const PROJECTS_COPY = {
   /** Compteur discret barre de filtres — `{count}` remplacé à l’affichage. */
   resultsCountOne: '1 réalisation',
   resultsCountMany: '{count} réalisations',
-  loading: 'Chargement des projets…',
+  loading: 'Chargement des réalisations…',
   errorLoad: 'Erreur lors du chargement des projets.',
   errorNetwork: 'Erreur de connexion.',
   viewProject: 'Voir le projet',

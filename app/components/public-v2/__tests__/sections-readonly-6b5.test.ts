@@ -5,6 +5,7 @@ import { gitDiff, gitDiffNameOnly } from './gitDiffPortable'
 import { PHASE8_PREMIUM_FILES } from './phase8-premium-allowlist'
 import { I18N_V2_FILES } from './approved-i18n-v2-allowlist'
 import { SUPPORT_HERO_ATELIER_FILES } from './approved-support-hero-atelier-allowlist'
+import { PROJECTS_LOADER_FILES } from './approved-projects-loader-allowlist'
 
 /** HEAD après commit 6B4 À propos. */
 const BASE_6B5 = 'c22c1f548d418ffe34426d48ca0bba3570475cc6'
@@ -59,7 +60,8 @@ describe('Homepage + catalog + contact + about read-only during Phase 6B5', () =
         !PHASE8_PREMIUM_FILES.has(name) &&
         !CONTACT_SMS_DISABLE_FILES.has(name) &&
         !I18N_V2_FILES.has(name) &&
-        !SUPPORT_HERO_ATELIER_FILES.has(name),
+        !SUPPORT_HERO_ATELIER_FILES.has(name) &&
+        !PROJECTS_LOADER_FILES.has(name),
     )
 
     expect(out).toEqual([])
