@@ -10,7 +10,7 @@ export const WEB_LANDING_PATH = '/creation-site-web-montreal'
 export const WEB_EDITORIAL_FR = {
   hero: {
     eyebrow: 'Création web · Montréal',
-    title: 'Un site web qui a de l’allure. Pis qui fait la job.',
+    title: 'Un site web qui a de l’allure. Puis qui fait le travail.',
     lead:
       'Je crée des sites web modernes, rapides et faciles à utiliser. Que vous partiez de zéro ou que votre site ait besoin d’un bon coup de neuf, on va faire ça comme du monde.',
     ctaProjects: 'Voir mes projets Web',
@@ -51,7 +51,7 @@ export const WEB_EDITORIAL_FR = {
       {
         id: 'jase',
         num: '01',
-        title: 'On jase',
+        title: 'On discute',
         lead: 'Vous me racontez votre idée et ce dont vous avez besoin.',
       },
       {
@@ -64,7 +64,7 @@ export const WEB_EDITORIAL_FR = {
         id: 'enligne',
         num: '03',
         title: 'On met en ligne',
-        lead: 'On vérifie que tout fonctionne, pis votre site est prêt.',
+        lead: 'On vérifie que tout fonctionne, puis votre site est prêt.',
       },
     ],
   },

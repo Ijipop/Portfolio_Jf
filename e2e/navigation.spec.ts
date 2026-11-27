@@ -94,6 +94,10 @@ test('legacy hub and SEO landing routes redirect to catalog', async ({ page }) =
   await expect(page).toHaveURL(/\/creation-site-web-montreal/)
   await expect(page.getByTestId('pv2-web-hero')).toBeVisible()
 
+  await page.goto('/developpement-logiciels-montreal', { waitUntil: 'domcontentloaded' })
+  await expect(page).toHaveURL(/\/developpement-logiciels-montreal/)
+  await expect(page.getByTestId('pv2-software-hero')).toBeVisible()
+
   await page.goto('/portfolio/pageweb', { waitUntil: 'domcontentloaded' })
   await expect(page).toHaveURL(/\/portfolio\/projets\?type=web/)
 })
@@ -155,11 +159,11 @@ test('home service lanes expose web, support and software destinations', async (
   )
   await expect(software.getByRole('link')).toHaveAttribute(
     'href',
-    '/portfolio/projets?type=logiciel',
+    '/developpement-logiciels-montreal',
   )
 })
 
-test('home software service links to logiciels showcase', async ({ page }) => {
+test('home software service links to logiciels landing', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' })
   await page.goto('/', { waitUntil: 'domcontentloaded' })
 
@@ -168,7 +172,7 @@ test('home software service links to logiciels showcase', async ({ page }) => {
   await expect(software).toBeVisible()
   await expect(software.getByRole('link')).toHaveAttribute(
     'href',
-    '/portfolio/projets?type=logiciel',
+    '/developpement-logiciels-montreal',
   )
 })
 test('site light mode uses dark text on home and contact', async ({ page }) => {
