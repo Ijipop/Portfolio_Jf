@@ -69,7 +69,7 @@ describe('Homepage + catalog + contact + about read-only during Phase 6B5', () =
 
   it('ne change que les href Services (web + logiciels) dans servicesContent', () => {
     const diff = gitDiff(BASE_6B5, ['lib/public-v2/servicesContent.ts'])
-    expect(diff).toMatch(/portfolio\/projets\?type=web/)
+    expect(diff).toMatch(/creation-site-web-montreal|portfolio\/projets\?type=web/)
     expect(diff).toMatch(/portfolio\/projets\?type=logiciel/)
     // Twins EN (I18N_V2) autorisés — hors i18n, pas de retouche éditoriale FR.
     if (!I18N_V2_FILES.has('lib/public-v2/servicesContent.ts')) {

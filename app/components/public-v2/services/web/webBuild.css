@@ -1,0 +1,164 @@
+/**
+ * TRACE → CONSTRUIRE → RÉVÉLER → TERMINER
+ * Sous html[data-web-build="run"] uniquement.
+ *
+ * --build 0→1 sur le slot :
+ *   --trace  0→1 sur ~0–0.32  (dessin des barres)
+ *   --wire   1 jusqu’à ~0.5, puis →0 vers 0.78 (chrome / rétraction)
+ *   --copy   0 jusqu’à 0.48, puis →1 vers 0.82 (vrai contenu)
+ * À 100 % : wire = 0, copy = 1 — design Atelier sans résidu.
+ */
+
+html[data-web-build='run'] [data-build-root] {
+  --build: 0;
+}
+
+html[data-web-build='run'] [data-build-root],
+html[data-web-build='run'] [data-build-root] * {
+  --trace: clamp(0, calc(var(--build) / 0.32), 1);
+  --wire: clamp(0, calc((0.78 - var(--build)) / 0.28), 1);
+  --copy: clamp(0, calc((var(--build) - 0.48) / 0.34), 1);
+}
+
+/* ——— Blueprint chrome ——— */
+html[data-web-build='run'] [data-blueprint] {
+  /* Opacité = --wire (plein en TRACE/CONSTRUIRE, 0 à 100 %). Le tracé est scaleX(--trace). */
+  opacity: var(--wire);
+  visibility: visible;
+  pointer-events: none;
+}
+
+html:not([data-web-build='run']) [data-blueprint] {
+  display: none !important;
+}
+
+/* ——— Contenu : invisible TRACE+CONSTRUIRE ; révélation L→R (titres / textes) ——— */
+html[data-web-build='run'] [data-copy] {
+  opacity: var(--copy);
+  -webkit-text-fill-color: currentColor;
+  color: inherit;
+}
+
+html[data-web-build='run'] [data-slot='title'] [data-copy],
+html[data-web-build='run'] [data-slot='text'] [data-copy] {
+  -webkit-text-stroke-width: 0;
+  clip-path: inset(0 calc((1 - var(--copy)) * 100%) 0 0);
+}
+
+/* Boutons : pas de clip-path (clics / focus / a11y) — opacity seulement */
+html[data-web-build='run'] [data-slot='btn'] [data-copy] {
+  clip-path: none;
+  opacity: var(--copy);
+  transform: none;
+  color: inherit;
+}
+
+/* ——— Boutons : cadre accent (TRACE/CONSTRUIRE) → fill final (RÉVÉLER+) ——— */
+html[data-web-build='run'] [data-slot='btn'] {
+  background-image: none !important;
+  border-width: 1px !important;
+  border-style: solid !important;
+  box-shadow: none !important;
+  outline-offset: 3px;
+}
+
+html[data-web-build='run'] [data-slot='btn'][data-btn='primary'] {
+  background-color: color-mix(
+    in srgb,
+    var(--color-ink) calc(clamp(0, calc((var(--build) - 0.4) / 0.45), 1) * 100%),
+    transparent
+  ) !important;
+  /* Contour accent se trace avec --trace, puis passe à l’encre en RÉVÉLER */
+  border-color: color-mix(
+    in srgb,
+    var(--color-accent) calc(var(--wire) * var(--trace) * 72%),
+    color-mix(in srgb, var(--color-ink) calc(var(--copy) * 100%), transparent)
+  ) !important;
+  color: color-mix(
+    in srgb,
+    var(--color-on-ink, var(--color-bg, #f7f4ef)) calc(var(--copy) * 100%),
+    transparent
+  ) !important;
+}
+
+html[data-web-build='run'] [data-slot='btn'][data-btn='ghost'] {
+  background-color: transparent !important;
+  border-color: color-mix(
+    in srgb,
+    var(--color-accent) calc(var(--wire) * var(--trace) * 72%),
+    color-mix(
+      in srgb,
+      var(--color-line-strong, var(--color-line)) calc(var(--copy) * 100%),
+      transparent
+    )
+  ) !important;
+  color: color-mix(
+    in srgb,
+    var(--color-ink) calc(var(--copy) * 100%),
+    transparent
+  ) !important;
+}
+
+/* ——— Cartes ——— */
+html[data-web-build='run'] [data-slot='card'] {
+  border-color: color-mix(
+    in srgb,
+    var(--color-accent) calc(var(--wire) * 55%),
+    var(--color-line)
+  ) !important;
+  border-style: solid !important;
+  position: relative;
+}
+
+html[data-web-build='run'] [data-slot='card'] [data-copy],
+html[data-web-build='run'] [data-slot='card'] [data-card-reveal] {
+  opacity: var(--copy);
+  /* Pas de clip-path : cartes projets contiennent des liens */
+  transform: none;
+}
+
+/* ——— Ligne process ——— */
+html[data-web-build='run'] [data-slot='line'] {
+  opacity: calc(0.15 + var(--trace) * 0.85);
+  --line-draw: var(--build);
+}
+
+/* ——— Panel CTA ——— */
+html[data-web-build='run'] [data-slot='panel'] {
+  border-style: solid !important;
+  border-color: color-mix(
+    in srgb,
+    var(--color-accent) calc(var(--wire) * 40% + 22%),
+    transparent
+  ) !important;
+  background: color-mix(
+    in srgb,
+    var(--color-accent) calc(var(--copy) * 8%),
+    var(--color-bg)
+  ) !important;
+  position: relative;
+}
+
+/* Guides hero : opacité wire ; le tracé est scale*trace dans le module */
+html[data-web-build='run'] [data-guides] {
+  opacity: var(--wire);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html[data-web-build='run'] [data-blueprint],
+  html[data-web-build='run'] [data-guides] {
+    display: none !important;
+  }
+
+  html[data-web-build='run'] [data-copy],
+  html[data-web-build='run'] [data-slot='card'] [data-card-reveal],
+  html[data-web-build='run'] [data-slot='btn'] {
+    opacity: 1 !important;
+    transform: none !important;
+    clip-path: none !important;
+    color: unset !important;
+    -webkit-text-fill-color: unset !important;
+    background: unset;
+    border-style: solid !important;
+  }
+}

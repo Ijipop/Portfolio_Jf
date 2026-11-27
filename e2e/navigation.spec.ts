@@ -91,7 +91,8 @@ test('legacy hub and SEO landing routes redirect to catalog', async ({ page }) =
   await expect(page).toHaveURL(/\/portfolio\/projets\?type=logiciel/)
 
   await page.goto('/creation-site-web-montreal', { waitUntil: 'domcontentloaded' })
-  await expect(page).toHaveURL(/\/portfolio\/projets\?type=web/)
+  await expect(page).toHaveURL(/\/creation-site-web-montreal/)
+  await expect(page.getByTestId('pv2-web-hero')).toBeVisible()
 
   await page.goto('/portfolio/pageweb', { waitUntil: 'domcontentloaded' })
   await expect(page).toHaveURL(/\/portfolio\/projets\?type=web/)
@@ -147,7 +148,7 @@ test('home service lanes expose web, support and software destinations', async (
   await expect(support).toBeVisible()
   await expect(software).toBeVisible()
 
-  await expect(web.getByRole('link')).toHaveAttribute('href', '/portfolio/projets?type=web')
+  await expect(web.getByRole('link')).toHaveAttribute('href', '/creation-site-web-montreal')
   await expect(support.getByRole('link')).toHaveAttribute(
     'href',
     '/soutien-informatique-montreal',

@@ -10,6 +10,9 @@ type CommonProps = {
   size?: ButtonSize
   className?: string
   children: ReactNode
+  /** Attributs de construction page Web (BuildSlot) */
+  'data-slot'?: string
+  'data-btn'?: string
 }
 
 type ButtonAsButton = CommonProps &
@@ -36,8 +39,27 @@ export default function Button(props: ButtonProps) {
   const size = props.size ?? 'md'
   const cls = classNames(variant, size, props.className)
 
+  const dataSlot = props['data-slot']
+  const dataBtn = props['data-btn']
+
+  const dataProps = {
+    ...(dataSlot ? { 'data-slot': dataSlot } : {}),
+    ...(dataBtn ? { 'data-btn': dataBtn } : {}),
+  }
+
   if ('href' in props && props.href) {
-    const { href, children, target, rel, className: _c, variant: _v, size: _s, ...rest } = props
+    const {
+      href,
+      children,
+      target,
+      rel,
+      className: _c,
+      variant: _v,
+      size: _s,
+      'data-slot': _ds,
+      'data-btn': _db,
+      ...rest
+    } = props
     const absoluteHttp = /^https?:\/\//i.test(href)
     const protocolOrHash = /^(tel:|sms:|mailto:)/i.test(href) || href.startsWith('#')
     if (absoluteHttp || protocolOrHash) {
@@ -47,6 +69,7 @@ export default function Button(props: ButtonProps) {
           href={href}
           target={absoluteHttp ? (target ?? '_blank') : target}
           rel={absoluteHttp ? (rel ?? 'noopener noreferrer') : rel}
+          {...dataProps}
           {...rest}
         >
           {children}
@@ -54,16 +77,25 @@ export default function Button(props: ButtonProps) {
       )
     }
     return (
-      <Link className={cls} href={href} target={target} rel={rel} {...rest}>
+      <Link className={cls} href={href} target={target} rel={rel} {...dataProps} {...rest}>
         {children}
       </Link>
     )
   }
 
   const buttonProps = props as ButtonAsButton
-  const { children, className: _c, variant: _v, size: _s, type, ...rest } = buttonProps
+  const {
+    children,
+    className: _c,
+    variant: _v,
+    size: _s,
+    type,
+    'data-slot': _ds2,
+    'data-btn': _db2,
+    ...rest
+  } = buttonProps
   return (
-    <button className={cls} type={type ?? 'button'} {...rest}>
+    <button className={cls} type={type ?? 'button'} {...dataProps} {...rest}>
       {children}
     </button>
   )

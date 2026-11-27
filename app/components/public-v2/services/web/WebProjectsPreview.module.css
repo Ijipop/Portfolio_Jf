@@ -1,0 +1,81 @@
+.section {
+  padding-block: var(--space-7);
+}
+
+.eyebrow {
+  margin: 0 0 var(--space-3);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+}
+
+.title {
+  margin: 0 0 var(--space-3);
+  font-family: var(--font-display);
+  font-size: clamp(1.75rem, 3vw, 2.35rem);
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  color: var(--color-ink);
+}
+
+.lead {
+  margin: 0 0 var(--space-5);
+  max-width: 36rem;
+  color: var(--color-ink-soft);
+  line-height: 1.55;
+}
+
+.grid {
+  list-style: none;
+  margin: 0 0 var(--space-5);
+  padding: 0;
+  display: grid;
+  gap: var(--space-4);
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 768px) {
+  .grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.slots {
+  display: grid;
+  gap: var(--space-4);
+  grid-template-columns: 1fr;
+  margin-bottom: var(--space-5);
+}
+
+@media (min-width: 768px) {
+  .slots {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.slot {
+  min-height: 14rem;
+  border-radius: var(--radius-lg);
+  border: 1px dashed color-mix(in srgb, var(--color-ink) 22%, transparent);
+  background: color-mix(in srgb, var(--color-ink) 3%, var(--color-bg));
+}
+
+.msg {
+  margin: 0 0 var(--space-5);
+  color: var(--color-ink-soft);
+}
+
+.cardReveal {
+  min-height: 100%;
+  /* Opacité pilotée par webBuild.css [data-card-reveal] sous run */
+}
+
+.cta {
+  display: flex;
+}
+
+.arrow {
+  margin-left: 0.35em;
+}

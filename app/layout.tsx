@@ -1,9 +1,11 @@
 import type { Metadata } from 'next'
 import { Analytics } from '@vercel/analytics/next'
 import Script from 'next/script'
+import InlineBootScript from './components/InlineBootScript'
 import SeoJsonLd from './components/SeoJsonLd'
 import './globals.css'
 import { beigeDarkBootstrapScript } from '@/utils/beigeDarkBootstrapScript'
+import { WEB_BUILD_BOOT_SCRIPT } from '@/components/public-v2/services/web/WebBuildBoot'
 import { inter } from './fonts'
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://ijipop.com'
@@ -62,7 +64,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="fr" className={`${inter.variable} dark`} suppressHydrationWarning>
       <head>
-        <script dangerouslySetInnerHTML={{ __html: beigeDarkBootstrapScript }} />
+        <InlineBootScript id="beige-dark-boot" html={beigeDarkBootstrapScript} />
+        <InlineBootScript id="web-build-boot" html={WEB_BUILD_BOOT_SCRIPT} />
       </head>
       <body>
         <SeoJsonLd />

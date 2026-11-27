@@ -32,11 +32,6 @@ describe('next.config redirects', () => {
           permanent: true,
         }),
         expect.objectContaining({
-          source: '/creation-site-web-montreal',
-          destination: '/portfolio/projets?type=web',
-          permanent: true,
-        }),
-        expect.objectContaining({
           source: '/pageweb',
           destination: '/portfolio/projets?type=web',
           permanent: true,
@@ -54,6 +49,9 @@ describe('next.config redirects', () => {
       ]),
     )
     expect(redirects.some((item) => item.source === '/logiciel/:path*')).toBe(false)
+    expect(
+      redirects.some((item) => item.source === '/creation-site-web-montreal'),
+    ).toBe(false)
   })
 
   it('n’ajoute pas de redirect CPU-ZE auto-référent', async () => {

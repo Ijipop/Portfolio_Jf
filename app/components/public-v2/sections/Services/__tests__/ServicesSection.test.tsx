@@ -33,7 +33,7 @@ describe('ServicesSection V2', () => {
     }
 
     expect(SERVICE_OFFERS.map((o) => o.href)).toEqual([
-      '/portfolio/projets?type=web',
+      '/creation-site-web-montreal',
       '/soutien-informatique-montreal',
       '/portfolio/projets?type=logiciel',
     ])

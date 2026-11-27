@@ -1,0 +1,152 @@
+.stage {
+  --browser-ink: var(--color-ink);
+  --browser-accent: var(--color-accent);
+  --browser-cream: var(--color-bg);
+  --browser-surface: var(--color-surface, #fff);
+  --badge-slot: 2.2rem;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 19rem;
+  margin-inline: auto;
+  gap: 0.4rem;
+  pointer-events: none;
+}
+
+@media (min-width: 720px) {
+  .stage {
+    max-width: 22.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .stage {
+    max-width: none;
+    width: 100%;
+    margin-inline: 0;
+    align-items: stretch;
+  }
+}
+
+.progressBlock {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: min(100%, 15.5rem);
+  min-height: 1.75rem;
+}
+
+@media (min-width: 1024px) {
+  .progressBlock {
+    width: min(100%, 17rem);
+    margin-inline: auto;
+  }
+}
+
+.progressInner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+  width: 100%;
+}
+
+.progressLabel {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: 0.65rem;
+  font-weight: 650;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--browser-accent);
+  white-space: nowrap;
+}
+
+.progressTrack {
+  width: 100%;
+  height: 1.5px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--browser-ink) 12%, transparent);
+  overflow: hidden;
+}
+
+.progressFill {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--browser-accent) 65%, transparent),
+    var(--browser-accent)
+  );
+  transform-origin: left center;
+  transform: scaleX(0);
+}
+
+.canvas {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 360 / 268;
+  min-height: 12.5rem;
+}
+
+@media (min-width: 720px) {
+  .canvas {
+    min-height: 14.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .canvas {
+    min-height: 16.5rem;
+  }
+}
+
+.stageSvg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.badgeSlot {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: var(--badge-slot);
+  margin-top: 0.15rem;
+}
+
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.28rem 0.65rem;
+  border-radius: 4px;
+  font-family: var(--font-body);
+  font-size: 0.7rem;
+  font-weight: 650;
+  letter-spacing: 0.04em;
+  color: var(--browser-ink);
+  background: color-mix(in srgb, var(--browser-cream) 92%, var(--browser-accent));
+  border: 1px solid color-mix(in srgb, var(--browser-accent) 26%, transparent);
+  white-space: nowrap;
+}
+
+.statusDot {
+  width: 0.4rem;
+  height: 0.4rem;
+  border-radius: 50%;
+  background: var(--browser-accent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .statusDot {
+    box-shadow: none;
+  }
+}

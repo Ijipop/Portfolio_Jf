@@ -42,7 +42,7 @@ export const SERVICE_OFFERS: readonly ServiceOffer[] = [
     title: 'Création de sites web',
     description:
       'Sites vitrines, refontes et projets web plus complexes. Je m’occupe autant de l’apparence que du fonctionnement, avec le souci de créer des sites agréables à utiliser et faciles à faire évoluer.',
-    href: '/portfolio/projets?type=web',
+    href: '/creation-site-web-montreal',
     ctaLabel: 'En savoir plus →',
   },
   {
@@ -75,7 +75,7 @@ const SERVICE_OFFERS_EN: readonly ServiceOffer[] = [
     title: 'Website design & development',
     description:
       'Brochure sites, redesigns, and more involved web projects. I care as much about how it looks as how it works — sites that are pleasant to use and straightforward to grow.',
-    href: '/portfolio/projets?type=web',
+    href: '/creation-site-web-montreal',
     ctaLabel: 'Learn more →',
   },
   {
