@@ -1,0 +1,8 @@
+export { default as SoftwarePageClient } from './SoftwarePageClient'
+export { default as SoftwareHeroBuild } from './SoftwareHeroBuild'
+export { default as SoftwareHeroApp } from './SoftwareHeroApp'
+export { default as SoftwareOffers } from './SoftwareOffers'
+export { default as SoftwareProcess } from './SoftwareProcess'
+export { default as SoftwareProjects } from './SoftwareProjects'
+export { default as SoftwareFinalCta } from './SoftwareFinalCta'
+export { useSoftwareProgress } from './useSoftwareProgress'

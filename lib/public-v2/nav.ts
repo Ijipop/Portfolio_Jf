@@ -8,11 +8,19 @@ export type { PublicV2Locale } from './locale'
 
 export type PublicV2NavItemId = 'services' | 'realisations' | 'about' | 'contact'
 
+export type PublicV2NavChild = {
+  id: string
+  label: string
+  href: string
+  description?: string
+}
+
 export type PublicV2NavItem = {
   id: PublicV2NavItemId
   label: string
   /** Destination canonique (production / futur accueil). */
   href: string
+  children?: readonly PublicV2NavChild[]
 }
 
 export const PUBLIC_V2_BRAND = {
@@ -28,6 +36,12 @@ export const PUBLIC_V2_MAIN_ID = 'pv2-main'
 /** Ancre Services = id réel de ServicesSection (`pv2-services`). */
 export const PUBLIC_V2_SERVICES_HASH = '#pv2-services'
 export const PUBLIC_V2_SERVICES_HREF = '/#pv2-services'
+
+const SERVICE_LANDING_PATHS = [
+  '/creation-site-web-montreal',
+  '/soutien-informatique-montreal',
+  '/developpement-logiciels-montreal',
+] as const
 
 const NAV_HREFS: Record<PublicV2NavItemId, string> = {
   services: PUBLIC_V2_SERVICES_HREF,
@@ -48,6 +62,84 @@ const NAV_LABELS: Record<PublicV2Locale, Record<PublicV2NavItemId, string>> = {
     realisations: 'Work',
     about: 'About',
     contact: 'Contact',
+  },
+}
+
+const NAV_CHILDREN: Record<
+  PublicV2Locale,
+  Partial<Record<PublicV2NavItemId, readonly PublicV2NavChild[]>>
+> = {
+  fr: {
+    services: [
+      {
+        id: 'web',
+        label: 'Création web',
+        href: '/creation-site-web-montreal',
+        description: 'Sites modernes et sur mesure',
+      },
+      {
+        id: 'support',
+        label: 'Soutien informatique',
+        href: '/soutien-informatique-montreal',
+        description: 'Dépannage et accompagnement',
+      },
+      {
+        id: 'software',
+        label: 'Développement logiciels',
+        href: '/developpement-logiciels-montreal',
+        description: 'Applications et automatisation',
+      },
+    ],
+    realisations: [
+      {
+        id: 'web',
+        label: 'Web',
+        href: '/portfolio/projets?type=web',
+        description: 'Sites et projets web',
+      },
+      {
+        id: 'logiciel',
+        label: 'Logiciels',
+        href: '/portfolio/projets?type=logiciel',
+        description: 'Outils et applications',
+      },
+    ],
+  },
+  en: {
+    services: [
+      {
+        id: 'web',
+        label: 'Web design',
+        href: '/creation-site-web-montreal',
+        description: 'Modern custom websites',
+      },
+      {
+        id: 'support',
+        label: 'IT support',
+        href: '/soutien-informatique-montreal',
+        description: 'Troubleshooting and setup',
+      },
+      {
+        id: 'software',
+        label: 'Custom software',
+        href: '/developpement-logiciels-montreal',
+        description: 'Apps and automation',
+      },
+    ],
+    realisations: [
+      {
+        id: 'web',
+        label: 'Web',
+        href: '/portfolio/projets?type=web',
+        description: 'Sites and web projects',
+      },
+      {
+        id: 'logiciel',
+        label: 'Software',
+        href: '/portfolio/projets?type=logiciel',
+        description: 'Tools and applications',
+      },
+    ],
   },
 }
 
@@ -89,6 +181,7 @@ export const PUBLIC_V2_NAV_ITEMS: readonly PublicV2NavItem[] = (
   id,
   label: NAV_LABELS.fr[id],
   href: NAV_HREFS[id],
+  children: NAV_CHILDREN.fr[id],
 }))
 
 export const PUBLIC_V2_CTA = {
@@ -134,10 +227,15 @@ export function getPublicV2NavItems(
   locale: PublicV2Locale = 'fr',
 ): PublicV2NavItem[] {
   const labels = NAV_LABELS[locale] ?? NAV_LABELS.fr
+  const childrenMap = NAV_CHILDREN[locale] ?? NAV_CHILDREN.fr
   return (Object.keys(NAV_HREFS) as PublicV2NavItemId[]).map((id) => ({
     id,
     label: labels[id],
     href: resolvePublicV2Href(NAV_HREFS[id], pathname),
+    children: childrenMap[id]?.map((child) => ({
+      ...child,
+      href: resolvePublicV2Href(child.href, pathname),
+    })),
   }))
 }
 
@@ -160,7 +258,13 @@ export function getPublicV2BrandHomeHref(pathname: string): string {
 export function isPublicV2NavItemActive(item: PublicV2NavItem, pathname: string): boolean {
   switch (item.id) {
     case 'services':
-      return pathname === '/' || pathname === ''
+      return (
+        pathname === '/' ||
+        pathname === '' ||
+        SERVICE_LANDING_PATHS.some(
+          (path) => pathname === path || pathname.startsWith(`${path}/`),
+        )
+      )
     case 'realisations':
       return pathname === '/portfolio/projets' || pathname.startsWith('/portfolio/projets/')
     case 'about':
@@ -170,4 +274,26 @@ export function isPublicV2NavItemActive(item: PublicV2NavItem, pathname: string)
     default:
       return false
   }
+}
+
+/** Enfant actif — pathname + query (`?type=`). */
+export function isPublicV2NavChildActive(
+  child: PublicV2NavChild,
+  pathname: string,
+  search = '',
+): boolean {
+  const qIndex = child.href.indexOf('?')
+  const childPath = qIndex >= 0 ? child.href.slice(0, qIndex) : child.href
+  const childQuery = qIndex >= 0 ? child.href.slice(qIndex + 1) : ''
+
+  if (childPath.startsWith('#')) return false
+  if (pathname !== childPath && !pathname.startsWith(`${childPath}/`)) return false
+  if (!childQuery) return true
+
+  const wanted = new URLSearchParams(childQuery)
+  const current = new URLSearchParams(search.startsWith('?') ? search.slice(1) : search)
+  for (const [key, value] of wanted.entries()) {
+    if (current.get(key) !== value) return false
+  }
+  return true
 }

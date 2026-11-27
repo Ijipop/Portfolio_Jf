@@ -1,5 +1,6 @@
 'use client'
 
+import { useEffect, useState } from 'react'
 import { Container, Button } from '@/components/public-v2/primitives'
 import { useLanguage } from '@/contexts/LanguageContext'
 import {
@@ -13,6 +14,7 @@ import BrandLockup from './BrandLockup'
 import HeaderScrollShell from './HeaderScrollShell'
 import PublicLocaleToggle from './PublicLocaleToggle'
 import PublicMobileNav from './PublicMobileNav'
+import PublicNavDropdown from './PublicNavDropdown'
 import styles from './PublicHeader.module.css'
 
 export type PublicHeaderProps = {
@@ -25,6 +27,11 @@ export default function PublicHeader({ pathname }: PublicHeaderProps) {
   const items = getPublicV2NavItems(pathname, loc)
   const cta = getPublicV2Cta(pathname, loc)
   const chrome = getPublicV2ChromeCopy(loc)
+  const [search, setSearch] = useState('')
+
+  useEffect(() => {
+    setSearch(window.location.search || '')
+  }, [pathname])
 
   return (
     <HeaderScrollShell>
@@ -33,6 +40,16 @@ export default function PublicHeader({ pathname }: PublicHeaderProps) {
         <nav aria-label={chrome.primaryNav}>
           <ul className={styles.desktopNav}>
             {items.map((item) => {
+              if (item.children?.length) {
+                return (
+                  <PublicNavDropdown
+                    key={item.id}
+                    item={item}
+                    pathname={pathname}
+                    search={search}
+                  />
+                )
+              }
               const active = isPublicV2NavItemActive(item, pathname)
               return (
                 <li key={item.id}>
@@ -60,6 +77,7 @@ export default function PublicHeader({ pathname }: PublicHeaderProps) {
               items={items}
               cta={cta}
               pathname={pathname}
+              search={search}
               menuLabel={chrome.mobileMenu}
             />
           </div>

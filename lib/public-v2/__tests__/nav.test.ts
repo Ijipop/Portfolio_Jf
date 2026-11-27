@@ -7,6 +7,7 @@ import {
   PUBLIC_V2_SERVICES_HREF,
   getPublicV2Cta,
   getPublicV2NavItems,
+  isPublicV2NavChildActive,
   isPublicV2NavItemActive,
   resolvePublicV2Href,
 } from '../nav'
@@ -65,9 +66,43 @@ describe('public-v2 nav config', () => {
     const about = PUBLIC_V2_NAV_ITEMS.find((i) => i.id === 'about')!
     const contact = PUBLIC_V2_NAV_ITEMS.find((i) => i.id === 'contact')!
     const services = PUBLIC_V2_NAV_ITEMS.find((i) => i.id === 'services')!
+    const realisations = PUBLIC_V2_NAV_ITEMS.find((i) => i.id === 'realisations')!
     expect(isPublicV2NavItemActive(about, '/portfolio/a-propos')).toBe(true)
     expect(isPublicV2NavItemActive(contact, '/portfolio/contact/merci')).toBe(true)
     expect(isPublicV2NavItemActive(services, '/')).toBe(true)
+    expect(isPublicV2NavItemActive(services, '/developpement-logiciels-montreal')).toBe(
+      true,
+    )
+    expect(isPublicV2NavItemActive(realisations, '/portfolio/projets')).toBe(true)
     expect(isPublicV2NavItemActive(about, '/portfolio/projets')).toBe(false)
+  })
+
+  it('expose les sous-menus Services et Réalisations', () => {
+    const items = getPublicV2NavItems('/')
+    const services = items.find((i) => i.id === 'services')!
+    const realisations = items.find((i) => i.id === 'realisations')!
+    expect(services.children?.map((c) => c.href)).toEqual([
+      '/creation-site-web-montreal',
+      '/soutien-informatique-montreal',
+      '/developpement-logiciels-montreal',
+    ])
+    expect(realisations.children?.map((c) => c.href)).toEqual([
+      '/portfolio/projets?type=web',
+      '/portfolio/projets?type=logiciel',
+    ])
+  })
+
+  it('détecte l’enfant actif via pathname et query', () => {
+    const soft = PUBLIC_V2_NAV_ITEMS.find((i) => i.id === 'services')!.children!.find(
+      (c) => c.id === 'software',
+    )!
+    const webWork = PUBLIC_V2_NAV_ITEMS.find((i) => i.id === 'realisations')!.children!.find(
+      (c) => c.id === 'web',
+    )!
+    expect(isPublicV2NavChildActive(soft, '/developpement-logiciels-montreal')).toBe(true)
+    expect(isPublicV2NavChildActive(webWork, '/portfolio/projets', '?type=web')).toBe(true)
+    expect(isPublicV2NavChildActive(webWork, '/portfolio/projets', '?type=logiciel')).toBe(
+      false,
+    )
   })
 })
