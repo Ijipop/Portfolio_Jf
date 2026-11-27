@@ -1,0 +1,231 @@
+/**
+ * Chrome blueprint ancré au slot parent.
+ * --trace : dessin L→R (scaleX 0→1)
+ * --wire  : maintien puis rétraction
+ * scaleX(trace * wire) = tracer puis laisser place au copy
+ */
+
+.root {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.55em;
+  padding: 0.1em 0;
+  overflow: hidden;
+}
+
+.bar {
+  display: block;
+  height: 0.42em;
+  max-width: 100%;
+  border-radius: 2px;
+  background: color-mix(in srgb, var(--color-accent) 55%, var(--color-ink) 20%);
+  opacity: calc(0.35 + var(--trace, 0) * 0.45 * var(--wire, 1));
+  transform: scaleX(calc(var(--trace, 0) * var(--wire, 1)));
+  transform-origin: left center;
+  will-change: transform, opacity;
+}
+
+.barWide {
+  width: 100%;
+}
+
+/* Stagger CSS : barres suivantes tracent un peu plus tard (seuil --trace) */
+.barMid {
+  width: 82%;
+  transform: scaleX(
+    calc(clamp(0, calc((var(--trace, 0) - 0.08) / 0.92), 1) * var(--wire, 1))
+  );
+  opacity: calc(0.3 + clamp(0, calc((var(--trace, 0) - 0.08) / 0.92), 1) * 0.45 * var(--wire, 1));
+}
+
+.barShort {
+  width: 58%;
+  transform: scaleX(
+    calc(clamp(0, calc((var(--trace, 0) - 0.16) / 0.84), 1) * var(--wire, 1))
+  );
+  opacity: calc(0.28 + clamp(0, calc((var(--trace, 0) - 0.16) / 0.84), 1) * 0.4 * var(--wire, 1));
+}
+
+.barNarrow {
+  width: 71%;
+  transform: scaleX(
+    calc(clamp(0, calc((var(--trace, 0) - 0.12) / 0.88), 1) * var(--wire, 1))
+  );
+}
+
+.barEnd {
+  width: 44%;
+  transform: scaleX(
+    calc(clamp(0, calc((var(--trace, 0) - 0.22) / 0.78), 1) * var(--wire, 1))
+  );
+  opacity: calc(0.25 + clamp(0, calc((var(--trace, 0) - 0.22) / 0.78), 1) * 0.4 * var(--wire, 1));
+}
+
+.title {
+  gap: 0.62em;
+  justify-content: flex-start;
+  padding-top: 0.15em;
+}
+
+.title .bar {
+  height: 0.55em;
+}
+
+.text {
+  gap: 0.48em;
+  justify-content: flex-start;
+  padding-top: 0.2em;
+}
+
+.text .bar {
+  height: 0.32em;
+}
+
+.card {
+  inset: 0;
+  justify-content: flex-start;
+  gap: 0.75rem;
+  padding: 0.85rem;
+  background: color-mix(in srgb, var(--color-bg) calc(var(--wire, 1) * 94%), transparent);
+  border-radius: inherit;
+}
+
+.card .bar {
+  height: 0.55rem;
+  position: relative;
+  z-index: 1;
+}
+
+.cardFrame {
+  position: absolute;
+  inset: 0.65rem;
+  border: 1px dashed color-mix(in srgb, var(--color-accent) 50%, transparent);
+  border-radius: calc(var(--radius-lg, 12px) - 4px);
+  pointer-events: none;
+  opacity: calc(var(--trace, 0) * (0.4 + var(--wire, 1) * 0.6));
+  transform: scaleX(calc(0.2 + var(--trace, 0) * 0.8));
+  transform-origin: left center;
+}
+
+.card .barWide {
+  width: 55%;
+  margin-top: 0.35rem;
+}
+
+.card .barMid {
+  width: 88%;
+}
+
+.card .barShort {
+  width: 70%;
+}
+
+.card .barNarrow {
+  width: 62%;
+}
+
+.ticks {
+  inset: -2px;
+  display: block;
+  padding: 0;
+  background: transparent;
+  overflow: visible;
+}
+
+.tick {
+  position: absolute;
+  background: color-mix(in srgb, var(--color-accent) 70%, transparent);
+  opacity: calc(var(--trace, 0) * var(--wire, 1));
+  transform: scale(calc(0.35 + var(--trace, 0) * 0.65));
+  transform-origin: center;
+}
+
+.tickTLH {
+  top: 0;
+  left: 0;
+  width: 12px;
+  height: 1.5px;
+  transform-origin: left center;
+}
+
+.tickTLV {
+  top: 0;
+  left: 0;
+  width: 1.5px;
+  height: 12px;
+  transform-origin: top center;
+}
+
+.tickTRH {
+  top: 0;
+  right: 0;
+  width: 12px;
+  height: 1.5px;
+  transform-origin: right center;
+}
+
+.tickTRV {
+  top: 0;
+  right: 0;
+  width: 1.5px;
+  height: 12px;
+  transform-origin: top center;
+}
+
+.tickBLH {
+  bottom: 0;
+  left: 0;
+  width: 12px;
+  height: 1.5px;
+  transform-origin: left center;
+}
+
+.tickBLV {
+  bottom: 0;
+  left: 0;
+  width: 1.5px;
+  height: 12px;
+  transform-origin: bottom center;
+}
+
+.mark {
+  position: absolute;
+  top: -1.1rem;
+  left: 0;
+  font-family: var(--font-body, sans-serif);
+  font-size: 0.55rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--color-accent) 75%, var(--color-ink));
+  opacity: calc(var(--trace, 0) * var(--wire, 1) * 0.9);
+  white-space: nowrap;
+  transform: translate3d(calc((1 - var(--trace, 0)) * -0.35rem), 0, 0);
+}
+
+@media (max-width: 640px) {
+  .barMid {
+    width: 88%;
+  }
+
+  .barShort {
+    width: 64%;
+  }
+
+  .card {
+    padding: 0.65rem;
+  }
+
+  .cardFrame {
+    inset: 0.5rem;
+  }
+
+  .mark {
+    font-size: 0.5rem;
+  }
+}

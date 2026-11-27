@@ -1,0 +1,11 @@
+/* Wrapper relatif pour BlueprintBars — ne change pas les marges du contenu */
+.slot {
+  position: relative;
+  display: block;
+}
+
+.btnWrap {
+  position: relative;
+  display: inline-flex;
+  vertical-align: top;
+}
