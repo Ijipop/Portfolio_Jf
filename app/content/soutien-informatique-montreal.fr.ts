@@ -37,6 +37,7 @@ type SupportLocaleCopy = {
   formName: string
   formEmail: string
   formPhone: string
+  formPhoneOptional: string
   formDevice: string
   formDevicePlaceholder: string
   formMode: string
@@ -116,6 +117,7 @@ const fr: SupportLocaleCopy = {
   formName: 'Nom',
   formEmail: 'Courriel',
   formPhone: 'Téléphone',
+  formPhoneOptional: 'N° de téléphone (optionnel)',
   formDevice: 'Type d’appareil',
   formDevicePlaceholder: 'Ex. : PC Windows, Mac, portable…',
   formMode: 'Où souhaitez-vous l’aide ?',
@@ -243,6 +245,7 @@ const en: SupportLocaleCopy = {
   formName: 'Name',
   formEmail: 'Email',
   formPhone: 'Phone',
+  formPhoneOptional: 'Phone number (optional)',
   formDevice: 'Device type',
   formDevicePlaceholder: 'e.g. Windows PC, Mac, laptop…',
   formMode: 'Where do you want help?',

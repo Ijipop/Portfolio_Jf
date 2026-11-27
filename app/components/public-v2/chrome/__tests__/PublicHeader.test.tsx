@@ -101,4 +101,17 @@ describe('public-v2 chrome', () => {
     expect(screen.getAllByRole('link', { name: 'Work' }).length).toBeGreaterThanOrEqual(1)
     expect(screen.getAllByRole('link', { name: 'Contact me' }).length).toBeGreaterThanOrEqual(1)
   })
+
+  it('place FR/EN à droite du CTA Me contacter quand le flag est on', () => {
+    vi.stubEnv('NEXT_PUBLIC_I18N_TOGGLE_ENABLED', 'true')
+    window.localStorage.setItem('portfolio-locale', 'fr')
+    const { container } = renderChrome(<PublicHeader pathname="/" />)
+    const trailing = container.querySelector('[class*="trailing"]')
+    expect(trailing).toBeTruthy()
+    const toggle = trailing!.querySelector('[data-testid="pv2-locale-toggle"]')
+    const cta = trailing!.querySelector('a[class*="desktopCta"]')
+    expect(toggle).toBeTruthy()
+    expect(cta).toBeTruthy()
+    expect(cta!.compareDocumentPosition(toggle!) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+  })
 })

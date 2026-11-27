@@ -27,11 +27,15 @@ async function waitFormInteractive(page: Page) {
   await expect(submit).toBeEnabled()
 }
 
-async function fillValidSupportForm(page: Page) {
+async function fillValidSupportForm(page: Page, opts: { phone?: string } = {}) {
   const form = supportForm(page)
   await form.locator('input[name="name"]').fill('Test P0 IJIPOP')
   await form.locator('input[name="email"]').fill('test.p0@example.invalid')
-  await form.locator('input[name="phone"]').fill('514-555-0199')
+  if (opts.phone !== undefined) {
+    if (opts.phone) await form.locator('input[name="phone"]').fill(opts.phone)
+  } else {
+    await form.locator('input[name="phone"]').fill('514-555-0199')
+  }
   await form.getByRole('radio', { name: 'Dépannage ou mise en place' }).check()
   await form.getByRole('radio', { name: 'À distance' }).check()
   await form
@@ -84,6 +88,28 @@ for (const vp of VIEWPORTS) {
       })
       await gotoSupport(page)
       await fillValidSupportForm(page)
+      await Promise.all([
+        page.waitForResponse((r) => r.url().includes('/api/contact') && r.status() === 200),
+        submitForm(page),
+      ])
+      await expect(page.getByText(/bien été envoyée/i)).toBeVisible({ timeout: 20_000 })
+    })
+
+    test('succès API simulé sans téléphone', async ({ page }) => {
+      await page.route('**/api/contact', async (route) => {
+        const body = route.request().postDataJSON() as { phone?: string }
+        expect(body.phone ?? '').toBe('')
+        await route.fulfill({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify({ success: true }),
+        })
+      })
+      await gotoSupport(page)
+      await expect(
+        supportForm(page).getByLabel(/N° de téléphone \(optionnel\)/i),
+      ).toBeVisible()
+      await fillValidSupportForm(page, { phone: '' })
       await Promise.all([
         page.waitForResponse((r) => r.url().includes('/api/contact') && r.status() === 200),
         submitForm(page),

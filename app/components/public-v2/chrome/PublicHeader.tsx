@@ -28,7 +28,7 @@ export default function PublicHeader({ pathname }: PublicHeaderProps) {
 
   return (
     <HeaderScrollShell>
-      <Container className={styles.shell}>
+      <Container variant="wide" className={styles.shell}>
         <BrandLockup pathname={pathname} />
         <nav aria-label={chrome.primaryNav}>
           <ul className={styles.desktopNav}>
@@ -51,10 +51,10 @@ export default function PublicHeader({ pathname }: PublicHeaderProps) {
           </ul>
         </nav>
         <div className={styles.trailing}>
-          <PublicLocaleToggle />
           <Button href={cta.href} variant="primary" size="sm" className={styles.desktopCta}>
             {cta.label}
           </Button>
+          <PublicLocaleToggle />
           <div className={styles.mobile}>
             <PublicMobileNav
               items={items}

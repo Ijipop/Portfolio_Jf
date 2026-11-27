@@ -49,6 +49,20 @@
   box-shadow: var(--focus-ring);
 }
 
+@media (max-width: 879.98px) {
+  .group {
+    height: 2.5rem;
+    padding: 0 0.28rem;
+  }
+
+  .option {
+    min-width: 1.4rem;
+    height: 1.65rem;
+    padding: 0 0.25rem;
+    font-size: 0.64rem;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .option {
     transition: none;
