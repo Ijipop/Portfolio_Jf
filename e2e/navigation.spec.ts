@@ -22,7 +22,7 @@ test('landing reaches portfolio and contact in two clicks max', async ({ page })
   await expect(page.getByTestId('pv2-service-software')).toBeVisible()
 
   await page.getByTestId('pv2-service-web').getByRole('link').click()
-  await expect(page).toHaveURL(/\/portfolio\/projets/)
+  await expect(page).toHaveURL(/\/creation-site-web-montreal/)
 
   const contactCta = page.getByRole('banner').getByRole('link', { name: 'Me contacter' })
   await expect(contactCta).toBeVisible()
