@@ -146,6 +146,25 @@ describe('POST /api/contact', { timeout: 15_000 }, () => {
     })
   })
 
+  it('accepte un téléphone vide et omet la ligne dans le HTML Resend', async () => {
+    const response = await postContact({ ...validBody, phone: '' })
+    expect(response.status).toBe(200)
+    expect(sendMock).toHaveBeenCalledOnce()
+    const html = (sendMock.mock.calls[0]?.[0] as { html: string }).html
+    expect(html).toContain('Jean Test')
+    expect(html).toContain(validBody.email)
+    expect(html).not.toContain('Téléphone')
+  })
+
+  it('accepte l’absence de champ téléphone', async () => {
+    const { phone: _omit, ...withoutPhone } = validBody
+    const response = await postContact(withoutPhone)
+    expect(response.status).toBe(200)
+    expect(sendMock).toHaveBeenCalledOnce()
+    const html = (sendMock.mock.calls[0]?.[0] as { html: string }).html
+    expect(html).not.toContain('Téléphone')
+  })
+
   it('simule un succès honeypot sans appeler Resend', async () => {
     const response = await postContact({ ...validBody, bm_verify: 'http://spam.test' })
     expect(response.status).toBe(200)

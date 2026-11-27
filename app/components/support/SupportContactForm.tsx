@@ -60,12 +60,12 @@ function focusFirstInvalidField(form: HTMLFormElement | null, nextErrors: FieldE
       form?.querySelector<HTMLElement>(`[name="${name}"]`) ??
       form?.querySelector<HTMLElement>(`#${name}`)
     if (target) {
-      target.focus()
-      target.scrollIntoView({ behavior: 'smooth', block: 'center' })
+      target.focus?.()
+      target.scrollIntoView?.({ behavior: 'smooth', block: 'center' })
       return
     }
   }
-  document.getElementById(SUPPORT_FORM_ANCHOR)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  document.getElementById(SUPPORT_FORM_ANCHOR)?.scrollIntoView?.({ behavior: 'smooth', block: 'start' })
 }
 
 export default function SupportContactForm() {
@@ -115,8 +115,8 @@ export default function SupportContactForm() {
   useEffect(() => {
     if (!submitted) return
     const node = document.getElementById(SUPPORT_FORM_ANCHOR)
-    node?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-    statusRef.current?.focus()
+    node?.scrollIntoView?.({ behavior: 'smooth', block: 'start' })
+    statusRef.current?.focus?.()
   }, [submitted])
 
   const messagePlaceholder =
@@ -139,7 +139,8 @@ export default function SupportContactForm() {
 
   const fieldSx = {
     '& .MuiOutlinedInput-root': {
-      borderRadius: DESIGN_TOKENS.borderRadius.small,
+      // String px — MUI sx multiplies bare numbers by theme.shape.borderRadius.
+      borderRadius: `${DESIGN_TOKENS.borderRadius.small}px`,
       bgcolor: panel.fieldBg,
       color: panel.text,
     },
@@ -147,14 +148,24 @@ export default function SupportContactForm() {
     '& .MuiFormHelperText-root': { color: panel.muted },
   }
 
+  /** Description only: kill pop-atelier :focus-visible ring on nested textarea; one outline. */
+  const messageFieldSx = {
+    ...fieldSx,
+    '& .MuiOutlinedInput-input:focus-visible': {
+      outline: 'none',
+      boxShadow: 'none',
+    },
+    '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
+      borderWidth: 2,
+      borderColor: 'var(--color-accent)',
+    },
+  }
+
   const validate = (): FieldErrors => {
-    const phoneTrim = phone.trim()
     return {
       name: validateContactField('name', name, validationLocale),
       email: validateContactField('email', email, validationLocale),
-      phone: !phoneTrim
-        ? copy.formPhoneRequired
-        : validateContactField('phone', phone, validationLocale),
+      phone: validateContactField('phone', phone, validationLocale),
       subject: '',
       message: validateContactField('message', message, validationLocale),
       mode: supportMode ? '' : copy.formModeRequired,
@@ -336,14 +347,13 @@ export default function SupportContactForm() {
               sx={fieldSx}
             />
             <TextField
-              label={copy.formPhone}
+              label={copy.formPhoneOptional}
               name="phone"
               type="tel"
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
               error={!!errors.phone}
               helperText={errors.phone || ' '}
-              required
               fullWidth
               autoComplete="tel"
               sx={fieldSx}
@@ -427,7 +437,7 @@ export default function SupportContactForm() {
               fullWidth
               multiline
               minRows={4}
-              sx={fieldSx}
+              sx={messageFieldSx}
             />
 
             <Box
