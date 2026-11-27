@@ -100,14 +100,38 @@
   border: 0;
 }
 
+@media (max-width: 900px) {
+  .hero {
+    min-height: auto;
+    padding-block: 1.6rem 1.85rem;
+    justify-content: flex-start;
+  }
+
+  .heroGrid {
+    gap: var(--space-3);
+  }
+}
+
 @media (max-width: 640px) {
   .hero {
-    min-height: min(30rem, 78svh);
-    padding-block: 2.1rem 2.4rem;
+    padding-block: 1.25rem 1.5rem;
+  }
+
+  .heroGrid {
+    gap: var(--space-2);
+  }
+
+  .title {
+    margin-bottom: var(--space-3);
+    font-size: clamp(1.85rem, 7.5vw, 2.35rem);
+  }
+
+  .lead {
+    margin-bottom: var(--space-3);
   }
 
   .heroVisual {
-    max-width: 19rem;
+    max-width: 17.5rem;
   }
 
   .actions {

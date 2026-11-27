@@ -96,22 +96,31 @@ describe('public-v2 chrome', () => {
     const user = userEvent.setup()
     renderChrome(<PublicHeader pathname="/" />)
 
-    expect(screen.getByTestId('pv2-locale-toggle')).toBeTruthy()
-    await user.click(screen.getByRole('button', { name: 'English' }))
+    expect(screen.getAllByTestId('pv2-locale-toggle').length).toBeGreaterThanOrEqual(1)
+    await user.click(screen.getAllByRole('button', { name: 'English' })[0])
     expect(screen.getAllByRole('link', { name: 'Work' }).length).toBeGreaterThanOrEqual(1)
     expect(screen.getAllByRole('link', { name: 'Contact me' }).length).toBeGreaterThanOrEqual(1)
   })
 
-  it('place FR/EN à droite du CTA Me contacter quand le flag est on', () => {
+  it('place FR/EN desktop à droite du CTA Me contacter quand le flag est on', () => {
     vi.stubEnv('NEXT_PUBLIC_I18N_TOGGLE_ENABLED', 'true')
     window.localStorage.setItem('portfolio-locale', 'fr')
     const { container } = renderChrome(<PublicHeader pathname="/" />)
     const trailing = container.querySelector('[class*="trailing"]')
     expect(trailing).toBeTruthy()
-    const toggle = trailing!.querySelector('[data-testid="pv2-locale-toggle"]')
+    const desktopLocale = trailing!.querySelector('[class*="desktopLocale"]')
+    const toggle = desktopLocale?.querySelector('[data-testid="pv2-locale-toggle"]')
     const cta = trailing!.querySelector('a[class*="desktopCta"]')
     expect(toggle).toBeTruthy()
     expect(cta).toBeTruthy()
     expect(cta!.compareDocumentPosition(toggle!) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+  })
+
+  it('expose aussi FR/EN dans le panneau hamburger quand le flag est on', () => {
+    vi.stubEnv('NEXT_PUBLIC_I18N_TOGGLE_ENABLED', 'true')
+    const { container } = renderChrome(<PublicHeader pathname="/" />)
+    const details = container.querySelector('details')
+    expect(details?.querySelector('[data-testid="pv2-locale-toggle"]')).toBeTruthy()
+    expect(screen.getAllByTestId('pv2-locale-toggle').length).toBe(2)
   })
 })

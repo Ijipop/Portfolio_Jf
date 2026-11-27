@@ -71,7 +71,9 @@ export default function PublicHeader({ pathname }: PublicHeaderProps) {
           <Button href={cta.href} variant="primary" size="sm" className={styles.desktopCta}>
             {cta.label}
           </Button>
-          <PublicLocaleToggle />
+          <div className={styles.desktopLocale}>
+            <PublicLocaleToggle />
+          </div>
           <div className={styles.mobile}>
             <PublicMobileNav
               items={items}

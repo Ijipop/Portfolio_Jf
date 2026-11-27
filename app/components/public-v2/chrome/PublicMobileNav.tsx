@@ -8,6 +8,7 @@ import {
   isPublicV2NavItemActive,
 } from '@/lib/public-v2/nav'
 import { Button } from '@/components/public-v2/primitives'
+import PublicLocaleToggle from './PublicLocaleToggle'
 import styles from './PublicMobileNav.module.css'
 
 export type PublicMobileNavProps = {
@@ -141,6 +142,9 @@ export default function PublicMobileNav({
             )
           })}
         </ul>
+        <div className={styles.localeRow}>
+          <PublicLocaleToggle />
+        </div>
         <Button href={cta.href} variant="primary" size="sm" onClick={closeMenu}>
           {cta.label}
         </Button>
