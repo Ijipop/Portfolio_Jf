@@ -7,6 +7,7 @@ import { PHASE8_PREMIUM_FILES } from './phase8-premium-allowlist'
 import { I18N_V2_FILES } from './approved-i18n-v2-allowlist'
 import { SUPPORT_HERO_ATELIER_FILES } from './approved-support-hero-atelier-allowlist'
 import { PROJECTS_LOADER_FILES } from './approved-projects-loader-allowlist'
+import { SOFTWARE_LANDING_FILES } from './approved-software-landing-allowlist'
 
 /** HEAD après commit 6B9. */
 const BASE_6B10 = '8903f617b3b12b1bc9c12a7801df8e0c9e458c60'
@@ -88,7 +89,8 @@ describe('Approved surfaces read-only during Phase 6B10', () => {
         !CONTACT_SMS_DISABLE_FILES.has(name) &&
         !I18N_V2_FILES.has(name) &&
         !SUPPORT_HERO_ATELIER_FILES.has(name) &&
-        !PROJECTS_LOADER_FILES.has(name),
+        !PROJECTS_LOADER_FILES.has(name) &&
+        !SOFTWARE_LANDING_FILES.has(name),
     )
 
     expect(out).toEqual([])
