@@ -125,6 +125,10 @@
   display: block;
 }
 
+.desktopLocale {
+  display: none;
+}
+
 @media (min-width: 880px) {
   .desktopNav {
     display: flex;
@@ -132,6 +136,10 @@
 
   .desktopCta {
     display: inline-flex;
+  }
+
+  .desktopLocale {
+    display: block;
   }
 
   .mobile {

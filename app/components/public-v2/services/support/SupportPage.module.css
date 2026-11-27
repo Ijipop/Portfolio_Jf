@@ -179,6 +179,82 @@
   color: var(--support-brass);
 }
 
+/* Mobile / tablet portrait — keep assembly in the first viewport */
+@media (max-width: 899.98px) {
+  .hero {
+    margin-bottom: var(--space-6);
+    padding-block: var(--space-3) var(--space-4);
+  }
+
+  .heroGrid {
+    gap: var(--space-3);
+  }
+
+  .heroVisual {
+    margin-bottom: 0.25rem;
+    padding-bottom: 2.25rem;
+  }
+
+  .eyebrow {
+    margin-bottom: var(--space-2);
+  }
+
+  .heroTitle {
+    margin-bottom: var(--space-3);
+  }
+
+  .heroTitleLine {
+    font-size: clamp(1.85rem, 6.2vw, 2.65rem);
+  }
+
+  .heroTitleLineAccent {
+    font-size: clamp(1.65rem, 5.6vw, 2.35rem);
+  }
+
+  .heroLead {
+    margin-bottom: var(--space-3);
+    font-size: 0.98rem;
+  }
+
+  .phoneHint {
+    margin-bottom: var(--space-2);
+  }
+
+  .signature {
+    padding-top: var(--space-2);
+  }
+}
+
+@media (max-width: 640px) {
+  .hero {
+    padding-block: 0.65rem 1rem;
+  }
+
+  .heroGrid {
+    gap: var(--space-2);
+  }
+
+  .heroVisual {
+    padding-bottom: 1.5rem;
+  }
+
+  .heroTitleLine {
+    font-size: clamp(1.7rem, 7vw, 2.15rem);
+  }
+
+  .heroTitleLineAccent {
+    font-size: clamp(1.5rem, 6.2vw, 1.95rem);
+  }
+
+  .heroActions {
+    margin-bottom: var(--space-2);
+  }
+
+  .signature {
+    display: none;
+  }
+}
+
 /* —— Services (rythme éditorial, pas de cartes) —— */
 
 .servicesBand {
