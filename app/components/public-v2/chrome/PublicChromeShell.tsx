@@ -5,6 +5,7 @@ import PublicChromeI18n from './PublicChromeI18n'
 import PublicFooter from './PublicFooter'
 import PublicHeader from './PublicHeader'
 import PublicSkipLink from './PublicSkipLink'
+import styles from './PublicChromeShell.module.css'
 
 export type PublicChromeShellProps = {
   pathname: string
@@ -27,12 +28,14 @@ export default function PublicChromeShell({
   mainTestId,
   className,
 }: PublicChromeShellProps) {
+  const shellClass = [styles.shell, className].filter(Boolean).join(' ')
+
   return (
-    <PublicThemeRoot className={className}>
+    <PublicThemeRoot className={shellClass}>
       <PublicChromeI18n>
         <PublicSkipLink mainId={mainId} />
         <PublicHeader pathname={pathname} />
-        <main id={mainId} data-testid={mainTestId}>
+        <main id={mainId} data-testid={mainTestId} className={styles.chromeMain}>
           {children}
         </main>
         <PublicFooter pathname={pathname} />

@@ -102,6 +102,23 @@ describe('ProjectsCatalog V2', () => {
     expect(screen.queryByTestId(/pv2-project-/)).toBeNull()
   })
 
+  it('affiche le loader IJIPOP pendant le fetch', async () => {
+    vi.spyOn(globalThis, 'fetch').mockImplementation(
+      () =>
+        new Promise(() => {
+          /* pending */
+        }) as Promise<Response>,
+    )
+    render(
+      <PublicThemeRoot>
+        <ProjectsCatalog />
+      </PublicThemeRoot>,
+    )
+    expect(await screen.findByTestId('pv2-busy-projects')).toBeInTheDocument()
+    expect(screen.getByText(PROJECTS_COPY.loading)).toBeInTheDocument()
+    expect(screen.queryByTestId(/pv2-project-/)).toBeNull()
+  })
+
   it('la route publique n’embarque pas les fixtures', () => {
     const page = readFileSync(
       path.join(process.cwd(), 'app/(site-pages)/portfolio/projets/page.tsx'),

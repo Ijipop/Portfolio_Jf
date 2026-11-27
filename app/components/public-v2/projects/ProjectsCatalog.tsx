@@ -13,6 +13,7 @@ import {
   type WebAudienceTab,
 } from '@/lib/public-v2/projectsContent'
 import { usePublicV2Locale } from '@/lib/public-v2/usePublicV2Locale'
+import IjipopWorkLoader from '@/components/public-v2/chrome/IjipopWorkLoader'
 import ProjectCard from './ProjectCard'
 import styles from './ProjectsCatalog.module.css'
 
@@ -137,7 +138,7 @@ export default function ProjectsCatalog({
     return (
       <section className={styles.section} data-testid="pv2-projects-catalog" aria-busy="true">
         <Container>
-          <p className={styles.stateBox}>{copy.loading}</p>
+          <IjipopWorkLoader label={copy.loading} testId="pv2-busy-projects" />
         </Container>
       </section>
     )
