@@ -5,6 +5,7 @@ import { SUPPORT_FORM_P0_FILES } from './approved-support-form-p0-allowlist'
 import { gitDiffNameOnly } from './gitDiffPortable'
 import { PHASE8_PREMIUM_FILES } from './phase8-premium-allowlist'
 import { I18N_V2_FILES } from './approved-i18n-v2-allowlist'
+import { SUPPORT_HERO_ATELIER_FILES } from './approved-support-hero-atelier-allowlist'
 
 /**
  * Phase 6B6 clôturée (hub /logiciel). Baseline = commit 6B6.
@@ -48,7 +49,8 @@ describe('Approved surfaces remain frozen after Phase 6B6', () => {
         !PHASE8_PREMIUM_FILES.has(name) &&
         !SUPPORT_FORM_P0_FILES.has(name) &&
         !CONTACT_SMS_DISABLE_FILES.has(name) &&
-        !I18N_V2_FILES.has(name),
+        !I18N_V2_FILES.has(name) &&
+        !SUPPORT_HERO_ATELIER_FILES.has(name),
     )
 
     expect(out).toEqual([])
