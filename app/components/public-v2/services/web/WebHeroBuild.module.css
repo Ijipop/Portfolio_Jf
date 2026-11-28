@@ -170,14 +170,46 @@
   border: 0;
 }
 
+@media (max-width: 900px) {
+  .hero {
+    min-height: auto;
+    padding-block: 1.7rem 1.9rem;
+    justify-content: flex-start;
+  }
+
+  .heroGrid {
+    gap: var(--space-3);
+  }
+}
+
 @media (max-width: 640px) {
   .hero {
-    min-height: min(30rem, 78svh);
-    padding-block: 2.1rem 2.4rem;
+    padding-block: 1.3rem 1.55rem;
+  }
+
+  .heroGrid {
+    gap: var(--space-2);
+  }
+
+  .eyebrow {
+    margin-bottom: var(--space-2);
+  }
+
+  .title {
+    font-size: clamp(1.85rem, 7.5vw, 2.35rem);
+  }
+
+  .titleSlot {
+    margin-bottom: var(--space-3);
+    min-height: calc(3 * 1.12em);
+  }
+
+  .leadSlot {
+    margin-bottom: var(--space-3);
   }
 
   .heroVisual {
-    max-width: 19rem;
+    max-width: 17.5rem;
   }
 
   .actions {
@@ -193,9 +225,5 @@
   .buildBtn {
     width: 100%;
     justify-content: center;
-  }
-
-  .titleSlot {
-    min-height: calc(3 * 1.12em);
   }
 }

@@ -139,7 +139,8 @@ export function useBuildProgress(options: UseBuildProgressOptions): MotionValue<
         progress.set(debug)
         return
       }
-      if (progress.get() >= 0.999) return
+      // Like Support/Software: always restart 0→1 on mount (client nav included)
+      progress.set(0)
       const controls = animate(progress, 1, { duration, ease: WEB_BUILD_EASE })
       return () => controls.stop()
     }
